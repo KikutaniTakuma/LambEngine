@@ -2,8 +2,8 @@
 #include <memory>
 #include <unordered_map>
 #include <string>
-#include <SpriteFont.h>
-#include <ResourceUploadBatch.h>
+#include "../externals/DirectXTK12/Inc/SpriteFont.h"
+#include "../externals/DirectXTK12/Inc/ResourceUploadBatch.h"
 #pragma comment(lib, "DirectXTK12.lib")
 
 class StringOutPutManager {
