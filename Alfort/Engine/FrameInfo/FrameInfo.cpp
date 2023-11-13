@@ -2,6 +2,11 @@
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "../externals/imgui/imgui.h"
 
+#ifdef _DEBUG
+#include "Input/KeyInput/KeyInput.h"
+#endif // _DEBUG
+
+
 #include <cmath>
 #include <thread>
 #include <Windows.h>
@@ -13,10 +18,11 @@
 #include <algorithm>
 
 FrameInfo::FrameInfo() :
+	kMaxMonitorFps_(GetMainMonitorFramerate()),
 #ifdef _DEBUG
 	isDebugStopGame_(false),
 	isOneFrameActive_(false),
-	isFixedDeltaTime_(true),
+	isFixedDeltaTime_(false),
 #endif // _DEBUG
 	frameStartTime_(),
 	deltaTime_(0.0),
@@ -33,14 +39,8 @@ FrameInfo::FrameInfo() :
 	frameDataDurationStartTime_{},
 	avgProcDuration_{600llu}
 {
-	//画面情報構造体
-	DEVMODE mode{};
-
-	//現在の画面情報を取得
-	EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &mode);
-
 	// リフレッシュレート取得
-	fps_ = static_cast<float>(mode.dmDisplayFrequency);
+	fps_ = kMaxMonitorFps_;
 	minFps_ = maxFps_ = fps_;
 	deltaTime_ = 1.0f / fps_;
 
@@ -66,8 +66,8 @@ FrameInfo::~FrameInfo() {
 	auto playtime =
 		std::chrono::duration_cast<std::chrono::milliseconds>(end - gameStartTime_);
 
-	maxFps_ = std::clamp(maxFps_, 0.0, static_cast<double>(mode.dmDisplayFrequency));
-	minFps_ = std::clamp(minFps_, 0.0, static_cast<double>(mode.dmDisplayFrequency));
+	maxFps_ = std::clamp(maxFps_, 0.0, kMaxMonitorFps_);
+	minFps_ = std::clamp(minFps_, 0.0, kMaxMonitorFps_);
 
 	double avgFps = 0.0;
 	double size = static_cast<double>(frameDatas_.size());
@@ -159,11 +159,18 @@ void FrameInfo::Debug() {
 	static float fpsLimit = static_cast<float>(fpsLimit_);
 	fpsLimit = static_cast<float>(fpsLimit_);
 
+	if (KeyInput::GetInstance()->Pushed(DIK_F9)) {
+		isDebugStopGame_ = !isDebugStopGame_;
+	}
+	if (KeyInput::GetInstance()->Pushed(DIK_F10)) {
+		isOneFrameActive_ = true;
+	}
+
 	ImGui::Begin("fps");
 	ImGui::Text("Frame rate: %3.0lf fps", fps_);
 	ImGui::Text("Delta Time: %.4lf", deltaTime_);
 	ImGui::Text("Frame Count: %llu", frameCount_);
-	ImGui::DragFloat("fps limit", &fpsLimit, 1.0f, 10.0f, 165.0f);
+	ImGui::DragFloat("fps limit", &fpsLimit, 1.0f, 1.0f, static_cast<float>(kMaxMonitorFps_));
 	fpsLimit_ = static_cast<double>(fpsLimit);
 	SetFpsLimit(fpsLimit_);
 	if (ImGui::TreeNode("DEBUG")) {
@@ -185,4 +192,15 @@ void FrameInfo::Debug() {
 void FrameInfo::SetGameSpeedScale(float gameSpeedSccale) {
 	gameSpeedSccale = std::clamp(gameSpeedSccale, 0.0f, 10.0f);
 	gameSpeedSccale_ = static_cast<double>(gameSpeedSccale);
+}
+
+double FrameInfo::GetMainMonitorFramerate() const {
+	//画面情報構造体
+	DEVMODE mode{};
+
+	//現在の画面情報を取得
+	EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &mode);
+
+	// リフレッシュレート取得
+	return static_cast<double>(mode.dmDisplayFrequency);
 }

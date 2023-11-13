@@ -102,6 +102,8 @@ public:
 	/// </summary>
 	void Debug();
 
+	double GetMainMonitorFramerate() const;
+
 
 #ifdef _DEBUG
 	bool GetIsDebugStop() const {
@@ -123,6 +125,8 @@ public:
 /// メンバ変数
 /// </summary>
 private:
+	const double kMaxMonitorFps_;
+
 	std::chrono::steady_clock::time_point frameStartTime_;
 	double deltaTime_;
 	double fps_;
