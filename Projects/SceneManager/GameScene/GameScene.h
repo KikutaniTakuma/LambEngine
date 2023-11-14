@@ -1,9 +1,9 @@
 #pragma once
 #include "SceneManager/SceneManager.h"
-#include "Alfort/Drawers/Model/Model.h"
-#include "Alfort/Drawers/Texture2D/Texture2D.h"
-#include "Alfort/Drawers/PeraRender/PeraRender.h"
-#include "Alfort/Drawers/Particle/Particle.h"
+#include "Lamb/Drawers/Model/Model.h"
+#include "Lamb/Drawers/Texture2D/Texture2D.h"
+#include "Lamb/Drawers/PeraRender/PeraRender.h"
+#include "Lamb/Drawers/Particle/Particle.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Game/Player/Player.h"
 #include "Game/MoveFloor/MoveFloor.h"

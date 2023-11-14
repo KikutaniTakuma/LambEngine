@@ -1,7 +1,7 @@
 #pragma once
-#include "Alfort/Drawers/Texture2D/Texture2D.h"
-#include "Alfort/Utils/UtilsLib/UtilsLib.h"
-#include "Alfort/Utils/Easeing/Easeing.h"
+#include "Drawers/Texture2D/Texture2D.h"
+#include "Utils/UtilsLib/UtilsLib.h"
+#include "Utils/Easeing/Easeing.h"
 
 class Fade {
 public:

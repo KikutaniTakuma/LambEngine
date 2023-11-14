@@ -1,6 +1,6 @@
 #pragma once
-#include "Alfort/Utils/UtilsLib/UtilsLib.h"
-#include "Alfort/Utils/Camera/Camera.h"
+#include "Utils/UtilsLib/UtilsLib.h"
+#include "Utils/Camera/Camera.h"
 
 
 class SubMenu {

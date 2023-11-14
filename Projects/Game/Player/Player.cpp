@@ -1,6 +1,6 @@
 #include "Player.h"
-#include "Alfort/Input/Input.h"
-#include "Alfort/Engine/FrameInfo/FrameInfo.h"
+#include "Input/Input.h"
+#include "Engine/FrameInfo/FrameInfo.h"
 #include <numbers>
 #include <cmath>
 #include "externals/nlohmann/json.hpp"

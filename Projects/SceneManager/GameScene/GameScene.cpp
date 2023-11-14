@@ -1,8 +1,8 @@
 #include "GameScene.h"
-#include "Alfort/MeshManager/MeshManager.h"
-#include "Alfort/TextureManager/TextureManager.h"
-#include "Alfort/AudioManager/AudioManager.h"
-#include "Alfort/Engine/FrameInfo/FrameInfo.h"
+#include "MeshManager/MeshManager.h"
+#include "TextureManager/TextureManager.h"
+#include "AudioManager/AudioManager.h"
+#include "Engine/FrameInfo/FrameInfo.h"
 #include <numbers>
 
 GameScene::GameScene() :

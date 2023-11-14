@@ -1,8 +1,8 @@
 #pragma once
-#include "Alfort/Utils/Math/Vector3.h"
-#include "Alfort/Utils/Math/Mat4x4.h"
-#include "Alfort/Drawers/Line/Line.h"
-#include "Alfort/Utils/UtilsLib/UtilsLib.h"
+#include "Utils/Math/Vector3.h"
+#include "Utils/Math/Mat4x4.h"
+#include "Drawers/Line/Line.h"
+#include "Utils/UtilsLib/UtilsLib.h"
 #include <array>
 
 /// <summary>

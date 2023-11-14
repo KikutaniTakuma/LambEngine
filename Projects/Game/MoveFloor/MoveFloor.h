@@ -1,7 +1,7 @@
 #pragma once
 #include "Game/CollisionManager/Collider/Collider.h"
-#include "Alfort/Drawers/Model/Model.h"
-#include "Alfort/Utils/Easeing/Easeing.h"
+#include "Drawers/Model/Model.h"
+#include "Utils/Easeing/Easeing.h"
 
 class MoveFloor {
 public:

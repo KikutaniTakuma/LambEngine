@@ -1,6 +1,6 @@
 #pragma once
 #include "Game/CollisionManager/Collider/Collider.h"
-#include "Alfort/Drawers/Model/Model.h"
+#include "Drawers/Model/Model.h"
 
 class Goal : public Collider {
 public:

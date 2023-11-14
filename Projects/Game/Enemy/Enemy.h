@@ -1,10 +1,10 @@
 #pragma once
-#include "Alfort/Drawers/Model/Model.h"
+#include "Drawers/Model/Model.h"
 #include <memory>
-#include "Alfort/Utils/Camera/Camera.h"
+#include "Utils/Camera/Camera.h"
 #include <vector>
 #include "Game/CollisionManager/Collider/Collider.h"
-#include "Alfort/Utils/Easeing/Easeing.h"
+#include "Utils/Easeing/Easeing.h"
 
 class Enemy {
 public:

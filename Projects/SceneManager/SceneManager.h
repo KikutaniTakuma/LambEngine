@@ -5,13 +5,13 @@
 #include <vector>
 #include <bitset>
 #include <optional>
-#include "Alfort/Utils/Camera/Camera.h"
+#include "Utils/Camera/Camera.h"
 #include "Fade/Fade.h"
-#include "Alfort/MeshManager/MeshManager.h"
-#include "Alfort/TextureManager/TextureManager.h"
-#include "Alfort/AudioManager/AudioManager.h"
-#include "Alfort/Engine/FrameInfo/FrameInfo.h"
-#include "Alfort/Input/Input.h"
+#include "MeshManager/MeshManager.h"
+#include "TextureManager/TextureManager.h"
+#include "AudioManager/AudioManager.h"
+#include "Engine/FrameInfo/FrameInfo.h"
+#include "Input/Input.h"
 
 class BaseScene {
 	friend class SceneManager;

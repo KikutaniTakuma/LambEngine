@@ -1,6 +1,6 @@
 #pragma once
-#include "Alfort/Utils/Math/Vector3.h"
-#include "Alfort/Utils/Math/Mat4x4.h"
+#include "Utils/Math/Vector3.h"
+#include "Utils/Math/Mat4x4.h"
 
 struct Plane {
 	Vector3 normal;
