@@ -119,7 +119,7 @@ StringOut& StringOut::operator<<(const Vector2& right) {
 	return *this;
 }
 StringOut& StringOut::operator<<(const Vector3& right) {
-	str_ += std::format(L"{:6.3f}, {:6.3f}, {:6.3f}", right.x, right.y, right.y);
+	str_ += std::format(L"{:6.3f}, {:6.3f}, {:6.3f}", right.x, right.y, right.z);
 
 	return *this;
 }
