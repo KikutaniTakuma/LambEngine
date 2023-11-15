@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Projects\Game.vcxproj", "{5A50F54F-3C40-432B-8813-E50FF8D5E787}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目", "ソリューション項目", "{800EB363-166F-4597-B0F7-4EE177A06175}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EditorConfig", "EditorConfig", "{800EB363-166F-4597-B0F7-4EE177A06175}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
@@ -15,6 +15,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTex", "Projects\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj", "{371B9FA9-4C90-4AC6-A123-ACED756D6C77}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTK12", "Projects\externals\DirectXTK12\DirectXTK_Desktop_2022_Win10.vcxproj", "{3E0E8608-CD9B-4C76-AF33-29CA38F2C9F0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DirectX", "DirectX", "{A8C1D6D2-9E73-4EDE-A6BF-E9E9A5F66AC4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{5FA87F4E-4689-4C56-A701-949AF0640FB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -104,6 +108,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F7469051-9A30-4717-84E1-AA15CD13A9A9} = {5FA87F4E-4689-4C56-A701-949AF0640FB1}
+		{371B9FA9-4C90-4AC6-A123-ACED756D6C77} = {A8C1D6D2-9E73-4EDE-A6BF-E9E9A5F66AC4}
+		{3E0E8608-CD9B-4C76-AF33-29CA38F2C9F0} = {A8C1D6D2-9E73-4EDE-A6BF-E9E9A5F66AC4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C59500A3-330A-455F-8E37-776FBA93EDF1}
