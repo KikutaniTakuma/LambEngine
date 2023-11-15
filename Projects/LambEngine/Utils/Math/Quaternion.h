@@ -39,6 +39,9 @@ public:
 	friend Quaternion operator/(float right, const Quaternion& left);
 	Quaternion& operator/=(float right);
 
+	bool operator==(const Quaternion& right) const;
+	bool operator!=(const Quaternion& right) const;
+
 public:
 	/// <summary>
 	/// 共役

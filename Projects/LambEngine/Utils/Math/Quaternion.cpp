@@ -99,6 +99,20 @@ Quaternion& Quaternion::operator/=(float right) {
 
 	return *this;
 }
+/// ========================================================================
+/// 等値演算子
+/// ========================================================================
+#pragma region Equal operator
+bool Quaternion::operator==(const Quaternion& right) const {
+	return m_ == right.m_;
+}
+bool Quaternion::operator!=(const Quaternion& right) const {
+	return m_ != right.m_;
+}
+#pragma endregion
+/// ========================================================================
+/// ========================================================================
+/// ========================================================================
 
 Quaternion Quaternion::Conjugate() const {
 	return Quaternion{ -vector_.vector3_, vector_.w_ };
