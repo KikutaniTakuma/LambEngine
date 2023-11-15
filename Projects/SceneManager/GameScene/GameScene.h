@@ -31,5 +31,5 @@ public:
 	void Draw() override;
 
 public:
-	StringOut resultString_;
+	std::array<StringOut,3> resultString_;
 };
