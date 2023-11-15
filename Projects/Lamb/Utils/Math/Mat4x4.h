@@ -1,6 +1,8 @@
 #pragma once
 
 #include <array>
+#include <concepts>
+#include <string>
 #include "Vector4.h"
 
 class Vector3;
@@ -17,6 +19,8 @@ public:
 	Mat4x4(const Mat4x4& mat);
 	Mat4x4(Mat4x4&& mat) noexcept;
 	Mat4x4(const std::array<Vector4, 4>& num);
+	Mat4x4(const std::array<float, 16>& num);
+
 public:
 	~Mat4x4() = default;
 
@@ -34,8 +38,14 @@ public:
 	Mat4x4 operator-(const Mat4x4& mat) const;
 	Mat4x4& operator-=(const Mat4x4& mat);
 
-	Vector4& operator[](size_t index);
-	const Vector4& operator[](size_t index) const;
+	template<std::integral T>
+	Vector4& operator[](T index) {
+		return m[index];
+	}
+	template<std::integral T>
+	const Vector4& operator[](T index) const {
+		return m[index];
+	}
 
 	bool operator==(const Mat4x4& mat) const;
 	bool operator!=(const Mat4x4& mat) const;
@@ -172,3 +182,7 @@ Mat4x4 MakeMatrixViewPort(float left, float top, float width, float height, floa
 
 
 Mat4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
+
+Mat4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
+
+std::string GetMatrixString(const Mat4x4& mat);

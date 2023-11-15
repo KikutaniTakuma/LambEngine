@@ -2,7 +2,10 @@
 #include "Vector3.h"
 #include <cmath>
 #include <algorithm>
+#include <format>
 #include <Windows.h>
+#undef max
+#undef min
 #include <immintrin.h>
 
 const Mat4x4 Mat4x4::kIdentity_ = Mat4x4{
@@ -37,6 +40,16 @@ Mat4x4::Mat4x4(Mat4x4&& mat) noexcept {
 
 Mat4x4::Mat4x4(const std::array<Vector4, 4>& num) {
 	m = num;
+}
+
+Mat4x4::Mat4x4(const std::array<float, 16>& num) {
+	size_t i = 0;
+	for (size_t y = 0llu; y < 4llu; y++) {
+		for (size_t x = 0; x < 4llu; x++) {
+			m[y][x] = num[i];
+			i++;
+		}
+	}
 }
 
 Mat4x4& Mat4x4::operator=(const Mat4x4& mat) {
@@ -110,14 +123,6 @@ Mat4x4& Mat4x4::operator-=(const Mat4x4& mat) {
 	}
 
 	return *this;
-}
-
-Vector4& Mat4x4::operator[](size_t index) {
-	return m[index];
-}
-
-const Vector4& Mat4x4::operator[](size_t index) const {
-	return m[index];
 }
 
 bool Mat4x4::operator==(const Mat4x4& mat) const {
@@ -447,6 +452,51 @@ Mat4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 		}
 	};
 
+
+	return result;
+}
+
+Mat4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
+	float angleCos = std::cos(angle);
+	float angleSin = std::sin(angle);
+
+	Mat4x4 result = Mat4x4{
+		std::array<Vector4, 4>{
+			Vector4{
+				axis.x * axis.x * (1.0f - angleCos) + angleCos,
+				axis.x * axis.y * (1.0f - angleCos) + axis.z * angleSin,
+				axis.x * axis.z * (1.0f - angleCos) - axis.y * angleSin,
+				0.0f
+			},
+			Vector4{
+				axis.y * axis.x * (1.0f - angleCos) - axis.z * angleSin,
+				axis.y * axis.y * (1.0f - angleCos) + angleCos,
+				axis.y * axis.z * (1.0f - angleCos) + axis.x * angleSin,
+				0.0f
+			},
+			Vector4{
+				axis.z * axis.x * (1.0f - angleCos) + axis.y * angleSin,
+				axis.z * axis.y * (1.0f - angleCos) - axis.x * angleSin,
+				axis.z * axis.z * (1.0f - angleCos) + angleCos,
+				0.0f
+			},
+			Vector4::wIdy
+		}
+	};
+
+
+	return result;
+}
+
+std::string GetMatrixString(const Mat4x4& mat) {
+	std::string result =
+	std::format(
+		"{:6.3f}, {:6.3f}, {:6.3f}, {:6.3f}\n{:6.3f}, {:6.3f}, {:6.3f}, {:6.3f}\n{:6.3f}, {:6.3f}, {:6.3f}, {:6.3f}\n{:6.3f}, {:6.3f}, {:6.3f}, {:6.3f}\n",
+		mat[0][0], mat[0][1], mat[0][2], mat[0][3],
+		mat[1][0], mat[1][1], mat[1][2], mat[1][3],
+		mat[2][0], mat[2][1], mat[2][2], mat[2][3],
+		mat[3][0], mat[3][1], mat[3][2], mat[3][3]
+	);
 
 	return result;
 }
