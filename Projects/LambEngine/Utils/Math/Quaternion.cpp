@@ -71,6 +71,19 @@ Quaternion& Quaternion::operator*=(const Quaternion& right) {
 	return *this;
 }
 
+Quaternion Quaternion::operator*(float right) const {
+	Quaternion result{ *this };
+	for (auto& i : result.m_) {
+		i *= right;
+	}
+	return result;
+}
+Quaternion& Quaternion::operator*=(float right) {
+	*this = *this * right;
+
+	return *this;
+}
+
 Quaternion Quaternion::Conjugate() const {
 	return Quaternion{ -vector_.vector3_, vector_.w_ };
 }

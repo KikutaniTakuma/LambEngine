@@ -31,6 +31,9 @@ public:
 	Quaternion operator*(const Quaternion& right) const;
 	Quaternion& operator*=(const Quaternion& right);
 
+	Quaternion operator*(float right) const;
+	Quaternion& operator*=(float right);
+
 public:
 	/// <summary>
 	/// 共役
