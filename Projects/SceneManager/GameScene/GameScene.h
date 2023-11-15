@@ -1,9 +1,10 @@
 #pragma once
 #include "SceneManager/SceneManager.h"
-#include "Lamb/Drawers/Model/Model.h"
-#include "Lamb/Drawers/Texture2D/Texture2D.h"
-#include "Lamb/Drawers/PeraRender/PeraRender.h"
-#include "Lamb/Drawers/Particle/Particle.h"
+#include "Drawers/Model/Model.h"
+#include "Drawers/Texture2D/Texture2D.h"
+#include "Drawers/PeraRender/PeraRender.h"
+#include "Drawers/Particle/Particle.h"
+#include "Drawers/StringOut/StringOut.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Game/Player/Player.h"
 #include "Game/MoveFloor/MoveFloor.h"
@@ -30,10 +31,5 @@ public:
 	void Draw() override;
 
 public:
-	Model model_;
-	Model model2_;
-	Texture2D tex2D_;
-	Texture2D tex2D2_;
-
-	Texture* texture_;
+	StringOut resultString_;
 };
