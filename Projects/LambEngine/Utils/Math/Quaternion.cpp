@@ -121,6 +121,48 @@ Quaternion& Quaternion::operator*=(const Quaternion& right) {
 /// ========================================================================
 
 /// ========================================================================
+/// 加算演算子
+/// ========================================================================
+#pragma region Add operator
+Quaternion Quaternion::operator+(const Quaternion& right) const {
+	Quaternion result;
+
+	result = vector4_ + right.vector4_;
+
+	return result;
+}
+Quaternion& Quaternion::operator+=(const Quaternion& right) {
+	*this = *this + right;
+
+	return *this;
+}
+#pragma endregion
+/// ========================================================================
+/// ========================================================================
+/// ========================================================================
+
+/// ========================================================================
+/// 減算演算子
+/// ========================================================================
+#pragma region Sub operator
+Quaternion Quaternion::operator-(const Quaternion& right) const {
+	Quaternion result;
+
+	result = vector4_ - right.vector4_;
+
+	return result;
+}
+Quaternion& Quaternion::operator-=(const Quaternion& right) {
+	*this = *this - right;
+
+	return *this;
+}
+#pragma endregion
+/// ========================================================================
+/// ========================================================================
+/// ========================================================================
+
+/// ========================================================================
 /// スカラー倍演算子
 /// ========================================================================
 #pragma region Scalar operator

@@ -38,6 +38,12 @@ public:
 	Quaternion operator*(const Quaternion& right) const;
 	Quaternion& operator*=(const Quaternion& right);
 
+	Quaternion operator+(const Quaternion& right) const;
+	Quaternion& operator+=(const Quaternion& right);
+
+	Quaternion operator-(const Quaternion& right) const;
+	Quaternion& operator-=(const Quaternion& right);
+
 	Quaternion operator*(float right) const;
 	friend Quaternion operator*(float right, const Quaternion& left);
 	Quaternion& operator*=(float right);
