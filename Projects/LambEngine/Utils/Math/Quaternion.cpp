@@ -118,6 +118,10 @@ Quaternion Quaternion::Conjugate() const {
 	return Quaternion{ -vector_.vector3_, vector_.w_ };
 }
 
+float Quaternion::Dot(const Quaternion& other) const {
+	return _mm_cvtss_f32(_mm_dp_ps(m128_, other.m128_, 0xff));
+}
+
 float Quaternion::Length() const {
 	return vector4_.Length();
 }

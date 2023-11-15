@@ -50,6 +50,7 @@ public:
 	Quaternion Conjugate() const;
 
 	/// <summary>
+	/// クォータニオンを4次元ベクトルとしての内積
 	/// 長さ取得
 	/// </summary>
 	/// <returns>ノルム</returns>
