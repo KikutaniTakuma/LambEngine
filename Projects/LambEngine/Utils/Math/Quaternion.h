@@ -98,6 +98,24 @@ public:
 /// </summary>
 public:
 	static Quaternion MakeRotateAxisAngle(const Vector3& axis, float angle);
+	/// <summary>
+	/// x軸回転クォータニオン
+	/// </summary>
+	/// <param name="eulerAngle">オイラー角</param>
+	/// <returns>x意軸回転を適用したクォータニオン</returns>
+	static Quaternion MakeRotateXAxis(float eulerAngle);
+	// <summary>
+	/// y軸回転クォータニオン
+	/// </summary>
+	/// <param name="eulerAngle">オイラー角</param>
+	/// <returns>y意軸回転を適用したクォータニオン</returns>
+	static Quaternion MakeRotateYAxis(float eulerAngle);
+	// <summary>
+	/// z軸回転クォータニオン
+	/// </summary>
+	/// <param name="eulerAngle">オイラー角</param>
+	/// <returns>z意軸回転を適用したクォータニオン</returns>
+	static Quaternion MakeRotateZAxis(float eulerAngle);
 
 	static Quaternion Slerp(const Quaternion& start, const Quaternion& end, float t);
 
