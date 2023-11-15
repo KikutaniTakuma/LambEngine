@@ -12,6 +12,7 @@
 #include "AudioManager/AudioManager.h"
 #include "Engine/FrameInfo/FrameInfo.h"
 #include "Input/Input.h"
+#include "Engine/EngineParts/StringOutPutManager/StringOutPutManager.h"
 
 class BaseScene {
 	friend class SceneManager;
@@ -58,6 +59,8 @@ protected:
 	FrameInfo* frameInfo_;
 
 	Input* input_;
+
+	StringOutPutManager* stringOutPutManager_;
 
 	BaseScene::ID sceneID_;
 

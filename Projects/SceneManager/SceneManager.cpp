@@ -13,6 +13,7 @@ BaseScene::BaseScene(BaseScene::ID sceneID):
 	textureManager_(nullptr),
 	frameInfo_(nullptr),
 	input_(nullptr),
+	stringOutPutManager_(nullptr),
 	sceneID_(sceneID),
 	camera_()
 {}
@@ -27,6 +28,8 @@ void BaseScene::SceneInitialize(SceneManager* sceneManager) {
 	textureManager_ = TextureManager::GetInstance();
 
 	frameInfo_ = FrameInfo::GetInstance();
+
+	stringOutPutManager_ = StringOutPutManager::GetInstance();
 
 	input_ = Input::GetInstance();
 }
@@ -47,6 +50,8 @@ void SceneManager::Initialize(BaseScene* firstScene) {
 	scene_.reset(firstScene);
 	scene_->SceneInitialize(this);
 	scene_->Initialize();
+
+	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/default.spritefont");
 }
 
 void SceneManager::SceneChange(BaseScene* next) {
