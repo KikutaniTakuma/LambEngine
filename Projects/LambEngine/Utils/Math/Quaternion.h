@@ -74,6 +74,10 @@ public:
 	/// <returns>逆クォータニオン</returns>
 	Quaternion Inverce() const;
 
+	/// <summary>
+	/// 回転行列を取得
+	/// </summary>
+	/// <returns>クォータニオンからの回転行列</returns>
 	class Mat4x4 GetMatrix() const;
 
 /// <summary>
@@ -84,7 +88,7 @@ public:
 
 
 /// <summary>
-/// 静的メンバ変数
+/// 静的メンバ定数
 /// </summary>
 public:
 	/// <summary>
@@ -92,8 +96,12 @@ public:
 	/// </summary>
 	static const Quaternion identity;
 
-/// <summary>
+	/// <summary>
+	/// x = 0.0f, y = 0.0f, z = 0.0f w = 0.0f
+	/// </summary>
 	static const Quaternion zero;
+
+/// <summary>
 /// メンバ変数
 /// </summary>
 public:

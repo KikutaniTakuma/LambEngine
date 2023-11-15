@@ -2,9 +2,21 @@
 #include "Mat4x4.h"
 #include <cmath>
 
+/// ========================================================================
+/// 静的メンバ定数
+/// ========================================================================
+#pragma region Constant Number
 const Quaternion Quaternion::identity = { 0.0f, 0.0f, 0.0f, 1.0f };
 const Quaternion Quaternion::zero = { 0.0f, 0.0f, 0.0f, 0.0f };
+#pragma endregion
+/// ========================================================================
+/// ========================================================================
+/// ========================================================================
 
+/// ========================================================================
+/// コンストラクタ
+/// ========================================================================
+#pragma region Constructor
 Quaternion::Quaternion():
 	m_{0.0f}
 {}
@@ -38,7 +50,16 @@ Quaternion::Quaternion(const std::array<float, 4>& right) {
 Quaternion::Quaternion(float x, float y, float z, float w) {
 	m_ = { x,y,z,w };
 }
+#pragma endregion
+/// ========================================================================
+/// ========================================================================
+/// ========================================================================
 
+
+/// ========================================================================
+/// コピー演算子
+/// ========================================================================
+#pragma region Copy operator
 Quaternion& Quaternion::operator=(const Quaternion& right) {
 	m_ = right.m_;
 
@@ -55,7 +76,15 @@ Quaternion& Quaternion::operator=(const Vector4& right) {
 
 	return *this;
 }
+#pragma endregion
+/// ========================================================================
+/// ========================================================================
+/// ========================================================================
 
+/// ========================================================================
+/// 乗算演算子
+/// ========================================================================
+#pragma region Multiplication operator
 Quaternion Quaternion::operator*(const Quaternion& right) const {
 	Quaternion result;
 
@@ -71,12 +100,20 @@ Quaternion& Quaternion::operator*=(const Quaternion& right) {
 
 	return *this;
 }
+#pragma endregion
+/// ========================================================================
+/// ========================================================================
+/// ========================================================================
 
+/// ========================================================================
+/// スカラー倍演算子
+/// ========================================================================
+#pragma region Scalar operator
 Quaternion Quaternion::operator*(float right) const {
 	Quaternion result{ *this };
-	for (auto& i : result.m_) {
-		i *= right;
-	}
+
+	result.vector4_ *= right;
+
 	return result;
 }
 Quaternion operator*(float right, const Quaternion& left) {
@@ -87,7 +124,6 @@ Quaternion& Quaternion::operator*=(float right) {
 
 	return *this;
 }
-
 
 Quaternion Quaternion::operator/(float right) const {
 	return *this * (1.0f / right);
@@ -100,6 +136,11 @@ Quaternion& Quaternion::operator/=(float right) {
 
 	return *this;
 }
+#pragma endregion
+/// ========================================================================
+/// ========================================================================
+/// ========================================================================
+
 /// ========================================================================
 /// 等値演算子
 /// ========================================================================
@@ -115,6 +156,11 @@ bool Quaternion::operator!=(const Quaternion& right) const {
 /// ========================================================================
 /// ========================================================================
 
+
+/// ========================================================================
+/// メンバ関数
+/// ========================================================================
+#pragma region Member function
 Quaternion Quaternion::Conjugate() const {
 	return Quaternion{ -vector_.vector3_, vector_.w_ };
 }
@@ -124,15 +170,21 @@ float Quaternion::Dot(const Quaternion& other) const {
 }
 
 float Quaternion::Length() const {
-	return vector4_.Length();
+	return std::sqrt(Dot(*this));
 }
 
 Quaternion Quaternion::Normalize() const {
-	return vector4_.Normalize();
+	if (*this == Quaternion::zero) {
+		return *this;
+	}
+
+	float nor = 1.0f / this->Length();
+
+	return Quaternion{ *this } *nor;
 }
 
 Quaternion Quaternion::Inverce() const {
-	return Conjugate().vector4_ / std::pow(Length(), 2.0f);
+	return Conjugate() / std::pow(Length(), 2.0f);
 }
 
 Mat4x4 Quaternion::GetMatrix() const {
@@ -163,7 +215,15 @@ Mat4x4 Quaternion::GetMatrix() const {
 
 	return result;
 }
+#pragma endregion
+/// ========================================================================
+/// ========================================================================
+/// ========================================================================
 
+/// ========================================================================
+/// 静的メンバ関数
+/// ========================================================================
+#pragma region Static member function
 Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	Quaternion result;
 	result.vector_.w_ = std::cos(angle * 0.5f);
@@ -171,3 +231,7 @@ Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
 	return result;
 }
+#pragma endregion
+/// ========================================================================
+/// ========================================================================
+/// ========================================================================
