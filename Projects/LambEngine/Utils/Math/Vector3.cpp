@@ -162,6 +162,12 @@ Vector3 Vector3::operator*(const Quaternion& right) const {
 	return (right * Quaternion{ *this, 0.0f } * right.Inverce()).vector_.vector3_;
 }
 
+Vector3& Vector3::operator*=(const Quaternion& right) {
+	*this = *this * right;
+
+	return *this;
+}
+
 bool Vector3::operator==(const Vector3& right) const noexcept {
 	return x == right.x && y == right.y && z == right.z;
 }

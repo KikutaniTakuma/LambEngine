@@ -46,6 +46,7 @@ public:
 	Vector3& operator=(const class Vector2& right) noexcept;
 
 	Vector3 operator*(const class Quaternion& right) const;
+	Vector3& operator*=(const class Quaternion& right);
 
 
 	// 等比演算子
