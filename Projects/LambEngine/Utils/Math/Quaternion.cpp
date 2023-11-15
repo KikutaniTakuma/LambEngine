@@ -55,7 +55,6 @@ Quaternion::Quaternion(float x, float y, float z, float w) {
 /// ========================================================================
 /// ========================================================================
 
-
 /// ========================================================================
 /// コピー演算子
 /// ========================================================================
@@ -284,7 +283,23 @@ Mat4x4 Quaternion::GetMatrix() const {
 Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	Quaternion result;
 	result.vector_.w_ = std::cos(angle * 0.5f);
-	result.vector_.vector3_ = axis.Normalize() * std::sin(angle * 0.5f);
+	result.vector_.vector3_ = axis * std::sin(angle * 0.5f);
+
+	return result;
+}
+Quaternion Quaternion::Slerp(const Quaternion& start, const Quaternion& end, float t) {
+	float cosTheata = start.Dot(end);
+	float theata = std::acos(cosTheata);
+	float sinTheata = 1.0f / std::sin(theata);
+
+	Quaternion result;
+
+	if (start.Dot(end) < 0.0f) {
+		result = (std::sin(theata * (1.0f - t)) * sinTheata) * start + (std::sin(theata * t) * sinTheata) * -end;
+	}
+	else {
+		result = (std::sin(theata * (1.0f - t)) * sinTheata) * start + (std::sin(theata * t) * sinTheata) * end;
+	}
 
 	return result;
 }

@@ -99,6 +99,8 @@ public:
 public:
 	static Quaternion MakeRotateAxisAngle(const Vector3& axis, float angle);
 
+	static Quaternion Slerp(const Quaternion& start, const Quaternion& end, float t);
+
 
 /// <summary>
 /// 静的メンバ定数
