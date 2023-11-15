@@ -7,6 +7,10 @@
 
 
 StringOut::StringOut():
+#ifdef _DEBUG
+	debugStr_{},
+#endif // _DEBUG
+
 	format_(),
 	str_(),
 	pos_(),
@@ -144,16 +148,19 @@ void StringOut::Draw() {
 	batch->End();
 }
 
+void StringOut::Clear() {
+	str_.clear();
+}
+
 void StringOut::Debug([[maybe_unused]]const std::string& debugName) {
 #ifdef _DEBUG
 	static Vector4 debugColor;
 	debugColor = UintToVector4(color_);
-	static std::string debugStr;
-	debugStr.resize(32);
-	debugStr = ConvertString(str_);
+	debugStr_.resize(64);
+	debugStr_ = ConvertString(str_);
 
 	ImGui::Begin(debugName.c_str());
-	ImGui::InputText("text", debugStr.data(), debugStr.size());
+	ImGui::InputText("text", debugStr_.data(), debugStr_.size());
 	ImGui::DragFloat2("pos", &pos_.x);
 	ImGui::DragFloat("rotation", &rotation_, 0.01f);
 	ImGui::DragFloat2("scale", &scale_.x, 0.01f);
@@ -161,7 +168,7 @@ void StringOut::Debug([[maybe_unused]]const std::string& debugName) {
 	ImGui::Checkbox("isHorizontal", &isHorizontal_);
 	ImGui::End();
 
-	str_ = ConvertString(debugStr);
+	str_ = ConvertString(debugStr_);
 
 	color_ = Vector4ToUint(debugColor);
 #endif // _DEBUG

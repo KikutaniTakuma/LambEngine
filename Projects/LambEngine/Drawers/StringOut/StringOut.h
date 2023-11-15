@@ -49,12 +49,19 @@ public:
 public:
 	void Draw();
 
+	void Clear();
+
 	void Debug(const std::string& debugName);
 
 
 private:
 	std::string format_;
 	std::wstring str_;
+
+#ifdef _DEBUG
+	std::string debugStr_;
+#endif // _DEBUG
+
 
 public:
 	Vector2 pos_;
