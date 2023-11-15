@@ -93,6 +93,7 @@ public:
 	static const Quaternion identity;
 
 /// <summary>
+	static const Quaternion zero;
 /// メンバ変数
 /// </summary>
 public:

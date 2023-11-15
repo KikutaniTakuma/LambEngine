@@ -3,6 +3,7 @@
 #include <cmath>
 
 const Quaternion Quaternion::identity = { 0.0f, 0.0f, 0.0f, 1.0f };
+const Quaternion Quaternion::zero = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 Quaternion::Quaternion():
 	m_{0.0f}
