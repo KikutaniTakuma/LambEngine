@@ -3,6 +3,7 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vector4.h"
 #include "Utils/ConvertString/ConvertString.h"
+#include <concepts>
 
 /// <summary>
 /// 文字列描画(座標系はスクリーンなので注意)
@@ -27,6 +28,19 @@ public:
 
 	StringOut& operator<<(const std::string& right);
 	StringOut& operator<<(const std::wstring& right);
+
+	template<std::integral T>
+	StringOut& operator<<(const T& right) {
+		str_ += std::to_wstring(right);
+	}
+
+	template<std::floating_point T>
+	StringOut& operator<<(const T& right) {
+		str_ += std::to_wstring(right);
+	}
+
+	const StringOut& operator>>(std::string& right) const;
+	const StringOut& operator>>(std::wstring& right) const;
 
 public:
 	void Draw();

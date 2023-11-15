@@ -108,6 +108,18 @@ StringOut& StringOut::operator<<(const std::wstring& right) {
 	return *this;
 }
 
+const StringOut& StringOut::operator>>(std::wstring& right) const {
+	right = str_;
+
+	return *this;
+}
+
+const StringOut& StringOut::operator>>(std::string& right) const {
+	right = ConvertString(str_);
+
+	return *this;
+}
+
 void StringOut::Draw() {
 	if (str_.empty()) {
 		return;
