@@ -4,7 +4,13 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
+/// <summary>
+/// クォータニオンクラス
+/// </summary>
 class Quaternion {
+/// <summary>
+/// コンストラクタ
+/// </summary>
 public:
 	Quaternion();
 	Quaternion(const Quaternion& right);
@@ -15,6 +21,9 @@ public:
 	Quaternion(float x, float y, float z, float w);
 	~Quaternion() = default;
 
+/// <summary>
+/// 演算子のオーバーロード
+/// </summary>
 public:
 	Quaternion& operator=(const Quaternion& right);
 	Quaternion& operator=(Quaternion&& right)noexcept;
@@ -24,26 +33,45 @@ public:
 	Quaternion operator*(const Quaternion& right) const;
 	Quaternion& operator*=(const Quaternion& right);
 
+public:
 	/// <summary>
 	/// 共役
 	/// </summary>
 	/// <returns>このクォータニオンの虚部を反転させたもの</returns>
 	Quaternion Conjugate() const;
 
+	/// <summary>
+	/// 長さ取得
+	/// </summary>
+	/// <returns>ノルム</returns>
 	float Length() const;
 
+	/// <summary>
+	/// 長さ1のクォータニオンを返す
+	/// </summary>
+	/// <returns>単位クォータニオン</returns>
 	Quaternion Normalize() const;
 
+	/// <summary>
+	/// 逆クォータニオンを返す
+	/// </summary>
+	/// <returns>逆クォータニオン</returns>
 	Quaternion Inverce() const;
 
+/// <summary>
+/// 静的メンバ変数
+/// </summary>
 public:
 	static const Quaternion identity;
 
+/// <summary>
+/// メンバ変数
+/// </summary>
 public:
 	union
 	{
 		std::array<float, 4> m_;
-		__m128 m128;
+		__m128 m128_;
 		Vector4 vector4_;
 		struct {
 			Vector3 vector3_;
