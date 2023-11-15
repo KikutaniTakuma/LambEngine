@@ -1,4 +1,5 @@
 #include "Quaternion.h"
+#include "Mat4x4.h"
 #include <cmath>
 
 const Quaternion Quaternion::identity = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -84,4 +85,41 @@ Quaternion Quaternion::Normalize() const {
 
 Quaternion Quaternion::Inverce() const {
 	return Conjugate().vector4_ / std::pow(Length(), 2.0f);
+}
+
+Mat4x4 Quaternion::GetMatrix() const {
+	Mat4x4 result = Mat4x4{
+		std::array<Vector4, 4>{
+			Vector4{
+				std::pow(quaternion_.w_, 2.0f) + std::pow(quaternion_.x_, 2.0f) - std::pow(quaternion_.y_, 2.0f) - std::pow(quaternion_.z_, 2.0f),
+				2.0f * (quaternion_.x_ * quaternion_.y_ + quaternion_.w_ * quaternion_.z_),
+				2.0f * (quaternion_.x_ * quaternion_.z_ - quaternion_.w_ * quaternion_.y_),
+				0.0f
+			},
+			Vector4{
+				2.0f * (quaternion_.x_ * quaternion_.y_ - quaternion_.w_ * quaternion_.z_),
+				std::pow(quaternion_.w_, 2.0f) - std::pow(quaternion_.x_, 2.0f) + std::pow(quaternion_.y_, 2.0f) - std::pow(quaternion_.z_, 2.0f),
+				2.0f * (quaternion_.y_ * quaternion_.z_ + quaternion_.w_ * quaternion_.x_),
+				0.0f
+			},
+			Vector4{
+				2.0f * (quaternion_.x_ * quaternion_.z_ + quaternion_.w_ * quaternion_.y_),
+				2.0f * (quaternion_.y_ * quaternion_.z_ - quaternion_.w_ * quaternion_.x_),
+				std::pow(quaternion_.w_, 2.0f) - std::pow(quaternion_.x_, 2.0f) - std::pow(quaternion_.y_, 2.0f) + std::pow(quaternion_.z_, 2.0f),
+				0.0f
+			},
+			Vector4::wIdy
+		}
+	};
+
+
+	return result;
+}
+
+Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle) {
+	Quaternion result;
+	result.vector_.w_ = std::cos(angle * 0.5f);
+	result.vector_.vector3_ = axis.Normalize() * std::sin(angle * 0.5f);
+
+	return result;
 }

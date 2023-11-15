@@ -56,6 +56,15 @@ public:
 	/// <returns>逆クォータニオン</returns>
 	Quaternion Inverce() const;
 
+	class Mat4x4 GetMatrix() const;
+
+/// <summary>
+/// 静的メンバ関数
+/// </summary>
+public:
+	static Quaternion MakeRotateAxisAngle(const Vector3& axis, float angle);
+
+
 /// <summary>
 /// 静的メンバ変数
 /// </summary>
