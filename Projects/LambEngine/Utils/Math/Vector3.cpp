@@ -4,6 +4,7 @@
 #include "Vector2.h"
 #include <cassert>
 #include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Quaternion.h"
 
 Vector3::Vector3() noexcept :
 	x(0.0f),
@@ -155,6 +156,10 @@ Vector3& Vector3::operator=(const Vector2& right) noexcept {
 	y = right.y;
 
 	return *this;
+}
+
+Vector3 Vector3::operator*(const Quaternion& right) const {
+	return (right * Quaternion{ *this, 0.0f } * right.Inverce()).vector_.vector3_;
 }
 
 bool Vector3::operator==(const Vector3& right) const noexcept {
