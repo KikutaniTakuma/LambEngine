@@ -207,6 +207,7 @@
     <ClCompile Include="Utils\Easeing\Easeing.cpp" />
     <ClCompile Include="Utils\ExecutionLog\ExecutionLog.cpp" />
     <ClCompile Include="Utils\Math\Mat4x4.cpp" />
+    <ClCompile Include="Utils\Math\Quaternion.cpp" />
     <ClCompile Include="Utils\Math\Vector2.cpp" />
     <ClCompile Include="Utils\Math\Vector3.cpp" />
     <ClCompile Include="Utils\Math\Vector4.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="Utils\Easeing\Easeing.h" />
     <ClInclude Include="Utils\ExecutionLog\ExecutionLog.h" />
     <ClInclude Include="Utils\Math\Mat4x4.h" />
+    <ClInclude Include="Utils\Math\Quaternion.h" />
     <ClInclude Include="Utils\Math\Vector2.h" />
     <ClInclude Include="Utils\Math\Vector3.h" />
     <ClInclude Include="Utils\Math\Vector4.h" />

@@ -142,6 +142,9 @@
     <ClCompile Include="..\externals\imgui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Math\Quaternion.cpp">
+      <Filter>Utils\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -427,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="..\externals\imgui\imstb_truetype.h">
       <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Math\Quaternion.h">
+      <Filter>Utils\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
