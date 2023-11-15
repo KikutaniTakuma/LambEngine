@@ -32,11 +32,15 @@ public:
 	template<std::integral T>
 	StringOut& operator<<(const T& right) {
 		str_ += std::to_wstring(right);
+
+		return *this;
 	}
 
 	template<std::floating_point T>
 	StringOut& operator<<(const T& right) {
 		str_ += std::to_wstring(right);
+
+		return *this;
 	}
 
 	const StringOut& operator>>(std::string& right) const;
