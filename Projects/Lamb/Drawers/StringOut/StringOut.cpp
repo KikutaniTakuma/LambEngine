@@ -3,6 +3,7 @@
 #include "Engine/EngineParts/StringOutPutManager/StringOutPutManager.h"
 #include "Engine/Engine.h"
 #include "../externals/imgui/imgui.h"
+#include "Utils/ConvertString/ConvertString.h"
 
 
 StringOut::StringOut():
@@ -15,7 +16,6 @@ StringOut::StringOut():
 	isHorizontal_(false)
 {
 	str_.reserve(0x40);
-	str_.resize(0x40);
 }
 
 StringOut::StringOut(const StringOut& right) {
@@ -36,7 +36,6 @@ StringOut::StringOut(const std::string& formatName) :
 	isHorizontal_(false)
 {
 	str_.reserve(0x40);
-	str_.resize(0x40);
 }
 
 StringOut::StringOut(const std::wstring& formatName) :
@@ -49,7 +48,6 @@ StringOut::StringOut(const std::wstring& formatName) :
 	isHorizontal_(false)
 {
 	str_.reserve(0x40);
-	str_.resize(0x40);
 }
 
 StringOut& StringOut::operator=(const StringOut& right) {
@@ -76,7 +74,45 @@ StringOut& StringOut::operator=(StringOut && right) noexcept{
 	return *this;
 }
 
+StringOut& StringOut::operator=(const std::string& right) {
+	str_ = ConvertString(right);
+
+	return *this;
+}
+
+StringOut& StringOut::operator=(const std::wstring& right) {
+	str_ = right;
+
+	return *this;
+}
+
+StringOut& StringOut::operator+=(const std::string& right) {
+	str_ += ConvertString(right);
+
+	return *this;
+}
+StringOut& StringOut::operator+=(const std::wstring& right) {
+	str_ += right;
+
+	return *this;
+}
+
+StringOut& StringOut::operator<<(const std::string& right) {
+	str_ += ConvertString(right);
+
+	return *this;
+}
+StringOut& StringOut::operator<<(const std::wstring& right) {
+	str_ += right;
+
+	return *this;
+}
+
 void StringOut::Draw() {
+	if (str_.empty()) {
+		return;
+	}
+
 	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
 	auto  stringOutPutManager = StringOutPutManager::GetInstance();
 	
@@ -96,8 +132,8 @@ void StringOut::Draw() {
 	batch->End();
 }
 
+void StringOut::Debug([[maybe_unused]]const std::string& debugName) {
 #ifdef _DEBUG
-void StringOut::Debug(const std::string& debugName) {
 	static Vector4 debugColor;
 	debugColor = UintToVector4(color_);
 	static std::string debugStr;
@@ -108,7 +144,7 @@ void StringOut::Debug(const std::string& debugName) {
 	ImGui::InputText("text", debugStr.data(), debugStr.size());
 	ImGui::DragFloat2("pos", &pos_.x);
 	ImGui::DragFloat("rotation", &rotation_, 0.01f);
-	ImGui::DragFloat2("scale", &scale_.x);
+	ImGui::DragFloat2("scale", &scale_.x, 0.01f);
 	ImGui::ColorEdit4("SphereColor", &debugColor.color.r);
 	ImGui::Checkbox("isHorizontal", &isHorizontal_);
 	ImGui::End();
@@ -116,5 +152,5 @@ void StringOut::Debug(const std::string& debugName) {
 	str_ = ConvertString(debugStr);
 
 	color_ = Vector4ToUint(debugColor);
-}
 #endif // _DEBUG
+}

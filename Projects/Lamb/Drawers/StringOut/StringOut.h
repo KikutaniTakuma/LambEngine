@@ -19,20 +19,26 @@ public:
 public:
 	StringOut& operator=(const StringOut& right);
 	StringOut& operator=(StringOut&& right) noexcept;
+	StringOut& operator=(const std::string& right);
+	StringOut& operator=(const std::wstring& right);
+
+	StringOut& operator+=(const std::string& right);
+	StringOut& operator+=(const std::wstring& right);
+
+	StringOut& operator<<(const std::string& right);
+	StringOut& operator<<(const std::wstring& right);
 
 public:
 	void Draw();
 
-#ifdef _DEBUG
 	void Debug(const std::string& debugName);
-#endif // _DEBUG
 
 
 private:
 	std::string format_;
-public:
 	std::wstring str_;
 
+public:
 	Vector2 pos_;
 	float rotation_;
 	Vector2 scale_;
