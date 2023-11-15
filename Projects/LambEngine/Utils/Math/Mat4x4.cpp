@@ -427,7 +427,7 @@ Mat4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 	Vector3 normal;
 
 	if (from.Dot(to) == -1.0f) {
-		Vector3 fromTmp = from.Normalize();
+		Vector3 fromTmp = from;
 		if (fromTmp.x != 0.0f || fromTmp.y != 0.0f) {
 			normal = { fromTmp.y, -fromTmp.x, 0.0f };
 		}
@@ -440,8 +440,8 @@ Mat4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 	}
 
 
-	float theataCos = from.Normalize().Dot(to.Normalize());
-	float theataSin = from.Normalize().Cross(to.Normalize()).Length();
+	float theataCos = from.Dot(to);
+	float theataSin = from.Cross(to).Length();
 
 	Mat4x4 result = Mat4x4{
 		std::array<Vector4, 4>{
