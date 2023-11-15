@@ -14,24 +14,17 @@ GameScene::GameScene() :
 void GameScene::Initialize() {
 	resultString_.SetFormat("./Resources/Font/default.spritefont");
 	resultString_.scale_ *= 0.3f;
-	Quaternion q1 = { 2.0f,3.0f,4.0f,1.0f };
-	Quaternion q2 = { 1.0f,3.0f,5.0f,2.0f };
-	Quaternion identity = Quaternion::identity;
-	Quaternion conj = q1.Conjugate();
-	Quaternion inv = q1.Inverce();
-	Quaternion normal = q1.Normalize();
-	Quaternion mul1 = q1 * q2;
-	Quaternion mul2 = q2 * q1;
-	float norm = q1.Length();
+	Quaternion rotation = Quaternion::MakeRotateAxisAngle(Vector3{1.0f,0.4f,-0.2f}.Normalize(), 0.45f);
+	Vector3 pointY = { 2.1f, -0.9f, 1.3f };
+	Mat4x4 rotateMatrix = rotation.GetMatrix();
+	Vector3 rotateByQuaternion = pointY * rotation;
+	Vector3 rotateByMatrix = pointY * rotateMatrix;
 
-	resultString_ 
-		<< identity << " : identity" << "\n"
-		<< conj << " : Conjugate" << "\n"
-		<< inv << " : Inverce" << "\n"
-		<< normal << " : Normalize" << "\n"
-		<< mul1 << " : q1 * q2" << "\n"
-		<< mul2 << " : q2 * q1" << "\n"
-		<< norm << " : Norm";
+	resultString_ << rotation << " : rotation\n"
+		<< "rotateMatrix\n"
+		<< GetMatrixString(rotateMatrix)
+		<< rotateByQuaternion << " : rotateByQuaternion\n"
+		<< rotateByMatrix << " : rotateByMatrix";
 }
 
 void GameScene::Finalize() {
