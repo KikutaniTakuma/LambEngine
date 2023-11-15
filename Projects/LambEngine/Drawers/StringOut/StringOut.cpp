@@ -131,7 +131,7 @@ StringOut& StringOut::operator<<(const Vector4& right) {
 	return *this;
 }
 StringOut& StringOut::operator<<(const Quaternion& right) {
-	*this << right.vec4_;
+	*this << right.vector4_;
 
 	return *this;
 }

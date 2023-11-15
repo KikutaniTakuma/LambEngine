@@ -44,17 +44,17 @@ public:
 	{
 		std::array<float, 4> m_;
 		__m128 m128;
-		Vector4 vec4_;
+		Vector4 vector4_;
 		struct {
-			Vector3 vec3_;
+			Vector3 vector3_;
 			float w_;
-		}vec_;
+		}vector_;
 
 		struct {
-			float x;
-			float y;
-			float z;
-			float w;
-		}quater_;
+			float x_;
+			float y_;
+			float z_;
+			float w_;
+		}quaternion_;
 	};
 };

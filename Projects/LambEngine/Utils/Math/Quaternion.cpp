@@ -25,8 +25,8 @@ Quaternion::Quaternion(const Vector4& right):
 }
 
 Quaternion::Quaternion(const Vector3& right, float w) {
-	vec_.vec3_ = right;
-	vec_.w_ = w;
+	vector_.vector3_ = right;
+	vector_.w_ = w;
 }
 
 Quaternion::Quaternion(const std::array<float, 4>& right) {
@@ -58,8 +58,8 @@ Quaternion Quaternion::operator*(const Quaternion& right) const {
 	Quaternion result;
 
 	result = Quaternion{
-		vec_.vec3_.Cross(right.vec_.vec3_) + vec_.vec3_ * right.vec_.w_ + right.vec_.vec3_ * vec_.w_,
-		vec_.w_ * right.vec_.w_ - vec_.vec3_.Dot(right.vec_.vec3_)
+		vector_.vector3_.Cross(right.vector_.vector3_) + vector_.vector3_ * right.vector_.w_ + right.vector_.vector3_ * vector_.w_,
+		vector_.w_ * right.vector_.w_ - vector_.vector3_.Dot(right.vector_.vector3_)
 	};
 
 	return result;
@@ -71,17 +71,17 @@ Quaternion& Quaternion::operator*=(const Quaternion& right) {
 }
 
 Quaternion Quaternion::Conjugate() const {
-	return Quaternion{ -vec_.vec3_, vec_.w_ };
+	return Quaternion{ -vector_.vector3_, vector_.w_ };
 }
 
 float Quaternion::Length() const {
-	return vec4_.Length();
+	return vector4_.Length();
 }
 
 Quaternion Quaternion::Normalize() const {
-	return vec4_.Normalize();
+	return vector4_.Normalize();
 }
 
 Quaternion Quaternion::Inverce() const {
-	return Conjugate().vec4_ / std::pow(Length(), 2.0f);
+	return Conjugate().vector4_ / std::pow(Length(), 2.0f);
 }
