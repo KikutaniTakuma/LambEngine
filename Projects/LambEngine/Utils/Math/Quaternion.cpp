@@ -78,6 +78,9 @@ Quaternion Quaternion::operator*(float right) const {
 	}
 	return result;
 }
+Quaternion operator*(float right, const Quaternion& left) {
+	return left * right;
+}
 Quaternion& Quaternion::operator*=(float right) {
 	*this = *this * right;
 
