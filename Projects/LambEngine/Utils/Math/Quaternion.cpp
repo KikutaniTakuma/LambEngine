@@ -288,13 +288,20 @@ Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	return result;
 }
 Quaternion Quaternion::Slerp(const Quaternion& start, const Quaternion& end, float t) {
-	float cosTheata = start.Dot(end);
-	float theata = std::acos(cosTheata);
+	float dot = start.Dot(end);
+	float theata = std::acos(dot);
 	float sinTheata = 1.0f / std::sin(theata);
+
+	static constexpr float kEpsilon = 0.0005f;
 
 	Quaternion result;
 
-	if (start.Dot(end) < 0.0f) {
+	// sinθが0.0fになる場合またはそれに近くなる場合
+	if (dot <= -1.0f + kEpsilon || 1.0f - kEpsilon <= dot || sinTheata == 0.0f) {
+		result = (1.0f - t) * start + t * end;
+	}
+	// 近いほうで補完する
+	else if (dot < 0.0f) {
 		result = (std::sin(theata * (1.0f - t)) * sinTheata) * start + (std::sin(theata * t) * sinTheata) * -end;
 	}
 	else {
