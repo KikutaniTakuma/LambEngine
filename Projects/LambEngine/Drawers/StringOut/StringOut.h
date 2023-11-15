@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "Utils/Math/Vector2.h"
-#include "Utils/Math/Vector4.h"
+#include "Utils/Math/Quaternion.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include <concepts>
 
@@ -42,6 +42,11 @@ public:
 
 		return *this;
 	}
+
+	StringOut& operator<<(const Vector2& right);
+	StringOut& operator<<(const Vector3& right);
+	StringOut& operator<<(const Vector4& right);
+	StringOut& operator<<(const Quaternion& right);
 
 	const StringOut& operator>>(std::string& right) const;
 	const StringOut& operator>>(std::wstring& right) const;

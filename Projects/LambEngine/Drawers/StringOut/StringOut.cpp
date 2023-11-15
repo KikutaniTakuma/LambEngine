@@ -4,6 +4,7 @@
 #include "Engine/Engine.h"
 #include "../externals/imgui/imgui.h"
 #include "Utils/ConvertString/ConvertString.h"
+#include <format>
 
 
 StringOut::StringOut():
@@ -108,6 +109,29 @@ StringOut& StringOut::operator<<(const std::string& right) {
 }
 StringOut& StringOut::operator<<(const std::wstring& right) {
 	str_ += right;
+
+	return *this;
+}
+
+StringOut& StringOut::operator<<(const Vector2& right) {
+	str_ += std::format(L"{:6.3f}, {:6.3f}", right.x, right.y);
+
+	return *this;
+}
+StringOut& StringOut::operator<<(const Vector3& right) {
+	str_ += std::format(L"{:6.3f}, {:6.3f}, {:6.3f}", right.x, right.y, right.y);
+
+	return *this;
+}
+StringOut& StringOut::operator<<(const Vector4& right) {
+	str_ += std::format(L"{:6.3f}, {:6.3f}, {:6.3f}, {:6.3f}", 
+		right.m[0], right.m[1], right.m[2], right.m[3]
+	);
+
+	return *this;
+}
+StringOut& StringOut::operator<<(const Quaternion& right) {
+	*this << right.vec4_;
 
 	return *this;
 }
