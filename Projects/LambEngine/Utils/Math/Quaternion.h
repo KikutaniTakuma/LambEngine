@@ -20,7 +20,14 @@ public:
 	~Quaternion() = default;
 
 /// <summary>
-/// 演算子のオーバーロード
+/// 単項演算子
+/// </summary>
+public:
+	Quaternion operator+() const;
+	Quaternion operator-() const;
+
+/// <summary>
+/// 二項演算子のオーバーロード
 /// </summary>
 public:
 	Quaternion& operator=(const Quaternion& right);
