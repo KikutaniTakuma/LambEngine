@@ -93,10 +93,17 @@ public:
 	/// <returns>クォータニオンからの回転行列</returns>
 	class Mat4x4 GetMatrix() const;
 
+
 /// <summary>
 /// 静的メンバ関数
 /// </summary>
 public:
+	/// <summary>
+	/// 任意軸回転
+	/// </summary>
+	/// <param name="axis">任意軸の方向ベクトル(単位ベクトル)</param>
+	/// <param name="angle">任意軸での回転量</param>
+	/// <returns>任意軸回転を適用したクォータニオン</returns>
 	static Quaternion MakeRotateAxisAngle(const Vector3& axis, float angle);
 	/// <summary>
 	/// x軸回転クォータニオン
@@ -117,6 +124,13 @@ public:
 	/// <returns>z意軸回転を適用したクォータニオン</returns>
 	static Quaternion MakeRotateZAxis(float eulerAngle);
 
+	/// <summary>
+	/// クォータニオン線形補完関数(近いものの方向に回転する)
+	/// </summary>
+	/// <param name="start">スタート時の回転</param>
+	/// <param name="end">終わりの回転</param>
+	/// <param name="t">0.0f～1.0f</param>
+	/// <returns>補完されたクォータニオン</returns>
 	static Quaternion Slerp(const Quaternion& start, const Quaternion& end, float t);
 
 
