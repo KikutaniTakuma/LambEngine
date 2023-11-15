@@ -14,24 +14,26 @@ GameScene::GameScene() :
 void GameScene::Initialize() {
 	resultString_.SetFormat("./Resources/Font/default.spritefont");
 	resultString_.scale_ *= 0.3f;
-	Quaternion rotation0 = Quaternion::MakeRotateAxisAngle(Vector3{0.71f,0.71f,0.0f}.Normalize(), 0.3f);
-	Quaternion rotation1 = -rotation0;
-	
-	std::array<float, 5> lerpT = {
-		0.0f,0.3f,0.5f,0.7f,1.0f
-	};
 
-	std::array<Quaternion, 5> interpolate = {
-		Quaternion::Slerp(rotation0, rotation1, lerpT[0]),
-		Quaternion::Slerp(rotation0, rotation1, lerpT[1]),
-		Quaternion::Slerp(rotation0, rotation1, lerpT[2]),
-		Quaternion::Slerp(rotation0, rotation1, lerpT[3]),
-		Quaternion::Slerp(rotation0, rotation1, lerpT[4])
-	};
+	Quaternion rotation = Quaternion::MakeRotateAxisAngle(Vector3{ 0.0f,0.0f,1.0f }.Normalize(), 0.45f);
+	Quaternion rotation2 = Quaternion::MakeRotateZAxis(0.45f);
+	Vector3 pointY = { 2.1f, -0.9f, 1.3f };
+	Mat4x4 rotateMatrix = rotation.GetMatrix();
+	Mat4x4 rotateMatrix2 = rotation2.GetMatrix();
+	Vector3 rotateByQuaternion = pointY * rotation;
+	Vector3 rotateByMatrix = pointY * rotateMatrix;
+	Vector3 rotateByQuaternion2 = pointY * rotation2;
+	Vector3 rotateByMatrix2 = pointY * rotateMatrix2;
 
-	for (size_t i = 0llu; i < interpolate.size(); i++) {
-		resultString_ << interpolate[i] << "   : interpolate" << i << ", Slerp(q0, q1, " << lerpT[i] << "f)\n";
-	}
+	resultString_ << rotation << " : rotation\n"
+		<< "rotateMatrix\n"
+		<< GetMatrixString(rotateMatrix)
+		<< rotateByQuaternion << " : rotateByQuaternion\n"
+		<< rotateByMatrix << " : rotateByMatrix\n"
+		<< "rotateMatrix2\n"
+		<< GetMatrixString(rotateMatrix2)
+		<< rotateByQuaternion2 << " : rotateByQuaternion\n"
+		<< rotateByMatrix2 << " : rotateByMatrix";
 }
 
 void GameScene::Finalize() {
