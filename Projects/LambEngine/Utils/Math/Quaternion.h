@@ -51,6 +51,12 @@ public:
 
 	/// <summary>
 	/// クォータニオンを4次元ベクトルとしての内積
+	/// </summary>
+	/// <param name="other">他のクォータニオン</param>
+	/// <returns>内積結果</returns>
+	float Dot(const Quaternion& other) const;
+
+	/// <summary>
 	/// 長さ取得
 	/// </summary>
 	/// <returns>ノルム</returns>
