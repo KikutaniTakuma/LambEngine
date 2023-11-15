@@ -60,6 +60,9 @@ public:
 /// 静的メンバ変数
 /// </summary>
 public:
+	/// <summary>
+	/// x = 0.0f, y = 0.0f, z = 0.0f w = 1.0f
+	/// </summary>
 	static const Quaternion identity;
 
 /// <summary>
