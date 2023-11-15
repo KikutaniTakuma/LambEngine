@@ -15,7 +15,7 @@ void GameScene::Initialize() {
 	resultString_.SetFormat("./Resources/Font/default.spritefont");
 	resultString_.scale_ *= 0.3f;
 	Quaternion rotation0 = Quaternion::MakeRotateAxisAngle(Vector3{0.71f,0.71f,0.0f}.Normalize(), 0.3f);
-	Quaternion rotation1 = Quaternion::MakeRotateAxisAngle(Vector3{ 0.71f,0.0f,0.71f }.Normalize(), std::numbers::pi_v<float>);
+	Quaternion rotation1 = -rotation0;
 	
 	std::array<float, 5> lerpT = {
 		0.0f,0.3f,0.5f,0.7f,1.0f
