@@ -64,11 +64,11 @@ public:
 		return incrementSAMPLER_;
 	}
 
-	ID3D12Device* GetDevice() const {
+	ID3D12Device* const GetDevice() const {
 		return device_.Get();
 	}
 
-	IDXGIFactory7* GetDxgiFactory() const {
+	IDXGIFactory7* const GetDxgiFactory() const {
 		return dxgiFactory_.Get();
 	}
 
