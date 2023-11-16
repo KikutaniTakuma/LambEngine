@@ -162,12 +162,24 @@ uint32_t DescriptorHeap::BookingHeapPos(UINT nextCreateViewNum) {
 		return currentHandleIndex_;
 	}
 
-	// リリースハンドルがの最初のイテレータ
+	// リリースハンドルの最初のイテレータ
 	auto releaseHandle = releaseHandle_.begin();
 	// 予約済みを使えるかどうか
 	bool isCanUseHandle = true;
 
+	size_t loopCount = 0llu;
+
 	do {
+		releaseHandle = releaseHandle_.begin();
+		size_t loopCountBuf = loopCount;
+		while (0llu < loopCountBuf) {
+			releaseHandle++;
+			if (releaseHandle == releaseHandle_.end()) {
+				return currentHandleIndex_;
+			}
+			loopCountBuf--;
+		}
+
 		// ループするのでここでも初期化
 		isCanUseHandle = true;
 		// 予約済みのハンドルをクリア
@@ -196,13 +208,14 @@ uint32_t DescriptorHeap::BookingHeapPos(UINT nextCreateViewNum) {
 		// 予約したものが連続したハンドルか
 		for (size_t i = 0; i < bookingHandle_.size() - 1; i++) {
 			// 連続してない場合予約ハンドルを解放してループを抜ける
-			if (bookingHandle_[i] != bookingHandle_[i + 1llu]) {
+			if (bookingHandle_[i] != bookingHandle_[i + 1llu] - 1u) {
 				isCanUseHandle = false;
 				bookingHandle_.clear();
 				break;
 			}
 		}
 
+		loopCount++;
 		// ちゃんと予約出来るまでループ
 	} while (!isCanUseHandle);
 
