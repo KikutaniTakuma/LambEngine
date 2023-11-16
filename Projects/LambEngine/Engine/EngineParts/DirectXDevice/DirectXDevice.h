@@ -29,6 +29,9 @@ public:
 private:
 	static DirectXDevice* instance_;
 
+/// <summary>
+/// リソース作成
+/// </summary>
 public:
 	[[nodiscard]]
 	ID3D12DescriptorHeap* CreateDescriptorHeap(
@@ -41,6 +44,9 @@ public:
 	[[nodiscard]]
 	ID3D12Resource* CreateDepthStencilTextureResource(int32_t width, int32_t height);
 
+/// <summary>
+/// ゲッター
+/// </summary>
 public:
 	inline UINT GetIncrementSRVCBVUAVHeap() const {
 		return incrementSRVCBVUAVHeap_;
