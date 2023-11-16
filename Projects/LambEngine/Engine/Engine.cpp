@@ -210,12 +210,8 @@ bool Engine::InitializeDraw() {
 		return false;
 	}
 
-	D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
-	dsvHeapDesc.NumDescriptors = 1;
-	dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-
-	dsvHeap = nullptr;
-	if(!SUCCEEDED(device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(dsvHeap.GetAddressOf())))) {
+	dsvHeap = engine->directXDevice_->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV,1,false);
+	if(!dsvHeap) {
 		assert(!"CreateDescriptorHeap failed");
 		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDraw() : CreateDescriptorHeap()  Failed", "Engine");
 		return false;
@@ -339,8 +335,14 @@ void Engine::FrameEnd() {
 /// 各種解放処理
 /// 
 Engine::~Engine() {
-	depthStencilResource->Release();
-
+	if (depthStencilResource) {
+		depthStencilResource->Release();
+		depthStencilResource.Reset();
+	}
+	if (dsvHeap) {
+		dsvHeap->Release();
+		dsvHeap.Reset();
+	}
 	DirectXCommon::Finalize();
 	DirectXDevice::Finalize();
 }
