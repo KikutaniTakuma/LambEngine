@@ -12,6 +12,10 @@ GameScene::GameScene() :
 {}
 
 void GameScene::Initialize() {
+	camera_.farClip = 3000.0f;
+	camera_.pos.z = -5.0f;
+	camera_.pos.y = 1.1f;
+
 	resultString_.SetFormat("./Resources/Font/default.spritefont");
 	resultString_.scale_ *= 0.3f;
 
@@ -34,6 +38,8 @@ void GameScene::Initialize() {
 		<< GetMatrixString(rotateMatrix2)
 		<< rotateByQuaternion2 << " : rotateByQuaternion\n"
 		<< rotateByMatrix2 << " : rotateByMatrix";
+
+	model_.LoadObj("./Resources/Watame/Watame.obj");
 }
 
 void GameScene::Finalize() {
@@ -42,8 +48,12 @@ void GameScene::Finalize() {
 
 void GameScene::Update() {
 	resultString_.Debug("result");
+	model_.Update();
 }
 
 void GameScene::Draw() {
+	camera_.Update(Vector3::zero);
 	resultString_.Draw();
+
+	model_.Draw(camera_.GetViewProjection(), camera_.GetPos());
 }

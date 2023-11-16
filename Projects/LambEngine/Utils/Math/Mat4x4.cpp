@@ -1,6 +1,7 @@
 #include "Mat4x4.h"
 #include "Vector3.h"
 #include <cmath>
+#include <cassert>
 #include <algorithm>
 #include <format>
 #include <Windows.h>
@@ -36,6 +37,20 @@ Mat4x4::Mat4x4(const Mat4x4& mat) {
 
 Mat4x4::Mat4x4(Mat4x4&& mat) noexcept {
 	*this = std::move(mat);
+}
+
+Mat4x4::Mat4x4(const std::initializer_list<float>& num) {
+	auto i = num.begin();
+	assert(num.size() <= 16llu);
+	for (size_t y = 0llu; y < 4llu; y++) {
+		for (size_t x = 0; x < 4llu; x++) {
+			m[y][x] = *i;
+			i++;
+			if (i == num.end()) {
+				return;
+			}
+		}
+	}
 }
 
 Mat4x4::Mat4x4(const std::array<Vector4, 4>& num) {
@@ -208,12 +223,10 @@ const Mat4x4& Mat4x4::Affin(const Vector3& scale, const Vector3& rad, const Vect
 	Mat4x4 rotate = MakeMatrixRotateX(rad.x) * MakeMatrixRotateY(rad.y) * MakeMatrixRotateZ(rad.z);
 
 	*this = Mat4x4{ 
-		std::array<Vector4, 4>{
-		Vector4{scale.x * rotate.m[0][0], scale.x * rotate.m[0][1],scale.x * rotate.m[0][2], 0.0f},
-		Vector4{scale.y * rotate.m[1][0], scale.y * rotate.m[1][1],scale.y * rotate.m[1][2], 0.0f },
-		Vector4{scale.z * rotate.m[2][0], scale.z * rotate.m[2][1],scale.z * rotate.m[2][2], 0.0f},
-		Vector4{translate.x, translate.y, translate.z, 1.0f}
-		}
+		scale.x * rotate.m[0][0], scale.x * rotate.m[0][1],scale.x * rotate.m[0][2], 0.0f,
+		scale.y * rotate.m[1][0], scale.y * rotate.m[1][1],scale.y * rotate.m[1][2], 0.0f,
+		scale.z * rotate.m[2][0], scale.z * rotate.m[2][1],scale.z * rotate.m[2][2], 0.0f,
+		translate.x, translate.y, translate.z, 1.0f
 	};
 
 	return *this;

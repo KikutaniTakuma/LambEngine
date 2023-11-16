@@ -32,4 +32,5 @@ public:
 
 public:
 	StringOut resultString_;
+	Model model_;
 };

@@ -3,6 +3,7 @@
 #include <array>
 #include <concepts>
 #include <string>
+#include <initializer_list>
 #include "Vector4.h"
 
 class Vector3;
@@ -18,6 +19,7 @@ public:
 	Mat4x4();
 	Mat4x4(const Mat4x4& mat);
 	Mat4x4(Mat4x4&& mat) noexcept;
+	Mat4x4(const std::initializer_list<float>& num);
 	Mat4x4(const std::array<Vector4, 4>& num);
 	Mat4x4(const std::array<float, 16>& num);
 
