@@ -72,7 +72,7 @@ public:
 	}
 
 	/// <summary>
-	/// 透視投影行列を取得(TypeがOthographicの場合ゼロ行列が返る)
+	/// 透視投影行列を取得
 	/// </summary>
 	/// <returns>透視投影行列</returns>
 	inline const Mat4x4& GetViewProjection() const noexcept {
@@ -80,7 +80,7 @@ public:
 	}
 	
 	/// <summary>
-	/// 平衡投影行列を取得(TypeがProjecctionの場合ゼロ行列が返る)
+	/// 平衡投影行列を取得
 	/// </summary>
 	/// <returns></returns>
 	inline const Mat4x4& GetViewOthographics() const noexcept {
@@ -96,14 +96,14 @@ public:
 	}
 
 	/// <summary>
-	/// 透視投影行列にビューポートをかけたものを取得(TypeがProjecctionの場合ゼロ行列が返る)
+	/// 透視投影行列にビューポートをかけたものを取得
 	/// </summary>
 	/// <returns></returns>
 	inline const Mat4x4& GetViewProjectionVp() const noexcept {
 		return viewProjecctionVp;
 	}
 	/// <summary>
-	/// 平衡投影行列ビューポートをかけたものを取得(TypeがProjecctionの場合ゼロ行列が返る)
+	/// 平衡投影行列ビューポートをかけたものを取得
 	/// </summary>
 	/// <returns></returns>
 	inline const Mat4x4& GetViewOthographicsVp() const noexcept {
