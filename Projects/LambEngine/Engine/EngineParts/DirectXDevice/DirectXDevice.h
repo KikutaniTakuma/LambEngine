@@ -29,6 +29,18 @@ public:
 private:
 	static DirectXDevice* instance_;
 
+private:
+	void SettingAdapter();
+
+	void CreateDevice();
+
+#ifdef _DEBUG
+	void InfoQueue() const;
+#endif // _DEBUG
+
+	void CreateHeapIncrements();
+
+
 /// <summary>
 /// リソース作成
 /// </summary>
