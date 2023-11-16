@@ -77,17 +77,31 @@ public:
 	void MeshChangeTexture(const std::string& useMtlName, const std::string& texName);
 	void MeshChangeTexture(const std::string& useMtlName, Texture* tex);
 
+	void ChangeMesh(Mesh* mesh) {
+		mesh_ = mesh;
+		isLoadObj_ = !!mesh_;
+	}
+
+	const std::string GetObjFileName() const {
+		if (mesh_) {
+			return mesh_->GetFileName();
+		}
+		else {
+			return std::string{};
+		}
+	}
+
 public:
 	Vector3 pos_;
 	Vector3 rotate_;
 	Vector3 scale_;
 
 	uint32_t color_;
-	Model* parent_;
 
 	Mesh::DirectionLight light_;
 
 private:
+	Model* parent_;
 	Mesh* mesh_;
 
 	std::unordered_map<std::string, Mesh::CopyData> data_;

@@ -241,12 +241,20 @@ void Model::ThreadLoadObj(const std::string& fileName) {
 }
 
 void Model::ChangeTexture(const std::string& useMtlName, const std::string& texName) {
+	assert(mesh_);
+	if (data_.empty()) {
+		data_ = mesh_->CopyBuffer();
+	}
 	data_[useMtlName].tex = TextureManager::GetInstance()->LoadTexture(texName);
 	assert(data_[useMtlName].tex->GetFileName() == texName);
 }
 
 void Model::ChangeTexture(const std::string& useMtlName, Texture* tex) {
 	assert(tex != nullptr);
+	assert(mesh_);
+	if (data_.empty()) {
+		data_ = mesh_->CopyBuffer();
+	}
 	data_[useMtlName].tex = tex;
 }
 
@@ -352,5 +360,8 @@ void Model::Debug([[maybe_unused]]const std::string& guiName) {
 }
 
 Model::~Model() {
-	
+	auto descriptorHeap = DescriptorHeap::GetInstance();
+	descriptorHeap->ReleaseView(wvpData_.GetViewHandleUINT());
+	descriptorHeap->ReleaseView(dirLig_.GetViewHandleUINT());
+	descriptorHeap->ReleaseView(colorBuf_.GetViewHandleUINT());
 }
