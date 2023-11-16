@@ -30,12 +30,15 @@ private:
 	static DirectXDevice* instance_;
 
 public:
+	[[nodiscard]]
 	ID3D12DescriptorHeap* CreateDescriptorHeap(
 		D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderrVisible
 	);
 
+	[[nodiscard]]
 	ID3D12Resource* CreateBufferResuorce(size_t sizeInBytes);
 
+	[[nodiscard]]
 	ID3D12Resource* CreateDepthStencilTextureResource(int32_t width, int32_t height);
 
 public:

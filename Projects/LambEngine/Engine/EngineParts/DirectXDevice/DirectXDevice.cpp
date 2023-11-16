@@ -122,6 +122,7 @@ DirectXDevice::DirectXDevice():
 	incrementSAMPLER_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
 }
 
+[[nodiscard]]
 ID3D12DescriptorHeap* DirectXDevice::CreateDescriptorHeap(
 	D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderrVisible
 ) {
@@ -139,6 +140,7 @@ ID3D12DescriptorHeap* DirectXDevice::CreateDescriptorHeap(
 	return nullptr;
 }
 
+[[nodiscard]]
 ID3D12Resource* DirectXDevice::CreateBufferResuorce(size_t sizeInBytes) {
 	if (!device_) {
 		OutputDebugStringA("device is nullptr!!");
@@ -174,6 +176,7 @@ ID3D12Resource* DirectXDevice::CreateBufferResuorce(size_t sizeInBytes) {
 	return resuorce;
 }
 
+[[nodiscard]]
 ID3D12Resource* DirectXDevice::CreateDepthStencilTextureResource(int32_t width, int32_t height) {
 	D3D12_RESOURCE_DESC resourceDesc{};
 	resourceDesc.Width = width;
