@@ -114,6 +114,10 @@ public:
 		return isLoad_;
 	}
 
+	inline const std::string& GetFileName()const {
+		return objFileName_;
+	}
+
 private:
 	void LoadObj(const std::string& objFileName);
 	void LoadMtl(const std::string& fileName);
