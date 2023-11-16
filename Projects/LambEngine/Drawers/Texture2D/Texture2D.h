@@ -93,6 +93,8 @@ public:
 		}
 	}
 
+	void ChangeTexture(Texture* tex);
+
 	/// <summary>
 	/// アニメーションスタート関数
 	/// </summary>

@@ -480,6 +480,11 @@ bool Texture2D::Collision(const Texture2D& tex2D) const {
 	return false;
 }
 
+void Texture2D::ChangeTexture(Texture* tex) {
+	tex_ = tex;
+	isLoad_ = !!tex_;
+}
+
 void Texture2D::AnimationStart(float aniUvPibot) {
 	if (!isAnimation_) {
 		aniStartTime_ = std::chrono::steady_clock::now();
