@@ -11,7 +11,7 @@ protected:
 	// インターフェース用の空の関数
 	virtual void InterFace() = 0;
 
-public:
+protected:
 	DescriptorHeap();
 	DescriptorHeap(const DescriptorHeap&) = delete;
 	DescriptorHeap(DescriptorHeap&&) = delete;
