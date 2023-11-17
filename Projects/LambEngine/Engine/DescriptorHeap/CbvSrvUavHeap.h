@@ -1,8 +1,5 @@
 #pragma once
-#include <memory>
-#include <vector>
-#include <list>
-#include <deque>
+#include "DescriptorHeap.h"
 #include "Engine/StructuredBuffer/StructuredBuffer.h"
 #include "TextureManager/Texture/Texture.h"
 #include "Engine/RenderTarget/RenderTarget.h"
@@ -10,7 +7,10 @@
 /// <summary>
 /// ディスクリプタヒープ管理クラス
 /// </summary>
-class CbvSrvUavHeap {
+class CbvSrvUavHeap final : public DescriptorHeap {
+private:
+	void InterFace() override {}
+
 private:
 	CbvSrvUavHeap() = delete;
 	CbvSrvUavHeap(const CbvSrvUavHeap& right) = delete;
@@ -31,11 +31,6 @@ private:
 	static CbvSrvUavHeap* instance_;
 
 public:
-	void SetHeap();
-
-	void Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex);
-	void Use(uint32_t handleIndex, UINT rootParmIndex);
-
 	/// <summary>
 	/// CBVを作成
 	/// </summary>
@@ -144,49 +139,4 @@ public:
 	/// <param name="renderTarget">RenderTarget</param>
 	/// <returns>作成した場所のハンドル</returns>
 	uint32_t CreatePerarenderView(RenderTarget& renderTarget);
-
-	D3D12_CPU_DESCRIPTOR_HANDLE GetSrvCpuHeapHandle(uint32_t heapIndex) {
-		return heapHandles_[heapIndex].first;
-	}
-	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvGpuHeapHandle(uint32_t heapIndex) {
-		return heapHandles_[heapIndex].second;
-	}
-	
-	inline UINT GetSize() const {
-		return heapSize_;
-	}
-
-	inline ID3D12DescriptorHeap* Get() const {
-		return heap_.Get();
-	}
-
-	inline ID3D12DescriptorHeap* const* GetAddressOf() const {
-		return heap_.GetAddressOf();
-	}
-
-public:
-	uint32_t BookingHeapPos(UINT nextCreateViewNum);
-	void ReleaseView(UINT viewHandle);
-
-	/// <summary>
-	/// Useハンドルコンテナに追加(既に追加済みなら追加されない)
-	/// </summary>
-	/// <param name=""></param>
-	void UseThisPosition(uint32_t handle);
-
-private:
-	void Reset();
-
-private:
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> heap_;
-
-	UINT heapSize_;
-	UINT currentHandleIndex_;
-
-	std::list<uint32_t> releaseHandle_;
-	std::list<uint32_t> useHandle_;
-	std::deque<uint32_t> bookingHandle_;
-
-
-	std::vector<std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE>> heapHandles_;
 };
