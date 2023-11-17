@@ -8,8 +8,8 @@
 
 class DescriptorHeap {
 protected:
-	// インターフェース用の空の関数
-	virtual void InterFace() = 0;
+	// インターフェース用の純粋仮想関数
+	virtual void Interface() = 0;
 
 protected:
 	DescriptorHeap();

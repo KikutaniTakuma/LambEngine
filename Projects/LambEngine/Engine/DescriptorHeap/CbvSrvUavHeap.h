@@ -9,7 +9,7 @@
 /// </summary>
 class CbvSrvUavHeap final : public DescriptorHeap {
 private:
-	void InterFace() override {}
+	void Interface() override {}
 
 private:
 	CbvSrvUavHeap() = delete;
