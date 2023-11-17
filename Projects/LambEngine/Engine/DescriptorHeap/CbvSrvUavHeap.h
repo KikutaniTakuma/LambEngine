@@ -10,25 +10,25 @@
 /// <summary>
 /// ディスクリプタヒープ管理クラス
 /// </summary>
-class DescriptorHeap {
+class CbvSrvUavHeap {
 private:
-	DescriptorHeap() = delete;
-	DescriptorHeap(const DescriptorHeap& right) = delete;
-	DescriptorHeap(DescriptorHeap&& right) noexcept = delete;
-	DescriptorHeap(UINT numDescriptor);
-	~DescriptorHeap();
-	DescriptorHeap& operator=(const DescriptorHeap& right) = delete;
-	DescriptorHeap& operator=(DescriptorHeap&& right) noexcept = delete;
+	CbvSrvUavHeap() = delete;
+	CbvSrvUavHeap(const CbvSrvUavHeap& right) = delete;
+	CbvSrvUavHeap(CbvSrvUavHeap&& right) noexcept = delete;
+	CbvSrvUavHeap(UINT numDescriptor);
+	~CbvSrvUavHeap();
+	CbvSrvUavHeap& operator=(const CbvSrvUavHeap& right) = delete;
+	CbvSrvUavHeap& operator=(CbvSrvUavHeap&& right) noexcept = delete;
 
 public:
 	static void Initialize(UINT numDescriptor);
 
 	static void Finalize();
 
-	static DescriptorHeap* GetInstance();
+	static CbvSrvUavHeap* GetInstance();
 
 private:
-	static DescriptorHeap* instance_;
+	static CbvSrvUavHeap* instance_;
 
 public:
 	void SetHeap();

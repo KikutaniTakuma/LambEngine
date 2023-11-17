@@ -2,7 +2,7 @@
 #include "../externals/imgui/imgui.h"
 #include "Engine/FrameInfo/FrameInfo.h"
 #include "Engine/WinApp/WinApp.h"
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
 
 #include "../externals/nlohmann/json.hpp"
 #include <cassert>
@@ -124,7 +124,7 @@ Particle::Particle() :
 	currentParticleIndex_(0u),
 	srvHeap_(nullptr)
 {
-	srvHeap_ = DescriptorHeap::GetInstance();
+	srvHeap_ = CbvSrvUavHeap::GetInstance();
 	srvHeap_->BookingHeapPos(2u);
 	srvHeap_->CreateStructuredBufferView<Mat4x4>(wvpMat_);
 	srvHeap_->CreateStructuredBufferView<Vector4>(colorBuf_);
@@ -198,7 +198,7 @@ Particle::Particle(uint32_t indexNum) :
 	currentParticleIndex_(0u),
 	srvHeap_(nullptr)
 {
-	srvHeap_ = DescriptorHeap::GetInstance();
+	srvHeap_ = CbvSrvUavHeap::GetInstance();
 	srvHeap_->BookingHeapPos(2u);
 	srvHeap_->CreateStructuredBufferView<Mat4x4>(wvpMat_);
 	srvHeap_->CreateStructuredBufferView<Vector4>(colorBuf_);

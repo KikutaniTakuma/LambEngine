@@ -3,7 +3,7 @@
 #include <climits>
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/UtilsLib/UtilsLib.h"
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
 #include "../externals/imgui/imgui.h"
 #include "Engine/ErrorCheck/ErrorCheck.h"
 #include "Engine/PipelineManager/PipelineManager.h"
@@ -125,7 +125,7 @@ Model::Model() :
 	colorBuf_.shaderRegister_ = 2;
 	*colorBuf_ = UintToVector4(color_);
 
-	auto descriptorHeap = DescriptorHeap::GetInstance();
+	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
 	descriptorHeap->BookingHeapPos(3u);
 	descriptorHeap->CreateConstBufferView(wvpData_);
 	descriptorHeap->CreateConstBufferView(dirLig_);
@@ -360,7 +360,7 @@ void Model::Debug([[maybe_unused]]const std::string& guiName) {
 }
 
 Model::~Model() {
-	auto descriptorHeap = DescriptorHeap::GetInstance();
+	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
 	descriptorHeap->ReleaseView(wvpData_.GetViewHandleUINT());
 	descriptorHeap->ReleaseView(dirLig_.GetViewHandleUINT());
 	descriptorHeap->ReleaseView(colorBuf_.GetViewHandleUINT());

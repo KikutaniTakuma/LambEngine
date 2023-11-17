@@ -21,7 +21,7 @@ Mesh::Mesh() :
 	color_{},
 	drawCount_{0u}
 {
-	auto descriptorHeap = DescriptorHeap::GetInstance();
+	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
 	descriptorHeap->BookingHeapPos(3u);
 	descriptorHeap->CreateStructuredBufferView(wvpMats_);
 	descriptorHeap->CreateConstBufferView(dirLig_);

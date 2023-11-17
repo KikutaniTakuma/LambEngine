@@ -1,6 +1,6 @@
 #include "PeraRender.h"
 #include "Utils/ConvertString/ConvertString.h"
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
 #include "../externals/imgui/imgui.h"
 #include "Engine/EngineParts/DirectXCommon/DirectXCommon.h"
 #include <cassert>
@@ -47,7 +47,7 @@ PeraRender::PeraRender(uint32_t width, uint32_t height):
 {}
 
 PeraRender::~PeraRender() {
-	static auto srvHeap = DescriptorHeap::GetInstance();
+	static auto srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->ReleaseView(render_.GetViewHandleUINT());
 	if (peraVertexResource_) {
 		peraVertexResource_->Release();
@@ -96,7 +96,7 @@ void PeraRender::Initialize(const std::string& vsFileName, const std::string& ps
 	std::copy(pv.begin(), pv.end(), mappedData);
 	peraVertexResource_->Unmap(0, nullptr);
 
-	static auto srvHeap = DescriptorHeap::GetInstance();
+	static auto srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->BookingHeapPos(3u);
 	srvHeap->CreatePerarenderView(render_);
 	srvHeap->CreateConstBufferView(wvpMat_);

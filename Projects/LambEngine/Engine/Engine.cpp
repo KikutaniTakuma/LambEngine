@@ -102,7 +102,7 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	engine->InitializeDirectXDevice();
 
 	// ディスクリプタヒープ初期化
-	DescriptorHeap::Initialize(4096);
+	CbvSrvUavHeap::Initialize(4096);
 
 	// DirectX12生成
 	engine->InitializeDirectXCommon();
@@ -144,7 +144,7 @@ void Engine::Finalize() {
 
 	StringOutPutManager::Finalize();
 
-	DescriptorHeap::Finalize();
+	CbvSrvUavHeap::Finalize();
 
 	delete engine;
 	engine = nullptr;
@@ -265,7 +265,7 @@ void Engine::FrameStart() {
 	engine->directXCommon_->SetViewPort(engine->clientWidth, engine->clientHeight);
 
 	// SRV用のヒープ
-	static auto srvDescriptorHeap = DescriptorHeap::GetInstance();
+	static auto srvDescriptorHeap = CbvSrvUavHeap::GetInstance();
 
 	srvDescriptorHeap->SetHeap();
 }

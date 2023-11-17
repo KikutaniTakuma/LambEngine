@@ -115,7 +115,7 @@
     <ClCompile Include="Engine\EngineParts\DirectXDevice\DirectXDevice.cpp">
       <Filter>Engine\EngineParts\DirectXDevice</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\DescriptorHeap\DescriptorHeap.cpp">
+    <ClCompile Include="Engine\DescriptorHeap\CbvSrvUavHeap.cpp">
       <Filter>Engine\DescriptorHeap</Filter>
     </ClCompile>
     <ClCompile Include="Engine\EngineParts\StringOutPutManager\StringOutPutManager.cpp">
@@ -401,7 +401,7 @@
     <ClInclude Include="Engine\EngineParts\DirectXDevice\DirectXDevice.h">
       <Filter>Engine\EngineParts\DirectXDevice</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\DescriptorHeap\DescriptorHeap.h">
+    <ClInclude Include="Engine\DescriptorHeap\CbvSrvUavHeap.h">
       <Filter>Engine\DescriptorHeap</Filter>
     </ClInclude>
     <ClInclude Include="Engine\EngineParts\StringOutPutManager\StringOutPutManager.h">

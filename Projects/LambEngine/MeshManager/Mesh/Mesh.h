@@ -8,7 +8,7 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vector4.h"
 
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/ShaderManager/ShaderManager.h"
 
 #include "Engine/StructuredBuffer/StructuredBuffer.h"

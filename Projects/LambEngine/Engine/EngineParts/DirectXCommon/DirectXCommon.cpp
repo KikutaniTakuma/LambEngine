@@ -2,7 +2,7 @@
 #include "Engine/Engine.h"
 #include "Engine/WinApp/WinApp.h"
 #include "Engine/EngineParts/DirectXDevice/DirectXDevice.h"
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/ErrorCheck/ErrorCheck.h"
 
 #include "Utils/Math/Vector2.h"
@@ -134,7 +134,7 @@ DirectXCommon::DirectXCommon():
 
 #ifdef _DEBUG
 	// SRV用のヒープ
-	auto descriptorHeap = DescriptorHeap::GetInstance();
+	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
 	uint32_t useHandle = descriptorHeap->BookingHeapPos(1u);
 
 	// ImGuiの初期化

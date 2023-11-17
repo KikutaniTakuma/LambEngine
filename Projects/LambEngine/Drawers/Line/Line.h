@@ -49,7 +49,7 @@ private:
 	// 頂点バッファマップ
 	VertexData* vertexMap_;
 
-	class DescriptorHeap* heap_;
+	class CbvSrvUavHeap* heap_;
 
 	ConstBuffer<Mat4x4> wvpMat_;
 };

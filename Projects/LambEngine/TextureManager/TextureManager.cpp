@@ -3,7 +3,7 @@
 #include "Engine/Engine.h"
 #include "Engine/EngineParts/DirectXDevice/DirectXDevice.h"
 #include <cassert>
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
 
 TextureManager* TextureManager::instance_ = nullptr;
 
@@ -82,7 +82,7 @@ TextureManager::TextureManager() :
 		return;
 	}
 
-	srvHeap_ = DescriptorHeap::GetInstance();
+	srvHeap_ = CbvSrvUavHeap::GetInstance();
 }
 
 TextureManager::~TextureManager() {

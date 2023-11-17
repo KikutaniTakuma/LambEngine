@@ -4,7 +4,7 @@
 #include "Engine/ErrorCheck/ErrorCheck.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/Engine.h"
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
 #include <cassert>
 #include <filesystem>
 
@@ -72,7 +72,7 @@ void StringOutPutManager::LoadFont(const std::string& fontName) {
 	viewport.MaxDepth = 1.0f;
 	spriteBatch_[fontName]->SetViewport(viewport);
 
-	auto descriptorHeap = DescriptorHeap::GetInstance();
+	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
 	uint32_t useHandle = descriptorHeap->BookingHeapPos(1u);
 
 	spriteFonts_.insert(

@@ -1,4 +1,4 @@
-#include "DescriptorHeap.h"
+#include "CbvSrvUavHeap.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/WinApp/WinApp.h"
 #include "Engine/EngineParts/DirectXDevice/DirectXDevice.h"
@@ -8,25 +8,25 @@
 #include <algorithm>
 #include <numeric>
 
-DescriptorHeap* DescriptorHeap::instance_ = nullptr;
+CbvSrvUavHeap* CbvSrvUavHeap::instance_ = nullptr;
 
-void DescriptorHeap::Initialize(UINT numDescriptor) {
+void CbvSrvUavHeap::Initialize(UINT numDescriptor) {
 	// 1～(10^6-1)でクランプ
 	numDescriptor = std::clamp(numDescriptor, 1u, static_cast<UINT>(std::pow(10u, 6u)) - 1u);
 
-	instance_ = new DescriptorHeap{ numDescriptor };
+	instance_ = new CbvSrvUavHeap{ numDescriptor };
 }
 
-void DescriptorHeap::Finalize() {
+void CbvSrvUavHeap::Finalize() {
 	delete instance_;
 	instance_ = nullptr;
 }
 
-DescriptorHeap* DescriptorHeap::GetInstance() {
+CbvSrvUavHeap* CbvSrvUavHeap::GetInstance() {
 	return instance_;
 }
 
-DescriptorHeap::DescriptorHeap(UINT numDescriptor) :
+CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor) :
 	heap_(),
 	heapSize_(numDescriptor),
 	currentHandleIndex_(0u),
@@ -52,33 +52,33 @@ DescriptorHeap::DescriptorHeap(UINT numDescriptor) :
 	bookingHandle_.clear();
 }
 
-DescriptorHeap::~DescriptorHeap() {
+CbvSrvUavHeap::~CbvSrvUavHeap() {
 	Reset();
 }
 
-void DescriptorHeap::SetHeap() {
+void CbvSrvUavHeap::SetHeap() {
 	static auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
 	commandlist->SetDescriptorHeaps(1, heap_.GetAddressOf());
 }
 
-void DescriptorHeap::Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex) {
+void CbvSrvUavHeap::Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex) {
 	static auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
 	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, handle);
 }
 
-void DescriptorHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
+void CbvSrvUavHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
 	auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
 	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, heapHandles_[handleIndex].second);
 }
 
-void DescriptorHeap::Reset() {
+void CbvSrvUavHeap::Reset() {
 	if (heap_) {
 		heap_->Release();
 		heap_.Reset();
 	}
 }
 
-uint32_t DescriptorHeap::CreateTxtureView(Texture* tex) {
+uint32_t CbvSrvUavHeap::CreateTxtureView(Texture* tex) {
 	assert(tex != nullptr);
 	if (tex == nullptr || !*tex) {
 		return currentHandleIndex_;
@@ -113,7 +113,7 @@ uint32_t DescriptorHeap::CreateTxtureView(Texture* tex) {
 	}
 }
 
-void DescriptorHeap::CreateTxtureView(Texture* tex, uint32_t heapIndex) {
+void CbvSrvUavHeap::CreateTxtureView(Texture* tex, uint32_t heapIndex) {
 	assert(tex != nullptr);
 	assert(heapIndex < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
@@ -128,7 +128,7 @@ void DescriptorHeap::CreateTxtureView(Texture* tex, uint32_t heapIndex) {
 		);
 }
 
-uint32_t DescriptorHeap::CreatePerarenderView(RenderTarget& renderTarget) {
+uint32_t CbvSrvUavHeap::CreatePerarenderView(RenderTarget& renderTarget) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
 		ErrorCheck::GetInstance()->ErrorTextBox("CreatePerarenderView failed\nOver HeapSize", "ShaderResourceHeap");
@@ -150,7 +150,7 @@ uint32_t DescriptorHeap::CreatePerarenderView(RenderTarget& renderTarget) {
 	}
 }
 
-uint32_t DescriptorHeap::BookingHeapPos(UINT nextCreateViewNum) {
+uint32_t CbvSrvUavHeap::BookingHeapPos(UINT nextCreateViewNum) {
 	// リリースハンドルがないなら予約しない
 	if (releaseHandle_.empty()) {
 		bookingHandle_.clear();
@@ -235,7 +235,7 @@ uint32_t DescriptorHeap::BookingHeapPos(UINT nextCreateViewNum) {
 }
 
 
-void DescriptorHeap::ReleaseView(UINT viewHandle) {
+void CbvSrvUavHeap::ReleaseView(UINT viewHandle) {
 	if (!releaseHandle_.empty()) {
 		// リリースハンドルにすでに格納されているか
 		auto isReleased = std::find(releaseHandle_.begin(), releaseHandle_.end(), viewHandle);
@@ -255,7 +255,7 @@ void DescriptorHeap::ReleaseView(UINT viewHandle) {
 	releaseHandle_.push_back(viewHandle);
 }
 
-void DescriptorHeap::UseThisPosition(uint32_t handle) {
+void CbvSrvUavHeap::UseThisPosition(uint32_t handle) {
 	// 使ったハンドルがcurrentHandleIndex_と一致していらcurrentHandleIndex_をインクリメント
 	if (currentHandleIndex_ == handle) {
 		currentHandleIndex_++;

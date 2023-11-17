@@ -1,7 +1,7 @@
 #include "Line.h"
 #include <algorithm>
 #include "Engine/PipelineManager/PipelineManager.h"
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
 
 Shader Line::shader_ = {};
 
@@ -48,7 +48,7 @@ Line::Line() :
 
 	vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexMap_));
 
-	heap_ = DescriptorHeap::GetInstance();
+	heap_ = CbvSrvUavHeap::GetInstance();
 	heap_->BookingHeapPos(1);
 	heap_->CreateConstBufferView(wvpMat_);
 }

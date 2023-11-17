@@ -65,7 +65,7 @@ public:
 
 
 private:
-	class DescriptorHeap* srvHeap_;
+	class CbvSrvUavHeap* srvHeap_;
 
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_;
 	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator_;

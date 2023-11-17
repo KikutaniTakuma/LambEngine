@@ -7,7 +7,7 @@
 #include <filesystem>
 #include "Engine/ErrorCheck/ErrorCheck.h"
 #include "TextureManager/TextureManager.h"
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
 
 Texture::Texture():
 	textureResouce(nullptr),
@@ -262,7 +262,7 @@ void Texture::Set(
 	UINT handleUINT
 ) {
 	if (CanUse()) {
-		DescriptorHeap* srvHeap = DescriptorHeap::GetInstance();
+		CbvSrvUavHeap* srvHeap = CbvSrvUavHeap::GetInstance();
 		srvHeap->ReleaseView(srvHeapHandleUint);
 		textureResouce->Release();
 		textureResouce.Reset();

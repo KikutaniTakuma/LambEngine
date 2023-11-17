@@ -321,7 +321,7 @@ private:
 
 	std::vector<WorldTransForm> wtfs_;
 
-	class DescriptorHeap* srvHeap_;
+	class CbvSrvUavHeap* srvHeap_;
 
 
 	D3D12_VERTEX_BUFFER_VIEW vertexView_;

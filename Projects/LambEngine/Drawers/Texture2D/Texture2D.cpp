@@ -1,7 +1,7 @@
 #include "Texture2D.h"
 #include "../externals/imgui/imgui.h"
 #include "Utils/UtilsLib/UtilsLib.h"
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
+#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
 #include <numeric>
 #undef max
 #undef min
@@ -55,7 +55,7 @@ Texture2D::Texture2D() :
 		isLoad_ = true;
 	}
 
-	auto srvHeap = DescriptorHeap::GetInstance();
+	auto srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->BookingHeapPos(2u);
 	srvHeap->CreateConstBufferView(wvpMat_);
 	srvHeap->CreateConstBufferView(colorBuf_);
@@ -139,7 +139,7 @@ Texture2D& Texture2D::operator=(Texture2D&& right) noexcept {
 }
 
 Texture2D::~Texture2D() {
-	auto descriptorHeap = DescriptorHeap::GetInstance();
+	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
 	descriptorHeap->ReleaseView(wvpMat_.GetViewHandleUINT());
 	descriptorHeap->ReleaseView(colorBuf_.GetViewHandleUINT());
 
