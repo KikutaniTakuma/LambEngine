@@ -116,6 +116,8 @@ public:
 		return isCommandListClose_;
 	}
 
+public:
+	static constexpr uint32_t kBackBufferNumber_ = 2u;
 
 private:
 	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_;
