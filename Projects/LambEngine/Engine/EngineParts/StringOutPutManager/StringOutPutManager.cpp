@@ -82,8 +82,8 @@ void StringOutPutManager::LoadFont(const std::string& fontName) {
 				device,
 				resUploadBach,
 				ConvertString(fontName).c_str(),
-				descriptorHeap->GetSrvCpuHeapHandle(useHandle),
-				descriptorHeap->GetSrvGpuHeapHandle(useHandle)
+				descriptorHeap->GetCpuHeapHandle(useHandle),
+				descriptorHeap->GetGpuHeapHandle(useHandle)
 			)
 		)
 	);
