@@ -5,7 +5,7 @@
 /// <summary>
 /// クォータニオンクラス
 /// </summary>
-class Quaternion {
+class Quaternion final {
 /// <summary>
 /// コンストラクタ
 /// </summary>
