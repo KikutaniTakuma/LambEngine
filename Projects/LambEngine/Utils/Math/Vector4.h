@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <immintrin.h>
+#include <concepts>
 
 /// <summary>
 /// 4次元配列
@@ -48,8 +49,14 @@ public:
 	bool operator==(const Vector4& right) const noexcept;
 	bool operator!=(const Vector4& right) const noexcept;
 
-	float& operator[](size_t index) noexcept;
-	const float& operator[](size_t index) const noexcept;
+	template<std::integral T>
+	float& operator[](T index) noexcept {
+		return m[index];
+	}
+	template<std::integral T>
+	const float& operator[](T index) const noexcept {
+		return m[index];
+	}
 
 	/// <summary>
 	/// メンバ関数

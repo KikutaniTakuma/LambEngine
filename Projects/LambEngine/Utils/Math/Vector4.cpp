@@ -174,14 +174,6 @@ bool Vector4::operator!=(const Vector4& right) const noexcept {
 	return m != right.m;
 }
 
-float& Vector4::operator[](size_t index) noexcept {
-	return m[index];
-}
-
-const float& Vector4::operator[](size_t index) const noexcept {
-	return m[index];
-}
-
 float Vector4::Length() const noexcept {
 	return std::sqrt(Dot(*this));
 }
