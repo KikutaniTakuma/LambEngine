@@ -8,6 +8,7 @@
 #undef min
 #include <vector>
 #include <cstdint>
+#include <array>
 
 /// <summary>
 /// DirectX12のデバイス以外を管理(スワップチェイン、コマンドリストなど)
@@ -99,17 +100,8 @@ public:
 		return swapChain_.Get();
 	}
 
-	inline D3D12_DESCRIPTOR_HEAP_DESC GetMainRTVDesc() const {
-		return rtvDescriptorHeap_->GetDesc();
-	}
-
 	inline D3D12_RESOURCE_DESC GetSwapchainBufferDesc() const {
 		return swapChainResource_[0]->GetDesc();
-	}
-
-	inline D3D12_CPU_DESCRIPTOR_HANDLE GetMainRendertTargetHandle() const {
-		UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
-		return rtvHandles_[backBufferIndex];
 	}
 
 	inline bool GetIsCloseCommandList() const {
@@ -128,9 +120,6 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_;
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, kBackBufferNumber_> swapChainResource_;
 	bool isRenderState_;
-
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap_;
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> rtvHandles_;
 
 	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
 	uint64_t fenceVal_;

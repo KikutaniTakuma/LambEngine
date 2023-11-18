@@ -3,6 +3,7 @@
 #include "Engine/WinApp/WinApp.h"
 #include "Engine/EngineParts/DirectXDevice/DirectXDevice.h"
 #include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/DescriptorHeap/RTVHeap.h"
 #include "Engine/ErrorCheck/ErrorCheck.h"
 
 #include "Utils/Math/Vector2.h"
@@ -20,12 +21,14 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 DirectXCommon* DirectXCommon::instance_ = nullptr;
 
 DirectXCommon* DirectXCommon::GetInstance() {
-	assert(instance_);
+	assert(!!instance_);
 	return instance_;
 }
 
 void DirectXCommon::Initialize() {
+	assert(!instance_);
 	instance_ = new DirectXCommon{};
+	assert(!!instance_);
 }
 void DirectXCommon::Finalize() {
 	delete instance_;
@@ -39,8 +42,6 @@ DirectXCommon::DirectXCommon():
 	isCommandListClose_{false},
 	swapChain_{},
 	swapChainResource_{},
-	rtvDescriptorHeap_{},
-	rtvHandles_{},
 	fence_{},
 	fenceVal_{0llu},
 	fenceEvent_{nullptr},
@@ -87,7 +88,7 @@ DirectXCommon::DirectXCommon():
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.BufferCount = 2;
+	swapChainDesc.BufferCount = kBackBufferNumber_;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
 	hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue_.Get(), WinApp::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
@@ -100,6 +101,8 @@ DirectXCommon::DirectXCommon():
 	dxgiFactory->MakeWindowAssociation(
 		WinApp::GetInstance()->GetHwnd(), DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
 
+	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
+	rtvHeap->CreateBackBuffer(swapChainResource_, swapChain_.Get());
 
 #ifdef _DEBUG
 	// RTVの設定
@@ -107,7 +110,6 @@ DirectXCommon::DirectXCommon():
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
-#ifdef _DEBUG
 	// SRV用のヒープ
 	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
 	uint32_t useHandle = descriptorHeap->BookingHeapPos(1u);
@@ -122,8 +124,8 @@ DirectXCommon::DirectXCommon():
 		swapChainDesc.BufferCount,
 		rtvDesc.Format,
 		descriptorHeap->Get(),
-		descriptorHeap->GetSrvCpuHeapHandle(useHandle),
-		descriptorHeap->GetSrvGpuHeapHandle(useHandle)
+		descriptorHeap->GetCpuHeapHandle(useHandle),
+		descriptorHeap->GetGpuHeapHandle(useHandle)
 	);
 
 	descriptorHeap->UseThisPosition(useHandle);
@@ -157,7 +159,6 @@ DirectXCommon::~DirectXCommon() {
 	ImGui::DestroyContext();
 #endif // _DEBUG
 	CloseHandle(fenceEvent_);
-	rtvDescriptorHeap_->Release();
 }
 
 void DirectXCommon::WaitForFinishCommnadlist() {
@@ -218,10 +219,8 @@ void DirectXCommon::Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES befo
 }
 
 void DirectXCommon::SetMainRenderTarget() {
-	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
-	// 描画先をRTVを設定する
-	auto dsvH = Engine::GetDsvHandle();
-	commandList_->OMSetRenderTargets(1, &rtvHandles_[backBufferIndex], false, &dsvH);
+	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
+	rtvHeap->SetMainRtv();
 }
 
 void DirectXCommon::ClearBackBuffer() {
@@ -231,8 +230,9 @@ void DirectXCommon::ClearBackBuffer() {
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
 
 	// 指定した色で画面全体をクリアする
+	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
 	Vector4 clearColor = { 0.1f, 0.25f, 0.5f, 0.0f };
-	commandList_->ClearRenderTargetView(rtvHandles_[backBufferIndex], clearColor.m.data(), 0, nullptr);
+	rtvHeap->ClearRenderTargetView(backBufferIndex, clearColor);
 }
 
 void DirectXCommon::ChangeBackBufferState() {
