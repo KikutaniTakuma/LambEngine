@@ -6,6 +6,7 @@
 #include "WinApp/WinApp.h"
 #include "EngineParts/DirectXDevice/DirectXDevice.h"
 #include "EngineParts/DirectXCommon/DirectXCommon.h"
+#include "Engine/DescriptorHeap/RtvHeap.h"
 #include "Engine/EngineParts/StringOutPutManager/StringOutPutManager.h"
 
 #include "ShaderManager/ShaderManager.h"
@@ -102,6 +103,7 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	engine->InitializeDirectXDevice();
 
 	// ディスクリプタヒープ初期化
+	RtvHeap::Initialize(128);
 	CbvSrvUavHeap::Initialize(4096);
 
 	// DirectX12生成
@@ -145,6 +147,10 @@ void Engine::Finalize() {
 	StringOutPutManager::Finalize();
 
 	CbvSrvUavHeap::Finalize();
+	RtvHeap::Finalize();
+
+	DirectXCommon::Finalize();
+	DirectXDevice::Finalize();
 
 	delete engine;
 	engine = nullptr;
@@ -265,7 +271,7 @@ void Engine::FrameStart() {
 	engine->directXCommon_->SetViewPort(engine->clientWidth, engine->clientHeight);
 
 	// SRV用のヒープ
-	static auto srvDescriptorHeap = CbvSrvUavHeap::GetInstance();
+	static auto const srvDescriptorHeap = CbvSrvUavHeap::GetInstance();
 
 	srvDescriptorHeap->SetHeap();
 }
@@ -343,6 +349,4 @@ Engine::~Engine() {
 		dsvHeap->Release();
 		dsvHeap.Reset();
 	}
-	DirectXCommon::Finalize();
-	DirectXDevice::Finalize();
 }
