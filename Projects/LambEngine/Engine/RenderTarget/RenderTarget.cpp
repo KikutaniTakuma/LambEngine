@@ -6,16 +6,18 @@
 #include "Engine/ErrorCheck/ErrorCheck.h"
 #include <cassert>
 #include "Utils/Math/Vector4.h"
+#include "Engine/DescriptorHeap/RtvHeap.h"
 
 RenderTarget::RenderTarget():
 	resource_(),
-	RTVHeap_(),
-	srvHeapHandle_(),
 	isResourceStateChange_(false),
 	width_(Engine::GetInstance()->clientWidth),
 	height_(Engine::GetInstance()->clientHeight),
 	srvDesc_{},
-	srvHeapHandleUint_()
+	srvHeapHandle_{},
+	srvHeapHandleUint_(),
+	rtvHeapHandle_{},
+	rtvHeapHandleUint_(0u)
 {
 	auto resDesc = DirectXCommon::GetInstance()->GetSwapchainBufferDesc();
 
@@ -47,35 +49,26 @@ RenderTarget::RenderTarget():
 		return;
 	}
 
-	RTVHeap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 1, false);
-
-	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-
-	device->
-		CreateRenderTargetView(
-			resource_.Get(),
-			&rtvDesc,
-			RTVHeap_->GetCPUDescriptorHandleForHeapStart()
-		);
+	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
+	rtvHeap->CreateView(*this);
 
 	srvDesc_ = {};
 	srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc_.Format = rtvDesc.Format;
+	srvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	srvDesc_.Texture2D.MipLevels = 1;
 	srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 }
 
 RenderTarget::RenderTarget(uint32_t width, uint32_t height) :
 	resource_(),
-	RTVHeap_(),
-	srvHeapHandle_(),
 	isResourceStateChange_(false),
 	width_(width),
 	height_(height),
 	srvDesc_{},
-	srvHeapHandleUint_()
+	srvHeapHandle_{},
+	srvHeapHandleUint_(),
+	rtvHeapHandle_{},
+	rtvHeapHandleUint_(0u)
 {
 	auto resDesc = DirectXCommon::GetInstance()->GetSwapchainBufferDesc();
 	resDesc.Width = width_;
@@ -110,30 +103,20 @@ RenderTarget::RenderTarget(uint32_t width, uint32_t height) :
 		return;
 	}
 
-	RTVHeap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 1, false);
-
-	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-
-	device->
-		CreateRenderTargetView(
-			resource_.Get(),
-			&rtvDesc,
-			RTVHeap_->GetCPUDescriptorHandleForHeapStart()
-		);
+	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
+	rtvHeap->BookingHeapPos(1u);
+	rtvHeap->CreateView(*this);
 
 	srvDesc_ = {};
 	srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc_.Format = rtvDesc.Format;
+	srvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	srvDesc_.Texture2D.MipLevels = 1;
 	srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 }
 
 RenderTarget::~RenderTarget() {
-	if (RTVHeap_) {
-		RTVHeap_->Release();
-	}
+	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
+	rtvHeap->ReleaseView(rtvHeapHandleUint_);
 }
 
 void RenderTarget::SetThisRenderTarget() {
@@ -145,13 +128,11 @@ void RenderTarget::SetThisRenderTarget() {
 		D3D12_RESOURCE_STATE_RENDER_TARGET
 	);
 
-	auto rtvHeapHandle = RTVHeap_->GetCPUDescriptorHandleForHeapStart();
-	auto dsvH = Engine::GetDsvHandle();
-	DirectXCommon::GetInstance()->GetCommandList()->OMSetRenderTargets(1, &rtvHeapHandle, false, &dsvH);
+	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
+	rtvHeap->SetRtv(rtvHeapHandleUint_);
 
 	Vector4 clearColor = { 0.0f, 0.0f, 0.0f, 1.0f };
-	DirectXCommon::GetInstance()->GetCommandList()->ClearRenderTargetView(rtvHeapHandle, clearColor.m.data(), 0, nullptr);
-	//Engine::SetViewPort(width, height);
+	rtvHeap->ClearRenderTargetView(rtvHeapHandleUint_, clearColor);
 }
 
 void RenderTarget::ChangeResourceState() {
@@ -177,7 +158,7 @@ void RenderTarget::UseThisRenderTargetShaderResource() {
 }
 
 void RenderTarget::CreateView(D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle, D3D12_GPU_DESCRIPTOR_HANDLE descHeapHandleGPU, UINT descHeapHandleUINT) {
-	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
+	static ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
 	
 	device->CreateShaderResourceView(
 		resource_.Get(),
@@ -197,4 +178,18 @@ void RenderTarget::CreateView(D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle, D3D12_
 		srvHeapHandle_,
 		srvHeapHandleUint_
 	);
+}
+
+void RenderTarget::CreateRTV(D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle, UINT descHeapHandleUINT) {
+	static ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	
+	// RTVの設定
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+
+	device->CreateRenderTargetView(resource_.Get(), &rtvDesc, descHeapHandle);
+
+	rtvHeapHandle_ = descHeapHandle;
+	rtvHeapHandleUint_ = descHeapHandleUINT;
 }

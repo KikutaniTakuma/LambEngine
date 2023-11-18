@@ -29,6 +29,7 @@ public:
 	void UseThisRenderTargetShaderResource();
 
 	void CreateView(D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle, D3D12_GPU_DESCRIPTOR_HANDLE descHeapHandleGPU, UINT descHeapHandleUINT);
+	void CreateRTV(D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle, UINT descHeapHandleUINT);
 
 	UINT GetViewHandleUINT() const {
 		return srvHeapHandleUint_;
@@ -41,13 +42,14 @@ public:
 private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc_;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> RTVHeap_;
 
 	D3D12_GPU_DESCRIPTOR_HANDLE srvHeapHandle_;
 	UINT srvHeapHandleUint_;
 
-	std::unique_ptr<Texture> tex_;
+	D3D12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle_;
+	UINT rtvHeapHandleUint_;
 
+	std::unique_ptr<Texture> tex_;
 
 	bool isResourceStateChange_;
 
