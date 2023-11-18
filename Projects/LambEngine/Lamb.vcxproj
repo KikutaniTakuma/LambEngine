@@ -118,6 +118,7 @@
     <ClCompile Include="Drawers\Texture2D\Texture2D.cpp" />
     <ClCompile Include="Engine\DescriptorHeap\CbvSrvUavHeap.cpp" />
     <ClCompile Include="Engine\DescriptorHeap\DescriptorHeap.cpp" />
+    <ClCompile Include="Engine\DescriptorHeap\RtvHeap.cpp" />
     <ClCompile Include="Engine\Engine.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Disabled</Optimization>
     </ClCompile>
@@ -179,6 +180,7 @@
     <ClInclude Include="Engine\ConstBuffer\ConstBuffer.h" />
     <ClInclude Include="Engine\DescriptorHeap\CbvSrvUavHeap.h" />
     <ClInclude Include="Engine\DescriptorHeap\DescriptorHeap.h" />
+    <ClInclude Include="Engine\DescriptorHeap\RtvHeap.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\EngineParts\DirectXCommon\DirectXCommon.h" />
     <ClInclude Include="Engine\EngineParts\DirectXDevice\DirectXDevice.h" />

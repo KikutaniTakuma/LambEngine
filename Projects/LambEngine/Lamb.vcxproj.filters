@@ -148,6 +148,9 @@
     <ClCompile Include="Engine\DescriptorHeap\DescriptorHeap.cpp">
       <Filter>Engine\DescriptorHeap</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\DescriptorHeap\RtvHeap.cpp">
+      <Filter>Engine\DescriptorHeap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -438,6 +441,9 @@
       <Filter>Utils\Math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\DescriptorHeap\DescriptorHeap.h">
+      <Filter>Engine\DescriptorHeap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\DescriptorHeap\RtvHeap.h">
       <Filter>Engine\DescriptorHeap</Filter>
     </ClInclude>
   </ItemGroup>
