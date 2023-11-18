@@ -10,11 +10,8 @@
 
 CbvSrvUavHeap* CbvSrvUavHeap::instance_ = nullptr;
 
-void CbvSrvUavHeap::Initialize(UINT numDescriptor) {
-	// 1～(10^6-1)でクランプ
-	numDescriptor = std::clamp(numDescriptor, 1u, static_cast<UINT>(std::pow(10u, 6u)) - 1u);
-
-	instance_ = new CbvSrvUavHeap{ numDescriptor };
+void CbvSrvUavHeap::Initialize(UINT heapSize) {
+	instance_ = new CbvSrvUavHeap{ heapSize };
 }
 
 void CbvSrvUavHeap::Finalize() {
@@ -29,9 +26,7 @@ CbvSrvUavHeap* CbvSrvUavHeap::GetInstance() {
 CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor) :
 	DescriptorHeap{}
 {
-	heapSize_ = numDescriptor;
-
-	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, numDescriptor, true);
+	CreateDescriptorHeap(numDescriptor);
 
 	CreateHeapHandles();
 
@@ -40,6 +35,12 @@ CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor) :
 
 CbvSrvUavHeap::~CbvSrvUavHeap() {
 	Reset();
+}
+
+void CbvSrvUavHeap::CreateDescriptorHeap(uint32_t heapSize) {
+	// 1～(10^6-1)でクランプ
+	heapSize_ = std::clamp(heapSize, 1u, static_cast<UINT>(std::pow(10u, 6u)) - 1u);
+	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, heapSize_, true);
 }
 
 uint32_t CbvSrvUavHeap::CreateTxtureView(Texture* tex) {

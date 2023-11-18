@@ -9,9 +9,6 @@
 /// </summary>
 class CbvSrvUavHeap final : public DescriptorHeap {
 private:
-	void Interface() override {}
-
-private:
 	CbvSrvUavHeap() = delete;
 	CbvSrvUavHeap(const CbvSrvUavHeap& right) = delete;
 	CbvSrvUavHeap(CbvSrvUavHeap&& right) noexcept = delete;
@@ -21,7 +18,7 @@ private:
 	CbvSrvUavHeap& operator=(CbvSrvUavHeap&& right) noexcept = delete;
 
 public:
-	static void Initialize(UINT numDescriptor);
+	static void Initialize(UINT heapSize);
 
 	static void Finalize();
 
@@ -29,6 +26,10 @@ public:
 
 private:
 	static CbvSrvUavHeap* instance_;
+
+private:
+	void CreateDescriptorHeap(uint32_t heapSize) override;
+
 
 public:
 	/// <summary>
