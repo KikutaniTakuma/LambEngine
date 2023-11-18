@@ -310,5 +310,5 @@ void TextureManager::ResetCommandList() {
 void TextureManager::Use(uint32_t texIndex, UINT rootParam) {
 	auto* const mainComlist = DirectXCommon::GetInstance()->GetCommandList();
 	mainComlist->SetGraphicsRootDescriptorTable(
-		rootParam, srvHeap_->GetSrvGpuHeapHandle(texIndex));
+		rootParam, srvHeap_->GetGpuHeapHandle(texIndex));
 }
