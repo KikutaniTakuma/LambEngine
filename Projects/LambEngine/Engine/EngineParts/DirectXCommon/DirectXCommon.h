@@ -126,7 +126,7 @@ private:
 	bool isCommandListClose_;
 
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_;
-	std::vector<Microsoft::WRL::ComPtr<ID3D12Resource>> swapChainResource_;
+	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, kBackBufferNumber_> swapChainResource_;
 	bool isRenderState_;
 
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvDescriptorHeap_;

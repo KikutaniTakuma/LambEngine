@@ -101,36 +101,11 @@ DirectXCommon::DirectXCommon():
 		WinApp::GetInstance()->GetHwnd(), DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
 
 
-	// デスクリプタヒープの作成
-	rtvDescriptorHeap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
-
-	// SwepChainのメモリとディスクリプタと関連付け
-	// バックバッファの数を取得
-	DXGI_SWAP_CHAIN_DESC backBufferNum{};
-	hr = swapChain_->GetDesc(&backBufferNum);
-	// SwapChainResource初期化
-	swapChainResource_.reserve(backBufferNum.BufferCount);
-	swapChainResource_.resize(backBufferNum.BufferCount);
-
+#ifdef _DEBUG
 	// RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-	// ディスクリプタの先頭を取得
-	rtvHandles_.reserve(backBufferNum.BufferCount);
-	rtvHandles_.resize(backBufferNum.BufferCount);
-	auto rtvStartHandle = rtvDescriptorHeap_->GetCPUDescriptorHandleForHeapStart();
-
-	for (UINT i = 0; i < backBufferNum.BufferCount; ++i) {
-		hr = swapChain_->GetBuffer(i, IID_PPV_ARGS(swapChainResource_[i].GetAddressOf()));
-		assert(SUCCEEDED(hr));
-		if (!SUCCEEDED(hr)) {
-			ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : GetBuffer() Failed", "Engine");
-			return;
-		}
-		rtvHandles_[i].ptr = rtvStartHandle.ptr + (i * incrementRTVHeap);
-		device->CreateRenderTargetView(swapChainResource_[i].Get(), &rtvDesc, rtvHandles_[i]);
-	}
 
 #ifdef _DEBUG
 	// SRV用のヒープ
