@@ -8,10 +8,6 @@
 
 class DescriptorHeap {
 protected:
-	// インターフェース用の純粋仮想関数
-	virtual void Interface() = 0;
-
-protected:
 	DescriptorHeap();
 	DescriptorHeap(const DescriptorHeap&) = delete;
 	DescriptorHeap(DescriptorHeap&&) = delete;
@@ -20,16 +16,22 @@ protected:
 	DescriptorHeap& operator=(const DescriptorHeap&) = delete;
 	DescriptorHeap& operator=(DescriptorHeap&&) = delete;
 
+/// <summary>
+/// ディスクリプタヒープ生成関数
+/// </summary>
+protected:
+	virtual void CreateDescriptorHeap(uint32_t heapSize) = 0;
+
 public:
 	void SetHeap();
 	void Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex);
 	void Use(uint32_t handleIndex, UINT rootParmIndex);
 
 public:
-	D3D12_CPU_DESCRIPTOR_HANDLE GetSrvCpuHeapHandle(uint32_t heapIndex) {
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHeapHandle(uint32_t heapIndex) {
 		return heapHandles_[heapIndex].first;
 	}
-	D3D12_GPU_DESCRIPTOR_HANDLE GetSrvGpuHeapHandle(uint32_t heapIndex) {
+	virtual D3D12_GPU_DESCRIPTOR_HANDLE GetGpuHeapHandle(uint32_t heapIndex) {
 		return heapHandles_[heapIndex].second;
 	}
 
@@ -56,7 +58,7 @@ public:
 	void UseThisPosition(uint32_t handle);
 
 protected:
-	void CreateHeapHandles();
+	virtual void CreateHeapHandles();
 
 	void Reset();
 
