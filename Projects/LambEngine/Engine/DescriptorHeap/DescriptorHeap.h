@@ -38,10 +38,6 @@ public:
 		return heap_.Get();
 	}
 
-	inline ID3D12DescriptorHeap* const* const GetAddressOf() const {
-		return heap_.GetAddressOf();
-	}
-
 public:
 	uint32_t BookingHeapPos(UINT nextCreateViewNum);
 	void ReleaseView(UINT viewHandle);
