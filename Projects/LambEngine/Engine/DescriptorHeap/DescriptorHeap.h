@@ -16,41 +16,75 @@ protected:
 	DescriptorHeap& operator=(const DescriptorHeap&) = delete;
 	DescriptorHeap& operator=(DescriptorHeap&&) = delete;
 
-/// <summary>
-/// ディスクリプタヒープ生成関数
-/// </summary>
 protected:
+	/// <summary>
+	/// ディスクリプタヒープ生成関数
+	/// </summary>
 	virtual void CreateDescriptorHeap(uint32_t heapSize) = 0;
 
 public:
+	/// <summary>
+	/// CPUハンドルを取得
+	/// </summary>
+	/// <param name="heapIndex">取得したいハンドルのインデックス</param>
+	/// <returns>CPUハンドル</returns>
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHeapHandle(uint32_t heapIndex) {
 		return heapHandles_[heapIndex].first;
 	}
+	/// <summary>
+	/// GPUハンドルを取得
+	/// </summary>
+	/// <param name="heapIndex">取得したいハンドルのインデックス</param>
+	/// <returns>GPUハンドル</returns>
 	virtual D3D12_GPU_DESCRIPTOR_HANDLE GetGpuHeapHandle(uint32_t heapIndex) {
 		return heapHandles_[heapIndex].second;
 	}
 
+	/// <summary>
+	/// ヒープの大きさ
+	/// </summary>
+	/// <returns>ヒープの大きさ</returns>
 	inline UINT GetSize() const {
 		return heapSize_;
 	}
 
+	/// <summary>
+	/// ディスクリプタヒープのポインタ
+	/// </summary>
+	/// <returns>ヒープのポインタ</returns>
 	inline ID3D12DescriptorHeap* const Get() const {
 		return heap_.Get();
 	}
 
 public:
+	/// <summary>
+	/// ディスクリプタを作る場所の予約関数
+	/// </summary>
+	/// <param name="nextCreateViewNum">予約するディスクリプタの数</param>
+	/// <returns>予約したヒープハンドルの一番最初のハンドル</returns>
 	uint32_t BookingHeapPos(UINT nextCreateViewNum);
+
+	/// <summary>
+	/// ディスクリプタの解放関数
+	/// </summary>
+	/// <param name="viewHandle"></param>
 	void ReleaseView(UINT viewHandle);
 
 	/// <summary>
 	/// Useハンドルコンテナに追加(既に追加済みなら追加されない)
 	/// </summary>
-	/// <param name=""></param>
+	/// <param name="handle">解放するハンドル</param>
 	void UseThisPosition(uint32_t handle);
 
 protected:
+	/// <summary>
+	/// ヒープのハンドルを作る
+	/// </summary>
 	virtual void CreateHeapHandles();
 
+	/// <summary>
+	/// ヒープを解放する
+	/// </summary>
 	void Reset();
 
 protected:
