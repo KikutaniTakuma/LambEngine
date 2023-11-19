@@ -89,7 +89,7 @@
       <Filter>Engine\FrameInfo</Filter>
     </ClCompile>
     <ClCompile Include="Utils\CsvLoad\CsvLoad.cpp">
-      <Filter>Utils\Easeing\CsvLoad</Filter>
+      <Filter>Utils\CsvLoad</Filter>
     </ClCompile>
     <ClCompile Include="Input\Input.cpp">
       <Filter>Input</Filter>
@@ -258,9 +258,6 @@
     <Filter Include="Utils\Easeing">
       <UniqueIdentifier>{1dc7052e-fce1-4542-b5fb-a5f223d204de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils\Easeing\CsvLoad">
-      <UniqueIdentifier>{0801bfcf-a0f8-4f86-b79a-283b0de7cdd3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\StructuredBuffer">
       <UniqueIdentifier>{e1e79296-6a53-46cd-ad47-5079058ad278}</UniqueIdentifier>
     </Filter>
@@ -284,6 +281,9 @@
     </Filter>
     <Filter Include="Engine\EngineParts\StringOutPutManager">
       <UniqueIdentifier>{c49edcd7-143e-4434-89cf-60c735de3979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\CsvLoad">
+      <UniqueIdentifier>{0801bfcf-a0f8-4f86-b79a-283b0de7cdd3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -378,7 +378,7 @@
       <Filter>Engine\FrameInfo</Filter>
     </ClInclude>
     <ClInclude Include="Utils\CsvLoad\CsvLoad.h">
-      <Filter>Utils\Easeing\CsvLoad</Filter>
+      <Filter>Utils\CsvLoad</Filter>
     </ClInclude>
     <ClInclude Include="Input\Input.h">
       <Filter>Input</Filter>
