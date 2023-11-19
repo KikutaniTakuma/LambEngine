@@ -14,19 +14,6 @@ DescriptorHeap::~DescriptorHeap() {
 	Reset();
 }
 
-void DescriptorHeap::SetHeap() {
-	static auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
-	commandlist->SetDescriptorHeaps(1, heap_.GetAddressOf());
-}
-void DescriptorHeap::Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex) {
-	static auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
-	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, handle);
-}
-void DescriptorHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
-	auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
-	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, heapHandles_[handleIndex].second);
-}
-
 uint32_t DescriptorHeap::BookingHeapPos(UINT nextCreateViewNum) {
 	// リリースハンドルがないなら予約しない
 	if (releaseHandle_.empty()) {

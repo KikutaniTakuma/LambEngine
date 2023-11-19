@@ -23,11 +23,6 @@ protected:
 	virtual void CreateDescriptorHeap(uint32_t heapSize) = 0;
 
 public:
-	void SetHeap();
-	void Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex);
-	void Use(uint32_t handleIndex, UINT rootParmIndex);
-
-public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHeapHandle(uint32_t heapIndex) {
 		return heapHandles_[heapIndex].first;
 	}
@@ -43,7 +38,7 @@ public:
 		return heap_.Get();
 	}
 
-	inline ID3D12DescriptorHeap* const* GetAddressOf() const {
+	inline ID3D12DescriptorHeap* const* const GetAddressOf() const {
 		return heap_.GetAddressOf();
 	}
 

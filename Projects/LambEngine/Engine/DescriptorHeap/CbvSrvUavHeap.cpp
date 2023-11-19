@@ -43,6 +43,19 @@ void CbvSrvUavHeap::CreateDescriptorHeap(uint32_t heapSize) {
 	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, heapSize_, true);
 }
 
+void CbvSrvUavHeap::SetHeap() {
+	static auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+	commandlist->SetDescriptorHeaps(1, heap_.GetAddressOf());
+}
+void CbvSrvUavHeap::Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex) {
+	static auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, handle);
+}
+void CbvSrvUavHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
+	auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, heapHandles_[handleIndex].second);
+}
+
 uint32_t CbvSrvUavHeap::CreateTxtureView(Texture* tex) {
 	assert(tex != nullptr);
 	if (tex == nullptr || !*tex) {
