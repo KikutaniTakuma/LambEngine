@@ -117,6 +117,9 @@ void DescriptorHeap::ReleaseView(UINT viewHandle) {
 
 	// リリースハンドルに格納
 	releaseHandle_.push_back(viewHandle);
+
+	// 解放済みになったUseハンドルを解放
+	std::erase(useHandle_, viewHandle);
 }
 
 void DescriptorHeap::UseThisPosition(uint32_t handle) {
