@@ -29,7 +29,8 @@ void GameScene::Initialize() {
 	Vector3 rotateByQuaternion2 = pointY * rotation2;
 	Vector3 rotateByMatrix2 = pointY * rotateMatrix2;
 
-	resultString_ << rotation << " : rotation\n"
+	resultString_ << "\n" << 
+		rotation << " : rotation\n"
 		<< "rotateMatrix\n"
 		<< GetMatrixString(rotateMatrix)
 		<< rotateByQuaternion << " : rotateByQuaternion\n"
