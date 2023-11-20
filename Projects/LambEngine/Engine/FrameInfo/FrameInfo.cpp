@@ -37,7 +37,9 @@ FrameInfo::FrameInfo() :
 	frameDatas_(),
 	frameDataDuration_(1),
 	frameDataDurationStartTime_{},
-	avgProcDuration_{600llu}
+	avgProcDuration_{600llu},
+	fpsStringOutPut_{},
+	isDrawFps_(false)
 {
 	// リフレッシュレート取得
 	fps_ = kMaxMonitorFps_;
