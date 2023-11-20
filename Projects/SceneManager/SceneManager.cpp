@@ -39,7 +39,7 @@ SceneManager* const SceneManager::GetInstace() {
 	return &instance;
 }
 
-void SceneManager::Initialize(BaseScene* firstScene) {
+void SceneManager::Initialize(BaseScene* firstScene, std::optional<BaseScene::ID> finishID) {
 	fade_ = std::make_unique<Fade>();
 	fadeCamera_.Update();
 
@@ -52,6 +52,8 @@ void SceneManager::Initialize(BaseScene* firstScene) {
 	scene_->Initialize();
 
 	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/default.spritefont");
+
+	finishID_ = finishID;
 }
 
 void SceneManager::SceneChange(BaseScene* next) {
@@ -102,49 +104,15 @@ void SceneManager::Draw() {
 	fade_->Draw(fadeCamera_.GetViewOthographics());
 }
 
-void SceneManager::Game(std::optional<BaseScene::ID> finishID) {
-	/// 
-	/// メインループ
-	/// 
-	while (Engine::WindowMassage()) {
-		// 描画開始処理
-		Engine::FrameStart();
-
-		// fps
-		frameInfo_->Debug();
-
-		// 入力処理
-		input_->InputStart();
-
-#ifdef _DEBUG		
-		if (frameInfo_->GetIsDebugStop() && frameInfo_->GetIsOneFrameActive()) {
-			this->Update();
-			frameInfo_->SetIsOneFrameActive(false);
-		}
-		else if(!frameInfo_->GetIsDebugStop()){
-			// 更新処理
-			this->Update();
-		}
-#else
-		// 更新処理
-		this->Update();
-#endif
-
-		// 描画処理
-		this->Draw();
-
-		// フレーム終了処理
-		Engine::FrameEnd();
-
-		// Escapeが押されたら終了
-		if (scene_->GetID() == finishID) {
-			if (input_->GetKey()->Pushed(DIK_ESCAPE) || input_->GetGamepad()->Pushed(Gamepad::Button::START)) {
-				break;
-			}
-		}
+bool SceneManager::IsEnd() const {
+	if (!scene_) {
+		return true;
 	}
-}
 
+	return scene_->GetID() == finishID_ && 
+	(input_->GetKey()->Pushed(DIK_ESCAPE) ||
+		input_->GetGamepad()->Pushed(Gamepad::Button::START));
+}
 
 void SceneManager::Finalize() {
 	fade_.reset();

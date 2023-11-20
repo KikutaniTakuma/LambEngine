@@ -82,7 +82,7 @@ public:
 	static SceneManager* const GetInstace();
 
 public:
-	void Initialize(BaseScene* firstScene);
+	void Initialize(BaseScene* firstScene, std::optional<BaseScene::ID> finishID);
 	void Finalize();
 
 	void SceneChange(BaseScene* next);
@@ -98,6 +98,9 @@ public:
 		return isPad_;
 	}
 
+	bool IsEnd() const;
+
+
 private:
 	std::unique_ptr<BaseScene> scene_;
 	std::unique_ptr<BaseScene> next_;
@@ -110,4 +113,6 @@ private:
 	Input* input_ = nullptr;
 
 	bool isPad_ = false;
+
+	std::optional<BaseScene::ID> finishID_;
 };
