@@ -2,9 +2,7 @@
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "../externals/imgui/imgui.h"
 
-#ifdef _DEBUG
 #include "Input/KeyInput/KeyInput.h"
-#endif // _DEBUG
 
 
 #include <cmath>
@@ -113,7 +111,7 @@ void FrameInfo::End() {
 
 	if (elapsed < minCheckTime_) {
 		while (std::chrono::high_resolution_clock::now() - reference_ < minTime_) {
-			std::this_thread::sleep_for(std::chrono::microseconds(1));
+			std::this_thread::sleep_for(std::chrono::nanoseconds(250));
 		}
 	}
 
