@@ -5,49 +5,26 @@
 #include <filesystem>
 #include <fstream>
 #include <format>
+#include "Engine/FrameInfo/FrameInfo.h"
+#include "Input/Input.h"
+#include "Engine/EngineParts/StringOutPutManager/StringOutPutManager.h"
+#include "SceneFactory/SceneFactory.h"
 
-BaseScene::BaseScene(BaseScene::ID sceneID):
-	sceneManager_(nullptr),
-	meshManager_(nullptr),
-	audioManager_(nullptr),
-	textureManager_(nullptr),
-	frameInfo_(nullptr),
-	input_(nullptr),
-	stringOutPutManager_(nullptr),
-	sceneID_(sceneID),
-	camera_()
-{}
-
-void BaseScene::SceneInitialize(SceneManager* sceneManager) {
-	sceneManager_ = sceneManager;
-
-	meshManager_ = MeshManager::GetInstance();
-
-	audioManager_ = AudioManager::GetInstance();
-
-	textureManager_ = TextureManager::GetInstance();
-
-	frameInfo_ = FrameInfo::GetInstance();
-
-	stringOutPutManager_ = StringOutPutManager::GetInstance();
-
-	input_ = Input::GetInstance();
-}
-
-SceneManager* const SceneManager::GetInstace() {
+SceneManager* const SceneManager::GetInstance() {
 	static SceneManager instance;
 	return &instance;
 }
 
-void SceneManager::Initialize(BaseScene* firstScene, std::optional<BaseScene::ID> finishID) {
+void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID) {
 	fade_ = std::make_unique<Fade>();
 	fadeCamera_.Update();
 
 	frameInfo_ = FrameInfo::GetInstance();
 	input_ = Input::GetInstance();
 
-	assert(firstScene != nullptr);
-	scene_.reset(firstScene);
+	SceneFactory* const sceneFactory = SceneFactory::GetInstance();
+
+	scene_.reset(sceneFactory->CreateBaseScene(firstScene));
 	scene_->SceneInitialize(this);
 	scene_->Initialize();
 
@@ -56,12 +33,13 @@ void SceneManager::Initialize(BaseScene* firstScene, std::optional<BaseScene::ID
 	finishID_ = finishID;
 }
 
-void SceneManager::SceneChange(BaseScene* next) {
-	assert(next != nullptr);
+void SceneManager::SceneChange(std::optional<BaseScene::ID> next) {
 	if (next_) {
 		return;
 	}
-	next_.reset(next);
+	SceneFactory* const sceneFactory = SceneFactory::GetInstance();
+
+	next_.reset(sceneFactory->CreateBaseScene(next));
 	next_->SceneInitialize(this);
 
 	fade_->OutStart();
