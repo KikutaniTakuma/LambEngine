@@ -113,12 +113,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Game\Player\Player.cpp" />
     <ClCompile Include="GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SceneManager\BaseScene\BaseScene.cpp" />
-    <ClCompile Include="SceneManager\Fade\Fade.cpp" />
-    <ClCompile Include="SceneManager\GameScene\GameScene.cpp" />
-    <ClCompile Include="SceneManager\SceneFactory\SceneFactory.cpp" />
-    <ClCompile Include="SceneManager\SceneManager.cpp" />
-    <ClCompile Include="SceneManager\SubMenu\SubMenu.cpp" />
+    <ClCompile Include="Scenes\GameScene\GameScene.cpp" />
+    <ClCompile Include="Scenes\Manager\BaseScene\BaseScene.cpp" />
+    <ClCompile Include="Scenes\Manager\Fade\Fade.cpp" />
+    <ClCompile Include="Scenes\Manager\SceneFactory\SceneFactory.cpp" />
+    <ClCompile Include="Scenes\Manager\SceneManager.cpp" />
+    <ClCompile Include="Scenes\SubMenu\SubMenu.cpp" />
     <ClCompile Include="World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -132,12 +132,12 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Game\MoveFloor\MoveFloor.h" />
     <ClInclude Include="Game\Player\Player.h" />
     <ClInclude Include="GlobalVariables\GlobalVariables.h" />
-    <ClInclude Include="SceneManager\BaseScene\BaseScene.h" />
-    <ClInclude Include="SceneManager\Fade\Fade.h" />
-    <ClInclude Include="SceneManager\GameScene\GameScene.h" />
-    <ClInclude Include="SceneManager\SceneFactory\SceneFactory.h" />
-    <ClInclude Include="SceneManager\SceneManager.h" />
-    <ClInclude Include="SceneManager\SubMenu\SubMenu.h" />
+    <ClInclude Include="Scenes\GameScene\GameScene.h" />
+    <ClInclude Include="Scenes\Manager\BaseScene\BaseScene.h" />
+    <ClInclude Include="Scenes\Manager\Fade\Fade.h" />
+    <ClInclude Include="Scenes\Manager\SceneFactory\SceneFactory.h" />
+    <ClInclude Include="Scenes\Manager\SceneManager.h" />
+    <ClInclude Include="Scenes\SubMenu\SubMenu.h" />
     <ClInclude Include="World\World.h" />
   </ItemGroup>
   <ItemGroup>

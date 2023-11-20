@@ -5,12 +5,6 @@
     <ClCompile Include="GlobalVariables\GlobalVariables.cpp">
       <Filter>GlobalVariables</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager\SceneManager.cpp">
-      <Filter>SceneManager</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager\GameScene\GameScene.cpp">
-      <Filter>SceneManager\GameScene</Filter>
-    </ClCompile>
     <ClCompile Include="Game\CollisionManager\CollisionManager.cpp">
       <Filter>Game\CollisionManager</Filter>
     </ClCompile>
@@ -29,12 +23,6 @@
     <ClCompile Include="Game\Goal\Goal.cpp">
       <Filter>Game\Goal</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager\Fade\Fade.cpp">
-      <Filter>SceneManager\Fade</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager\SubMenu\SubMenu.cpp">
-      <Filter>SceneManager\SubMenu</Filter>
-    </ClCompile>
     <ClCompile Include="Game\CollisionManager\Obb\Obb.cpp">
       <Filter>Game\CollisionManager\Obb</Filter>
     </ClCompile>
@@ -47,22 +35,28 @@
     <ClCompile Include="Framework\Framework.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager\SceneFactory\SceneFactory.cpp">
-      <Filter>SceneManager\SceneFactory</Filter>
+    <ClCompile Include="Scenes\Manager\SceneManager.cpp">
+      <Filter>Scenes\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager\BaseScene\BaseScene.cpp">
-      <Filter>SceneManager\BaseScene</Filter>
+    <ClCompile Include="Scenes\Manager\SceneFactory\SceneFactory.cpp">
+      <Filter>Scenes\Manager\SceneFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Manager\Fade\Fade.cpp">
+      <Filter>Scenes\Manager\Fade</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Manager\BaseScene\BaseScene.cpp">
+      <Filter>Scenes\Manager\BaseScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\GameScene\GameScene.cpp">
+      <Filter>Scenes\GameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\SubMenu\SubMenu.cpp">
+      <Filter>Scenes\SubMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
       <UniqueIdentifier>{dff28833-6a2e-4902-9a4c-e0a7cb10934b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SceneManager">
-      <UniqueIdentifier>{fad8cc50-c290-488f-b4fb-cdbad1bbd763}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SceneManager\GameScene">
-      <UniqueIdentifier>{d4d1cb10-a26f-4866-b520-1d5be8c63924}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{e16d5b6d-612f-4477-b4d3-85f9d99b2ab8}</UniqueIdentifier>
@@ -85,12 +79,6 @@
     <Filter Include="Game\Goal">
       <UniqueIdentifier>{1bacb22f-e85f-43e8-a84f-be23ce3ec48e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SceneManager\Fade">
-      <UniqueIdentifier>{fc86e848-5d67-4732-9a7d-9ea0a4889d0f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SceneManager\SubMenu">
-      <UniqueIdentifier>{06de54b1-47bd-4884-994f-f76486248bca}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\CollisionManager\Obb">
       <UniqueIdentifier>{f1b87284-7f48-48e0-946d-317f4c3da22f}</UniqueIdentifier>
     </Filter>
@@ -103,22 +91,31 @@
     <Filter Include="Framework">
       <UniqueIdentifier>{797ec55f-9d83-40e7-8a03-f4f9142c24d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SceneManager\SceneFactory">
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{fad8cc50-c290-488f-b4fb-cdbad1bbd763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\GameScene">
+      <UniqueIdentifier>{d4d1cb10-a26f-4866-b520-1d5be8c63924}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\SubMenu">
+      <UniqueIdentifier>{06de54b1-47bd-4884-994f-f76486248bca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Manager">
+      <UniqueIdentifier>{3920a90e-0f61-4c3e-a578-f7f4a2d79fd9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Manager\BaseScene">
+      <UniqueIdentifier>{09c8f465-3aff-4334-9c04-c77e3f818100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Manager\SceneFactory">
       <UniqueIdentifier>{e3cb3459-6828-4847-8a7d-6269ce3a1eba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SceneManager\BaseScene">
-      <UniqueIdentifier>{09c8f465-3aff-4334-9c04-c77e3f818100}</UniqueIdentifier>
+    <Filter Include="Scenes\Manager\Fade">
+      <UniqueIdentifier>{fc86e848-5d67-4732-9a7d-9ea0a4889d0f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlobalVariables\GlobalVariables.h">
       <Filter>GlobalVariables</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager\SceneManager.h">
-      <Filter>SceneManager</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager\GameScene\GameScene.h">
-      <Filter>SceneManager\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="Game\CollisionManager\CollisionManager.h">
       <Filter>Game\CollisionManager</Filter>
@@ -138,12 +135,6 @@
     <ClInclude Include="Game\Goal\Goal.h">
       <Filter>Game\Goal</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager\Fade\Fade.h">
-      <Filter>SceneManager\Fade</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager\SubMenu\SubMenu.h">
-      <Filter>SceneManager\SubMenu</Filter>
-    </ClInclude>
     <ClInclude Include="Game\CollisionManager\Obb\Obb.h">
       <Filter>Game\CollisionManager\Obb</Filter>
     </ClInclude>
@@ -156,11 +147,23 @@
     <ClInclude Include="Framework\Framework.h">
       <Filter>Framework</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager\SceneFactory\SceneFactory.h">
-      <Filter>SceneManager\SceneFactory</Filter>
+    <ClInclude Include="Scenes\Manager\SceneManager.h">
+      <Filter>Scenes\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager\BaseScene\BaseScene.h">
-      <Filter>SceneManager\BaseScene</Filter>
+    <ClInclude Include="Scenes\Manager\SceneFactory\SceneFactory.h">
+      <Filter>Scenes\Manager\SceneFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Manager\Fade\Fade.h">
+      <Filter>Scenes\Manager\Fade</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Manager\BaseScene\BaseScene.h">
+      <Filter>Scenes\Manager\BaseScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\GameScene\GameScene.h">
+      <Filter>Scenes\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\SubMenu\SubMenu.h">
+      <Filter>Scenes\SubMenu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

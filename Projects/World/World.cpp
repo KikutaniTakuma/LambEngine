@@ -1,6 +1,5 @@
 #include "World.h"
-#include "SceneManager/SceneManager.h"
-#include "SceneManager/GameScene/GameScene.h"
+#include "Scenes/Manager/SceneManager.h"
 
 void World::Initialize() {
 	Framework::Initialize();

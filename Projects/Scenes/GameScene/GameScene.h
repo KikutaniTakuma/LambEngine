@@ -1,5 +1,5 @@
 #pragma once
-#include "SceneManager/SceneManager.h"
+#include "Scenes/Manager/SceneManager.h"
 #include "Drawers/Model/Model.h"
 #include "Drawers/Texture2D/Texture2D.h"
 #include "Drawers/PeraRender/PeraRender.h"

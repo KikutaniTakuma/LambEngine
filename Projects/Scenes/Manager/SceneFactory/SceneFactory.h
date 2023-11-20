@@ -2,7 +2,7 @@
 #include <optional>
 #include <unordered_map>
 #include <functional>
-#include "SceneManager/BaseScene/BaseScene.h"
+#include "Scenes/Manager/BaseScene/BaseScene.h"
 
 class SceneFactory final {
 private:

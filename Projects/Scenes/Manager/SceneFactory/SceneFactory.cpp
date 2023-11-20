@@ -1,5 +1,5 @@
 #include "SceneFactory.h"
-#include "SceneManager/GameScene/GameScene.h"
+#include "Scenes/GameScene/GameScene.h"
 
 SceneFactory::SceneFactory():
 	createScene_{}
