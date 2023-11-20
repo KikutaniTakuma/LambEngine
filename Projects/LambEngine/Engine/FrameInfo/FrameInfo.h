@@ -77,6 +77,10 @@ public:
 		return frameCount_;
 	}
 
+	/// <summary>
+	/// fpsの上限値を設定(メインモニターのリフレッシュレートを超えることはない)
+	/// </summary>
+	/// <param name="fpsLimit">fps上限値</param>
 	void SetFpsLimit(double fpsLimit);
 
 	/// <summary>
@@ -102,6 +106,10 @@ public:
 	/// </summary>
 	void Debug();
 
+	/// <summary>
+	/// メインモニターのリフレッシュレートを取得
+	/// </summary>
+	/// <returns>リフレッシュレート</returns>
 	double GetMainMonitorFramerate() const;
 
 
