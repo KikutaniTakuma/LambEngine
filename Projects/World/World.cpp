@@ -1,0 +1,40 @@
+#include "World.h"
+#include "SceneManager/SceneManager.h"
+#include "SceneManager/GameScene/GameScene.h"
+
+void World::Initialize() {
+	Framework::Initialize();
+
+	sceneManager_ = SceneManager::GetInstace();
+
+	auto startScene = new GameScene{};
+
+	sceneManager_->Initialize(startScene, BaseScene::ID::Game);
+}
+
+void World::Finalize() {
+	if (sceneManager_) {
+		sceneManager_->Finalize();
+	}
+
+	Framework::Finalize();
+}
+
+void World::Update() {
+	if (sceneManager_) {
+		sceneManager_->Update();
+		isEnd_ = sceneManager_->IsEnd();
+	}
+	else {
+		isEnd_ = true;
+	}
+}
+
+void World::Draw() {
+	if (sceneManager_) {
+		sceneManager_->Draw();
+	}
+	else {
+		isEnd_ = true;
+	}
+}
