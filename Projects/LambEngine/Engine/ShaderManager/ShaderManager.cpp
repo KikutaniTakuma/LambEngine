@@ -5,6 +5,7 @@
 #include <format>
 #include "Engine/ErrorCheck/ErrorCheck.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
+#pragma warning(disable: 6387)
 
 ShaderManager* ShaderManager::instance_ = nullptr;
 
@@ -88,7 +89,7 @@ IDxcBlob* ShaderManager::CompilerShader(
 		L"-Zpr" // メモリレイアウトを優先
 	};
 	// 実際にShaderをコンパイルする
-	Microsoft::WRL::ComPtr<IDxcResult> shaderResult;
+	Microsoft::WRL::ComPtr<IDxcResult> shaderResult = nullptr;
 	hr = dxcCompiler_->Compile(
 		&shaderSourceBuffer, // 読みこんだファイル
 		arguments,           // コンパイルオプション
@@ -101,6 +102,12 @@ IDxcBlob* ShaderManager::CompilerShader(
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		ErrorCheck::GetInstance()->ErrorTextBox("Danger!! Cannot use ""dxc""", "ShaderManager");
+		return nullptr;
+	}
+
+	if (!shaderResult) {
+		ErrorCheck::GetInstance()->ErrorTextBox("Create ShaderResult failed", "ShaderManager");
+		return nullptr;
 	}
 
 	// 3. 警告・エラーが出てないか確認する
@@ -111,6 +118,7 @@ IDxcBlob* ShaderManager::CompilerShader(
 		ErrorCheck::GetInstance()->ErrorTextBox(shaderError->GetStringPointer(), "ShaderManager");
 		// 警告・エラーダメゼッタイ
 		assert(false);
+		return nullptr;
 	}
 
 	// 4. Compileを受け取って返す
