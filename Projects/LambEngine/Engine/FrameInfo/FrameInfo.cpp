@@ -52,6 +52,9 @@ FrameInfo::FrameInfo() :
 	maxFpsLimit_ = fps_;
 
 	SetFpsLimit(fps_);
+
+	fpsStringOutPut_.SetFormat("./Resources/Font/default.spritefont");
+	fpsStringOutPut_.scale_ *= 0.3f;
 }
 
 FrameInfo::~FrameInfo() {
@@ -147,6 +150,20 @@ void FrameInfo::End() {
 	}
 }
 
+void FrameInfo::DrawFps() {
+	if (isDrawFps_) {
+		fpsStringOutPut_.Clear();
+		fpsStringOutPut_ << "fps : " << static_cast<int32_t>(fps_);
+		fpsStringOutPut_.Draw();
+	}
+}
+
+void FrameInfo::SwitchDarwFlg() {
+	if (KeyInput::GetInstance()->Pushed(DIK_F3)) {
+		isDrawFps_ = !isDrawFps_;
+	}
+}
+
 void FrameInfo::SetFpsLimit(double fpsLimit) {
 	fpsLimit_ = std::clamp(fpsLimit, 10.0, maxFpsLimit_);
 	           
@@ -155,6 +172,8 @@ void FrameInfo::SetFpsLimit(double fpsLimit) {
 }
 
 void FrameInfo::Debug() {
+	this->SwitchDarwFlg();
+
 #ifdef _DEBUG
 	static float fpsLimit = static_cast<float>(fpsLimit_);
 	fpsLimit = static_cast<float>(fpsLimit_);
@@ -171,6 +190,7 @@ void FrameInfo::Debug() {
 	ImGui::Text("Delta Time: %.4lf", deltaTime_);
 	ImGui::Text("Frame Count: %llu", frameCount_);
 	ImGui::DragFloat("fps limit", &fpsLimit, 1.0f, 1.0f, static_cast<float>(kMaxMonitorFps_));
+	
 	fpsLimit_ = static_cast<double>(fpsLimit);
 	SetFpsLimit(fpsLimit_);
 	if (ImGui::TreeNode("DEBUG")) {

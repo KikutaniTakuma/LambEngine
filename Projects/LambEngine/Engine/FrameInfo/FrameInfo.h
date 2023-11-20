@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 #include <queue>
+#include "Drawers/StringOut/StringOut.h"
 
 /// <summary>
 /// フレーム情報の管理(fps固定、デルタタイム、平均fps)
@@ -37,6 +38,7 @@ public:
 	/// </summary>
 	void Start();
 
+
 	/// <summary>
 	/// フレーム終了時関数
 	/// </summary>
@@ -46,6 +48,14 @@ public:
 /// getter
 /// </summary>
 public:
+	/// <summary>
+	/// fps描画
+	/// </summary>
+	void DrawFps();
+
+	void SwitchDarwFlg();
+
+
 	/// <summary>
 	/// デルタタイム取得
 	/// </summary>
@@ -157,6 +167,9 @@ private:
 	std::chrono::seconds frameDataDuration_;
 	std::chrono::high_resolution_clock::time_point frameDataDurationStartTime_;
 	size_t avgProcDuration_;
+
+	StringOut fpsStringOutPut_;
+	bool isDrawFps_;
 	
 
 #ifdef _DEBUG
