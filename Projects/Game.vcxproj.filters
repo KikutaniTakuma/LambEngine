@@ -20,15 +20,6 @@
     <ClCompile Include="Game\Player\Player.cpp">
       <Filter>Game\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Enemy\Enemy.cpp">
-      <Filter>Game\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\MoveFloor\MoveFloor.cpp">
-      <Filter>Game\MoveFloor</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\Goal\Goal.cpp">
-      <Filter>Game\Goal</Filter>
-    </ClCompile>
     <ClCompile Include="SceneManager\Fade\Fade.cpp">
       <Filter>SceneManager\Fade</Filter>
     </ClCompile>
@@ -38,8 +29,14 @@
     <ClCompile Include="Game\CollisionManager\Obb\Obb.cpp">
       <Filter>Game\CollisionManager\Obb</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CollisionManager\Plane\Plane.cpp">
-      <Filter>Game\Plane</Filter>
+    <ClCompile Include="Game\Command\MoveRightCommand\MoveRightCommand.cpp">
+      <Filter>Game\Command\MoveRightCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Command\MoveLeftCommand\MoveLeftCommand.cpp">
+      <Filter>Game\Command\MoveLeftCommand</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Command\InputHandler\InputHandler.cpp">
+      <Filter>Game\Command\InputHandler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,20 +55,11 @@
     <Filter Include="Game\Player">
       <UniqueIdentifier>{59d5891a-fe38-42fd-8e02-eff0e6cc8f21}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Enemy">
-      <UniqueIdentifier>{9b3acda0-60e3-4f51-9f7a-cdeb0de855f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\MoveFloor">
-      <UniqueIdentifier>{ccb4e67f-317d-4ca7-988c-1166af7a4319}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\CollisionManager">
       <UniqueIdentifier>{1451ec42-a15b-4d2f-8a7d-7edbc8a26e9b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\CollisionManager\Collider">
       <UniqueIdentifier>{9e6dd177-5172-4dfe-bf41-1cfaa76118cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Goal">
-      <UniqueIdentifier>{1bacb22f-e85f-43e8-a84f-be23ce3ec48e}</UniqueIdentifier>
     </Filter>
     <Filter Include="SceneManager\Fade">
       <UniqueIdentifier>{fc86e848-5d67-4732-9a7d-9ea0a4889d0f}</UniqueIdentifier>
@@ -82,8 +70,20 @@
     <Filter Include="Game\CollisionManager\Obb">
       <UniqueIdentifier>{f1b87284-7f48-48e0-946d-317f4c3da22f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Plane">
-      <UniqueIdentifier>{268eefac-748b-4452-b6c2-10e06349215c}</UniqueIdentifier>
+    <Filter Include="Game\Command">
+      <UniqueIdentifier>{70774a35-c2c2-4af8-be28-71d25dbb75b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Command\ICommand">
+      <UniqueIdentifier>{8fc3241d-930f-4373-9c80-a06d99c0e934}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Command\MoveRightCommand">
+      <UniqueIdentifier>{3d867094-fe82-4d0a-a061-108126b8c950}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Command\MoveLeftCommand">
+      <UniqueIdentifier>{583b7934-94df-41e5-b036-48d7032c4d05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Command\InputHandler">
+      <UniqueIdentifier>{a2665127-1069-44b6-ad85-1a76acdf5653}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -105,15 +105,6 @@
     <ClInclude Include="Game\Player\Player.h">
       <Filter>Game\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Game\Enemy\Enemy.h">
-      <Filter>Game\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\MoveFloor\MoveFloor.h">
-      <Filter>Game\MoveFloor</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\Goal\Goal.h">
-      <Filter>Game\Goal</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager\Fade\Fade.h">
       <Filter>SceneManager\Fade</Filter>
     </ClInclude>
@@ -123,8 +114,17 @@
     <ClInclude Include="Game\CollisionManager\Obb\Obb.h">
       <Filter>Game\CollisionManager\Obb</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CollisionManager\Plane\Plane.h">
-      <Filter>Game\Plane</Filter>
+    <ClInclude Include="Game\Command\ICommand\ICommand.h">
+      <Filter>Game\Command\ICommand</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Command\MoveRightCommand\MoveRightCommand.h">
+      <Filter>Game\Command\MoveRightCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Command\MoveLeftCommand\MoveLeftCommand.h">
+      <Filter>Game\Command\MoveLeftCommand</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Command\InputHandler\InputHandler.h">
+      <Filter>Game\Command\InputHandler</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
