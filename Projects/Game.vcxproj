@@ -102,6 +102,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Framework\Framework.cpp" />
     <ClCompile Include="Game\CollisionManager\Collider\Collider.cpp" />
     <ClCompile Include="Game\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Game\CollisionManager\Obb\Obb.cpp" />
@@ -116,8 +117,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="SceneManager\GameScene\GameScene.cpp" />
     <ClCompile Include="SceneManager\SceneManager.cpp" />
     <ClCompile Include="SceneManager\SubMenu\SubMenu.cpp" />
+    <ClCompile Include="World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Framework\Framework.h" />
     <ClInclude Include="Game\CollisionManager\Collider\Collider.h" />
     <ClInclude Include="Game\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Game\CollisionManager\Obb\Obb.h" />
@@ -131,6 +134,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="SceneManager\GameScene\GameScene.h" />
     <ClInclude Include="SceneManager\SceneManager.h" />
     <ClInclude Include="SceneManager\SubMenu\SubMenu.h" />
+    <ClInclude Include="World\World.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="LambEngine\Lamb.vcxproj">
