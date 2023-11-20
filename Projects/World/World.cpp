@@ -5,11 +5,9 @@
 void World::Initialize() {
 	Framework::Initialize();
 
-	sceneManager_ = SceneManager::GetInstace();
+	sceneManager_ = SceneManager::GetInstance();
 
-	auto startScene = new GameScene{};
-
-	sceneManager_->Initialize(startScene, BaseScene::ID::Game);
+	sceneManager_->Initialize(BaseScene::ID::Game, BaseScene::ID::Game);
 }
 
 void World::Finalize() {
