@@ -282,6 +282,9 @@ void Engine::FrameEnd() {
 		return;
 	}
 
+	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
+	frameInfo->DrawFps();
+
 
 #ifdef _DEBUG
 	ID3D12GraphicsCommandList* commandList = engine->directXCommon_->GetCommandList();
@@ -329,7 +332,6 @@ void Engine::FrameEnd() {
 	audioManager->ThreadLoad();
 	audioManager->CheckThreadLoadFinish();
 
-	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	frameInfo->End();
 }
 
