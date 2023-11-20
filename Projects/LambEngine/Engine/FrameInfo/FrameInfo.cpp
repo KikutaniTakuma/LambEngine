@@ -42,7 +42,7 @@ FrameInfo::FrameInfo() :
 	// リフレッシュレート取得
 	fps_ = kMaxMonitorFps_;
 	minFps_ = maxFps_ = fps_;
-	deltaTime_ = 1.0f / fps_;
+	deltaTime_ = 1.0 / fps_;
 
 	auto nowTime = std::chrono::high_resolution_clock::now();
 	gameStartTime_ = nowTime;
