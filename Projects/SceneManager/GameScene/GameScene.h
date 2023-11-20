@@ -7,9 +7,7 @@
 #include "Drawers/StringOut/StringOut.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Game/Player/Player.h"
-#include "Game/MoveFloor/MoveFloor.h"
-#include "Game/Goal/Goal.h"
-#include "Game/Enemy/Enemy.h"
+#include "Game/Command/InputHandler/InputHandler.h"
 
 class GameScene : public BaseScene {
 public:
@@ -31,8 +29,7 @@ public:
 	void Draw() override;
 
 public:
-	StringOut resultString_;
-	Model model_;
-
-	PeraRender pera_;
+	std::unique_ptr<Player> player_;
+	std::unique_ptr<InputHandler> inputHandler_;
+	class ICommand* command_;
 };
