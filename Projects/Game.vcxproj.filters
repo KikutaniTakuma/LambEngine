@@ -41,6 +41,12 @@
     <ClCompile Include="Game\CollisionManager\Plane\Plane.cpp">
       <Filter>Game\Plane</Filter>
     </ClCompile>
+    <ClCompile Include="World\World.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Framework.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -85,6 +91,12 @@
     <Filter Include="Game\Plane">
       <UniqueIdentifier>{268eefac-748b-4452-b6c2-10e06349215c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="World">
+      <UniqueIdentifier>{b8981fb7-5ba2-4533-897e-e706c7dc3049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{797ec55f-9d83-40e7-8a03-f4f9142c24d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GlobalVariables\GlobalVariables.h">
@@ -125,6 +137,12 @@
     </ClInclude>
     <ClInclude Include="Game\CollisionManager\Plane\Plane.h">
       <Filter>Game\Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="World\World.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Framework.h">
+      <Filter>Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
