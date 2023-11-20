@@ -1,6 +1,6 @@
 #include "FrameInfo.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
-#include "../externals/imgui/imgui.h"
+#include "imgui.h"
 
 #include "Input/KeyInput/KeyInput.h"
 

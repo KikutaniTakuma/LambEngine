@@ -1,7 +1,7 @@
 #include "WinApp.h"
 #pragma comment(lib, "winmm.lib")
 #include <cassert>
-#include "../externals/imgui/imgui_impl_win32.h"
+#include "imgui_impl_win32.h"
 #include "Utils/Math/Vector2.h"
 
 extern IMGUI_IMPL_API LRESULT

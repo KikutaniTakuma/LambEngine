@@ -3,7 +3,7 @@
 #include "Input/KeyInput/KeyInput.h"
 #include "Input/Mouse/Mouse.h"
 #include "Input/Gamepad/Gamepad.h"
-#include "../externals/imgui/imgui.h"
+#include "imgui.h"
 #include "Engine/WinApp/WinApp.h"
 #include <algorithm>
 #include <numbers>

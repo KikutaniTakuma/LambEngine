@@ -121,27 +121,6 @@
     <ClCompile Include="Engine\EngineParts\StringOutPutManager\StringOutPutManager.cpp">
       <Filter>Engine\EngineParts\StringOutPutManager</Filter>
     </ClCompile>
-    <ClCompile Include="..\externals\imgui\imgui.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\externals\imgui\imgui_demo.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\externals\imgui\imgui_draw.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\externals\imgui\imgui_impl_dx12.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\externals\imgui\imgui_impl_win32.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\externals\imgui\imgui_tables.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\externals\imgui\imgui_widgets.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\Math\Quaternion.cpp">
       <Filter>Utils\Math</Filter>
     </ClCompile>
@@ -248,9 +227,6 @@
     </Filter>
     <Filter Include="Utils\ConvertString">
       <UniqueIdentifier>{5a7a3057-cf34-4af9-a2fc-9484d57e4dd8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ImGui">
-      <UniqueIdentifier>{5b876a97-01b6-4bd9-86f8-cc06c481da52}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utils\UtilsLib">
       <UniqueIdentifier>{c6f84b96-4130-443c-b4b7-b47e1dc84f27}</UniqueIdentifier>
@@ -413,30 +389,6 @@
     <ClInclude Include="Engine\EngineParts\StringOutPutManager\StringOutPutManager.h">
       <Filter>Engine\EngineParts\StringOutPutManager</Filter>
     </ClInclude>
-    <ClInclude Include="..\externals\imgui\imconfig.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\externals\imgui\imgui.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\externals\imgui\imgui_impl_dx12.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\externals\imgui\imgui_impl_win32.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\externals\imgui\imgui_internal.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\externals\imgui\imstb_rectpack.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\externals\imgui\imstb_textedit.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\externals\imgui\imstb_truetype.h">
-      <Filter>ImGui</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\Math\Quaternion.h">
       <Filter>Utils\Math</Filter>
     </ClInclude>
@@ -446,10 +398,5 @@
     <ClInclude Include="Engine\DescriptorHeap\RtvHeap.h">
       <Filter>Engine\DescriptorHeap</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\externals\imgui\LICENSE.txt">
-      <Filter>ImGui</Filter>
-    </Text>
   </ItemGroup>
 </Project>

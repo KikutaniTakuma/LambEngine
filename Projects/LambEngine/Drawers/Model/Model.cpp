@@ -4,7 +4,7 @@
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/UtilsLib/UtilsLib.h"
 #include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
-#include "../externals/imgui/imgui.h"
+#include "imgui.h"
 #include "Engine/ErrorCheck/ErrorCheck.h"
 #include "Engine/PipelineManager/PipelineManager.h"
 #include "MeshManager/MeshManager.h"

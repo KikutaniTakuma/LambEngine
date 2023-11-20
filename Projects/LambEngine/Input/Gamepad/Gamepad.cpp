@@ -1,5 +1,5 @@
 #include "GamePad.h"
-#include "../externals/imgui/imgui.h"
+#include "imgui.h"
 #include <limits>
 #include <algorithm>
 #include "Utils/Math/Vector2.h"

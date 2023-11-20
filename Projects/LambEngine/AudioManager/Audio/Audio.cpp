@@ -2,7 +2,7 @@
 #include <filesystem>
 #include "AudioManager/AudioManager.h"
 #include "Engine/ErrorCheck/ErrorCheck.h"
-#include "../externals/imgui/imgui.h"
+#include "imgui.h"
 
 Audio::Audio():
 	wfet_(),

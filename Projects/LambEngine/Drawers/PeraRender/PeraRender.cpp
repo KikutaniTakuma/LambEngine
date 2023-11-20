@@ -1,7 +1,7 @@
 #include "PeraRender.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
-#include "../externals/imgui/imgui.h"
+#include "imgui.h"
 #include "Engine/EngineParts/DirectXCommon/DirectXCommon.h"
 #include <cassert>
 #include <numbers>

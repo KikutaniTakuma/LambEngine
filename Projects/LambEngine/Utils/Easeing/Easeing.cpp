@@ -1,6 +1,6 @@
 #include "Easeing.h"
 #include "Engine/FrameInfo/FrameInfo.h"
-#include "../externals/imgui/imgui.h"
+#include "imgui.h"
 
 #include "Utils/Math/Vector3.h"
 #include "Utils/Math/Vector2.h"
