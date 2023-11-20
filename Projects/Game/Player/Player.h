@@ -1,5 +1,5 @@
 #pragma once
-#include "Drawers/Model/Model.h"
+#include "Drawers/Texture2D/Texture2D.h"
 #include <memory>
 #include "Utils/Camera/Camera.h"
 #include <vector>
@@ -13,61 +13,33 @@ public:
 	};
 
 public:
-	Player() = delete;
-	Player(class GlobalVariables* globalVariables);
+	Player();
 	Player(const Player&) = default;
 	~Player() = default;
 	Player& operator=(const Player&) = default;
 
 public:
-	void Move();
+	void ResetMoveVec();
 
 	void Update();
 
-	void Draw();
-
-	inline Vector3 GetPos() const {
-		return (*model.begin())->pos_;
-	}
-
-	inline void SetCamera(Camera* camera_) {
-		camera = camera_;
-	}
+	void Draw(const Mat4x4& cameraMat);
 
 	void Debug();
 
-private:
-	void Animation();
-
-	void ApplyGlobalVariables();
+public:
+	void MoveRight();
+	void MoveLeft();
 
 public:
 	Vector3 pos_;
+	Vector3 rotate_;
+	Vector2 scale_;
 
 	Vector3 moveVec_;
 
-	Collider colliser_;
 private:
-	class GlobalVariables* globalVariables_ = nullptr;
+	Texture2D tex2D_;
 
-	std::vector<std::unique_ptr<Model>> model;
-
-	float spd;
-
-	Camera* camera;
-
-	float freqSpd;
-	float freq;
-
-	float armFreqSpd;
-	float armFreq;
-
-	Behavior behavior;
-
-	float attack;
-	float attackSpd;
-
-	float cameraRotate_;
-	float cmaeraRotateSpd_;
-
+	float speed_;
 };
