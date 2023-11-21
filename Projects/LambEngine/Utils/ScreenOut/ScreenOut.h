@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include <cstdint>
+#include <functional>
 
 namespace Lamb{
 	class ScreenOutAllocator;
@@ -72,15 +73,17 @@ namespace Lamb {
 		const ScreenOutAllocator& operator<<(const Vector4& right)const;
 		const ScreenOutAllocator& operator<<(const Quaternion& right)const;
 
+		const ScreenOutAllocator& operator<<(std::function<const ScreenOutAllocator&(const ScreenOutAllocator&)> right)const;
+
 	private:
 		void Clear() const;
 		void Draw() const;
 
 	private:
-		ScreenOut* screenOutPtr_;
+		class ScreenOut* screenOutPtr_;
 	};
 
 	extern const ScreenOutAllocator screenout;
 
-	extern const char endline[1];
+	const ScreenOutAllocator& endline(const ScreenOutAllocator& allocator);
 }

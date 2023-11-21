@@ -28,7 +28,10 @@ ScreenOut::ScreenOut() :
 
 namespace Lamb {
 	const ScreenOutAllocator screenout;
-	const char endline[1] = { '\n' };
+	const ScreenOutAllocator& endline(const ScreenOutAllocator& allocator) {
+		allocator << "\n";
+		return allocator;
+	}
 
 	ScreenOutAllocator::ScreenOutAllocator():
 		screenOutPtr_{nullptr}
@@ -132,5 +135,8 @@ namespace Lamb {
 
 	void ScreenOutAllocator::Draw() const {
 		screenOutPtr_->sout_->Draw();
+	}
+	const ScreenOutAllocator& ScreenOutAllocator::operator<<(std::function<const ScreenOutAllocator& (const ScreenOutAllocator&)> right)const {
+		return right(*this);
 	}
 }
