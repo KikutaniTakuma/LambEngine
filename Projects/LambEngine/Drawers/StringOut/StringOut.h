@@ -2,7 +2,6 @@
 #include <string>
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Quaternion.h"
-#include "Utils/ConvertString/ConvertString.h"
 #include <concepts>
 
 /// <summary>
@@ -76,10 +75,6 @@ public:
 	bool isHorizontal_;
 
 public:
-	inline void SetFormat(const std::string& formatName) {
-		format_ = formatName;
-	}
-	inline void SetFormat(const std::wstring& formatName) {
-		format_ = ConvertString(formatName);
-	}
+	void SetFormat(const std::string& formatName);
+	void SetFormat(const std::wstring& formatName);
 };

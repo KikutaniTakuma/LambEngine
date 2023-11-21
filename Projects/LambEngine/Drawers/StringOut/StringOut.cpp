@@ -197,3 +197,10 @@ void StringOut::Debug([[maybe_unused]]const std::string& debugName) {
 	color_ = Vector4ToUint(debugColor);
 #endif // _DEBUG
 }
+
+void StringOut::SetFormat(const std::string& formatName) {
+	format_ = formatName;
+}
+void StringOut::SetFormat(const std::wstring& formatName) {
+	format_ = ConvertString(formatName);
+}
