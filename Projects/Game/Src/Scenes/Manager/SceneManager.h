@@ -6,6 +6,7 @@
 #include <bitset>
 #include <optional>
 #include "Fade/Fade.h"
+#include "Input/Input.h"
 #include "BaseScene/BaseScene.h"
 
 class SceneManager final {
