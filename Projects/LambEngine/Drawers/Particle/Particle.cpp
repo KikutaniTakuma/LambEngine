@@ -778,14 +778,14 @@ void Particle::Update() {
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(nowTime - settings_[currentSettingIndex_].durationTime_);
 
 		// 出す頻度ランダム
-		auto freq = UtilsLib::Random(settings_[currentSettingIndex_].freq_.first, settings_[currentSettingIndex_].freq_.second);
+		auto freq = Lamb::Random(settings_[currentSettingIndex_].freq_.first, settings_[currentSettingIndex_].freq_.second);
 
 		// 頻度時間を超えてたら
 		if (duration > decltype(duration)(freq)) {
 			settings_[currentSettingIndex_].durationTime_ = nowTime;
 
 			// パーティクルを出す数ランダム
-			auto particleNum = UtilsLib::Random(settings_[currentSettingIndex_].particleNum_.first, settings_[currentSettingIndex_].particleNum_.second);
+			auto particleNum = Lamb::Random(settings_[currentSettingIndex_].particleNum_.first, settings_[currentSettingIndex_].particleNum_.second);
 
 			// パーティクルの設定
 			for (uint32_t i = currentParticleIndex_; i < currentParticleIndex_ + particleNum; i++) {
@@ -805,43 +805,43 @@ void Particle::Update() {
 				{
 				case Particle::EmitterType::Cube:
 				default:
-					pos = UtilsLib::Random(minPos, maxPos);
+					pos = Lamb::Random(minPos, maxPos);
 					break;
 
 				case Particle::EmitterType::Circle:
 					maxPos.x += settings_[currentSettingIndex_].emitter_.circleSize_;
-					pos = UtilsLib::Random(settings_[currentSettingIndex_].emitter_.pos_, maxPos);
-					posRotate = UtilsLib::Random(settings_[currentSettingIndex_].emitter_.rotate_.first, settings_[currentSettingIndex_].emitter_.rotate_.second);
+					pos = Lamb::Random(settings_[currentSettingIndex_].emitter_.pos_, maxPos);
+					posRotate = Lamb::Random(settings_[currentSettingIndex_].emitter_.rotate_.first, settings_[currentSettingIndex_].emitter_.rotate_.second);
 					pos *= MakeMatrixAffin(Vector3::identity, posRotate, Vector3::zero);
 					break;
 				}
 
 				// 大きさランダム
-				Vector2 size = UtilsLib::Random(settings_[currentSettingIndex_].size_.first, settings_[currentSettingIndex_].size_.second);
+				Vector2 size = Lamb::Random(settings_[currentSettingIndex_].size_.first, settings_[currentSettingIndex_].size_.second);
 				if (settings_[currentSettingIndex_].isSameHW_) {
 					size.y = size.x;
 				}
-				Vector2 sizeSecond = UtilsLib::Random(settings_[currentSettingIndex_].sizeSecond_.first, settings_[currentSettingIndex_].sizeSecond_.second);
+				Vector2 sizeSecond = Lamb::Random(settings_[currentSettingIndex_].sizeSecond_.first, settings_[currentSettingIndex_].sizeSecond_.second);
 				if (settings_[currentSettingIndex_].isSameHW_) {
 					sizeSecond.y = sizeSecond.x;
 				}
 
 				// 速度ランダム
-				Vector3 velocity = UtilsLib::Random(settings_[currentSettingIndex_].velocity_.first, settings_[currentSettingIndex_].velocity_.second);
-				Vector3 velocitySecond = UtilsLib::Random(settings_[currentSettingIndex_].velocitySecond_.first, settings_[currentSettingIndex_].velocitySecond_.second);
+				Vector3 velocity = Lamb::Random(settings_[currentSettingIndex_].velocity_.first, settings_[currentSettingIndex_].velocity_.second);
+				Vector3 velocitySecond = Lamb::Random(settings_[currentSettingIndex_].velocitySecond_.first, settings_[currentSettingIndex_].velocitySecond_.second);
 
 				// 移動方向ランダム
-				Vector3 moveRotate = UtilsLib::Random(settings_[currentSettingIndex_].moveRotate_.first, settings_[currentSettingIndex_].moveRotate_.second);
+				Vector3 moveRotate = Lamb::Random(settings_[currentSettingIndex_].moveRotate_.first, settings_[currentSettingIndex_].moveRotate_.second);
 
 				// 速度回転
 				velocity *= MakeMatrixAffin(Vector3::identity, moveRotate, Vector3::zero);
 
 				// 回転
-				Vector3 rotate = UtilsLib::Random(settings_[currentSettingIndex_].rotate_.first, settings_[currentSettingIndex_].rotate_.second);
-				Vector3 rotateSecond = UtilsLib::Random(settings_[currentSettingIndex_].rotateSecond_.first, settings_[currentSettingIndex_].rotateSecond_.second);
+				Vector3 rotate = Lamb::Random(settings_[currentSettingIndex_].rotate_.first, settings_[currentSettingIndex_].rotate_.second);
+				Vector3 rotateSecond = Lamb::Random(settings_[currentSettingIndex_].rotateSecond_.first, settings_[currentSettingIndex_].rotateSecond_.second);
 
 				// 死ぬ時間ランダム
-				uint32_t deathTime = UtilsLib::Random(settings_[currentSettingIndex_].death_.first, settings_[currentSettingIndex_].death_.second);
+				uint32_t deathTime = Lamb::Random(settings_[currentSettingIndex_].death_.first, settings_[currentSettingIndex_].death_.second);
 
 				// カラー
 				uint32_t color = settings_[currentSettingIndex_].color_.first;
@@ -1290,7 +1290,7 @@ void Particle::Debug(const std::string& guiName) {
 		}
 	}
 
-	auto fileNames = UtilsLib::GetFilePathFormDir("./Resources", ".png");
+	auto fileNames = Lamb::GetFilePathFormDir("./Resources", ".png");
 
 	if (isLoad_) {
 		if (ImGui::TreeNode("png files Load")) {

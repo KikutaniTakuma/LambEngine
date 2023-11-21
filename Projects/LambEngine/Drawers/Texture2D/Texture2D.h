@@ -140,7 +140,7 @@ public:
 
 	uint32_t color_;
 
-	UtilsLib::Flg isSameTexSize_;
+	Lamb::Flg isSameTexSize_;
 
 	// テクスチャと同じスケールにしたときのスケール倍率
 	float texScalar_;

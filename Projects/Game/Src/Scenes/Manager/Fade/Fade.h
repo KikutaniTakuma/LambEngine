@@ -63,12 +63,12 @@ private:
 	/// <summary>
 	/// フェードインしてるか
 	/// </summary>
-	UtilsLib::Flg isInStart_;
+	Lamb::Flg isInStart_;
 
 	/// <summary>
 	/// フェードアウトしてるか
 	/// </summary>
-	UtilsLib::Flg isOutStart_;
+	Lamb::Flg isOutStart_;
 
 	Texture2D tex_;
 

@@ -73,5 +73,5 @@ protected:
 
 	std::bitset<32> types_;
 
-	UtilsLib::Flg flg_;
+	Lamb::Flg flg_;
 };

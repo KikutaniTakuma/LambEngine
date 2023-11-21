@@ -24,7 +24,7 @@ protected:
 	virtual void Update() = 0;
 
 public:
-	UtilsLib::Flg isActive_;
+	Lamb::Flg isActive_;
 
 protected:
 	Camera camera_;

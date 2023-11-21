@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <random>
 
-namespace UtilsLib {
+namespace Lamb {
 	int8_t Random(int8_t min, int8_t max) {
 		static std::random_device seed;
 		static std::mt19937_64 rnd(seed());

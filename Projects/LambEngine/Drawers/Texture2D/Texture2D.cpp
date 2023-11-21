@@ -362,7 +362,7 @@ void Texture2D::Debug([[maybe_unused]]const std::string& guiName) {
 
 	if (ImGui::TreeNode("tex load")) {
 		if (isLoad_) {
-		auto texures = UtilsLib::GetFilePathFormDir("./Resources/", ".png");
+		auto texures = Lamb::GetFilePathFormDir("./Resources/", ".png");
 
 			for (auto& i : texures) {
 				if (ImGui::Button(i.string().c_str())) {

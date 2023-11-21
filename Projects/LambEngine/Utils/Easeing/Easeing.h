@@ -111,8 +111,8 @@ private:
 
 	std::function<float(float)> ease_;
 
-	UtilsLib::Flg isActive_;
-	UtilsLib::Flg isLoop_;
+	Lamb::Flg isActive_;
+	Lamb::Flg isLoop_;
 
 	float t_;
 

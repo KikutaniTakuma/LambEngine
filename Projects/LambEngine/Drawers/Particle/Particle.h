@@ -139,11 +139,11 @@ private:
 		std::chrono::steady_clock::time_point durationTime_;
 
 		// 今有効か
-		UtilsLib::Flg isValid_;
+		Lamb::Flg isValid_;
 
 
 		// 縦横の大きさを同じにするか
-		UtilsLib::Flg isSameHW_;
+		Lamb::Flg isSameHW_;
 	};
 
 public:
@@ -295,9 +295,9 @@ public:
 	/// <param name="index">particleのインデックス</param>
 	void Resize(uint32_t index);
 
-	const UtilsLib::Flg& GetIsParticleStart() const {
+	const Lamb::Flg& GetIsParticleStart() const {
 		if (settings_.empty()) {
-			static UtilsLib::Flg result{false};
+			static Lamb::Flg result{false};
 			return result;
 		}
 
@@ -314,7 +314,7 @@ private:
 	std::deque<Setting> settings_;
 
 	// ループするか
-	UtilsLib::Flg isLoop_;
+	Lamb::Flg isLoop_;
 
 	uint32_t currentSettingIndex_;
 	uint32_t currentParticleIndex_;

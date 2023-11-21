@@ -42,13 +42,13 @@ private:
 
 	Mat4x4 worldMatrix_;
 
-	UtilsLib::Flg isCollision_;
+	Lamb::Flg isCollision_;
 
 /// <summary>
 /// ゲッター
 /// </summary>
 public:
-	const UtilsLib::Flg& GetIsCollision() const {
+	const Lamb::Flg& GetIsCollision() const {
 		return isCollision_;
 	}
 };

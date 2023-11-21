@@ -9,7 +9,7 @@
 /// <summary>
 /// 便利なあれやこれや
 /// </summary>
-namespace UtilsLib {
+namespace Lamb {
 	/// <summary>
 	/// 最小値から最大値までで一様分布で乱数を生成
 	/// </summary>

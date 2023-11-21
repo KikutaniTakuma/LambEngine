@@ -341,7 +341,7 @@ void Model::Debug([[maybe_unused]]const std::string& guiName) {
 
 
 	if (ImGui::TreeNode("LoadObj")) {
-		auto filePathes = UtilsLib::GetFilePathFormDir("./Resources/", ".obj");
+		auto filePathes = Lamb::GetFilePathFormDir("./Resources/", ".obj");
 
 		for (auto& path : filePathes) {
 			if (ImGui::Button(path.string().c_str())) {
