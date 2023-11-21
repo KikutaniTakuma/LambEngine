@@ -31,7 +31,6 @@ public:
 	void Draw() override;
 
 public:
-	StringOut resultString_;
 	Model model_;
 
 	PeraRender pera_;
