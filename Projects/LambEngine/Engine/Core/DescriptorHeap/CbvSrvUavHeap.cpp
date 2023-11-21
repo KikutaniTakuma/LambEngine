@@ -1,8 +1,8 @@
 #include "CbvSrvUavHeap.h"
 #include "Utils/ConvertString/ConvertString.h"
-#include "Engine/WinApp/WinApp.h"
-#include "Engine/EngineParts/DirectXDevice/DirectXDevice.h"
-#include "Engine/EngineParts/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/Core/DirectXDevice/DirectXDevice.h"
+#include "Engine/Core/DirectXCommon/DirectXCommon.h"
 #include <cassert>
 #include <cmath>
 #include <algorithm>

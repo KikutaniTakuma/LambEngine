@@ -1,7 +1,7 @@
 #include "Line.h"
 #include <algorithm>
-#include "Engine/PipelineManager/PipelineManager.h"
-#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 
 Shader Line::shader_ = {};
 

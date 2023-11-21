@@ -1,9 +1,9 @@
 #include "TextureManager.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Engine/Engine.h"
-#include "Engine/EngineParts/DirectXDevice/DirectXDevice.h"
+#include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include <cassert>
-#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 
 TextureManager* TextureManager::instance_ = nullptr;
 

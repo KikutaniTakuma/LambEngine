@@ -4,12 +4,6 @@
     <ClCompile Include="Engine\Engine.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\WinApp\WinApp.cpp">
-      <Filter>Engine\WinApp</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\ShaderManager\ShaderManager.cpp">
-      <Filter>Engine\ShaderManager</Filter>
-    </ClCompile>
     <ClCompile Include="TextureManager\TextureManager.cpp">
       <Filter>TextureManager</Filter>
     </ClCompile>
@@ -21,12 +15,6 @@
     </ClCompile>
     <ClCompile Include="AudioManager\Audio\Audio.cpp">
       <Filter>AudioManager\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\RootSignature\RootSignature.cpp">
-      <Filter>Engine\RootSignature</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\ErrorCheck\ErrorCheck.cpp">
-      <Filter>Engine\ErrorCheck</Filter>
     </ClCompile>
     <ClCompile Include="Input\Gamepad\Gamepad.cpp">
       <Filter>Input\Gamepad</Filter>
@@ -52,12 +40,6 @@
     <ClCompile Include="Drawers\StringOut\StringOut.cpp">
       <Filter>Drawers\StringOut</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\PipelineManager\PipelineManager.cpp">
-      <Filter>Engine\PipelineManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\PipelineManager\Pipeline\Pipeline.cpp">
-      <Filter>Engine\PipelineManager\Pipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\Action\Frame\Frame.cpp">
       <Filter>Utils\Action\Frame</Filter>
     </ClCompile>
@@ -76,17 +58,11 @@
     <ClCompile Include="Utils\Math\Vector4.cpp">
       <Filter>Utils\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\RenderTarget\RenderTarget.cpp">
-      <Filter>Engine\RenderTarget</Filter>
-    </ClCompile>
     <ClCompile Include="MeshManager\MeshManager.cpp">
       <Filter>MeshManager</Filter>
     </ClCompile>
     <ClCompile Include="MeshManager\Mesh\Mesh.cpp">
       <Filter>MeshManager\Mesh</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\FrameInfo\FrameInfo.cpp">
-      <Filter>Engine\FrameInfo</Filter>
     </ClCompile>
     <ClCompile Include="Utils\CsvLoad\CsvLoad.cpp">
       <Filter>Utils\CsvLoad</Filter>
@@ -109,40 +85,55 @@
     <ClCompile Include="Utils\ExecutionLog\ExecutionLog.cpp">
       <Filter>Utils\ExecutionLog</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\EngineParts\DirectXCommon\DirectXCommon.cpp">
-      <Filter>Engine\EngineParts\DirectXCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\EngineParts\DirectXDevice\DirectXDevice.cpp">
-      <Filter>Engine\EngineParts\DirectXDevice</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\DescriptorHeap\CbvSrvUavHeap.cpp">
-      <Filter>Engine\DescriptorHeap</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\EngineParts\StringOutPutManager\StringOutPutManager.cpp">
-      <Filter>Engine\EngineParts\StringOutPutManager</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\Math\Quaternion.cpp">
       <Filter>Utils\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\DescriptorHeap\DescriptorHeap.cpp">
-      <Filter>Engine\DescriptorHeap</Filter>
+    <ClCompile Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.cpp">
+      <Filter>Engine\Core\DescriptorHeap</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\DescriptorHeap\RtvHeap.cpp">
-      <Filter>Engine\DescriptorHeap</Filter>
+    <ClCompile Include="Engine\Core\DescriptorHeap\DescriptorHeap.cpp">
+      <Filter>Engine\Core\DescriptorHeap</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\DescriptorHeap\RtvHeap.cpp">
+      <Filter>Engine\Core\DescriptorHeap</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\DirectXCommon\DirectXCommon.cpp">
+      <Filter>Engine\Core\DirectXCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\DirectXDevice\DirectXDevice.cpp">
+      <Filter>Engine\Core\DirectXDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\StringOutPutManager\StringOutPutManager.cpp">
+      <Filter>Engine\Core\StringOutPutManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\WinApp\WinApp.cpp">
+      <Filter>Engine\Core\WinApp</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.cpp">
+      <Filter>Engine\Graphics\PipelineManager\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp">
+      <Filter>Engine\Graphics\PipelineManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\RenderTarget\RenderTarget.cpp">
+      <Filter>Engine\Graphics\RenderTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\RootSignature\RootSignature.cpp">
+      <Filter>Engine\Graphics\RootSignature</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\ShaderManager\ShaderManager.cpp">
+      <Filter>Engine\Graphics\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EngineUtils\ErrorCheck\ErrorCheck.cpp">
+      <Filter>Engine\EngineUtils\ErrorCheck</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EngineUtils\FrameInfo\FrameInfo.cpp">
+      <Filter>Engine\EngineUtils\FrameInfo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
       <UniqueIdentifier>{d3b2314c-5abb-4996-9d77-ddedf3938121}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\WinApp">
-      <UniqueIdentifier>{b53c25de-314b-4648-8852-e97c158f0275}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\ShaderManager">
-      <UniqueIdentifier>{e9f17783-c021-4323-ae3b-d9f04d63298d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\ConstBuffer">
-      <UniqueIdentifier>{e59427f8-55ba-46bf-b8a3-e4974976afc4}</UniqueIdentifier>
     </Filter>
     <Filter Include="TextureManager">
       <UniqueIdentifier>{1336c590-e855-4d4f-92b9-fa2698582835}</UniqueIdentifier>
@@ -150,17 +141,11 @@
     <Filter Include="TextureManager\Texture">
       <UniqueIdentifier>{5c638997-6f2b-4dd7-9e5b-0d6092ae02f0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\RootSignature">
-      <UniqueIdentifier>{e940fd55-6a3e-4764-ba45-668507747c4f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="AudioManager">
       <UniqueIdentifier>{2487b7fc-0f80-433c-af4a-03b5842ec259}</UniqueIdentifier>
     </Filter>
     <Filter Include="AudioManager\Audio">
       <UniqueIdentifier>{7d34ec95-2a47-42f6-93fb-23ebe8cc0e42}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\ErrorCheck">
-      <UniqueIdentifier>{a8ce4ac6-d6d6-46ea-aa47-a5463509a0f9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Drawers">
       <UniqueIdentifier>{13568cd3-f8d9-4f82-a4be-021ef5239ea6}</UniqueIdentifier>
@@ -189,17 +174,8 @@
     <Filter Include="Input\Mouse">
       <UniqueIdentifier>{840634f8-e2bb-40d7-a128-78abed2ce12a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\PipelineManager">
-      <UniqueIdentifier>{aef4978c-e692-4066-935c-3e9860805d1d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\PipelineManager\Pipeline">
-      <UniqueIdentifier>{5aa3bff6-a3f3-4517-bc62-2b54b5734cbd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Drawers\StringOut">
       <UniqueIdentifier>{8f6f9f0d-e177-4c18-b9a0-cab1926af85b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\RenderTarget">
-      <UniqueIdentifier>{ece16fea-31ac-410e-9402-f17c929ef028}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{42aaa316-1089-4ab2-ba8d-4be0f3334763}</UniqueIdentifier>
@@ -222,9 +198,6 @@
     <Filter Include="MeshManager\Mesh">
       <UniqueIdentifier>{32d082aa-0e85-4ef4-b2d9-1c07a678fc69}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\FrameInfo">
-      <UniqueIdentifier>{0b450b74-986a-4b3d-9a34-b57d457b62d0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils\ConvertString">
       <UniqueIdentifier>{5a7a3057-cf34-4af9-a2fc-9484d57e4dd8}</UniqueIdentifier>
     </Filter>
@@ -234,46 +207,73 @@
     <Filter Include="Utils\Easeing">
       <UniqueIdentifier>{1dc7052e-fce1-4542-b5fb-a5f223d204de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\StructuredBuffer">
-      <UniqueIdentifier>{e1e79296-6a53-46cd-ad47-5079058ad278}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Drawers\Particle">
       <UniqueIdentifier>{81d2d594-ca17-412f-85ce-bbbad35d144c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\EngineParts">
-      <UniqueIdentifier>{d48493c0-fbf6-4f90-a87e-20a9f228c0ba}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utils\ExecutionLog">
       <UniqueIdentifier>{68109607-fdfe-4fef-9345-8ea31bbf59bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\EngineParts\DirectXCommon">
-      <UniqueIdentifier>{f8b2e7c6-10e5-449e-8f53-36f5bd1aa9ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\EngineParts\DirectXDevice">
-      <UniqueIdentifier>{fc72a1ac-b158-4732-9c50-43f6c06d90e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\DescriptorHeap">
-      <UniqueIdentifier>{5325ce8c-6115-444a-84db-472a18839f17}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\EngineParts\StringOutPutManager">
-      <UniqueIdentifier>{c49edcd7-143e-4434-89cf-60c735de3979}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils\CsvLoad">
       <UniqueIdentifier>{0801bfcf-a0f8-4f86-b79a-283b0de7cdd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{078e13f7-3a71-446c-96c7-2c855798a9b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\DirectXCommon">
+      <UniqueIdentifier>{f8b2e7c6-10e5-449e-8f53-36f5bd1aa9ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\DirectXDevice">
+      <UniqueIdentifier>{fc72a1ac-b158-4732-9c50-43f6c06d90e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\StringOutPutManager">
+      <UniqueIdentifier>{c49edcd7-143e-4434-89cf-60c735de3979}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\DescriptorHeap">
+      <UniqueIdentifier>{5325ce8c-6115-444a-84db-472a18839f17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics">
+      <UniqueIdentifier>{75876d02-38c8-4935-bc29-34082def36ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineManager">
+      <UniqueIdentifier>{aef4978c-e692-4066-935c-3e9860805d1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineManager\Pipeline">
+      <UniqueIdentifier>{5aa3bff6-a3f3-4517-bc62-2b54b5734cbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\RenderTarget">
+      <UniqueIdentifier>{ece16fea-31ac-410e-9402-f17c929ef028}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\RootSignature">
+      <UniqueIdentifier>{e940fd55-6a3e-4764-ba45-668507747c4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\ShaderManager">
+      <UniqueIdentifier>{e9f17783-c021-4323-ae3b-d9f04d63298d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Buffer">
+      <UniqueIdentifier>{5d636698-24e8-45ca-88be-eda0819a5048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Buffer\ConstBuffer">
+      <UniqueIdentifier>{e59427f8-55ba-46bf-b8a3-e4974976afc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Buffer\StructuredBuffer">
+      <UniqueIdentifier>{e1e79296-6a53-46cd-ad47-5079058ad278}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\WinApp">
+      <UniqueIdentifier>{b53c25de-314b-4648-8852-e97c158f0275}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\EngineUtils">
+      <UniqueIdentifier>{997bda52-41c6-4af8-b118-8f4683630383}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\EngineUtils\ErrorCheck">
+      <UniqueIdentifier>{a8ce4ac6-d6d6-46ea-aa47-a5463509a0f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\EngineUtils\FrameInfo">
+      <UniqueIdentifier>{0b450b74-986a-4b3d-9a34-b57d457b62d0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
       <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\WinApp\WinApp.h">
-      <Filter>Engine\WinApp</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\ShaderManager\ShaderManager.h">
-      <Filter>Engine\ShaderManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\ConstBuffer\ConstBuffer.h">
-      <Filter>Engine\ConstBuffer</Filter>
     </ClInclude>
     <ClInclude Include="TextureManager\TextureManager.h">
       <Filter>TextureManager</Filter>
@@ -286,12 +286,6 @@
     </ClInclude>
     <ClInclude Include="AudioManager\Audio\Audio.h">
       <Filter>AudioManager\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\RootSignature\RootSignature.h">
-      <Filter>Engine\RootSignature</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\ErrorCheck\ErrorCheck.h">
-      <Filter>Engine\ErrorCheck</Filter>
     </ClInclude>
     <ClInclude Include="Input\Gamepad\Gamepad.h">
       <Filter>Input\Gamepad</Filter>
@@ -317,12 +311,6 @@
     <ClInclude Include="Drawers\StringOut\StringOut.h">
       <Filter>Drawers\StringOut</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\PipelineManager\PipelineManager.h">
-      <Filter>Engine\PipelineManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\PipelineManager\Pipeline\Pipeline.h">
-      <Filter>Engine\PipelineManager\Pipeline</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\Action\Frame\Frame.h">
       <Filter>Utils\Action\Frame</Filter>
     </ClInclude>
@@ -341,17 +329,11 @@
     <ClInclude Include="Utils\Math\Vector4.h">
       <Filter>Utils\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\RenderTarget\RenderTarget.h">
-      <Filter>Engine\RenderTarget</Filter>
-    </ClInclude>
     <ClInclude Include="MeshManager\MeshManager.h">
       <Filter>MeshManager</Filter>
     </ClInclude>
     <ClInclude Include="MeshManager\Mesh\Mesh.h">
       <Filter>MeshManager\Mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\FrameInfo\FrameInfo.h">
-      <Filter>Engine\FrameInfo</Filter>
     </ClInclude>
     <ClInclude Include="Utils\CsvLoad\CsvLoad.h">
       <Filter>Utils\CsvLoad</Filter>
@@ -368,35 +350,62 @@
     <ClInclude Include="Utils\Easeing\Easeing.h">
       <Filter>Utils\Easeing</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\StructuredBuffer\StructuredBuffer.h">
-      <Filter>Engine\StructuredBuffer</Filter>
-    </ClInclude>
     <ClInclude Include="Drawers\Particle\Particle.h">
       <Filter>Drawers\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Utils\ExecutionLog\ExecutionLog.h">
       <Filter>Utils\ExecutionLog</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\EngineParts\DirectXCommon\DirectXCommon.h">
-      <Filter>Engine\EngineParts\DirectXCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\EngineParts\DirectXDevice\DirectXDevice.h">
-      <Filter>Engine\EngineParts\DirectXDevice</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\DescriptorHeap\CbvSrvUavHeap.h">
-      <Filter>Engine\DescriptorHeap</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\EngineParts\StringOutPutManager\StringOutPutManager.h">
-      <Filter>Engine\EngineParts\StringOutPutManager</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\Math\Quaternion.h">
       <Filter>Utils\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\DescriptorHeap\DescriptorHeap.h">
-      <Filter>Engine\DescriptorHeap</Filter>
+    <ClInclude Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.h">
+      <Filter>Engine\Core\DescriptorHeap</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\DescriptorHeap\RtvHeap.h">
-      <Filter>Engine\DescriptorHeap</Filter>
+    <ClInclude Include="Engine\Core\DescriptorHeap\DescriptorHeap.h">
+      <Filter>Engine\Core\DescriptorHeap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\DescriptorHeap\RtvHeap.h">
+      <Filter>Engine\Core\DescriptorHeap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\DirectXCommon\DirectXCommon.h">
+      <Filter>Engine\Core\DirectXCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\DirectXDevice\DirectXDevice.h">
+      <Filter>Engine\Core\DirectXDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\StringOutPutManager\StringOutPutManager.h">
+      <Filter>Engine\Core\StringOutPutManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\WinApp\WinApp.h">
+      <Filter>Engine\Core\WinApp</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.h">
+      <Filter>Engine\Graphics\PipelineManager\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h">
+      <Filter>Engine\Graphics\PipelineManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\RenderTarget\RenderTarget.h">
+      <Filter>Engine\Graphics\RenderTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\RootSignature\RootSignature.h">
+      <Filter>Engine\Graphics\RootSignature</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\ShaderManager\ShaderManager.h">
+      <Filter>Engine\Graphics\ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Buffer\ConstBuffer\ConstBuffer.h">
+      <Filter>Engine\Buffer\ConstBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Buffer\StructuredBuffer\StructuredBuffer.h">
+      <Filter>Engine\Buffer\StructuredBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineUtils\ErrorCheck\ErrorCheck.h">
+      <Filter>Engine\EngineUtils\ErrorCheck</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineUtils\FrameInfo\FrameInfo.h">
+      <Filter>Engine\EngineUtils\FrameInfo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Engine/EngineParts/DirectXDevice/DirectXDevice.h"
-#include "Engine/EngineParts/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXDevice/DirectXDevice.h"
+#include "Engine/Core/DirectXCommon/DirectXCommon.h"
 #include <wrl.h>
 #include <list>
 #include <deque>

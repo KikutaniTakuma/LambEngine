@@ -3,10 +3,10 @@
 #include <climits>
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/UtilsLib/UtilsLib.h"
-#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "imgui.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
-#include "Engine/PipelineManager/PipelineManager.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "MeshManager/MeshManager.h"
 #undef max
 #undef min

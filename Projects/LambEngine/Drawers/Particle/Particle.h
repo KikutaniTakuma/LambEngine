@@ -1,7 +1,7 @@
 #pragma once
 #include "TextureManager/TextureManager.h"
-#include "Engine/PipelineManager/PipelineManager.h"
-#include "Engine/StructuredBuffer/StructuredBuffer.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
+#include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 
 #include "Utils/Math/Mat4x4.h"
 

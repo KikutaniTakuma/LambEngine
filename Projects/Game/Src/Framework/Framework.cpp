@@ -1,8 +1,8 @@
 #include "Framework.h"
 #include "Engine/Engine.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Utils/Math/Vector2.h"
-#include "Engine/FrameInfo/FrameInfo.h"
+#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Input/Input.h"
 
 void Framework::Initialize() {

@@ -2,9 +2,9 @@
 #include "MeshManager/MeshManager.h"
 #include "TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
-#include "Engine/FrameInfo/FrameInfo.h"
+#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Input/Input.h"
-#include "Engine/EngineParts/StringOutPutManager/StringOutPutManager.h"
+#include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 
 BaseScene::BaseScene(BaseScene::ID sceneID) :
 	sceneManager_(nullptr),

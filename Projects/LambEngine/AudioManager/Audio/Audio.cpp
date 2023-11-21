@@ -1,7 +1,7 @@
 #include <fstream>
 #include <filesystem>
 #include "AudioManager/AudioManager.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "imgui.h"
 
 Audio::Audio():

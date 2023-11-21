@@ -2,10 +2,10 @@
 #include <string>
 #include <array>
 
-#include "Engine/ConstBuffer/ConstBuffer.h"
-#include "Engine/RenderTarget/RenderTarget.h"
-#include "Engine/ShaderManager/ShaderManager.h"
-#include "Engine/PipelineManager/PipelineManager.h"
+#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
+#include "Engine/Graphics/RenderTarget/RenderTarget.h"
+#include "Engine/Graphics/ShaderManager/ShaderManager.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
 
 #include "Utils/Math/Vector3.h"
 #include "Utils/Math/Vector2.h"

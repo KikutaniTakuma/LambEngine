@@ -1,7 +1,7 @@
 #pragma once
 #include "TextureManager/TextureManager.h"
-#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
-#include "Engine/PipelineManager/PipelineManager.h"
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
 
 #include "Utils/Math/Vector3.h"
 #include "Utils/Math/Mat4x4.h"

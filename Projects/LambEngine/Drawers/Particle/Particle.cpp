@@ -1,8 +1,8 @@
 #include "Particle.h"
 #include "imgui.h"
-#include "Engine/FrameInfo/FrameInfo.h"
-#include "Engine/WinApp/WinApp.h"
-#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
+#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 
 #include "../externals/nlohmann/json.hpp"
 #include <cassert>

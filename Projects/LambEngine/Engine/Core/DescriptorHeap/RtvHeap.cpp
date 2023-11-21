@@ -1,6 +1,6 @@
 #include "RtvHeap.h"
-#include "Engine/RenderTarget/RenderTarget.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/Graphics/RenderTarget/RenderTarget.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Engine/Engine.h"
 #include "Utils/Math/Vector4.h"
 #include <algorithm>

@@ -1,7 +1,7 @@
 #include "Mouse.h"
-#include "Engine/WinApp/WinApp.h"
+#include "Engine/Core/WinApp/WinApp.h"
 #include "imgui.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 
 
 Mouse* Mouse::instance = nullptr;

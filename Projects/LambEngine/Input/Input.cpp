@@ -1,6 +1,6 @@
 #include "Input.h"
-#include "Engine/WinApp/WinApp.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Input/Gamepad/Gamepad.h"
 #include "Input/KeyInput/KeyInput.h"
 #include "Input/Mouse/Mouse.h"

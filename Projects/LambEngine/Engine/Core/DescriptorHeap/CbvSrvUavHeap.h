@@ -1,8 +1,8 @@
 #pragma once
 #include "DescriptorHeap.h"
-#include "Engine/StructuredBuffer/StructuredBuffer.h"
+#include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 #include "TextureManager/Texture/Texture.h"
-#include "Engine/RenderTarget/RenderTarget.h"
+#include "Engine/Graphics/RenderTarget/RenderTarget.h"
 
 /// <summary>
 /// ディスクリプタヒープ管理クラス

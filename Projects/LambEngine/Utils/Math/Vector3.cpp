@@ -3,7 +3,7 @@
 #include "Mat4x4.h"
 #include "Vector2.h"
 #include <cassert>
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Quaternion.h"
 
 Vector3::Vector3() noexcept :

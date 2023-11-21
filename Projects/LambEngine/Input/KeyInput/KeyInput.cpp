@@ -1,7 +1,7 @@
 #include "KeyInput.h"
-#include "Engine/WinApp/WinApp.h"
+#include "Engine/Core/WinApp/WinApp.h"
 #include <cassert>
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 
 void KeyInput::Input() {
 	if (!initalizeSucceeded) {

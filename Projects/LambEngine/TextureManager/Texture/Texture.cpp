@@ -1,13 +1,13 @@
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/Engine.h"
-#include "Engine/EngineParts/DirectXDevice/DirectXDevice.h"
-#include "Engine/EngineParts/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXDevice/DirectXDevice.h"
+#include "Engine/Core/DirectXCommon/DirectXCommon.h"
 #include <cassert>
 #include <iostream>
 #include <filesystem>
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "TextureManager/TextureManager.h"
-#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 
 Texture::Texture():
 	textureResouce(nullptr),

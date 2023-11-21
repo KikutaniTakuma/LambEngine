@@ -1,7 +1,7 @@
 #include "Mesh.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "TextureManager/TextureManager.h"
-#include "Engine/PipelineManager/PipelineManager.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "MeshManager/MeshManager.h"
 #include "Engine/Engine.h"
 #include <fstream>

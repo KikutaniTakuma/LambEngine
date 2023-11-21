@@ -1,8 +1,8 @@
 #include "RootSignature.h"
 #include <cassert>
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Engine/Engine.h"
-#include "Engine/EngineParts/DirectXDevice/DirectXDevice.h"
+#include "Engine/Core/DirectXDevice/DirectXDevice.h"
 
 RootSignature::RootSignature():
 	rootSignature_{},

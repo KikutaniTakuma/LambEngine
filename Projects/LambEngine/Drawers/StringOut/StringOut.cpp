@@ -1,6 +1,6 @@
 #include "StringOut.h"
-#include "Engine/EngineParts/DirectXCommon/DirectXCommon.h"
-#include "Engine/EngineParts/StringOutPutManager/StringOutPutManager.h"
+#include "Engine/Core/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "Engine/Engine.h"
 #include "imgui.h"
 #include "Utils/ConvertString/ConvertString.h"

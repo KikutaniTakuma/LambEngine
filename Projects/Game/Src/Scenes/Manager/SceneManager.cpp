@@ -5,9 +5,9 @@
 #include <filesystem>
 #include <fstream>
 #include <format>
-#include "Engine/FrameInfo/FrameInfo.h"
+#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Input/Input.h"
-#include "Engine/EngineParts/StringOutPutManager/StringOutPutManager.h"
+#include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "SceneFactory/SceneFactory.h"
 
 SceneManager* const SceneManager::GetInstance() {

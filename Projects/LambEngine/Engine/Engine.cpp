@@ -3,21 +3,22 @@
 #include <format>
 #include <filesystem>
 
-#include "WinApp/WinApp.h"
-#include "EngineParts/DirectXDevice/DirectXDevice.h"
-#include "EngineParts/DirectXCommon/DirectXCommon.h"
-#include "Engine/DescriptorHeap/RtvHeap.h"
-#include "Engine/EngineParts/StringOutPutManager/StringOutPutManager.h"
+#include "Core/WinApp/WinApp.h"
+#include "Core/DirectXDevice/DirectXDevice.h"
+#include "Core/DirectXCommon/DirectXCommon.h"
+#include "Core/DescriptorHeap/RtvHeap.h"
+#include "Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Core/StringOutPutManager/StringOutPutManager.h"
 
-#include "ShaderManager/ShaderManager.h"
+#include "./Graphics/ShaderManager/ShaderManager.h"
 #include "TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
-#include "PipelineManager/PipelineManager.h"
+#include "./Graphics/PipelineManager/PipelineManager.h"
 #include "MeshManager/MeshManager.h"
 
 #include "Input/Input.h"
-#include "ErrorCheck/ErrorCheck.h"
-#include "FrameInfo/FrameInfo.h"
+#include "./EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "./EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 

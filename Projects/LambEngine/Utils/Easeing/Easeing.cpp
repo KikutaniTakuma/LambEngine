@@ -1,5 +1,5 @@
 #include "Easeing.h"
-#include "Engine/FrameInfo/FrameInfo.h"
+#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "imgui.h"
 
 #include "Utils/Math/Vector3.h"

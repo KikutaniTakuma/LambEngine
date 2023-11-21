@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "Input/Input.h"
-#include "Engine/FrameInfo/FrameInfo.h"
+#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include <numbers>
 #include <cmath>
 #include "json.hpp"

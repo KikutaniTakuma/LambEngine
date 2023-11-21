@@ -1,7 +1,7 @@
 #include "Texture2D.h"
 #include "imgui.h"
 #include "Utils/UtilsLib/UtilsLib.h"
-#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include <numeric>
 #undef max
 #undef min

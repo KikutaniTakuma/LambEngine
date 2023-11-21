@@ -8,10 +8,10 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vector4.h"
 
-#include "Engine/DescriptorHeap/CbvSrvUavHeap.h"
-#include "Engine/ShaderManager/ShaderManager.h"
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Graphics/ShaderManager/ShaderManager.h"
 
-#include "Engine/StructuredBuffer/StructuredBuffer.h"
+#include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 
 /// <summary>
 /// メッシュクラス。objファイルの読み込みやリソースを管理(基本的にポインタ型で使う)

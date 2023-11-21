@@ -2,7 +2,7 @@
 #include "MeshManager/MeshManager.h"
 #include "TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
-#include "Engine/FrameInfo/FrameInfo.h"
+#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/Math/Quaternion.h"
 #include <numbers>
 #include <format>

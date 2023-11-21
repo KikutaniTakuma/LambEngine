@@ -1,9 +1,9 @@
 #pragma once
-#include "Engine/EngineParts/DirectXDevice/DirectXDevice.h"
-#include "Engine/EngineParts/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXDevice/DirectXDevice.h"
+#include "Engine/Core/DirectXCommon/DirectXCommon.h"
 #include <cassert>
 #include <wrl.h>
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include <type_traits>
 
 template<class T>

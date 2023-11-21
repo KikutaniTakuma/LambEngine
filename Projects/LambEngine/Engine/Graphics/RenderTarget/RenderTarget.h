@@ -1,5 +1,5 @@
 #pragma once
-#include "Engine/ConstBuffer/ConstBuffer.h"
+#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
 #include "TextureManager/Texture/Texture.h"
 
 /// <summary>
