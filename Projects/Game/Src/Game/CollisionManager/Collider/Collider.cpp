@@ -1,5 +1,6 @@
 #include "Collider.h"
 #include "imgui.h"
+#include <algorithm>
 
 Collider::Collider() :
 	scale_(Vector3::identity),

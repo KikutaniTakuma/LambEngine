@@ -130,6 +130,12 @@
     <ClCompile Include="Engine\EngineUtils\FrameInfo\FrameInfo.cpp">
       <Filter>Engine\EngineUtils\FrameInfo</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Random\Random.cpp">
+      <Filter>Utils\Random</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Flg\Flg.cpp">
+      <Filter>Utils\Flg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -270,6 +276,12 @@
     <Filter Include="Engine\EngineUtils\FrameInfo">
       <UniqueIdentifier>{0b450b74-986a-4b3d-9a34-b57d457b62d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Random">
+      <UniqueIdentifier>{a6b1a7fc-44db-494f-887b-b5bd46a2f7c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Flg">
+      <UniqueIdentifier>{8a74e60d-02ab-49cd-b758-52783946efb1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -406,6 +418,12 @@
     </ClInclude>
     <ClInclude Include="Engine\EngineUtils\FrameInfo\FrameInfo.h">
       <Filter>Engine\EngineUtils\FrameInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Random\Random.h">
+      <Filter>Utils\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Flg\Flg.h">
+      <Filter>Utils\Flg</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

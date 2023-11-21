@@ -3,6 +3,8 @@
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Engine/Core/WinApp/WinApp.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Utils/Random/Random.h"
+#include "Utils/UtilsLib/UtilsLib.h"
 
 #include "../externals/nlohmann/json.hpp"
 #include <cassert>

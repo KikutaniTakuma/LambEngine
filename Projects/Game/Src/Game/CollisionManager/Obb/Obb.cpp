@@ -1,5 +1,6 @@
 #include "Obb.h"
 #include <numbers>
+#include <algorithm>
 #include "imgui.h"
 #include "Game/CollisionManager/Plane/Plane.h"
 
