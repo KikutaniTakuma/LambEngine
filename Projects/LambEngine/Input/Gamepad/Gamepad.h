@@ -3,6 +3,7 @@
 #include <Windows.h>
 #undef max
 #undef min
+#define DIRECTINPUT_VERSION 0x0800
 #include <Xinput.h>
 #pragma comment (lib, "xinput.lib")
 #include <stdint.h>
