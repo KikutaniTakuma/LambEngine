@@ -32,6 +32,8 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vector4.h"
 
+#include "Utils/ScreenOut/ScreenOut.h"
+
 #include "imgui.h"
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"
@@ -258,6 +260,9 @@ void Engine::FrameStart() {
 	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	frameInfo->Start();
 
+	Lamb::screenout.Clear();
+	Lamb::screenout << Lamb::endline;
+
 #ifdef _DEBUG
 	ImGui_ImplDX12_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -286,6 +291,7 @@ void Engine::FrameEnd() {
 	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	frameInfo->DrawFps();
 
+	Lamb::screenout.Draw();
 
 #ifdef _DEBUG
 	ID3D12GraphicsCommandList* commandList = engine->directXCommon_->GetCommandList();
