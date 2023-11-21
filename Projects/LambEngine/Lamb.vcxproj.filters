@@ -136,6 +136,9 @@
     <ClCompile Include="Utils\Flg\Flg.cpp">
       <Filter>Utils\Flg</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\ScreenOut\ScreenOut.cpp">
+      <Filter>Utils\ScreenOut</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -282,6 +285,9 @@
     <Filter Include="Utils\Flg">
       <UniqueIdentifier>{8a74e60d-02ab-49cd-b758-52783946efb1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\ScreenOut">
+      <UniqueIdentifier>{e20685bc-e5ff-4b6a-897a-0cd31371c1f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -424,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="Utils\Flg\Flg.h">
       <Filter>Utils\Flg</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ScreenOut\ScreenOut.h">
+      <Filter>Utils\ScreenOut</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

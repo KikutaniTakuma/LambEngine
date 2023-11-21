@@ -159,6 +159,7 @@
     <ClCompile Include="Utils\Math\Vector3.cpp" />
     <ClCompile Include="Utils\Math\Vector4.cpp" />
     <ClCompile Include="Utils\Random\Random.cpp" />
+    <ClCompile Include="Utils\ScreenOut\ScreenOut.cpp" />
     <ClCompile Include="Utils\UtilsLib\UtilsLib.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -214,6 +215,7 @@
     <ClInclude Include="Utils\Math\Vector3.h" />
     <ClInclude Include="Utils\Math\Vector4.h" />
     <ClInclude Include="Utils\Random\Random.h" />
+    <ClInclude Include="Utils\ScreenOut\ScreenOut.h" />
     <ClInclude Include="Utils\UtilsLib\UtilsLib.h" />
   </ItemGroup>
   <ItemGroup>
