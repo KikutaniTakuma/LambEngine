@@ -142,6 +142,12 @@
     <ClCompile Include="Engine\Core\DirectXSwapChain\DirectXSwapChain.cpp">
       <Filter>Engine\Core\DirectXSwapChain</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\DepthBuffer\DepthBuffer.cpp">
+      <Filter>Engine\Graphics\DepthBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\DescriptorHeap\DsvHeap.cpp">
+      <Filter>Engine\Core\DescriptorHeap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -294,6 +300,9 @@
     <Filter Include="Engine\Core\DirectXSwapChain">
       <UniqueIdentifier>{eb906240-8377-437b-adf2-c82c6e30d4d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\DepthBuffer">
+      <UniqueIdentifier>{acd3416a-219a-4a0f-b725-6643048c704d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -442,6 +451,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Core\DirectXSwapChain\DirectXSwapChain.h">
       <Filter>Engine\Core\DirectXSwapChain</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h">
+      <Filter>Engine\Graphics\DepthBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\DescriptorHeap\DsvHeap.h">
+      <Filter>Engine\Core\DescriptorHeap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
