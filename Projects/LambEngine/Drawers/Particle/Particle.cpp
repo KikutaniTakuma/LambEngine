@@ -3,6 +3,7 @@
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
 #include "Utils/UtilsLib/UtilsLib.h"
 #include "Utils/Random/Random.h"
