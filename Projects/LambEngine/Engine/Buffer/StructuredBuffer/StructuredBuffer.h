@@ -1,6 +1,5 @@
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include "Engine/Core/DirectXCommon/DirectXCommon.h"
 #include <cassert>
 #include <wrl.h>
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"

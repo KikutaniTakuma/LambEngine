@@ -2,7 +2,6 @@
 #include "Engine/Engine.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
-#include "Engine/Core/DirectXCommon/DirectXCommon.h"
 #include <cassert>
 #include <iostream>
 #include <filesystem>
@@ -187,7 +186,7 @@ ID3D12Resource* Texture::UploadTextureData(ID3D12Resource* texture, const Direct
 	ID3D12Resource* resource = DirectXDevice::GetInstance()->CreateBufferResuorce(intermediateSize);
 	UpdateSubresources(DirectXCommand::GetInstance()->GetCommandList(), texture, resource, 0, 0, UINT(subresources.size()), subresources.data());
 	// Textureへの転送後は利用できるよう、D3D12_STATE_COPY_DESTからD3D12_RESOURCE_STATE_GENERIC_READへResouceStateを変更する
-	DirectXCommon::GetInstance()->Barrier(
+	Barrier(
 		texture,
 		D3D12_RESOURCE_STATE_COPY_DEST,
 		D3D12_RESOURCE_STATE_GENERIC_READ,

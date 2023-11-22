@@ -10,6 +10,7 @@
 #include "MeshManager/MeshManager.h"
 #undef max
 #undef min
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
 Shader Model::shader_ = {};
 

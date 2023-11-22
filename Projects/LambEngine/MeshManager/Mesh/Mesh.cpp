@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "TextureManager/TextureManager.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "MeshManager/MeshManager.h"

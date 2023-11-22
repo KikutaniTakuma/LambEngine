@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
 Shader Line::shader_ = {};
 

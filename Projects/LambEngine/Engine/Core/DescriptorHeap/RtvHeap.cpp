@@ -1,6 +1,7 @@
 #include "RtvHeap.h"
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Engine.h"
 #include "Utils/Math/Vector4.h"
 #include <algorithm>
@@ -37,7 +38,7 @@ RtvHeap::~RtvHeap() {
 }
 
 void RtvHeap::CreateDescriptorHeap(uint32_t heapSize) {
-	heapSize_ = std::clamp(heapSize, DirectXCommon::kBackBufferNumber_, 0xffu);
+	heapSize_ = std::clamp(heapSize, DirectXSwapChain::kBackBufferNumber_, 0xffu);
 	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, heapSize_, false);
 }
 
@@ -56,7 +57,7 @@ void RtvHeap::CreateHeapHandles() {
 }
 
 void RtvHeap::CreateBackBuffer(
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectXCommon::kBackBufferNumber_>& backBuffer,
+	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber_>& backBuffer,
 	IDXGISwapChain4* const swapChain
 ) {
 	assert(!!swapChain);
@@ -67,7 +68,7 @@ void RtvHeap::CreateBackBuffer(
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
-	for (uint32_t i = 0u; i < DirectXCommon::kBackBufferNumber_; i++) {
+	for (uint32_t i = 0u; i < DirectXSwapChain::kBackBufferNumber_; i++) {
 		HRESULT hr = swapChain->GetBuffer(i, IID_PPV_ARGS(backBuffer[i].GetAddressOf()));
 
 		assert(SUCCEEDED(hr));
@@ -84,7 +85,7 @@ void RtvHeap::CreateBackBuffer(
 }
 
 void RtvHeap::SetMainRtv() {
-	IDXGISwapChain4* const swapChain = DirectXCommon::GetInstance()->GetSwapChain();
+	IDXGISwapChain4* const swapChain = DirectXSwapChain::GetInstance()->GetSwapChain();
 	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
 	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
 	// 描画先をRTVを設定する

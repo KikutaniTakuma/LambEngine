@@ -5,7 +5,7 @@
 
 #include "Core/WindowFactory/WindowFactory.h"
 #include "Core/DirectXDevice/DirectXDevice.h"
-#include "Core/DirectXCommon/DirectXCommon.h"
+#include "Core/DirectXSwapChain/DirectXSwapChain.h"
 #include "Core/DirectXCommand/DirectXCommand.h"
 #include "Core/DescriptorHeap/RtvHeap.h"
 #include "Core/DescriptorHeap/CbvSrvUavHeap.h"
@@ -113,8 +113,36 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	// コマンドリスト生成
 	engine->InitializeDirectXCommand();
 
-	// DirectX12生成
-	engine->InitializeDirectXCommon();
+	// スワップチェーン生成
+	engine->InitializeDirectXSwapChain();
+
+#ifdef _DEBUG
+	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	// RTVの設定
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+
+	// SRV用のヒープ
+	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
+	uint32_t useHandle = descriptorHeap->BookingHeapPos(1u);
+
+	// ImGuiの初期化
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+	ImGui_ImplWin32_Init(WindowFactory::GetInstance()->GetHwnd());
+	ImGui_ImplDX12_Init(
+		device,
+		DirectXSwapChain::kBackBufferNumber_,
+		rtvDesc.Format,
+		descriptorHeap->Get(),
+		descriptorHeap->GetCpuHeapHandle(useHandle),
+		descriptorHeap->GetGpuHeapHandle(useHandle)
+	);
+
+	descriptorHeap->UseThisPosition(useHandle);
+#endif // DEBUG
 
 	if (!engine->InitializeDraw()) {
 		ErrorCheck::GetInstance()->ErrorTextBox("Initialize() : InitializeDraw() Failed", "Engine");
@@ -156,7 +184,12 @@ void Engine::Finalize() {
 	CbvSrvUavHeap::Finalize();
 	RtvHeap::Finalize();
 
-	DirectXCommon::Finalize();
+#ifdef _DEBUG
+	ImGui_ImplDX12_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+#endif // _DEBUG
+	DirectXSwapChain::Finalize();
 	DirectXCommand::Finalize();
 	DirectXDevice::Finalize();
 
@@ -196,12 +229,12 @@ void Engine::InitializeDirectXCommand() {
 
 
 /// 
-/// DirectXCommon
-/// 
+/// DirectXSwapChain
+///
 
-void Engine::InitializeDirectXCommon() {
-	DirectXCommon::Initialize();
-	directXCommon_ = DirectXCommon::GetInstance();
+void Engine::InitializeDirectXSwapChain() {
+	DirectXSwapChain::Initialize();
+	directXSwapChain_ = DirectXSwapChain::GetInstance();
 }
 
 
@@ -282,12 +315,12 @@ void Engine::FrameStart() {
 	ImGui::NewFrame();
 #endif // _DEBUG
 
-	engine->directXCommon_->ChangeBackBufferState();
-	engine->directXCommon_->SetMainRenderTarget();
-	engine->directXCommon_->ClearBackBuffer();
+	engine->directXSwapChain_->ChangeBackBufferState();
+	engine->directXSwapChain_->SetMainRenderTarget();
+	engine->directXSwapChain_->ClearBackBuffer();
 
 	// ビューポート
-	engine->directXCommon_->SetViewPort(engine->clientWidth, engine->clientHeight);
+	engine->directXSwapChain_->SetViewPort(engine->clientWidth, engine->clientHeight);
 
 	// SRV用のヒープ
 	static auto const srvDescriptorHeap = CbvSrvUavHeap::GetInstance();
@@ -314,7 +347,7 @@ void Engine::FrameEnd() {
 #endif // DEBUG
 
 	
-	engine->directXCommon_->ChangeBackBufferState();
+	engine->directXSwapChain_->ChangeBackBufferState();
 
 	// コマンドリストを確定させる
 	engine->directXCommand_->CloseCommandlist();
@@ -324,7 +357,7 @@ void Engine::FrameEnd() {
 
 
 	// GPUとOSに画面の交換を行うように通知する
-	engine->directXCommon_->SwapChainPresent();
+	engine->directXSwapChain_->SwapChainPresent();
 
 	engine->stringOutPutManager_->GmemoryCommit();
 
@@ -371,4 +404,26 @@ Engine::~Engine() {
 		dsvHeap->Release();
 		dsvHeap.Reset();
 	}
+}
+
+
+void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+
+	// TransitionBarrierの設定
+	D3D12_RESOURCE_BARRIER barrier{};
+	// 今回のバリアはTransition
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	// Noneにしておく
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	// バリアを張る対象のリソース
+	barrier.Transition.pResource = resource;
+	// subResourceの設定
+	barrier.Transition.Subresource = subResource;
+	// 遷移前(現在)のResouceState
+	barrier.Transition.StateBefore = before;
+	// 遷移後のResouceState
+	barrier.Transition.StateAfter = after;
+	// TransitionBarrierを張る
+	commandList->ResourceBarrier(1, &barrier);
 }

@@ -36,7 +36,7 @@ private:
 
 public:
 	void CreateBackBuffer(
-		std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectXCommon::kBackBufferNumber_>& backBuffer,
+		std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber_>& backBuffer,
 		IDXGISwapChain4* const swapChain
 		);
 	
