@@ -34,6 +34,101 @@ bool Collider::IsCollision(const Vector3& pos) {
 	return false;
 }
 
+bool Collider::IsCollision(Collider& other) {
+	if (other.scale_.Length() > scale_.Length()) {
+		std::array<Vector3, 8> otherPositions = {
+			Vector3(min_), // 左下手前
+			Vector3(min_.x, min_.y, max_.z), // 左下奥
+			Vector3(max_.x, min_.y, min_.z), // 右下手前
+			Vector3(max_.x, min_.y, max_.z), // 右下奥
+
+			Vector3(min_.x, max_.y, min_.z), // 左上手前
+			Vector3(min_.x, max_.y, max_.z), // 左上奥
+			Vector3(max_.x, max_.y, min_.z), // 右上手前
+			Vector3(max_) // 右上奥
+		};
+
+		for (auto& otherPos : otherPositions) {
+			if (other.IsCollision(otherPos)) {
+				flg_ = true;
+				other.flg_ = true;
+				color_ = Vector4ToUint(Vector4::xIdy);
+				other.color_ = color_;
+				return static_cast<bool>(flg_);
+			}
+			else {
+				flg_ = false;
+				other.flg_ = false;
+				color_ = Vector4ToUint(Vector4::identity);
+				other.color_ = color_;
+			}
+		}
+
+
+		return static_cast<bool>(flg_);
+	}
+
+	std::array<Vector3, 8> otherPositions = {
+		Vector3(other.min_), // 左下手前
+		Vector3(other.min_.x, other.min_.y, other.max_.z), // 左下奥
+		Vector3(other.max_.x, other.min_.y, other.min_.z), // 右下手前
+		Vector3(other.max_.x, other.min_.y, other.max_.z), // 右下奥
+
+		Vector3(other.min_.x, other.max_.y, other.min_.z), // 左上手前
+		Vector3(other.min_.x, other.max_.y, other.max_.z), // 左上奥
+		Vector3(other.max_.x, other.max_.y, other.min_.z), // 右上手前
+		Vector3(other.max_) // 右上奥
+	};
+
+	for (auto& otherPos : otherPositions) {
+		if (IsCollision(otherPos)) {
+			flg_ = true;
+			other.flg_ = true;
+			color_ = Vector4ToUint(Vector4::xIdy);
+			other.color_ = color_;
+			return static_cast<bool>(flg_);
+		}
+		else {
+			flg_ = false;
+			other.flg_ = false;
+			color_ = Vector4ToUint(Vector4::identity);
+			other.color_ = color_;
+		}
+	}
+
+
+	return static_cast<bool>(flg_);
+}
+
+bool Collider::IsCollision(Collider* other) {
+	std::array<Vector3, 8> otherPositions = {
+		Vector3(other->min_), // 左下手前
+		Vector3(other->min_.x, other->min_.y, other->max_.z), // 左下奥
+		Vector3(other->max_.x, other->min_.y, other->min_.z), // 右下手前
+		Vector3(other->max_.x, other->min_.y, other->max_.z), // 右下奥
+
+		Vector3(other->min_.x, other->max_.y, other->min_.z), // 左上手前
+		Vector3(other->min_.x, other->max_.y, other->max_.z), // 左上奥
+		Vector3(other->max_.x, other->max_.y, other->min_.z), // 右上手前
+		Vector3(other->max_) // 右上奥
+	};
+
+	for (auto& pos : otherPositions) {
+		if (IsCollision(pos)) {
+			flg_ = true;
+			other->flg_ = true;
+			return static_cast<bool>(flg_);
+		}
+		else {
+			flg_ = false;
+		}
+	}
+
+	color_ = Vector4ToUint(Vector4::identity);
+
+	return static_cast<bool>(flg_);
+}
+
 bool Collider::CollisionExtrusion(Collider& other) {
 	if (other.scale_.Length() > scale_.Length()) {
 		std::array<Vector3, 8> otherPositions = {

@@ -91,6 +91,8 @@ public:
 		}
 	}
 
+	Vector3 GetPos() const;
+
 public:
 	Vector3 pos_;
 	Vector3 rotate_;
@@ -99,6 +101,8 @@ public:
 	uint32_t color_;
 
 	Mesh::DirectionLight light_;
+
+	Mat4x4 worldMat_;
 
 private:
 	Model* parent_;

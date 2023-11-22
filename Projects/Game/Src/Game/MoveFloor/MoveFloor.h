@@ -3,7 +3,7 @@
 #include "Drawers/Model/Model.h"
 #include "Utils/Easeing/Easeing.h"
 
-class MoveFloor {
+class MoveFloor : public Collider {
 public:
 	MoveFloor();
 	MoveFloor(const MoveFloor&) = default;
@@ -27,10 +27,8 @@ public:
 
 	Vector3 moveVec_;
 
-	Collider colliser_;
 private:
 	std::unique_ptr<Model> model_;
 
 	Easeing ease_;
-
 };

@@ -6,7 +6,7 @@
 #include "Game/CollisionManager/Collider/Collider.h"
 #include "Utils/Easeing/Easeing.h"
 
-class Enemy {
+class Enemy : public Collider {
 public:
 	Enemy();
 	Enemy(const Enemy&) = default;
@@ -39,7 +39,6 @@ public:
 public:
 	Vector3 pos_;
 	Vector3 moveVec;
-	Collider colliser_;
 private:
 	std::vector<std::unique_ptr<Model>> model;
 
@@ -49,13 +48,14 @@ private:
 	float spd;
 
 
+
 	Camera* camera;
 
 	float freqSpd;
 	float freq;
 	float radius;
 
-	class Player* player_=nullptr;
+	class Player* player_ = nullptr;
 
 	float distanceLimit;
 	bool isPlayerCollsion;

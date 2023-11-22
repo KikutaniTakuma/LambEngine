@@ -13,6 +13,8 @@ void Goal::Update() {
 
 	model_->pos_ = collisionPos_;
 	model_->scale_ = scale_ * 0.5f;
+
+	model_->Update();
 }
 
 void Goal::Draw(const Mat4x4& viewProjection, const Vector3& cameraPos) {

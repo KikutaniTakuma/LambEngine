@@ -29,13 +29,13 @@ Enemy::Enemy() :
 	distanceLimit = 7.0f;
 	isPlayerCollsion = false;
 
-	colliser_.scale_ = { 2.0f, 1.5f, 2.0f };
+	scale_ = { 2.0f, 1.5f, 2.0f };
 
 	pos_.y = 8.0f;
 }
 
 void Enemy::Move() {
-	colliser_.UpdateCollision();
+	UpdateCollision();
 	moveVec = {};
 	float deltaTime = FrameInfo::GetInstance()->GetDelta();
 
@@ -48,9 +48,10 @@ void Enemy::Move() {
 		if ((player_->pos_ - pos_).Length() < distanceLimit) {
 			moveVec = (player_->pos_ - pos_).Normalize() * spd;
 			moveVec.y = -15.0f;
-			Vector2 rotate = { moveVec.z, moveVec.x };
+			model[0]->rotate_.y = (std::numbers::pi_v<float> *1.5f);
+			//Vector2 rotate = { moveVec.z, moveVec.x };
 
-			model[0]->rotate_.y = rotate.GetRad() + (std::numbers::pi_v<float> *1.5f);
+			//model[0]->rotate_.y = rotate.GetRad() + (std::numbers::pi_v<float> *1.5f);
 		}
 		else {
 			model[0]->rotate_.y = freq + (std::numbers::pi_v<float> *0.5f);
@@ -63,12 +64,24 @@ void Enemy::Update() {
 	float deltaTime = FrameInfo::GetInstance()->GetDelta();
 
 	pos_ += moveVec * deltaTime;
-	colliser_.collisionPos_ = pos_;
+	collisionPos_ = pos_;
 	model[0]->pos_ = pos_;
 
 	model[1]->pos_ = ease.Get(easeDuration.first, easeDuration.second);
 
 	ease.Update();
+
+	for (auto& i : model) {
+		i->Update();
+	}
+	if (moveVec != Vector3::zero) {
+		if (-Vector3::zIdy == moveVec.Normalize()) {
+			model.front()->worldMat_ = MakeMatrixScalar(model.front()->scale_) * DirectionToDirection(-Vector3::zIdy, moveVec.Normalize()) * MakeMatrixRotate(model.front()->rotate_) * MakeMatrixTranslate(model.front()->pos_);
+		}
+		else {
+			model.front()->worldMat_ = MakeMatrixScalar(model.front()->scale_) * DirectionToDirection(Vector3::zIdy, moveVec.Normalize()) * MakeMatrixRotate(model.front()->rotate_) * MakeMatrixTranslate(model.front()->pos_);
+		}
+	}
 }
 
 void Enemy::Draw() {
@@ -76,5 +89,5 @@ void Enemy::Draw() {
 		i->Draw(camera->GetViewProjection(), camera->pos);
 	}
 
-	colliser_.DebugDraw(camera->GetViewProjection());
+	DebugDraw(camera->GetViewProjection());
 }

@@ -29,6 +29,20 @@ public:
 	bool IsCollision(const Vector3& pos);
 
 	/// <summary>
+	/// 他のコライダーに当たっているか
+	/// </summary>
+	/// <param name="pos">コライダー</param>
+	/// <returns>当たっていたらtrue</returns>
+	bool IsCollision(Collider& other);
+
+	/// <summary>
+	/// 他のコライダーに当たっているか
+	/// </summary>
+	/// <param name="pos">コライダー</param>
+	/// <returns>当たっていたらtrue</returns>
+	bool IsCollision(Collider* other);
+
+	/// <summary>
 	/// 引数に取ったコライダーが当たっていたら引数側のコライダーを押し出す
 	/// </summary>
 	/// <param name="other">他のコライダー</param>
