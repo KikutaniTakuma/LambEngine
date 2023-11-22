@@ -31,7 +31,10 @@ public:
 	void Draw() override;
 
 public:
-	Model model_;
+	Model watame_;
+	Model towa_;
+	Model kanata_;
+	Model luna_;
 
 	PeraRender pera_;
 };

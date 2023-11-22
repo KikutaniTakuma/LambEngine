@@ -17,7 +17,10 @@ void GameScene::Initialize() {
 	camera_.pos.z = -5.0f;
 	camera_.pos.y = 1.1f;
 
-	model_.ThreadLoadObj("./Resources/Watame/Watame.obj");
+	watame_.ThreadLoadObj("./Resources/Hololive/Watame/Watame.obj");
+	towa_.ThreadLoadObj("./Resources/Hololive/Towa/Obj/Towa.obj");
+	kanata_.ThreadLoadObj("./Resources/Hololive/Kanata/Obj/Kanata.obj");
+	luna_.ThreadLoadObj("./Resources/Hololive/Luna/Obj/Luna.obj");
 
 	//pera_.Initialize("./Resources/Shaders/PostShader/Post.VS.hlsl", "./Resources/Shaders/PostShader/PostNone.PS.hlsl");
 	pera_.scale_ = { 1280.0f,720.0f };
@@ -29,7 +32,14 @@ void GameScene::Finalize() {
 
 void GameScene::Update() {
 	camera_.Debug("camera");
-	model_.Update();
+	watame_.Debug("watame");
+	watame_.Update();
+	towa_.Debug("towa");
+	towa_.Update();
+	kanata_.Debug("kanata");
+	kanata_.Update();
+	luna_.Debug("luna");
+	luna_.Update();
 	pera_.Update();
 }
 
@@ -37,28 +47,13 @@ void GameScene::Draw() {
 	camera_.Update(Vector3::zero);
 	//pera_.PreDraw();
 
-	Quaternion rotation = Quaternion::MakeRotateAxisAngle(Vector3{ 0.0f,0.0f,1.0f }.Normalize(), 0.45f);
-	Quaternion rotation2 = Quaternion::MakeRotateZAxis(0.45f);
-	Vector3 pointY = { 2.1f, -0.9f, 1.3f };
-	Mat4x4 rotateMatrix = rotation.GetMatrix();
-	Mat4x4 rotateMatrix2 = rotation2.GetMatrix();
-	Vector3 rotateByQuaternion = pointY * rotation;
-	Vector3 rotateByMatrix = pointY * rotateMatrix;
-	Vector3 rotateByQuaternion2 = pointY * rotation2;
-	Vector3 rotateByMatrix2 = pointY * rotateMatrix2;
+	Lamb::screenout << "Test Hololive Models" << Lamb::endline;
+	Lamb::screenout << "4th gen";
 
-	Lamb::screenout <<
-		rotation << " : rotation" << Lamb::endline
-		<< "rotateMatrix" << Lamb::endline
-		<< GetMatrixString(rotateMatrix)
-		<< rotateByQuaternion << " : rotateByQuaternion" << Lamb::endline
-		<< rotateByMatrix << " : rotateByMatrix" << Lamb::endline
-		<< "rotateMatrix2" << Lamb::endline
-		<< GetMatrixString(rotateMatrix2)
-		<< rotateByQuaternion2 << " : rotateByQuaternion" << Lamb::endline
-		<< rotateByMatrix2 << " : rotateByMatrix";
-
-	model_.Draw(camera_.GetViewProjection(), camera_.GetPos());
+	watame_.Draw(camera_.GetViewProjection(), camera_.GetPos());
+	towa_.Draw(camera_.GetViewProjection(), camera_.GetPos());
+	kanata_.Draw(camera_.GetViewProjection(), camera_.GetPos());
+	luna_.Draw(camera_.GetViewProjection(), camera_.GetPos());
 
 	//pera_.Draw(camera_.GetViewOthographics(), Pipeline::None);
 }
