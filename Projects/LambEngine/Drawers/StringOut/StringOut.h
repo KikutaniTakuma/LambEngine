@@ -47,8 +47,8 @@ public:
 	StringOut& operator<<(const Vector4& right);
 	StringOut& operator<<(const Quaternion& right);
 
-	const StringOut& operator>>(std::string& right) const;
-	const StringOut& operator>>(std::wstring& right) const;
+	StringOut& operator>>(std::string& right);
+	StringOut& operator>>(std::wstring& right);
 
 public:
 	void Draw();

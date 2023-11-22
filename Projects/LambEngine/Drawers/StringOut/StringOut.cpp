@@ -136,14 +136,18 @@ StringOut& StringOut::operator<<(const Quaternion& right) {
 	return *this;
 }
 
-const StringOut& StringOut::operator>>(std::wstring& right) const {
+StringOut& StringOut::operator>>(std::wstring& right) {
 	right = str_;
+
+	Clear();
 
 	return *this;
 }
 
-const StringOut& StringOut::operator>>(std::string& right) const {
+StringOut& StringOut::operator>>(std::string& right) {
 	right = ConvertString(str_);
+
+	Clear();
 
 	return *this;
 }
