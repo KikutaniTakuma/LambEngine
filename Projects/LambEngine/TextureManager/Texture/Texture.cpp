@@ -1,6 +1,7 @@
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/Engine.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/DirectXCommon/DirectXCommon.h"
 #include <cassert>
 #include <iostream>
@@ -48,7 +49,7 @@ void Texture::Load(const std::string& filePath) {
 		size = { static_cast<float>(metadata.width),static_cast<float>(metadata.height) };
 		textureResouce = CreateTextureResource(metadata);
 
-		if (textureResouce && !DirectXCommon::GetInstance()->GetIsCloseCommandList()) {
+		if (textureResouce && !DirectXCommand::GetInstance()->GetIsCloseCommandList()) {
 			intermediateResource = UploadTextureData(textureResouce.Get(), mipImages);
 		}
 		else {
@@ -184,7 +185,7 @@ ID3D12Resource* Texture::UploadTextureData(ID3D12Resource* texture, const Direct
 	DirectX::PrepareUpload(device, mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
 	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresources.size()));
 	ID3D12Resource* resource = DirectXDevice::GetInstance()->CreateBufferResuorce(intermediateSize);
-	UpdateSubresources(DirectXCommon::GetInstance()->GetCommandList(), texture, resource, 0, 0, UINT(subresources.size()), subresources.data());
+	UpdateSubresources(DirectXCommand::GetInstance()->GetCommandList(), texture, resource, 0, 0, UINT(subresources.size()), subresources.data());
 	// Textureへの転送後は利用できるよう、D3D12_STATE_COPY_DESTからD3D12_RESOURCE_STATE_GENERIC_READへResouceStateを変更する
 	DirectXCommon::GetInstance()->Barrier(
 		texture,

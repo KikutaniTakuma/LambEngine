@@ -485,7 +485,7 @@ void Mesh::Use(
 
 void Mesh::Draw() {
 	if (0u < drawCount_) {
-		auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+		auto commandList = DirectXCommand::GetInstance()->GetCommandList();
 
 		if (!pipeline_) {
 			ErrorCheck::GetInstance()->ErrorTextBox("pipeline is nullptr", "Mesh");

@@ -2,6 +2,7 @@
 #include "Engine/Engine.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include <cassert>
@@ -153,7 +154,7 @@ void RenderTarget::SetMainRenderTarget() {
 }
 
 void RenderTarget::UseThisRenderTargetShaderResource() {
-	static auto mainComList = DirectXCommon::GetInstance()->GetCommandList();
+	static auto mainComList = DirectXCommand::GetInstance()->GetCommandList();
 	mainComList->SetGraphicsRootDescriptorTable(0, srvHeapHandle_);
 }
 

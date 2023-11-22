@@ -6,6 +6,7 @@
 #include "Core/WindowFactory/WindowFactory.h"
 #include "Core/DirectXDevice/DirectXDevice.h"
 #include "Core/DirectXCommon/DirectXCommon.h"
+#include "Core/DirectXCommand/DirectXCommand.h"
 #include "Core/DescriptorHeap/RtvHeap.h"
 #include "Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Core/StringOutPutManager/StringOutPutManager.h"
@@ -102,12 +103,15 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	debugLayer.InitializeDebugLayer();
 #endif
 
-	// Direct3D生成
+	// デバイス生成
 	engine->InitializeDirectXDevice();
 
 	// ディスクリプタヒープ初期化
 	RtvHeap::Initialize(128);
 	CbvSrvUavHeap::Initialize(4096);
+
+	// コマンドリスト生成
+	engine->InitializeDirectXCommand();
 
 	// DirectX12生成
 	engine->InitializeDirectXCommon();
@@ -153,6 +157,7 @@ void Engine::Finalize() {
 	RtvHeap::Finalize();
 
 	DirectXCommon::Finalize();
+	DirectXCommand::Finalize();
 	DirectXDevice::Finalize();
 
 	delete engine;
@@ -180,6 +185,14 @@ void Engine::InitializeDirectXDevice() {
 }
 
 
+/// 
+/// DirectXCommand
+/// 
+
+void Engine::InitializeDirectXCommand() {
+	DirectXCommand::Initialize();
+	directXCommand_ = DirectXCommand::GetInstance();
+}
 
 
 /// 
@@ -294,7 +307,7 @@ void Engine::FrameEnd() {
 	Lamb::screenout.Draw();
 
 #ifdef _DEBUG
-	ID3D12GraphicsCommandList* commandList = engine->directXCommon_->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = engine->directXCommand_->GetCommandList();
 	// ImGui描画
 	ImGui::Render();
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
@@ -304,10 +317,10 @@ void Engine::FrameEnd() {
 	engine->directXCommon_->ChangeBackBufferState();
 
 	// コマンドリストを確定させる
-	engine->directXCommon_->CloseCommandlist();
+	engine->directXCommand_->CloseCommandlist();
 
 	// GPUにコマンドリストの実行を行わせる
-	engine->directXCommon_->ExecuteCommandLists();
+	engine->directXCommand_->ExecuteCommandLists();
 
 
 	// GPUとOSに画面の交換を行うように通知する
@@ -315,9 +328,9 @@ void Engine::FrameEnd() {
 
 	engine->stringOutPutManager_->GmemoryCommit();
 
-	engine->directXCommon_->WaitForFinishCommnadlist();
+	engine->directXCommand_->WaitForFinishCommnadlist();
 
-	engine->directXCommon_->ResetCommandlist();
+	engine->directXCommand_->ResetCommandlist();
 	
 	// テクスチャの非同期読み込み
 	auto textureManager = TextureManager::GetInstance();

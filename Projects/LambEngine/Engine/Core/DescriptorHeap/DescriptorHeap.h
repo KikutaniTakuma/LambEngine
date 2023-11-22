@@ -2,6 +2,7 @@
 
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include <wrl.h>
 #include <list>
 #include <deque>

@@ -1,5 +1,5 @@
 #include "StringOut.h"
-#include "Engine/Core/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "Engine/Engine.h"
 #include "imgui.h"
@@ -153,7 +153,7 @@ void StringOut::Draw() {
 		return;
 	}
 
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = DirectXCommand::GetInstance()->GetCommandList();
 	auto  stringOutPutManager = StringOutPutManager::GetInstance();
 	
 	auto batch = stringOutPutManager->GetBatch(format_);

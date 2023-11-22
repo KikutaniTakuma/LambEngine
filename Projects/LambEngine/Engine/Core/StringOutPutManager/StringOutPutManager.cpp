@@ -1,6 +1,6 @@
 #include "StringOutPutManager.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include "Engine/Core/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/Engine.h"
@@ -90,7 +90,7 @@ void StringOutPutManager::LoadFont(const std::string& fontName) {
 
 	descriptorHeap->UseThisPosition(useHandle);
 
-	auto directXCommon = DirectXCommon::GetInstance();
+	auto directXCommon = DirectXCommand::GetInstance();
 	auto future = resUploadBach.End(directXCommon->GetCommandQueue());
 
 	directXCommon->WaitForFinishCommnadlist();
@@ -119,6 +119,6 @@ DirectX::SpriteBatch* StringOutPutManager::GetBatch(const std::string& fontName)
 }
 
 void StringOutPutManager::GmemoryCommit() {
-	static auto directXCommon = DirectXCommon::GetInstance();
+	static auto directXCommon = DirectXCommand::GetInstance();
 	gmemory_->Commit(directXCommon->GetCommandQueue());
 }

@@ -2,7 +2,7 @@
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include "Engine/Core/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include <cassert>
 #include <cmath>
 #include <algorithm>
@@ -44,15 +44,15 @@ void CbvSrvUavHeap::CreateDescriptorHeap(uint32_t heapSize) {
 }
 
 void CbvSrvUavHeap::SetHeap() {
-	static auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+	static auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 	commandlist->SetDescriptorHeaps(1, heap_.GetAddressOf());
 }
 void CbvSrvUavHeap::Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex) {
-	static auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+	static auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, handle);
 }
 void CbvSrvUavHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
-	auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+	auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, heapHandles_[handleIndex].second);
 }
 

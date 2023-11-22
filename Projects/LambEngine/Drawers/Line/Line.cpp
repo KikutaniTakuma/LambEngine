@@ -94,7 +94,7 @@ void Line::Draw(const Mat4x4& viewProjection, uint32_t color) {
 
 	pipline_->Use();
 	heap_->Use(wvpMat_.GetViewHandleUINT(), 0);
-	auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+	auto commandList = DirectXCommand::GetInstance()->GetCommandList();
 	commandList->IASetVertexBuffers(0, 1, &vertexView_);
 	commandList->DrawInstanced(kVertexNum, 1, 0, 0);
 }

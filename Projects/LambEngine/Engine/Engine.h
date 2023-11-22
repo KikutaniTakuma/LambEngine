@@ -107,6 +107,14 @@ private:
 private:
 	class DirectXDevice* directXDevice_ = nullptr;
 
+	/// 
+	/// DirectXCommand
+	/// 
+private:
+	void InitializeDirectXCommand();
+
+private:
+	class DirectXCommand* directXCommand_ = nullptr;
 
 
 	/// 
