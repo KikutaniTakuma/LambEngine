@@ -104,6 +104,8 @@ void Texture::Unload() {
 			textureResouce.Reset();
 		}
 
+		CbvSrvUavHeap::GetInstance()->ReleaseView(srvHeapHandleUint);
+
 		// Unload済み
 		isLoad = false;
 	}
