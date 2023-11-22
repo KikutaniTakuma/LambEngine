@@ -144,4 +144,6 @@ public:
 	/// <param name="renderTarget">RenderTarget</param>
 	/// <returns>作成した場所のハンドル</returns>
 	uint32_t CreatePerarenderView(RenderTarget& renderTarget);
+
+	uint32_t CreateDepthTextureView(class DepthBuffer& depthBuffer);
 };

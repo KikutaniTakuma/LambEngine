@@ -3,6 +3,7 @@
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
+#include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
 #include <cassert>
 #include <cmath>
 #include <algorithm>
@@ -123,6 +124,28 @@ uint32_t CbvSrvUavHeap::CreatePerarenderView(RenderTarget& renderTarget) {
 		uint32_t nowCreateViewHandle = bookingHandle_.front();
 		useHandle_.push_back(nowCreateViewHandle);
 		renderTarget.CreateView(heapHandles_[nowCreateViewHandle].first, heapHandles_[nowCreateViewHandle].second, nowCreateViewHandle);
+		bookingHandle_.pop_front();
+		return nowCreateViewHandle;
+	}
+}
+
+uint32_t CbvSrvUavHeap::CreateDepthTextureView(class DepthBuffer& depthBuffer) {
+	assert(currentHandleIndex_ < heapSize_);
+	if (currentHandleIndex_ >= heapSize_) {
+		ErrorCheck::GetInstance()->ErrorTextBox("CreatePerarenderView failed\nOver HeapSize", "ShaderResourceHeap");
+		return std::numeric_limits<uint32_t>::max();
+	}
+
+	if (bookingHandle_.empty()) {
+		useHandle_.push_back(currentHandleIndex_);
+		depthBuffer.CreateSRView(heapHandles_[currentHandleIndex_].first, heapHandles_[currentHandleIndex_].second, currentHandleIndex_);
+		currentHandleIndex_++;
+		return currentHandleIndex_ - 1u;
+	}
+	else {
+		uint32_t nowCreateViewHandle = bookingHandle_.front();
+		useHandle_.push_back(nowCreateViewHandle);
+		depthBuffer.CreateSRView(heapHandles_[nowCreateViewHandle].first, heapHandles_[nowCreateViewHandle].second, nowCreateViewHandle);
 		bookingHandle_.pop_front();
 		return nowCreateViewHandle;
 	}
