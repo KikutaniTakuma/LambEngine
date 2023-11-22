@@ -35,11 +35,6 @@ private:
 
 public:
 	/// <summary>
-	/// コマンドリストの実行を待つ
-	/// </summary>
-	void WaitForFinishCommnadlist();
-
-	/// <summary>
 	/// ビューポートセット
 	/// </summary>
 	/// <param name="width">基本的にバックバッファと同じにする</param>
@@ -68,34 +63,11 @@ public:
 	void ChangeBackBufferState();
 
 	/// <summary>
-	/// コマンドリストを確定させる
-	/// </summary>
-	void CloseCommandlist();
-
-	/// <summary>
-	/// コマンドリストを実行
-	/// </summary>
-	void ExecuteCommandLists();
-
-	/// <summary>
 	/// スワップチェインに画面の交換を行う
 	/// </summary>
 	void SwapChainPresent();
 
-	/// <summary>
-	/// コマンドリストのリセット(また使えるようにする)
-	/// </summary>
-	void ResetCommandlist();
-
 public:
-	ID3D12GraphicsCommandList* GetCommandList() const {
-		return commandList_.Get();
-	}
-
-	ID3D12CommandQueue* GetCommandQueue() const {
-		return commandQueue_.Get();
-	}
-
 	IDXGISwapChain4* GetSwapChain() const {
 		return swapChain_.Get();
 	}
@@ -104,24 +76,11 @@ public:
 		return swapChainResource_[0]->GetDesc();
 	}
 
-	inline bool GetIsCloseCommandList() const {
-		return isCommandListClose_;
-	}
-
 public:
 	static constexpr uint32_t kBackBufferNumber_ = 2u;
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_;
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator_;
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList_;
-	bool isCommandListClose_;
-
 	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_;
 	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, kBackBufferNumber_> swapChainResource_;
 	bool isRenderState_;
-
-	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
-	uint64_t fenceVal_;
-	HANDLE fenceEvent_;
 };

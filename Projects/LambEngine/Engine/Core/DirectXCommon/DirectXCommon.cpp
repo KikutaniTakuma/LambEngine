@@ -2,6 +2,7 @@
 #include "Engine/Engine.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DescriptorHeap/RTVHeap.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
@@ -36,49 +37,13 @@ void DirectXCommon::Finalize() {
 }
 
 DirectXCommon::DirectXCommon():
-	commandQueue_{},
-	commandAllocator_{},
-	commandList_{},
-	isCommandListClose_{false},
 	swapChain_{},
 	swapChainResource_{},
-	fence_{},
-	fenceVal_{0llu},
-	fenceEvent_{nullptr},
 	isRenderState_{false}
 {
-	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
-	static IDXGIFactory7* dxgiFactory = DirectXDevice::GetInstance()->GetDxgiFactory();
-	static UINT incrementRTVHeap = DirectXDevice::GetInstance()->GetIncrementRTVHeap();
-
-	// コマンドキューを作成
-	commandQueue_ = nullptr;
-	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
-	HRESULT hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(commandQueue_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
-	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateCommandQueue() Failed", "Engine");
-		return;
-	}
-
-	// コマンドアロケータを生成する
-	commandAllocator_ = nullptr;
-	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
-	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateCommandAllocator() Failed", "Engine");
-		return;
-	}
-
-	// コマンドリストを作成する
-	commandList_ = nullptr;
-	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(commandList_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
-	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateCommandList() Failed", "Engine");
-		return;
-	}
-
+	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	IDXGIFactory7* const dxgiFactory = DirectXDevice::GetInstance()->GetDxgiFactory();
+	ID3D12CommandQueue* const commandQueue = DirectXCommand::GetInstance()->GetCommandQueue();
 
 	// スワップチェーンの作成
 	swapChain_ = nullptr;
@@ -91,7 +56,7 @@ DirectXCommon::DirectXCommon():
 	swapChainDesc.BufferCount = kBackBufferNumber_;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
-	hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue_.Get(), WindowFactory::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
+	HRESULT hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue, WindowFactory::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateSwapChainForHwnd() Failed", "Engine");
@@ -130,26 +95,6 @@ DirectXCommon::DirectXCommon():
 
 	descriptorHeap->UseThisPosition(useHandle);
 #endif // DEBUG
-
-
-	// 初期値0でFenceを作る
-	fence_ = nullptr;
-	fenceVal_ = 0llu;
-	hr = device->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
-	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateFence() Failed", "Engine");
-		return;
-	}
-
-	// FenceのSignalを持つためのイベントを作成する
-	fenceEvent_ = nullptr;
-	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
-	assert(fenceEvent_ != nullptr);
-	if (!(fenceEvent_ != nullptr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateEvent() Failed", "Engine");
-		return;
-	}
 }
 
 DirectXCommon::~DirectXCommon() {
@@ -158,26 +103,11 @@ DirectXCommon::~DirectXCommon() {
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 #endif // _DEBUG
-	CloseHandle(fenceEvent_);
-}
-
-void DirectXCommon::WaitForFinishCommnadlist() {
-	// Fenceの値を更新
-	fenceVal_++;
-	// GPUがここまでたどり着いたときに、Fenceの値を指定した値に代入するようにSignalを送る
-	commandQueue_->Signal(fence_.Get(), fenceVal_);
-
-	// Fenceの値が指定したSigna値にたどり着いているか確認する
-	// GetCompletedValueの初期値はFence作成時に渡した初期値
-	if (fence_->GetCompletedValue() < fenceVal_) {
-		// 指定したSignal値にたどり着いていないので、たどり着くまで待つようにイベントを設定する
-		fence_->SetEventOnCompletion(fenceVal_, fenceEvent_);
-		// イベントを待つ
-		WaitForSingleObject(fenceEvent_, INFINITE);
-	}
 }
 
 void DirectXCommon::SetViewPort(uint32_t width, uint32_t height) {
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+
 	// ビューポート
 	D3D12_VIEWPORT viewport{};
 	// クライアント領域のサイズと一緒にして画面全体に表示
@@ -187,7 +117,7 @@ void DirectXCommon::SetViewPort(uint32_t width, uint32_t height) {
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
-	commandList_->RSSetViewports(1, &viewport);
+	commandList->RSSetViewports(1, &viewport);
 
 	// シザー矩形
 	D3D12_RECT scissorRect{};
@@ -196,10 +126,12 @@ void DirectXCommon::SetViewPort(uint32_t width, uint32_t height) {
 	scissorRect.right = static_cast<LONG>(WindowFactory::GetInstance()->GetWindowSize().x);
 	scissorRect.top = 0;
 	scissorRect.bottom = static_cast<LONG>(WindowFactory::GetInstance()->GetWindowSize().y);
-	commandList_->RSSetScissorRects(1, &scissorRect);
+	commandList->RSSetScissorRects(1, &scissorRect);
 }
 
 void DirectXCommon::Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+
 	// TransitionBarrierの設定
 	D3D12_RESOURCE_BARRIER barrier{};
 	// 今回のバリアはTransition
@@ -215,7 +147,7 @@ void DirectXCommon::Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES befo
 	// 遷移後のResouceState
 	barrier.Transition.StateAfter = after;
 	// TransitionBarrierを張る
-	commandList_->ResourceBarrier(1, &barrier);
+	commandList->ResourceBarrier(1, &barrier);
 }
 
 void DirectXCommon::SetMainRenderTarget() {
@@ -224,8 +156,11 @@ void DirectXCommon::SetMainRenderTarget() {
 }
 
 void DirectXCommon::ClearBackBuffer() {
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+
+
 	auto dsvH = Engine::GetDsvHandle();
-	commandList_->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+	commandList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
 
@@ -255,37 +190,7 @@ void DirectXCommon::ChangeBackBufferState() {
 	}
 }
 
-void DirectXCommon::CloseCommandlist() {
-	// コマンドリストを確定させる
-	HRESULT hr = commandList_->Close();
-	isCommandListClose_ = true;
-	assert(SUCCEEDED(hr));
-	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CommandList->Close() Failed", "Engine");
-	}
-}
-
-void DirectXCommon::ExecuteCommandLists() {
-	ID3D12CommandList* commandLists[] = { commandList_.Get() };
-	commandQueue_->ExecuteCommandLists(_countof(commandLists), commandLists);
-}
-
 void DirectXCommon::SwapChainPresent() {
 	// GPUとOSに画面の交換を行うように通知する
 	swapChain_->Present(1, 0);
-}
-
-void DirectXCommon::ResetCommandlist() {
-	// 次フレーム用のコマンドリストを準備
-	HRESULT hr = commandAllocator_->Reset();
-	assert(SUCCEEDED(hr));
-	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CommandAllocator->Reset() Failed", "Engine");
-	}
-	hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
-	isCommandListClose_ = false;
-	assert(SUCCEEDED(hr));
-	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CommandList->Reset() Failed", "Engine");
-	}
 }
