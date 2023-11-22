@@ -118,14 +118,9 @@ void RtvHeap::ClearRenderTargetView(uint32_t handle, const Vector4& clearColor) 
 }
 
 uint32_t RtvHeap::CreateView(class RenderTarget& peraRender) {
-	// RTVの設定
-	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CreateConstBufferView failed\nOver HeapSize", "ShaderResourceHeap");
+		ErrorCheck::GetInstance()->ErrorTextBox("CreateConstBufferView failed\nOver HeapSize", "RtvHeap");
 	}
 
 	if (bookingHandle_.empty()) {
