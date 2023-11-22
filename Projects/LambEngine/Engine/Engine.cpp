@@ -183,6 +183,8 @@ void Engine::Finalize() {
 
 	StringOutPutManager::Finalize();
 
+	engine->depthStencil_.reset();
+
 	CbvSrvUavHeap::Finalize();
 	DsvHeap::Finalize();
 	RtvHeap::Finalize();
@@ -271,9 +273,9 @@ bool Engine::InitializeDraw() {
 	dsvHeap->BookingHeapPos(1u);
 	dsvHeap->CreateView(*depthStencil_);
 
-	/*CbvSrvUavHeap* cbvSrvUavHeap = CbvSrvUavHeap::GetInstance();
+	CbvSrvUavHeap* cbvSrvUavHeap = CbvSrvUavHeap::GetInstance();
 	cbvSrvUavHeap->BookingHeapPos(1u);
-	cbvSrvUavHeap->CreateDepthTextureView(*depthStencil_);*/
+	cbvSrvUavHeap->CreateDepthTextureView(*depthStencil_);
 
 	return true;
 }

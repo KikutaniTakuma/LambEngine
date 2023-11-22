@@ -28,7 +28,7 @@ DepthBuffer::DepthBuffer():
 
 	srvDesc_ = {};
 	srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	srvDesc_.Format = DXGI_FORMAT_R32_FLOAT;
 	srvDesc_.Texture2D.MipLevels = 1;
 	srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 }
@@ -56,7 +56,7 @@ DepthBuffer::DepthBuffer(const Vector2& bufSize):
 
 	srvDesc_ = {};
 	srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	srvDesc_.Format = DXGI_FORMAT_R32_FLOAT;
 	srvDesc_.Texture2D.MipLevels = 1;
 	srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 }
