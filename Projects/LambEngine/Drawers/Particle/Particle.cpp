@@ -3,8 +3,9 @@
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Engine/Core/WinApp/WinApp.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
-#include "Utils/Random/Random.h"
+
 #include "Utils/UtilsLib/UtilsLib.h"
+#include "Utils/Random/Random.h"
 
 #include "../externals/nlohmann/json.hpp"
 #include <cassert>
@@ -124,7 +125,8 @@ Particle::Particle() :
 	settings_(),
 	currentSettingIndex_(0u),
 	currentParticleIndex_(0u),
-	srvHeap_(nullptr)
+	srvHeap_(nullptr),
+	isClose_{false}
 {
 	srvHeap_ = CbvSrvUavHeap::GetInstance();
 	srvHeap_->BookingHeapPos(2u);
@@ -198,7 +200,8 @@ Particle::Particle(uint32_t indexNum) :
 	settings_(),
 	currentSettingIndex_(0u),
 	currentParticleIndex_(0u),
-	srvHeap_(nullptr)
+	srvHeap_(nullptr),
+	isClose_{false}
 {
 	srvHeap_ = CbvSrvUavHeap::GetInstance();
 	srvHeap_->BookingHeapPos(2u);
@@ -501,6 +504,8 @@ void Particle::LoadSettingDirectory(const std::string& directoryName) {
 
 		file.close();
 	}
+
+	isClose_ = false;
 }
 
 void Particle::LopadSettingFile(const std::string& jsonName) {
@@ -973,6 +978,10 @@ void Particle::Draw(
 }
 
 void Particle::Debug(const std::string& guiName) {
+	if (isClose_) {
+		return;
+	}
+
 	if (!ImGui::Begin(guiName.c_str(), nullptr, ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();
 		return;
@@ -1304,6 +1313,10 @@ void Particle::Debug(const std::string& guiName) {
 			}
 			ImGui::TreePop();
 		}
+	}
+
+	if (ImGui::Button("close")) {
+		isClose_ = !isClose_;
 	}
 
 	ImGui::End();

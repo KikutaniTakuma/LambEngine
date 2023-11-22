@@ -22,4 +22,6 @@ private:
 
 private:
 	class SceneManager* sceneManager_;
+
+	class ParticleEditor* particleEditor_;
 };

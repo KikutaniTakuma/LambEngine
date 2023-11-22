@@ -304,6 +304,10 @@ public:
 		return settings_.front().isValid_;
 	}
 
+	bool GetIsClose() const {
+		return isClose_;
+	}
+
 public:
 	Vector2 uvPibot_;
 	Vector2 uvSize_;
@@ -340,6 +344,8 @@ private:
 	std::chrono::steady_clock::time_point aniStartTime_;
 	float aniCount_;
 	bool isAnimation_;
+
+	bool isClose_;
 public:
 	float uvPibotSpd_;
 };

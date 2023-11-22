@@ -53,6 +53,9 @@
     <ClCompile Include="Src\Scenes\SubMenu\SubMenu.cpp">
       <Filter>Scenes\SubMenu</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp">
+      <Filter>Editor\ParticleEditor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -112,6 +115,12 @@
     <Filter Include="Scenes\Manager\Fade">
       <UniqueIdentifier>{fc86e848-5d67-4732-9a7d-9ea0a4889d0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{38830fbd-b2f4-43bb-85ce-ccfa08c65319}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\ParticleEditor">
+      <UniqueIdentifier>{4b7de689-4b28-45f6-bb48-00506bfb839d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -164,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="Src\Scenes\SubMenu\SubMenu.h">
       <Filter>Scenes\SubMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h">
+      <Filter>Editor\ParticleEditor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
