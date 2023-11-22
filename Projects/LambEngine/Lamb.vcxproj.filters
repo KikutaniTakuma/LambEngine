@@ -139,6 +139,9 @@
     <ClCompile Include="Engine\Core\WindowFactory\WindowFactory.cpp">
       <Filter>Engine\Core\WindowFactory</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Core\DirectXCommand\DirectXCommand.cpp">
+      <Filter>Engine\Core\DirectXCommand</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -288,6 +291,9 @@
     <Filter Include="Engine\Core\WindowFactory">
       <UniqueIdentifier>{b53c25de-314b-4648-8852-e97c158f0275}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Core\DirectXCommand">
+      <UniqueIdentifier>{be0077c5-c2fa-4ca9-b94d-3d2fbf6f218e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -433,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Core\WindowFactory\WindowFactory.h">
       <Filter>Engine\Core\WindowFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\DirectXCommand\DirectXCommand.h">
+      <Filter>Engine\Core\DirectXCommand</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
