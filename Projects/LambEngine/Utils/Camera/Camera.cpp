@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "Engine/Engine.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Input/KeyInput/KeyInput.h"
 #include "Input/Mouse/Mouse.h"
 #include "Input/Gamepad/Gamepad.h"
@@ -36,28 +36,26 @@ void Camera::Update() {
 	worldPos = { view[0][3],view[1][3], view[2][3] };
 	view.Inverse();
 
-	static auto engine = Engine::GetInstance();
-	static const float aspect = static_cast<float>(engine->clientWidth) / static_cast<float>(engine->clientHeight);
-
-	const auto&& windowSize = WindowFactory::GetInstance()->GetWindowSize();
+	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
+	const float aspect = clientSize.x / clientSize.y;
 
 
 	fov = std::clamp(fov, 0.0f, 1.0f);
 	projection.PerspectiveFov(fov, aspect, kNearClip, farClip);
 	viewProjecction = view * projection;
 
-	viewProjecctionVp = viewProjecction * MakeMatrixViewPort(0.0f, 0.0f, windowSize.x, windowSize.y, 0.0f, 1.0f);
+	viewProjecctionVp = viewProjecction * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 
 	othograohics.Orthographic(
-		-static_cast<float>(engine->clientWidth) * 0.5f * drawScale,
-		static_cast<float>(engine->clientHeight) * 0.5f * drawScale,
-		static_cast<float>(engine->clientWidth) * 0.5f * drawScale,
-		-static_cast<float>(engine->clientHeight) * 0.5f * drawScale,
+		-clientSize.x * 0.5f * drawScale,
+		clientSize.y * 0.5f * drawScale,
+		clientSize.x * 0.5f * drawScale,
+		-clientSize.y * 0.5f * drawScale,
 		kNearClip, farClip);
 	viewOthograohics = view * othograohics;
 
 
-	viewOthograohicsVp = viewOthograohics * MakeMatrixViewPort(0.0f, 0.0f, windowSize.x, windowSize.y, 0.0f, 1.0f);
+	viewOthograohicsVp = viewOthograohics * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 }
 
 void Camera::Update(const Vector3& gazePoint) {
@@ -69,28 +67,25 @@ void Camera::Update(const Vector3& gazePoint) {
 	worldPos = { view[0][3],view[1][3], view[2][3] };
 	view.Inverse();
 
-	static auto engine = Engine::GetInstance();
-	static const float aspect = static_cast<float>(engine->clientWidth) / static_cast<float>(engine->clientHeight);
-
-	const auto&& windowSize = WindowFactory::GetInstance()->GetWindowSize();
-
+	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
+	const float aspect = clientSize.x / clientSize.y;
 
 	fov = std::clamp(fov, 0.0f, 1.0f);
 	projection.PerspectiveFov(fov, aspect, kNearClip, farClip);
 	viewProjecction = view * projection;
 
-	viewProjecctionVp = viewProjecction * MakeMatrixViewPort(0.0f, 0.0f, windowSize.x, windowSize.y, 0.0f, 1.0f);
+	viewProjecctionVp = viewProjecction * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 
 	othograohics.Orthographic(
-		-static_cast<float>(engine->clientWidth) * 0.5f * drawScale,
-		static_cast<float>(engine->clientHeight) * 0.5f * drawScale,
-		static_cast<float>(engine->clientWidth) * 0.5f * drawScale,
-		-static_cast<float>(engine->clientHeight) * 0.5f * drawScale,
+		-clientSize.x * 0.5f * drawScale,
+		clientSize.y * 0.5f * drawScale,
+		clientSize.x * 0.5f * drawScale,
+		-clientSize.y * 0.5f * drawScale,
 		kNearClip, farClip);
 	viewOthograohics = view * othograohics;
 
 
-	viewOthograohicsVp = viewOthograohics * MakeMatrixViewPort(0.0f, 0.0f, windowSize.x, windowSize.y, 0.0f, 1.0f);
+	viewOthograohicsVp = viewOthograohics * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 }
 
 void Camera::Update(const Mat4x4& worldMat) {
@@ -99,27 +94,25 @@ void Camera::Update(const Mat4x4& worldMat) {
 	worldPos = { view[0][3],view[1][3], view[2][3] };
 	view.Inverse();
 
-	static auto engine = Engine::GetInstance();
-	static const float aspect = static_cast<float>(engine->clientWidth) / static_cast<float>(engine->clientHeight);
-
-	const auto&& windowSize = WindowFactory::GetInstance()->GetWindowSize();
+	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
+	const float aspect = clientSize.x / clientSize.y;
 
 	fov = std::clamp(fov, 0.0f, 1.0f);
 	projection.PerspectiveFov(fov, aspect, kNearClip, farClip);
 	viewProjecction = view * projection;
 
-	viewProjecctionVp = viewProjecction * MakeMatrixViewPort(0.0f, 0.0f, windowSize.x, windowSize.y, 0.0f, 1.0f);
+	viewProjecctionVp = viewProjecction * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 
 	othograohics.Orthographic(
-		-static_cast<float>(engine->clientWidth) * 0.5f * drawScale,
-		static_cast<float>(engine->clientHeight) * 0.5f * drawScale,
-		static_cast<float>(engine->clientWidth) * 0.5f * drawScale,
-		-static_cast<float>(engine->clientHeight) * 0.5f * drawScale,
+		-clientSize.x * 0.5f * drawScale,
+		clientSize.y * 0.5f * drawScale,
+		clientSize.x * 0.5f * drawScale,
+		-clientSize.y * 0.5f * drawScale,
 		kNearClip, farClip);
 	viewOthograohics = view * othograohics;
 
 
-	viewOthograohicsVp = viewOthograohics * MakeMatrixViewPort(0.0f, 0.0f, windowSize.x, windowSize.y, 0.0f, 1.0f);
+	viewOthograohicsVp = viewOthograohics * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 }
 
 void Camera::Debug([[maybe_unused]] const std::string& guiName) {

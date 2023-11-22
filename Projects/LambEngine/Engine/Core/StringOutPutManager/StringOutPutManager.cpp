@@ -3,7 +3,7 @@
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Utils/ConvertString/ConvertString.h"
-#include "Engine/Engine.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include <cassert>
 #include <filesystem>
@@ -64,8 +64,9 @@ void StringOutPutManager::LoadFont(const std::string& fontName) {
 	// ビューポート
 	D3D12_VIEWPORT viewport{};
 	// クライアント領域のサイズと一緒にして画面全体に表示
-	viewport.Width = static_cast<float>(Engine::GetInstance()->clientWidth);
-	viewport.Height = static_cast<float>(Engine::GetInstance()->clientHeight);
+	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
+	viewport.Width = clientSize.x;
+	viewport.Height = clientSize.y;
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;

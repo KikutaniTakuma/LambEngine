@@ -1,5 +1,6 @@
 #include "RenderTarget.h"
 #include "Engine/Engine.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
@@ -12,8 +13,8 @@
 RenderTarget::RenderTarget():
 	resource_(),
 	isResourceStateChange_(false),
-	width_(Engine::GetInstance()->clientWidth),
-	height_(Engine::GetInstance()->clientHeight),
+	width_(static_cast<uint32_t>(WindowFactory::GetInstance()->GetClientSize().x)),
+	height_(static_cast<uint32_t>(WindowFactory::GetInstance()->GetClientSize().y)),
 	srvDesc_{},
 	srvHeapHandle_{},
 	srvHeapHandleUint_(),
