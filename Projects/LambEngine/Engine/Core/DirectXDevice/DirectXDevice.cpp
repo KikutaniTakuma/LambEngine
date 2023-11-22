@@ -233,3 +233,11 @@ ID3D12Resource* DirectXDevice::CreateDepthStencilTextureResource(int32_t width, 
 
 	return resource;
 }
+
+[[nodiscard]]
+ID3D12Resource* DirectXDevice::CreateDepthStencilTextureResource(const Vector2& size) {
+	return CreateDepthStencilTextureResource(
+		static_cast<int32_t>(size.x),
+		static_cast<int32_t>(size.y)
+	);
+}
