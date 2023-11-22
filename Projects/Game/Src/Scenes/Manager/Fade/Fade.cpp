@@ -1,5 +1,5 @@
 #include "Fade.h"
-#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "imgui.h"
 
 Fade::Fade():
@@ -8,7 +8,7 @@ Fade::Fade():
 	tex_(),
 	fadeTime_(0.75f)
 {
-	tex_.scale_ = WinApp::GetInstance()->GetWindowSize();
+	tex_.scale_ = WindowFactory::GetInstance()->GetWindowSize();
 }
 
 void Fade::OutStart() {

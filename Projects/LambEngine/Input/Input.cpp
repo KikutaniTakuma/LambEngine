@@ -1,5 +1,5 @@
 #include "Input.h"
-#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Input/Gamepad/Gamepad.h"
 #include "Input/KeyInput/KeyInput.h"
@@ -20,7 +20,7 @@ Input::Input():
 	key_(nullptr),
 	mouse_(nullptr)
 {
-	HRESULT hr = DirectInput8Create(WinApp::GetInstance()->getWNDCLASSEX().hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8,
+	HRESULT hr = DirectInput8Create(WindowFactory::GetInstance()->getWNDCLASSEX().hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8,
 		reinterpret_cast<void**>(directInput_.GetAddressOf()), nullptr);
 	assert(SUCCEEDED(hr));
 	if (hr != S_OK) {

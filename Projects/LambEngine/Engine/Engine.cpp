@@ -3,7 +3,7 @@
 #include <format>
 #include <filesystem>
 
-#include "Core/WinApp/WinApp.h"
+#include "Core/WindowFactory/WindowFactory.h"
 #include "Core/DirectXDevice/DirectXDevice.h"
 #include "Core/DirectXCommon/DirectXCommon.h"
 #include "Core/DescriptorHeap/RtvHeap.h"
@@ -95,7 +95,7 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	const auto&& windowTitle = ConvertString(windowName);
 
 	// Window生成
-	WinApp::GetInstance()->Create(windowTitle, engine->clientWidth, engine->clientHeight);
+	WindowFactory::GetInstance()->Create(windowTitle, engine->clientWidth, engine->clientHeight);
 
 #ifdef _DEBUG
 	// DebugLayer有効化

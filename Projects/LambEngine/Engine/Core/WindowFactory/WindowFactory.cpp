@@ -1,4 +1,4 @@
-#include "WinApp.h"
+#include "WindowFactory.h"
 #pragma comment(lib, "winmm.lib")
 #include <cassert>
 #include "imgui_impl_win32.h"
@@ -7,7 +7,7 @@
 extern IMGUI_IMPL_API LRESULT
 ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-WinApp::WinApp():
+WindowFactory::WindowFactory():
 	hwnd_{},
 	wndEx_{},
 	windowStyle_(0u),
@@ -17,11 +17,11 @@ WinApp::WinApp():
 	timeBeginPeriod(1);
 }
 
-WinApp::~WinApp() {
+WindowFactory::~WindowFactory() {
 	UnregisterClass(wndEx_.lpszClassName, wndEx_.hInstance);
 }
 
-LRESULT WinApp::WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+LRESULT WindowFactory::WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
 		return true;
 	}
@@ -34,7 +34,7 @@ LRESULT WinApp::WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpara
 	return DefWindowProc(hwnd, msg, wparam, lparam); // 標準の処理を行う
 }
 
-void WinApp::Create(const std::wstring& windowTitle, int32_t width, int32_t height) {
+void WindowFactory::Create(const std::wstring& windowTitle, int32_t width, int32_t height) {
 	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
 	windowName_ = windowTitle;
@@ -78,7 +78,7 @@ void WinApp::Create(const std::wstring& windowTitle, int32_t width, int32_t heig
 }
 
 
-Vector2 WinApp::GetWindowSize() const {
+Vector2 WindowFactory::GetWindowSize() const {
 	return Vector2(
 		static_cast<float>(windowRect_.right), 
 		static_cast<float>(windowRect_.bottom)

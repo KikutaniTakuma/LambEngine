@@ -106,9 +106,6 @@
     <ClCompile Include="Engine\Core\StringOutPutManager\StringOutPutManager.cpp">
       <Filter>Engine\Core\StringOutPutManager</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Core\WinApp\WinApp.cpp">
-      <Filter>Engine\Core\WinApp</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.cpp">
       <Filter>Engine\Graphics\PipelineManager\Pipeline</Filter>
     </ClCompile>
@@ -138,6 +135,9 @@
     </ClCompile>
     <ClCompile Include="Utils\ScreenOut\ScreenOut.cpp">
       <Filter>Utils\ScreenOut</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\WindowFactory\WindowFactory.cpp">
+      <Filter>Engine\Core\WindowFactory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -267,9 +267,6 @@
     <Filter Include="Engine\Buffer\StructuredBuffer">
       <UniqueIdentifier>{e1e79296-6a53-46cd-ad47-5079058ad278}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Core\WinApp">
-      <UniqueIdentifier>{b53c25de-314b-4648-8852-e97c158f0275}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\EngineUtils">
       <UniqueIdentifier>{997bda52-41c6-4af8-b118-8f4683630383}</UniqueIdentifier>
     </Filter>
@@ -287,6 +284,9 @@
     </Filter>
     <Filter Include="Utils\ScreenOut">
       <UniqueIdentifier>{e20685bc-e5ff-4b6a-897a-0cd31371c1f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\WindowFactory">
+      <UniqueIdentifier>{b53c25de-314b-4648-8852-e97c158f0275}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -395,9 +395,6 @@
     <ClInclude Include="Engine\Core\StringOutPutManager\StringOutPutManager.h">
       <Filter>Engine\Core\StringOutPutManager</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Core\WinApp\WinApp.h">
-      <Filter>Engine\Core\WinApp</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.h">
       <Filter>Engine\Graphics\PipelineManager\Pipeline</Filter>
     </ClInclude>
@@ -433,6 +430,9 @@
     </ClInclude>
     <ClInclude Include="Utils\ScreenOut\ScreenOut.h">
       <Filter>Utils\ScreenOut</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\WindowFactory\WindowFactory.h">
+      <Filter>Engine\Core\WindowFactory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

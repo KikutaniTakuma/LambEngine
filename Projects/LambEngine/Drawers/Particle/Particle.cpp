@@ -1,7 +1,7 @@
 #include "Particle.h"
 #include "imgui.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
-#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 
 #include "Utils/UtilsLib/UtilsLib.h"
@@ -1000,7 +1000,7 @@ void Particle::Debug(const std::string& guiName) {
 			for (const auto& entry : dirItr) {
 				if (ImGui::Button(entry.path().string().c_str())) {
 					int32_t id = MessageBoxA(
-						WinApp::GetInstance()->GetHwnd(),
+						WindowFactory::GetInstance()->GetHwnd(),
 						"Are you sure you wanna load this setting?", "Particle",
 						MB_OKCANCEL | MB_ICONINFORMATION
 					);
@@ -1010,7 +1010,7 @@ void Particle::Debug(const std::string& guiName) {
 						datas_.clear();
 						LoadSettingDirectory(entry.path().stem().string());
 						MessageBoxA(
-							WinApp::GetInstance()->GetHwnd(),
+							WindowFactory::GetInstance()->GetHwnd(),
 							"Load success", "Particle",
 							MB_OK | MB_ICONINFORMATION
 						);
@@ -1198,7 +1198,7 @@ void Particle::Debug(const std::string& guiName) {
 		if (ImGui::Button("this setting save")) {
 			SaveSettingFile(("setting" + std::to_string(i)).c_str());
 			MessageBoxA(
-				WinApp::GetInstance()->GetHwnd(),
+				WindowFactory::GetInstance()->GetHwnd(),
 				"save success", "Particle",
 				MB_OK | MB_ICONINFORMATION
 			);
@@ -1206,7 +1206,7 @@ void Particle::Debug(const std::string& guiName) {
 
 		if (ImGui::Button("this setting delete")) {
 			int32_t id =  MessageBoxA(
-				WinApp::GetInstance()->GetHwnd(),
+				WindowFactory::GetInstance()->GetHwnd(),
 				"Are you sure you wanna delete this setting?", "Particle",
 				MB_OKCANCEL | MB_ICONINFORMATION
 			);
@@ -1219,7 +1219,7 @@ void Particle::Debug(const std::string& guiName) {
 				ImGui::EndMenu();
 
 				MessageBoxA(
-					WinApp::GetInstance()->GetHwnd(),
+					WindowFactory::GetInstance()->GetHwnd(),
 					"delete success", "Particle",
 					MB_OK | MB_ICONINFORMATION
 				);
@@ -1294,7 +1294,7 @@ void Particle::Debug(const std::string& guiName) {
 				<< isYBillboard_;
 			file.close();
 			MessageBoxA(
-				WinApp::GetInstance()->GetHwnd(),
+				WindowFactory::GetInstance()->GetHwnd(),
 				"save success", "Particle",
 				MB_OK | MB_ICONINFORMATION
 			);

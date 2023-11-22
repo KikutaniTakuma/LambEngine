@@ -121,7 +121,7 @@
     <ClCompile Include="Engine\Core\DirectXCommon\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Core\DirectXDevice\DirectXDevice.cpp" />
     <ClCompile Include="Engine\Core\StringOutPutManager\StringOutPutManager.cpp" />
-    <ClCompile Include="Engine\Core\WinApp\WinApp.cpp" />
+    <ClCompile Include="Engine\Core\WindowFactory\WindowFactory.cpp" />
     <ClCompile Include="Engine\Engine.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Disabled</Optimization>
     </ClCompile>
@@ -179,7 +179,7 @@
     <ClInclude Include="Engine\Core\DirectXCommon\DirectXCommon.h" />
     <ClInclude Include="Engine\Core\DirectXDevice\DirectXDevice.h" />
     <ClInclude Include="Engine\Core\StringOutPutManager\StringOutPutManager.h" />
-    <ClInclude Include="Engine\Core\WinApp\WinApp.h" />
+    <ClInclude Include="Engine\Core\WindowFactory\WindowFactory.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\EngineUtils\ErrorCheck\ErrorCheck.h" />
     <ClInclude Include="Engine\EngineUtils\FrameInfo\FrameInfo.h" />

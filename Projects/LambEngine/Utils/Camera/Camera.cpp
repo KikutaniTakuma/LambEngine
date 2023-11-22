@@ -4,7 +4,7 @@
 #include "Input/Mouse/Mouse.h"
 #include "Input/Gamepad/Gamepad.h"
 #include "imgui.h"
-#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include <algorithm>
 #include <numbers>
 #include <cmath>
@@ -39,7 +39,7 @@ void Camera::Update() {
 	static auto engine = Engine::GetInstance();
 	static const float aspect = static_cast<float>(engine->clientWidth) / static_cast<float>(engine->clientHeight);
 
-	const auto&& windowSize = WinApp::GetInstance()->GetWindowSize();
+	const auto&& windowSize = WindowFactory::GetInstance()->GetWindowSize();
 
 
 	fov = std::clamp(fov, 0.0f, 1.0f);
@@ -72,7 +72,7 @@ void Camera::Update(const Vector3& gazePoint) {
 	static auto engine = Engine::GetInstance();
 	static const float aspect = static_cast<float>(engine->clientWidth) / static_cast<float>(engine->clientHeight);
 
-	const auto&& windowSize = WinApp::GetInstance()->GetWindowSize();
+	const auto&& windowSize = WindowFactory::GetInstance()->GetWindowSize();
 
 
 	fov = std::clamp(fov, 0.0f, 1.0f);
@@ -102,7 +102,7 @@ void Camera::Update(const Mat4x4& worldMat) {
 	static auto engine = Engine::GetInstance();
 	static const float aspect = static_cast<float>(engine->clientWidth) / static_cast<float>(engine->clientHeight);
 
-	const auto&& windowSize = WinApp::GetInstance()->GetWindowSize();
+	const auto&& windowSize = WindowFactory::GetInstance()->GetWindowSize();
 
 	fov = std::clamp(fov, 0.0f, 1.0f);
 	projection.PerspectiveFov(fov, aspect, kNearClip, farClip);

@@ -1,5 +1,5 @@
 #include "KeyInput.h"
-#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include <cassert>
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 
@@ -73,7 +73,7 @@ KeyInput::KeyInput(IDirectInput8* input):
 		return;
 	}
 
-	hr = keyBoard->SetCooperativeLevel(WinApp::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	hr = keyBoard->SetCooperativeLevel(WindowFactory::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		ErrorCheck::GetInstance()->ErrorTextBox("SetCooperativeLevel failed", "KeyInput");

@@ -10,16 +10,16 @@ class Vector2;
 /// <summary>
 /// ウィンドウズAPI管理クラス(ウィンドウ生成等)
 /// </summary>
-class WinApp {
+class WindowFactory {
 private:
-	WinApp();
-	~WinApp();
-	WinApp(const WinApp&) = delete;
-	const WinApp& operator=(const WinApp&) = delete;
+	WindowFactory();
+	~WindowFactory();
+	WindowFactory(const WindowFactory&) = delete;
+	const WindowFactory& operator=(const WindowFactory&) = delete;
 
 public:
-	static inline WinApp* GetInstance() {
-		static WinApp instance;
+	static inline WindowFactory* GetInstance() {
+		static WindowFactory instance;
 		return &instance;
 	}
 

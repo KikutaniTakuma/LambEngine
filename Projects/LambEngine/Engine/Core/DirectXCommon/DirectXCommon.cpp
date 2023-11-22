@@ -1,6 +1,6 @@
 #include "DirectXCommon.h"
 #include "Engine/Engine.h"
-#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DescriptorHeap/RTVHeap.h"
@@ -91,7 +91,7 @@ DirectXCommon::DirectXCommon():
 	swapChainDesc.BufferCount = kBackBufferNumber_;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
-	hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue_.Get(), WinApp::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
+	hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue_.Get(), WindowFactory::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateSwapChainForHwnd() Failed", "Engine");
@@ -99,7 +99,7 @@ DirectXCommon::DirectXCommon():
 	}
 
 	dxgiFactory->MakeWindowAssociation(
-		WinApp::GetInstance()->GetHwnd(), DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
+		WindowFactory::GetInstance()->GetHwnd(), DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
 
 	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
 	rtvHeap->CreateBackBuffer(swapChainResource_, swapChain_.Get());
@@ -118,7 +118,7 @@ DirectXCommon::DirectXCommon():
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(WinApp::GetInstance()->GetHwnd());
+	ImGui_ImplWin32_Init(WindowFactory::GetInstance()->GetHwnd());
 	ImGui_ImplDX12_Init(
 		device,
 		swapChainDesc.BufferCount,
@@ -193,9 +193,9 @@ void DirectXCommon::SetViewPort(uint32_t width, uint32_t height) {
 	D3D12_RECT scissorRect{};
 	// 基本的にビューポートと同じ矩形が構成されるようになる
 	scissorRect.left = 0;
-	scissorRect.right = static_cast<LONG>(WinApp::GetInstance()->GetWindowSize().x);
+	scissorRect.right = static_cast<LONG>(WindowFactory::GetInstance()->GetWindowSize().x);
 	scissorRect.top = 0;
-	scissorRect.bottom = static_cast<LONG>(WinApp::GetInstance()->GetWindowSize().y);
+	scissorRect.bottom = static_cast<LONG>(WindowFactory::GetInstance()->GetWindowSize().y);
 	commandList_->RSSetScissorRects(1, &scissorRect);
 }
 
