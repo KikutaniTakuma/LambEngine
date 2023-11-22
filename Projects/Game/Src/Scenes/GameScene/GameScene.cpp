@@ -19,7 +19,7 @@ void GameScene::Initialize() {
 
 	model_.ThreadLoadObj("./Resources/Watame/Watame.obj");
 
-	pera_.Initialize("./Resources/Shaders/PostShader/Post.VS.hlsl", "./Resources/Shaders/PostShader/PostNone.PS.hlsl");
+	//pera_.Initialize("./Resources/Shaders/PostShader/Post.VS.hlsl", "./Resources/Shaders/PostShader/PostNone.PS.hlsl");
 	pera_.scale_ = { 1280.0f,720.0f };
 }
 
@@ -28,13 +28,14 @@ void GameScene::Finalize() {
 }
 
 void GameScene::Update() {
+	camera_.Debug("camera");
 	model_.Update();
 	pera_.Update();
 }
 
 void GameScene::Draw() {
 	camera_.Update(Vector3::zero);
-	pera_.PreDraw();
+	//pera_.PreDraw();
 
 	Quaternion rotation = Quaternion::MakeRotateAxisAngle(Vector3{ 0.0f,0.0f,1.0f }.Normalize(), 0.45f);
 	Quaternion rotation2 = Quaternion::MakeRotateZAxis(0.45f);
@@ -59,5 +60,5 @@ void GameScene::Draw() {
 
 	model_.Draw(camera_.GetViewProjection(), camera_.GetPos());
 
-	pera_.Draw(camera_.GetViewOthographics(), Pipeline::None);
+	//pera_.Draw(camera_.GetViewOthographics(), Pipeline::None);
 }
