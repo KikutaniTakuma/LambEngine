@@ -7,19 +7,22 @@
 #include "Core/DirectXDevice/DirectXDevice.h"
 #include "Core/DirectXSwapChain/DirectXSwapChain.h"
 #include "Core/DirectXCommand/DirectXCommand.h"
-#include "Core/DescriptorHeap/RtvHeap.h"
-#include "Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Core/StringOutPutManager/StringOutPutManager.h"
 
-#include "./Graphics/ShaderManager/ShaderManager.h"
+#include "Core/DescriptorHeap/RtvHeap.h"
+#include "Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Core/DescriptorHeap/DsvHeap.h"
+
+#include "Graphics/ShaderManager/ShaderManager.h"
+#include "Graphics/PipelineManager/PipelineManager.h"
 #include "TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
-#include "./Graphics/PipelineManager/PipelineManager.h"
 #include "MeshManager/MeshManager.h"
+#include "Graphics/DepthBuffer/DepthBuffer.h"
 
 #include "Input/Input.h"
-#include "./EngineUtils/ErrorCheck/ErrorCheck.h"
-#include "./EngineUtils/FrameInfo/FrameInfo.h"
+#include "EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 
@@ -90,13 +93,11 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 
 	engine = new Engine();
 	assert(engine);
-	engine->clientWidth = static_cast<int32_t>(windowSize.x);
-	engine->clientHeight = static_cast<int32_t>(windowSize.y);
 
 	const auto&& windowTitle = ConvertString(windowName);
 
 	// Window生成
-	WindowFactory::GetInstance()->Create(windowTitle, engine->clientWidth, engine->clientHeight);
+	WindowFactory::GetInstance()->Create(windowTitle, static_cast<int32_t>(windowSize.x), static_cast<int32_t>(windowSize.y));
 
 #ifdef _DEBUG
 	// DebugLayer有効化
@@ -107,8 +108,9 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	engine->InitializeDirectXDevice();
 
 	// ディスクリプタヒープ初期化
-	RtvHeap::Initialize(128);
-	CbvSrvUavHeap::Initialize(4096);
+	RtvHeap::Initialize(128u);
+	DsvHeap::Initialize(128u);
+	CbvSrvUavHeap::Initialize(4096u);
 
 	// コマンドリスト生成
 	engine->InitializeDirectXCommand();
@@ -182,6 +184,7 @@ void Engine::Finalize() {
 	StringOutPutManager::Finalize();
 
 	CbvSrvUavHeap::Finalize();
+	DsvHeap::Finalize();
 	RtvHeap::Finalize();
 
 #ifdef _DEBUG
@@ -204,7 +207,9 @@ bool Engine::IsFinalize() {
 	return engine->isFinalize;
 }
 
-
+D3D12_CPU_DESCRIPTOR_HANDLE Engine::GetDsvHandle() {
+	return engine->depthStencil_->GetDepthHandle();
+}
 
 
 
@@ -254,31 +259,21 @@ void Engine::InitializeDirectXTK() {
 /// 描画用
 /// 
 bool Engine::InitializeDraw() {
-	static ID3D12Device* device = engine->directXDevice_->GetDevice();
-
-	// DepthStencilTextureをウィンドウサイズで作成
-	depthStencilResource = directXDevice_->CreateDepthStencilTextureResource(clientWidth, clientHeight);
-	assert(depthStencilResource);
-	if (!depthStencilResource) {
-		assert(!"depthStencilResource failed");
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDraw() : DepthStencilResource Create Failed", "Engine");
-		return false;
-	}
-
-	dsvHeap = engine->directXDevice_->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV,1,false);
+	DsvHeap* dsvHeap = DsvHeap::GetInstance();
 	if(!dsvHeap) {
 		assert(!"CreateDescriptorHeap failed");
 		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDraw() : CreateDescriptorHeap()  Failed", "Engine");
 		return false;
 	}
 
+	depthStencil_ = std::make_unique<DepthBuffer>();
 
-	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
-	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
-	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
+	dsvHeap->BookingHeapPos(1u);
+	dsvHeap->CreateView(*depthStencil_);
 
-	device->CreateDepthStencilView(depthStencilResource.Get(), &dsvDesc, dsvHeap->GetCPUDescriptorHandleForHeapStart());
+	/*CbvSrvUavHeap* cbvSrvUavHeap = CbvSrvUavHeap::GetInstance();
+	cbvSrvUavHeap->BookingHeapPos(1u);
+	cbvSrvUavHeap->CreateDepthTextureView(*depthStencil_);*/
 
 	return true;
 }
@@ -320,7 +315,8 @@ void Engine::FrameStart() {
 	engine->directXSwapChain_->ClearBackBuffer();
 
 	// ビューポート
-	engine->directXSwapChain_->SetViewPort(engine->clientWidth, engine->clientHeight);
+	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
+	engine->directXSwapChain_->SetViewPort(static_cast<int32_t>(clientSize.x), static_cast<int32_t>(clientSize.y));
 
 	// SRV用のヒープ
 	static auto const srvDescriptorHeap = CbvSrvUavHeap::GetInstance();
@@ -393,17 +389,10 @@ void Engine::FrameEnd() {
 
 
 /// 
-/// 各種解放処理
+/// 各種解放処理なくなっちゃた
 /// 
 Engine::~Engine() {
-	if (depthStencilResource) {
-		depthStencilResource->Release();
-		depthStencilResource.Reset();
-	}
-	if (dsvHeap) {
-		dsvHeap->Release();
-		dsvHeap.Reset();
-	}
+	
 }
 
 

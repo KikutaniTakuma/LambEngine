@@ -57,23 +57,7 @@ public:
 		return engine;
 	}
 
-	static inline ID3D12DescriptorHeap* GetDSVHeap() {
-		return engine->dsvHeap.Get();
-	}
-
-	static inline D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle() {
-		return engine->dsvHeap->GetCPUDescriptorHandleForHeapStart();
-	}
-
-
-	///
-	/// Window生成用
-	/// 
-public:
-	int32_t clientWidth = 0;
-	int32_t clientHeight = 0;
-
-
+	static D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle();
 
 #ifdef _DEBUG
 	///
@@ -143,8 +127,7 @@ private:
 	bool InitializeDraw();
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
+	std::unique_ptr<class DepthBuffer> depthStencil_;
 
 	///
 	/// MainLoop
