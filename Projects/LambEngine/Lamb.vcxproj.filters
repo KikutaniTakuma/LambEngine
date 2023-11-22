@@ -148,6 +148,9 @@
     <ClCompile Include="Engine\Core\DescriptorHeap\DsvHeap.cpp">
       <Filter>Engine\Core\DescriptorHeap</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineState\PipelineState.cpp">
+      <Filter>Engine\Graphics\PipelineState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -303,6 +306,9 @@
     <Filter Include="Engine\Graphics\DepthBuffer">
       <UniqueIdentifier>{acd3416a-219a-4a0f-b725-6643048c704d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\PipelineState">
+      <UniqueIdentifier>{2ac729fd-9a53-4f4d-8cbf-6c119d9a211a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -457,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Core\DescriptorHeap\DsvHeap.h">
       <Filter>Engine\Core\DescriptorHeap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineState\PipelineState.h">
+      <Filter>Engine\Graphics\PipelineState</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
