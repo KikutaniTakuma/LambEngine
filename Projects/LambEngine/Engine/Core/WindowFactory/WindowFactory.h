@@ -5,7 +5,7 @@
 #undef max
 #include <stdint.h>
 #include <string>
-class Vector2;
+#include "Utils/Math/Vector2.h"
 
 /// <summary>
 /// ウィンドウズAPI管理クラス(ウィンドウ生成等)
@@ -42,6 +42,8 @@ public:
 
 	Vector2 GetWindowSize() const;
 
+	Vector2 GetClientSize() const;
+
 
 private:
 	HWND hwnd_ = nullptr;
@@ -49,4 +51,6 @@ private:
 	UINT windowStyle_;
 	RECT windowRect_;
 	std::wstring windowName_;
+
+	Vector2 clientSize_;
 };

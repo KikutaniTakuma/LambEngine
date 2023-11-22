@@ -2,7 +2,6 @@
 #pragma comment(lib, "winmm.lib")
 #include <cassert>
 #include "imgui_impl_win32.h"
-#include "Utils/Math/Vector2.h"
 
 extern IMGUI_IMPL_API LRESULT
 ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -12,7 +11,8 @@ WindowFactory::WindowFactory():
 	wndEx_{},
 	windowStyle_(0u),
 	windowRect_{},
-	windowName_()
+	windowName_(),
+	clientSize_{}
 {
 	timeBeginPeriod(1);
 }
@@ -50,6 +50,8 @@ void WindowFactory::Create(const std::wstring& windowTitle, int32_t width, int32
 
 	RegisterClassEx(&wndEx_);
 
+	clientSize_ = {static_cast<float>(width),static_cast<float>(height)};
+
 	windowRect_ = { 0,0,width, height };
 
 	// 指定のサイズになるようなウィンドウサイズを計算
@@ -83,4 +85,8 @@ Vector2 WindowFactory::GetWindowSize() const {
 		static_cast<float>(windowRect_.right), 
 		static_cast<float>(windowRect_.bottom)
 	);
+}
+
+Vector2 WindowFactory::GetClientSize() const {
+	return clientSize_;
 }
