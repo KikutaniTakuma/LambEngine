@@ -118,6 +118,7 @@
     <ClCompile Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.cpp" />
     <ClCompile Include="Engine\Core\DescriptorHeap\DescriptorHeap.cpp" />
     <ClCompile Include="Engine\Core\DescriptorHeap\RtvHeap.cpp" />
+    <ClCompile Include="Engine\Core\DirectXCommand\DirectXCommand.cpp" />
     <ClCompile Include="Engine\Core\DirectXCommon\DirectXCommon.cpp" />
     <ClCompile Include="Engine\Core\DirectXDevice\DirectXDevice.cpp" />
     <ClCompile Include="Engine\Core\StringOutPutManager\StringOutPutManager.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\DescriptorHeap.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\RtvHeap.h" />
+    <ClInclude Include="Engine\Core\DirectXCommand\DirectXCommand.h" />
     <ClInclude Include="Engine\Core\DirectXCommon\DirectXCommon.h" />
     <ClInclude Include="Engine\Core\DirectXDevice\DirectXDevice.h" />
     <ClInclude Include="Engine\Core\StringOutPutManager\StringOutPutManager.h" />
