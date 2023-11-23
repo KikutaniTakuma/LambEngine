@@ -17,7 +17,7 @@ void GameScene::Initialize() {
 	camera_.pos.z = -5.0f;
 	camera_.pos.y = 1.1f;
 
-	model_.ThreadLoadObj("./Resources/Watame/Watame.obj");
+	model_.ThreadLoadObj("./Resources/Hololive/Watame/Watame.obj");
 
 	//pera_.Initialize("./Resources/Shaders/PostShader/Post.VS.hlsl", "./Resources/Shaders/PostShader/PostNone.PS.hlsl");
 	pera_.scale_ = { 1280.0f,720.0f };
