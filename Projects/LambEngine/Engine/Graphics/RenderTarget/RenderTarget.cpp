@@ -1,7 +1,9 @@
 #include "RenderTarget.h"
 #include "Engine/Engine.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include "Engine/Core/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
+#include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include <cassert>
@@ -11,15 +13,15 @@
 RenderTarget::RenderTarget():
 	resource_(),
 	isResourceStateChange_(false),
-	width_(Engine::GetInstance()->clientWidth),
-	height_(Engine::GetInstance()->clientHeight),
+	width_(static_cast<uint32_t>(WindowFactory::GetInstance()->GetClientSize().x)),
+	height_(static_cast<uint32_t>(WindowFactory::GetInstance()->GetClientSize().y)),
 	srvDesc_{},
 	srvHeapHandle_{},
 	srvHeapHandleUint_(),
 	rtvHeapHandle_{},
 	rtvHeapHandleUint_(0u)
 {
-	auto resDesc = DirectXCommon::GetInstance()->GetSwapchainBufferDesc();
+	auto resDesc = DirectXSwapChain::GetInstance()->GetSwapchainBufferDesc();
 
 	// Resourceを生成する
 	// リソース用のヒープの設定
@@ -70,7 +72,7 @@ RenderTarget::RenderTarget(uint32_t width, uint32_t height) :
 	rtvHeapHandle_{},
 	rtvHeapHandleUint_(0u)
 {
-	auto resDesc = DirectXCommon::GetInstance()->GetSwapchainBufferDesc();
+	auto resDesc = DirectXSwapChain::GetInstance()->GetSwapchainBufferDesc();
 	resDesc.Width = width_;
 	resDesc.Height = height_;
 
@@ -122,7 +124,7 @@ RenderTarget::~RenderTarget() {
 void RenderTarget::SetThisRenderTarget() {
 	isResourceStateChange_ = false;
 
-	DirectXCommon::GetInstance()->Barrier(
+	Barrier(
 		resource_.Get(),
 		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
 		D3D12_RESOURCE_STATE_RENDER_TARGET
@@ -137,7 +139,7 @@ void RenderTarget::SetThisRenderTarget() {
 
 void RenderTarget::ChangeResourceState() {
 	if (!isResourceStateChange_) {
-		DirectXCommon::GetInstance()->Barrier(
+		Barrier(
 			resource_.Get(),
 			D3D12_RESOURCE_STATE_RENDER_TARGET,
 			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
@@ -149,11 +151,11 @@ void RenderTarget::ChangeResourceState() {
 void RenderTarget::SetMainRenderTarget() {
 	ChangeResourceState();
 	
-	DirectXCommon::GetInstance()->SetMainRenderTarget();
+	DirectXSwapChain::GetInstance()->SetMainRenderTarget();
 }
 
 void RenderTarget::UseThisRenderTargetShaderResource() {
-	static auto mainComList = DirectXCommon::GetInstance()->GetCommandList();
+	static auto mainComList = DirectXCommand::GetInstance()->GetCommandList();
 	mainComList->SetGraphicsRootDescriptorTable(0, srvHeapHandle_);
 }
 

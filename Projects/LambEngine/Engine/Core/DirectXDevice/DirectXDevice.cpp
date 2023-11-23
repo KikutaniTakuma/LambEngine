@@ -205,7 +205,7 @@ ID3D12Resource* DirectXDevice::CreateDepthStencilTextureResource(int32_t width, 
 	resourceDesc.Width = width;
 	resourceDesc.Height = height;
 	resourceDesc.DepthOrArraySize = 1;
-	resourceDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	resourceDesc.Format = DXGI_FORMAT_R32_TYPELESS;
 	resourceDesc.SampleDesc.Count = 1;
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
 	resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
@@ -232,4 +232,12 @@ ID3D12Resource* DirectXDevice::CreateDepthStencilTextureResource(int32_t width, 
 	}
 
 	return resource;
+}
+
+[[nodiscard]]
+ID3D12Resource* DirectXDevice::CreateDepthStencilTextureResource(const Vector2& size) {
+	return CreateDepthStencilTextureResource(
+		static_cast<int32_t>(size.x),
+		static_cast<int32_t>(size.y)
+	);
 }

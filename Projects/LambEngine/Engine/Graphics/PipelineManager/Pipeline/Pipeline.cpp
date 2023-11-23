@@ -4,7 +4,7 @@
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Engine/Graphics/RootSignature/RootSignature.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include "Engine/Core/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
 Pipeline::Pipeline():
 	graphicsPipelineState_(),
@@ -216,7 +216,7 @@ void Pipeline::Use() const {
 		ErrorCheck::GetInstance()->ErrorTextBox("Use() : GraphicsPipelineState is nullptr", "Pipeline");
 		return;
 	}
-	auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+	auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 	commandlist->SetGraphicsRootSignature(rootSignature_);
 	commandlist->SetPipelineState(graphicsPipelineState_.Get());
 

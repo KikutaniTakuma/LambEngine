@@ -1,5 +1,5 @@
 #include "StringOut.h"
-#include "Engine/Core/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "Engine/Engine.h"
 #include "imgui.h"
@@ -136,14 +136,18 @@ StringOut& StringOut::operator<<(const Quaternion& right) {
 	return *this;
 }
 
-const StringOut& StringOut::operator>>(std::wstring& right) const {
+StringOut& StringOut::operator>>(std::wstring& right) {
 	right = str_;
+
+	Clear();
 
 	return *this;
 }
 
-const StringOut& StringOut::operator>>(std::string& right) const {
+StringOut& StringOut::operator>>(std::string& right) {
 	right = ConvertString(str_);
+
+	Clear();
 
 	return *this;
 }
@@ -153,7 +157,7 @@ void StringOut::Draw() {
 		return;
 	}
 
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = DirectXCommand::GetInstance()->GetCommandList();
 	auto  stringOutPutManager = StringOutPutManager::GetInstance();
 	
 	auto batch = stringOutPutManager->GetBatch(format_);

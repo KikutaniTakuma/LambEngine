@@ -10,6 +10,7 @@
 #include "MeshManager/MeshManager.h"
 #undef max
 #undef min
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
 Shader Model::shader_ = {};
 
@@ -303,7 +304,7 @@ void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 		light_.eyePos = cameraPos;
 		dirLig_->eyePos = cameraPos;
 
-		auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+		auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 
 		if (!pipeline_) {
 			ErrorCheck::GetInstance()->ErrorTextBox("pipeline is nullptr", "Model");

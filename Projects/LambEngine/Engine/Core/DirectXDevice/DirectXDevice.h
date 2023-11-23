@@ -56,6 +56,9 @@ public:
 	[[nodiscard]]
 	ID3D12Resource* CreateDepthStencilTextureResource(int32_t width, int32_t height);
 
+	[[nodiscard]]
+	ID3D12Resource* CreateDepthStencilTextureResource(const class Vector2& size);
+
 /// <summary>
 /// ゲッター
 /// </summary>

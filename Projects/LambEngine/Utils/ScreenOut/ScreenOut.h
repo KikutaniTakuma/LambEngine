@@ -75,6 +75,10 @@ namespace Lamb {
 
 		const ScreenOutAllocator& operator<<(std::function<const ScreenOutAllocator&(const ScreenOutAllocator&)> right)const;
 
+
+		const ScreenOutAllocator& operator>>(std::string& right) const;
+		const ScreenOutAllocator& operator>>(std::wstring& right)const;
+
 	private:
 		void Clear() const;
 		void Draw() const;
@@ -86,4 +90,5 @@ namespace Lamb {
 	extern const ScreenOutAllocator screenout;
 
 	const ScreenOutAllocator& endline(const ScreenOutAllocator& allocator);
+	const ScreenOutAllocator& clear(const ScreenOutAllocator& allocator);
 }

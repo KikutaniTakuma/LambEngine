@@ -33,6 +33,12 @@ namespace Lamb {
 		return allocator;
 	}
 
+	const ScreenOutAllocator& clear(const ScreenOutAllocator& allocator) {
+		std::string buf;
+		allocator >> buf;
+		return allocator;
+	}
+
 	ScreenOutAllocator::ScreenOutAllocator():
 		screenOutPtr_{nullptr}
 	{
@@ -125,6 +131,17 @@ namespace Lamb {
 	}
 	const ScreenOutAllocator& ScreenOutAllocator::operator<<(const Quaternion& right) const {
 		*(screenOutPtr_->sout_) << right;
+
+		return *this;
+	}
+
+	const ScreenOutAllocator& ScreenOutAllocator::operator>>(std::string& right) const {
+		*(screenOutPtr_->sout_) >> right;
+
+		return *this;
+	}
+	const ScreenOutAllocator& ScreenOutAllocator::operator>>(std::wstring& right) const {
+		*(screenOutPtr_->sout_) >> right;
 
 		return *this;
 	}

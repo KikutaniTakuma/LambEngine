@@ -1,5 +1,5 @@
 #include "Mouse.h"
-#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "imgui.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 
@@ -43,7 +43,7 @@ Mouse::Mouse(IDirectInput8* input) :
 		return;
 	}
 
-	hr = mouse->SetCooperativeLevel(WinApp::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	hr = mouse->SetCooperativeLevel(WindowFactory::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		ErrorCheck::GetInstance()->ErrorTextBox("SetCooperativeLevel", "Mouse");
@@ -164,7 +164,7 @@ Vector2 Mouse::GetPos() {
 
 	POINT p{};
 	GetCursorPos(&p);
-	ScreenToClient(FindWindowW(WinApp::GetInstance()->GetWindowClassName().c_str(), nullptr), &p);
+	ScreenToClient(FindWindowW(WindowFactory::GetInstance()->GetWindowClassName().c_str(), nullptr), &p);
 
 	Vector2 pos{ static_cast<float>(p.x),static_cast<float>(p.y) };
 

@@ -57,23 +57,7 @@ public:
 		return engine;
 	}
 
-	static inline ID3D12DescriptorHeap* GetDSVHeap() {
-		return engine->dsvHeap.Get();
-	}
-
-	static inline D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle() {
-		return engine->dsvHeap->GetCPUDescriptorHandleForHeapStart();
-	}
-
-
-	///
-	/// Window生成用
-	/// 
-public:
-	int32_t clientWidth = 0;
-	int32_t clientHeight = 0;
-
-
+	static D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle();
 
 #ifdef _DEBUG
 	///
@@ -107,16 +91,24 @@ private:
 private:
 	class DirectXDevice* directXDevice_ = nullptr;
 
-
-
 	/// 
-	/// DirectXCommon
+	/// DirectXCommand
 	/// 
 private:
-	void InitializeDirectXCommon();
+	void InitializeDirectXCommand();
 
 private:
-	class DirectXCommon* directXCommon_ = nullptr;
+	class DirectXCommand* directXCommand_ = nullptr;
+
+/// 
+/// DirectXCommand
+/// 
+private:
+	void InitializeDirectXSwapChain();
+
+private:
+	class DirectXSwapChain* directXSwapChain_ = nullptr;
+
 	
 /// <summary>
 /// DirectXTK
@@ -135,8 +127,7 @@ private:
 	bool InitializeDraw();
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
+	std::unique_ptr<class DepthBuffer> depthStencil_;
 
 	///
 	/// MainLoop
@@ -148,3 +139,12 @@ public:
 
 	static void FrameEnd();
 };
+
+/// <summary>
+/// バリア
+/// </summary>
+/// <param name="resource">リソースバリアを貼るリソース</param>
+/// <param name="before">今の状態</param>
+/// <param name="after">遷移後の状態</param>
+/// <param name="subResource">サブリソース</param>
+void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource = 0u);

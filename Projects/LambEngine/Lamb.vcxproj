@@ -117,16 +117,19 @@
     <ClCompile Include="Drawers\Texture2D\Texture2D.cpp" />
     <ClCompile Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.cpp" />
     <ClCompile Include="Engine\Core\DescriptorHeap\DescriptorHeap.cpp" />
+    <ClCompile Include="Engine\Core\DescriptorHeap\DsvHeap.cpp" />
     <ClCompile Include="Engine\Core\DescriptorHeap\RtvHeap.cpp" />
-    <ClCompile Include="Engine\Core\DirectXCommon\DirectXCommon.cpp" />
+    <ClCompile Include="Engine\Core\DirectXCommand\DirectXCommand.cpp" />
     <ClCompile Include="Engine\Core\DirectXDevice\DirectXDevice.cpp" />
+    <ClCompile Include="Engine\Core\DirectXSwapChain\DirectXSwapChain.cpp" />
     <ClCompile Include="Engine\Core\StringOutPutManager\StringOutPutManager.cpp" />
-    <ClCompile Include="Engine\Core\WinApp\WinApp.cpp" />
+    <ClCompile Include="Engine\Core\WindowFactory\WindowFactory.cpp" />
     <ClCompile Include="Engine\Engine.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Disabled</Optimization>
     </ClCompile>
     <ClCompile Include="Engine\EngineUtils\ErrorCheck\ErrorCheck.cpp" />
     <ClCompile Include="Engine\EngineUtils\FrameInfo\FrameInfo.cpp" />
+    <ClCompile Include="Engine\Graphics\DepthBuffer\DepthBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.cpp" />
     <ClCompile Include="Engine\Graphics\RenderTarget\RenderTarget.cpp" />
@@ -175,14 +178,17 @@
     <ClInclude Include="Engine\Buffer\StructuredBuffer\StructuredBuffer.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\DescriptorHeap.h" />
+    <ClInclude Include="Engine\Core\DescriptorHeap\DsvHeap.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\RtvHeap.h" />
-    <ClInclude Include="Engine\Core\DirectXCommon\DirectXCommon.h" />
+    <ClInclude Include="Engine\Core\DirectXCommand\DirectXCommand.h" />
     <ClInclude Include="Engine\Core\DirectXDevice\DirectXDevice.h" />
+    <ClInclude Include="Engine\Core\DirectXSwapChain\DirectXSwapChain.h" />
     <ClInclude Include="Engine\Core\StringOutPutManager\StringOutPutManager.h" />
-    <ClInclude Include="Engine\Core\WinApp\WinApp.h" />
+    <ClInclude Include="Engine\Core\WindowFactory\WindowFactory.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\EngineUtils\ErrorCheck\ErrorCheck.h" />
     <ClInclude Include="Engine\EngineUtils\FrameInfo\FrameInfo.h" />
+    <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.h" />
     <ClInclude Include="Engine\Graphics\RenderTarget\RenderTarget.h" />

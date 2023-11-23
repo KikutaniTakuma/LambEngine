@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
 Shader Line::shader_ = {};
 
@@ -94,7 +95,7 @@ void Line::Draw(const Mat4x4& viewProjection, uint32_t color) {
 
 	pipline_->Use();
 	heap_->Use(wvpMat_.GetViewHandleUINT(), 0);
-	auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+	auto commandList = DirectXCommand::GetInstance()->GetCommandList();
 	commandList->IASetVertexBuffers(0, 1, &vertexView_);
 	commandList->DrawInstanced(kVertexNum, 1, 0, 0);
 }

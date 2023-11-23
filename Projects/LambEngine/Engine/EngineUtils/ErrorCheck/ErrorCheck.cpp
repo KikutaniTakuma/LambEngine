@@ -5,7 +5,7 @@
 #include <format>
 #include <cassert>
 #include <Windows.h>
-#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 
 ErrorCheck* ErrorCheck::GetInstance() {
@@ -26,14 +26,14 @@ void ErrorCheck::ErrorTextBox(const std::string& text, const std::string& boxNam
 
 	if (boxName == "Error") {
 		MessageBoxA(
-			WinApp::GetInstance()->GetHwnd(), 
+			WindowFactory::GetInstance()->GetHwnd(), 
 			text.c_str(), boxName.c_str(), 
 			MB_OK | MB_SYSTEMMODAL | MB_ICONERROR
 		);
 	}
 	else {
 		MessageBoxA(
-			WinApp::GetInstance()->GetHwnd(), 
+			WindowFactory::GetInstance()->GetHwnd(), 
 			text.c_str(), ("Error : " + boxName).c_str(),
 			MB_OK | MB_SYSTEMMODAL| MB_ICONERROR
 		);

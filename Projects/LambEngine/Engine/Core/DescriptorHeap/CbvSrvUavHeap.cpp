@@ -1,8 +1,9 @@
 #include "CbvSrvUavHeap.h"
 #include "Utils/ConvertString/ConvertString.h"
-#include "Engine/Core/WinApp/WinApp.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include "Engine/Core/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
+#include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
 #include <cassert>
 #include <cmath>
 #include <algorithm>
@@ -44,15 +45,15 @@ void CbvSrvUavHeap::CreateDescriptorHeap(uint32_t heapSize) {
 }
 
 void CbvSrvUavHeap::SetHeap() {
-	static auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+	static auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 	commandlist->SetDescriptorHeaps(1, heap_.GetAddressOf());
 }
 void CbvSrvUavHeap::Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex) {
-	static auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+	static auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, handle);
 }
 void CbvSrvUavHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
-	auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+	auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, heapHandles_[handleIndex].second);
 }
 
@@ -123,6 +124,28 @@ uint32_t CbvSrvUavHeap::CreatePerarenderView(RenderTarget& renderTarget) {
 		uint32_t nowCreateViewHandle = bookingHandle_.front();
 		useHandle_.push_back(nowCreateViewHandle);
 		renderTarget.CreateView(heapHandles_[nowCreateViewHandle].first, heapHandles_[nowCreateViewHandle].second, nowCreateViewHandle);
+		bookingHandle_.pop_front();
+		return nowCreateViewHandle;
+	}
+}
+
+uint32_t CbvSrvUavHeap::CreateDepthTextureView(class DepthBuffer& depthBuffer) {
+	assert(currentHandleIndex_ < heapSize_);
+	if (currentHandleIndex_ >= heapSize_) {
+		ErrorCheck::GetInstance()->ErrorTextBox("CreatePerarenderView failed\nOver HeapSize", "ShaderResourceHeap");
+		return std::numeric_limits<uint32_t>::max();
+	}
+
+	if (bookingHandle_.empty()) {
+		useHandle_.push_back(currentHandleIndex_);
+		depthBuffer.CreateSRView(heapHandles_[currentHandleIndex_].first, heapHandles_[currentHandleIndex_].second, currentHandleIndex_);
+		currentHandleIndex_++;
+		return currentHandleIndex_ - 1u;
+	}
+	else {
+		uint32_t nowCreateViewHandle = bookingHandle_.front();
+		useHandle_.push_back(nowCreateViewHandle);
+		depthBuffer.CreateSRView(heapHandles_[nowCreateViewHandle].first, heapHandles_[nowCreateViewHandle].second, nowCreateViewHandle);
 		bookingHandle_.pop_front();
 		return nowCreateViewHandle;
 	}

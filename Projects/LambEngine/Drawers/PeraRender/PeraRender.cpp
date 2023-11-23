@@ -2,7 +2,7 @@
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "imgui.h"
-#include "Engine/Core/DirectXCommon/DirectXCommon.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include <cassert>
 #include <numbers>
 
@@ -212,7 +212,7 @@ void PeraRender::Draw(
 	*wvpMat_ = viewProjection;
 
 	// 各種描画コマンドを積む
-	ID3D12GraphicsCommandList* commandList = DirectXCommon::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = DirectXCommand::GetInstance()->GetCommandList();
 	piplines_[blend]->Use();
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	render_.UseThisRenderTargetShaderResource();

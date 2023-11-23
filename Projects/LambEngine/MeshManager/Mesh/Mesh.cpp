@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "TextureManager/TextureManager.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "MeshManager/MeshManager.h"
@@ -485,7 +486,7 @@ void Mesh::Use(
 
 void Mesh::Draw() {
 	if (0u < drawCount_) {
-		auto commandList = DirectXCommon::GetInstance()->GetCommandList();
+		auto commandList = DirectXCommand::GetInstance()->GetCommandList();
 
 		if (!pipeline_) {
 			ErrorCheck::GetInstance()->ErrorTextBox("pipeline is nullptr", "Mesh");

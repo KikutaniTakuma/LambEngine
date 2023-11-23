@@ -5,6 +5,7 @@
 #include <numeric>
 #undef max
 #undef min
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
 /// <summary>
 /// 静的変数のインスタンス化
@@ -325,7 +326,7 @@ void Texture2D::Draw(
 
 		*wvpMat_ = viewProjection;
 
-		auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+		auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 
 
 		// 各種描画コマンドを積む

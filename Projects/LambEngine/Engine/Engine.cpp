@@ -3,22 +3,26 @@
 #include <format>
 #include <filesystem>
 
-#include "Core/WinApp/WinApp.h"
+#include "Core/WindowFactory/WindowFactory.h"
 #include "Core/DirectXDevice/DirectXDevice.h"
-#include "Core/DirectXCommon/DirectXCommon.h"
-#include "Core/DescriptorHeap/RtvHeap.h"
-#include "Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Core/DirectXSwapChain/DirectXSwapChain.h"
+#include "Core/DirectXCommand/DirectXCommand.h"
 #include "Core/StringOutPutManager/StringOutPutManager.h"
 
-#include "./Graphics/ShaderManager/ShaderManager.h"
+#include "Core/DescriptorHeap/RtvHeap.h"
+#include "Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Core/DescriptorHeap/DsvHeap.h"
+
+#include "Graphics/ShaderManager/ShaderManager.h"
+#include "Graphics/PipelineManager/PipelineManager.h"
 #include "TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
-#include "./Graphics/PipelineManager/PipelineManager.h"
 #include "MeshManager/MeshManager.h"
+#include "Graphics/DepthBuffer/DepthBuffer.h"
 
 #include "Input/Input.h"
-#include "./EngineUtils/ErrorCheck/ErrorCheck.h"
-#include "./EngineUtils/FrameInfo/FrameInfo.h"
+#include "EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 
@@ -89,28 +93,58 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 
 	engine = new Engine();
 	assert(engine);
-	engine->clientWidth = static_cast<int32_t>(windowSize.x);
-	engine->clientHeight = static_cast<int32_t>(windowSize.y);
 
 	const auto&& windowTitle = ConvertString(windowName);
 
 	// Window生成
-	WinApp::GetInstance()->Create(windowTitle, engine->clientWidth, engine->clientHeight);
+	WindowFactory::GetInstance()->Create(windowTitle, static_cast<int32_t>(windowSize.x), static_cast<int32_t>(windowSize.y));
 
 #ifdef _DEBUG
 	// DebugLayer有効化
 	debugLayer.InitializeDebugLayer();
 #endif
 
-	// Direct3D生成
+	// デバイス生成
 	engine->InitializeDirectXDevice();
 
 	// ディスクリプタヒープ初期化
-	RtvHeap::Initialize(128);
-	CbvSrvUavHeap::Initialize(4096);
+	RtvHeap::Initialize(128u);
+	DsvHeap::Initialize(128u);
+	CbvSrvUavHeap::Initialize(4096u);
 
-	// DirectX12生成
-	engine->InitializeDirectXCommon();
+	// コマンドリスト生成
+	engine->InitializeDirectXCommand();
+
+	// スワップチェーン生成
+	engine->InitializeDirectXSwapChain();
+
+#ifdef _DEBUG
+	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	// RTVの設定
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
+	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
+
+	// SRV用のヒープ
+	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
+	uint32_t useHandle = descriptorHeap->BookingHeapPos(1u);
+
+	// ImGuiの初期化
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui::StyleColorsDark();
+	ImGui_ImplWin32_Init(WindowFactory::GetInstance()->GetHwnd());
+	ImGui_ImplDX12_Init(
+		device,
+		DirectXSwapChain::kBackBufferNumber_,
+		rtvDesc.Format,
+		descriptorHeap->Get(),
+		descriptorHeap->GetCpuHeapHandle(useHandle),
+		descriptorHeap->GetGpuHeapHandle(useHandle)
+	);
+
+	descriptorHeap->UseThisPosition(useHandle);
+#endif // DEBUG
 
 	if (!engine->InitializeDraw()) {
 		ErrorCheck::GetInstance()->ErrorTextBox("Initialize() : InitializeDraw() Failed", "Engine");
@@ -149,10 +183,19 @@ void Engine::Finalize() {
 
 	StringOutPutManager::Finalize();
 
+	engine->depthStencil_.reset();
+
 	CbvSrvUavHeap::Finalize();
+	DsvHeap::Finalize();
 	RtvHeap::Finalize();
 
-	DirectXCommon::Finalize();
+#ifdef _DEBUG
+	ImGui_ImplDX12_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+#endif // _DEBUG
+	DirectXSwapChain::Finalize();
+	DirectXCommand::Finalize();
 	DirectXDevice::Finalize();
 
 	delete engine;
@@ -166,7 +209,9 @@ bool Engine::IsFinalize() {
 	return engine->isFinalize;
 }
 
-
+D3D12_CPU_DESCRIPTOR_HANDLE Engine::GetDsvHandle() {
+	return engine->depthStencil_->GetDepthHandle();
+}
 
 
 
@@ -180,15 +225,23 @@ void Engine::InitializeDirectXDevice() {
 }
 
 
+/// 
+/// DirectXCommand
+/// 
+
+void Engine::InitializeDirectXCommand() {
+	DirectXCommand::Initialize();
+	directXCommand_ = DirectXCommand::GetInstance();
+}
 
 
 /// 
-/// DirectXCommon
-/// 
+/// DirectXSwapChain
+///
 
-void Engine::InitializeDirectXCommon() {
-	DirectXCommon::Initialize();
-	directXCommon_ = DirectXCommon::GetInstance();
+void Engine::InitializeDirectXSwapChain() {
+	DirectXSwapChain::Initialize();
+	directXSwapChain_ = DirectXSwapChain::GetInstance();
 }
 
 
@@ -208,31 +261,21 @@ void Engine::InitializeDirectXTK() {
 /// 描画用
 /// 
 bool Engine::InitializeDraw() {
-	static ID3D12Device* device = engine->directXDevice_->GetDevice();
-
-	// DepthStencilTextureをウィンドウサイズで作成
-	depthStencilResource = directXDevice_->CreateDepthStencilTextureResource(clientWidth, clientHeight);
-	assert(depthStencilResource);
-	if (!depthStencilResource) {
-		assert(!"depthStencilResource failed");
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDraw() : DepthStencilResource Create Failed", "Engine");
-		return false;
-	}
-
-	dsvHeap = engine->directXDevice_->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV,1,false);
+	DsvHeap* dsvHeap = DsvHeap::GetInstance();
 	if(!dsvHeap) {
 		assert(!"CreateDescriptorHeap failed");
 		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDraw() : CreateDescriptorHeap()  Failed", "Engine");
 		return false;
 	}
 
+	depthStencil_ = std::make_unique<DepthBuffer>();
 
-	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
-	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
-	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
+	dsvHeap->BookingHeapPos(1u);
+	dsvHeap->CreateView(*depthStencil_);
 
-	device->CreateDepthStencilView(depthStencilResource.Get(), &dsvDesc, dsvHeap->GetCPUDescriptorHandleForHeapStart());
+	CbvSrvUavHeap* cbvSrvUavHeap = CbvSrvUavHeap::GetInstance();
+	cbvSrvUavHeap->BookingHeapPos(1u);
+	cbvSrvUavHeap->CreateDepthTextureView(*depthStencil_);
 
 	return true;
 }
@@ -269,12 +312,13 @@ void Engine::FrameStart() {
 	ImGui::NewFrame();
 #endif // _DEBUG
 
-	engine->directXCommon_->ChangeBackBufferState();
-	engine->directXCommon_->SetMainRenderTarget();
-	engine->directXCommon_->ClearBackBuffer();
+	engine->directXSwapChain_->ChangeBackBufferState();
+	engine->directXSwapChain_->SetMainRenderTarget();
+	engine->directXSwapChain_->ClearBackBuffer();
 
 	// ビューポート
-	engine->directXCommon_->SetViewPort(engine->clientWidth, engine->clientHeight);
+	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
+	engine->directXSwapChain_->SetViewPort(static_cast<int32_t>(clientSize.x), static_cast<int32_t>(clientSize.y));
 
 	// SRV用のヒープ
 	static auto const srvDescriptorHeap = CbvSrvUavHeap::GetInstance();
@@ -294,30 +338,30 @@ void Engine::FrameEnd() {
 	Lamb::screenout.Draw();
 
 #ifdef _DEBUG
-	ID3D12GraphicsCommandList* commandList = engine->directXCommon_->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = engine->directXCommand_->GetCommandList();
 	// ImGui描画
 	ImGui::Render();
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
 #endif // DEBUG
 
 	
-	engine->directXCommon_->ChangeBackBufferState();
+	engine->directXSwapChain_->ChangeBackBufferState();
 
 	// コマンドリストを確定させる
-	engine->directXCommon_->CloseCommandlist();
+	engine->directXCommand_->CloseCommandlist();
 
 	// GPUにコマンドリストの実行を行わせる
-	engine->directXCommon_->ExecuteCommandLists();
+	engine->directXCommand_->ExecuteCommandLists();
 
 
 	// GPUとOSに画面の交換を行うように通知する
-	engine->directXCommon_->SwapChainPresent();
+	engine->directXSwapChain_->SwapChainPresent();
 
 	engine->stringOutPutManager_->GmemoryCommit();
 
-	engine->directXCommon_->WaitForFinishCommnadlist();
+	engine->directXCommand_->WaitForFinishCommnadlist();
 
-	engine->directXCommon_->ResetCommandlist();
+	engine->directXCommand_->ResetCommandlist();
 	
 	// テクスチャの非同期読み込み
 	auto textureManager = TextureManager::GetInstance();
@@ -347,15 +391,30 @@ void Engine::FrameEnd() {
 
 
 /// 
-/// 各種解放処理
+/// 各種解放処理なくなっちゃた
 /// 
 Engine::~Engine() {
-	if (depthStencilResource) {
-		depthStencilResource->Release();
-		depthStencilResource.Reset();
-	}
-	if (dsvHeap) {
-		dsvHeap->Release();
-		dsvHeap.Reset();
-	}
+	
+}
+
+
+void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+
+	// TransitionBarrierの設定
+	D3D12_RESOURCE_BARRIER barrier{};
+	// 今回のバリアはTransition
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	// Noneにしておく
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	// バリアを張る対象のリソース
+	barrier.Transition.pResource = resource;
+	// subResourceの設定
+	barrier.Transition.Subresource = subResource;
+	// 遷移前(現在)のResouceState
+	barrier.Transition.StateBefore = before;
+	// 遷移後のResouceState
+	barrier.Transition.StateAfter = after;
+	// TransitionBarrierを張る
+	commandList->ResourceBarrier(1, &barrier);
 }
