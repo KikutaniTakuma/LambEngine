@@ -1,9 +1,6 @@
 #include "Input.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
-#include "Input/Gamepad/Gamepad.h"
-#include "Input/KeyInput/KeyInput.h"
-#include "Input/Mouse/Mouse.h"
 
 Input* Input::instance_ = nullptr;
 
