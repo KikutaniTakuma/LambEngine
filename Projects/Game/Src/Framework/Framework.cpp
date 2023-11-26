@@ -1,6 +1,6 @@
 #include "Framework.h"
 #include "Engine/Engine.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Utils/Math/Vector2.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Input/Input.h"
@@ -8,9 +8,10 @@
 void Framework::Initialize() {
 	// ライブラリ初期化
 	if (!Engine::Initialize("DirectXGame", Vector2{ 1280.0f, 720.0f })) {
-		ErrorCheck::GetInstance()->ErrorTextBox(
-			"Engine::Initialize() Failed",
-			"WinMain"
+		Log::ErrorLog(
+			"somthing error",
+			"Engine::Initialize()",
+			"Framework"
 		);
 		return;
 	}
