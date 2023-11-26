@@ -44,7 +44,7 @@ public:
 	/// <typeparam name="T">ポインタ型に制限</typeparam>
 	/// <param name="conBuf">ConstBuffer</param>
 	/// <returns>作成した場所のハンドル</returns>
-	template<IsNotPtrCB T>
+	template<Lamb::IsNotPtr T>
 	uint32_t CreateConstBufferView(ConstBuffer<T>& conBuf) {
 		assert(currentHandleIndex_ < heapSize_);
 		if (currentHandleIndex_ >= heapSize_) {
@@ -73,7 +73,7 @@ public:
 	/// <typeparam name="T">ポインタ型に制限</typeparam>
 	/// <param name="conBuf">ConstBuffer</param>
 	/// <param name="heapIndex">作成する場所のハンドル</param>
-	template<IsNotPtrCB T>
+	template<Lamb::IsNotPtr T>
 	void CreateConstBufferView(ConstBuffer<T>& conBuf, UINT heapIndex) {
 		assert(heapIndex < heapSize_);
 		if (heapIndex >= heapSize_) {
@@ -89,7 +89,7 @@ public:
 	/// <typeparam name="T">ポインタ型に制限</typeparam>
 	/// <param name="strcBuf">StructuredBuffer</param>
 	/// <returns>作成した場所のハンドル</returns>
-	template<IsNotPtrSB T>
+	template<Lamb::IsNotPtr T>
 	uint32_t CreateStructuredBufferView(StructuredBuffer<T>& strcBuf) {
 		assert(currentHandleIndex_ < heapSize_);
 		if (currentHandleIndex_ >= heapSize_) {
@@ -116,7 +116,7 @@ public:
 	/// <typeparam name="T">ポインタ型に制限</typeparam>
 	/// <param name="strcBuf">StructuredBuffe</param>
 	/// <param name="heapIndex">作成する場所のハンドル</param>
-	template<IsNotPtrSB T>
+	template<Lamb::IsNotPtr T>
 	void CreateStructuredBufferView(StructuredBuffer<T>& strcBuf, UINT heapIndex) {
 		assert(heapIndex < heapSize_);
 		if (heapIndex >= heapSize_) {
