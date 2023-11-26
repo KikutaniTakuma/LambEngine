@@ -1,8 +1,10 @@
 #pragma once
 #include "DescriptorHeap.h"
+#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
 #include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 #include "TextureManager/Texture/Texture.h"
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 
 /// <summary>
 /// ディスクリプタヒープ管理クラス

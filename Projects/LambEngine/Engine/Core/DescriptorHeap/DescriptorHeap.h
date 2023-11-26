@@ -2,7 +2,6 @@
 
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
-#include <wrl.h>
 #include <list>
 #include <deque>
 #include <vector>

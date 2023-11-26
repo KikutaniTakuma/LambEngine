@@ -1,7 +1,6 @@
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include <cassert>
-#include <wrl.h>
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include <type_traits>
 #include <concepts>

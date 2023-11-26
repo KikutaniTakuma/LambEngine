@@ -4,7 +4,6 @@
 #include "Utils/Math/Vector4.h"
 #include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
 #include "Engine/Graphics/ShaderManager/ShaderManager.h"
-class Pipeline;
 
 /// <summary>
 /// 線の描画
@@ -24,7 +23,7 @@ public:
 private:
 	static Shader shader_;
 
-	static Pipeline* pipline_;
+	static class Pipeline* pipline_;
 
 public:
 	Line();
