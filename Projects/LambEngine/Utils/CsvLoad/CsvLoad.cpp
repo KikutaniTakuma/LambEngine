@@ -1,5 +1,5 @@
 #include "CsvLoad.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include <filesystem>
 #include <fstream>
 #include <sstream>
@@ -9,13 +9,13 @@ std::vector<std::vector<int32_t>> CsvLoad(const std::string& fileName) {
 	std::vector<std::vector<int32_t>> result;
 
 	if (!(std::filesystem::path(fileName).extension() == ".csv")) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CsvLoad() Failed : This file is not csv -> " + fileName);
+		Log::ErrorLog("This file is not csv -> " + fileName, "CsvLoad()");
 		return std::vector<std::vector<int32_t>>(0);
 	}
 
 	std::ifstream file{ fileName };
 	if (file.fail()) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CsvLoad() Failed : This file is not exist -> " + fileName);
+		Log::ErrorLog("This file is not exist -> " + fileName, "CsvLoad()");
 		return std::vector<std::vector<int32_t>>(0);
 	}
 
