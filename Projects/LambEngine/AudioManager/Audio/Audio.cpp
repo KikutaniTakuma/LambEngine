@@ -139,14 +139,14 @@ void Audio::Start(float volume) {
 		buf.LoopCount = loopFlg_ ? XAUDIO2_LOOP_INFINITE : 0;
 
 		if (!SUCCEEDED(hr)) {
-			Log::ErrorLog("Start()", "SubmitSourceBuffer() failed", "Audio");
+			Log::ErrorLog("SubmitSourceBuffer() failed", "Start()", "Audio");
 			return;
 		}
 		hr = pSourceVoice_->SubmitSourceBuffer(&buf);
 	}
 	hr = pSourceVoice_->Start();
 	if (!SUCCEEDED(hr)) {
-		Log::ErrorLog("Start()", "function is something error", "Audio");
+		Log::ErrorLog("function is something error", "Start()", "Audio");
 		return;
 	}
 	pSourceVoice_->SetVolume(volume_);

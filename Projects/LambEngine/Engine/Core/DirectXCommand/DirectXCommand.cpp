@@ -1,6 +1,6 @@
 #include "DirectXCommand.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include <cassert>
 
 DirectXCommand* DirectXCommand::instance_ = nullptr;
@@ -47,7 +47,7 @@ void DirectXCommand::CloseCommandlist() {
 	isCommandListClose_ = true;
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CommandList->Close() Failed", "Engine");
+		Log::ErrorLog("Close()", "CommandList ","DirectXCommand");
 	}
 }
 
@@ -61,13 +61,13 @@ void DirectXCommand::ResetCommandlist() {
 	HRESULT hr = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CommandAllocator->Reset() Failed", "Engine");
+		Log::ErrorLog("Reset()", "CommandAllocator", "DirectXCommand");
 		return;
 	}
 	hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CommandList->Reset() Failed", "Engine");
+		Log::ErrorLog("Reset()", "CommandList", "DirectXCommand");
 		return;
 	}
 	isCommandListClose_ = false;
@@ -98,7 +98,7 @@ void DirectXCommand::CreateCommandQueue() {
 	HRESULT hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(commandQueue_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateCommandQueue() Failed", "Engine");
+		Log::ErrorLog("device somethig error", "CreateCommandQueue()", "DirectXCommand");
 		return;
 	}
 }
@@ -111,7 +111,7 @@ void DirectXCommand::CreateCommandAllocator() {
 	HRESULT hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateCommandAllocator() Failed", "Engine");
+		Log::ErrorLog("device somethig error", "CreateCommandAllocator()", "DirectXCommand");
 		return;
 	}
 }
@@ -124,7 +124,7 @@ void DirectXCommand::CreateGraphicsCommandList() {
 	HRESULT hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(commandList_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateCommandList() Failed", "Engine");
+		Log::ErrorLog("device somethig error", "CreateCommandList()", "DirectXCommand");
 		return;
 	}
 }
@@ -138,7 +138,7 @@ void DirectXCommand::CrateFence() {
 	HRESULT hr = device->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateFence() Failed", "Engine");
+		Log::ErrorLog("device somethig error", "CreateFence()", "DirectXCommand");
 		return;
 	}
 
@@ -147,7 +147,7 @@ void DirectXCommand::CrateFence() {
 	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
 	assert(fenceEvent_ != nullptr);
 	if (!(fenceEvent_ != nullptr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateEvent() Failed", "Engine");
+		Log::ErrorLog("device somethig error", "CreateEvent()", "DirectXCommand");
 		return;
 	}
 }
