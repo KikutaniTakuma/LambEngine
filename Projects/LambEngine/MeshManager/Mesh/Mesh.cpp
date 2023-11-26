@@ -1,5 +1,5 @@
 #include "Mesh.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "TextureManager/TextureManager.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
@@ -39,10 +39,10 @@ void Mesh::LoadObj(const std::string& objFileName) {
 		assert(objFile);
 		if (objFile.fail()) {
 			if (std::filesystem::exists(std::filesystem::path(objFileName))) {
-				ErrorCheck::GetInstance()->ErrorTextBox("LoadObj() : " + objFileName + " open failed", "Model");
+				Log::ErrorLog(objFileName + " open failed", "LoadObj()", "Mesh");
 			}
 			else {
-				ErrorCheck::GetInstance()->ErrorTextBox("LoadObj() : Not found objFile : " + objFileName, "Model");
+				Log::ErrorLog("Not found objFile -> " + objFileName, "LoadObj()", "Mesh");
 			}
 
 			return;
@@ -107,7 +107,7 @@ void Mesh::LoadObj(const std::string& objFileName) {
 					// エラーチェック
 					if (idnexItr == indcoes.rend()) {
 						//assert(!"Obj Load Error : Cannot Load Rectangles or more");
-						ErrorCheck::GetInstance()->ErrorTextBox("LoadObj() : Not supported for rectangles or more", "Model");
+						Log::ErrorLog("Not supported for rectangles or more", "LoadObj()", "Mesh");
 						objFile.close();
 						return;
 					}
@@ -174,7 +174,7 @@ void Mesh::LoadObj(const std::string& objFileName) {
 void Mesh::LoadMtl(const std::string& fileName) {
 	std::ifstream file(fileName);
 	assert(file);
-	if (!file) { ErrorCheck::GetInstance()->ErrorTextBox("LoadMtl() : Not Found mtlFile", "Model"); }
+	if (!file) { Log::ErrorLog("Not Found mtlFile", "LoadMtl()", "Mesh"); }
 
 	std::string lineBuf;
 	std::unordered_map<std::string, Texture*>::iterator texItr;
@@ -213,10 +213,10 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 		assert(objFile);
 		if (objFile.fail()) {
 			if (std::filesystem::exists(std::filesystem::path(objFileName))) {
-				ErrorCheck::GetInstance()->ErrorTextBox("LoadObj() : " + objFileName + " open failed", "Model");
+				Log::ErrorLog(objFileName + " open failed", "ThreadLoadObj()", "Mesh");
 			}
 			else {
-				ErrorCheck::GetInstance()->ErrorTextBox("LoadObj() : Not found objFile : " + objFileName, "Model");
+				Log::ErrorLog("Not found objFile -> " + objFileName, "ThreadLoadObj()", "Mesh");
 			}
 
 			return;
@@ -285,7 +285,7 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 					// エラーチェック
 					if (idnexItr == indcoes.rend()) {
 						//assert(!"Obj Load Error : Cannot Load Rectangles or more");
-						ErrorCheck::GetInstance()->ErrorTextBox("LoadObj() : Not supported for rectangles or more", "Model");
+						Log::ErrorLog("Not supported for rectangles or more", "ThreadLoadObj()", "Mesh");
 						objFile.close();
 						return;
 					}
@@ -348,7 +348,7 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 void Mesh::ThreadLoadMtl(const std::string& fileName) {
 	std::ifstream file(fileName);
 	assert(file);
-	if (!file) { ErrorCheck::GetInstance()->ErrorTextBox("LoadMtl() : Not Found mtlFile", "Model"); }
+	if (!file) { Log::ErrorLog("Not Found mtlFile", "ThreadLoadMtl()", "Mesh"); }
 
 	std::string lineBuf;
 	std::unordered_map<std::string, Texture*>::iterator texItr;
@@ -489,7 +489,7 @@ void Mesh::Draw() {
 		auto commandList = DirectXCommand::GetInstance()->GetCommandList();
 
 		if (!pipeline_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("pipeline is nullptr", "Mesh");
+		Log::ErrorLog("pipeline is nullptr", "Draw()", "Mesh");
 			return;
 		}
 
