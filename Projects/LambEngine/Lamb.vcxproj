@@ -131,6 +131,7 @@
     <ClCompile Include="Engine\Core\DirectXCommand\DirectXCommand.cpp" />
     <ClCompile Include="Engine\Core\DirectXDevice\DirectXDevice.cpp" />
     <ClCompile Include="Engine\Core\DirectXSwapChain\DirectXSwapChain.cpp" />
+    <ClCompile Include="Engine\Core\ImGuiManager\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Core\StringOutPutManager\StringOutPutManager.cpp" />
     <ClCompile Include="Engine\Core\WindowFactory\WindowFactory.cpp" />
     <ClCompile Include="Engine\Engine.cpp">
@@ -192,6 +193,7 @@
     <ClInclude Include="Engine\Core\DirectXCommand\DirectXCommand.h" />
     <ClInclude Include="Engine\Core\DirectXDevice\DirectXDevice.h" />
     <ClInclude Include="Engine\Core\DirectXSwapChain\DirectXSwapChain.h" />
+    <ClInclude Include="Engine\Core\ImGuiManager\ImGuiManager.h" />
     <ClInclude Include="Engine\Core\StringOutPutManager\StringOutPutManager.h" />
     <ClInclude Include="Engine\Core\WindowFactory\WindowFactory.h" />
     <ClInclude Include="Engine\Engine.h" />
@@ -219,6 +221,7 @@
     <ClInclude Include="TextureManager\Texture\Texture.h" />
     <ClInclude Include="Utils\Action\Frame\Frame.h" />
     <ClInclude Include="Utils\Camera\Camera.h" />
+    <ClInclude Include="Utils\Cocepts\Cocepts.h" />
     <ClInclude Include="Utils\ConvertString\ConvertString.h" />
     <ClInclude Include="Utils\CsvLoad\CsvLoad.h" />
     <ClInclude Include="Utils\Easeing\Easeing.h" />
@@ -230,6 +233,7 @@
     <ClInclude Include="Utils\Math\Vector3.h" />
     <ClInclude Include="Utils\Math\Vector4.h" />
     <ClInclude Include="Utils\Random\Random.h" />
+    <ClInclude Include="Utils\SafeDelete\SafeDelete.h" />
     <ClInclude Include="Utils\ScreenOut\ScreenOut.h" />
     <ClInclude Include="Utils\UtilsLib\UtilsLib.h" />
   </ItemGroup>

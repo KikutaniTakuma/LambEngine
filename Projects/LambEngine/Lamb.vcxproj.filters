@@ -148,6 +148,9 @@
     <ClCompile Include="Engine\Core\DescriptorHeap\DsvHeap.cpp">
       <Filter>Engine\Core\DescriptorHeap</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Core\ImGuiManager\ImGuiManager.cpp">
+      <Filter>Engine\Core\ImGuiManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -303,6 +306,15 @@
     <Filter Include="Engine\Graphics\DepthBuffer">
       <UniqueIdentifier>{acd3416a-219a-4a0f-b725-6643048c704d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\SafeDelete">
+      <UniqueIdentifier>{94134e6e-da45-45f9-b920-bf5e3ae5f7af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Cocepts">
+      <UniqueIdentifier>{d34d4eed-7ec5-4e6e-a6d6-e19ad5846855}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\ImGuiManager">
+      <UniqueIdentifier>{d6d93ca6-1ebb-4ead-ad68-07b252c618a4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -457,6 +469,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Core\DescriptorHeap\DsvHeap.h">
       <Filter>Engine\Core\DescriptorHeap</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SafeDelete\SafeDelete.h">
+      <Filter>Utils\SafeDelete</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Cocepts\Cocepts.h">
+      <Filter>Utils\Cocepts</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\ImGuiManager\ImGuiManager.h">
+      <Filter>Engine\Core\ImGuiManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

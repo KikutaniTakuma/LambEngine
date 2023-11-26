@@ -4,13 +4,13 @@
 #include <cassert>
 #include <filesystem>
 
-AudioManager* AudioManager::instance = nullptr;
+AudioManager* AudioManager::instance_ = nullptr;
 void AudioManager::Inititalize() {
-	instance = new AudioManager{};
+	instance_ = new AudioManager{};
 }
 void AudioManager::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete instance_;
+	instance_ = nullptr;
 }
 
 AudioManager::AudioManager() :
