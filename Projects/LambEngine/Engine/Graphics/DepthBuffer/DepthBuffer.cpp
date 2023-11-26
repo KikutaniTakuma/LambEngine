@@ -1,9 +1,9 @@
 #include "DepthBuffer.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include "TextureManager/Texture/Texture.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
-#include <cmath>
 #include "Engine/Core/WindowFactory/WindowFactory.h"
+#include "TextureManager/Texture/Texture.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
+#include <cmath>
 
 DepthBuffer::DepthBuffer():
 	tex_{},
@@ -22,7 +22,7 @@ DepthBuffer::DepthBuffer():
 	assert(depthStencilResource_);
 	if (!depthStencilResource_) {
 		assert(!"depthStencilResource failed");
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDraw() : DepthStencilResource Create Failed", "Engine");
+		Log::ErrorLog("something error","CreateDepthStencilTextureResource()", "DepthBuffer");
 		return;
 	}
 
@@ -50,7 +50,7 @@ DepthBuffer::DepthBuffer(const Vector2& bufSize):
 	assert(depthStencilResource_);
 	if (!depthStencilResource_) {
 		assert(!"depthStencilResource failed");
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDraw() : DepthStencilResource Create Failed", "Engine");
+		Log::ErrorLog("something error", "CreateDepthStencilTextureResource()", "DepthBuffer");
 		return;
 	}
 
