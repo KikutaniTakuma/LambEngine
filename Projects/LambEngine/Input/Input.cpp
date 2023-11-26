@@ -1,6 +1,5 @@
 #include "Input.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 
 Input* Input::instance_ = nullptr;
@@ -30,7 +29,7 @@ Input::Input():
 		Log::AddLog("DirectInput create succeeded");
 	}
 	else {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeInput() : DirectInput8Create() Failed", "Engine");
+		Log::ErrorLog("DirectInput8Create() Failed", "InitializeInput()", "Engine");
 		return;
 	}
 
