@@ -238,7 +238,7 @@ void Texture2D::CreateGraphicsPipeline() {
 
 	for (auto& i : graphicsPipelineState_) {
 		if (!i) {
-			ErrorCheck::GetInstance()->ErrorTextBox("pipeline is nullptr", "Texture2D");
+			Log::ErrorLog("pipeline is nullptr", "CreateGraphicsPipeline()", "Texture2D");
 			return;
 		}
 	}
