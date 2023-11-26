@@ -17,6 +17,7 @@
 #include "TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
 #include "MeshManager/MeshManager.h"
+#include "Graphics/PipelineManager/PipelineManager.h"
 
 #include "EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/ConvertString/ConvertString.h"
@@ -113,11 +114,25 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 
 	engine->InitializeDirectXTK();
 
+	// 各種マネージャー初期化
+	ShaderManager::Initialize();
+	TextureManager::Initialize();
+	AudioManager::Inititalize();
+	PipelineManager::Initialize();
+	MeshManager::Initialize();
+
 	return true;
 }
 
 void Engine::Finalize() {
 	engine->isFinalize = true;
+
+	// 各種マネージャー解放
+	MeshManager::Finalize();
+	PipelineManager::Finalize();
+	AudioManager::Finalize();
+	TextureManager::Finalize();
+	ShaderManager::Finalize();
 
 	StringOutPutManager::Finalize();
 

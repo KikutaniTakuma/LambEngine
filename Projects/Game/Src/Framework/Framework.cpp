@@ -4,11 +4,6 @@
 #include "Utils/ExecutionLog/ExecutionLog.h"
 
 #include "Input/Input.h"
-#include "Engine/Graphics/ShaderManager/ShaderManager.h"
-#include "Engine/Graphics/PipelineManager/PipelineManager.h"
-#include "TextureManager/TextureManager.h"
-#include "AudioManager/AudioManager.h"
-#include "MeshManager/MeshManager.h"
 
 #include "Drawers/Texture2D/Texture2D.h"
 #include "Drawers/Model/Model.h"
@@ -31,13 +26,6 @@ void Framework::Initialize() {
 	// 入力処理初期化
 	Input::Initialize();
 
-	// 各種マネージャー初期化
-	ShaderManager::Initialize();
-	TextureManager::Initialize();
-	AudioManager::Inititalize();
-	PipelineManager::Initialize();
-	MeshManager::Initialize();
-
 	// 各種パイプライン生成
 	Texture2D::Initialize();
 	Mesh::Initialize();
@@ -50,13 +38,6 @@ void Framework::Finalize() {
 	// インデックスリソース解放
 	Particle::Finalize();
 	Texture2D::Finalize();
-
-	// 各種マネージャー解放
-	MeshManager::Finalize();
-	PipelineManager::Finalize();
-	AudioManager::Finalize();
-	TextureManager::Finalize();
-	ShaderManager::Finalize();
 
 	// 入力関連解放
 	Input::Finalize();
