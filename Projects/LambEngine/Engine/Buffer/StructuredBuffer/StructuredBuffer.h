@@ -1,18 +1,14 @@
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include <cassert>
 #include "Utils/ExecutionLog/ExecutionLog.h"
-#include <type_traits>
-#include <concepts>
-
-template<class T>
-concept IsNotPtrSB = !std::is_pointer_v<T>;
+#include "Utils/Cocepts/Cocepts.h"
+#include <cassert>
 
 /// <summary>
 /// ストラクチャードバッファ
 /// </summary>
 /// <typeparam name="T">ポインタ以外をサポート</typeparam>
-template<IsNotPtrSB T>
+template<Lamb::IsNotPtr T>
 class StructuredBuffer {
 public:
 	StructuredBuffer() noexcept :
