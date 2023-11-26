@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include <cassert>
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include <type_traits>
 #include <concepts>
 
@@ -138,7 +138,7 @@ public:
 		}
 
 		if (indexNum < 1) {
-			ErrorCheck::GetInstance()->ErrorTextBox("Resize : Index must be greater than or equal to 1 ->" + std::to_string(indexNum), "StructuredBuffer");
+			Log::ErrorLog("Index must be greater than or equal to 1 ->" + std::to_string(indexNum), "Resize()","StructuredBuffer");
 			return;
 		}
 
