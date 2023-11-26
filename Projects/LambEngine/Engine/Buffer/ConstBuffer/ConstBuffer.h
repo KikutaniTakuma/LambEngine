@@ -1,17 +1,13 @@
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
-#include <cassert>
 #include <wrl.h>
 #include "Utils/Cocepts/Cocepts.h"
-
-template<class T>
-concept IsNotPtrCB = !std::is_pointer_v<T>;
 
 /// <summary>
 /// 定数バッファ
 /// </summary>
-template<IsNotPtrCB T>
+template<Lamb::IsNotPtr T>
 class ConstBuffer {
 public:
 	inline ConstBuffer() noexcept:
