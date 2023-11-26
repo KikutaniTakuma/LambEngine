@@ -8,7 +8,7 @@
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 
-ErrorCheck* ErrorCheck::GetInstance() {
+ErrorCheck* const ErrorCheck::GetInstance() {
 	static ErrorCheck instance;
 	return &instance;
 }
