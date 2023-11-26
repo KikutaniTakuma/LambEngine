@@ -1,7 +1,7 @@
 #include "StringOutPutManager.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
@@ -39,7 +39,7 @@ StringOutPutManager::StringOutPutManager():
 void StringOutPutManager::LoadFont(const std::string& fontName) {
 	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
 	if (!std::filesystem::exists(std::filesystem::path(fontName))) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Engine::LoadFont() Failed : This file is not exist -> " + fontName, "Engine");
+		Log::ErrorLog("This file is not exist -> " + fontName, "LoadFont()", "StringOutPutManager");
 		return;
 	}
 
