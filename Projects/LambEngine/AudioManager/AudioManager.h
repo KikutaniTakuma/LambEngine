@@ -34,11 +34,11 @@ public:
 	static void Inititalize();
 	static void Finalize();
 	static inline AudioManager* GetInstance() {
-		return instance;
+		return instance_;
 	}
 
 private:
-	static AudioManager* instance;
+	static AudioManager* instance_;
 
 public:
 	Audio* LoadWav(const std::string& fileName, bool loopFlg);
