@@ -5,41 +5,29 @@
 
 #include "Core/WindowFactory/WindowFactory.h"
 #include "Core/DirectXDevice/DirectXDevice.h"
-#include "Core/DirectXSwapChain/DirectXSwapChain.h"
 #include "Core/DirectXCommand/DirectXCommand.h"
+#include "Core/DirectXSwapChain/DirectXSwapChain.h"
 #include "Core/StringOutPutManager/StringOutPutManager.h"
+#include "Core/ImGuiManager/ImGuiManager.h"
 
 #include "Core/DescriptorHeap/RtvHeap.h"
 #include "Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Core/DescriptorHeap/DsvHeap.h"
 
-#include "Graphics/ShaderManager/ShaderManager.h"
-#include "Graphics/PipelineManager/PipelineManager.h"
 #include "TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
 #include "MeshManager/MeshManager.h"
-#include "Graphics/DepthBuffer/DepthBuffer.h"
-
-#include "Input/Input.h"
 
 #include "EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 
-#include "Drawers/Texture2D/Texture2D.h"
-#include "Drawers/Model/Model.h"
-#include "Drawers/Line/Line.h"
-#include "Drawers/Particle/Particle.h"
-
-#include "Utils/Math/Vector3.h"
-#include "Utils/Math/Mat4x4.h"
 #include "Utils/Math/Vector2.h"
-#include "Utils/Math/Vector4.h"
 
+#include "Graphics/DepthBuffer/DepthBuffer.h"
 #include "Utils/ScreenOut/ScreenOut.h"
 
-#include "Core/ImGuiManager/ImGuiManager.h"
 
 
 #ifdef _DEBUG
@@ -125,33 +113,11 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 
 	engine->InitializeDirectXTK();
 
-	Input::Initialize();
-	ShaderManager::Initialize();
-	TextureManager::Initialize();
-	AudioManager::Inititalize();
-	PipelineManager::Initialize();
-	MeshManager::Initialize();
-
-	Texture2D::Initialize();
-	Mesh::Initialize();
-	Model::Initialize();
-	Line::Initialize();
-	Particle::Initialize();
-
 	return true;
 }
 
 void Engine::Finalize() {
 	engine->isFinalize = true;
-	Particle::Finalize();
-	Texture2D::Finalize();
-
-	MeshManager::Finalize();
-	PipelineManager::Finalize();
-	AudioManager::Finalize();
-	TextureManager::Finalize();
-	ShaderManager::Finalize();
-	Input::Finalize();
 
 	StringOutPutManager::Finalize();
 
