@@ -23,14 +23,6 @@ StringOut::StringOut():
 	str_.reserve(0x40);
 }
 
-StringOut::StringOut(const StringOut& right) {
-	*this = right;
-}
-
-StringOut::StringOut(StringOut&& right) noexcept {
-	*this = std::move(right);
-}
-
 StringOut::StringOut(const std::string& formatName) :
 	format_(formatName),
 	str_(),
@@ -53,30 +45,6 @@ StringOut::StringOut(const std::wstring& formatName) :
 	isHorizontal_(false)
 {
 	str_.reserve(0x40);
-}
-
-StringOut& StringOut::operator=(const StringOut& right) {
-	format_ = right.format_;
-	str_ = right.str_;
-	pos_ = right.pos_;
-	rotation_ = right.rotation_;
-	scale_ = right.scale_;
-	color_ = right.color_;
-	isHorizontal_ = right.isHorizontal_;
-
-	return *this;
-}
-
-StringOut& StringOut::operator=(StringOut && right) noexcept{
-	format_ = std::move(right.format_);
-	str_ = std::move(right.str_);
-	pos_ = std::move(right.pos_);
-	rotation_ = std::move(right.rotation_);
-	scale_ = std::move(right.scale_);
-	color_ = std::move(right.color_);
-	isHorizontal_ = std::move(right.isHorizontal_);
-
-	return *this;
 }
 
 StringOut& StringOut::operator=(const std::string& right) {

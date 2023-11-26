@@ -5,6 +5,7 @@
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vector3.h"
 #include "Utils/Math/Vector4.h"
+#include "Utils/Math/Quaternion.h"
 
 #include <Windows.h>
 #undef max
@@ -47,6 +48,13 @@ namespace Log {
 	/// <param name="text">ログテキスト</param>
 	/// <param name="vec">vector</param>
 	void DebugLog(const std::string& text, const Vector4& vec);
+
+	/// <summary>
+	/// デバッグ時にVSの出力にデバッグログを出す
+	/// </summary>
+	/// <param name="text">ログテキスト</param>
+	/// <param name="vec">quaternion</param>
+	void DebugLog(const std::string& text, const Quaternion& quaternion);
 
 	/// <summary>
 	/// デバッグ時にVSの出力にデバッグログを出す

@@ -44,7 +44,7 @@ FrameInfo::FrameInfo() :
 	minFps_ = maxFps_ = fps_;
 	deltaTime_ = 1.0 / fps_;
 
-	auto nowTime = std::chrono::high_resolution_clock::now();
+	auto nowTime = std::chrono::steady_clock::now();
 	gameStartTime_ = nowTime;
 	reference_ = nowTime;
 	frameDataDurationStartTime_ = nowTime;
@@ -58,7 +58,7 @@ FrameInfo::FrameInfo() :
 }
 
 FrameInfo::~FrameInfo() {
-	auto end = std::chrono::high_resolution_clock::now();
+	auto end = std::chrono::steady_clock::now();
 
 	//画面情報構造体
 	DEVMODE mode{};
@@ -96,12 +96,12 @@ FrameInfo* const FrameInfo::GetInstance() {
 }
 
 void FrameInfo::Start() {
-	frameStartTime_ = std::chrono::high_resolution_clock::now();
+	frameStartTime_ = std::chrono::steady_clock::now();
 }
 
 void FrameInfo::End() {
-	static std::chrono::high_resolution_clock::time_point end{};
-	end = std::chrono::high_resolution_clock::now();
+	static std::chrono::steady_clock::time_point end{};
+	end = std::chrono::steady_clock::now();
 
 	// 10^-6
 	static constexpr double unitAdjustment = 0.000001;
@@ -110,12 +110,12 @@ void FrameInfo::End() {
 		std::chrono::duration_cast<std::chrono::microseconds>(end - reference_);
 
 	if (elapsed < minCheckTime_) {
-		while (std::chrono::high_resolution_clock::now() - reference_ < minTime_) {
+		while (std::chrono::steady_clock::now() - reference_ < minTime_) {
 			std::this_thread::sleep_for(std::chrono::nanoseconds(250));
 		}
 	}
 
-	end = std::chrono::high_resolution_clock::now();
+	end = std::chrono::steady_clock::now();
 	auto frameTime = std::chrono::duration_cast<std::chrono::microseconds>(end - frameStartTime_);
 
 	deltaTime_ = static_cast<double>(frameTime.count()) * unitAdjustment;
@@ -128,7 +128,7 @@ void FrameInfo::End() {
 	}
 
 	frameCount_++;
-	auto nowTime = std::chrono::high_resolution_clock::now();
+	auto nowTime = std::chrono::steady_clock::now();
 	reference_ = nowTime;
 
 	if (std::chrono::duration_cast<std::chrono::seconds>(frameDataDurationStartTime_ - nowTime) < frameDataDuration_) {
@@ -181,8 +181,10 @@ void FrameInfo::Debug() {
 	if (KeyInput::GetInstance()->Pushed(DIK_F9)) {
 		isDebugStopGame_ = !isDebugStopGame_;
 	}
-	if (KeyInput::GetInstance()->Pushed(DIK_F10)) {
-		isOneFrameActive_ = true;
+	if (KeyInput::GetInstance()->Pushed(DIK_F11)) {
+		if (isDebugStopGame_) {
+			isOneFrameActive_ = true;
+		}
 	}
 
 	ImGui::Begin("fps");

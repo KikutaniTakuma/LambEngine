@@ -11,8 +11,6 @@
 #include "imgui.h"
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wPram, LPARAM lPram);
-
 
 ImGuiManager* ImGuiManager::instance_ = nullptr;
 
@@ -44,6 +42,8 @@ ImGuiManager::ImGuiManager() {
 	// ImGuiの初期化
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	// 日本語フォント追加
+	ImGui::GetIO().Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\msgothic.ttc", 18.0f, NULL, ImGui::GetIO().Fonts->GetGlyphRangesJapanese());
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(WindowFactory::GetInstance()->GetHwnd());
 	ImGui_ImplDX12_Init(

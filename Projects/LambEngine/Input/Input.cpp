@@ -26,7 +26,7 @@ Input::Input():
 	);
 	assert(SUCCEEDED(hr));
 	if (SUCCEEDED(hr)) {
-		Log::AddLog("DirectInput create succeeded");
+		Log::AddLog("DirectInput create succeeded\n");
 	}
 	else {
 		Log::ErrorLog("DirectInput8Create() Failed", "InitializeInput()", "Engine");
