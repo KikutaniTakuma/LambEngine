@@ -1,6 +1,6 @@
 #include "DsvHeap.h"
 #include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include <cassert>
 #include <algorithm>
 
@@ -56,7 +56,7 @@ void DsvHeap::CreateHeapHandles() {
 uint32_t DsvHeap::CreateView(DepthBuffer& depthStencilBuffer) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CreateConstBufferView failed\nOver HeapSize", "DsvHeap");
+		Log::ErrorLog("Over HeapSize", "CreateConstBufferView()","DsvHeap");
 	}
 
 	if (bookingHandle_.empty()) {
