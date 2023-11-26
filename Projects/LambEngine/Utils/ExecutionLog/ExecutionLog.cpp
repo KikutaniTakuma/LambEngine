@@ -53,6 +53,10 @@ namespace Log {
 		OutputDebugStringA((text + std::string{ " : " } + std::format("{}, {}, {}, {}", vec.vec.x, vec.vec.y, vec.vec.z, vec.vec.w) + "\n").c_str());
 	}
 
+	void DebugLog(const std::string& text, const Quaternion& quaternion) {
+		DebugLog(text, quaternion.vector4_);
+	}
+
 	void ErrorLog(
 		const std::string& erroerMassage,
 		const std::string& functionName,
