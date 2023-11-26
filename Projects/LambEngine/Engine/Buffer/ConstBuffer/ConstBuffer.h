@@ -3,8 +3,7 @@
 #include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
 #include <cassert>
 #include <wrl.h>
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
-#include <type_traits>
+#include "Utils/Cocepts/Cocepts.h"
 
 template<class T>
 concept IsNotPtrCB = !std::is_pointer_v<T>;
