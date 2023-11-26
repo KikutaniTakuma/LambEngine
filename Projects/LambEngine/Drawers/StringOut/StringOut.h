@@ -10,15 +10,15 @@
 class StringOut {
 public:
 	StringOut();
-	StringOut(const StringOut& right);
-	StringOut(StringOut&& right) noexcept;
+	StringOut(const StringOut&) = default;
+	StringOut(StringOut&&) noexcept = default;
 	StringOut(const std::string& formatName);
 	StringOut(const std::wstring& formatName);
 	~StringOut() = default;
 
 public:
-	StringOut& operator=(const StringOut& right);
-	StringOut& operator=(StringOut&& right) noexcept;
+	StringOut& operator=(const StringOut&)  =default;
+	StringOut& operator=(StringOut&&) noexcept = default;
 	StringOut& operator=(const std::string& right);
 	StringOut& operator=(const std::wstring& right);
 
