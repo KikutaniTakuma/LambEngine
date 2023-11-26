@@ -1,7 +1,7 @@
 #include "KeyInput.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include <cassert>
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 
 void KeyInput::Input() {
 	if (!initalizeSucceeded) {
@@ -62,21 +62,21 @@ KeyInput::KeyInput(IDirectInput8* input):
 	HRESULT hr = input->CreateDevice(GUID_SysKeyboard, keyBoard.GetAddressOf(), NULL);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CreateDevice failed", "KeyInput");
+		Log::ErrorLog("CreateDevice failed","Constructor", "KeyInput");
 		return;
 	}
 
 	hr = keyBoard->SetDataFormat(&c_dfDIKeyboard);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("SetDataFormat failed", "KeyInput");
+		Log::ErrorLog("SetDataFormat failed", "Constructor", "KeyInput");
 		return;
 	}
 
 	hr = keyBoard->SetCooperativeLevel(WindowFactory::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("SetCooperativeLevel failed", "KeyInput");
+		Log::ErrorLog("SetCooperativeLevel failed", "Constructor", "KeyInput");
 		return;
 	}
 
