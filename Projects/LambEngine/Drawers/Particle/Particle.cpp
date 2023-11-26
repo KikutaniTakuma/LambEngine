@@ -103,7 +103,7 @@ void Particle::CreateGraphicsPipeline() {
 
 	for (auto& i : graphicsPipelineState_) {
 		if (!i) {
-			ErrorCheck::GetInstance()->ErrorTextBox("pipeline is nullptr", "Particle");
+			Log::ErrorLog("pipeline is nullptr", "CreateGraphicsPipeline()","Particle");
 			return;
 		}
 	}
