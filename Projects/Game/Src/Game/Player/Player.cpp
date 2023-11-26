@@ -23,6 +23,8 @@ void Player::Initialize(GlobalVariables* globalVariables) {
 	globalVariables->AddItem(groupName, "dashCoolTime_", 500);
 	globalVariables->AddItem(groupName, "dashScale_", 2.0f);
 	globalVariables->AddItem(groupName, "delayCaemraSpeed_", 0.2f);
+	globalVariables->AddItem(groupName, "jumpVelocity_", 9.8f);
+	globalVariables->AddItem(groupName, "gravity_", -9.8f);
 }
 
 Player::Player(GlobalVariables* globalVariables) :
@@ -44,7 +46,9 @@ Player::Player(GlobalVariables* globalVariables) :
 	dashScale_{ 2.0f },
 	cameraEaseing_{},
 	preCameraPos_{},
-	delayCaemraSpeed_{ 0.2f }
+	delayCaemraSpeed_{ 0.2f },
+	jumpVelocity_{9.8f },
+	gravity_{-9.8f }
 {
 	globalVariables_ = globalVariables;
 
@@ -98,6 +102,8 @@ void Player::ApplyGlobalVariables() {
 	cmaeraRotateSpd_ = globalVariables_->GetFloatValue(groupName, "cmaeraRotateSpd_");
 	dashCoolTime_ = std::chrono::milliseconds{ globalVariables_->GetIntValue(groupName, "dashCoolTime_") };
 	dashScale_ = globalVariables_->GetFloatValue(groupName, "dashScale_");
+	jumpVelocity_ = globalVariables_->GetFloatValue(groupName, "jumpVelocity_");
+	gravity_ = globalVariables_->GetFloatValue(groupName, "gravity_");
 }
 
 void Player::Animation() {
@@ -151,7 +157,8 @@ void Player::Move() {
 	Animation();
 
 	bool isMove = false;
-	moveVec_ = {};
+	moveVec_.x = 0.0f;
+	moveVec_.z = 0.0f;
 	static Input* input = Input::GetInstance();
 
 	if (!isDash_) {
@@ -182,6 +189,13 @@ void Player::Move() {
 			moveVec_.z += spd * input->GetGamepad()->GetStick(Gamepad::Stick::LEFT_Y);
 			isMove = true;
 		}
+
+		if (moveVec_.y == 0.0f && (input->GetKey()->LongPush(DIK_F) ||
+			input->GetGamepad()->Pushed(Gamepad::Button::A))
+			)
+		{
+			moveVec_.y += jumpVelocity_;
+		}
 	}
 
 	if (input->GetGamepad()->GetStick(Gamepad::Stick::RIGHT_X) > 0.25f || input->GetGamepad()->GetStick(Gamepad::Stick::RIGHT_X) < -0.25f) {
@@ -206,10 +220,10 @@ void Player::Move() {
 		spd *= dashScale_;
 		moveVec_ = Vector3::zIdy;
 		if (preMoveVec_.Normalize() == -Vector3::zIdy) {
-			moveVec_ *= DirectionToDirection(-Vector3::zIdy, preMoveVec_.Normalize());
+			moveVec_ *= DirectionToDirection(-Vector3::zIdy, Vector3{ preMoveVec_.x,0.0f, preMoveVec_.z }.Normalize());
 		}
 		else {
-			moveVec_ *= DirectionToDirection(Vector3::zIdy, preMoveVec_.Normalize());
+			moveVec_ *= DirectionToDirection(Vector3::zIdy, Vector3{ preMoveVec_.x,0.0f, preMoveVec_.z }.Normalize());
 		}
 	}
 
@@ -221,8 +235,12 @@ void Player::Move() {
 		}
 	}
 
-	moveVec_.y = -15.0f;
-	collisionPos_ += moveVec_.Normalize() * spd * FrameInfo::GetInstance()->GetDelta();
+	float deltaTime = FrameInfo::GetInstance()->GetDelta();
+	moveVec_.y += gravity_ * deltaTime;
+
+	collisionPos_.x += moveVec_.x * spd * deltaTime;
+	collisionPos_.y += moveVec_.y;
+	collisionPos_.z += moveVec_.z * spd * deltaTime;
 }
 
 void Player::Update() {
@@ -230,7 +248,7 @@ void Player::Update() {
 
 	if (moveVec_.y != 0.0f) {
 		pos_.y += moveVec_.y * FrameInfo::GetInstance()->GetDelta();
-		moveVec_.y = 0.0f;
+		//moveVec_.y = 0.0f;
 	}
 	pos_ += moveVec_.Normalize() * spd * FrameInfo::GetInstance()->GetDelta();
 	collisionPos_ = pos_;
@@ -279,10 +297,10 @@ void Player::Update() {
 	}
 	if (preMoveVec_ != Vector3::zero) {
 		if (preMoveVec_.Normalize() == -Vector3::zIdy) {
-			model_[0]->worldMat_ = DirectionToDirection(-Vector3::zIdy, preMoveVec_.Normalize()) * MakeMatrixRotateY(std::numbers::pi_v<float>) * model_[0]->worldMat_;
+			model_[0]->worldMat_ = DirectionToDirection(-Vector3::zIdy, Vector3{ preMoveVec_.x,0.0f, preMoveVec_.z }.Normalize()) * MakeMatrixRotateY(std::numbers::pi_v<float>) * model_[0]->worldMat_;
 		}
 		else {
-			model_[0]->worldMat_ = DirectionToDirection(Vector3::zIdy, preMoveVec_.Normalize()) * model_[0]->worldMat_;
+			model_[0]->worldMat_ = DirectionToDirection(Vector3::zIdy, Vector3{ preMoveVec_ .x,0.0f, preMoveVec_ .z}.Normalize()) * model_[0]->worldMat_;
 		}
 	}
 	weapon_->Debug("weapon_");

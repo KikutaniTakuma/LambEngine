@@ -78,7 +78,9 @@ void GameScene::Update() {
 	for (auto& floor : floor_) {
 		floor.IsCollision(player_.get());
 		if ((floor.OnStay() || floor.OnEnter()) && player_->pos_.y > floor.pos_.y) {
-			player_->moveVec_.y = 0.0f;
+			if (player_->moveVec_.y <= 0.0f) {
+				player_->moveVec_.y = 0.0f;
+			}
 			player_->collisionPos_.y = player_->pos_.y;
 			player_->pos_ += floor.moveVec_;
 		}

@@ -36,7 +36,8 @@ Enemy::Enemy() :
 
 void Enemy::Move() {
 	UpdateCollision();
-	moveVec = {};
+	moveVec.x = 0.0f;
+	moveVec.z = 0.0f;
 	float deltaTime = FrameInfo::GetInstance()->GetDelta();
 
 	freq += freqSpd * deltaTime;

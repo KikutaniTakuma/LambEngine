@@ -96,4 +96,7 @@ private:
 	float delayCaemraSpeed_;
 
 	Vector3 preMoveVec_;
+
+	float jumpVelocity_;
+	float gravity_;
 };
