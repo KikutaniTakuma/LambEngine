@@ -21,7 +21,6 @@
 #include "Graphics/DepthBuffer/DepthBuffer.h"
 
 #include "Input/Input.h"
-#include "EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
@@ -87,7 +86,7 @@ Engine* Engine::engine = nullptr;
 bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize) {
 	HRESULT hr =  CoInitializeEx(0, COINIT_MULTITHREADED);
 	if (hr != S_OK) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CoInitializeEx failed", "Engine");
+		Log::ErrorLog("CoInitializeEx failed","Initialize()", "Engine");
 		return false;
 	}
 
@@ -147,7 +146,7 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 #endif // DEBUG
 
 	if (!engine->InitializeDraw()) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Initialize() : InitializeDraw() Failed", "Engine");
+		Log::ErrorLog("InitializeDraw() Failed","Initialize()", "Engine");
 		return false;
 	}
 
@@ -264,7 +263,7 @@ bool Engine::InitializeDraw() {
 	DsvHeap* dsvHeap = DsvHeap::GetInstance();
 	if(!dsvHeap) {
 		assert(!"CreateDescriptorHeap failed");
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDraw() : CreateDescriptorHeap()  Failed", "Engine");
+		Log::ErrorLog("CreateDescriptorHeap()  Failed","InitializeDraw()", "Engine");
 		return false;
 	}
 
