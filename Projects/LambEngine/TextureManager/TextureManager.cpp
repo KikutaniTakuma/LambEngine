@@ -32,7 +32,9 @@ TextureManager::TextureManager() :
 	fence_(),
 	fenceVal_(0),
 	fenceEvent_(nullptr),
-	srvHeap_(nullptr)
+	srvHeap_(nullptr),
+	isCloaseCommandList_(false),
+	isNowThreadLoading_(false)
 {
 	ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
 
@@ -42,7 +44,7 @@ TextureManager::TextureManager() :
 	HRESULT hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(commandQueue_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("TextureManager() : CreateCommandQueue() Failed", "TextureManager");
+		Log::ErrorLog("CreateCommandQueue() Failed", "Constructor", "TextureManager");
 		return;
 	}
 
@@ -51,7 +53,7 @@ TextureManager::TextureManager() :
 	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("TextureManager() : CreateCommandAllocator() Failed", "TextureManager");
+		Log::ErrorLog("CreateCommandAllocator() Failed", "Constructor", "TextureManager");
 		return;
 	}
 
@@ -60,7 +62,7 @@ TextureManager::TextureManager() :
 	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(commandList_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("TextureManager() : CreateCommandList() Failed", "TextureManager");
+		Log::ErrorLog("CreateCommandList() Failed", "Constructor", "TextureManager");
 		return;
 	}
 
@@ -70,7 +72,7 @@ TextureManager::TextureManager() :
 	hr = device->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("TextureManager() : CreateFence() Failed", "TextureManager");
+		Log::ErrorLog("CreateFence() Failed", "Constructor", "TextureManager");
 		return;
 	}
 
@@ -79,7 +81,7 @@ TextureManager::TextureManager() :
 	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
 	assert(fenceEvent_ != nullptr);
 	if (!(fenceEvent_ != nullptr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("TextureManager() : CreateEvent() Failed", "TextureManager");
+		Log::ErrorLog("CreateEvent() Failed", "Constructor", "TextureManager");
 		return;
 	}
 
@@ -122,12 +124,12 @@ Texture* TextureManager::LoadTexture(const std::string& fileName) {
 		auto hr = commandAllocator_->Reset();
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			ErrorCheck::GetInstance()->ErrorTextBox("CommandAllocator->Reset() Failed", "Engine");
+			Log::ErrorLog("CommandAllocator somthing error", "Reset()", "TextureManager");
 		}
 		hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			ErrorCheck::GetInstance()->ErrorTextBox("CommandList->Reset() Failed", "Engine");
+			Log::ErrorLog("CommandList somthing error", "Reset()", "TextureManager");
 		}
 		///
 
@@ -169,12 +171,12 @@ Texture* TextureManager::LoadTexture(const std::string& fileName) {
 			auto hr = commandAllocator_->Reset();
 			assert(SUCCEEDED(hr));
 			if (!SUCCEEDED(hr)) {
-				ErrorCheck::GetInstance()->ErrorTextBox("CommandAllocator->Reset() Failed", "Engine");
+				Log::ErrorLog("CommandAllocator somthing error", "Reset()", "TextureManager");
 			}
 			hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 			assert(SUCCEEDED(hr));
 			if (!SUCCEEDED(hr)) {
-				ErrorCheck::GetInstance()->ErrorTextBox("CommandList->Reset() Failed", "Engine");
+				Log::ErrorLog("CommandList somthing error", "Reset()", "TextureManager");
 			}
 			///
 
@@ -295,12 +297,12 @@ void TextureManager::ResetCommandList() {
 		auto hr = commandAllocator_->Reset();
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			ErrorCheck::GetInstance()->ErrorTextBox("CommandAllocator->Reset() Failed", "Engine");
+			Log::ErrorLog("CommandAllocator somthing error", "Reset()", "TextureManager");
 		}
 		hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			ErrorCheck::GetInstance()->ErrorTextBox("CommandList->Reset() Failed", "Engine");
+			Log::ErrorLog("CommandList somthing error", "Reset()", "TextureManager");
 		}
 
 		isThreadFinish_ = false;
