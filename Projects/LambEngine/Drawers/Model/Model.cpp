@@ -8,9 +8,9 @@
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "MeshManager/MeshManager.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #undef max
 #undef min
-#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
 Shader Model::shader_ = {};
 
@@ -166,14 +166,10 @@ Model& Model::operator=(const Model& right) {
 	if (right.isLoadObj_) {
 		mesh_ = right.mesh_;
 
-		if (!mesh_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("operator=() : right mesh is nullptr", "Model");
-			return *this;
+		if (mesh_) {
+			data_ = mesh_->CopyBuffer();
 		}
-
-		data_ = mesh_->CopyBuffer();
-
-		isLoadObj_ = true;
+		isLoadObj_ = !!mesh_;
 	}
 
 	light_ = right.light_;
@@ -202,14 +198,10 @@ Model& Model::operator=(Model&& right) noexcept {
 	if (right.isLoadObj_) {
 		mesh_ = right.mesh_;
 
-		if (!mesh_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("operator=() : right mesh is nullptr", "Model");
-			return *this;
+		if (mesh_) {
+			data_ = mesh_->CopyBuffer();
 		}
-
-		data_ = mesh_->CopyBuffer();
-
-		isLoadObj_ = true;
+		isLoadObj_ = !!mesh_;
 	}
 
 	light_ = std::move(right.light_);
@@ -227,7 +219,7 @@ void Model::LoadObj(const std::string& fileName) {
 		mesh_ = MeshManager::GetInstance()->LoadObj(fileName);
 
 		if (!mesh_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("LoadObj : mesh is nullptr", "Model");
+			Log::ErrorLog("mesh is nullptr","LoadObj()", "Model");
 			return;
 		}
 
@@ -297,7 +289,7 @@ void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 		auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 
 		if (!pipeline_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("pipeline is nullptr", "Model");
+			Log::ErrorLog("pipeline is nullptr", "Draw()", "Model");
 			return;
 		}
 
