@@ -39,10 +39,7 @@
 
 #include "Utils/ScreenOut/ScreenOut.h"
 
-#include "imgui.h"
-#include "imgui_impl_dx12.h"
-#include "imgui_impl_win32.h"
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wPram, LPARAM lPram);
+#include "Core/ImGuiManager/ImGuiManager.h"
 
 
 #ifdef _DEBUG
@@ -119,33 +116,7 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	// スワップチェーン生成
 	engine->InitializeDirectXSwapChain();
 
-#ifdef _DEBUG
-	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
-	// RTVの設定
-	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
-
-	// SRV用のヒープ
-	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
-	uint32_t useHandle = descriptorHeap->BookingHeapPos(1u);
-
-	// ImGuiの初期化
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui::StyleColorsDark();
-	ImGui_ImplWin32_Init(WindowFactory::GetInstance()->GetHwnd());
-	ImGui_ImplDX12_Init(
-		device,
-		DirectXSwapChain::kBackBufferNumber_,
-		rtvDesc.Format,
-		descriptorHeap->Get(),
-		descriptorHeap->GetCpuHeapHandle(useHandle),
-		descriptorHeap->GetGpuHeapHandle(useHandle)
-	);
-
-	descriptorHeap->UseThisPosition(useHandle);
-#endif // DEBUG
+	ImGuiManager::Initialize();
 
 	if (!engine->InitializeDraw()) {
 		Log::ErrorLog("InitializeDraw() Failed","Initialize()", "Engine");
@@ -190,11 +161,8 @@ void Engine::Finalize() {
 	DsvHeap::Finalize();
 	RtvHeap::Finalize();
 
-#ifdef _DEBUG
-	ImGui_ImplDX12_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
-#endif // _DEBUG
+	ImGuiManager::Finalize();
+
 	DirectXSwapChain::Finalize();
 	DirectXCommand::Finalize();
 	DirectXDevice::Finalize();
@@ -307,11 +275,7 @@ void Engine::FrameStart() {
 	Lamb::screenout.Clear();
 	Lamb::screenout << Lamb::endline;
 
-#ifdef _DEBUG
-	ImGui_ImplDX12_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-#endif // _DEBUG
+	ImGuiManager::GetInstance()->Start();
 
 	engine->directXSwapChain_->ChangeBackBufferState();
 	engine->directXSwapChain_->SetMainRenderTarget();
@@ -338,13 +302,7 @@ void Engine::FrameEnd() {
 
 	Lamb::screenout.Draw();
 
-#ifdef _DEBUG
-	ID3D12GraphicsCommandList* commandList = engine->directXCommand_->GetCommandList();
-	// ImGui描画
-	ImGui::Render();
-	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);
-#endif // DEBUG
-
+	ImGuiManager::GetInstance()->End();
 	
 	engine->directXSwapChain_->ChangeBackBufferState();
 
