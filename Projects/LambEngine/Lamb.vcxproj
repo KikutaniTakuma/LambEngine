@@ -131,6 +131,7 @@
     <ClCompile Include="Engine\Core\DirectXCommand\DirectXCommand.cpp" />
     <ClCompile Include="Engine\Core\DirectXDevice\DirectXDevice.cpp" />
     <ClCompile Include="Engine\Core\DirectXSwapChain\DirectXSwapChain.cpp" />
+    <ClCompile Include="Engine\Core\ImGuiManager\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Core\StringOutPutManager\StringOutPutManager.cpp" />
     <ClCompile Include="Engine\Core\WindowFactory\WindowFactory.cpp" />
     <ClCompile Include="Engine\Engine.cpp">
@@ -192,6 +193,7 @@
     <ClInclude Include="Engine\Core\DirectXCommand\DirectXCommand.h" />
     <ClInclude Include="Engine\Core\DirectXDevice\DirectXDevice.h" />
     <ClInclude Include="Engine\Core\DirectXSwapChain\DirectXSwapChain.h" />
+    <ClInclude Include="Engine\Core\ImGuiManager\ImGuiManager.h" />
     <ClInclude Include="Engine\Core\StringOutPutManager\StringOutPutManager.h" />
     <ClInclude Include="Engine\Core\WindowFactory\WindowFactory.h" />
     <ClInclude Include="Engine\Engine.h" />
