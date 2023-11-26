@@ -219,6 +219,7 @@
     <ClInclude Include="TextureManager\Texture\Texture.h" />
     <ClInclude Include="Utils\Action\Frame\Frame.h" />
     <ClInclude Include="Utils\Camera\Camera.h" />
+    <ClInclude Include="Utils\Cocepts\Cocepts.h" />
     <ClInclude Include="Utils\ConvertString\ConvertString.h" />
     <ClInclude Include="Utils\CsvLoad\CsvLoad.h" />
     <ClInclude Include="Utils\Easeing\Easeing.h" />
@@ -230,6 +231,7 @@
     <ClInclude Include="Utils\Math\Vector3.h" />
     <ClInclude Include="Utils\Math\Vector4.h" />
     <ClInclude Include="Utils\Random\Random.h" />
+    <ClInclude Include="Utils\SafeDelete\SafeDelete.h" />
     <ClInclude Include="Utils\ScreenOut\ScreenOut.h" />
     <ClInclude Include="Utils\UtilsLib\UtilsLib.h" />
   </ItemGroup>
