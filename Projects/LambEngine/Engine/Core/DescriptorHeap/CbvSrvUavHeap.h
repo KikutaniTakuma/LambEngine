@@ -1,8 +1,10 @@
 #pragma once
 #include "DescriptorHeap.h"
+#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
 #include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 #include "TextureManager/Texture/Texture.h"
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 
 /// <summary>
 /// ディスクリプタヒープ管理クラス
@@ -46,7 +48,7 @@ public:
 	uint32_t CreateConstBufferView(ConstBuffer<T>& conBuf) {
 		assert(currentHandleIndex_ < heapSize_);
 		if (currentHandleIndex_ >= heapSize_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("CreateConstBufferView failed\nOver HeapSize", "ShaderResourceHeap");
+			Log::ErrorLog("Over HeapSize", "CreateConstBufferView()","CbvSrvUavHeap");
 		}
 
 		if (bookingHandle_.empty()) {
@@ -75,7 +77,7 @@ public:
 	void CreateConstBufferView(ConstBuffer<T>& conBuf, UINT heapIndex) {
 		assert(heapIndex < heapSize_);
 		if (heapIndex >= heapSize_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("CreateConstBufferView failed\nOver HeapSize", "ShaderResourceHeap");
+			Log::ErrorLog("Over HeapSize", "CreateConstBufferView()", "CbvSrvUavHeap");
 		}
 
 		conBuf.CrerateView(heapHandles_[heapIndex].first, heapHandles_[heapIndex].second, heapIndex);
@@ -91,7 +93,7 @@ public:
 	uint32_t CreateStructuredBufferView(StructuredBuffer<T>& strcBuf) {
 		assert(currentHandleIndex_ < heapSize_);
 		if (currentHandleIndex_ >= heapSize_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("CreateStructuredBufferView failed\nOver HeapSize", "ShaderResourceHeap");
+			Log::ErrorLog("Over HeapSize", "CreateStructuredBufferView()", "CbvSrvUavHeap");
 		}
 		if (bookingHandle_.empty()) {
 			useHandle_.push_back(currentHandleIndex_);
@@ -118,7 +120,7 @@ public:
 	void CreateStructuredBufferView(StructuredBuffer<T>& strcBuf, UINT heapIndex) {
 		assert(heapIndex < heapSize_);
 		if (heapIndex >= heapSize_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("CreateStructuredBufferView failed\nOver HeapSize", "ShaderResourceHeap");
+			Log::ErrorLog("Over HeapSize", "CreateStructuredBufferView()", "CbvSrvUavHeap");
 		}
 		
 		strcBuf.CrerateView(heapHandles_[heapIndex].first, heapHandles_[heapIndex].second, heapIndex);

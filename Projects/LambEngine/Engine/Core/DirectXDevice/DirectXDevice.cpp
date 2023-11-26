@@ -1,6 +1,5 @@
 #include "DirectXDevice.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include <cassert>
 #include <format>
@@ -33,14 +32,14 @@ DirectXDevice::DirectXDevice():
 	HRESULT hr = CreateDXGIFactory(IID_PPV_ARGS(dxgiFactory_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect3D() : CreateDXGIFactory() Failed", "Engine");
+		Log::ErrorLog("somthing error", "CreateDXGIFactory()", "DirectXDevice");
 		return;
 	}
 
 	// 使用するグラボの設定
 	SettingAdapter();
 	if (useAdapter_ == nullptr) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect3D() : GPU not Found", "Engine");
+		Log::ErrorLog("GPU not Found", "SettingAdapter()","DirectXDevice");
 		return;
 	}
 
@@ -68,7 +67,7 @@ void DirectXDevice::SettingAdapter() {
 		DXGI_ADAPTER_DESC3 adapterDesc{};
 		HRESULT hr = useAdapter_->GetDesc3(&adapterDesc);
 		if (hr != S_OK) {
-			ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect3D() : GetDesc3() Failed", "Engine");
+			Log::ErrorLog("GetDesc3() Failed", "SettingAdapter()", "DirectXDevice");
 			return;
 		}
 
@@ -158,7 +157,7 @@ ID3D12DescriptorHeap* DirectXDevice::CreateDescriptorHeap(
 		return descriptorHeap;
 	}
 	assert(!"Failed");
-	ErrorCheck::GetInstance()->ErrorTextBox("CreateDescriptorHeap() Failed", "Engine");
+	Log::ErrorLog("somthing error", "CreateDescriptorHeap()", "DirectXDevice");
 
 	return nullptr;
 }
@@ -192,7 +191,7 @@ ID3D12Resource* DirectXDevice::CreateBufferResuorce(size_t sizeInBytes) {
 	HRESULT hr = device_->CreateCommittedResource(&uploadHeapPropaerties, D3D12_HEAP_FLAG_NONE, &resouceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resuorce));
 	if (!SUCCEEDED(hr)) {
 		OutputDebugStringA("CreateCommittedResource Function Failed!!");
-		ErrorCheck::GetInstance()->ErrorTextBox("CreateBufferResuorce() : CreateCommittedResource() Failed", "Engine");
+		Log::ErrorLog("somthing error", "CreateBufferResuorce()", "DirectXDevice");
 		return nullptr;
 	}
 
@@ -228,7 +227,7 @@ ID3D12Resource* DirectXDevice::CreateDepthStencilTextureResource(int32_t width, 
 			IID_PPV_ARGS(&resource))
 	)) {
 		assert(!"CreateDepthStencilTextureResource Failed");
-		ErrorCheck::GetInstance()->ErrorTextBox("CreateDepthStencilTextureResource() Failed", "Engine");
+		Log::ErrorLog("somthing error", "CreateDepthStencilTextureResource()", "DirectXDevice");
 	}
 
 	return resource;

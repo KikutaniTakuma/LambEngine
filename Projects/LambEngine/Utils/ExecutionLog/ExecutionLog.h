@@ -59,6 +59,18 @@ namespace Log {
 	}
 
 	/// <summary>
+	/// ErrorCheck::ErrorTextBoxのラッパー関数
+	/// </summary>
+	/// <param name="erroerMassage">エラーメッセージ</param>
+	/// <param name="functionName">エラーが起きた関数名</param>
+	/// <param name="className">エラーが起きたクラス名</param>
+	void ErrorLog(
+		const std::string& erroerMassage,
+		const std::string& functionName = std::string{},
+		const std::string& className = "Error"
+		);
+
+	/// <summary>
 	/// 今の時間を文字列として出力する
 	/// </summary>
 	/// <returns>今の時間(jst)</returns>

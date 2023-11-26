@@ -21,7 +21,6 @@
 #include "Graphics/DepthBuffer/DepthBuffer.h"
 
 #include "Input/Input.h"
-#include "EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
@@ -87,7 +86,7 @@ Engine* Engine::engine = nullptr;
 bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize) {
 	HRESULT hr =  CoInitializeEx(0, COINIT_MULTITHREADED);
 	if (hr != S_OK) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CoInitializeEx failed", "Engine");
+		Log::ErrorLog("CoInitializeEx failed","Initialize()", "Engine");
 		return false;
 	}
 
@@ -147,7 +146,7 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 #endif // DEBUG
 
 	if (!engine->InitializeDraw()) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Initialize() : InitializeDraw() Failed", "Engine");
+		Log::ErrorLog("InitializeDraw() Failed","Initialize()", "Engine");
 		return false;
 	}
 
@@ -264,7 +263,7 @@ bool Engine::InitializeDraw() {
 	DsvHeap* dsvHeap = DsvHeap::GetInstance();
 	if(!dsvHeap) {
 		assert(!"CreateDescriptorHeap failed");
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDraw() : CreateDescriptorHeap()  Failed", "Engine");
+		Log::ErrorLog("CreateDescriptorHeap()  Failed","InitializeDraw()", "Engine");
 		return false;
 	}
 
@@ -395,26 +394,4 @@ void Engine::FrameEnd() {
 /// 
 Engine::~Engine() {
 	
-}
-
-
-void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
-
-	// TransitionBarrierの設定
-	D3D12_RESOURCE_BARRIER barrier{};
-	// 今回のバリアはTransition
-	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	// Noneにしておく
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	// バリアを張る対象のリソース
-	barrier.Transition.pResource = resource;
-	// subResourceの設定
-	barrier.Transition.Subresource = subResource;
-	// 遷移前(現在)のResouceState
-	barrier.Transition.StateBefore = before;
-	// 遷移後のResouceState
-	barrier.Transition.StateAfter = after;
-	// TransitionBarrierを張る
-	commandList->ResourceBarrier(1, &barrier);
 }

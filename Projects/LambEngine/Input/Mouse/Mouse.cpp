@@ -1,7 +1,7 @@
 #include "Mouse.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "imgui.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 
 
 Mouse* Mouse::instance = nullptr;
@@ -10,7 +10,7 @@ void Mouse::Initialize(IDirectInput8* input) {
 	instance = new Mouse(input);
 	assert(instance);
 	if (!instance) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Initialize() : instance failed", "Mouse");
+		Log::ErrorLog("instance failed", "Initialize()", "Mouse");
 		return;
 	}
 }
@@ -32,21 +32,21 @@ Mouse::Mouse(IDirectInput8* input) :
 	HRESULT hr = input->CreateDevice(GUID_SysMouse, mouse.GetAddressOf(), NULL);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CreateDevice failed", "Mouse");
+		Log::ErrorLog("CreateDevice failed", "Constructor", "Mouse");
 		return;
 	}
 
 	hr = mouse->SetDataFormat(&c_dfDIMouse2);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("SetDataFormat", "Mouse");
+		Log::ErrorLog("SetDataFormat failed", "Constructor", "Mouse");
 		return;
 	}
 
 	hr = mouse->SetCooperativeLevel(WindowFactory::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("SetCooperativeLevel", "Mouse");
+		Log::ErrorLog("SetCooperativeLevel failed", "Constructor", "Mouse");
 		return;
 	}
 

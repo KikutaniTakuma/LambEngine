@@ -1,4 +1,5 @@
 #include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Engine//EngineUtils/ErrorCheck/ErrorCheck.h"
 #include <fstream>
 #include <filesystem>
 #include <cassert>
@@ -50,6 +51,26 @@ namespace Log {
 
 	void DebugLog(const std::string& text, const Vector4& vec) {
 		OutputDebugStringA((text + std::string{ " : " } + std::format("{}, {}, {}, {}", vec.vec.x, vec.vec.y, vec.vec.z, vec.vec.w) + "\n").c_str());
+	}
+
+	void ErrorLog(
+		const std::string& erroerMassage,
+		const std::string& functionName,
+		const std::string& className
+	) {
+		static ErrorCheck* const errorCheck = ErrorCheck::GetInstance();
+		if (functionName.empty()) {
+			errorCheck->ErrorTextBox(
+				"Failed : " + erroerMassage,
+				className
+			);
+		}
+		else {
+			errorCheck->ErrorTextBox(
+				functionName + " failed : " + erroerMassage,
+				className
+			);
+		}
 	}
 
 	std::string NowTime() {

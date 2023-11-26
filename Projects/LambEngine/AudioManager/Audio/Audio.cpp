@@ -1,7 +1,7 @@
 #include <fstream>
 #include <filesystem>
 #include "AudioManager/AudioManager.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include "imgui.h"
 
 Audio::Audio():
@@ -26,18 +26,18 @@ Audio::~Audio() {
 
 void Audio::Load(const std::string& fileName, bool loopFlg) {
 	if (std::filesystem::path{fileName}.extension() != ".wav") {
-		ErrorCheck::GetInstance()->ErrorTextBox(("Load() : This file is not wav -> " + fileName), "Audio");
+		Log::ErrorLog(("This file is not wav -> " + fileName), "Load()", "Audio");
 		return;
 	}
 
 	if (!std::filesystem::exists(std::filesystem::path{ fileName })) {
-		ErrorCheck::GetInstance()->ErrorTextBox(("Load() : This file is not found -> " + fileName), "Audio");
+		Log::ErrorLog("Load()", ("This file is not found -> " + fileName), "Audio");
 		return;
 	}
 
 	std::ifstream file(fileName, std::ios::binary);
 	if (file.fail()) {
-		ErrorCheck::GetInstance()->ErrorTextBox(("Load() : File open failed -> " + fileName), "Audio");
+		Log::ErrorLog("Load()", ("File open failed -> " + fileName), "Audio");
 		return;
 	}
 
@@ -48,11 +48,11 @@ void Audio::Load(const std::string& fileName, bool loopFlg) {
 	file.read((char*)&riff, sizeof(riff));
 
 	if (strncmp(riff.chunk_.id_.data(), "RIFF", 4) != 0) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Load() : Not found RIFF", "Audio");
+		Log::ErrorLog("Load()", "Not found RIFF", "Audio");
 		return;
 	}
 	if (strncmp(riff.type_.data(), "WAVE", 4) != 0) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Load() : Not found WAVE", "Audio");
+		Log::ErrorLog("Load()", "Not found WAVE", "Audio");
 		return;
 	}
 
@@ -62,7 +62,7 @@ void Audio::Load(const std::string& fileName, bool loopFlg) {
 	while (strncmp(format.chunk_.id_.data(), "fmt ", 4) != 0) {
 		file.seekg(nowRead, std::ios_base::beg);
 		if (file.eof()) {
-			ErrorCheck::GetInstance()->ErrorTextBox("Load() : Not found fmt", "Audio");
+			Log::ErrorLog("Load()", "Not found fmt", "Audio");
 			return;
 		}
 		nowRead++;
@@ -70,8 +70,8 @@ void Audio::Load(const std::string& fileName, bool loopFlg) {
 	}
 
 	if (format.chunk_.size_ > sizeof(format.fmt_)) {
-		ErrorCheck::GetInstance()->ErrorTextBox(
-			"Load() : format chunk size is too big ->" + std::to_string(format.chunk_.size_) + " byte (max is " + std::to_string(sizeof(format.fmt_)) + " byte)", 
+		Log::ErrorLog("Load()",
+			"format chunk size is too big ->" + std::to_string(format.chunk_.size_) + " byte (max is " + std::to_string(sizeof(format.fmt_)) + " byte)", 
 			"Audio"
 		);
 		return;
@@ -89,7 +89,7 @@ void Audio::Load(const std::string& fileName, bool loopFlg) {
 	while (strncmp(data.id_.data(), "data", 4) != 0) {
 		file.seekg(data.size_, std::ios_base::cur);
 		if (file.eof()) {
-			ErrorCheck::GetInstance()->ErrorTextBox("Load() : Not found data", "Audio");
+			Log::ErrorLog("Load()", "Not found data", "Audio");
 			return;
 		}
 		file.read((char*)&data, sizeof(data));
@@ -106,7 +106,7 @@ void Audio::Load(const std::string& fileName, bool loopFlg) {
 
 	HRESULT hr = AudioManager::GetInstance()->xAudio2_->CreateSourceVoice(&pSourceVoice_, &wfet_);
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Load() : CreateSourceVoice() failed", "Audio");
+		Log::ErrorLog("Load()", "CreateSourceVoice() failed", "Audio");
 	}
 
 	XAUDIO2_BUFFER buf{};
@@ -139,14 +139,14 @@ void Audio::Start(float volume) {
 		buf.LoopCount = loopFlg_ ? XAUDIO2_LOOP_INFINITE : 0;
 
 		if (!SUCCEEDED(hr)) {
-			ErrorCheck::GetInstance()->ErrorTextBox("Start() : SubmitSourceBuffer() failed", "Audio");
+			Log::ErrorLog("SubmitSourceBuffer() failed", "Start()", "Audio");
 			return;
 		}
 		hr = pSourceVoice_->SubmitSourceBuffer(&buf);
 	}
 	hr = pSourceVoice_->Start();
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Start() : Start() failed", "Audio");
+		Log::ErrorLog("function is something error", "Start()", "Audio");
 		return;
 	}
 	pSourceVoice_->SetVolume(volume_);

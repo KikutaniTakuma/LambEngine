@@ -1,9 +1,6 @@
 #include "Input.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
-#include "Input/Gamepad/Gamepad.h"
-#include "Input/KeyInput/KeyInput.h"
-#include "Input/Mouse/Mouse.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 
 Input* Input::instance_ = nullptr;
 
@@ -20,11 +17,19 @@ Input::Input():
 	key_(nullptr),
 	mouse_(nullptr)
 {
-	HRESULT hr = DirectInput8Create(WindowFactory::GetInstance()->getWNDCLASSEX().hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8,
-		reinterpret_cast<void**>(directInput_.GetAddressOf()), nullptr);
+	HRESULT hr = DirectInput8Create(
+		WindowFactory::GetInstance()->getWNDCLASSEX().hInstance, 
+		DIRECTINPUT_VERSION,
+		IID_IDirectInput8,
+		reinterpret_cast<void**>(directInput_.GetAddressOf()),
+		nullptr
+	);
 	assert(SUCCEEDED(hr));
-	if (hr != S_OK) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeInput() : DirectInput8Create() Failed", "Engine");
+	if (SUCCEEDED(hr)) {
+		Log::AddLog("DirectInput create succeeded");
+	}
+	else {
+		Log::ErrorLog("DirectInput8Create() Failed", "InitializeInput()", "Engine");
 		return;
 	}
 

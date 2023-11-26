@@ -1,7 +1,7 @@
 #include "Pipeline.h"
 #include <cassert>
 #include <algorithm>
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/Graphics/RootSignature/RootSignature.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
@@ -203,7 +203,7 @@ void Pipeline::Create(
 	HRESULT hr = device->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(graphicsPipelineState_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Create() : CreateGraphicsPipelineState", "Pipeline");
+		Log::ErrorLog("CreateGraphicsPipelineState", "Create()", "Pipeline");
 		return;
 	}
 }
@@ -213,7 +213,7 @@ void Pipeline::Use() const {
 
 	assert(graphicsPipelineState_);
 	if (!graphicsPipelineState_) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Use() : GraphicsPipelineState is nullptr", "Pipeline");
+		Log::ErrorLog("GraphicsPipelineState is nullptr", "Use()", "Pipeline");
 		return;
 	}
 	auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
@@ -234,7 +234,7 @@ void Pipeline::Use() const {
 	default:
 	case D3D12_PRIMITIVE_TOPOLOGY_TYPE_UNDEFINED:
 	case D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT:
-		ErrorCheck::GetInstance()->ErrorTextBox("Pipline::Use() failed : Cannot use this primitive topology type","Pipline");
+		Log::ErrorLog("Cannot use this primitive topology type", "Use()", "Pipline");
 		break;
 	}
 }

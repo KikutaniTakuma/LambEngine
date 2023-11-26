@@ -19,7 +19,7 @@ public:
 	/// シングルトン
 	/// </summary>
 	/// <returns>インスタンス</returns>
-	static ErrorCheck* GetInstance();
+	static ErrorCheck* const GetInstance();
 
 public:
 	/// <summary>

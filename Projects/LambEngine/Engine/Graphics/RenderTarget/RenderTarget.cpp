@@ -5,7 +5,7 @@
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
 #include "Utils/ConvertString/ConvertString.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include <cassert>
 #include "Utils/Math/Vector4.h"
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
@@ -47,7 +47,7 @@ RenderTarget::RenderTarget():
 			IID_PPV_ARGS(resource_.GetAddressOf())
 		);
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CreateCommittedResource Function Failed", "RenderTarget");
+		Log::ErrorLog("CreateCommittedResource Function Failed", "Constructor", "RenderTarget");
 		return;
 	}
 
@@ -101,7 +101,7 @@ RenderTarget::RenderTarget(uint32_t width, uint32_t height) :
 			IID_PPV_ARGS(resource_.GetAddressOf())
 		);
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CreateCommittedResource Function Failed", "RenderTarget");
+		Log::ErrorLog("CreateCommittedResource Function Failed", "Constructor", "RenderTarget");
 		return;
 	}
 

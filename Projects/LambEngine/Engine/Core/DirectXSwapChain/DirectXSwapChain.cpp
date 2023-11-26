@@ -1,5 +1,5 @@
 #include "DirectXSwapChain.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
@@ -45,7 +45,7 @@ DirectXSwapChain::DirectXSwapChain():
 	HRESULT hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue, WindowFactory::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeDirect12() : CreateSwapChainForHwnd() Failed", "Engine");
+		Log::ErrorLog("something error", "CreateSwapChainForHwnd()", "DirectXSwapChain");
 		return;
 	}
 

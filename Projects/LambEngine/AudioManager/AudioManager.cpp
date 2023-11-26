@@ -1,15 +1,12 @@
 #include "AudioManager.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/Engine.h"
 #include <cassert>
 #include <filesystem>
 
 AudioManager* AudioManager::instance = nullptr;
 void AudioManager::Inititalize() {
-	instance = new AudioManager();
-	if (instance == nullptr) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Inititalize() : Instance failed", "AudioManager");
-	}
+	instance = new AudioManager{};
 }
 void AudioManager::Finalize() {
 	delete instance;
@@ -28,13 +25,13 @@ AudioManager::AudioManager() :
 	HRESULT hr = XAudio2Create(xAudio2_.GetAddressOf(), 0u, XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Constructor : XAudio2Create() failed", "AudioManager");
+		Log::ErrorLog("XAudio2Create()", "Constructor", "AudioManager");
 	}
 
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Constructor : CreateMasteringVoicey() failed", "AudioManager");
+		Log::ErrorLog("CreateMasteringVoicey()", "Constructor", "AudioManager");
 	}
 }
 AudioManager::~AudioManager() {
@@ -46,7 +43,7 @@ AudioManager::~AudioManager() {
 
 Audio* AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 	if (!std::filesystem::exists(std::filesystem::path(fileName))) {
-		ErrorCheck::GetInstance()->ErrorTextBox("LoadWav() Fialed : There is not this file -> " + fileName, "AudioManager");
+		Log::ErrorLog(" There is not this file -> " + fileName, "LoadWav()", "AudioManager");
 	}
 
 	if (audios_.empty()) {

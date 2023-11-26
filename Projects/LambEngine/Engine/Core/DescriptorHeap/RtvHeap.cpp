@@ -1,6 +1,6 @@
 #include "RtvHeap.h"
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Engine.h"
 #include "Utils/Math/Vector4.h"
@@ -73,7 +73,7 @@ void RtvHeap::CreateBackBuffer(
 
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			ErrorCheck::GetInstance()->ErrorTextBox("CreateBackBuffer() : GetBuffer() Failed", "RtvHeap");
+			Log::ErrorLog("GetBuffer() Failed", "CreateBackBuffer()", "RtvHeap");
 			return;
 		}
 
@@ -120,7 +120,7 @@ void RtvHeap::ClearRenderTargetView(uint32_t handle, const Vector4& clearColor) 
 uint32_t RtvHeap::CreateView(class RenderTarget& peraRender) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CreateConstBufferView failed\nOver HeapSize", "RtvHeap");
+		Log::ErrorLog("Over HeapSize", "CreateView", "RtvHeap");
 	}
 
 	if (bookingHandle_.empty()) {
