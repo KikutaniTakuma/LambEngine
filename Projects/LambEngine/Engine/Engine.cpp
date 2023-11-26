@@ -396,25 +396,3 @@ void Engine::FrameEnd() {
 Engine::~Engine() {
 	
 }
-
-
-void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
-
-	// TransitionBarrierの設定
-	D3D12_RESOURCE_BARRIER barrier{};
-	// 今回のバリアはTransition
-	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-	// Noneにしておく
-	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	// バリアを張る対象のリソース
-	barrier.Transition.pResource = resource;
-	// subResourceの設定
-	barrier.Transition.Subresource = subResource;
-	// 遷移前(現在)のResouceState
-	barrier.Transition.StateBefore = before;
-	// 遷移後のResouceState
-	barrier.Transition.StateAfter = after;
-	// TransitionBarrierを張る
-	commandList->ResourceBarrier(1, &barrier);
-}

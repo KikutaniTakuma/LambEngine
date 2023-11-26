@@ -79,3 +79,12 @@ private:
 	uint64_t fenceVal_;
 	HANDLE fenceEvent_;
 };
+
+/// <summary>
+/// バリア
+/// </summary>
+/// <param name="resource">リソースバリアを貼るリソース</param>
+/// <param name="before">今の状態</param>
+/// <param name="after">遷移後の状態</param>
+/// <param name="subResource">サブリソース</param>
+void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource = 0u);
