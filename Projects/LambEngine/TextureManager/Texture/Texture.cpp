@@ -5,7 +5,7 @@
 #include <cassert>
 #include <iostream>
 #include <filesystem>
-#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include "TextureManager/TextureManager.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 
@@ -114,7 +114,7 @@ void Texture::Unload() {
 
 DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 	if (!std::filesystem::exists(std::filesystem::path(filePath))) {
-		ErrorCheck::GetInstance()->ErrorTextBox("LoadTexture() : Failed : This file is not exist -> " + filePath, "Texture");
+		Log::ErrorLog("This file is not exist -> " + filePath, "LoadTexture()", "Texture");
 		return DirectX::ScratchImage();
 	}
 
@@ -123,7 +123,7 @@ DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 	std::wstring filePathW = ConvertString(filePath);
 	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("LoadTexture() : DirectX::LoadFromWICFile() failed", "Texture");
+		Log::ErrorLog("DirectX::LoadFromWICFile() failed", "LoadTexture()", "Texture");
 		return DirectX::ScratchImage();
 	}
 
@@ -131,7 +131,7 @@ DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 	DirectX::ScratchImage mipImages{};
 	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("LoadTexture() : DirectX::GenerateMipMaps failed", "Texture");
+		Log::ErrorLog("DirectX::GenerateMipMaps failed", "LoadTexture()", "Texture");
 		return DirectX::ScratchImage();
 	}
 
@@ -172,7 +172,7 @@ ID3D12Resource* Texture::CreateTextureResource(const DirectX::TexMetadata& metaD
 		IID_PPV_ARGS(&resource)
 	);
 	if (hr != S_OK) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CreateTextureResource() failed", "Texture");
+		Log::ErrorLog("somehitng error","CreateTextureResource", "Texture");
 		return nullptr;
 	}
 	return resource;
