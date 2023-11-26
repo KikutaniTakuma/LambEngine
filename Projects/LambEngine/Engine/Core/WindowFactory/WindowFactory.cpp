@@ -1,11 +1,10 @@
 #include "WindowFactory.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #pragma comment(lib, "winmm.lib")
 #include <cassert>
+
 #include "imgui_impl_win32.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-extern IMGUI_IMPL_API LRESULT
-ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 WindowFactory::WindowFactory():
 	hwnd_{},
@@ -36,7 +35,13 @@ LRESULT WindowFactory::WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARA
 }
 
 void WindowFactory::Create(const std::wstring& windowTitle, int32_t width, int32_t height) {
-	CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+	assert(SUCCEEDED(hr));
+	if (FAILED(hr)) {
+		Log::ErrorLog("CoInitializeEx failed", "Create()", "WindowFactory");
+
+		return;
+	}
 
 	windowName_ = windowTitle;
 
