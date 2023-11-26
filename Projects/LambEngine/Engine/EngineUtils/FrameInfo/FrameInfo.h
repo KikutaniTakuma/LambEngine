@@ -107,7 +107,7 @@ public:
 	/// フレームの最初の時間を取得
 	/// </summary>
 	/// <returns>フレームの時間</returns>
-	std::chrono::high_resolution_clock::time_point GetThisFrameTime() const {
+	std::chrono::steady_clock::time_point GetThisFrameTime() const {
 		return frameStartTime_;
 	}
 
@@ -145,16 +145,16 @@ public:
 private:
 	const double kMaxMonitorFps_;
 
-	std::chrono::high_resolution_clock::time_point frameStartTime_;
+	std::chrono::steady_clock::time_point frameStartTime_;
 	double deltaTime_;
 	double fps_;
 	double maxFps_;
 	double minFps_;
 	size_t frameCount_;
 
-	std::chrono::high_resolution_clock::time_point gameStartTime_;
+	std::chrono::steady_clock::time_point gameStartTime_;
 
-	std::chrono::high_resolution_clock::time_point reference_;
+	std::chrono::steady_clock::time_point reference_;
 	double fpsLimit_;
 	double maxFpsLimit_;
 
@@ -165,7 +165,7 @@ private:
 
 	std::queue<double> frameDatas_;
 	std::chrono::seconds frameDataDuration_;
-	std::chrono::high_resolution_clock::time_point frameDataDurationStartTime_;
+	std::chrono::steady_clock::time_point frameDataDurationStartTime_;
 	size_t avgProcDuration_;
 
 	StringOut fpsStringOutPut_;
