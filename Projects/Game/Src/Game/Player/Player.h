@@ -24,7 +24,7 @@ public:
 	Player& operator=(const Player&) = default;
 
 public:
-	void Move();
+	void Move(float cameraRoatate);
 
 	void Update();
 
@@ -46,6 +46,14 @@ public:
 
 	const Behavior& GetBehavior() const {
 		return behavior;
+	}
+	
+	const Lamb::Flg& GetIsDash() const {
+		return isDash_;
+	}
+
+	float GetDelayCaemraSpeed() const{
+		return delayCaemraSpeed_;
 	}
 
 private:
@@ -81,17 +89,11 @@ private:
 	float attack;
 	float attackSpd;
 
-	float cameraRotate_;
-	float cmaeraRotateSpd_;
-
 	std::chrono::steady_clock::time_point dashStartTime_;
 	std::chrono::milliseconds dashCoolTime_;
 	Lamb::Flg isDash_;
 
 	float dashScale_;
-
-	Easing cameraEaseing_;
-	Vector3 preCameraPos_;
 
 	float delayCaemraSpeed_;
 

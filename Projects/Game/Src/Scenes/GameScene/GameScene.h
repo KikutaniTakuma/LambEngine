@@ -44,4 +44,5 @@ public:
 	GlobalVariables globalVariables_;
 
 	std::unique_ptr<class RockOn> rockOn_;
+	std::unique_ptr<class FollowCamera> followCamera_;
 };

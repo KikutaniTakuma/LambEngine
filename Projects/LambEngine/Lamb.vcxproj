@@ -161,6 +161,7 @@
     <ClCompile Include="TextureManager\Texture\Texture.cpp" />
     <ClCompile Include="Utils\Action\Frame\Frame.cpp" />
     <ClCompile Include="Utils\Camera\Camera.cpp" />
+    <ClCompile Include="Utils\Camera\FollowCamera\FollowCamera.cpp" />
     <ClCompile Include="Utils\ConvertString\ConvertString.cpp" />
     <ClCompile Include="Utils\CsvLoad\CsvLoad.cpp" />
     <ClCompile Include="Utils\Easing\Easing.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="TextureManager\Texture\Texture.h" />
     <ClInclude Include="Utils\Action\Frame\Frame.h" />
     <ClInclude Include="Utils\Camera\Camera.h" />
+    <ClInclude Include="Utils\Camera\FollowCamera\FollowCamera.h" />
     <ClInclude Include="Utils\Cocepts\Cocepts.h" />
     <ClInclude Include="Utils\ConvertString\ConvertString.h" />
     <ClInclude Include="Utils\CsvLoad\CsvLoad.h" />

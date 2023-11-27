@@ -24,7 +24,6 @@ void Player::Initialize(GlobalVariables* globalVariables) {
 	globalVariables->AddItem(groupName, "cmaeraRotateSpd_", std::numbers::pi_v<float>);
 	globalVariables->AddItem(groupName, "dashCoolTime_", 500);
 	globalVariables->AddItem(groupName, "dashScale_", 2.0f);
-	globalVariables->AddItem(groupName, "delayCaemraSpeed_", 0.2f);
 	globalVariables->AddItem(groupName, "jumpVelocity_", 9.8f);
 	globalVariables->AddItem(groupName, "gravity_", -9.8f);
 }
@@ -40,15 +39,10 @@ Player::Player(GlobalVariables* globalVariables) :
 	behavior(Behavior::Normal),
 	attack(0.0f),
 	attackSpd(std::numbers::pi_v<float> / 2.0f),
-	cmaeraRotateSpd_(std::numbers::pi_v<float>),
-	cameraRotate_(),
 	dashStartTime_{},
 	dashCoolTime_{ 500 },
 	isDash_{ false },
 	dashScale_{ 2.0f },
-	cameraEaseing_{},
-	preCameraPos_{},
-	delayCaemraSpeed_{ 0.2f },
 	jumpVelocity_{9.8f },
 	gravity_{-9.8f }
 {
@@ -101,7 +95,6 @@ void Player::ApplyGlobalVariables() {
 	freqSpd = globalVariables_->GetFloatValue(groupName, "freqSpd");
 	armFreqSpd = globalVariables_->GetFloatValue(groupName, "armFreqSpd");
 	attackSpd = globalVariables_->GetFloatValue(groupName, "attackSpd");
-	cmaeraRotateSpd_ = globalVariables_->GetFloatValue(groupName, "cmaeraRotateSpd_");
 	dashCoolTime_ = std::chrono::milliseconds{ globalVariables_->GetIntValue(groupName, "dashCoolTime_") };
 	dashScale_ = globalVariables_->GetFloatValue(groupName, "dashScale_");
 	jumpVelocity_ = globalVariables_->GetFloatValue(groupName, "jumpVelocity_");
@@ -151,7 +144,7 @@ void Player::Animation() {
 	}
 }
 
-void Player::Move() {
+void Player::Move(float cameraRoatate) {
 	isDash_.Update();
 	ApplyGlobalVariables();
 	UpdateCollision();
@@ -161,7 +154,7 @@ void Player::Move() {
 	bool isMove = false;
 	moveVec_.x = 0.0f;
 	moveVec_.z = 0.0f;
-	static Input* input = Input::GetInstance();
+	static Input* const input = Input::GetInstance();
 
 	if (!isDash_) {
 		if (input->GetKey()->LongPush(DIK_W)) {
@@ -200,13 +193,7 @@ void Player::Move() {
 		}
 	}
 
-	if (input->GetGamepad()->GetStick(Gamepad::Stick::RIGHT_X) > 0.25f || input->GetGamepad()->GetStick(Gamepad::Stick::RIGHT_X) < -0.25f) {
-		cameraRotate_ += cmaeraRotateSpd_ * input->GetGamepad()->GetStick(Gamepad::Stick::RIGHT_X) * FrameInfo::GetInstance()->GetDelta();
-
-		isMove = true;
-	}
-
-	moveVec_ *= MakeMatrixRotateY(cameraRotate_);
+	moveVec_ *= MakeMatrixRotateY(cameraRoatate);
 
 	auto nowTime = std::chrono::steady_clock::now();
 	if (!isDash_) {
@@ -266,29 +253,6 @@ void Player::Update() {
 		model_[2]->rotate_.y = 0.0f;
 		model_[3]->rotate_.y = 0.0f;
 	}
-
-	if (camera) {
-		Vector3 offset = { 0.0f, 7.0f, -30.0f };
-		camera->rotate.y = cameraRotate_;
-		camera->rotate.x = 0.2f;
-		offset *= MakeMatrixRotateY(cameraRotate_);
-		if (isDash_.OnEnter()) {
-			cameraEaseing_.Start(
-				false,
-				delayCaemraSpeed_
-			);
-			preCameraPos_ = camera->pos;
-		}
-		if (cameraEaseing_.ActiveEnter() || cameraEaseing_.ActiveStay()) {
-			camera->pos = cameraEaseing_.Get(preCameraPos_, model_[0]->pos_ + offset);
-		}
-		else {
-			camera->pos = model_[0]->pos_ + offset;
-		}
-		camera->Update();
-	}
-
-	cameraEaseing_.Update();
 
 	if (moveVec_ != Vector3::zero && !isDash_) {
 		preMoveVec_ = moveVec_;

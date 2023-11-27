@@ -14,8 +14,8 @@ class Camera {
 /// </summary>
 public:
 	Camera() noexcept;
-	Camera(const Camera& right) noexcept;
-	Camera(Camera&& right) noexcept;
+	Camera(const Camera& right) noexcept = default;
+	Camera(Camera&& right) noexcept = default;
 	~Camera() noexcept = default;
 
 
@@ -34,13 +34,8 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	virtual void Update();
 
-	/// <summary>
-	/// 行列更新
-	/// </summary>
-	/// <param name="gazePoint">デバッグ時の起点</param>
-	void Update(const Vector3& gazePoint, const Vector3& offset);
 	/// <summary>
 	/// 行列更新
 	/// </summary>

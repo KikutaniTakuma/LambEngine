@@ -21,16 +21,6 @@ Camera::Camera() noexcept :
 	othograohics()
 {}
 
-Camera::Camera(const Camera& right) noexcept
-{
-	*this = right;
-}
-
-Camera::Camera(Camera&& right) noexcept
-{
-	*this = std::move(right);
-}
-
 void Camera::Update() {
 	view.Affin(scale, rotate, pos);
 	worldPos = { view[0][3],view[1][3], view[2][3] };
@@ -56,12 +46,6 @@ void Camera::Update() {
 
 
 	viewOthograohicsVp = viewOthograohics * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
-}
-
-void Camera::Update(const Vector3& gazePoint, const Vector3& offset) {
-	pos = gazePoint + (offset * MakeMatrixRotate(rotate));
-
-	Update();
 }
 
 void Camera::Update(const Mat4x4& worldMat) {

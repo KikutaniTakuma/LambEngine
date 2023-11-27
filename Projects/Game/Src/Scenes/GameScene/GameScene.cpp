@@ -5,6 +5,7 @@
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/ScreenOut/ScreenOut.h"
 #include "Game/RockOn/RockOn.h"
+#include "Utils/Camera/FollowCamera/FollowCamera.h" 
 #include <numbers>
 #include <format>
 
@@ -13,15 +14,20 @@ GameScene::GameScene() :
 {}
 
 void GameScene::Initialize() {
-	camera_.farClip = 3000.0f;
-	camera_.farClip = 3000.0f;
+	//camera_.farClip = 3000.0f;
+
+	followCamera_ = std::make_unique<FollowCamera>();
+	followCamera_->farClip = 3000.0f;
+	followCamera_->offset_ = { 0.0f, 5.0f, -30.0f };
+	followCamera_->rotate.x = 0.2f;
+	followCamera_->rotateSpd_ = std::numbers::pi_v<float>;
 
 	Player::Initialize(&globalVariables_);
 	globalVariables_.LoadFile();
 
 
 	player_ = std::make_unique<Player>(&globalVariables_);
-	player_->SetCamera(&camera_);
+	player_->SetCamera(followCamera_.get());
 
 	goal_ = std::make_unique<Goal>();
 
@@ -32,7 +38,7 @@ void GameScene::Initialize() {
 	float moveFloorDuration = 32.0f;
 
 	enemy_ = std::make_unique<Enemy>();
-	enemy_->SetCamera(&camera_);
+	enemy_->SetCamera(followCamera_.get());
 	enemy_->SetPlayer(player_.get());
 	enemy_->pos_.z = moveFloorDuration;
 
@@ -52,7 +58,8 @@ void GameScene::Initialize() {
 	goal_->collisionPos_.z = moveFloorDuration * 2.0f;
 
 	rockOn_ = std::make_unique<RockOn>();
-	rockOn_->Initialize(&camera_);
+	rockOn_->Initialize(followCamera_.get());
+
 }
 
 void GameScene::Finalize() {
@@ -76,7 +83,7 @@ void GameScene::Update() {
 		floor.Update();
 	}
 
-	player_->Move();
+	player_->Move(followCamera_->rotate.y);
 	if (enemy_) {
 		enemy_->Move();
 	}
@@ -111,11 +118,11 @@ void GameScene::Update() {
 		if (enemy_->OnEnter() || (player_->pos_ - enemy_->pos_).Length() < enemy_->scale_.x) {
 			player_.reset();
 			player_ = std::make_unique<Player>(&globalVariables_);
-			player_->SetCamera(&camera_);
+			player_->SetCamera(followCamera_.get());
 
 			enemy_.reset();
 			enemy_ = std::make_unique<Enemy>();
-			enemy_->SetCamera(&camera_);
+			enemy_->SetCamera(followCamera_.get());
 			enemy_->SetPlayer(player_.get());
 			enemy_->pos_.z = 32.0f;
 		}
@@ -123,11 +130,11 @@ void GameScene::Update() {
 	if (player_->pos_.y < -10.0f || goal_->OnEnter()) {
 		player_.reset();
 		player_ = std::make_unique<Player>(&globalVariables_);
-		player_->SetCamera(&camera_);
+		player_->SetCamera(followCamera_.get());
 
 		enemy_.reset();
 		enemy_ = std::make_unique<Enemy>();
-		enemy_->SetCamera(&camera_);
+		enemy_->SetCamera(followCamera_.get());
 		enemy_->SetPlayer(player_.get());
 		enemy_->pos_.z = 32.0f;
 	}
@@ -137,7 +144,23 @@ void GameScene::Update() {
 		}
 	}
 
-	camera_.Debug("camera");
+	followCamera_->Debug("camera");
+	followCamera_->Move();
+
+	if (player_) {
+		followCamera_->gazePoint_ = player_->pos_;
+		if (player_->GetIsDash().OnEnter()) {
+			followCamera_->DelayEasingStart(player_->GetPos());
+		}
+	}
+	if (rockOn_->isRockOn_) {
+		//followCamera_->Update(Vector3::identity, enemy_->GetPos());
+	}
+	else {
+	}
+		followCamera_->Update();
+
+
 	if (enemy_) {
 		rockOn_->SetRockOnTarget(enemy_->GetPos());
 	}
@@ -145,22 +168,24 @@ void GameScene::Update() {
 		rockOn_->isRockOn_ = false;
 	}
 	rockOn_->Update();
+
+
 }
 
 void GameScene::Draw() {
 	for (auto& model : models_) {
-		model.Draw(camera_.GetViewProjection(), camera_.GetPos());
+		model.Draw(followCamera_->GetViewProjection(), followCamera_->GetPos());
 	}
 
 	for (auto& tex : texs_) {
-		tex.Draw(camera_.GetViewProjection());
+		tex.Draw(followCamera_->GetViewProjection());
 	}
 
 	for (auto& floor : floor_) {
-		floor.Draw(camera_.GetViewProjection(), camera_.GetPos());
+		floor.Draw(followCamera_->GetViewProjection(), followCamera_->GetPos());
 	}
 
-	skyDome_->Draw(camera_.GetViewProjection(), camera_.GetPos());
+	skyDome_->Draw(followCamera_->GetViewProjection(), followCamera_->GetPos());
 
 	if (enemy_) {
 		enemy_->Draw();
@@ -168,7 +193,7 @@ void GameScene::Draw() {
 
 	player_->Draw();
 
-	goal_->Draw(camera_.GetViewProjection(), camera_.GetPos());
+	goal_->Draw(followCamera_->GetViewProjection(), followCamera_->GetPos());
 
 	rockOn_->Draw();
 }
