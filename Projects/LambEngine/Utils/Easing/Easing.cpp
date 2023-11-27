@@ -1,4 +1,4 @@
-#include "Easeing.h"
+#include "Easing.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "imgui.h"
 
@@ -7,7 +7,7 @@
 #include <cmath>
 #include <numbers>
 
-Easeing::Easeing():
+Easing::Easing():
 #ifdef _DEBUG
 	easeType_(0),easeTime_(1.0f),
 #endif // _DEBUG
@@ -18,7 +18,7 @@ Easeing::Easeing():
 	spdT_(1.0f)
 {}
 
-void Easeing::Update() {
+void Easing::Update() {
 	isActive_.Update();
 	isLoop_.Update();
 	if (isActive_) {
@@ -36,7 +36,7 @@ void Easeing::Update() {
 	}
 }
 
-void Easeing::Start(
+void Easing::Start(
 	bool isLoop, 
 	float easeTime, 
 	std::function<float(float)> ease
@@ -48,14 +48,14 @@ void Easeing::Start(
 
 	ease_ = ease;
 }
-void Easeing::Pause() {
+void Easing::Pause() {
 	isActive_ = false;
 }
 
-void Easeing::Restart() {
+void Easing::Restart() {
 	isActive_ = true;
 }
-void Easeing::Stop() {
+void Easing::Stop() {
 	isActive_ = false;
 	isLoop_ = false;
 
@@ -63,7 +63,7 @@ void Easeing::Stop() {
 	spdT_ = 1.0f;
 }
 
-void Easeing::Debug([[maybe_unused]]const std::string& debugName) {
+void Easing::Debug([[maybe_unused]]const std::string& debugName) {
 #ifdef _DEBUG
 	ImGui::Begin(debugName.c_str());
 	ImGui::SliderInt("easeType", &easeType_, 0, 30);
@@ -90,7 +90,7 @@ void Easeing::Debug([[maybe_unused]]const std::string& debugName) {
 #endif // _DEBUG
 }
 
-void Easeing::DebugTreeNode([[maybe_unused]] const std::string& debugName) {
+void Easing::DebugTreeNode([[maybe_unused]] const std::string& debugName) {
 #ifdef _DEBUG
 	if (spdT_) {
 		easeTime_ = 1.0f / spdT_;
@@ -112,63 +112,63 @@ void Easeing::DebugTreeNode([[maybe_unused]] const std::string& debugName) {
 }
 
 
-float Easeing::InSine(float t) {
+float Easing::InSine(float t) {
 	return 1.0f - std::cos((t * std::numbers::pi_v<float>) / 2.0f);
 }
-float Easeing::OutSine(float t) {
+float Easing::OutSine(float t) {
 	return std::sin((t * std::numbers::pi_v<float>) / 2.0f);
 }
-float Easeing::InOutSine(float t) {
+float Easing::InOutSine(float t) {
 	return -(std::cos(std::numbers::pi_v<float> * t) - 1.0f) / 2.0f;
 }
 
-float Easeing::InQuad(float t) {
+float Easing::InQuad(float t) {
 	return t * t;
 }
-float Easeing::OutQuad(float t) {
+float Easing::OutQuad(float t) {
 	return 1.0f - (1.0f - t) * (1.0f - t);
 }
-float Easeing::InOutQuad(float t) {
+float Easing::InOutQuad(float t) {
 	return t < 0.5f ? 2.0f * t * t : 1.0f - std::pow(-2.0f * t + 2.0f, 2.0f) / 2.0f;
 }
 
-float Easeing::InCubic(float t) {
+float Easing::InCubic(float t) {
 	return t * t * t;
 }
-float Easeing::OutCubic(float t) {
+float Easing::OutCubic(float t) {
 	return 1.0f - std::pow(1.0f - t, 3.0f);
 }
-float Easeing::InOutCubic(float t) {
+float Easing::InOutCubic(float t) {
 	return t < 0.5f ? 4.0f * t * t * t : 1.0f - std::pow(-2.0f * t + 2.0f, 3.0f) / 2.0f;
 }
 
-float Easeing::InQuart(float t) {
+float Easing::InQuart(float t) {
 	return t * t * t * t;
 }
-float Easeing::OutQuart(float t) {
+float Easing::OutQuart(float t) {
 	return 1.0f - std::pow(1.0f - t, 4.0f);
 }
-float Easeing::InOutQuart(float t) {
+float Easing::InOutQuart(float t) {
 	return t < 0.5f ? 8.0f * t * t * t * t : 1.0f - std::pow(-2.0f * t + 2.0f, 4.0f) / 2.0f;
 }
 
-float Easeing::InQuint(float t) {
+float Easing::InQuint(float t) {
 	return t * t * t * t * t;
 }
-float Easeing::OutQuint(float t) {
+float Easing::OutQuint(float t) {
 	return 1.0f - std::pow(1.0f - t, 5.0f);
 }
-float Easeing::InOutQuint(float t) {
+float Easing::InOutQuint(float t) {
 	return t < 0.5f ? 16.0f * t * t * t * t * t : 1.0f - std::pow(-2.0f * t + 2.0f, 5.0f) / 2.0f;
 }
 
-float Easeing::InExpo(float t) {
+float Easing::InExpo(float t) {
 	return t == 0.0f ? 0.0f : std::pow(2.0f, 10.0f * t - 10.0f);
 }
-float Easeing::OutExpo(float t) {
+float Easing::OutExpo(float t) {
 	return t == 1.0f ? 1.0f : 1.0f - std::pow(2.0f, -10.0f * t);
 }
-float Easeing::InOutExpo(float t) {
+float Easing::InOutExpo(float t) {
 	return t == 0.0f
 		? 0.0f
 		: t == 1.0f
@@ -177,31 +177,31 @@ float Easeing::InOutExpo(float t) {
 		: (2.0f - std::pow(2.0f, -20.0f * t + 10.0f)) / 2.0f;
 }
 
-float Easeing::InCirc(float t) {
+float Easing::InCirc(float t) {
 	return 1.0f - std::sqrt(1.0f - std::pow(t, 2.0f));
 }
-float Easeing::OutCirc(float t) {
+float Easing::OutCirc(float t) {
 	return std::sqrt(1.0f - std::pow(t - 1.0f, 2.0f));
 }
-float Easeing::InOutCirc(float t) {
+float Easing::InOutCirc(float t) {
 	return t < 0.5f
 		? (1.0f - std::sqrt(1 - std::pow(2.0f * t, 2.0f))) / 2.0f
 		: (std::sqrt(1.0f - std::pow(-2.0f * t + 2.0f, 2.0f)) + 1.0f) / 2.0f;
 }
 
-float Easeing::InBack(float t) {
+float Easing::InBack(float t) {
 	const float c1 = 1.70158f;
 	const float c3 = c1 + 1.0f;
 
 	return c3 * t * t * t - c1 * t * t;
 }
-float Easeing::OutBack(float t) {
+float Easing::OutBack(float t) {
 	const float c1 = 1.70158f;
 	const float c3 = c1 + 1.0f;
 
 	return 1.0f + c3 * std::pow(t - 1.0f, 3.0f) + c1 * std::pow(t - 1.0f, 2.0f);
 }
-float Easeing::InOutBack(float t) {
+float Easing::InOutBack(float t) {
 	const float c1 = 1.70158f;
 	const float c2 = c1 * 1.525f;
 
@@ -210,7 +210,7 @@ float Easeing::InOutBack(float t) {
 		: (std::pow(2.0f * t - 2.0f, 2.0f) * ((c2 + 1.0f) * (t * 2.0f - 2.0f) + c2) + 2.0f) / 2.0f;
 }
 
-float Easeing::InElastic(float t) {
+float Easing::InElastic(float t) {
 	const float c4 = (2.0f * std::numbers::pi_v<float>) / 3.0f;
 
 	return t == 0.0f
@@ -219,7 +219,7 @@ float Easeing::InElastic(float t) {
 		? 1.0f
 		: -std::pow(2.0f, 10.0f * t - 10.0f) * std::sin((t * 10.0f - 10.75f) * c4);
 }
-float Easeing::OutElastic(float t) {
+float Easing::OutElastic(float t) {
 	const float c4 = (2.0f * std::numbers::pi_v<float>) / 3.0f;
 
 	return t == 0.0f
@@ -228,7 +228,7 @@ float Easeing::OutElastic(float t) {
 		? 1.0f
 		: std::pow(2.0f, -10.0f * t) * std::sin((t * 10.0f - 0.75f) * c4) + 1.0f;
 }
-float Easeing::InOutElastic(float t) {
+float Easing::InOutElastic(float t) {
 	const float c5 = (2.0f * std::numbers::pi_v<float>) / 4.5f;
 
 	return t == 0.0f
@@ -240,10 +240,10 @@ float Easeing::InOutElastic(float t) {
 		: (std::pow(2.0f, -20.0f * t + 10.0f) * std::sin((20.0f * t - 11.125f) * c5)) / 2.0f + 1.0f;
 }
 
-float Easeing::InBounce(float t) {
+float Easing::InBounce(float t) {
 	return 1.0f - OutBounce(1.0f - t);
 }
-float Easeing::OutBounce(float t) {
+float Easing::OutBounce(float t) {
 	const float n1 = 7.5625f;
 	const float d1 = 2.75f;
 
@@ -260,7 +260,7 @@ float Easeing::OutBounce(float t) {
 		return n1 * (t -= 2.625f / d1) * t + 0.984375f;
 	}
 }
-float Easeing::InOutBounce(float t) {
+float Easing::InOutBounce(float t) {
 	return t < 0.5
 		? (1.0f - OutBounce(1.0f - 2.0f * t)) / 2.0f
 		: (1.0f + OutBounce(2.0f * t - 1.0f)) / 2.0f;

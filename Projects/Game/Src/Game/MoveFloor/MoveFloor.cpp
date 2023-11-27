@@ -4,7 +4,7 @@
 MoveFloor::MoveFloor() {
 	model_ = std::make_unique<Model>();
 	model_->LoadObj("./Resources/Cube.obj");
-	ease_.Start(true, 2.0f, Easeing::InOutSine);
+	ease_.Start(true, 2.0f, Easing::InOutSine);
 	colliser_.scale_ = { 14.0f,1.0f,14.0f };
 	pos_.y = -0.5f;
 }

@@ -30,7 +30,7 @@ bool KeyInput::LongPush(uint8_t keyType) {
 	}
 	return (key[keyType] & 0x80) && (preKey[keyType] & 0x80);
 }
-bool KeyInput::Releaed(uint8_t keyType) {
+bool KeyInput::Released(uint8_t keyType) {
 	if (!initalizeSucceeded) {
 		return false;
 	}

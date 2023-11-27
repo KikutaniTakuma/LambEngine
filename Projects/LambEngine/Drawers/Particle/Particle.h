@@ -6,7 +6,7 @@
 #include "Utils/Math/Mat4x4.h"
 
 #include "Utils/Flg/Flg.h"
-#include "Utils/Easeing/Easeing.h"
+#include "Utils/Easing/Easing.h"
 
 #include <array>
 #include <variant>

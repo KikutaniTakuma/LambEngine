@@ -171,31 +171,31 @@ ID3D12Resource* DirectXDevice::CreateBufferResuorce(size_t sizeInBytes) {
 
 	// Resourceを生成する
 	// リソース用のヒープの設定
-	D3D12_HEAP_PROPERTIES uploadHeapPropaerties{};
-	uploadHeapPropaerties.Type = D3D12_HEAP_TYPE_UPLOAD;
+	D3D12_HEAP_PROPERTIES uploadHeapProp{};
+	uploadHeapProp.Type = D3D12_HEAP_TYPE_UPLOAD;
 	// リソースの設定
-	D3D12_RESOURCE_DESC resouceDesc{};
+	D3D12_RESOURCE_DESC resourceDesc{};
 	// バッファリソース。テクスチャの場合はまた別の設定にする
-	resouceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	resouceDesc.Width = sizeInBytes;
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	resourceDesc.Width = sizeInBytes;
 	// バッファの場合はこれにする決まり
-	resouceDesc.Height = 1;
-	resouceDesc.DepthOrArraySize = 1;
-	resouceDesc.MipLevels = 1;
-	resouceDesc.SampleDesc.Count = 1;
+	resourceDesc.Height = 1;
+	resourceDesc.DepthOrArraySize = 1;
+	resourceDesc.MipLevels = 1;
+	resourceDesc.SampleDesc.Count = 1;
 	// バッファの場合はこれにする決まり
-	resouceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	// 実際にリソースを作る
-	ID3D12Resource* resuorce = nullptr;
-	resuorce = nullptr;
-	HRESULT hr = device_->CreateCommittedResource(&uploadHeapPropaerties, D3D12_HEAP_FLAG_NONE, &resouceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resuorce));
+	ID3D12Resource* resource = nullptr;
+	resource = nullptr;
+	HRESULT hr = device_->CreateCommittedResource(&uploadHeapProp, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resource));
 	if (!SUCCEEDED(hr)) {
 		OutputDebugStringA("CreateCommittedResource Function Failed!!");
 		Log::ErrorLog("somthing error", "CreateBufferResuorce()", "DirectXDevice");
 		return nullptr;
 	}
 
-	return resuorce;
+	return resource;
 }
 
 [[nodiscard]]

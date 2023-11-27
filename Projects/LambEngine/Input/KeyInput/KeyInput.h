@@ -34,7 +34,7 @@ public:
 
 	bool Pushed(uint8_t keyType);
 	bool LongPush(uint8_t keyType);
-	bool Releaed(uint8_t keyType);
+	bool Released(uint8_t keyType);
 
 	/// <summary>
 	/// 何かしらのキーが押された
