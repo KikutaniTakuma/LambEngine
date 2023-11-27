@@ -4,7 +4,7 @@
 #include "Utils/Camera/Camera.h"
 #include <vector>
 #include "Game/CollisionManager/Collider/Collider.h"
-#include "Utils/Easeing/Easeing.h"
+#include "Utils/Easing/Easing.h"
 
 class Enemy : public Collider {
 public:
@@ -42,7 +42,7 @@ public:
 private:
 	std::vector<std::unique_ptr<Model>> model;
 
-	Easeing ease;
+	Easing ease;
 	std::pair<Vector3, Vector3> easeDuration;
 
 	float spd;

@@ -4,7 +4,7 @@
 #include "Utils/Camera/Camera.h"
 #include <vector>
 #include "Game/CollisionManager/Collider/Collider.h"
-#include "Utils/Easeing/Easeing.h"
+#include "Utils/Easing/Easing.h"
 
 class Player : public Collider {
 public:
@@ -90,7 +90,7 @@ private:
 
 	float dashScale_;
 
-	Easeing cameraEaseing_;
+	Easing cameraEaseing_;
 	Vector3 preCameraPos_;
 
 	float delayCaemraSpeed_;

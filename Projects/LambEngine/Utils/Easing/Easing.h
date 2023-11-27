@@ -12,16 +12,16 @@
 /// <summary>
 /// イージング管理
 /// </summary>
-class Easeing {
+class Easing {
 public:
-	Easeing();
-	Easeing(const Easeing& right) = default;
-	Easeing(Easeing&& right) noexcept = default;
-	~Easeing() = default;
+	Easing();
+	Easing(const Easing& right) = default;
+	Easing(Easing&& right) noexcept = default;
+	~Easing() = default;
 
 public:
-	Easeing& operator=(const Easeing& right) = default;
-	Easeing& operator=(Easeing&& right) noexcept = default;
+	Easing& operator=(const Easing& right) = default;
+	Easing& operator=(Easing&& right) noexcept = default;
 
 public:
 	void Update();

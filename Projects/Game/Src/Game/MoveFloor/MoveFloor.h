@@ -1,7 +1,7 @@
 #pragma once
 #include "Game/CollisionManager/Collider/Collider.h"
 #include "Drawers/Model/Model.h"
-#include "Utils/Easeing/Easeing.h"
+#include "Utils/Easing/Easing.h"
 
 class MoveFloor : public Collider {
 public:
@@ -30,5 +30,6 @@ public:
 private:
 	std::unique_ptr<Model> model_;
 
-	Easeing ease_;
+	Easing ease_;
+
 };

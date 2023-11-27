@@ -76,9 +76,6 @@
     <ClCompile Include="Utils\UtilsLib\UtilsLib.cpp">
       <Filter>Utils\UtilsLib</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Easeing\Easeing.cpp">
-      <Filter>Utils\Easeing</Filter>
-    </ClCompile>
     <ClCompile Include="Drawers\Particle\Particle.cpp">
       <Filter>Drawers\Particle</Filter>
     </ClCompile>
@@ -150,6 +147,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Core\ImGuiManager\ImGuiManager.cpp">
       <Filter>Engine\Core\ImGuiManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Easing\Easing.cpp">
+      <Filter>Utils\Easing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,9 +224,6 @@
     </Filter>
     <Filter Include="Utils\UtilsLib">
       <UniqueIdentifier>{c6f84b96-4130-443c-b4b7-b47e1dc84f27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\Easeing">
-      <UniqueIdentifier>{1dc7052e-fce1-4542-b5fb-a5f223d204de}</UniqueIdentifier>
     </Filter>
     <Filter Include="Drawers\Particle">
       <UniqueIdentifier>{81d2d594-ca17-412f-85ce-bbbad35d144c}</UniqueIdentifier>
@@ -315,6 +312,9 @@
     <Filter Include="Engine\Core\ImGuiManager">
       <UniqueIdentifier>{d6d93ca6-1ebb-4ead-ad68-07b252c618a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Easing">
+      <UniqueIdentifier>{1dc7052e-fce1-4542-b5fb-a5f223d204de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -391,9 +391,6 @@
     </ClInclude>
     <ClInclude Include="Utils\UtilsLib\UtilsLib.h">
       <Filter>Utils\UtilsLib</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Easeing\Easeing.h">
-      <Filter>Utils\Easeing</Filter>
     </ClInclude>
     <ClInclude Include="Drawers\Particle\Particle.h">
       <Filter>Drawers\Particle</Filter>
@@ -478,6 +475,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Core\ImGuiManager\ImGuiManager.h">
       <Filter>Engine\Core\ImGuiManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Easing\Easing.h">
+      <Filter>Utils\Easing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

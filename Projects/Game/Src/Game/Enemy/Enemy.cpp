@@ -24,7 +24,7 @@ Enemy::Enemy() :
 	easeDuration.first.y = 2.0f;
 	easeDuration.second.y = 3.0f;
 
-	ease.Start(true, 2.0f, Easeing::InOutSine);
+	ease.Start(true, 2.0f, Easing::InOutSine);
 
 	distanceLimit = 7.0f;
 	isPlayerCollsion = false;
