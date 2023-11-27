@@ -295,8 +295,8 @@ void Player::Update() {
 	for (auto& i : model_) {
 		i->Update();
 	}
-	if (preMoveVec_ != Vector3::zero) {
-		if (preMoveVec_.Normalize() == -Vector3::zIdy) {
+	if (Vector3{ preMoveVec_.x,0.0f, preMoveVec_.z } != Vector3::zero) {
+		if (Vector3{ preMoveVec_.x,0.0f, preMoveVec_.z }.Normalize() == -Vector3::zIdy) {
 			model_[0]->worldMat_ = DirectionToDirection(-Vector3::zIdy, Vector3{ preMoveVec_.x,0.0f, preMoveVec_.z }.Normalize()) * MakeMatrixRotateY(std::numbers::pi_v<float>) * model_[0]->worldMat_;
 		}
 		else {
