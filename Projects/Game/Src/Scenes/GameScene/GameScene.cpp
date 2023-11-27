@@ -154,11 +154,13 @@ void GameScene::Update() {
 		}
 	}
 	if (rockOn_->isRockOn_) {
-		//followCamera_->Update(Vector3::identity, enemy_->GetPos());
+		Vector3 enemyPos = enemy_->GetPos();
+		enemyPos.y = 0.0f;
+		followCamera_->Update(Vector3::zIdy, enemyPos);
 	}
 	else {
-	}
 		followCamera_->Update();
+	}
 
 
 	if (enemy_) {

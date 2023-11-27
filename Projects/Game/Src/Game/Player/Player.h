@@ -52,10 +52,6 @@ public:
 		return isDash_;
 	}
 
-	float GetDelayCaemraSpeed() const{
-		return delayCaemraSpeed_;
-	}
-
 private:
 	void Animation();
 
@@ -94,8 +90,6 @@ private:
 	Lamb::Flg isDash_;
 
 	float dashScale_;
-
-	float delayCaemraSpeed_;
 
 	Vector3 preMoveVec_;
 

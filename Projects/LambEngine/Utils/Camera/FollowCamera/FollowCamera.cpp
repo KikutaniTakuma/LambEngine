@@ -26,14 +26,18 @@ void FollowCamera::Update() {
 }
 
 void FollowCamera::Update(const Vector3& basis, const Vector3& target) {
+	Vector3 posTmp = pos;
+	posTmp.y = 0.0f;
+	Mat4x4 rotateMatrix = MakeMatrixRotateX(rotate.x) * DirectionToDirection(basis.Normalize(), (target - posTmp).Normalize());
+
 	if (delayEasing_.ActiveEnter() || delayEasing_.ActiveStay()) {
-		pos = delayEasing_.Get(easingStartPos_, gazePoint_ + (offset_ * MakeMatrixRotate(rotate)));
+		pos = delayEasing_.Get(easingStartPos_, gazePoint_ + (offset_ * rotateMatrix));
 	}
 	else {
-		pos = gazePoint_ + (offset_ * MakeMatrixRotate(rotate));
+		pos = gazePoint_ + (offset_ * rotateMatrix);
 	}
 
-	Mat4x4 worldMat = MakeMatrixScalar(scale) * DirectionToDirection(basis, target) * MakeMatrixTranslate(pos);
+	Mat4x4 worldMat = MakeMatrixScalar(scale) * rotateMatrix * MakeMatrixTranslate(pos);
 
 	SetMat4x4Update(worldMat);
 

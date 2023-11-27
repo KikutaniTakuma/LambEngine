@@ -263,10 +263,10 @@ void Player::Update() {
 	}
 	if (Vector3{ preMoveVec_.x,0.0f, preMoveVec_.z } != Vector3::zero) {
 		if (Vector3{ preMoveVec_.x,0.0f, preMoveVec_.z }.Normalize() == -Vector3::zIdy) {
-			model_[0]->worldMat_ = DirectionToDirection(-Vector3::zIdy, Vector3{ preMoveVec_.x,0.0f, preMoveVec_.z }.Normalize()) * MakeMatrixRotateY(std::numbers::pi_v<float>) * model_[0]->worldMat_;
+			model_[0]->worldMat_ = MakeMatrixScalar(model_[0]->scale_) * DirectionToDirection(-Vector3::zIdy, Vector3{ preMoveVec_.x,0.0f, preMoveVec_.z }.Normalize()) * MakeMatrixRotateY(std::numbers::pi_v<float>) * MakeMatrixTranslate(model_[0]->pos_);
 		}
 		else {
-			model_[0]->worldMat_ = DirectionToDirection(Vector3::zIdy, Vector3{ preMoveVec_ .x,0.0f, preMoveVec_ .z}.Normalize()) * model_[0]->worldMat_;
+			model_[0]->worldMat_ = MakeMatrixScalar(model_[0]->scale_) * DirectionToDirection(Vector3::zIdy, Vector3{ preMoveVec_ .x,0.0f, preMoveVec_ .z}.Normalize()) * MakeMatrixTranslate(model_[0]->pos_);
 		}
 	}
 	weapon_->Debug("weapon_");
