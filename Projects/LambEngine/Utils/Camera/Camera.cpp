@@ -58,12 +58,8 @@ void Camera::Update() {
 	viewOthograohicsVp = viewOthograohics * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 }
 
-void Camera::Update(const Vector3& gazePoint) {
-	Vector3 offset = Vector3::zIdy * -10.0f;
-
-	offset *= MakeMatrixRotate(rotate);
-
-	pos = gazePoint + offset;
+void Camera::Update(const Vector3& gazePoint, const Vector3& offset) {
+	pos = gazePoint + (offset * MakeMatrixRotate(rotate));
 
 	Update();
 }
@@ -76,6 +72,33 @@ void Camera::Update(const Mat4x4& worldMat) {
 
 	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
 	const float aspect = clientSize.x / clientSize.y;
+
+	fov = std::clamp(fov, 0.0f, 1.0f);
+	projection.PerspectiveFov(fov, aspect, kNearClip, farClip);
+	viewProjecction = view * projection;
+
+	viewProjecctionVp = viewProjecction * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
+
+	othograohics.Orthographic(
+		-clientSize.x * 0.5f * drawScale,
+		clientSize.y * 0.5f * drawScale,
+		clientSize.x * 0.5f * drawScale,
+		-clientSize.y * 0.5f * drawScale,
+		kNearClip, farClip);
+	viewOthograohics = view * othograohics;
+
+
+	viewOthograohicsVp = viewOthograohics * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
+}
+
+void Camera::SetMat4x4Update(const Mat4x4& worldMat) {
+	view = worldMat;
+	worldPos = { view[0][3],view[1][3], view[2][3] };
+	view.Inverse();
+
+	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
+	const float aspect = clientSize.x / clientSize.y;
+
 
 	fov = std::clamp(fov, 0.0f, 1.0f);
 	projection.PerspectiveFov(fov, aspect, kNearClip, farClip);

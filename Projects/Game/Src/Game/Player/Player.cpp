@@ -6,6 +6,8 @@
 #include "json.hpp"
 #include "GlobalVariables/GlobalVariables.h"
 #include "imgui.h"
+#undef far
+#undef near
 
 void Player::Initialize(GlobalVariables* globalVariables) {
 	const std::string groupName = "Player";
@@ -84,7 +86,7 @@ Player::Player(GlobalVariables* globalVariables) :
 	scale_.x = 2.09f;
 	scale_.z = 2.09f;
 
-	pos_.y = 8.0f;
+	pos_.y = 16.0f;
 	pos_.x = 0.0f;
 }
 

@@ -42,4 +42,6 @@ public:
 	std::vector<MoveFloor> floor_;
 
 	GlobalVariables globalVariables_;
+
+	std::unique_ptr<class RockOn> rockOn_;
 };

@@ -40,12 +40,14 @@ public:
 	/// 行列更新
 	/// </summary>
 	/// <param name="gazePoint">デバッグ時の起点</param>
-	void Update(const Vector3& gazePoint);
+	void Update(const Vector3& gazePoint, const Vector3& offset);
 	/// <summary>
 	/// 行列更新
 	/// </summary>
 	/// <param name="worldMat">カメラの親のワールド行列</param>
 	void Update(const Mat4x4& worldMat);
+
+	void SetMat4x4Update(const Mat4x4& worldMat);
 
 	/// <summary>
 	/// ビュー行列取得

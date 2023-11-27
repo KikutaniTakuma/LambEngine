@@ -31,7 +31,7 @@ Enemy::Enemy() :
 
 	scale_ = { 2.0f, 1.5f, 2.0f };
 
-	pos_.y = 8.0f;
+	pos_.y = 16.0f;
 }
 
 void Enemy::Move() {

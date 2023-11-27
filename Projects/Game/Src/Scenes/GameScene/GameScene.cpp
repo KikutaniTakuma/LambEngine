@@ -4,6 +4,7 @@
 #include "AudioManager/AudioManager.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/ScreenOut/ScreenOut.h"
+#include "Game/RockOn/RockOn.h"
 #include <numbers>
 #include <format>
 
@@ -28,25 +29,30 @@ void GameScene::Initialize() {
 	skyDome_->LoadObj("./Resources/skydome/skydome.obj");
 	skyDome_->scale_ *= 1000.0f;
 
+	float moveFloorDuration = 32.0f;
+
 	enemy_ = std::make_unique<Enemy>();
 	enemy_->SetCamera(&camera_);
 	enemy_->SetPlayer(player_.get());
-	enemy_->pos_.z = 14.0f;
+	enemy_->pos_.z = moveFloorDuration;
 
 
 	floor_.push_back(MoveFloor());
 	floor_[0].moveDuration_.first.x = -4.0f;
-	floor_[0].moveDuration_.first.z = 14.0f;
+	floor_[0].moveDuration_.first.z = moveFloorDuration;
 	floor_[0].moveDuration_.second.x = 4.0f;
-	floor_[0].moveDuration_.second.z = 14.0f;
-	floor_[0].pos_.z = 14.0f;
+	floor_[0].moveDuration_.second.z = moveFloorDuration;
+	floor_[0].pos_.z = moveFloorDuration;
 	floor_.push_back(MoveFloor());
 	floor_.push_back(MoveFloor());
-	floor_[2].moveDuration_.first.z = 28.0f;
-	floor_[2].moveDuration_.second.z = 28.0f;
+	floor_[2].moveDuration_.first.z = moveFloorDuration * 2.0f;
+	floor_[2].moveDuration_.second.z = moveFloorDuration * 2.0f;
 
 	goal_ = std::make_unique<Goal>();
-	goal_->collisionPos_.z = 28.0f;
+	goal_->collisionPos_.z = moveFloorDuration * 2.0f;
+
+	rockOn_ = std::make_unique<RockOn>();
+	rockOn_->Initialize(&camera_);
 }
 
 void GameScene::Finalize() {
@@ -111,7 +117,7 @@ void GameScene::Update() {
 			enemy_ = std::make_unique<Enemy>();
 			enemy_->SetCamera(&camera_);
 			enemy_->SetPlayer(player_.get());
-			enemy_->pos_.z = 14.0f;
+			enemy_->pos_.z = 32.0f;
 		}
 	}
 	if (player_->pos_.y < -10.0f || goal_->OnEnter()) {
@@ -123,13 +129,22 @@ void GameScene::Update() {
 		enemy_ = std::make_unique<Enemy>();
 		enemy_->SetCamera(&camera_);
 		enemy_->SetPlayer(player_.get());
-		enemy_->pos_.z = 14.0f;
+		enemy_->pos_.z = 32.0f;
 	}
 	if (enemy_ && player_->GetBehavior() == Player::Behavior::Attack) {
 		if (player_->GetWeaponCollider().IsCollision(enemy_.get())) {
 			enemy_.reset();
 		}
 	}
+
+	camera_.Debug("camera");
+	if (enemy_) {
+		rockOn_->SetRockOnTarget(enemy_->GetPos());
+	}
+	else {
+		rockOn_->isRockOn_ = false;
+	}
+	rockOn_->Update();
 }
 
 void GameScene::Draw() {
@@ -154,4 +169,6 @@ void GameScene::Draw() {
 	player_->Draw();
 
 	goal_->Draw(camera_.GetViewProjection(), camera_.GetPos());
+
+	rockOn_->Draw();
 }

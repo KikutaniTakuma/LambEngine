@@ -56,6 +56,9 @@
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp">
       <Filter>Editor\ParticleEditor</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\RockOn\RockOn.cpp">
+      <Filter>Game\RockOn</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -121,6 +124,9 @@
     <Filter Include="Editor\ParticleEditor">
       <UniqueIdentifier>{4b7de689-4b28-45f6-bb48-00506bfb839d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\RockOn">
+      <UniqueIdentifier>{d879f184-f348-4439-b7c2-2483d7b6efb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -176,6 +182,9 @@
     </ClInclude>
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h">
       <Filter>Editor\ParticleEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\RockOn\RockOn.h">
+      <Filter>Game\RockOn</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

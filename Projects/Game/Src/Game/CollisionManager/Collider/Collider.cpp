@@ -267,7 +267,8 @@ bool Collider::CollisionPush(Collider& other) {
 	return other.CollisionExtrusion(*this);
 }
 
-void Collider::DebugDraw(const Mat4x4& viewProjection) {
+void Collider::DebugDraw([[maybe_unused]]const Mat4x4& viewProjection) {
+#ifdef _DEBUG
 	std::array<Vector3, 8> positions = {
 		Vector3(min_), // 左下手前
 		Vector3(min_.x, min_.y, max_.z), // 左下奥
@@ -322,6 +323,7 @@ void Collider::DebugDraw(const Mat4x4& viewProjection) {
 	for (auto& line : lines_) {
 		line.Draw(viewProjection, color_);
 	}
+#endif // _DEBUG
 }
 
 void Collider::Debug([[maybe_unused]] const std::string& guiName) {
