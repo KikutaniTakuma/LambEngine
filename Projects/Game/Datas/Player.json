@@ -1,0 +1,14 @@
+{
+    "Player": {
+        "Speed": 10.0,
+        "armFreqSpd": 1.5707963705062866,
+        "attackSpd": 1.5707963705062866,
+        "cmaeraRotateSpd_": 3.1415927410125732,
+        "dashCoolTime_": 500,
+        "dashScale_": 10.0,
+        "delayCaemraSpeed_": 0.20000000298023224,
+        "freqSpd": 3.1415927410125732,
+        "gravity_": -9.800000190734863,
+        "jumpVelocity_": 9.800000190734863
+    }
+}
