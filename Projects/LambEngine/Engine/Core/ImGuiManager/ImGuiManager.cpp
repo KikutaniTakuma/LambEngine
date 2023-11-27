@@ -43,7 +43,7 @@ ImGuiManager::ImGuiManager() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	// 日本語フォント追加
-	ImGui::GetIO().Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\msgothic.ttc", 18.0f, NULL, ImGui::GetIO().Fonts->GetGlyphRangesJapanese());
+	ImGui::GetIO().Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\msgothic.ttc", 13.0f, NULL, ImGui::GetIO().Fonts->GetGlyphRangesJapanese());
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(WindowFactory::GetInstance()->GetHwnd());
 	ImGui_ImplDX12_Init(
