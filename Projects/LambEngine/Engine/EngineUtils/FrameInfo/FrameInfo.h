@@ -107,7 +107,7 @@ public:
 	/// フレームの最初の時間を取得
 	/// </summary>
 	/// <returns>フレームの時間</returns>
-	std::chrono::steady_clock::time_point GetThisFrameTime() const {
+	const std::chrono::steady_clock::time_point& GetThisFrameTime() const {
 		return frameStartTime_;
 	}
 

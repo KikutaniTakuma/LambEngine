@@ -13,6 +13,27 @@ public:
 		Attack,
 	};
 
+	struct ComboAttack {
+		// 溜め時間
+		std::chrono::milliseconds chargeTime_;
+
+		// 攻撃振り速度
+		float swingSpeed_;
+	};
+
+	struct WorkAttack {
+		std::chrono::steady_clock::time_point attackStartTime_;
+
+		uint32_t currentComboAttack_;
+
+		bool isNext_;
+	};
+
+	static constexpr int32_t kMaxComboNum_ = 3;
+
+private:
+	static const std::array<Player::ComboAttack, Player::kMaxComboNum_> kComboAttacks_;
+
 public:
 	static void Initialize(class GlobalVariables* globalVariables);
 
@@ -24,7 +45,7 @@ public:
 	Player& operator=(const Player&) = default;
 
 public:
-	void Move(float cameraRoatate);
+	void Move(const Mat4x4& cameraRoatate);
 
 	void Update();
 
@@ -50,6 +71,10 @@ public:
 	
 	const Lamb::Flg& GetIsDash() const {
 		return isDash_;
+	}
+
+	bool isWeaopnCollsion() const {
+		return isWeaopnCollsion_;
 	}
 
 private:
@@ -85,6 +110,9 @@ private:
 	float attack;
 	float attackSpd;
 
+	WorkAttack workAttack_;
+	std::chrono::steady_clock::time_point attackStartTime_;
+
 	std::chrono::steady_clock::time_point dashStartTime_;
 	std::chrono::milliseconds dashCoolTime_;
 	Lamb::Flg isDash_;
@@ -95,4 +123,6 @@ private:
 
 	float jumpVelocity_;
 	float gravity_;
+
+	bool isWeaopnCollsion_;
 };

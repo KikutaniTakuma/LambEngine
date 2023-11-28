@@ -1,6 +1,8 @@
 #pragma once
 #include "Drawers/Texture2D/Texture2D.h"
 #include <utility>
+#include <initializer_list>
+#include <vector>
 
 class RockOn {
 public:
@@ -27,11 +29,15 @@ public:
 
 	bool IsRockOnRange(const Vector3& pos) const;
 
+	Vector3 SortRockOn(std::initializer_list<Vector3> positions);
+	void SetRockOnPositions(const std::vector<Vector3>& positions);
+
+	Vector3 NowRockOnPos() const;
+
 public:
 	bool isRockOn_;
 private:
 	std::unique_ptr<Texture2D> rockOnMark_;
-
 
 	Vector3 targetPos_;
 
@@ -41,4 +47,10 @@ private:
 
 	std::pair<float, float> rockOnRange_;
 	std::pair<float, float> rockOnRotateRange_;
+
+	bool isAutoRock_;
+
+	int32_t currentRockOn_;
+
+	std::vector<Vector3> positions_;
 };

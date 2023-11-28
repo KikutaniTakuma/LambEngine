@@ -37,10 +37,7 @@ void GameScene::Initialize() {
 
 	float moveFloorDuration = 32.0f;
 
-	enemy_ = std::make_unique<Enemy>();
-	enemy_->SetCamera(followCamera_.get());
-	enemy_->SetPlayer(player_.get());
-	enemy_->pos_.z = moveFloorDuration;
+	InitEnemy();
 
 
 	floor_.push_back(MoveFloor());
@@ -66,6 +63,20 @@ void GameScene::Finalize() {
 
 }
 
+void GameScene::InitEnemy() {
+	enemys_.clear();
+	float x = -12.0f;
+	for (int32_t i = 0; i < kEnemyNumber_; i++) {
+		enemys_.push_back(std::make_unique<Enemy>());
+		float moveFloorDuration = 32.0f;
+		enemys_.back()->SetCamera(followCamera_.get());
+		enemys_.back()->SetPlayer(player_.get());
+		enemys_.back()->pos_.z = moveFloorDuration;
+		enemys_.back()->pos_.x = x;
+		x += 6.0f;
+	}
+}
+
 void GameScene::Update() {
 	globalVariables_.Update();
 
@@ -83,9 +94,21 @@ void GameScene::Update() {
 		floor.Update();
 	}
 
-	player_->Move(followCamera_->rotate.y);
-	if (enemy_) {
-		enemy_->Move();
+	Mat4x4 cameraRotate;
+
+	if (rockOn_->isRockOn_) {
+		Vector3 enemyPos = rockOn_->NowRockOnPos();
+		enemyPos.y = 0.0f;
+		cameraRotate = followCamera_->GetRotateMatrixY(Vector3::zIdy, enemyPos);
+	}
+	else {
+		cameraRotate = followCamera_->GetRotateMatrixY();
+	}
+	player_->Move(cameraRotate);
+	for (auto& i : enemys_) {
+		if (i) {
+			i->Move();
+		}
 	}
 
 	for (auto& floor : floor_) {
@@ -98,49 +121,52 @@ void GameScene::Update() {
 			player_->pos_ += floor.moveVec_;
 		}
 
-		if (enemy_) {
-			floor.IsCollision(enemy_.get());
-			if ((floor.OnStay() || floor.OnEnter()) && enemy_->pos_.y > floor.pos_.y) {
-				enemy_->moveVec.y = 0.0f;
-				enemy_->collisionPos_.y = enemy_->pos_.y;
-				enemy_->pos_ += floor.moveVec_;
+		for (auto& i : enemys_) {
+			if (i) {
+				floor.IsCollision(i.get());
+				if ((floor.OnStay() || floor.OnEnter()) && i->pos_.y > floor.pos_.y) {
+					i->moveVec.y = 0.0f;
+					i->collisionPos_.y = i->pos_.y;
+					i->pos_ += floor.moveVec_;
+				}
 			}
 		}
 	}
 
-	if (enemy_) { enemy_->Update(); }
+	for (auto& i : enemys_) {
+		if (i) { i->Update(); }
+	}
 	player_->Update();
 	goal_->Update();
 
 	goal_->IsCollision(player_.get());
-	if (enemy_) {
-		enemy_->IsCollision(player_.get());
-		if (enemy_->OnEnter() || (player_->pos_ - enemy_->pos_).Length() < enemy_->scale_.x) {
-			player_.reset();
-			player_ = std::make_unique<Player>(&globalVariables_);
-			player_->SetCamera(followCamera_.get());
+	for (auto& i : enemys_) {
+		if (i) {
+			i->IsCollision(player_.get());
+			if (i->OnEnter() || (player_->pos_ - i->pos_).Length() < i->scale_.x) {
+				player_.reset();
+				player_ = std::make_unique<Player>(&globalVariables_);
+				player_->SetCamera(followCamera_.get());
 
-			enemy_.reset();
-			enemy_ = std::make_unique<Enemy>();
-			enemy_->SetCamera(followCamera_.get());
-			enemy_->SetPlayer(player_.get());
-			enemy_->pos_.z = 32.0f;
+				InitEnemy();
+				break;
+			}
 		}
 	}
+	
 	if (player_->pos_.y < -10.0f || goal_->OnEnter()) {
 		player_.reset();
 		player_ = std::make_unique<Player>(&globalVariables_);
 		player_->SetCamera(followCamera_.get());
 
-		enemy_.reset();
-		enemy_ = std::make_unique<Enemy>();
-		enemy_->SetCamera(followCamera_.get());
-		enemy_->SetPlayer(player_.get());
-		enemy_->pos_.z = 32.0f;
+		InitEnemy();
 	}
-	if (enemy_ && player_->GetBehavior() == Player::Behavior::Attack) {
-		if (player_->GetWeaponCollider().IsCollision(enemy_.get())) {
-			enemy_.reset();
+	for (auto& i : enemys_) {
+		if (i && player_->GetBehavior() == Player::Behavior::Attack && player_->isWeaopnCollsion()) {
+			if (player_->GetWeaponCollider().IsCollision(i.get())) {
+				i.reset();
+				break;
+			}
 		}
 	}
 
@@ -153,8 +179,9 @@ void GameScene::Update() {
 			followCamera_->DelayEasingStart(player_->GetPos());
 		}
 	}
+	Vector3 enemyPos;
 	if (rockOn_->isRockOn_) {
-		Vector3 enemyPos = enemy_->GetPos();
+		enemyPos = rockOn_->NowRockOnPos();
 		enemyPos.y = 0.0f;
 		followCamera_->Update(Vector3::zIdy, enemyPos);
 	}
@@ -162,16 +189,17 @@ void GameScene::Update() {
 		followCamera_->Update();
 	}
 
-
-	if (enemy_) {
-		rockOn_->SetRockOnTarget(enemy_->GetPos());
+	float stickMoveValue = input_->GetGamepad()->GetStick(Gamepad::Stick::RIGHT_X);
+	if (std::abs(stickMoveValue) == 0.0f) {
+		rockOn_->SetRockOnTarget(enemyPos);
 	}
 	else {
 		rockOn_->isRockOn_ = false;
 	}
 	rockOn_->Update();
 
-
+	CreateRockOnPosisions();
+	rockOn_->SetRockOnPositions(enemyPossiotns_);
 }
 
 void GameScene::Draw() {
@@ -189,8 +217,10 @@ void GameScene::Draw() {
 
 	skyDome_->Draw(followCamera_->GetViewProjection(), followCamera_->GetPos());
 
-	if (enemy_) {
-		enemy_->Draw();
+	for(auto& i : enemys_){
+		if (i) {
+			i->Draw();
+		}
 	}
 
 	player_->Draw();
@@ -198,4 +228,13 @@ void GameScene::Draw() {
 	goal_->Draw(followCamera_->GetViewProjection(), followCamera_->GetPos());
 
 	rockOn_->Draw();
+}
+
+void GameScene::CreateRockOnPosisions() {
+	enemyPossiotns_.clear();
+	for (auto& i : enemys_) {
+		if (i && rockOn_->IsRockOnRange(i->GetPos())) {
+			enemyPossiotns_.push_back(i->GetPos());
+		}
+	}
 }

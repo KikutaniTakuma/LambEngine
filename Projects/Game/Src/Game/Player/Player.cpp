@@ -5,9 +5,29 @@
 #include <cmath>
 #include "json.hpp"
 #include "GlobalVariables/GlobalVariables.h"
+#include "Utils/Random/Random.h"
 #include "imgui.h"
 #undef far
 #undef near
+#include "Utils/ScreenOut/ScreenOut.h"
+
+const std::array<Player::ComboAttack, Player::kMaxComboNum_> Player::kComboAttacks_ = {
+	Player::ComboAttack{
+		std::chrono::milliseconds{200},
+
+		float{std::numbers::pi_v<float> * 2.0f}
+	},
+	Player::ComboAttack{
+		std::chrono::milliseconds{300},
+
+		float{std::numbers::pi_v<float> * 4.0f}
+	},
+	Player::ComboAttack{
+		std::chrono::milliseconds{1600},
+
+		float{std::numbers::pi_v<float> * 8.0f}
+	} 
+};
 
 void Player::Initialize(GlobalVariables* globalVariables) {
 	const std::string groupName = "Player";
@@ -103,8 +123,12 @@ void Player::ApplyGlobalVariables() {
 
 void Player::Animation() {
 	float deltaTime = FrameInfo::GetInstance()->GetDelta();
+	std::chrono::steady_clock::time_point nowTime = FrameInfo::GetInstance()->GetThisFrameTime();
 	freq += freqSpd * deltaTime;
 	model_[0]->pos_.y = std::sin(freq) + 2.5f;
+
+	Vector3 trembling;
+	float tremblingStrength = 1.0f;
 
 	if (freq > (std::numbers::pi_v<float> *2.0f)) {
 		freq = 0.0f;
@@ -122,29 +146,67 @@ void Player::Animation() {
 
 		model_[2]->rotate_.y = armFreq;
 		model_[3]->rotate_.y = armFreq;
+		isWeaopnCollsion_ = false;
 		break;
 	case Player::Behavior::Attack:
-		armFreq += attackSpd * deltaTime;
+		if (kComboAttacks_[workAttack_.currentComboAttack_].chargeTime_ < std::chrono::duration_cast<std::chrono::milliseconds>(nowTime - attackStartTime_) ) {
+			armFreq += attackSpd * deltaTime;
+		}else if(workAttack_.currentComboAttack_ == kMaxComboNum_ -1) {
+			trembling = Lamb::Random(-Vector3::identity * tremblingStrength, Vector3::identity * tremblingStrength);
+		}
+		else {
+			trembling = Vector3::zero;
+		}
 
 		if (armFreq > (std::numbers::pi_v<float> *0.5f)) {
 			armFreq = 0.0f;
-			behavior = Behavior::Normal;
+			if (workAttack_.isNext_) {
+				behavior = Behavior::Attack;
+				attackStartTime_ = nowTime;
+				workAttack_.isNext_ = false;
+				armFreq = 0.0f;
 
+				model_[2]->rotate_.y = 0.0f;
+				model_[3]->rotate_.y = 0.0f;
+				workAttack_.currentComboAttack_++;
+				if (kMaxComboNum_ <= workAttack_.currentComboAttack_) {
+					workAttack_.isNext_ = false;
+					workAttack_.currentComboAttack_ = kMaxComboNum_ - 1;
+				}
+				attackSpd = kComboAttacks_[workAttack_.currentComboAttack_].swingSpeed_;
+				isWeaopnCollsion_ = false;
+			}
+			else {
+				if (kMaxComboNum_ - 1 == workAttack_.currentComboAttack_) {
+					workAttack_.isNext_ = false;
+					workAttack_.currentComboAttack_ = 0;
+				}
+				behavior = Behavior::Normal;
+			}
 			model_[2]->rotate_.x = 0.0f;
 			model_[3]->rotate_.x = 0.0f;
 			break;
+		}
+		if (std::chrono::milliseconds{300} < std::chrono::duration_cast<std::chrono::milliseconds>(nowTime - attackStartTime_)) {
+			isWeaopnCollsion_ = true;
+		}
+		else {
+			isWeaopnCollsion_ = false;
 		}
 
 		model_[2]->rotate_.x = armFreq + std::numbers::pi_v<float>;
 		model_[3]->rotate_.x = armFreq + std::numbers::pi_v<float>;
 
-		weapon_->worldMat_ = MakeMatrixAffin(weapon_->scale_, Vector3::zero, weapon_->pos_);
 		weapon_->rotate_.x = armFreq;
+		weapon_->Debug("weapon_");
+		weapon_->Update();
+		weapon_->worldMat_ = MakeMatrixAffin(weapon_->scale_, Vector3::zero, weapon_->pos_ + trembling);
+		weapon_->worldMat_ *= MakeMatrixRotate(weapon_->rotate_);
 		break;
 	}
 }
 
-void Player::Move(float cameraRoatate) {
+void Player::Move(const Mat4x4& cameraRoatate) {
 	isDash_.Update();
 	ApplyGlobalVariables();
 	UpdateCollision();
@@ -155,6 +217,7 @@ void Player::Move(float cameraRoatate) {
 	moveVec_.x = 0.0f;
 	moveVec_.z = 0.0f;
 	static Input* const input = Input::GetInstance();
+	auto nowTime = FrameInfo::GetInstance()->GetThisFrameTime();
 
 	if (!isDash_) {
 		if (input->GetKey()->LongPush(DIK_W)) {
@@ -185,7 +248,7 @@ void Player::Move(float cameraRoatate) {
 			isMove = true;
 		}
 
-		if (moveVec_.y == 0.0f && (input->GetKey()->LongPush(DIK_F) ||
+		if (moveVec_.y == 0.0f && (input->GetKey()->LongPush(DIK_SPACE) ||
 			input->GetGamepad()->Pushed(Gamepad::Button::A))
 			)
 		{
@@ -193,11 +256,10 @@ void Player::Move(float cameraRoatate) {
 		}
 	}
 
-	moveVec_ *= MakeMatrixRotateY(cameraRoatate);
+	moveVec_ *= cameraRoatate;
 
-	auto nowTime = std::chrono::steady_clock::now();
 	if (!isDash_) {
-		if (input->GetKey()->LongPush(DIK_RETURN) ||
+		if (input->GetKey()->LongPush(DIK_LSHIFT) ||
 			input->GetGamepad()->Pushed(Gamepad::Button::B)) {
 			isDash_ = true;
 			dashStartTime_ = nowTime;
@@ -234,6 +296,7 @@ void Player::Move(float cameraRoatate) {
 
 void Player::Update() {
 	//ApplyGlobalVariables();
+	auto nowTime = FrameInfo::GetInstance()->GetThisFrameTime();
 
 	if (moveVec_.y != 0.0f) {
 		pos_.y += moveVec_.y * FrameInfo::GetInstance()->GetDelta();
@@ -245,13 +308,31 @@ void Player::Update() {
 
 	model_[0]->pos_ = pos_;
 
-	if (KeyInput::GetInstance()->Pushed(DIK_SPACE) || Gamepad::GetInstance()->Pushed(Gamepad::Button::A)) {
-		behavior = Behavior::Attack;
+	Lamb::screenout << "IsNext" << workAttack_.isNext_ << Lamb::endline 
+		<< "nowCombo" << workAttack_.currentComboAttack_ << Lamb::endline
+		<< "isWeaponColision" << isWeaopnCollsion_ << Lamb::endline;
 
-		armFreq = 0.0f;
+	if ((KeyInput::GetInstance()->Pushed(DIK_RETURN) || Gamepad::GetInstance()->Pushed(Gamepad::Button::X)) && workAttack_.currentComboAttack_ < kMaxComboNum_ - 1) {
+		if (behavior == Behavior::Attack && !workAttack_.isNext_ ) {
+			if (kMaxComboNum_ <= workAttack_.currentComboAttack_) {
+				workAttack_.isNext_ = false;
+				workAttack_.currentComboAttack_ = kMaxComboNum_-1;
+			}
+			else {
+				workAttack_.isNext_ = true;
+			}
+		}
+		else {
+			workAttack_.isNext_ = false;
+			workAttack_.currentComboAttack_ = 0;
+			behavior = Behavior::Attack;
+			attackStartTime_ = nowTime;
 
-		model_[2]->rotate_.y = 0.0f;
-		model_[3]->rotate_.y = 0.0f;
+			armFreq = 0.0f;
+
+			model_[2]->rotate_.y = 0.0f;
+			model_[3]->rotate_.y = 0.0f;
+		}
 	}
 
 	if (moveVec_ != Vector3::zero && !isDash_) {
@@ -269,12 +350,12 @@ void Player::Update() {
 			model_[0]->worldMat_ = MakeMatrixScalar(model_[0]->scale_) * DirectionToDirection(Vector3::zIdy, Vector3{ preMoveVec_ .x,0.0f, preMoveVec_ .z}.Normalize()) * MakeMatrixTranslate(model_[0]->pos_);
 		}
 	}
-	weapon_->Debug("weapon_");
+	/*weapon_->Debug("weapon_");
 	weapon_->Update();
 	if (behavior == Behavior::Attack) {
 		weapon_->worldMat_.Affin(weapon_->scale_, Vector3::zero, weapon_->pos_);
 		weapon_->worldMat_ *= MakeMatrixRotate(weapon_->rotate_);
-	}
+	}*/
 	weaponColliser_.collisionPos_ = weapon_->GetPos();
 }
 

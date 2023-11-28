@@ -109,6 +109,16 @@ public:
 
 	void Debug(const std::string& guiName);
 
+	Vector3 GetDirection() const {
+		return (Vector3::zIdy * MakeMatrixRotate(rotate)).Normalize();
+	}
+
+	Vector3 GetDirection(const Vector3& basis, const Vector3& target) const {
+		Vector3 posTmp = pos;
+		posTmp.y = 0.0f;
+		return (Vector3::zIdy * DirectionToDirection(basis.Normalize(), (target - posTmp).Normalize())).Normalize();
+	}
+
 
 /// <summary>
 /// メンバ変数

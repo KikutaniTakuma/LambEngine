@@ -41,8 +41,7 @@ Vector4::Vector4(uint32_t right) noexcept {
 }
 
 Vector4& Vector4::operator=(const Vector4& right) noexcept {
-	std::copy(right.m.begin(), right.m.end(), m.begin());
-
+	m = right.m;
 	return *this;
 }
 

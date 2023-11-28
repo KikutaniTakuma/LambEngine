@@ -21,6 +21,9 @@ public:
 
 	void DelayEasingStart(const Vector3& endPos);
 
+	Mat4x4 GetRotateMatrixY() const;
+	Mat4x4 GetRotateMatrixY(const Vector3& basis, const Vector3& target) const;
+
 public:
 	Vector3 offset_;
 	Vector3 gazePoint_;
