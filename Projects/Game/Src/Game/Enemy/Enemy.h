@@ -5,6 +5,7 @@
 #include <vector>
 #include "Game/CollisionManager/Collider/Collider.h"
 #include "Utils/Easing/Easing.h"
+#include "Drawers/Particle/Particle.h"
 
 class Enemy : public Collider {
 public:
@@ -17,6 +18,7 @@ public:
 	void Update();
 
 	void Draw();
+	void ParticleDraw();
 
 	inline Vector3 GetPos() const {
 		return (*model.begin())->pos_;
@@ -35,6 +37,27 @@ public:
 	}
 
 	void Move();
+
+	void EnableDamageAccept() {
+		isDamageAccept_ = true;
+	}
+
+	void Damage() {
+		if (isDamageAccept_) {
+			hp_--;
+			isDamageAccept_ = false;
+			if (hp_ <= 0.0f) {
+				DeleteStart();
+			}
+		}
+	}
+
+	void DeleteStart();
+
+	bool IsDeath() const {
+		return isDeath_;
+	}
+
 
 public:
 	Vector3 pos_;
@@ -59,4 +82,11 @@ private:
 
 	float distanceLimit;
 	bool isPlayerCollsion;
+
+	bool isDamageAccept_;
+	float hp_;
+
+	bool isDeath_;
+
+	Particle particle_;
 };

@@ -80,6 +80,14 @@ void GameScene::InitEnemy() {
 void GameScene::Update() {
 	globalVariables_.Update();
 
+	if (player_->IsAtackStart()) {
+		for (auto& i : enemys_) {
+			if (i) {
+				i->EnableDamageAccept();
+			}
+		}
+	}
+
 	for (auto& model : models_) {
 		model.Update();
 	}
@@ -162,14 +170,19 @@ void GameScene::Update() {
 		InitEnemy();
 	}
 	for (auto& i : enemys_) {
-		if (i && player_->GetBehavior() == Player::Behavior::Attack && player_->isWeaopnCollsion()) {
+		if (i && player_->GetBehavior() == Player::Behavior::Attack && player_->IsWeaopnCollsion()) {
 			if (player_->GetWeaponCollider().IsCollision(i.get())) {
-				i.reset();
+				i->Damage();
 				break;
 			}
 		}
 	}
 
+	for (auto& i : enemys_) {
+		if (i && i->IsDeath()) {
+			i.reset();
+		}
+	}
 	followCamera_->Debug("camera");
 	followCamera_->Move();
 
@@ -226,6 +239,12 @@ void GameScene::Draw() {
 	player_->Draw();
 
 	goal_->Draw(followCamera_->GetViewProjection(), followCamera_->GetPos());
+
+	for (auto& i : enemys_) {
+		if (i) {
+			i->ParticleDraw();
+		}
+	}
 
 	rockOn_->Draw();
 }

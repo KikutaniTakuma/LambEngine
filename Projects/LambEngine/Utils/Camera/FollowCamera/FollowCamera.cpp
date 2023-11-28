@@ -13,11 +13,13 @@ void FollowCamera::Move() {
 }
 
 void FollowCamera::Update() {
+	rotateMat_ = MakeMatrixRotate(rotate);
+
 	if (delayEasing_.ActiveEnter() || delayEasing_.ActiveStay()) {
-		pos = delayEasing_.Get(pos, gazePoint_ + (offset_ * MakeMatrixRotate(rotate)));
+		pos = delayEasing_.Get(pos, gazePoint_ + (offset_ * rotateMat_));
 	}
 	else {
-		pos = gazePoint_ + (offset_ * MakeMatrixRotate(rotate));
+		pos = gazePoint_ + (offset_ * rotateMat_);
 	}
 
 	Camera::Update();
@@ -28,16 +30,16 @@ void FollowCamera::Update() {
 void FollowCamera::Update(const Vector3& basis, const Vector3& target) {
 	Vector3 posTmp = pos;
 	posTmp.y = 0.0f;
-	Mat4x4 rotateMatrix = MakeMatrixRotateX(rotate.x) * DirectionToDirection(basis.Normalize(), (target - posTmp).Normalize());
+	rotateMat_ = MakeMatrixRotateX(rotate.x) * DirectionToDirection(basis.Normalize(), (target - posTmp).Normalize());
 
 	if (delayEasing_.ActiveEnter() || delayEasing_.ActiveStay()) {
-		pos = delayEasing_.Get(easingStartPos_, gazePoint_ + (offset_ * rotateMatrix));
+		pos = delayEasing_.Get(easingStartPos_, gazePoint_ + (offset_ * rotateMat_));
 	}
 	else {
-		pos = gazePoint_ + (offset_ * rotateMatrix);
+		pos = gazePoint_ + (offset_ * rotateMat_);
 	}
 
-	Mat4x4 worldMat = MakeMatrixScalar(scale) * rotateMatrix * MakeMatrixTranslate(pos);
+	Mat4x4 worldMat = MakeMatrixScalar(scale) * rotateMat_ * MakeMatrixTranslate(pos);
 
 	SetMat4x4Update(worldMat);
 

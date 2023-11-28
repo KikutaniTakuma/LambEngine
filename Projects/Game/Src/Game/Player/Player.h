@@ -73,8 +73,12 @@ public:
 		return isDash_;
 	}
 
-	bool isWeaopnCollsion() const {
+	bool IsWeaopnCollsion() const {
 		return isWeaopnCollsion_;
+	}
+
+	bool IsAtackStart() const {
+		return isAtackStart_;
 	}
 
 private:
@@ -125,4 +129,6 @@ private:
 	float gravity_;
 
 	bool isWeaopnCollsion_;
+
+	bool isAtackStart_;
 };

@@ -237,6 +237,12 @@ public:
 		Pipeline::Blend blend = Pipeline::Blend::Normal
 	);
 
+	void Draw(
+		const Mat4x4& cameraRotate,
+		const Mat4x4& viewProjection,
+		Pipeline::Blend blend = Pipeline::Blend::Normal
+	);
+
 	/// <summary>
 	/// この関数で設定及び保存等を行う
 	/// </summary>

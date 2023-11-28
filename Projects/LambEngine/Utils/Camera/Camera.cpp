@@ -49,6 +49,7 @@ void Camera::Update() {
 }
 
 void Camera::Update(const Mat4x4& worldMat) {
+	rotateMat_ = MakeMatrixRotate(rotate);
 	view.Affin(scale, rotate, pos);
 	view = worldMat * view;
 	worldPos = { view[0][3],view[1][3], view[2][3] };

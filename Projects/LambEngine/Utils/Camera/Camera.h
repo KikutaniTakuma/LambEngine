@@ -119,6 +119,10 @@ public:
 		return (Vector3::zIdy * DirectionToDirection(basis.Normalize(), (target - posTmp).Normalize())).Normalize();
 	}
 
+	const Mat4x4& GetRotateMatrix() const {
+		return rotateMat_;
+	}
+
 
 /// <summary>
 /// メンバ変数
@@ -150,4 +154,6 @@ protected:
 
 	Mat4x4 viewProjecctionVp;
 	Mat4x4 viewOthograohicsVp;
+
+	Mat4x4 rotateMat_;
 };

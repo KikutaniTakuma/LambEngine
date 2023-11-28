@@ -64,7 +64,9 @@ Player::Player(GlobalVariables* globalVariables) :
 	isDash_{ false },
 	dashScale_{ 2.0f },
 	jumpVelocity_{9.8f },
-	gravity_{-9.8f }
+	gravity_{-9.8f },
+	isWeaopnCollsion_{false},
+	isAtackStart_{false}
 {
 	globalVariables_ = globalVariables;
 
@@ -147,15 +149,19 @@ void Player::Animation() {
 		model_[2]->rotate_.y = armFreq;
 		model_[3]->rotate_.y = armFreq;
 		isWeaopnCollsion_ = false;
+		isAtackStart_ = false;
 		break;
 	case Player::Behavior::Attack:
 		if (kComboAttacks_[workAttack_.currentComboAttack_].chargeTime_ < std::chrono::duration_cast<std::chrono::milliseconds>(nowTime - attackStartTime_) ) {
 			armFreq += attackSpd * deltaTime;
+			isAtackStart_ = false;
 		}else if(workAttack_.currentComboAttack_ == kMaxComboNum_ -1) {
 			trembling = Lamb::Random(-Vector3::identity * tremblingStrength, Vector3::identity * tremblingStrength);
+			isAtackStart_ = true;
 		}
 		else {
 			trembling = Vector3::zero;
+			isAtackStart_ = true;
 		}
 
 		if (armFreq > (std::numbers::pi_v<float> *0.5f)) {

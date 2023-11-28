@@ -978,6 +978,64 @@ void Particle::Draw(
 	}
 }
 
+void Particle::Draw(
+	const Mat4x4& cameraRotate,
+	const Mat4x4& viewProjection,
+	Pipeline::Blend blend
+) {
+	if (tex_ && isLoad_ && !settings_.empty()) {
+		const Vector2& uv0 = { uvPibot_.x, uvPibot_.y + uvSize_.y }; const Vector2& uv1 = uvSize_ + uvPibot_;
+		const Vector2& uv2 = { uvPibot_.x + uvSize_.x, uvPibot_.y }; const Vector2& uv3 = uvPibot_;
+
+		std::array<VertexData, 4> pv = {
+			Vector3{ -0.5f,  0.5f, 0.1f }, uv3,
+			Vector3{  0.5f,  0.5f, 0.1f }, uv2,
+			Vector3{  0.5f, -0.5f, 0.1f }, uv1,
+			Vector3{ -0.5f, -0.5f, 0.1f }, uv0
+		};
+
+		VertexData* mappedData = nullptr;
+		vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&mappedData));
+		std::copy(pv.begin(), pv.end(), mappedData);
+		vertexResource_->Unmap(0, nullptr);
+
+		UINT drawCount = 0;
+		assert(wtfs_.size() == wvpMat_.Size());
+		Mat4x4 billboardMat;
+		if (isBillboard_) {
+			if (isYBillboard_) {
+				billboardMat = cameraRotate;
+			}
+			else {
+				billboardMat = cameraRotate;
+			}
+		}
+		else {
+			billboardMat = Mat4x4::kIdentity_;
+		}
+
+		for (uint32_t i = 0; i < wvpMat_.Size(); i++) {
+			if (wtfs_[i].isActive_) {
+				wvpMat_[drawCount] = MakeMatrixScalar(wtfs_[i].scale_) * billboardMat * MakeMatrixTranslate(wtfs_[i].pos_) * viewProjection;
+				colorBuf_[drawCount] = UintToVector4(wtfs_[i].color_);
+				drawCount++;
+			}
+		}
+
+
+		if (0 < drawCount) {
+			auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
+			// 各種描画コマンドを積む
+			graphicsPipelineState_[blend]->Use();
+			tex_->Use(0);
+			srvHeap_->Use(wvpMat_.GetViewHandleUINT(), 1);
+			commandlist->IASetVertexBuffers(0, 1, &vertexView_);
+			commandlist->IASetIndexBuffer(&indexView_);
+			commandlist->DrawIndexedInstanced(6, drawCount, 0, 0, 0);
+		}
+	}
+}
+
 void Particle::Debug(const std::string& guiName) {
 	if (isClose_) {
 		return;

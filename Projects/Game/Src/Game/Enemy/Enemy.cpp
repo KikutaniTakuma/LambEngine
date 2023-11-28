@@ -12,7 +12,10 @@ Enemy::Enemy() :
 	model(0),
 	freqSpd(std::numbers::pi_v<float>),
 	freq(0.0f),
-	radius(5.0f)
+	radius(5.0f),
+	isDamageAccept_{true},
+	hp_{3.0f},
+	isDeath_{false}
 {
 	model.push_back(std::make_unique<Model>());
 	model[0]->LoadObj("AL_Resouce/Enemy/Enemy.obj");
@@ -32,6 +35,8 @@ Enemy::Enemy() :
 	scale_ = { 2.0f, 1.5f, 2.0f };
 
 	pos_.y = 16.0f;
+
+	particle_.LoadSettingDirectory("enemy-generation-delete");
 }
 
 void Enemy::Move() {
@@ -83,12 +88,28 @@ void Enemy::Update() {
 			model.front()->worldMat_ = MakeMatrixScalar(model.front()->scale_) * DirectionToDirection(Vector3::zIdy, moveVec.Normalize()) * MakeMatrixRotate(model.front()->rotate_) * MakeMatrixTranslate(model.front()->pos_);
 		}
 	}
+
+	if (particle_.GetIsParticleStart().OnExit()) {
+		isDeath_ = true;
+	}
 }
 
 void Enemy::Draw() {
-	for (auto& i : model) {
-		i->Draw(camera->GetViewProjection(), camera->pos);
+	if (!particle_.GetIsParticleStart()) {
+		for (auto& i : model) {
+			i->Draw(camera->GetViewProjection(), camera->pos);
+		}
 	}
 
 	DebugDraw(camera->GetViewProjection());
+}
+
+void Enemy::ParticleDraw() {
+	particle_.emitterPos_ = collisionPos_;
+	particle_.Update();
+	particle_.Draw(camera->GetRotateMatrix(), camera->GetViewProjection());
+}
+
+void Enemy::DeleteStart() {
+	particle_.ParticleStart();
 }
