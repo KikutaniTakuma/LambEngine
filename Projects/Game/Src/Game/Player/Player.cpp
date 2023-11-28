@@ -314,9 +314,9 @@ void Player::Update() {
 
 	model_[0]->pos_ = pos_;
 
-	Lamb::screenout << "IsNext" << workAttack_.isNext_ << Lamb::endline 
+	/*Lamb::screenout << "IsNext" << workAttack_.isNext_ << Lamb::endline 
 		<< "nowCombo" << workAttack_.currentComboAttack_ << Lamb::endline
-		<< "isWeaponColision" << isWeaopnCollsion_ << Lamb::endline;
+		<< "isWeaponColision" << isWeaopnCollsion_ << Lamb::endline;*/
 
 	if ((KeyInput::GetInstance()->Pushed(DIK_RETURN) || Gamepad::GetInstance()->Pushed(Gamepad::Button::X)) && workAttack_.currentComboAttack_ < kMaxComboNum_ - 1) {
 		if (behavior == Behavior::Attack && !workAttack_.isNext_ ) {
