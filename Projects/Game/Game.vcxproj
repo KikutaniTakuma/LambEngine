@@ -129,10 +129,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\Game\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Obb\Obb.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Plane\Plane.cpp" />
-    <ClCompile Include="Src\Game\Enemy\Enemy.cpp" />
-    <ClCompile Include="Src\Game\Goal\Goal.cpp" />
-    <ClCompile Include="Src\Game\MoveFloor\MoveFloor.cpp" />
-    <ClCompile Include="Src\Game\Player\Player.cpp" />
     <ClCompile Include="Src\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\Scenes\GameScene\GameScene.cpp" />
@@ -150,10 +146,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\Game\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Src\Game\CollisionManager\Obb\Obb.h" />
     <ClInclude Include="Src\Game\CollisionManager\Plane\Plane.h" />
-    <ClInclude Include="Src\Game\Enemy\Enemy.h" />
-    <ClInclude Include="Src\Game\Goal\Goal.h" />
-    <ClInclude Include="Src\Game\MoveFloor\MoveFloor.h" />
-    <ClInclude Include="Src\Game\Player\Player.h" />
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h" />
     <ClInclude Include="Src\Scenes\GameScene\GameScene.h" />
     <ClInclude Include="Src\Scenes\Manager\BaseScene\BaseScene.h" />

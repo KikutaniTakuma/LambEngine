@@ -11,23 +11,11 @@
     <ClCompile Include="Src\Game\CollisionManager\Collider\Collider.cpp">
       <Filter>Game\CollisionManager\Collider</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Game\Player\Player.cpp">
-      <Filter>Game\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\Enemy\Enemy.cpp">
-      <Filter>Game\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\MoveFloor\MoveFloor.cpp">
-      <Filter>Game\MoveFloor</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\Goal\Goal.cpp">
-      <Filter>Game\Goal</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Game\CollisionManager\Obb\Obb.cpp">
       <Filter>Game\CollisionManager\Obb</Filter>
     </ClCompile>
     <ClCompile Include="Src\Game\CollisionManager\Plane\Plane.cpp">
-      <Filter>Game\Plane</Filter>
+      <Filter>Game\CollisionManager\Plane</Filter>
     </ClCompile>
     <ClCompile Include="Src\World\World.cpp">
       <Filter>World</Filter>
@@ -64,29 +52,14 @@
     <Filter Include="Game">
       <UniqueIdentifier>{e16d5b6d-612f-4477-b4d3-85f9d99b2ab8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player">
-      <UniqueIdentifier>{59d5891a-fe38-42fd-8e02-eff0e6cc8f21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy">
-      <UniqueIdentifier>{9b3acda0-60e3-4f51-9f7a-cdeb0de855f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\MoveFloor">
-      <UniqueIdentifier>{ccb4e67f-317d-4ca7-988c-1166af7a4319}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\CollisionManager">
       <UniqueIdentifier>{1451ec42-a15b-4d2f-8a7d-7edbc8a26e9b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game\CollisionManager\Collider">
       <UniqueIdentifier>{9e6dd177-5172-4dfe-bf41-1cfaa76118cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Goal">
-      <UniqueIdentifier>{1bacb22f-e85f-43e8-a84f-be23ce3ec48e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\CollisionManager\Obb">
       <UniqueIdentifier>{f1b87284-7f48-48e0-946d-317f4c3da22f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Plane">
-      <UniqueIdentifier>{268eefac-748b-4452-b6c2-10e06349215c}</UniqueIdentifier>
     </Filter>
     <Filter Include="World">
       <UniqueIdentifier>{b8981fb7-5ba2-4533-897e-e706c7dc3049}</UniqueIdentifier>
@@ -121,6 +94,9 @@
     <Filter Include="Editor\ParticleEditor">
       <UniqueIdentifier>{4b7de689-4b28-45f6-bb48-00506bfb839d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CollisionManager\Plane">
+      <UniqueIdentifier>{268eefac-748b-4452-b6c2-10e06349215c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -132,23 +108,11 @@
     <ClInclude Include="Src\Game\CollisionManager\Collider\Collider.h">
       <Filter>Game\CollisionManager\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Game\Player\Player.h">
-      <Filter>Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\Enemy\Enemy.h">
-      <Filter>Game\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\MoveFloor\MoveFloor.h">
-      <Filter>Game\MoveFloor</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\Goal\Goal.h">
-      <Filter>Game\Goal</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Game\CollisionManager\Obb\Obb.h">
       <Filter>Game\CollisionManager\Obb</Filter>
     </ClInclude>
     <ClInclude Include="Src\Game\CollisionManager\Plane\Plane.h">
-      <Filter>Game\Plane</Filter>
+      <Filter>Game\CollisionManager\Plane</Filter>
     </ClInclude>
     <ClInclude Include="Src\World\World.h">
       <Filter>World</Filter>
