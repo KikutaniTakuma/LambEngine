@@ -47,7 +47,7 @@ void Framework::Finalize() {
 }
 
 void Framework::Execution() {
-	Initialize();
+	this->Initialize();
 
 	FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	Input* const input = Input::GetInstance();
@@ -76,7 +76,7 @@ void Framework::Execution() {
 		this->Update();
 #endif
 		// 終了リクエストが来たら終わり
-		if (isEnd_) {
+		if (this->isEnd_) {
 			break;
 		}
 
@@ -87,5 +87,5 @@ void Framework::Execution() {
 		Engine::FrameEnd();
 	}
 
-	Finalize();
+	this->Finalize();
 }
