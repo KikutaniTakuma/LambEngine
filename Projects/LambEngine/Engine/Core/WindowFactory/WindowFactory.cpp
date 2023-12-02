@@ -1,5 +1,6 @@
 #include "WindowFactory.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Input/Input.h"
 #pragma comment(lib, "winmm.lib")
 #include <cassert>
 
@@ -12,6 +13,7 @@ WindowFactory::WindowFactory():
 	windowStyle_(0u),
 	windowRect_{},
 	windowName_(),
+	isFullscreen_(false),
 	clientSize_{}
 {
 	timeBeginPeriod(1);
@@ -83,6 +85,45 @@ void WindowFactory::Create(const std::wstring& windowTitle, int32_t width, int32
 	SetWindowPos(
 		hwnd_, NULL, 0, 0, 0, 0, (SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED));
 	ShowWindow(hwnd_, SW_NORMAL);
+}
+
+void WindowFactory::ChangeWindowMode() {
+	if (isFullscreen_) {
+		// 通常ウィンドウの時の状態を保存
+		windowStyle_ = GetWindowLong(hwnd_, GWL_STYLE);
+		GetWindowRect(hwnd_, &windowRect_);
+
+		// フルスクリーンにする
+		SetWindowLong(hwnd_, GWL_STYLE, WS_POPUP);
+		SetWindowPos(hwnd_, HWND_TOP, 0, 0, 
+			GetSystemMetrics(SM_CXSCREEN),
+			GetSystemMetrics(SM_CYSCREEN), 
+			SWP_FRAMECHANGED | SWP_SHOWWINDOW
+		);
+	}
+	else {
+		// 通常のウィンドウに戻す
+		SetWindowLong(hwnd_, GWL_STYLE, windowStyle_);
+		SetWindowPos(
+			hwnd_, 
+			NULL,
+			windowRect_.left, windowRect_.top,
+			windowRect_.right - windowRect_.left, 
+			windowRect_.bottom - windowRect_.top,
+			SWP_FRAMECHANGED | SWP_SHOWWINDOW
+		);
+	}
+}
+
+void WindowFactory::Fullscreen() {
+	static KeyInput* const key = Input::GetInstance()->GetKey();
+	if (key->Pushed(DIK_F11) || 
+		((key->LongPush(DIK_LALT) || key->LongPush(DIK_RALT)) && key->Pushed(DIK_RETURN))
+		) 
+	{
+		isFullscreen_ = !isFullscreen_;
+		ChangeWindowMode();
+	}
 }
 
 

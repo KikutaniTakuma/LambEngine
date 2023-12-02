@@ -1,5 +1,6 @@
 #include "Framework.h"
 #include "Engine/Engine.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 
@@ -51,6 +52,7 @@ void Framework::Execution() {
 
 	FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	Input* const input = Input::GetInstance();
+	WindowFactory* const window = WindowFactory::GetInstance();
 
 	while (Engine::WindowMassage()) {
 		// 描画開始処理
@@ -61,6 +63,9 @@ void Framework::Execution() {
 
 		// 入力処理
 		input->InputStart();
+
+		// フルスクリーン化
+		window->Fullscreen();
 
 #ifdef _DEBUG		
 		if (frameInfo->GetIsDebugStop() && frameInfo->GetIsOneFrameActive()) {

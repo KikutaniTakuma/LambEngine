@@ -23,10 +23,22 @@ public:
 		return &instance;
 	}
 
+public:
 	static LRESULT WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 public:
 	void Create(const std::wstring& windowTitle, int32_t width, int32_t height);
+
+	void Fullscreen();
+
+private:
+	/// <summary>
+	/// 引数がtrueならフルスクリーンに変更
+	/// </summary>
+	/// <param name="changeState">スクリーンの状態</param>
+	void ChangeWindowMode();
+
+public:
 
 	inline HWND GetHwnd() const {
 		return hwnd_;
@@ -51,6 +63,10 @@ private:
 	UINT windowStyle_;
 	RECT windowRect_;
 	std::wstring windowName_;
+
+	
+
+	bool isFullscreen_;
 
 	Vector2 clientSize_;
 };
