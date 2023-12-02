@@ -117,6 +117,7 @@ void WindowFactory::ChangeWindowMode() {
 
 void WindowFactory::Fullscreen() {
 	static KeyInput* const key = Input::GetInstance()->GetKey();
+	assert(!!key);
 	if (key->Pushed(DIK_F11) || 
 		((key->LongPush(DIK_LALT) || key->LongPush(DIK_RALT)) && key->Pushed(DIK_RETURN))
 		) 
