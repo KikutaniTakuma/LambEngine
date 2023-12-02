@@ -64,9 +64,6 @@ private:
 	RECT windowRect_;
 	std::wstring windowName_;
 
-	
-
 	bool isFullscreen_;
-
 	Vector2 clientSize_;
 };
