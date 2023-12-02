@@ -94,11 +94,47 @@ public:
 		}
 	}
 
-	inline StructuredBuffer(const StructuredBuffer& right) noexcept = delete;
-	inline StructuredBuffer(StructuredBuffer&& right) noexcept = delete;
+	inline StructuredBuffer(const StructuredBuffer& right) noexcept:
+		StructuredBuffer{ right.Size() }
+	{
+		*this = right;
+	}
 
-	inline StructuredBuffer<T>& operator=(const StructuredBuffer& right) = delete;
-	inline StructuredBuffer<T>& operator=(StructuredBuffer&& right) = delete;
+	template<Lamb::IsContainer Container>
+	inline StructuredBuffer(const Container& right) noexcept :
+		StructuredBuffer{ right.size() }
+	{
+		*this = right;
+	}
+	inline StructuredBuffer(StructuredBuffer&&) = delete;
+
+	inline StructuredBuffer<T>& operator=(const StructuredBuffer& right) noexcept {
+		Resize(right.Size());
+
+		OnWright();
+
+		for (uint32_t i = 0u; i < instanceNum_; i++) {
+			data_[i] = right[i];
+		}
+
+		return *this;
+	}
+	inline StructuredBuffer<T>& operator=(StructuredBuffer&&) = delete;
+
+	template<Lamb::IsContainer Container>
+	inline StructuredBuffer<T>& operator=(const Container& right) noexcept {
+		Resize(right.size());
+
+		OnWright();
+
+		uint32_t index = 0u;
+		for (const auto& i : right) {
+			data_[index] = i;
+			index++;
+		}
+
+		return *this;
+	}
 
 public:
 	void OnWright() noexcept {
