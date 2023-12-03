@@ -1,11 +1,13 @@
 #include "WindowFactory.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
-#include "Input/Input.h"
 #pragma comment(lib, "winmm.lib")
-#include <cassert>
 
 #include "imgui_impl_win32.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+#include <cassert>
+
+#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Input/Input.h"
 
 WindowFactory::WindowFactory():
 	hwnd_{},
@@ -146,6 +148,6 @@ Vector2 WindowFactory::GetWindowSize() const {
 	);
 }
 
-Vector2 WindowFactory::GetClientSize() const {
+const Vector2& WindowFactory::GetClientSize() const {
 	return clientSize_;
 }
