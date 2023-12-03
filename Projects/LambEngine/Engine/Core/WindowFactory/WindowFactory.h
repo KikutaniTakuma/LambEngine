@@ -8,24 +8,36 @@
 #include "Utils/Math/Vector2.h"
 
 /// <summary>
-/// ウィンドウズAPI管理クラス(ウィンドウ生成等)
+/// ウィンドウ管理クラス(ウィンドウ生成等)
 /// </summary>
 class WindowFactory {
 private:
 	WindowFactory();
 	~WindowFactory();
 	WindowFactory(const WindowFactory&) = delete;
+	WindowFactory(WindowFactory&&) = delete;
 	const WindowFactory& operator=(const WindowFactory&) = delete;
+	const WindowFactory& operator=(WindowFactory&&) = delete;
 
 public:
-	static inline WindowFactory* GetInstance() {
+	/// <summary>
+	/// シングルトンインスタンス取得
+	/// </summary>
+	/// <returns>シングルトンインスタンス</returns>
+	static inline WindowFactory* const GetInstance() {
 		static WindowFactory instance;
 		return &instance;
 	}
 
 public:
+	/// <summary>
+	/// ウィンドウプロシージャ
+	/// </summary>
 	static LRESULT WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
+/// <summary>
+/// ウィンドウ
+/// </summary>
 public:
 	/// <summary>
 	/// ウィンドウ生成
@@ -41,17 +53,26 @@ public:
 		bool isFullscreen = false
 	);
 
+	/// <summary>
+	///  特定の入力でフルスクリーンにする。フルスクリーンなら元のウィンドウに戻す
+	/// </summary>
 	void Fullscreen();
 
 private:
 	/// <summary>
-	/// 引数がtrueならフルスクリーンに変更
+	/// ウィンドウのモードを変更
 	/// </summary>
-	/// <param name="changeState">スクリーンの状態</param>
 	void ChangeWindowMode();
 
-public:
 
+/// <summary>
+/// ゲッター
+/// </summary>
+public:
+	/// <summary>
+	/// ウィンドウハンドル取得
+	/// </summary>
+	/// <returns>ウィンドウハンドル</returns>
 	inline HWND GetHwnd() const {
 		return hwnd_;
 	}
@@ -64,15 +85,29 @@ public:
 		return wndEx_;
 	}
 
-	inline std::wstring GetWindowClassName() const {
+	/// <summary>
+	/// ウィング名取得
+	/// </summary>
+	/// <returns></returns>
+	inline const std::wstring& GetWindowClassName() const {
 		return windowName_;
 	}
 
+	/// <summary>
+	/// ウィンドウサイズ取得
+	/// </summary>
+	/// <returns>ウィンドウサイズ</returns>
 	Vector2 GetWindowSize() const;
 
-	Vector2 GetClientSize() const;
+	/// <summary>
+	/// クライアント領域取得
+	/// </summary>
+	/// <returns>クライアント領域</returns>
+	const Vector2& GetClientSize() const;
 
-
+/// <summary>
+/// メンバ変数
+/// </summary>
 private:
 	HWND hwnd_ = nullptr;
 	WNDCLASSEX wndEx_{};
