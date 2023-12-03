@@ -3,7 +3,7 @@
 #include <Windows.h>
 #undef min
 #undef max
-#include <stdint.h>
+#include <cstdint>
 #include <string>
 #include "Utils/Math/Vector2.h"
 
