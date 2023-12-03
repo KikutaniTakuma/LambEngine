@@ -58,7 +58,31 @@ public:
 	/// </summary>
 	void SwitchDarwFlg();
 
+#ifdef _DEBUG
+	bool GetIsDebugStop() const {
+		return isDebugStopGame_;
+	}
 
+	bool GetIsOneFrameActive() const {
+		return isOneFrameActive_;
+	}
+
+	void SetIsOneFrameActive(bool isOneFramActive) {
+		if (isDebugStopGame_) {
+			isOneFrameActive_ = isOneFramActive;
+		}
+	}
+#endif // _DEBUG
+
+	/// <summary>
+	/// デバッグ関数
+	/// </summary>
+	void Debug();
+
+/// <summary>
+/// getter
+/// </summary>
+public:
 	/// <summary>
 	/// デルタタイム取得
 	/// </summary>
@@ -91,20 +115,12 @@ public:
 	}
 
 	/// <summary>
-	/// fpsの上限値を設定(メインモニターのリフレッシュレートを超えることはない)
-	/// </summary>
-	/// <param name="fpsLimit">fps上限値</param>
-	void SetFpsLimit(double fpsLimit);
-
-	/// <summary>
 	/// ゲームスピード取得
 	/// </summary>
 	/// <returns></returns>
 	inline float GetGameSpeedScale() const {
 		return static_cast<float>(gameSpeedSccale_);
 	}
-
-	void SetGameSpeedScale(float gameSpeedSccale);
 
 	/// <summary>
 	/// フレームの最初の時間を取得
@@ -115,32 +131,28 @@ public:
 	}
 
 	/// <summary>
-	/// デバッグ関数
-	/// </summary>
-	void Debug();
-
-	/// <summary>
 	/// メインモニターのリフレッシュレートを取得
 	/// </summary>
 	/// <returns>リフレッシュレート</returns>
 	double GetMainMonitorFramerate() const;
 
 
-#ifdef _DEBUG
-	bool GetIsDebugStop() const {
-		return isDebugStopGame_;
-	}
+/// <summary>
+/// セッター
+/// </summary>
+public:
+	/// <summary>
+	/// fpsの上限値を設定(メインモニターのリフレッシュレートを超えることはない)
+	/// </summary>
+	/// <param name="fpsLimit">fps上限値</param>
+	void SetFpsLimit(double fpsLimit);
 
-	bool GetIsOneFrameActive() const {
-		return isOneFrameActive_;
-	}
+	/// <summary>
+	/// ゲームスピードのスケールを変更
+	/// </summary>
+	void SetGameSpeedScale(float gameSpeedSccale);
 
-	void SetIsOneFrameActive(bool isOneFramActive) {
-		if (isDebugStopGame_) {
-			isOneFrameActive_ = isOneFramActive;
-		}
-	}
-#endif // _DEBUG
+
 
 /// <summary>
 /// メンバ変数
