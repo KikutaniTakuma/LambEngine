@@ -58,6 +58,12 @@ public:
 	/// </summary>
 	void Fullscreen();
 
+	/// <summary>
+	/// 今このウィンドウがアクティブかどうか
+	/// </summary>
+	/// <returns>アクティブならtrue</returns>
+	bool IsThisWindowaActive() const;
+
 private:
 	/// <summary>
 	/// ウィンドウのモードを変更

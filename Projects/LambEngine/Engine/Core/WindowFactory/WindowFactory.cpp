@@ -140,6 +140,12 @@ void WindowFactory::Fullscreen() {
 	}
 }
 
+bool WindowFactory::IsThisWindowaActive() const {
+	HWND currentActiveWindow = GetForegroundWindow();
+
+	return hwnd_ == currentActiveWindow;
+}
+
 
 Vector2 WindowFactory::GetWindowSize() const {
 	return Vector2(
