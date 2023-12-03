@@ -36,7 +36,12 @@ LRESULT WindowFactory::WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARA
 	return DefWindowProc(hwnd, msg, wparam, lparam); // 標準の処理を行う
 }
 
-void WindowFactory::Create(const std::wstring& windowTitle, int32_t width, int32_t height) {
+void WindowFactory::Create(
+	const std::wstring& windowTitle, 
+	int32_t width,
+	int32_t height, 
+	bool isFullscreen
+) {
 	HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 	assert(SUCCEEDED(hr));
 	if (FAILED(hr)) {
@@ -85,6 +90,12 @@ void WindowFactory::Create(const std::wstring& windowTitle, int32_t width, int32
 	SetWindowPos(
 		hwnd_, NULL, 0, 0, 0, 0, (SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED));
 	ShowWindow(hwnd_, SW_NORMAL);
+
+	isFullscreen_ = isFullscreen;
+
+	if (isFullscreen_) {
+		ChangeWindowMode();
+	}
 }
 
 void WindowFactory::ChangeWindowMode() {

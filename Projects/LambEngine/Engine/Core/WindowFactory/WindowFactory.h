@@ -27,7 +27,19 @@ public:
 	static LRESULT WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 public:
-	void Create(const std::wstring& windowTitle, int32_t width, int32_t height);
+	/// <summary>
+	/// ウィンドウ生成
+	/// </summary>
+	/// <param name="windowTitle">ウィンドウ名</param>
+	/// <param name="width">横幅</param>
+	/// <param name="height">縦幅</param>
+	/// <param name="isFullscreen">フルスクリーン化</param>
+	void Create(
+		const std::wstring& windowTitle = L"LambEngine",
+		int32_t width = 1280, 
+		int32_t height = 720, 
+		bool isFullscreen = false
+	);
 
 	void Fullscreen();
 
