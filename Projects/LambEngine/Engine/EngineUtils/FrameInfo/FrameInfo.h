@@ -53,6 +53,9 @@ public:
 	/// </summary>
 	void DrawFps();
 
+	/// <summary>
+	/// fps描画切り替え
+	/// </summary>
 	void SwitchDarwFlg();
 
 
