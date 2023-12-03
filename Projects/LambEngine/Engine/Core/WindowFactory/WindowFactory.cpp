@@ -7,6 +7,7 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 #include <cassert>
 
 #include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Input/Input.h"
 
 WindowFactory::WindowFactory():
@@ -98,6 +99,19 @@ void WindowFactory::Create(
 	if (isFullscreen_) {
 		ChangeWindowMode();
 	}
+}
+
+bool WindowFactory::WindowMassage() {
+	MSG msg{};
+
+	if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	static ErrorCheck* const err = ErrorCheck::GetInstance();
+
+	return (msg.message != WM_QUIT) && !(err->GetError());
 }
 
 void WindowFactory::ChangeWindowMode() {

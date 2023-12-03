@@ -133,8 +133,6 @@ private:
 	/// MainLoop
 	/// 
 public:
-	static bool WindowMassage();
-
 	static void FrameStart();
 
 	static void FrameEnd();

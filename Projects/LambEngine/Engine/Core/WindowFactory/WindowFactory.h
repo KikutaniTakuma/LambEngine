@@ -54,6 +54,11 @@ public:
 	);
 
 	/// <summary>
+	/// ウィンドウメッセージ
+	/// </summary>
+	bool WindowMassage();
+
+	/// <summary>
 	///  特定の入力でフルスクリーンにする。フルスクリーンなら元のウィンドウに戻す
 	/// </summary>
 	void Fullscreen();
