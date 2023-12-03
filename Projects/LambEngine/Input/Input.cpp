@@ -18,7 +18,7 @@ Input::Input():
 	mouse_(nullptr)
 {
 	HRESULT hr = DirectInput8Create(
-		WindowFactory::GetInstance()->getWNDCLASSEX().hInstance, 
+		WindowFactory::GetInstance()->GetWNDCLASSEX().hInstance, 
 		DIRECTINPUT_VERSION,
 		IID_IDirectInput8,
 		reinterpret_cast<void**>(directInput_.GetAddressOf()),

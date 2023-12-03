@@ -56,7 +56,11 @@ public:
 		return hwnd_;
 	}
 
-	inline const WNDCLASSEX& getWNDCLASSEX() const {
+	/// <summary>
+	/// WNDCLASSEX取得
+	/// </summary>
+	/// <returns>WNDCLASSEX</returns>
+	inline const WNDCLASSEX& GetWNDCLASSEX() const {
 		return wndEx_;
 	}
 
