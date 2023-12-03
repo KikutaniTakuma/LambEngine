@@ -1,7 +1,11 @@
 #include "FrameInfo.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
-#include "imgui.h"
 
+#ifdef _DEBUG
+#include "imgui.h"
+#endif // _DEBUG
+
+#include "Engine/Core/WindowFactory/WindowFactory.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Input/KeyInput/KeyInput.h"
 
 
@@ -187,10 +191,12 @@ void FrameInfo::Debug() {
 		}
 	}
 
-	ImGui::Begin("fps");
-	ImGui::Text("Frame rate: %3.0lf fps", fps_);
-	ImGui::Text("Delta Time: %.4lf", deltaTime_);
-	ImGui::Text("Frame Count: %llu", frameCount_);
+	ImGui::Begin("Frame Information");
+	bool isThisWindowActive = WindowFactory::GetInstance()->IsThisWindowaActive();
+	ImGui::Text(std::format("This Window Active : {}", isThisWindowActive).c_str());
+	ImGui::Text("Frame rate : %3.0lf fps", fps_);
+	ImGui::Text("Delta Time : %.4lf", deltaTime_);
+	ImGui::Text("Frame Count : %llu", frameCount_);
 	ImGui::DragFloat("fps limit", &fpsLimit, 1.0f, 1.0f, static_cast<float>(kMaxMonitorFps_));
 	
 	fpsLimit_ = static_cast<double>(fpsLimit);
