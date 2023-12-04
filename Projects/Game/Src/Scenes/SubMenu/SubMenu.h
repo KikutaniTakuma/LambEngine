@@ -1,7 +1,7 @@
 #pragma once
 #include "Utils/Flg/Flg.h"
 #include "Utils/Camera/Camera.h"
-
+#include <memory>
 
 class SubMenu {
 public:
@@ -27,5 +27,5 @@ public:
 	Lamb::Flg isActive_;
 
 protected:
-	Camera camera_;
+	std::unique_ptr<Camera> camera_;
 };
