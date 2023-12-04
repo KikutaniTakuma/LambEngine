@@ -236,19 +236,6 @@ bool Engine::InitializeDraw() {
 /// MianLoop用
 /// 
 
-bool Engine::WindowMassage() {
-	MSG msg{};
-
-	if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-
-	static auto err = ErrorCheck::GetInstance();
-
-	return (msg.message != WM_QUIT) && !(err->GetError());
-}
-
 void Engine::FrameStart() {
 	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	frameInfo->Start();

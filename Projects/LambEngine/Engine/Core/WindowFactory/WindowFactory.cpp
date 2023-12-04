@@ -1,10 +1,14 @@
 #include "WindowFactory.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
 #pragma comment(lib, "winmm.lib")
-#include <cassert>
 
 #include "imgui_impl_win32.h"
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+#include <cassert>
+
+#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Input/Input.h"
 
 WindowFactory::WindowFactory():
 	hwnd_{},
@@ -12,6 +16,7 @@ WindowFactory::WindowFactory():
 	windowStyle_(0u),
 	windowRect_{},
 	windowName_(),
+	isFullscreen_(false),
 	clientSize_{}
 {
 	timeBeginPeriod(1);
@@ -34,7 +39,12 @@ LRESULT WindowFactory::WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARA
 	return DefWindowProc(hwnd, msg, wparam, lparam); // 標準の処理を行う
 }
 
-void WindowFactory::Create(const std::wstring& windowTitle, int32_t width, int32_t height) {
+void WindowFactory::Create(
+	const std::wstring& windowTitle, 
+	int32_t width,
+	int32_t height, 
+	bool isFullscreen
+) {
 	HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 	assert(SUCCEEDED(hr));
 	if (FAILED(hr)) {
@@ -83,6 +93,71 @@ void WindowFactory::Create(const std::wstring& windowTitle, int32_t width, int32
 	SetWindowPos(
 		hwnd_, NULL, 0, 0, 0, 0, (SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED));
 	ShowWindow(hwnd_, SW_NORMAL);
+
+	isFullscreen_ = isFullscreen;
+
+	if (isFullscreen_) {
+		ChangeWindowMode();
+	}
+}
+
+bool WindowFactory::WindowMassage() {
+	MSG msg{};
+
+	if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	static ErrorCheck* const err = ErrorCheck::GetInstance();
+
+	return (msg.message != WM_QUIT) && !(err->GetError());
+}
+
+void WindowFactory::ChangeWindowMode() {
+	if (isFullscreen_) {
+		// 通常ウィンドウの時の状態を保存
+		windowStyle_ = GetWindowLong(hwnd_, GWL_STYLE);
+		GetWindowRect(hwnd_, &windowRect_);
+
+		// フルスクリーンにする
+		SetWindowLong(hwnd_, GWL_STYLE, WS_POPUP);
+		SetWindowPos(hwnd_, HWND_TOP, 0, 0, 
+			GetSystemMetrics(SM_CXSCREEN),
+			GetSystemMetrics(SM_CYSCREEN), 
+			SWP_FRAMECHANGED | SWP_SHOWWINDOW
+		);
+	}
+	else {
+		// 通常のウィンドウに戻す
+		SetWindowLong(hwnd_, GWL_STYLE, windowStyle_);
+		SetWindowPos(
+			hwnd_, 
+			NULL,
+			windowRect_.left, windowRect_.top,
+			windowRect_.right - windowRect_.left, 
+			windowRect_.bottom - windowRect_.top,
+			SWP_FRAMECHANGED | SWP_SHOWWINDOW
+		);
+	}
+}
+
+void WindowFactory::Fullscreen() {
+	static KeyInput* const key = Input::GetInstance()->GetKey();
+	assert(!!key);
+	if (key->Pushed(DIK_F11) || 
+		((key->LongPush(DIK_LALT) || key->LongPush(DIK_RALT)) && key->Pushed(DIK_RETURN))
+		) 
+	{
+		isFullscreen_ = !isFullscreen_;
+		ChangeWindowMode();
+	}
+}
+
+bool WindowFactory::IsThisWindowaActive() const {
+	HWND currentActiveWindow = GetForegroundWindow();
+
+	return hwnd_ == currentActiveWindow;
 }
 
 
@@ -93,6 +168,6 @@ Vector2 WindowFactory::GetWindowSize() const {
 	);
 }
 
-Vector2 WindowFactory::GetClientSize() const {
+const Vector2& WindowFactory::GetClientSize() const {
 	return clientSize_;
 }

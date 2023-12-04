@@ -38,10 +38,20 @@ public:
 		}
 	}
 
-	inline ConstBuffer(const ConstBuffer&) noexcept = delete;
+	inline ConstBuffer(const ConstBuffer& right) noexcept :
+		ConstBuffer{}
+	{
+		*this = right;
+	}
 	inline ConstBuffer(ConstBuffer&&) noexcept = delete;
 
-	inline ConstBuffer<T>& operator=(const ConstBuffer&) = delete;
+	inline ConstBuffer<T>& operator=(const ConstBuffer& right) {
+		OnWright();
+
+		*(*this) = *right;
+
+		return *this;
+	}
 	inline ConstBuffer<T>& operator=(ConstBuffer&&) = delete;
 
 public:

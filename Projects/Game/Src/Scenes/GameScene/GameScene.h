@@ -6,10 +6,6 @@
 #include "Drawers/Particle/Particle.h"
 #include "Drawers/StringOut/StringOut.h"
 #include "GlobalVariables/GlobalVariables.h"
-#include "Game/Player/Player.h"
-#include "Game/MoveFloor/MoveFloor.h"
-#include "Game/Goal/Goal.h"
-#include "Game/Enemy/Enemy.h"
 
 class GameScene : public BaseScene {
 public:
