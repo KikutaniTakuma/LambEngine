@@ -17,10 +17,9 @@ void GameScene::Initialize() {
 	camera_.pos.z = -5.0f;
 	camera_.pos.y = 1.1f;
 
-	model_.ThreadLoadObj("./Resources/Hololive/Watame/Watame.obj");
+	model_ = std::make_unique<Model>();
 
-	//pera_.Initialize("./Resources/Shaders/PostShader/Post.VS.hlsl", "./Resources/Shaders/PostShader/PostNone.PS.hlsl");
-	pera_.scale_ = { 1280.0f,720.0f };
+	model_->ThreadLoadObj("./Resources/Hololive/Watame/Watame.obj");
 }
 
 void GameScene::Finalize() {
@@ -29,14 +28,12 @@ void GameScene::Finalize() {
 
 void GameScene::Update() {
 	camera_.Debug("camera");
-	model_.Update();
-	pera_.Update();
+	model_->Update();
 }
 
 void GameScene::Draw() {
 	camera_.Update(Vector3::zero);
-	//pera_.PreDraw();
-
+	
 	Quaternion rotation = Quaternion::MakeRotateAxisAngle(Vector3{ 0.0f,0.0f,1.0f }.Normalize(), 0.45f);
 	Quaternion rotation2 = Quaternion::MakeRotateZAxis(0.45f);
 	Vector3 pointY = { 2.1f, -0.9f, 1.3f };
@@ -58,7 +55,5 @@ void GameScene::Draw() {
 		<< rotateByQuaternion2 << " : rotateByQuaternion" << Lamb::endline
 		<< rotateByMatrix2 << " : rotateByMatrix";
 
-	model_.Draw(camera_.GetViewProjection(), camera_.GetPos());
-
-	//pera_.Draw(camera_.GetViewOthographics(), Pipeline::None);
+	model_->Draw(camera_.GetViewProjection(), camera_.GetPos());
 }

@@ -31,7 +31,5 @@ public:
 	void Draw() override;
 
 public:
-	Model model_;
-
-	PeraRender pera_;
+	std::unique_ptr<Model> model_;
 };

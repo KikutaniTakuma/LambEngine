@@ -9,6 +9,10 @@ Collider::Collider() :
 	min_(Vector3::identity * -0.5f)
 {
 	color_ = Vector4ToUint(Vector4::identity);
+
+	for (auto& i : lines_) {
+		i = std::make_unique<Line>();
+	}
 }
 
 void Collider::UpdateCollision() {
@@ -185,47 +189,47 @@ void Collider::DebugDraw(const Mat4x4& viewProjection) {
 		Vector3(max_) // 右上奥
 	};
 
-	lines_[0].start_ = positions[0];
-	lines_[0].end_ = positions[1];
+	lines_[0]->start_ = positions[0];
+	lines_[0]->end_ = positions[1];
 
-	lines_[1].start_ = positions[0];
-	lines_[1].end_ = positions[2];
+	lines_[1]->start_ = positions[0];
+	lines_[1]->end_ = positions[2];
 
-	lines_[2].start_ = positions[0];
-	lines_[2].end_ = positions[4];
-
-
-	lines_[3].start_ = positions[3];
-	lines_[3].end_ = positions[1];
-
-	lines_[4].start_ = positions[3];
-	lines_[4].end_ = positions[2];
-
-	lines_[5].start_ = positions[3];
-	lines_[5].end_ = positions[7];
+	lines_[2]->start_ = positions[0];
+	lines_[2]->end_ = positions[4];
 
 
-	lines_[6].start_ = positions[5];
-	lines_[6].end_ = positions[4];
+	lines_[3]->start_ = positions[3];
+	lines_[3]->end_ = positions[1];
 
-	lines_[7].start_ = positions[5];
-	lines_[7].end_ = positions[7];
+	lines_[4]->start_ = positions[3];
+	lines_[4]->end_ = positions[2];
 
-	lines_[8].start_ = positions[5];
-	lines_[8].end_ = positions[1];
+	lines_[5]->start_ = positions[3];
+	lines_[5]->end_ = positions[7];
 
 
-	lines_[9].start_ = positions[6];
-	lines_[9].end_ = positions[4];
+	lines_[6]->start_ = positions[5];
+	lines_[6]->end_ = positions[4];
 
-	lines_[10].start_ = positions[6];
-	lines_[10].end_ = positions[7];
+	lines_[7]->start_ = positions[5];
+	lines_[7]->end_ = positions[7];
 
-	lines_[11].start_ = positions[6];
-	lines_[11].end_ = positions[2];
+	lines_[8]->start_ = positions[5];
+	lines_[8]->end_ = positions[1];
+
+
+	lines_[9]->start_ = positions[6];
+	lines_[9]->end_ = positions[4];
+
+	lines_[10]->start_ = positions[6];
+	lines_[10]->end_ = positions[7];
+
+	lines_[11]->start_ = positions[6];
+	lines_[11]->end_ = positions[2];
 
 	for (auto& line : lines_) {
-		line.Draw(viewProjection, color_);
+		line->Draw(viewProjection, color_);
 	}
 }
 
