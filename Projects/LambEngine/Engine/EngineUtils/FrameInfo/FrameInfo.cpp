@@ -58,7 +58,7 @@ FrameInfo::FrameInfo() :
 	SetFpsLimit(fps_);
 
 	fpsStringOutPut_.SetFormat("./Resources/Font/default.spritefont");
-	fpsStringOutPut_.scale_ *= 0.3f;
+	fpsStringOutPut_.scale *= 0.3f;
 }
 
 FrameInfo::~FrameInfo() {

@@ -117,11 +117,11 @@ public:
 /// メンバ変数
 /// </summary>
 public:
-	Vector3 pos_;
-	Vector3 scale_;
-	Vector3 rotate_;
+	Vector3 pos;
+	Vector3 scale;
+	Vector3 rotate;
 
-	float drawScale_;
+	float drawScale;
 
 protected:
 	Vector3 worldPos_;
@@ -130,8 +130,8 @@ protected:
 	static constexpr float kNearClip_ = 0.01f;
 
 public:
-	float farClip_;
-	float fov_;
+	float farClip;
+	float fov;
 
 protected:
 	Mat4x4 view_;

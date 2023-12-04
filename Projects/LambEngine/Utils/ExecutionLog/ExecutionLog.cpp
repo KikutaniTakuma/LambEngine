@@ -54,7 +54,7 @@ namespace Lamb {
 	}
 
 	void DebugLog(const std::string& text, const Quaternion& quaternion) {
-		DebugLog(text, quaternion.vector4_);
+		DebugLog(text, quaternion.vector4);
 	}
 
 	void ErrorLog(

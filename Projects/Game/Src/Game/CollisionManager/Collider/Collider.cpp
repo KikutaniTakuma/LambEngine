@@ -3,12 +3,12 @@
 #include <algorithm>
 
 Collider::Collider() :
-	scale_(Vector3::identity),
-	collisionPos_(Vector3::zero),
-	max_(Vector3::identity * 0.5f),
-	min_(Vector3::identity * -0.5f)
+	scale_(Vector3::kIdentity),
+	collisionPos_(Vector3::kZero),
+	max_(Vector3::kIdentity * 0.5f),
+	min_(Vector3::kIdentity * -0.5f)
 {
-	color_ = Vector4ToUint(Vector4::identity);
+	color_ = Vector4ToUint(Vector4::kIdentity);
 
 	for (auto& i : lines_) {
 		i = std::make_unique<Line>();
@@ -17,11 +17,11 @@ Collider::Collider() :
 
 void Collider::UpdateCollision() {
 	flg_.Update();
-	max_ = Vector3::identity * 0.5f;
-	min_ = Vector3::identity * -0.5f;
+	max_ = Vector3::kIdentity * 0.5f;
+	min_ = Vector3::kIdentity * -0.5f;
 
-	max_ *= MakeMatrixAffin(scale_, Vector3::zero, collisionPos_);
-	min_ *= MakeMatrixAffin(scale_, Vector3::zero, collisionPos_);
+	max_ *= MakeMatrixAffin(scale_, Vector3::kZero, collisionPos_);
+	min_ *= MakeMatrixAffin(scale_, Vector3::kZero, collisionPos_);
 }
 
 
@@ -29,12 +29,12 @@ bool Collider::IsCollision(const Vector3& pos) {
 	if (min_.x <= pos.x && pos.x <= max_.x) {
 		if (min_.y <= pos.y && pos.y <= max_.y) {
 			if (min_.z <= pos.z && pos.z <= max_.z) {
-				color_ = Vector4ToUint(Vector4::xIdy);
+				color_ = Vector4ToUint(Vector4::kXIndentity);
 				return true;
 			}
 		}
 	}
-	color_ = Vector4ToUint(Vector4::identity);
+	color_ = Vector4ToUint(Vector4::kIdentity);
 	return false;
 }
 
@@ -61,7 +61,7 @@ bool Collider::CollisionExtrusion(Collider& other) {
 		for (auto& otherPos : otherPositions) {
 			if (other.IsCollision(otherPos)) {
 				Vector3 otherToVec = other.collisionPos_ - collisionPos_;
-				Vector3 direction = Vector3::identity;
+				Vector3 direction = Vector3::kIdentity;
 				if (direction.Dot(otherToVec) >= 0.0f
 					) {
 					Vector3 pushBack = closestPoint - otherPos;
@@ -90,14 +90,14 @@ bool Collider::CollisionExtrusion(Collider& other) {
 
 				flg_ = true;
 				other.flg_ = true;
-				color_ = Vector4ToUint(Vector4::xIdy);
+				color_ = Vector4ToUint(Vector4::kXIndentity);
 				other.color_ = color_;
 				return static_cast<bool>(flg_);
 			}
 			else {
 				flg_ = false;
 				other.flg_ = false;
-				color_ = Vector4ToUint(Vector4::identity);
+				color_ = Vector4ToUint(Vector4::kIdentity);
 				other.color_ = color_;
 			}
 		}
@@ -127,7 +127,7 @@ bool Collider::CollisionExtrusion(Collider& other) {
 	for (auto& otherPos : otherPositions) {
 		if (IsCollision(otherPos)) {
 			Vector3 otherToVec = other.collisionPos_ - collisionPos_;
-			Vector3 direction = Vector3::identity;
+			Vector3 direction = Vector3::kIdentity;
 			if (direction.Dot(otherToVec) >= 0.0f
 				) {
 				Vector3 pushBack = closestPoint - otherPos;
@@ -156,14 +156,14 @@ bool Collider::CollisionExtrusion(Collider& other) {
 
 			flg_ = true;
 			other.flg_ = true;
-			color_ = Vector4ToUint(Vector4::xIdy);
+			color_ = Vector4ToUint(Vector4::kXIndentity);
 			other.color_ = color_;
 			return static_cast<bool>(flg_);
 		}
 		else {
 			flg_ = false;
 			other.flg_ = false;
-			color_ = Vector4ToUint(Vector4::identity);
+			color_ = Vector4ToUint(Vector4::kIdentity);
 			other.color_ = color_;
 		}
 	}
@@ -189,44 +189,44 @@ void Collider::DebugDraw(const Mat4x4& viewProjection) {
 		Vector3(max_) // 右上奥
 	};
 
-	lines_[0]->start_ = positions[0];
-	lines_[0]->end_ = positions[1];
+	lines_[0]->start = positions[0];
+	lines_[0]->end = positions[1];
 
-	lines_[1]->start_ = positions[0];
-	lines_[1]->end_ = positions[2];
+	lines_[1]->start = positions[0];
+	lines_[1]->end = positions[2];
 
-	lines_[2]->start_ = positions[0];
-	lines_[2]->end_ = positions[4];
-
-
-	lines_[3]->start_ = positions[3];
-	lines_[3]->end_ = positions[1];
-
-	lines_[4]->start_ = positions[3];
-	lines_[4]->end_ = positions[2];
-
-	lines_[5]->start_ = positions[3];
-	lines_[5]->end_ = positions[7];
+	lines_[2]->start = positions[0];
+	lines_[2]->end = positions[4];
 
 
-	lines_[6]->start_ = positions[5];
-	lines_[6]->end_ = positions[4];
+	lines_[3]->start = positions[3];
+	lines_[3]->end = positions[1];
 
-	lines_[7]->start_ = positions[5];
-	lines_[7]->end_ = positions[7];
+	lines_[4]->start = positions[3];
+	lines_[4]->end = positions[2];
 
-	lines_[8]->start_ = positions[5];
-	lines_[8]->end_ = positions[1];
+	lines_[5]->start = positions[3];
+	lines_[5]->end = positions[7];
 
 
-	lines_[9]->start_ = positions[6];
-	lines_[9]->end_ = positions[4];
+	lines_[6]->start = positions[5];
+	lines_[6]->end = positions[4];
 
-	lines_[10]->start_ = positions[6];
-	lines_[10]->end_ = positions[7];
+	lines_[7]->start = positions[5];
+	lines_[7]->end = positions[7];
 
-	lines_[11]->start_ = positions[6];
-	lines_[11]->end_ = positions[2];
+	lines_[8]->start = positions[5];
+	lines_[8]->end = positions[1];
+
+
+	lines_[9]->start = positions[6];
+	lines_[9]->end = positions[4];
+
+	lines_[10]->start = positions[6];
+	lines_[10]->end = positions[7];
+
+	lines_[11]->start = positions[6];
+	lines_[11]->end = positions[2];
 
 	for (auto& line : lines_) {
 		line->Draw(viewProjection, color_);

@@ -8,7 +8,7 @@ ParticleEditor* ParticleEditor::instance_ = nullptr;
 void ParticleEditor::Initialize() {
 	assert(!instance_);
 	instance_ = new ParticleEditor;
-	instance_->camera_.pos_.z = -5.0f;
+	instance_->camera_.pos.z = -5.0f;
 	instance_->camera_.Update();
 }
 
@@ -59,6 +59,6 @@ void ParticleEditor::Editor() {
 
 void ParticleEditor::Draw() {
 #ifdef _DEBUG
-	particle_.Draw(camera_.rotate_, camera_.GetViewOthographics());
+	particle_.Draw(camera_.rotate, camera_.GetViewOthographics());
 #endif // _DEBUG
 }
