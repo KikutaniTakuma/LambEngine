@@ -133,11 +133,11 @@ Texture* TextureManager::LoadTexture(const std::string& fileName) {
 		}
 		///
 
-		if (!tex->isLoad) {
+		if (!tex->isLoad_) {
 			return nullptr;
 		}
 
-		tex->srvHeapHandleUint = srvHeap_->CreateTxtureView(tex.get());
+		tex->srvHeapHandleUint_ = srvHeap_->CreateTxtureView(tex.get());
 		
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 
@@ -180,11 +180,11 @@ Texture* TextureManager::LoadTexture(const std::string& fileName) {
 			}
 			///
 
-			if (!tex->isLoad) {
+			if (!tex->isLoad_) {
 				return nullptr;
 			}
 
-			tex->srvHeapHandleUint = srvHeap_->CreateTxtureView(tex.get());
+			tex->srvHeapHandleUint_ = srvHeap_->CreateTxtureView(tex.get());
 
 			textures_.insert(std::make_pair(fileName, std::move(tex)));
 
@@ -199,11 +199,11 @@ Texture* TextureManager::LoadTexture(const std::string& fileName, ID3D12Graphics
 	if (textures_.empty()) {
 		auto tex = std::make_unique<Texture>();
 		tex->Load(fileName, commandList);
-		if (!tex->isLoad) {
+		if (!tex->isLoad_) {
 			return nullptr;
 		}
 
-		tex->srvHeapHandleUint = srvHeap_->CreateTxtureView(tex.get());
+		tex->srvHeapHandleUint_ = srvHeap_->CreateTxtureView(tex.get());
 
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 
@@ -214,11 +214,11 @@ Texture* TextureManager::LoadTexture(const std::string& fileName, ID3D12Graphics
 		if (itr == textures_.end()) {
 			auto tex = std::make_unique<Texture>();
 			tex->Load(fileName, commandList);
-			if (!tex->isLoad) {
+			if (!tex->isLoad_) {
 				return nullptr;
 			}
 
-			tex->srvHeapHandleUint = srvHeap_->CreateTxtureView(tex.get());
+			tex->srvHeapHandleUint_ = srvHeap_->CreateTxtureView(tex.get());
 
 			textures_.insert(std::make_pair(fileName, std::move(tex)));
 
