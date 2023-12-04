@@ -13,9 +13,9 @@ GameScene::GameScene() :
 {}
 
 void GameScene::Initialize() {
-	camera_.farClip = 3000.0f;
-	camera_.pos.z = -5.0f;
-	camera_.pos.y = 1.1f;
+	camera_->farClip = 3000.0f;
+	camera_->pos.z = -5.0f;
+	camera_->pos.y = 1.1f;
 
 	model_ = std::make_unique<Model>();
 
@@ -27,12 +27,12 @@ void GameScene::Finalize() {
 }
 
 void GameScene::Update() {
-	camera_.Debug("camera");
+	camera_->Debug("camera");
 	model_->Update();
 }
 
 void GameScene::Draw() {
-	camera_.Update(Vector3::zero);
+	camera_->Update(Vector3::zero);
 	
 	Quaternion rotation = Quaternion::MakeRotateAxisAngle(Vector3{ 0.0f,0.0f,1.0f }.Normalize(), 0.45f);
 	Quaternion rotation2 = Quaternion::MakeRotateZAxis(0.45f);
@@ -55,5 +55,5 @@ void GameScene::Draw() {
 		<< rotateByQuaternion2 << " : rotateByQuaternion" << Lamb::endline
 		<< rotateByMatrix2 << " : rotateByMatrix";
 
-	model_->Draw(camera_.GetViewProjection(), camera_.GetPos());
+	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
 }
