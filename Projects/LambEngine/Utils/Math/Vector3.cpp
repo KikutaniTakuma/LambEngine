@@ -114,7 +114,7 @@ Vector3 Vector3::operator*(const Mat4x4& mat) const noexcept {
 	float&& w = x * mat[0][3] + y * mat[1][3] + z * mat[2][3] + 1.0f * mat[3][3];
 	assert(w != 0.0f);
 	if (w == 0.0f) {
-		Log::ErrorLog("Vector3 * Matrix4x4 : w = 0.0f", "operator*", "Vector3");
+		Lamb::ErrorLog("Vector3 * Matrix4x4 : w = 0.0f", "operator*", "Vector3");
 	}
 	w = 1.0f / w;
 	result.x *= w;
@@ -134,7 +134,7 @@ Vector3 operator*(const Mat4x4& left, const Vector3& right) {
 	float&& w = left[3].Dot(vec);
 	assert(w != 0.0f);
 	if (w == 0.0f) {
-		Log::ErrorLog("Vector3 * Matrix4x4 : w = 0.0f", "operator*", "Vector3");
+		Lamb::ErrorLog("Vector3 * Matrix4x4 : w = 0.0f", "operator*", "Vector3");
 	}
 
 	w = 1.0f / w;

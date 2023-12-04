@@ -114,7 +114,7 @@ void Texture::Unload() {
 
 DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 	if (!std::filesystem::exists(std::filesystem::path(filePath))) {
-		Log::ErrorLog("This file is not exist -> " + filePath, "LoadTexture()", "Texture");
+		Lamb::ErrorLog("This file is not exist -> " + filePath, "LoadTexture()", "Texture");
 		return DirectX::ScratchImage();
 	}
 
@@ -123,7 +123,7 @@ DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 	std::wstring filePathW = ConvertString(filePath);
 	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 	if (!SUCCEEDED(hr)) {
-		Log::ErrorLog("DirectX::LoadFromWICFile() failed", "LoadTexture()", "Texture");
+		Lamb::ErrorLog("DirectX::LoadFromWICFile() failed", "LoadTexture()", "Texture");
 		return DirectX::ScratchImage();
 	}
 
@@ -131,7 +131,7 @@ DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 	DirectX::ScratchImage mipImages{};
 	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
 	if (!SUCCEEDED(hr)) {
-		Log::ErrorLog("DirectX::GenerateMipMaps failed", "LoadTexture()", "Texture");
+		Lamb::ErrorLog("DirectX::GenerateMipMaps failed", "LoadTexture()", "Texture");
 		return DirectX::ScratchImage();
 	}
 
@@ -172,7 +172,7 @@ ID3D12Resource* Texture::CreateTextureResource(const DirectX::TexMetadata& metaD
 		IID_PPV_ARGS(&resource)
 	);
 	if (hr != S_OK) {
-		Log::ErrorLog("somehitng error","CreateTextureResource", "Texture");
+		Lamb::ErrorLog("somehitng error","CreateTextureResource", "Texture");
 		return nullptr;
 	}
 	return resource;

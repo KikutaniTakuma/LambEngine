@@ -5,7 +5,7 @@
 #include <cassert>
 #include <chrono>
 
-namespace Log {
+namespace Lamb {
 	bool AddLog(const std::string& text) {
 		static const std::filesystem::path fileName = "./Log/Execution.log";
 		static bool isOpned = false;

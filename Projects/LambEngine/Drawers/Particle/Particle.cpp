@@ -103,7 +103,7 @@ void Particle::CreateGraphicsPipeline() {
 
 	for (auto& i : graphicsPipelineState_) {
 		if (!i) {
-			Log::ErrorLog("pipeline is nullptr", "CreateGraphicsPipeline()","Particle");
+			Lamb::ErrorLog("pipeline is nullptr", "CreateGraphicsPipeline()","Particle");
 			return;
 		}
 	}

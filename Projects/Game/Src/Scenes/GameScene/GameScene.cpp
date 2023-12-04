@@ -13,9 +13,9 @@ GameScene::GameScene() :
 {}
 
 void GameScene::Initialize() {
-	camera_->farClip = 3000.0f;
-	camera_->pos.z = -5.0f;
-	camera_->pos.y = 1.1f;
+	camera_->farClip_ = 3000.0f;
+	camera_->pos_.z = -5.0f;
+	camera_->pos_.y = 1.1f;
 
 	model_ = std::make_unique<Model>();
 

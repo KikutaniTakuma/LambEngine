@@ -62,21 +62,21 @@ KeyInput::KeyInput(IDirectInput8* input):
 	HRESULT hr = input->CreateDevice(GUID_SysKeyboard, keyBoard.GetAddressOf(), NULL);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Log::ErrorLog("CreateDevice failed","Constructor", "KeyInput");
+		Lamb::ErrorLog("CreateDevice failed","Constructor", "KeyInput");
 		return;
 	}
 
 	hr = keyBoard->SetDataFormat(&c_dfDIKeyboard);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Log::ErrorLog("SetDataFormat failed", "Constructor", "KeyInput");
+		Lamb::ErrorLog("SetDataFormat failed", "Constructor", "KeyInput");
 		return;
 	}
 
 	hr = keyBoard->SetCooperativeLevel(WindowFactory::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Log::ErrorLog("SetCooperativeLevel failed", "Constructor", "KeyInput");
+		Lamb::ErrorLog("SetCooperativeLevel failed", "Constructor", "KeyInput");
 		return;
 	}
 

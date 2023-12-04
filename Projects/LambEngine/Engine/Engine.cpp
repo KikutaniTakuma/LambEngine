@@ -74,7 +74,7 @@ Engine* Engine::engine = nullptr;
 bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize) {
 	HRESULT hr =  CoInitializeEx(0, COINIT_MULTITHREADED);
 	if (hr != S_OK) {
-		Log::ErrorLog("CoInitializeEx failed","Initialize()", "Engine");
+		Lamb::ErrorLog("CoInitializeEx failed","Initialize()", "Engine");
 		return false;
 	}
 
@@ -108,7 +108,7 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	ImGuiManager::Initialize();
 
 	if (!engine->InitializeDraw()) {
-		Log::ErrorLog("InitializeDraw() Failed","Initialize()", "Engine");
+		Lamb::ErrorLog("InitializeDraw() Failed","Initialize()", "Engine");
 		return false;
 	}
 
@@ -214,7 +214,7 @@ bool Engine::InitializeDraw() {
 	DsvHeap* dsvHeap = DsvHeap::GetInstance();
 	if(!dsvHeap) {
 		assert(!"CreateDescriptorHeap failed");
-		Log::ErrorLog("CreateDescriptorHeap()  Failed","InitializeDraw()", "Engine");
+		Lamb::ErrorLog("CreateDescriptorHeap()  Failed","InitializeDraw()", "Engine");
 		return false;
 	}
 
