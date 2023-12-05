@@ -4,6 +4,7 @@
 #include "Drawers/Line/Line.h"
 #include "Utils/Flg/Flg.h"
 #include <bitset>
+#include <memory>
 
 /// <summary>
 /// 当たり判定(AABB)
@@ -69,7 +70,7 @@ protected:
 
 	uint32_t color_;
 
-	std::array<Line, 12> lines_;
+	std::array<std::unique_ptr<Line>, 12> lines_;
 
 	std::bitset<32> types_;
 

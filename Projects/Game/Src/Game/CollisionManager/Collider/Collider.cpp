@@ -9,6 +9,10 @@ Collider::Collider() :
 	min_(Vector3::kIdentity * -0.5f)
 {
 	color_ = Vector4ToUint(Vector4::kIdentity);
+
+	for (auto& i : lines_) {
+		i = std::make_unique<Line>();
+	}
 }
 
 void Collider::UpdateCollision() {
@@ -185,47 +189,47 @@ void Collider::DebugDraw(const Mat4x4& viewProjection) {
 		Vector3(max_) // 右上奥
 	};
 
-	lines_[0].start = positions[0];
-	lines_[0].end = positions[1];
+	lines_[0]->start = positions[0];
+	lines_[0]->end = positions[1];
 
-	lines_[1].start = positions[0];
-	lines_[1].end = positions[2];
+	lines_[1]->start = positions[0];
+	lines_[1]->end = positions[2];
 
-	lines_[2].start = positions[0];
-	lines_[2].end = positions[4];
-
-
-	lines_[3].start = positions[3];
-	lines_[3].end = positions[1];
-
-	lines_[4].start = positions[3];
-	lines_[4].end = positions[2];
-
-	lines_[5].start = positions[3];
-	lines_[5].end = positions[7];
+	lines_[2]->start = positions[0];
+	lines_[2]->end = positions[4];
 
 
-	lines_[6].start = positions[5];
-	lines_[6].end = positions[4];
+	lines_[3]->start = positions[3];
+	lines_[3]->end = positions[1];
 
-	lines_[7].start = positions[5];
-	lines_[7].end = positions[7];
+	lines_[4]->start = positions[3];
+	lines_[4]->end = positions[2];
 
-	lines_[8].start = positions[5];
-	lines_[8].end = positions[1];
+	lines_[5]->start = positions[3];
+	lines_[5]->end = positions[7];
 
 
-	lines_[9].start = positions[6];
-	lines_[9].end = positions[4];
+	lines_[6]->start = positions[5];
+	lines_[6]->end = positions[4];
 
-	lines_[10].start = positions[6];
-	lines_[10].end = positions[7];
+	lines_[7]->start = positions[5];
+	lines_[7]->end = positions[7];
 
-	lines_[11].start = positions[6];
-	lines_[11].end = positions[2];
+	lines_[8]->start = positions[5];
+	lines_[8]->end = positions[1];
+
+
+	lines_[9]->start = positions[6];
+	lines_[9]->end = positions[4];
+
+	lines_[10]->start = positions[6];
+	lines_[10]->end = positions[7];
+
+	lines_[11]->start = positions[6];
+	lines_[11]->end = positions[2];
 
 	for (auto& line : lines_) {
-		line.Draw(viewProjection, color_);
+		line->Draw(viewProjection, color_);
 	}
 }
 

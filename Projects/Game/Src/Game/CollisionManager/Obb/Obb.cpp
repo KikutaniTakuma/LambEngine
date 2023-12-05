@@ -102,12 +102,17 @@ void Obb::Update() {
 	lines_[3].start = positions[3];
 	lines_[3].end = positions[1];
 
+	lines_[3].start = positions[3];
+	lines_[3].end = positions[1];
+
 	lines_[4].start = positions[3];
 	lines_[4].end = positions[2];
 
 	lines_[5].start = positions[3];
 	lines_[5].end = positions[7];
 
+	lines_[6].start = positions[5];
+	lines_[6].end = positions[4];
 
 	lines_[6].start = positions[5];
 	lines_[6].end = positions[4];
@@ -118,6 +123,8 @@ void Obb::Update() {
 	lines_[8].start = positions[5];
 	lines_[8].end = positions[1];
 
+	lines_[9].start = positions[6];
+	lines_[9].end = positions[4];
 
 	lines_[9].start = positions[6];
 	lines_[9].end = positions[4];
