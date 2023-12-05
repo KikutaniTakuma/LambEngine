@@ -21,12 +21,12 @@ public:
 
 public:
 	struct MatrixData {
-		Mat4x4 wvpMat_;
+		Mat4x4 wvpMat;
 	};
 
 	struct VertexData {
-		Vector3 position_;
-		Vector2 uv_;
+		Vector3 position;
+		Vector2 uv;
 	};
 
 private:
@@ -219,7 +219,7 @@ public:
 	/// パーティクルスタート関数
 	/// </summary>
 	/// <param name="emitterPos">Emitterの位置</param>
-	void ParticleStart(const Vector3& emitterPos);
+	void ParticleStart(const Vector3& pos);
 
 	/// <summary>
 	/// 更新処理
@@ -309,10 +309,10 @@ public:
 	}
 
 public:
-	Vector2 uvPibot_;
-	Vector2 uvSize_;
+	Vector2 uvPibot;
+	Vector2 uvSize;
 
-	Vector3 emitterPos_;
+	Vector3 emitterPos;
 
 private:
 	std::deque<Setting> settings_;

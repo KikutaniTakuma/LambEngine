@@ -6,14 +6,14 @@
 
 Obb::Obb():
 	center_(),
-	scale_(Vector3::identity),
+	scale_(Vector3::kIdentity),
 	rotate_(),
 	worldMatrix_(),
 	color_(std::numeric_limits<uint32_t>::max()),
 	orientations_{
-		Vector3::xIdy,
-		Vector3::yIdy,
-		Vector3::zIdy
+		Vector3::kXIndentity,
+		Vector3::kYIndentity,
+		Vector3::kZIndentity
 	},
 	lines_{},
 	orientationLines_{}
@@ -36,7 +36,7 @@ bool Obb::IsCollision(Vector3 pos, float radius) {
 		position *= MakeMatrixScalar(scale_);
 	}
 
-	pos *= MakeMatrixInverse(MakeMatrixAffin(Vector3::identity, rotate_, center_));
+	pos *= MakeMatrixInverse(MakeMatrixAffin(Vector3::kIdentity, rotate_, center_));
 
 	//std::array<Plane, 6> planes = {
 	//	Plane{-orientations[1].Normalize(), (center_ - orientations[1]).Length()}, //底面
@@ -90,53 +90,52 @@ void Obb::Update() {
 		Vector3(+size_) // 右上奥
 	};
 
-	lines_[0].start_ = positions[0];
-	lines_[0].end_ = positions[1];
+	lines_[0].start = positions[0];
+	lines_[0].end = positions[1];
 
-	lines_[1].start_ = positions[0];
-	lines_[1].end_ = positions[2];
+	lines_[1].start = positions[0];
+	lines_[1].end = positions[2];
 
-	lines_[2].start_ = positions[0];
-	lines_[2].end_ = positions[4];
+	lines_[2].start = positions[0];
+	lines_[2].end = positions[4];
 
+	lines_[3].start = positions[3];
+	lines_[3].end = positions[1];
 
-	lines_[3].start_ = positions[3];
-	lines_[3].end_ = positions[1];
+	lines_[4].start = positions[3];
+	lines_[4].end = positions[2];
 
-	lines_[4].start_ = positions[3];
-	lines_[4].end_ = positions[2];
-
-	lines_[5].start_ = positions[3];
-	lines_[5].end_ = positions[7];
-
-
-	lines_[6].start_ = positions[5];
-	lines_[6].end_ = positions[4];
-
-	lines_[7].start_ = positions[5];
-	lines_[7].end_ = positions[7];
-
-	lines_[8].start_ = positions[5];
-	lines_[8].end_ = positions[1];
+	lines_[5].start = positions[3];
+	lines_[5].end = positions[7];
 
 
-	lines_[9].start_ = positions[6];
-	lines_[9].end_ = positions[4];
+	lines_[6].start = positions[5];
+	lines_[6].end = positions[4];
 
-	lines_[10].start_ = positions[6];
-	lines_[10].end_ = positions[7];
+	lines_[7].start = positions[5];
+	lines_[7].end = positions[7];
 
-	lines_[11].start_ = positions[6];
-	lines_[11].end_ = positions[2];
+	lines_[8].start = positions[5];
+	lines_[8].end = positions[1];
+
+
+	lines_[9].start = positions[6];
+	lines_[9].end = positions[4];
+
+	lines_[10].start = positions[6];
+	lines_[10].end = positions[7];
+
+	lines_[11].start = positions[6];
+	lines_[11].end = positions[2];
 
 	for (size_t i = 0llu; i < orientationLines_.size(); i++) {
-		orientationLines_[i].start_ = center_;
-		orientationLines_[i].end_ = (orientations_[i] * size_[i]) * worldMatrix_;
+		orientationLines_[i].start = center_;
+		orientationLines_[i].end = (orientations_[i] * size_[i]) * worldMatrix_;
 	}
 
 	for (auto& line : lines_) {
-		line.start_ *= worldMatrix_;
-		line.end_ *= worldMatrix_;
+		line.start *= worldMatrix_;
+		line.end *= worldMatrix_;
 	}
 }
 

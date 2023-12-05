@@ -20,7 +20,7 @@ void GameScene::Initialize() {
 	model_.ThreadLoadObj("./Resources/Hololive/Watame/Watame.obj");
 
 	//pera_.Initialize("./Resources/Shaders/PostShader/Post.VS.hlsl", "./Resources/Shaders/PostShader/PostNone.PS.hlsl");
-	pera_.scale_ = { 1280.0f,720.0f };
+	pera_.scale = { 1280.0f,720.0f };
 }
 
 void GameScene::Finalize() {
@@ -34,7 +34,7 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-	camera_.Update(Vector3::zero);
+	camera_.Update(Vector3::kZero);
 	//pera_.PreDraw();
 
 	Quaternion rotation = Quaternion::MakeRotateAxisAngle(Vector3{ 0.0f,0.0f,1.0f }.Normalize(), 0.45f);
