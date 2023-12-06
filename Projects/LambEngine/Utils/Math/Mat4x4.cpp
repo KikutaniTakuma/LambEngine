@@ -440,12 +440,11 @@ Mat4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 	Vector3 normal;
 
 	if (from.Dot(to) == -1.0f) {
-		Vector3 fromTmp = from;
-		if (fromTmp.x != 0.0f || fromTmp.y != 0.0f) {
-			normal = { fromTmp.y, -fromTmp.x, 0.0f };
+		if (from.x != 0.0f || from.y != 0.0f) {
+			normal = Vector3{ from.y, -from.x, 0.0f }.Normalize();
 		}
-		else if(fromTmp.x != 0.0f || fromTmp.z != 0.0f){
-			normal = { fromTmp.z, 0.0f, -fromTmp.x };
+		else if (from.x != 0.0f || from.z != 0.0f) {
+			normal = Vector3{ from.z, 0.0f, -from.x }.Normalize();
 		}
 	}
 	else {
