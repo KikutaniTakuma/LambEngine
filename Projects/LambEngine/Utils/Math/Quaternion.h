@@ -98,6 +98,12 @@ public:
 /// 静的メンバ関数
 /// </summary>
 public:
+	/// <summary>
+	/// クォータニオン版のDirectionToDirection
+	/// </summary>
+	/// <param name="from">始点</param>
+	/// <param name="to">終点</param>
+	/// <returns>クォータニオン</returns>
 	static Quaternion DirectionToDirection(const Vector3& from, const Vector3& to);
 
 	/// <summary>
@@ -111,19 +117,19 @@ public:
 	/// x軸回転クォータニオン
 	/// </summary>
 	/// <param name="eulerAngle">オイラー角</param>
-	/// <returns>x意軸回転を適用したクォータニオン</returns>
+	/// <returns>x軸回転を適用したクォータニオン</returns>
 	static Quaternion MakeRotateXAxis(float eulerAngle);
 	// <summary>
 	/// y軸回転クォータニオン
 	/// </summary>
 	/// <param name="eulerAngle">オイラー角</param>
-	/// <returns>y意軸回転を適用したクォータニオン</returns>
+	/// <returns>y軸回転を適用したクォータニオン</returns>
 	static Quaternion MakeRotateYAxis(float eulerAngle);
 	// <summary>
 	/// z軸回転クォータニオン
 	/// </summary>
 	/// <param name="eulerAngle">オイラー角</param>
-	/// <returns>z意軸回転を適用したクォータニオン</returns>
+	/// <returns>z軸回転を適用したクォータニオン</returns>
 	static Quaternion MakeRotateZAxis(float eulerAngle);
 
 	/// <summary>
