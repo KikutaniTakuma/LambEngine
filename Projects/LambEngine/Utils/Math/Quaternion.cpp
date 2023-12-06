@@ -285,7 +285,6 @@ Quaternion Quaternion::DirectionToDirection(const Vector3& from, const Vector3& 
 	Quaternion result;
 	Vector3 normal;
 	float theata = std::acos(from.Dot(to)) * 0.5f;
-	float theatSin = from.Cross(to).Length();
 
 	if (from.Dot(to) == -1.0f) {
 		if (from.x != 0.0f || from.y != 0.0f) {
@@ -299,9 +298,6 @@ Quaternion Quaternion::DirectionToDirection(const Vector3& from, const Vector3& 
 		normal = from.Cross(to).Normalize();
 	}
 
-	if (theatSin < 0.0f) {
-		theata *= -1.0f;
-	}
 
 	result.vector.w = std::cos(theata);
 	result.vector.vector3 = normal * std::sin(theata);
