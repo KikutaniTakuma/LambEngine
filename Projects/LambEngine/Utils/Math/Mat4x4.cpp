@@ -220,7 +220,7 @@ const Mat4x4& Mat4x4::RotateZ(float rad) {
 }
 
 const Mat4x4& Mat4x4::Affin(const Vector3& scale, const Vector3& rad, const Vector3& translate) {
-	Mat4x4 rotate = MakeMatrixRotateX(rad.x) * MakeMatrixRotateY(rad.y) * MakeMatrixRotateZ(rad.z);
+	Mat4x4 rotate = Mat4x4::MakeRotateX(rad.x) * Mat4x4::MakeRotateY(rad.y) * Mat4x4::MakeRotateZ(rad.z);
 
 	*this = Mat4x4{ 
 		scale.x * rotate.m_[0][0], scale.x * rotate.m_[0][1],scale.x * rotate.m_[0][2], 0.0f,
@@ -344,19 +344,19 @@ const Mat4x4& Mat4x4::ViewPort(float left, float top, float width, float height,
 	return *this;
 }
 
-Mat4x4 MakeMatrixInverse(Mat4x4 mat) {
-	Mat4x4 tmp = mat;
-	tmp.Inverse();
-	return tmp;
+Mat4x4 Mat4x4::MakeInverse(Mat4x4 mat) {
+	Mat4x4 result = mat;
+	result.Inverse();
+	return result;
 }
 
-Mat4x4 MakeMatrixTransepose(Mat4x4 mat) {
-	Mat4x4 tmp = mat;
-	tmp.Transepose();
-	return tmp;
+Mat4x4 Mat4x4::MakeTransepose(Mat4x4 mat) {
+	Mat4x4 result = mat;
+	result.Transepose();
+	return result;
 }
 
-Mat4x4 MakeMatrixTranslate(Vector3 vec) {
+Mat4x4 Mat4x4::MakeTranslate(Vector3 vec) {
 	Mat4x4 mat;
 
 	mat.Translate(vec);
@@ -364,7 +364,7 @@ Mat4x4 MakeMatrixTranslate(Vector3 vec) {
 	return mat;
 }
 
-Mat4x4 MakeMatrixScalar(Vector3 vec) {
+Mat4x4 Mat4x4::MakeScalar(Vector3 vec) {
 	Mat4x4 mat;
 
 	mat.Scalar(vec);
@@ -372,71 +372,79 @@ Mat4x4 MakeMatrixScalar(Vector3 vec) {
 	return mat;
 }
 
-Mat4x4 MakeMatrixRotateX(float rad) {
-	Mat4x4 tmp;
+Mat4x4 Mat4x4::MakeRotateX(float rad) {
+	Mat4x4 result;
 
-	tmp.RotateX(rad);
+	result.RotateX(rad);
 
-	return tmp;
+	return result;
 }
 
-Mat4x4 MakeMatrixRotateY(float rad) {
-	Mat4x4 tmp;
+Mat4x4 Mat4x4::MakeRotateY(float rad) {
+	Mat4x4 result;
 
-	tmp.RotateY(rad);
+	result.RotateY(rad);
 
-	return tmp;
+	return result;
 }
 
-Mat4x4 MakeMatrixRotateZ(float rad) {
-	Mat4x4 tmp;
+Mat4x4 Mat4x4::MakeRotateZ(float rad) {
+	Mat4x4 result;
 
-	tmp.RotateZ(rad);
+	result.RotateZ(rad);
 
-	return tmp;
+	return result;
 }
 
-Mat4x4 MakeMatrixRotate(const Vector3& rad) {
-	Mat4x4 tmp;
+Mat4x4 Mat4x4::MakeRotate(const Vector3& rad) {
+	Mat4x4 result;
 
-	tmp.Affin(Vector3::kIdentity, rad, Vector3::kZero);
+	result.Affin(Vector3::kIdentity, rad, Vector3::kZero);
 
-	return tmp;
+	return result;
 }
 
-Mat4x4 MakeMatrixAffin(const Vector3& scale, const Vector3& rad, const Vector3& translate) {
-	Mat4x4 tmp;
+Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Vector3& rad, const Vector3& translate) {
+	Mat4x4 result;
 
-	tmp.Affin(scale, rad, translate);
+	result.Affin(scale, rad, translate);
 
-	return tmp;
+	return result;
 }
 
-Mat4x4 MakeMatrixPerspectiveFov(float fovY, float aspectRatio, float nearClip, float farClip) {
-	Mat4x4 tmp;
+Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Vector3& from, const Vector3& to, const Vector3& translate) {
+	Mat4x4 result;
 
-	tmp.PerspectiveFov(fovY, aspectRatio, nearClip, farClip);
+	result = Mat4x4::MakeScalar(scale) * Mat4x4::DirectionToDirection(from, to) * Mat4x4::MakeTranslate(translate);
 
-	return tmp;
+	return result;
 }
 
-Mat4x4 MakeMatrixOrthographic(float left, float right, float top, float bottom, float nearClip, float farClip) {
-	Mat4x4 tmp;
+Mat4x4 Mat4x4::MakePerspectiveFov(float fovY, float aspectRatio, float nearClip, float farClip) {
+	Mat4x4 result;
 
-	tmp.Orthographic(left, right, top, bottom, nearClip, farClip);
+	result.PerspectiveFov(fovY, aspectRatio, nearClip, farClip);
 
-	return tmp;
+	return result;
 }
 
-Mat4x4 MakeMatrixViewPort(float left, float top, float width, float height, float minDepth, float maxDepth) {
-	Mat4x4 tmp;
+Mat4x4 Mat4x4::MakeOrthographic(float left, float right, float top, float bottom, float nearClip, float farClip) {
+	Mat4x4 result;
 
-	tmp.ViewPort(left, top, width, height, minDepth, maxDepth);
+	result.Orthographic(left, right, top, bottom, nearClip, farClip);
 
-	return tmp;
+	return result;
 }
 
-Mat4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
+Mat4x4 Mat4x4::MakeViewPort(float left, float top, float width, float height, float minDepth, float maxDepth) {
+	Mat4x4 result;
+
+	result.ViewPort(left, top, width, height, minDepth, maxDepth);
+
+	return result;
+}
+
+Mat4x4 Mat4x4::DirectionToDirection(const Vector3& from, const Vector3& to) {
 	Vector3 normal;
 
 	if (from.Dot(to) == -1.0f) {
@@ -483,7 +491,7 @@ Mat4x4 DirectionToDirection(const Vector3& from, const Vector3& to) {
 	return result;
 }
 
-Mat4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
+Mat4x4 Mat4x4::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	float angleCos = std::cos(angle);
 	float angleSin = std::sin(angle);
 
@@ -515,14 +523,14 @@ Mat4x4 MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	return result;
 }
 
-std::string GetMatrixString(const Mat4x4& mat) {
+std::string Mat4x4::GetMatrixString() {
 	std::string result =
 	std::format(
 		"{:6.3f}, {:6.3f}, {:6.3f}, {:6.3f}\n{:6.3f}, {:6.3f}, {:6.3f}, {:6.3f}\n{:6.3f}, {:6.3f}, {:6.3f}, {:6.3f}\n{:6.3f}, {:6.3f}, {:6.3f}, {:6.3f}\n",
-		mat[0][0], mat[0][1], mat[0][2], mat[0][3],
-		mat[1][0], mat[1][1], mat[1][2], mat[1][3],
-		mat[2][0], mat[2][1], mat[2][2], mat[2][3],
-		mat[3][0], mat[3][1], mat[3][2], mat[3][3]
+		(*this)[0][0], (*this)[0][1], (*this)[0][2], (*this)[0][3],
+		(*this)[1][0], (*this)[1][1], (*this)[1][2], (*this)[1][3],
+		(*this)[2][0], (*this)[2][1], (*this)[2][2], (*this)[2][3],
+		(*this)[3][0], (*this)[3][1], (*this)[3][2], (*this)[3][3]
 	);
 
 	return result;

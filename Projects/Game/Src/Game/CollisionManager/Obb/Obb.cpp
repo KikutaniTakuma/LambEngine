@@ -21,9 +21,9 @@ Obb::Obb():
 
 bool Obb::IsCollision(Vector3 pos, float radius) {
 	std::array<Vector3, 3> orientations = {
-		orientations_[0] * MakeMatrixRotate(rotate_),
-		orientations_[1] * MakeMatrixRotate(rotate_),
-		orientations_[2] * MakeMatrixRotate(rotate_)
+		orientations_[0] * Mat4x4::MakeRotate(rotate_),
+		orientations_[1] * Mat4x4::MakeRotate(rotate_),
+		orientations_[2] * Mat4x4::MakeRotate(rotate_)
 	};
 
 	std::array<Vector3, 2> positions = {
@@ -33,10 +33,10 @@ bool Obb::IsCollision(Vector3 pos, float radius) {
 	};
 
 	for (auto& position : positions) {
-		position *= MakeMatrixScalar(scale_);
+		position *= Mat4x4::MakeScalar(scale_);
 	}
 
-	pos *= MakeMatrixInverse(MakeMatrixAffin(Vector3::kIdentity, rotate_, center_));
+	pos *= Mat4x4::MakeInverse(Mat4x4::MakeAffin(Vector3::kIdentity, rotate_, center_));
 
 	//std::array<Plane, 6> planes = {
 	//	Plane{-orientations[1].Normalize(), (center_ - orientations[1]).Length()}, //底面

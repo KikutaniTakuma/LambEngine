@@ -44,7 +44,7 @@ void Camera::Update() {
 	projection_.PerspectiveFov(fov, aspect, kNearClip_, farClip);
 	viewProjecction_ = view_ * projection_;
 
-	viewProjecctionVp_ = viewProjecction_ * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
+	viewProjecctionVp_ = viewProjecction_ * Mat4x4::MakeViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 
 	othograohics_.Orthographic(
 		-clientSize.x * 0.5f * drawScale,
@@ -55,13 +55,13 @@ void Camera::Update() {
 	viewOthograohics_ = view_ * othograohics_;
 
 
-	viewOthograohicsVp_ = viewOthograohics_ * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
+	viewOthograohicsVp_ = viewOthograohics_ * Mat4x4::MakeViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 }
 
 void Camera::Update(const Vector3& gazePoint) {
 	Vector3 offset = Vector3::kZIndentity * -10.0f;
 
-	offset *= MakeMatrixRotate(rotate);
+	offset *= Mat4x4::MakeRotate(rotate);
 
 	pos = gazePoint + offset;
 
@@ -81,7 +81,7 @@ void Camera::Update(const Mat4x4& worldMat) {
 	projection_.PerspectiveFov(fov, aspect, kNearClip_, farClip);
 	viewProjecction_ = view_ * projection_;
 
-	viewProjecctionVp_ = viewProjecction_ * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
+	viewProjecctionVp_ = viewProjecction_ * Mat4x4::MakeViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 
 	othograohics_.Orthographic(
 		-clientSize.x * 0.5f * drawScale,
@@ -92,7 +92,7 @@ void Camera::Update(const Mat4x4& worldMat) {
 	viewOthograohics_ = view_ * othograohics_;
 
 
-	viewOthograohicsVp_ = viewOthograohics_ * MakeMatrixViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
+	viewOthograohicsVp_ = viewOthograohics_ * Mat4x4::MakeViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 }
 
 void Camera::Debug([[maybe_unused]] const std::string& guiName) {

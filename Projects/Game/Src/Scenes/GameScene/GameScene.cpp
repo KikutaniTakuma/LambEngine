@@ -40,9 +40,9 @@ void GameScene::Draw() {
 	Vector3 to1 = Vector3{ 0.4f, 0.7f, -0.5f }.Normalize();
 
 	std::array<Mat4x4, 3> rotateMatrix = {
-		DirectionToDirection(Vector3::kXIndentity,Vector3{-1.0f,0.0f,0.0f}),
-		DirectionToDirection(from0, to0),
-		DirectionToDirection(from1, to1)
+		Mat4x4::DirectionToDirection(Vector3::kXIndentity,Vector3{-1.0f,0.0f,0.0f}),
+		Mat4x4::DirectionToDirection(from0, to0),
+		Mat4x4::DirectionToDirection(from1, to1)
 	};
 
 	std::array<Quaternion, 3> rotateQuaternion = {
@@ -53,12 +53,12 @@ void GameScene::Draw() {
 
 	for (size_t i = 0; i < rotateMatrix.size();i++) {
 		Lamb::screenout << "rotateMatrix" << i << Lamb::endline
-			<< GetMatrixString(rotateMatrix[i]);
+			<< rotateMatrix[i].GetMatrixString();
 	}
 
 	for (size_t i = 0; i < rotateQuaternion.size(); i++) {
 		Lamb::screenout << "rotateQuaternion" << i << Lamb::endline
-			<< GetMatrixString(rotateQuaternion[i].GetMatrix());
+			<< rotateQuaternion[i].GetMatrix().GetMatrixString();
 	}
 
 	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());

@@ -20,8 +20,8 @@ void Collider::UpdateCollision() {
 	max_ = Vector3::kIdentity * 0.5f;
 	min_ = Vector3::kIdentity * -0.5f;
 
-	max_ *= MakeMatrixAffin(scale_, Vector3::kZero, collisionPos_);
-	min_ *= MakeMatrixAffin(scale_, Vector3::kZero, collisionPos_);
+	max_ *= Mat4x4::MakeAffin(scale_, Vector3::kZero, collisionPos_);
+	min_ *= Mat4x4::MakeAffin(scale_, Vector3::kZero, collisionPos_);
 }
 
 

@@ -820,7 +820,7 @@ void Particle::Update() {
 					maxPos.x += settings_[currentSettingIndex_].emitter_.circleSize_;
 					pos = Lamb::Random(settings_[currentSettingIndex_].emitter_.pos_, maxPos);
 					posRotate = Lamb::Random(settings_[currentSettingIndex_].emitter_.rotate_.first, settings_[currentSettingIndex_].emitter_.rotate_.second);
-					pos *= MakeMatrixAffin(Vector3::kIdentity, posRotate, Vector3::kZero);
+					pos *= Mat4x4::MakeAffin(Vector3::kIdentity, posRotate, Vector3::kZero);
 					break;
 				}
 
@@ -842,7 +842,7 @@ void Particle::Update() {
 				Vector3 moveRotate = Lamb::Random(settings_[currentSettingIndex_].moveRotate_.first, settings_[currentSettingIndex_].moveRotate_.second);
 
 				// 速度回転
-				velocity *= MakeMatrixAffin(Vector3::kIdentity, moveRotate, Vector3::kZero);
+				velocity *= Mat4x4::MakeAffin(Vector3::kIdentity, moveRotate, Vector3::kZero);
 
 				// 回転
 				Vector3 rotate = Lamb::Random(settings_[currentSettingIndex_].rotate_.first, settings_[currentSettingIndex_].rotate_.second);
@@ -946,10 +946,10 @@ void Particle::Draw(
 		Mat4x4 billboardMat;
 		if (isBillboard_) {
 			if (isYBillboard_) {
-				billboardMat = MakeMatrixRotateY(cameraRotate.y);
+				billboardMat = Mat4x4::MakeRotateY(cameraRotate.y);
 			}
 			else {
-				billboardMat = MakeMatrixRotate(cameraRotate);
+				billboardMat = Mat4x4::MakeRotate(cameraRotate);
 			}
 		}
 		else {
@@ -958,7 +958,7 @@ void Particle::Draw(
 
 		for (uint32_t i = 0; i < wvpMat_.Size();i++) {
 			if (wtfs_[i].isActive_) {
-				wvpMat_[drawCount] = MakeMatrixAffin(wtfs_[i].scale_, wtfs_[i].rotate_, wtfs_[i].pos_) * billboardMat * viewProjection;
+				wvpMat_[drawCount] = Mat4x4::MakeAffin(wtfs_[i].scale_, wtfs_[i].rotate_, wtfs_[i].pos_) * billboardMat * viewProjection;
 				colorBuf_[drawCount] = UintToVector4(wtfs_[i].color_);
 				drawCount++;
 			}

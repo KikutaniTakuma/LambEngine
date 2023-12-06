@@ -310,7 +310,7 @@ void Model::InstancingDraw(const Mat4x4& viewProjectionMat, const Vector3& camer
 		light.eyePos = cameraPos;
 
 		mesh_->Use(
-			MakeMatrixAffin(scale, rotate, pos),
+			Mat4x4::MakeAffin(scale, rotate, pos),
 			viewProjectionMat,
 			light,
 			UintToVector4(color)

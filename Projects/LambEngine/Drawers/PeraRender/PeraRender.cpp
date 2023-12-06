@@ -163,7 +163,7 @@ void PeraRender::Update() {
 
 	std::copy(pv.begin(), pv.end(), worldPos.begin());
 	auto&& worldMat =
-		MakeMatrixAffin(
+		Mat4x4::MakeAffin(
 			Vector3(scale.x, scale.y, 1.0f),
 			rotate,
 			pos
