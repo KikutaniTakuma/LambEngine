@@ -34,26 +34,32 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	camera_->Update(Vector3::kZero);
 	
-	Quaternion rotation = Quaternion::MakeRotateAxisAngle(Vector3{ 0.0f,0.0f,1.0f }.Normalize(), 0.45f);
-	Quaternion rotation2 = Quaternion::MakeRotateZAxis(0.45f);
-	Vector3 pointY = { 2.1f, -0.9f, 1.3f };
-	Mat4x4 rotateMatrix = rotation.GetMatrix();
-	Mat4x4 rotateMatrix2 = rotation2.GetMatrix();
-	Vector3 rotateByQuaternion = pointY * rotation;
-	Vector3 rotateByMatrix = pointY * rotateMatrix;
-	Vector3 rotateByQuaternion2 = pointY * rotation2;
-	Vector3 rotateByMatrix2 = pointY * rotateMatrix2;
+	Vector3 from0 = Vector3{ 1.0f, 0.7f, 0.5f }.Normalize();
+	Vector3 to0 = -from0;
+	Vector3 from1 = Vector3{ -0.6f, 0.9f, 0.2f }.Normalize();
+	Vector3 to1 = Vector3{ 0.4f, 0.7f, -0.5f }.Normalize();
 
-	Lamb::screenout <<
-		rotation << " : rotation" << Lamb::endline
-		<< "rotateMatrix" << Lamb::endline
-		<< GetMatrixString(rotateMatrix)
-		<< rotateByQuaternion << " : rotateByQuaternion" << Lamb::endline
-		<< rotateByMatrix << " : rotateByMatrix" << Lamb::endline
-		<< "rotateMatrix2" << Lamb::endline
-		<< GetMatrixString(rotateMatrix2)
-		<< rotateByQuaternion2 << " : rotateByQuaternion" << Lamb::endline
-		<< rotateByMatrix2 << " : rotateByMatrix";
+	std::array<Mat4x4, 3> rotateMatrix = {
+		DirectionToDirection(Vector3::kXIndentity,Vector3{-1.0f,0.0f,0.0f}),
+		DirectionToDirection(from0, to0),
+		DirectionToDirection(from1, to1)
+	};
+
+	std::array<Quaternion, 3> rotateQuaternion = {
+		Quaternion::DirectionToDirection(Vector3::kXIndentity,Vector3{-1.0f,0.0f,0.0f}),
+		Quaternion::DirectionToDirection(from0, to0),
+		Quaternion::DirectionToDirection(from1, to1)
+	};
+
+	for (size_t i = 0; i < rotateMatrix.size();i++) {
+		Lamb::screenout << "rotateMatrix" << i << Lamb::endline
+			<< GetMatrixString(rotateMatrix[i]);
+	}
+
+	for (size_t i = 0; i < rotateQuaternion.size(); i++) {
+		Lamb::screenout << "rotateQuaternion" << i << Lamb::endline
+			<< GetMatrixString(rotateQuaternion[i].GetMatrix());
+	}
 
 	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
 }
