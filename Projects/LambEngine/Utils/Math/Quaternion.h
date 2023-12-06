@@ -98,6 +98,8 @@ public:
 /// 静的メンバ関数
 /// </summary>
 public:
+	static Quaternion DirectionToDirection(const Vector3& from, const Vector3& to);
+
 	/// <summary>
 	/// 任意軸回転
 	/// </summary>
