@@ -1,6 +1,6 @@
 #include "Particle.h"
 #include "imgui.h"
-#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
+#include "Utils/EngineInfo/EngineInfo.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
@@ -888,7 +888,7 @@ void Particle::Update() {
 			else {
 				float wtfT =static_cast<float>(duration.count()) / static_cast<float>(wtf.deathTime_.count());
 				Vector3 moveVec = Vector3::Lerp(wtf.movePos_, wtf.movePosSecond_, settings_[currentSettingIndex_].moveEase_(wtfT));
-				wtf.pos_ += moveVec * FrameInfo::GetInstance()->GetDelta();
+				wtf.pos_ += moveVec * Lamb::DeltaTime();
 				wtf.color_ = ColorLerp(settings_[currentSettingIndex_].color_.first, settings_[currentSettingIndex_].color_.second, settings_[currentSettingIndex_].colorEase_(wtfT));
 			
 				wtf.scale_ = Vector2::Lerp(wtf.scaleStart_, wtf.scaleSecond_, settings_[currentSettingIndex_].sizeEase_(wtfT));
