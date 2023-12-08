@@ -154,6 +154,9 @@
     <ClCompile Include="Utils\EngineInfo\EngineInfo.cpp">
       <Filter>Utils\EngineInfo</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\EngineUtils\FlgManager\FlgManager.cpp">
+      <Filter>Engine\EngineUtils\FlgManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -321,6 +324,9 @@
     <Filter Include="Utils\EngineInfo">
       <UniqueIdentifier>{43053c56-0360-4ba5-903a-08a26af29cde}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\EngineUtils\FlgManager">
+      <UniqueIdentifier>{a2e5192d-ba59-4283-8ae9-56cbc98d6efc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -487,6 +493,9 @@
     </ClInclude>
     <ClInclude Include="Utils\EngineInfo\EngineInfo.h">
       <Filter>Utils\EngineInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineUtils\FlgManager\FlgManager.h">
+      <Filter>Engine\EngineUtils\FlgManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

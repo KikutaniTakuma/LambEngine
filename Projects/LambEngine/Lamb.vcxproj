@@ -138,6 +138,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Disabled</Optimization>
     </ClCompile>
     <ClCompile Include="Engine\EngineUtils\ErrorCheck\ErrorCheck.cpp" />
+    <ClCompile Include="Engine\EngineUtils\FlgManager\FlgManager.cpp" />
     <ClCompile Include="Engine\EngineUtils\FrameInfo\FrameInfo.cpp" />
     <ClCompile Include="Engine\Graphics\DepthBuffer\DepthBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Engine\Core\WindowFactory\WindowFactory.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\EngineUtils\ErrorCheck\ErrorCheck.h" />
+    <ClInclude Include="Engine\EngineUtils\FlgManager\FlgManager.h" />
     <ClInclude Include="Engine\EngineUtils\FrameInfo\FrameInfo.h" />
     <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />
