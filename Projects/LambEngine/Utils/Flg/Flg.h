@@ -8,10 +8,10 @@ namespace Lamb {
 	class Flg {
 	public:
 		Flg();
-		Flg(const Flg&) = default;
-		Flg(Flg&&) = default;
+		Flg(const Flg& right);
+		Flg(Flg&& right) noexcept;
 		Flg(bool right);
-		~Flg() = default;
+		~Flg();
 
 		Flg& operator=(const Flg&) = default;
 		Flg& operator=(Flg&&) = default;
@@ -51,13 +51,13 @@ namespace Lamb {
 			return flg_ != other.flg_ || preFlg_ != other.preFlg_;
 		}
 
-		inline bool* Data() {
+		inline bool* const Data() {
 			return &flg_;
 		}
 
 	public:
 		/// <summary>
-		/// アップデート(基本的に更新処理の一番最初か終わりにする)
+		/// アップデート(Managerが自動でやるので呼ばなくて良い)
 		/// </summary>
 		void Update();
 
