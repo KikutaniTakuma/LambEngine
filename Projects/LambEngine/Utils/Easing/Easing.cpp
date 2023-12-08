@@ -1,5 +1,5 @@
 #include "Easing.h"
-#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
+#include "Utils/EngineInfo/EngineInfo.h"
 #include "imgui.h"
 
 #include "Utils/Math/Vector3.h"
@@ -20,7 +20,7 @@ Easing::Easing():
 
 void Easing::Update() {
 	if (isActive_) {
-		t_ += spdT_ * FrameInfo::GetInstance()->GetDelta();
+		t_ += spdT_ * Lamb::DeltaTime();
 		t_ = std::clamp(t_, 0.0f, 1.0f);
 
 		if (t_ <= 0.0f || 1.0f <= t_) {
