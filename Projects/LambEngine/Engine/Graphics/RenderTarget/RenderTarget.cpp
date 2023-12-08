@@ -52,6 +52,7 @@ RenderTarget::RenderTarget():
 	}
 
 	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
+	rtvHeap->BookingHeapPos(1u);
 	rtvHeap->CreateView(*this);
 
 	srvDesc_ = {};
