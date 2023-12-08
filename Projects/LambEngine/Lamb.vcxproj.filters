@@ -151,6 +151,9 @@
     <ClCompile Include="Utils\Easing\Easing.cpp">
       <Filter>Utils\Easing</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\EngineInfo\EngineInfo.cpp">
+      <Filter>Utils\EngineInfo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -315,6 +318,9 @@
     <Filter Include="Utils\Easing">
       <UniqueIdentifier>{1dc7052e-fce1-4542-b5fb-a5f223d204de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\EngineInfo">
+      <UniqueIdentifier>{43053c56-0360-4ba5-903a-08a26af29cde}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -478,6 +484,9 @@
     </ClInclude>
     <ClInclude Include="Utils\Easing\Easing.h">
       <Filter>Utils\Easing</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\EngineInfo\EngineInfo.h">
+      <Filter>Utils\EngineInfo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

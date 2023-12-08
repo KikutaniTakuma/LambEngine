@@ -164,6 +164,7 @@
     <ClCompile Include="Utils\ConvertString\ConvertString.cpp" />
     <ClCompile Include="Utils\CsvLoad\CsvLoad.cpp" />
     <ClCompile Include="Utils\Easing\Easing.cpp" />
+    <ClCompile Include="Utils\EngineInfo\EngineInfo.cpp" />
     <ClCompile Include="Utils\ExecutionLog\ExecutionLog.cpp" />
     <ClCompile Include="Utils\Flg\Flg.cpp" />
     <ClCompile Include="Utils\Math\Mat4x4.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="Utils\ConvertString\ConvertString.h" />
     <ClInclude Include="Utils\CsvLoad\CsvLoad.h" />
     <ClInclude Include="Utils\Easing\Easing.h" />
+    <ClInclude Include="Utils\EngineInfo\EngineInfo.h" />
     <ClInclude Include="Utils\ExecutionLog\ExecutionLog.h" />
     <ClInclude Include="Utils\Flg\Flg.h" />
     <ClInclude Include="Utils\Math\Mat4x4.h" />
