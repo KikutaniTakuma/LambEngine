@@ -20,6 +20,7 @@
 #include "Graphics/PipelineManager/PipelineManager.h"
 
 #include "EngineUtils/FrameInfo/FrameInfo.h"
+#include "EngineUtils/FlgManager/FlgManager.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
@@ -240,6 +241,7 @@ void Engine::FrameStart() {
 	Lamb::screenout.Clear();
 	Lamb::screenout << Lamb::endline;
 
+
 	ImGuiManager::GetInstance()->Start();
 
 	instance_->directXSwapChain_->ChangeBackBufferState();
@@ -261,6 +263,8 @@ void Engine::FrameEnd() {
 	if (err->GetError()) {
 		return;
 	}
+
+	FlgManager::GetInstance()->AllFlgUpdate();
 
 	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	frameInfo->DrawFps();
