@@ -72,8 +72,6 @@ bool Obb::IsCollision(Vector3 pos, float radius) {
 }
 
 void Obb::Update() {
-	isCollision_.Update();
-
 	worldMatrix_.Affin(scale_, rotate_, center_);
 
 	size_ = scale_ * 0.5f;

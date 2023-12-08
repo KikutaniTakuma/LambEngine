@@ -6,7 +6,6 @@ SubMenu::SubMenu():
 {}
 
 void SubMenu::ActiveUpdate() {
-	isActive_.Update();
 	if (isActive_) {
 		Update();
 	}

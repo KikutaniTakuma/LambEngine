@@ -19,8 +19,6 @@ Easing::Easing():
 {}
 
 void Easing::Update() {
-	isActive_.Update();
-	isLoop_.Update();
 	if (isActive_) {
 		t_ += spdT_ * FrameInfo::GetInstance()->GetDelta();
 		t_ = std::clamp(t_, 0.0f, 1.0f);
@@ -58,9 +56,6 @@ void Easing::Restart() {
 void Easing::Stop() {
 	isActive_ = false;
 	isLoop_ = false;
-
-	t_ = 0.0f;
-	spdT_ = 1.0f;
 }
 
 void Easing::Debug([[maybe_unused]]const std::string& debugName) {

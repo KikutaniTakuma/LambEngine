@@ -899,7 +899,7 @@ void Particle::Update() {
 
 	}
 
-	settings_[currentSettingIndex_].isValid_.Update();
+	//settings_[currentSettingIndex_].isValid_.Update();
 
 	// もし今の設定の有効時間を過ぎていたら終了
 	if (settings_[currentSettingIndex_].isValid_ && 

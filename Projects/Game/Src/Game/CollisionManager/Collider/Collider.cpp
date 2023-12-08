@@ -16,7 +16,6 @@ Collider::Collider() :
 }
 
 void Collider::UpdateCollision() {
-	flg_.Update();
 	max_ = Vector3::kIdentity * 0.5f;
 	min_ = Vector3::kIdentity * -0.5f;
 

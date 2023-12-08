@@ -300,7 +300,6 @@ void Texture2D::Update() {
 
 		*colorBuf_ = UintToVector4(color);
 	}
-	isSameTexSize.Update();
 }
 
 void Texture2D::Draw(

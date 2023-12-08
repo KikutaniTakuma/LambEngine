@@ -44,14 +44,6 @@ bool Fade::InStay() const {
 }
 
 void Fade::Update() {
-	isOutStart_.Update();
-	isInStart_.Update();
-
-	if (ease_.ActiveExit()) {
-		isInStart_ = false;
-		isOutStart_ = false;
-	}
-	
 	if (isInStart_) {
 		tex_.color = ColorLerp(0xff, 0x00, ease_.GetT());
 	}
@@ -62,6 +54,11 @@ void Fade::Update() {
 	tex_.Update();
 
 	ease_.Update();
+
+	if (ease_.ActiveExit()) {
+		isInStart_ = false;
+		isOutStart_ = false;
+	}
 }
 void Fade::Draw(const Mat4x4& viewProjection) {
 	if (isInStart_ || isOutStart_) {
