@@ -220,9 +220,6 @@ bool Engine::InitializeDraw() {
 
 	depthStencil_ = std::make_unique<DepthBuffer>();
 
-	dsvHeap->BookingHeapPos(1u);
-	dsvHeap->CreateView(*depthStencil_);
-
 	CbvSrvUavHeap* cbvSrvUavHeap = CbvSrvUavHeap::GetInstance();
 	cbvSrvUavHeap->BookingHeapPos(1u);
 	cbvSrvUavHeap->CreateDepthTextureView(*depthStencil_);

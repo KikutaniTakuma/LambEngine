@@ -1,9 +1,10 @@
 #include "DepthBuffer.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include "Engine/Core/WindowFactory/WindowFactory.h"
+#include "Utils/EngineInfo/EngineInfo.h"
 #include "TextureManager/Texture/Texture.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include <cmath>
+#include "Engine/Core/DescriptorHeap/DsvHeap.h"
 
 DepthBuffer::DepthBuffer():
 	tex_{},
@@ -18,7 +19,7 @@ DepthBuffer::DepthBuffer():
 	DirectXDevice* const directXDevice = DirectXDevice::GetInstance();
 
 	// DepthStencilTextureをウィンドウサイズで作成
-	depthStencilResource_ = directXDevice->CreateDepthStencilTextureResource(WindowFactory::GetInstance()->GetClientSize());
+	depthStencilResource_ = directXDevice->CreateDepthStencilTextureResource(Lamb::ClientSize());
 	assert(depthStencilResource_);
 	if (!depthStencilResource_) {
 		assert(!"depthStencilResource failed");
@@ -31,6 +32,10 @@ DepthBuffer::DepthBuffer():
 	srvDesc_.Format = DXGI_FORMAT_R32_FLOAT;
 	srvDesc_.Texture2D.MipLevels = 1;
 	srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	static DsvHeap* const dsvHeap = DsvHeap::GetInstance();
+	dsvHeap->BookingHeapPos(1u);
+	dsvHeap->CreateView(*this);
 }
 
 DepthBuffer::DepthBuffer(const Vector2& bufSize):
@@ -59,9 +64,16 @@ DepthBuffer::DepthBuffer(const Vector2& bufSize):
 	srvDesc_.Format = DXGI_FORMAT_R32_FLOAT;
 	srvDesc_.Texture2D.MipLevels = 1;
 	srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+	static DsvHeap* const dsvHeap = DsvHeap::GetInstance();
+	dsvHeap->BookingHeapPos(1u);
+	dsvHeap->CreateView(*this);
 }
 
 DepthBuffer::~DepthBuffer() {
+	static DsvHeap* const dsvHeap = DsvHeap::GetInstance();
+	dsvHeap->ReleaseView(hadleUINT_);
+
 	if (depthStencilResource_) {
 		depthStencilResource_->Release();
 		depthStencilResource_.Reset();
