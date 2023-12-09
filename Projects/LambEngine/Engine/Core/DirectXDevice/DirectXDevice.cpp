@@ -6,7 +6,7 @@
 
 DirectXDevice* DirectXDevice::instance_ = nullptr;
 
-DirectXDevice* DirectXDevice::GetInstance() {
+DirectXDevice* const DirectXDevice::GetInstance() {
 	return instance_;
 }
 

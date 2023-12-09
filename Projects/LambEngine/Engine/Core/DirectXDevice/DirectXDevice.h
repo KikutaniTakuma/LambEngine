@@ -21,7 +21,7 @@ public:
 	DirectXDevice operator=(DirectXDevice&&) = delete;
 
 public:
-	static DirectXDevice* GetInstance();
+	static DirectXDevice* const GetInstance();
 
 	static void Initialize();
 	static void Finalize();
