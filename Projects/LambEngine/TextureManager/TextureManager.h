@@ -43,7 +43,7 @@ public:
 	/// </summary>
 	/// <param name="fileName"></param>
 	/// <param name="texPtr"></param>
-	void LoadTexture(const std::string& fileName, Texture** texPtr);
+	void LoadTexture(const std::string& fileName, Texture** const texPtr);
 
 	void ThreadLoadTexture();
 
@@ -82,7 +82,7 @@ private:
 	std::unordered_map<std::string, std::unique_ptr<Texture>> textures_;
 	bool thisFrameLoadFlg_;
 
-	std::queue<std::pair<std::string, Texture**>> threadTextureBuff_;
+	std::queue<std::pair<std::string, Texture** const>> threadTextureBuff_;
 	std::thread load_;
 	bool isThreadFinish_;
 	bool isNowThreadLoading_;

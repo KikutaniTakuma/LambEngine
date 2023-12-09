@@ -229,7 +229,7 @@ Texture* const TextureManager::LoadTexture(const std::string& fileName, ID3D12Gr
 	return textures_[fileName].get();
 }
 
-void TextureManager::LoadTexture(const std::string& fileName, Texture** texPtr) {
+void TextureManager::LoadTexture(const std::string& fileName, Texture** const texPtr) {
 	// コンテナに追加
 	threadTextureBuff_.push({ fileName, texPtr });
 }
