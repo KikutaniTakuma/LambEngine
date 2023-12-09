@@ -8,7 +8,7 @@
 
 TextureManager* TextureManager::instance_ = nullptr;
 
-TextureManager* TextureManager::GetInstance() {
+TextureManager* const TextureManager::GetInstance() {
 	return instance_;
 }
 
@@ -97,7 +97,7 @@ TextureManager::~TextureManager() {
 }
 
 
-Texture* TextureManager::LoadTexture(const std::string& fileName) {
+Texture* const TextureManager::LoadTexture(const std::string& fileName) {
 	if (textures_.empty()) {
 		auto tex = std::make_unique<Texture>();
 		tex->Load(fileName, commandList_.Get());
@@ -195,7 +195,7 @@ Texture* TextureManager::LoadTexture(const std::string& fileName) {
 	return textures_[fileName].get();
 }
 
-Texture* TextureManager::LoadTexture(const std::string& fileName, ID3D12GraphicsCommandList* commandList) {
+Texture* const TextureManager::LoadTexture(const std::string& fileName, ID3D12GraphicsCommandList* const commandList) {
 	if (textures_.empty()) {
 		auto tex = std::make_unique<Texture>();
 		tex->Load(fileName, commandList);
@@ -255,7 +255,7 @@ void TextureManager::ThreadLoadTexture() {
 	}
 }
 
-Texture* TextureManager::GetWhiteTex() {
+Texture* const TextureManager::GetWhiteTex() {
 	return instance_->textures_["./Resources/white2x2.png"].get();
 }
 

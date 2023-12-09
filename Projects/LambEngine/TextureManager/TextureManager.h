@@ -21,7 +21,7 @@ private:
 	TextureManager& operator=(TextureManager&&) noexcept = delete;
 
 public:
-	static TextureManager* GetInstance();
+	static TextureManager* const GetInstance();
 
 	static void Initialize();
 
@@ -32,10 +32,10 @@ private:
 
 
 public:
-	Texture* LoadTexture(const std::string& fileName);
+	Texture* const LoadTexture(const std::string& fileName);
 
 private:
-	Texture* LoadTexture(const std::string& fileName, ID3D12GraphicsCommandList* commandList_);
+	Texture* const LoadTexture(const std::string& fileName, ID3D12GraphicsCommandList* const commandList_);
 
 public:
 	/// <summary>
@@ -47,7 +47,7 @@ public:
 
 	void ThreadLoadTexture();
 
-	Texture* GetWhiteTex();
+	Texture* const GetWhiteTex();
 
 	void ReleaseIntermediateResource();
 
@@ -55,7 +55,7 @@ public:
 		return isNowThreadLoading_ && !isCloaseCommandList_;
 	}
 
-	inline ID3D12GraphicsCommandList* GetCommandList() const {
+	inline ID3D12GraphicsCommandList* const GetCommandList() const {
 		return commandList_.Get();
 	}
 
