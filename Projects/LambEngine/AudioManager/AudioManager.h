@@ -19,7 +19,7 @@ private:
 	struct LoadStatus {
 		std::string fileName_;
 		bool loopFlg_;
-		Audio** audio_;
+		Audio**const audio_;
 	};
 
 private:
@@ -42,7 +42,7 @@ private:
 
 public:
 	Audio* const LoadWav(const std::string& fileName, bool loopFlg);
-	void LoadWav(const std::string& fileName, bool loopFlg,Audio** audio);
+	void LoadWav(const std::string& fileName, bool loopFlg,Audio** const audio);
 
 public:
 	void ThreadLoad();

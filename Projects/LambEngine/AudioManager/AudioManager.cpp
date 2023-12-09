@@ -64,7 +64,7 @@ Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 	return audios_[fileName].get();
 }
 
-void AudioManager::LoadWav(const std::string& fileName, bool loopFlg, class Audio** audio) {
+void AudioManager::LoadWav(const std::string& fileName, bool loopFlg, class Audio** const audio) {
 	// コンテナに追加
 	threadAudioBuff_.push({fileName, loopFlg, audio});
 }
