@@ -33,7 +33,7 @@ private:
 public:
 	static void Inititalize();
 	static void Finalize();
-	static inline AudioManager* GetInstance() {
+	static inline AudioManager* const GetInstance() {
 		return instance_;
 	}
 
@@ -41,7 +41,7 @@ private:
 	static AudioManager* instance_;
 
 public:
-	Audio* LoadWav(const std::string& fileName, bool loopFlg);
+	Audio* const LoadWav(const std::string& fileName, bool loopFlg);
 	void LoadWav(const std::string& fileName, bool loopFlg,Audio** audio);
 
 public:
