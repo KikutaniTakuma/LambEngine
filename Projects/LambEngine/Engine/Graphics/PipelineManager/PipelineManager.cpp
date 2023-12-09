@@ -74,7 +74,7 @@ void PipelineManager::IsDepth(bool isDepth_) {
 	instance_->isDepth_ = isDepth_;
 }
 
-Pipeline* PipelineManager::Create() {
+Pipeline* const PipelineManager::Create() {
 	if (instance_->pipelines_.empty()) {
 		auto pipeline = std::make_unique<Pipeline>();
 		pipeline->SetShader(instance_->shader_);
