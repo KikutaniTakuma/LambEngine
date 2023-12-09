@@ -34,7 +34,7 @@ public:
 
 	static void Finalize();
 
-	static inline ShaderManager* GetInstance() {
+	static inline ShaderManager* const GetInstance() {
 		return instance_;
 	}
 
