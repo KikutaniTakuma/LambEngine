@@ -41,7 +41,7 @@ Mesh* MeshManager::LoadObj(const std::string& objFileName) {
 	return meshs_[objFileName].get();
 }
 
-void MeshManager::LoadObj(const std::string& objFileName, Mesh** mesh) {
+void MeshManager::LoadObj(const std::string& objFileName, Mesh**const mesh) {
 	threadMeshBuff_.push(std::make_pair(objFileName, mesh));
 }
 
