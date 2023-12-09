@@ -20,7 +20,7 @@ void CbvSrvUavHeap::Finalize() {
 	instance_ = nullptr;
 }
 
-CbvSrvUavHeap* CbvSrvUavHeap::GetInstance() {
+CbvSrvUavHeap* const CbvSrvUavHeap::GetInstance() {
 	return instance_;
 }
 

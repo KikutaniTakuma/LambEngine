@@ -24,7 +24,7 @@ public:
 
 	static void Finalize();
 
-	static CbvSrvUavHeap* GetInstance();
+	static CbvSrvUavHeap* const GetInstance();
 
 private:
 	static CbvSrvUavHeap* instance_;
