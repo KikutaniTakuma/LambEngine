@@ -145,7 +145,8 @@
     <ClCompile Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.cpp" />
     <ClCompile Include="Engine\Graphics\RenderTarget\RenderTarget.cpp" />
     <ClCompile Include="Engine\Graphics\RootSignature\RootSignature.cpp" />
-    <ClCompile Include="Engine\Graphics\ShaderManager\ShaderManager.cpp" />
+    <ClCompile Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.cpp" />
+    <ClCompile Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.cpp" />
     <ClCompile Include="Input\Gamepad\Gamepad.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Input\KeyInput\KeyInput.cpp" />
@@ -207,7 +208,8 @@
     <ClInclude Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.h" />
     <ClInclude Include="Engine\Graphics\RenderTarget\RenderTarget.h" />
     <ClInclude Include="Engine\Graphics\RootSignature\RootSignature.h" />
-    <ClInclude Include="Engine\Graphics\ShaderManager\ShaderManager.h" />
+    <ClInclude Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.h" />
+    <ClInclude Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.h" />
     <ClInclude Include="Input\Gamepad\Gamepad.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\KeyInput\KeyInput.h" />
