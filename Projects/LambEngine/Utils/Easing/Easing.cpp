@@ -2,8 +2,8 @@
 #include "Utils/EngineInfo/EngineInfo.h"
 #include "imgui.h"
 
-#include "Utils/Math/Vector3.h"
-#include "Utils/Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math/Vector2.h"
 #include <cmath>
 #include <numbers>
 

@@ -5,7 +5,7 @@
 #undef max
 #include <cstdint>
 #include <string>
-#include "Utils/Math/Vector2.h"
+#include "Math/Vector2.h"
 
 /// <summary>
 /// ウィンドウ管理クラス(ウィンドウ生成等)

@@ -11,7 +11,7 @@
 #include "Drawers/Line/Line.h"
 #include "Drawers/Particle/Particle.h"
 
-#include "Utils/Math/Vector2.h"
+#include "Math/Vector2.h"
 
 void Framework::Initialize() {
 	// ライブラリ初期化

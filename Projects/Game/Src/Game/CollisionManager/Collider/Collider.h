@@ -1,6 +1,6 @@
 #pragma once
-#include "Utils/Math/Vector3.h"
-#include "Utils/Math/Mat4x4.h"
+#include "Math/Vector3.h"
+#include "Math/Mat4x4.h"
 #include "Drawers/Line/Line.h"
 #include "Utils/Flg/Flg.h"
 #include <bitset>

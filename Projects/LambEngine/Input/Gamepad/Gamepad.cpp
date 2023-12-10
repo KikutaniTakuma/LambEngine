@@ -2,7 +2,7 @@
 #include "imgui.h"
 #include <limits>
 #include <algorithm>
-#include "Utils/Math/Vector2.h"
+#include "Math/Vector2.h"
 
 Gamepad::Gamepad() :
 	preButton_(0),

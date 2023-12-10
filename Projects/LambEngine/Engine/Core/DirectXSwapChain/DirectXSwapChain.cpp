@@ -4,8 +4,8 @@
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
 #include "Engine/Engine.h"
-#include "Utils/Math/Vector2.h"
-#include "Utils/Math/Vector4.h"
+#include "Math/Vector2.h"
+#include "Math/Vector4.h"
 #include <cassert>
 
 DirectXSwapChain* DirectXSwapChain::instance_ = nullptr;

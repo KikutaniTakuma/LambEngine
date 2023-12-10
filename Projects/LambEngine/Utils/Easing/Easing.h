@@ -4,9 +4,9 @@
 #include <algorithm>
 #include <cassert>
 #include <concepts>
-#include "Utils/Math/Vector2.h"
-#include "Utils/Math/Vector3.h"
-#include "Utils/Math/Vector4.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math/Vector4.h"
 #include"Utils/Flg/Flg.h"
 
 /// <summary>

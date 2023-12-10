@@ -7,9 +7,9 @@
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 
-#include "Utils/Math/Vector3.h"
-#include "Utils/Math/Vector2.h"
-#include "Utils/Math/Mat4x4.h"
+#include "Math/Vector3.h"
+#include "Math/Vector2.h"
+#include "Math/Mat4x4.h"
 
 /// <summary>
 /// ポストエフェクトの描画

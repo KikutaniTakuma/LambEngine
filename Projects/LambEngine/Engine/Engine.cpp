@@ -25,7 +25,7 @@
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 
-#include "Utils/Math/Vector2.h"
+#include "Math/Vector2.h"
 
 #include "Graphics/DepthBuffer/DepthBuffer.h"
 #include "Utils/ScreenOut/ScreenOut.h"

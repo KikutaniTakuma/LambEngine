@@ -2,7 +2,7 @@
 #include <unordered_map>
 #include <variant>
 #include <string>
-#include "Utils/Math/Vector3.h"
+#include "Math/Vector3.h"
 
 class GlobalVariables {
 public:

@@ -7,7 +7,7 @@
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include <cassert>
-#include "Utils/Math/Vector4.h"
+#include "Math/Vector4.h"
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
 
 RenderTarget::RenderTarget():

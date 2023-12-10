@@ -1,7 +1,7 @@
 #pragma once
-#include "Utils/Math/Vector3.h"
-#include "Utils/Math/Mat4x4.h"
-#include "Utils/Math/Vector4.h"
+#include "Math/Vector3.h"
+#include "Math/Mat4x4.h"
+#include "Math/Vector4.h"
 #include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
 

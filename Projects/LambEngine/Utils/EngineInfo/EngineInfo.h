@@ -1,6 +1,6 @@
 #pragma once
 #include <chrono>
-#include "Utils/Math/Vector2.h"
+#include "Math/Vector2.h"
 
 namespace Lamb {
 	float DeltaTime();

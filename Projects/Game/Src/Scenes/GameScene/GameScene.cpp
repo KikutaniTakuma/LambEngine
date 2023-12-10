@@ -3,7 +3,7 @@
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
-#include "Utils/Math/Quaternion.h"
+#include "Math/Quaternion.h"
 #include "Utils/ScreenOut/ScreenOut.h"
 #include <numbers>
 #include <format>

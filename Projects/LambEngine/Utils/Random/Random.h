@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cstdint>
-#include "Utils/Math/Vector2.h"
-#include "Utils/Math/Vector3.h"
-#include "Utils/Math/Vector4.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math/Vector4.h"
 
 namespace Lamb {
 	/// <summary>

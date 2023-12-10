@@ -3,10 +3,10 @@
 #include <unordered_map>
 #include <initializer_list>
 
-#include "Utils/Math/Vector3.h"
-#include "Utils/Math/Mat4x4.h"
-#include "Utils/Math/Vector2.h"
-#include "Utils/Math/Vector4.h"
+#include "Math/Vector3.h"
+#include "Math/Mat4x4.h"
+#include "Math/Vector2.h"
+#include "Math/Vector4.h"
 
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
