@@ -86,10 +86,10 @@ FrameInfo::~FrameInfo() {
 
 	avgFps /= size;
 
-	Lamb::AddLog(std::format("Average Fps : {:.2f}\n", avgFps));
+	Lamb::AddLog(std::format("Average Fps : {:.2f}", avgFps));
 	if (std::chrono::duration_cast<std::chrono::seconds>(end - gameStartTime_) > std::chrono::seconds(1)) {
-		Lamb::AddLog(std::format("Max Fps : {:.2f}\n", maxFps_));
-		Lamb::AddLog(std::format("Min Fps : {:.2f}\n", minFps_));
+		Lamb::AddLog(std::format("Max Fps : {:.2f}", maxFps_));
+		Lamb::AddLog(std::format("Min Fps : {:.2f}", minFps_));
 	}
 }
 

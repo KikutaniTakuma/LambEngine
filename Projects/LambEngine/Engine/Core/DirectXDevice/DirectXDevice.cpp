@@ -72,7 +72,7 @@ void DirectXDevice::SettingAdapter() {
 		}
 
 		if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) {
-			Lamb::AddLog(ConvertString(std::format(L"Use Adapter:{}\n", adapterDesc.Description)));
+			Lamb::AddLog(ConvertString(std::format(L"Use Adapter:{}", adapterDesc.Description)));
 			break;
 		}
 		useAdapter_.Reset();
@@ -95,7 +95,7 @@ void DirectXDevice::CreateDevice() {
 		HRESULT hr = D3D12CreateDevice(useAdapter_.Get(), featureLevels[i], IID_PPV_ARGS(device_.GetAddressOf()));
 
 		if (SUCCEEDED(hr)) {
-			Lamb::AddLog(std::format("FeatureLevel:{}\n", featureLevelString[i]));
+			Lamb::AddLog(std::format("FeatureLevel:{}", featureLevelString[i]));
 			break;
 		}
 	}
@@ -103,7 +103,7 @@ void DirectXDevice::CreateDevice() {
 	if (device_ == nullptr) {
 		return;
 	}
-	Lamb::AddLog("Complete create D3D12Device!!!\n");
+	Lamb::AddLog("Complete create D3D12Device");
 }
 
 #ifdef _DEBUG

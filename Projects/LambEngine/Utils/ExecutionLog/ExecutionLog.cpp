@@ -30,7 +30,7 @@ namespace Lamb {
 			return false;
 		}
 
-		file << NowTime() << " : " << text;
+		file << NowTime() << " : " << text << std::endl;
 
 		isOpned = true;
 
@@ -38,7 +38,7 @@ namespace Lamb {
 	}
 
 	void DebugLog(const std::string& text) {
-		OutputDebugStringA(text.c_str());
+		OutputDebugStringA((text + "\n").c_str());
 	}
 
 	void DebugLog(const std::string& text, const Vector2& vec) {
