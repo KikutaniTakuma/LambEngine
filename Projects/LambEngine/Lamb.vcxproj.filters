@@ -112,9 +112,6 @@
     <ClCompile Include="Engine\Graphics\RootSignature\RootSignature.cpp">
       <Filter>Engine\Graphics\RootSignature</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\ShaderManager\ShaderManager.cpp">
-      <Filter>Engine\Graphics\ShaderManager</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\EngineUtils\ErrorCheck\ErrorCheck.cpp">
       <Filter>Engine\EngineUtils\ErrorCheck</Filter>
     </ClCompile>
@@ -156,6 +153,12 @@
     </ClCompile>
     <ClCompile Include="Engine\EngineUtils\FlgManager\FlgManager.cpp">
       <Filter>Engine\EngineUtils\FlgManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.cpp">
+      <Filter>Engine\Graphics\Shader\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.cpp">
+      <Filter>Engine\Graphics\Shader\ShaderFactory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -267,9 +270,6 @@
     <Filter Include="Engine\Graphics\RootSignature">
       <UniqueIdentifier>{e940fd55-6a3e-4764-ba45-668507747c4f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\ShaderManager">
-      <UniqueIdentifier>{e9f17783-c021-4323-ae3b-d9f04d63298d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Buffer">
       <UniqueIdentifier>{5d636698-24e8-45ca-88be-eda0819a5048}</UniqueIdentifier>
     </Filter>
@@ -326,6 +326,15 @@
     </Filter>
     <Filter Include="Engine\EngineUtils\FlgManager">
       <UniqueIdentifier>{a2e5192d-ba59-4283-8ae9-56cbc98d6efc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Shader">
+      <UniqueIdentifier>{20199357-248d-4de0-8174-650a6997b5ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Shader\ShaderManager">
+      <UniqueIdentifier>{e9f17783-c021-4323-ae3b-d9f04d63298d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Shader\ShaderFactory">
+      <UniqueIdentifier>{5f7e1038-27c5-404e-8914-287c680dd589}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -440,9 +449,6 @@
     <ClInclude Include="Engine\Graphics\RootSignature\RootSignature.h">
       <Filter>Engine\Graphics\RootSignature</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\ShaderManager\ShaderManager.h">
-      <Filter>Engine\Graphics\ShaderManager</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Buffer\ConstBuffer\ConstBuffer.h">
       <Filter>Engine\Buffer\ConstBuffer</Filter>
     </ClInclude>
@@ -496,6 +502,12 @@
     </ClInclude>
     <ClInclude Include="Engine\EngineUtils\FlgManager\FlgManager.h">
       <Filter>Engine\EngineUtils\FlgManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.h">
+      <Filter>Engine\Graphics\Shader\ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.h">
+      <Filter>Engine\Graphics\Shader\ShaderFactory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
