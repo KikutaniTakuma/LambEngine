@@ -1,5 +1,5 @@
 #pragma once
-#include "TextureManager/TextureManager.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 

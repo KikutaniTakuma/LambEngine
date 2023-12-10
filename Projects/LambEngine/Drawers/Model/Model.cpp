@@ -7,7 +7,7 @@
 #include "imgui.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
-#include "MeshManager/MeshManager.h"
+#include "Engine/Graphics/MeshManager/MeshManager.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #undef max
 #undef min

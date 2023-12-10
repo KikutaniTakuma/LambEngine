@@ -14,9 +14,9 @@
 #include "Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Core/DescriptorHeap/DsvHeap.h"
 
-#include "TextureManager/TextureManager.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
-#include "MeshManager/MeshManager.h"
+#include "Engine/Graphics/MeshManager/MeshManager.h"
 #include "Graphics/PipelineManager/PipelineManager.h"
 
 #include "EngineUtils/FrameInfo/FrameInfo.h"

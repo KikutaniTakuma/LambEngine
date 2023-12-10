@@ -1,7 +1,7 @@
 #include "DepthBuffer.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Utils/EngineInfo/EngineInfo.h"
-#include "TextureManager/Texture/Texture.h"
+#include "Engine/Graphics/TextureManager/Texture/Texture.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include <cmath>
 #include "Engine/Core/DescriptorHeap/DsvHeap.h"

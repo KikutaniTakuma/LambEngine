@@ -1,5 +1,5 @@
 #pragma once
-#include "TextureManager/TextureManager.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 

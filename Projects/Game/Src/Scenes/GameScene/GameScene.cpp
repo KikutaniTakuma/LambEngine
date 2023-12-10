@@ -1,6 +1,6 @@
 #include "GameScene.h"
-#include "MeshManager/MeshManager.h"
-#include "TextureManager/TextureManager.h"
+#include "Engine/Graphics/MeshManager/MeshManager.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Utils/Math/Quaternion.h"
