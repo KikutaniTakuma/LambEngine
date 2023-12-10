@@ -1,6 +1,6 @@
 #include "TextureManager.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
-#include "Engine/Engine.h"
+#include "Utils/EngineInfo/EngineInfo.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
@@ -177,7 +177,7 @@ void TextureManager::ThreadLoadTexture() {
 		auto loadProc = [this]() {
 			isNowThreadLoading_ = true;
 			while (!threadTextureBuff_.empty()) {
-				if (Engine::IsFinalize()) {
+				if (Lamb::IsEngineFianlize()) {
 					break;
 				}
 				auto& front = threadTextureBuff_.front();

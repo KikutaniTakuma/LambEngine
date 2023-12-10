@@ -1,6 +1,6 @@
 #include "AudioManager.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
-#include "Engine/Engine.h"
+#include "Utils/EngineInfo/EngineInfo.h"
 #include <cassert>
 #include <filesystem>
 
@@ -68,7 +68,7 @@ void AudioManager::ThreadLoad() {
 		auto loadProc = [this]() {
 			std::lock_guard<std::mutex> lock(mtx_);
 			while (!threadAudioBuff_.empty()) {
-				if (Engine::IsFinalize()) {
+				if (Lamb::IsEngineFianlize()) {
 					break;
 				}
 

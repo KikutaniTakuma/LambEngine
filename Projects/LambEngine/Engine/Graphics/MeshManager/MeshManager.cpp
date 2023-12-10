@@ -1,5 +1,5 @@
 #include "MeshManager.h"
-#include "Engine/Engine.h"
+#include "Utils/EngineInfo/EngineInfo.h"
 
 MeshManager* MeshManager::instance_ = nullptr;
 
@@ -63,7 +63,7 @@ void MeshManager::ThreadLoad() {
 		auto loadProc = [this]() {
 			isNowThreadLoading_ = true;
 			while (!threadMeshBuff_.empty()) {
-				if (Engine::IsFinalize()) {
+				if (Lamb::IsEngineFianlize()) {
 					break;
 				}
 				// ロードするmeshを取得
@@ -76,14 +76,14 @@ void MeshManager::ThreadLoad() {
 				if (mesh == meshs_.end()) {
 					meshs_[front.first] = std::make_unique<Mesh>();
 					meshs_[front.first]->ThreadLoadObj(front.first);
-					if (Engine::IsFinalize()) {
+					if (Lamb::IsEngineFianlize()) {
 						break;
 					}
 					(*front.second) = meshs_[front.first].get();
 				}
 				// ロード済みだったらロード済みのmeshポインタを代入
 				else {
-					if (Engine::IsFinalize()) {
+					if (Lamb::IsEngineFianlize()) {
 						break;
 					}
 					(*front.second) = mesh->second.get();
@@ -94,7 +94,7 @@ void MeshManager::ThreadLoad() {
 			// テクスチャの読み込みが終わるまでループ
 			bool isTextureLoadFinish = false;
 			while (!isTextureLoadFinish) {
-				if (Engine::IsFinalize()) {
+				if (Lamb::IsEngineFianlize()) {
 					break;
 				}
 

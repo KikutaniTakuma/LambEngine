@@ -4,7 +4,7 @@
 #include "../../TextureManager/TextureManager.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "../MeshManager.h"
-#include "Engine/Engine.h"
+#include "Utils/EngineInfo/EngineInfo.h"
 #include <fstream>
 #include <sstream>
 #include <cassert>
@@ -236,7 +236,7 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 		std::string lineBuf;
 
 		while (std::getline(objFile, lineBuf)) {
-			if (Engine::IsFinalize()) {
+			if (Lamb::IsEngineFianlize()) {
 				return;
 			}
 
