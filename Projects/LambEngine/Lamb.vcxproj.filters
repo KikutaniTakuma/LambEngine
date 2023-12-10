@@ -4,12 +4,6 @@
     <ClCompile Include="Engine\Engine.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="TextureManager\TextureManager.cpp">
-      <Filter>TextureManager</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager\Texture\Texture.cpp">
-      <Filter>TextureManager\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="AudioManager\AudioManager.cpp">
       <Filter>AudioManager</Filter>
     </ClCompile>
@@ -57,12 +51,6 @@
     </ClCompile>
     <ClCompile Include="Utils\Math\Vector4.cpp">
       <Filter>Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshManager\MeshManager.cpp">
-      <Filter>MeshManager</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshManager\Mesh\Mesh.cpp">
-      <Filter>MeshManager\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="Utils\CsvLoad\CsvLoad.cpp">
       <Filter>Utils\CsvLoad</Filter>
@@ -160,16 +148,22 @@
     <ClCompile Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.cpp">
       <Filter>Engine\Graphics\Shader\ShaderFactory</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\TextureManager\TextureManager.cpp">
+      <Filter>Engine\Graphics\TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\TextureManager\Texture\Texture.cpp">
+      <Filter>Engine\Graphics\TextureManager\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\MeshManager\MeshManager.cpp">
+      <Filter>Engine\Graphics\MeshManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\MeshManager\Mesh\Mesh.cpp">
+      <Filter>Engine\Graphics\MeshManager\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
       <UniqueIdentifier>{d3b2314c-5abb-4996-9d77-ddedf3938121}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TextureManager">
-      <UniqueIdentifier>{1336c590-e855-4d4f-92b9-fa2698582835}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TextureManager\Texture">
-      <UniqueIdentifier>{5c638997-6f2b-4dd7-9e5b-0d6092ae02f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="AudioManager">
       <UniqueIdentifier>{2487b7fc-0f80-433c-af4a-03b5842ec259}</UniqueIdentifier>
@@ -221,12 +215,6 @@
     </Filter>
     <Filter Include="Utils\Action\Frame">
       <UniqueIdentifier>{607698ed-b760-4d10-b8a3-22a385153c5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MeshManager">
-      <UniqueIdentifier>{e3b837b9-c45b-439a-98d3-36af6cb3ea8e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="MeshManager\Mesh">
-      <UniqueIdentifier>{32d082aa-0e85-4ef4-b2d9-1c07a678fc69}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utils\ConvertString">
       <UniqueIdentifier>{5a7a3057-cf34-4af9-a2fc-9484d57e4dd8}</UniqueIdentifier>
@@ -336,16 +324,22 @@
     <Filter Include="Engine\Graphics\Shader\ShaderFactory">
       <UniqueIdentifier>{5f7e1038-27c5-404e-8914-287c680dd589}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\MeshManager">
+      <UniqueIdentifier>{e3b837b9-c45b-439a-98d3-36af6cb3ea8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\MeshManager\Mesh">
+      <UniqueIdentifier>{32d082aa-0e85-4ef4-b2d9-1c07a678fc69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\TextureManager">
+      <UniqueIdentifier>{1336c590-e855-4d4f-92b9-fa2698582835}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\TextureManager\Texture">
+      <UniqueIdentifier>{5c638997-6f2b-4dd7-9e5b-0d6092ae02f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
       <Filter>Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager\TextureManager.h">
-      <Filter>TextureManager</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager\Texture\Texture.h">
-      <Filter>TextureManager\Texture</Filter>
     </ClInclude>
     <ClInclude Include="AudioManager\AudioManager.h">
       <Filter>AudioManager</Filter>
@@ -394,12 +388,6 @@
     </ClInclude>
     <ClInclude Include="Utils\Math\Vector4.h">
       <Filter>Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshManager\MeshManager.h">
-      <Filter>MeshManager</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshManager\Mesh\Mesh.h">
-      <Filter>MeshManager\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Utils\CsvLoad\CsvLoad.h">
       <Filter>Utils\CsvLoad</Filter>
@@ -508,6 +496,18 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.h">
       <Filter>Engine\Graphics\Shader\ShaderFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\TextureManager\TextureManager.h">
+      <Filter>Engine\Graphics\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\TextureManager\Texture\Texture.h">
+      <Filter>Engine\Graphics\TextureManager\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\MeshManager\MeshManager.h">
+      <Filter>Engine\Graphics\MeshManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\MeshManager\Mesh\Mesh.h">
+      <Filter>Engine\Graphics\MeshManager\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
