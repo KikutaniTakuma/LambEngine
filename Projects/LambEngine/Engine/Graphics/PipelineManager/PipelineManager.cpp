@@ -15,7 +15,13 @@ void PipelineManager::Finalize() {
 }
 
 void PipelineManager::CreateRootSgnature(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture) {
-	if (instance_->rootSignatures_.empty()) {
+	auto IsSame = [&rootParamater, &rootParamaterSize, &isTexture](const std::unique_ptr<RootSignature>& rootSignature_) {
+		return rootSignature_->IsSame(rootParamater, rootParamaterSize, isTexture);
+		};
+
+	auto rootSignatureItr = std::find_if(instance_->rootSignatures_.begin(), instance_->rootSignatures_.end(), IsSame);
+
+	if (rootSignatureItr == instance_->rootSignatures_.end()) {
 		auto rootSignature = std::make_unique<RootSignature>();
 
 		rootSignature->Create(rootParamater, rootParamaterSize, isTexture);
@@ -25,26 +31,10 @@ void PipelineManager::CreateRootSgnature(D3D12_ROOT_PARAMETER* rootParamater, si
 		instance_->rootSignatures_.push_back(std::move(rootSignature));
 	}
 	else {
-		auto IsSame = [&rootParamater,&rootParamaterSize, &isTexture](const std::unique_ptr<RootSignature>& rootSignature_) {
-			return rootSignature_->IsSame(rootParamater, rootParamaterSize, isTexture);
-		};
-
-		auto rootSignatureItr = std::find_if(instance_->rootSignatures_.begin(), instance_->rootSignatures_.end(), IsSame);
-
-		if (rootSignatureItr == instance_->rootSignatures_.end()) {
-			auto rootSignature = std::make_unique<RootSignature>();
-
-			rootSignature->Create(rootParamater, rootParamaterSize, isTexture);
-
-			instance_->rootSignature_ = rootSignature.get();
-
-			instance_->rootSignatures_.push_back(std::move(rootSignature));
-		}
-		else {
-			instance_->rootSignature_ = rootSignatureItr->get();
-		}
+		instance_->rootSignature_ = rootSignatureItr->get();
 	}
 }
+
 void PipelineManager::SetRootSgnature(RootSignature* rootSignature) {
 	instance_->rootSignature_ = rootSignature;
 }
