@@ -1,3 +1,4 @@
+#include "Texture.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Engine/Engine.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
@@ -6,7 +7,7 @@
 #include <iostream>
 #include <filesystem>
 #include "Utils/ExecutionLog/ExecutionLog.h"
-#include "TextureManager/TextureManager.h"
+#include "../TextureManager.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 
 Texture::Texture():
