@@ -141,26 +141,20 @@
     <ClCompile Include="Engine\EngineUtils\FlgManager\FlgManager.cpp" />
     <ClCompile Include="Engine\EngineUtils\FrameInfo\FrameInfo.cpp" />
     <ClCompile Include="Engine\Graphics\DepthBuffer\DepthBuffer.cpp" />
+    <ClCompile Include="Engine\Graphics\MeshManager\MeshManager.cpp" />
+    <ClCompile Include="Engine\Graphics\MeshManager\Mesh\Mesh.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.cpp" />
     <ClCompile Include="Engine\Graphics\RenderTarget\RenderTarget.cpp" />
     <ClCompile Include="Engine\Graphics\RootSignature\RootSignature.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.cpp" />
+    <ClCompile Include="Engine\Graphics\TextureManager\TextureManager.cpp" />
+    <ClCompile Include="Engine\Graphics\TextureManager\Texture\Texture.cpp" />
     <ClCompile Include="Input\Gamepad\Gamepad.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Input\KeyInput\KeyInput.cpp" />
     <ClCompile Include="Input\Mouse\Mouse.cpp" />
-    <ClCompile Include="MeshManager\MeshManager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="MeshManager\Mesh\Mesh.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="TextureManager\TextureManager.cpp" />
-    <ClCompile Include="TextureManager\Texture\Texture.cpp" />
     <ClCompile Include="Utils\Action\Frame\Frame.cpp" />
     <ClCompile Include="Utils\Camera\Camera.cpp" />
     <ClCompile Include="Utils\ConvertString\ConvertString.cpp" />
@@ -204,26 +198,20 @@
     <ClInclude Include="Engine\EngineUtils\FlgManager\FlgManager.h" />
     <ClInclude Include="Engine\EngineUtils\FrameInfo\FrameInfo.h" />
     <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h" />
+    <ClInclude Include="Engine\Graphics\MeshManager\MeshManager.h" />
+    <ClInclude Include="Engine\Graphics\MeshManager\Mesh\Mesh.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.h" />
     <ClInclude Include="Engine\Graphics\RenderTarget\RenderTarget.h" />
     <ClInclude Include="Engine\Graphics\RootSignature\RootSignature.h" />
     <ClInclude Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.h" />
     <ClInclude Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.h" />
+    <ClInclude Include="Engine\Graphics\TextureManager\TextureManager.h" />
+    <ClInclude Include="Engine\Graphics\TextureManager\Texture\Texture.h" />
     <ClInclude Include="Input\Gamepad\Gamepad.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\KeyInput\KeyInput.h" />
     <ClInclude Include="Input\Mouse\Mouse.h" />
-    <ClInclude Include="MeshManager\MeshManager.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="MeshManager\Mesh\Mesh.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="TextureManager\TextureManager.h" />
-    <ClInclude Include="TextureManager\Texture\Texture.h" />
     <ClInclude Include="Utils\Action\Frame\Frame.h" />
     <ClInclude Include="Utils\Camera\Camera.h" />
     <ClInclude Include="Utils\Cocepts\Cocepts.h" />
