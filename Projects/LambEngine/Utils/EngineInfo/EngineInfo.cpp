@@ -1,6 +1,7 @@
 #include "EngineInfo.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
+#include "Engine/Engine.h"
 
 namespace Lamb {
 	float DeltaTime() {
@@ -21,5 +22,9 @@ namespace Lamb {
 	std::chrono::steady_clock::time_point ThisFrameTime() {
 		static FrameInfo* const frameInfo = FrameInfo::GetInstance();
 		return frameInfo->GetThisFrameTime();
+	}
+
+	bool IsEngineFianlize() {
+		return Engine::IsFinalize();
 	}
 }

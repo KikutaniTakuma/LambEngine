@@ -10,4 +10,6 @@ namespace Lamb {
 	Vector2 WindowSize();
 
 	std::chrono::steady_clock::time_point ThisFrameTime();
+
+	bool IsEngineFianlize();
 }
