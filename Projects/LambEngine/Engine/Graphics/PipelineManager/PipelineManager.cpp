@@ -75,11 +75,28 @@ void PipelineManager::IsDepth(bool isDepth_) {
 }
 
 Pipeline* const PipelineManager::Create() {
-	if (instance_->pipelines_.empty()) {
+	auto IsSmae = [](const std::unique_ptr<Pipeline>& pipeline) {
+		bool issame = pipeline->IsSame(
+			instance_->shader_,
+			instance_->blend_,
+			instance_->cullMode_,
+			instance_->solidState_,
+			instance_->topologyType_,
+			instance_->numRenderTarget_,
+			instance_->rootSignature_->Get(),
+			instance_->isDepth_
+		);
+
+		return issame;
+		};
+
+	auto pipelineItr = std::find_if(instance_->pipelines_.begin(), instance_->pipelines_.end(), IsSmae);
+
+	if (pipelineItr == instance_->pipelines_.end()) {
 		auto pipeline = std::make_unique<Pipeline>();
 		pipeline->SetShader(instance_->shader_);
 		for (auto& i : instance_->vertexInputStates_) {
-			pipeline->SetVertexInput(std::get<std::string>(i), std::get<uint32_t>(i), std::get<DXGI_FORMAT>(i));
+			pipeline->SetVertexInput(std::get<0>(i), std::get<1>(i), std::get<2>(i));
 		}
 		pipeline->Create(
 			*instance_->rootSignature_,
@@ -100,50 +117,7 @@ Pipeline* const PipelineManager::Create() {
 		return instance_->pipelines_.rbegin()->get();
 	}
 	else {
-		auto IsSmae = [](const std::unique_ptr<Pipeline>& pipeline) {
-			bool issame = pipeline->IsSame(
-				instance_->shader_,
-				instance_->blend_,
-				instance_->cullMode_,
-				instance_->solidState_,
-				instance_->topologyType_,
-				instance_->numRenderTarget_,
-				instance_->rootSignature_->Get(),
-				instance_->isDepth_
-			);
-
-			return issame;
-		};
-
-		auto pipelineItr = std::find_if(instance_->pipelines_.begin(), instance_->pipelines_.end(),IsSmae);
-
-		if (pipelineItr == instance_->pipelines_.end()) {
-			auto pipeline = std::make_unique<Pipeline>();
-			pipeline->SetShader(instance_->shader_);
-			for (auto& i : instance_->vertexInputStates_) {
-				pipeline->SetVertexInput(std::get<0>(i), std::get<1>(i), std::get<2>(i));
-			}
-			pipeline->Create(
-				*instance_->rootSignature_,
-				instance_->blend_,
-				instance_->cullMode_,
-				instance_->solidState_,
-				instance_->topologyType_,
-				instance_->numRenderTarget_,
-				instance_->isDepth_
-			);
-
-			if (!pipeline->graphicsPipelineState_) {
-				return nullptr;
-			}
-
-			instance_->pipelines_.push_back(std::move(pipeline));
-
-			return instance_->pipelines_.rbegin()->get();
-		}
-		else {
-			return pipelineItr->get();
-		}
+		return pipelineItr->get();
 	}
 }
 
