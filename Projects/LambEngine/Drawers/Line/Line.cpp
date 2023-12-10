@@ -9,8 +9,9 @@ Shader Line::shader_ = {};
 Pipeline* Line::pipline_ = nullptr;
 
 void Line::Initialize() {
-	shader_.vertex_ = ShaderManager::LoadVertexShader("./Resources/Shaders/LineShader/Line.VS.hlsl");
-	shader_.pixel_ = ShaderManager::LoadPixelShader("./Resources/Shaders/LineShader/Line.PS.hlsl");
+	ShaderManager* const shaderManager = ShaderManager::GetInstance();
+	shader_.vertex_ = shaderManager->LoadVertexShader("./Resources/Shaders/LineShader/Line.VS.hlsl");
+	shader_.pixel_ = shaderManager->LoadPixelShader("./Resources/Shaders/LineShader/Line.PS.hlsl");
 
 	D3D12_DESCRIPTOR_RANGE range = {};
 	range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;

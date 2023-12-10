@@ -36,15 +36,16 @@ void Model::LoadShader(
 	const std::string& hull,
 	const std::string& domain
 ) {
+	static ShaderManager* const shaderManager = ShaderManager::GetInstance();
 	if (!loadShaderFlg_) {
-		shader_.vertex_ = ShaderManager::LoadVertexShader(vertex);
-		shader_.pixel_ = ShaderManager::LoadPixelShader(pixel);
+		shader_.vertex_ = shaderManager->LoadVertexShader(vertex);
+		shader_.pixel_ = shaderManager->LoadPixelShader(pixel);
 		if (geometory.size() != 0LLU) {
-			shader_.geometory_ = ShaderManager::LoadGeometoryShader(geometory);
+			shader_.geometory_ = shaderManager->LoadGeometoryShader(geometory);
 		}
 		if (hull.size() != 0LLU && geometory.size() != 0LLU) {
-			shader_.hull_ = ShaderManager::LoadHullShader(hull);
-			shader_.domain_ = ShaderManager::LoadHullShader(domain);
+			shader_.hull_ = shaderManager->LoadHullShader(hull);
+			shader_.domain_ = shaderManager->LoadHullShader(domain);
 		}
 		loadShaderFlg_ = true;
 	}

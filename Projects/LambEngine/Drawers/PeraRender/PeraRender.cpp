@@ -104,9 +104,10 @@ void PeraRender::Initialize(const std::string& vsFileName, const std::string& ps
 }
 
 void PeraRender::CreateShader(const std::string& vsFileName, const std::string& psFileName) {
-	shader_.vertex_ = ShaderManager::LoadVertexShader(vsFileName);
+	static ShaderManager* const shaderManager = ShaderManager::GetInstance();
+	shader_.vertex_ = shaderManager->LoadVertexShader(vsFileName);
 	assert(shader_.vertex_);
-	shader_.pixel_ = ShaderManager::LoadPixelShader(psFileName);
+	shader_.pixel_ = shaderManager->LoadPixelShader(psFileName);
 	assert(shader_.pixel_);
 }
 
