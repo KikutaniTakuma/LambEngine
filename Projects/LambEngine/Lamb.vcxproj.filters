@@ -40,18 +40,6 @@
     <ClCompile Include="Utils\Camera\Camera.cpp">
       <Filter>Utils\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Math\Mat4x4.cpp">
-      <Filter>Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Math\Vector2.cpp">
-      <Filter>Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Math\Vector3.cpp">
-      <Filter>Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Math\Vector4.cpp">
-      <Filter>Utils\Math</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\CsvLoad\CsvLoad.cpp">
       <Filter>Utils\CsvLoad</Filter>
     </ClCompile>
@@ -69,9 +57,6 @@
     </ClCompile>
     <ClCompile Include="Utils\ExecutionLog\ExecutionLog.cpp">
       <Filter>Utils\ExecutionLog</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Math\Quaternion.cpp">
-      <Filter>Utils\Math</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.cpp">
       <Filter>Engine\Core\DescriptorHeap</Filter>
@@ -160,6 +145,21 @@
     <ClCompile Include="Engine\Graphics\MeshManager\Mesh\Mesh.cpp">
       <Filter>Engine\Graphics\MeshManager\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="Math\Mat4x4.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Quaternion.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Vector2.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Vector3.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Vector4.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -206,9 +206,6 @@
     </Filter>
     <Filter Include="Utils\Camera">
       <UniqueIdentifier>{83ad4e33-18a7-4b34-afb3-3b41fc1e2017}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\Math">
-      <UniqueIdentifier>{f4d2bb2b-5300-4906-bcac-3c4a0124dcf7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Utils\Action">
       <UniqueIdentifier>{d9155807-1673-4565-be3a-edfdf537e04f}</UniqueIdentifier>
@@ -336,6 +333,9 @@
     <Filter Include="Engine\Graphics\TextureManager\Texture">
       <UniqueIdentifier>{5c638997-6f2b-4dd7-9e5b-0d6092ae02f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{f4d2bb2b-5300-4906-bcac-3c4a0124dcf7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -377,18 +377,6 @@
     <ClInclude Include="Utils\Camera\Camera.h">
       <Filter>Utils\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\Math\Mat4x4.h">
-      <Filter>Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Math\Vector2.h">
-      <Filter>Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Math\Vector3.h">
-      <Filter>Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Math\Vector4.h">
-      <Filter>Utils\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\CsvLoad\CsvLoad.h">
       <Filter>Utils\CsvLoad</Filter>
     </ClInclude>
@@ -406,9 +394,6 @@
     </ClInclude>
     <ClInclude Include="Utils\ExecutionLog\ExecutionLog.h">
       <Filter>Utils\ExecutionLog</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Math\Quaternion.h">
-      <Filter>Utils\Math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.h">
       <Filter>Engine\Core\DescriptorHeap</Filter>
@@ -508,6 +493,21 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\MeshManager\Mesh\Mesh.h">
       <Filter>Engine\Graphics\MeshManager\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Mat4x4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Quaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector4.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
