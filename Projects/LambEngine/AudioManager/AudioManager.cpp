@@ -46,19 +46,13 @@ Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 		Lamb::ErrorLog(" There is not this file -> " + fileName, "LoadWav()", "AudioManager");
 	}
 
-	if (audios_.empty()) {
+
+	auto itr = audios_.find(fileName);
+
+	if (itr == audios_.end()) {
 		auto audio = std::make_unique<Audio>();
 		audio->Load(fileName, loopFlg);
 		audios_.insert({ fileName, std::move(audio) });
-	}
-	else {
-		auto itr = audios_.find(fileName);
-
-		if (itr == audios_.end()) {
-			auto audio = std::make_unique<Audio>();
-			audio->Load(fileName, loopFlg);
-			audios_.insert({ fileName, std::move(audio) });
-		}
 	}
 
 	return audios_[fileName].get();
