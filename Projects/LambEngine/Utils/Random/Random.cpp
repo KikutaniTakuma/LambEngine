@@ -109,4 +109,17 @@ namespace Lamb {
 
 		return result;
 	}
+
+	uint32_t RandomColor(uint32_t min, uint32_t max) {
+		return Vector4ToUint(RandomColor(Vector4{ min }, Vector4{ max }));
+	}
+	Vector4 RandomColor(const Vector4& min, const Vector4& max) {
+		Vector4 result;
+		result.vec.x = Random(min.vec.x, max.vec.x);
+		result.vec.y = Random(min.vec.y, max.vec.y);
+		result.vec.z = Random(min.vec.z, max.vec.z);
+		result.vec.w = Random(min.vec.w, max.vec.w);
+
+		return result;
+	}
 }

@@ -3,6 +3,7 @@
 #include <cstdint>
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vector3.h"
+#include "Utils/Math/Vector4.h"
 
 namespace Lamb {
 	/// <summary>
@@ -79,4 +80,19 @@ namespace Lamb {
 	/// <param name="max">最大値</param>
 	/// <returns>乱数</returns>
 	Vector3 Random(const Vector3& min, const Vector3& max);
+
+	/// <summary>
+	/// 色のランダム
+	/// </summary>
+	/// <param name="min">最小値</param>
+	/// <param name="max">最大値</param>
+	/// <returns>乱数</returns>
+	uint32_t RandomColor(uint32_t min, uint32_t max);
+	/// <summary>
+	/// 色のランダム
+	/// </summary>
+	/// <param name="min">最小値</param>
+	/// <param name="max">最大値</param>
+	/// <returns>乱数</returns>
+	Vector4 RandomColor(const Vector4& min, const Vector4& max);
 }
