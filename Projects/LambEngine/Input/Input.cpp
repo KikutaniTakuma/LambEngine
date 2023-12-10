@@ -26,7 +26,7 @@ Input::Input():
 	);
 	assert(SUCCEEDED(hr));
 	if (SUCCEEDED(hr)) {
-		Lamb::AddLog("DirectInput create succeeded\n");
+		Lamb::AddLog("DirectInput Create Succeeded");
 	}
 	else {
 		Lamb::ErrorLog("DirectInput8Create() Failed", "InitializeInput()", "Engine");
