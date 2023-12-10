@@ -1,9 +1,9 @@
 #include "Mesh.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
-#include "TextureManager/TextureManager.h"
+#include "../../TextureManager/TextureManager.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
-#include "MeshManager/MeshManager.h"
+#include "../MeshManager.h"
 #include "Engine/Engine.h"
 #include <fstream>
 #include <sstream>
