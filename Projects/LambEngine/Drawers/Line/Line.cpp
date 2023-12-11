@@ -11,13 +11,15 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Line::vertexBuffer_;
 // 頂点バッファビュー
 D3D12_VERTEX_BUFFER_VIEW Line::vertexView_;
 
+std::unique_ptr<StructuredBuffer<Mat4x4>> Line::wvpMat_;
+
 void Line::Initialize() {
 	ShaderManager* const shaderManager = ShaderManager::GetInstance();
 	shader_.vertex_ = shaderManager->LoadVertexShader("./Resources/Shaders/LineShader/Line.VS.hlsl");
 	shader_.pixel_ = shaderManager->LoadPixelShader("./Resources/Shaders/LineShader/Line.PS.hlsl");
 
 	D3D12_DESCRIPTOR_RANGE range = {};
-	range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+	range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	range.BaseShaderRegister = 0;
 	range.NumDescriptors = 1;
 	range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
@@ -31,10 +33,17 @@ void Line::Initialize() {
 	PipelineManager::CreateRootSgnature(&paramater, 1, false);
 	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT);
 	PipelineManager::SetVertexInput("COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT);
+	PipelineManager::SetVertexInput("BLENDINDICES", 0, DXGI_FORMAT_R32_UINT);
 	PipelineManager::SetShader(shader_);
 	PipelineManager::SetState(Pipeline::None, Pipeline::SolidState::Solid, Pipeline::CullMode::None, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
 	pipline_ = PipelineManager::Create();
 	PipelineManager::StateReset();
+
+	wvpMat_ = std::make_unique<StructuredBuffer<Mat4x4>>(kDrawMaxNumber_);
+
+	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
+	heap->BookingHeapPos(1);
+	heap->CreateStructuredBufferView(*wvpMat_);
 
 	vertexBuffer_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(VertexData) * kVertexNum * kDrawMaxNumber_);
 	vertexView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
@@ -43,6 +52,10 @@ void Line::Initialize() {
 }
 
 void Line::Finalize() {
+	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
+	heap->ReleaseView(wvpMat_->GetViewHandleUINT());
+	wvpMat_.reset();
+
 	if (vertexBuffer_) {
 		vertexBuffer_->Release();
 		vertexBuffer_.Reset();
@@ -54,15 +67,10 @@ void Line::ResetDrawCount() {
 }
 
 Line::Line() : 
-	vertexMap_(nullptr),
-	heap_(),
-	wvpMat_(),
 	start(),
 	end()
 {
-	heap_ = CbvSrvUavHeap::GetInstance();
-	heap_->BookingHeapPos(1);
-	heap_->CreateConstBufferView(wvpMat_);
+	
 }
 
 Line::Line(const Line& right):
@@ -90,7 +98,6 @@ Line& Line::operator=(Line&& right)noexcept {
 }
 
 Line::~Line() {
-	heap_->ReleaseView(wvpMat_.GetViewHandleUINT());
 	if (vertexBuffer_) {
 		vertexBuffer_->Release();
 		vertexBuffer_.Reset();
@@ -104,20 +111,23 @@ void Line::Draw(const Mat4x4& viewProjection, uint32_t color) {
 		return;
 	}
 
-	vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexMap_));
+	// 頂点バッファマップ
+	VertexData* vertexMap = nullptr;
+	vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexMap));
 
 	size_t indexVertex = kVertexNum * indexCount_;
 
 	auto&& colorFloat = UintToVector4(color);
-	vertexMap_[indexVertex] = { Vector4(start, 1.0f), colorFloat };
-	vertexMap_[indexVertex + 1] = { Vector4(end, 1.0f),   colorFloat };
+	vertexMap[indexVertex] = { Vector4(start, 1.0f), colorFloat, indexCount_ };
+	vertexMap[indexVertex + 1] = { Vector4(end, 1.0f),   colorFloat, indexCount_ };
 
 	vertexBuffer_->Unmap(0, nullptr);
 
-	*wvpMat_ = viewProjection;
+	(*wvpMat_)[indexCount_] = viewProjection;
 
 	pipline_->Use();
-	heap_->Use(wvpMat_.GetViewHandleUINT(), 0);
+	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
+	heap->Use(wvpMat_->GetViewHandleUINT(), 0);
 	auto commandList = DirectXCommand::GetInstance()->GetCommandList();
 	commandList->IASetVertexBuffers(0, 1, &vertexView_);
 	commandList->DrawInstanced(kVertexNum, 1, static_cast<uint32_t>(indexVertex), 0);

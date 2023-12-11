@@ -2,8 +2,9 @@
 #include "Math/Vector3.h"
 #include "Math/Mat4x4.h"
 #include "Math/Vector4.h"
-#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
+#include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
+#include <memory>
 
 /// <summary>
 /// 線の描画
@@ -11,8 +12,9 @@
 class Line {
 private:
 	struct VertexData {
-		Vector4 pos_;
-		Vector4 color_;
+		Vector4 pos;
+		Vector4 color;
+		uint32_t indexNumber;
 	};
 private:
 	static constexpr uint16_t kVertexNum = 2u;
@@ -35,6 +37,8 @@ private:
 	// 頂点バッファビュー
 	static D3D12_VERTEX_BUFFER_VIEW vertexView_;
 
+	static std::unique_ptr<StructuredBuffer<Mat4x4>> wvpMat_;
+
 public:
 	Line();
 	Line(const Line& right);
@@ -50,12 +54,4 @@ public:
 public:
 	Vector3 start;
 	Vector3 end;
-
-private:
-	// 頂点バッファマップ
-	VertexData* vertexMap_;
-
-	class CbvSrvUavHeap* heap_;
-
-	ConstBuffer<Mat4x4> wvpMat_;
 };
