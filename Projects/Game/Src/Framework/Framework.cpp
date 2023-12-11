@@ -37,6 +37,7 @@ void Framework::Initialize() {
 
 void Framework::Finalize() {
 	// インデックスリソース解放
+	Line::Finalize();
 	Particle::Finalize();
 	Texture2D::Finalize();
 
@@ -57,6 +58,9 @@ void Framework::Execution() {
 	while (window->WindowMassage()) {
 		// 描画開始処理
 		Engine::FrameStart();
+
+		//ラインの描画カウントをリセット
+		Line::ResetDrawCount();
 
 		// fps
 		frameInfo->Debug();
