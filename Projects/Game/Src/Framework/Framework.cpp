@@ -59,9 +59,6 @@ void Framework::Execution() {
 		// 描画開始処理
 		Engine::FrameStart();
 
-		//ラインの描画カウントをリセット
-		Line::ResetDrawCount();
-
 		// fps
 		frameInfo->Debug();
 
@@ -91,6 +88,8 @@ void Framework::Execution() {
 
 		// 描画処理
 		this->Draw();
+
+		Line::AllDraw();
 
 		// フレーム終了処理
 		Engine::FrameEnd();
