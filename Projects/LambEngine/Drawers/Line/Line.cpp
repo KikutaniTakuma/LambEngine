@@ -4,9 +4,12 @@
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
+uint32_t Line::indexCount_ = 0u;
 Shader Line::shader_ = {};
-
 Pipeline* Line::pipline_ = nullptr;
+Microsoft::WRL::ComPtr<ID3D12Resource> Line::vertexBuffer_;
+// 頂点バッファビュー
+D3D12_VERTEX_BUFFER_VIEW Line::vertexView_;
 
 void Line::Initialize() {
 	ShaderManager* const shaderManager = ShaderManager::GetInstance();
@@ -32,24 +35,31 @@ void Line::Initialize() {
 	PipelineManager::SetState(Pipeline::None, Pipeline::SolidState::Solid, Pipeline::CullMode::None, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
 	pipline_ = PipelineManager::Create();
 	PipelineManager::StateReset();
+
+	vertexBuffer_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(VertexData) * kVertexNum * kDrawMaxNumber_);
+	vertexView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
+	vertexView_.SizeInBytes = sizeof(VertexData) * kVertexNum * kDrawMaxNumber_;
+	vertexView_.StrideInBytes = sizeof(VertexData);
+}
+
+void Line::Finalize() {
+	if (vertexBuffer_) {
+		vertexBuffer_->Release();
+		vertexBuffer_.Reset();
+	}
+}
+
+void Line::ResetDrawCount() {
+	indexCount_ = 0u;
 }
 
 Line::Line() : 
-	vertexBuffer_(),
-	vertexView_{},
 	vertexMap_(nullptr),
 	heap_(),
 	wvpMat_(),
 	start(),
 	end()
 {
-	vertexBuffer_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(VertexData) * kVertexNum);
-	vertexView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
-	vertexView_.SizeInBytes = sizeof(VertexData) * kVertexNum;
-	vertexView_.StrideInBytes = sizeof(VertexData);
-
-	vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexMap_));
-
 	heap_ = CbvSrvUavHeap::GetInstance();
 	heap_->BookingHeapPos(1);
 	heap_->CreateConstBufferView(wvpMat_);
@@ -88,9 +98,21 @@ Line::~Line() {
 }
 
 void Line::Draw(const Mat4x4& viewProjection, uint32_t color) {
+	assert(indexCount_ < kDrawMaxNumber_);
+	if (!(indexCount_ < kDrawMaxNumber_)) {
+		Lamb::ErrorLog("Over Draw index", "Draw", "Line");
+		return;
+	}
+
+	vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexMap_));
+
+	size_t indexVertex = kVertexNum * indexCount_;
+
 	auto&& colorFloat = UintToVector4(color);
-	vertexMap_[0] = { Vector4(start, 1.0f), colorFloat };
-	vertexMap_[1] = { Vector4(end, 1.0f),   colorFloat };
+	vertexMap_[indexVertex] = { Vector4(start, 1.0f), colorFloat };
+	vertexMap_[indexVertex + 1] = { Vector4(end, 1.0f),   colorFloat };
+
+	vertexBuffer_->Unmap(0, nullptr);
 
 	*wvpMat_ = viewProjection;
 
@@ -98,5 +120,7 @@ void Line::Draw(const Mat4x4& viewProjection, uint32_t color) {
 	heap_->Use(wvpMat_.GetViewHandleUINT(), 0);
 	auto commandList = DirectXCommand::GetInstance()->GetCommandList();
 	commandList->IASetVertexBuffers(0, 1, &vertexView_);
-	commandList->DrawInstanced(kVertexNum, 1, 0, 0);
+	commandList->DrawInstanced(kVertexNum, 1, static_cast<uint32_t>(indexVertex), 0);
+
+	indexCount_++;
 }

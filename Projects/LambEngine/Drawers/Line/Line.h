@@ -16,14 +16,24 @@ private:
 	};
 private:
 	static constexpr uint16_t kVertexNum = 2u;
+	static constexpr uint16_t kDrawMaxNumber_ = 4096u;
+	static uint32_t indexCount_;
 
 public:
 	static void Initialize();
+
+	static void Finalize();
+
+	static void ResetDrawCount();
 
 private:
 	static Shader shader_;
 
 	static class Pipeline* pipline_;
+
+	static Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer_;
+	// 頂点バッファビュー
+	static D3D12_VERTEX_BUFFER_VIEW vertexView_;
 
 public:
 	Line();
@@ -42,9 +52,6 @@ public:
 	Vector3 end;
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer_;
-	// 頂点バッファビュー
-	D3D12_VERTEX_BUFFER_VIEW vertexView_;
 	// 頂点バッファマップ
 	VertexData* vertexMap_;
 
