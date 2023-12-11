@@ -11,12 +11,6 @@
 /// </summary>
 class Line {
 private:
-	struct VertexData {
-		Vector4 pos;
-		Vector4 color;
-		uint32_t indexNumber;
-	};
-private:
 	static constexpr uint16_t kVertexNum = 2u;
 	static constexpr uint16_t kDrawMaxNumber_ = 4096u;
 	static uint32_t indexCount_;
@@ -26,6 +20,9 @@ public:
 
 	static void Finalize();
 
+	static void AllDraw();
+
+private:
 	static void ResetDrawCount();
 
 private:
@@ -38,6 +35,7 @@ private:
 	static D3D12_VERTEX_BUFFER_VIEW vertexView_;
 
 	static std::unique_ptr<StructuredBuffer<Mat4x4>> wvpMat_;
+	static std::unique_ptr<StructuredBuffer<Vector4>> color_;
 
 public:
 	Line();
@@ -49,6 +47,8 @@ public:
 	Line& operator=(Line&& right)noexcept;
 
 public:
+	void Debug(const std::string& guiName);
+
 	void Draw(const Mat4x4& viewProjection, uint32_t color);
 
 public:
