@@ -6,6 +6,7 @@
 #include "Drawers/Particle/Particle.h"
 #include "Drawers/StringOut/StringOut.h"
 #include "GlobalVariables/GlobalVariables.h"
+#include "Game/CollisionManager/Collider/Collider.h"
 
 class GameScene : public BaseScene {
 public:
@@ -28,4 +29,6 @@ public:
 
 public:
 	std::unique_ptr<Model> model_;
+
+	Collider collider_;
 };

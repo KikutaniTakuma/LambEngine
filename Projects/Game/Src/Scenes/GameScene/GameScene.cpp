@@ -29,6 +29,10 @@ void GameScene::Finalize() {
 void GameScene::Update() {
 	camera_->Debug("camera");
 	model_->Update();
+
+
+	collider_.Debug("collider");
+	collider_.UpdateCollision();
 }
 
 void GameScene::Draw() {
@@ -62,4 +66,6 @@ void GameScene::Draw() {
 	}
 
 	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+
+	collider_.DebugDraw(camera_->GetViewProjection());
 }
