@@ -19,7 +19,7 @@ void GameScene::Initialize() {
 
 	model_ = std::make_unique<Model>();
 
-	model_->LoadObj("./Resources/Hololive/Watame/Watame.obj");
+	model_->ThreadLoadObj("./Resources/Hololive/Watame/Watame.obj");
 }
 
 void GameScene::Finalize() {
