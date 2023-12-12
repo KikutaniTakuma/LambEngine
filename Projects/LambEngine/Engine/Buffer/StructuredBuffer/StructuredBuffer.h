@@ -151,13 +151,13 @@ public:
 		}
 	}
 
-	template<std::integral IsInt>
+	template<Lamb::IsInt IsInt>
 	T& operator[](IsInt index) {
 		assert(static_cast<uint32_t>(index) < instanceNum_);
 		return data_[index];
 	}
 
-	template<std::integral IsInt>
+	template<Lamb::IsInt IsInt>
 	const T& operator[](IsInt index) const {
 		assert(static_cast<uint32_t>(index) < instanceNum_);
 		return data_[index];
