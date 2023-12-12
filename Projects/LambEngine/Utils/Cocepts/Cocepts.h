@@ -41,9 +41,4 @@ namespace Lamb {
 
 	template<class T>
 	concept IsNotFloat = !std::is_floating_point_v<T>;
-
-	template<class T>
-	concept IsIntSmallerThan32bit = requires {
-		IsInt<T> && sizeof(T) <= 32llu;
-	};
 }
