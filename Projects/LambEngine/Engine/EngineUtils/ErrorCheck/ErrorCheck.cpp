@@ -18,8 +18,7 @@ ErrorCheck* const ErrorCheck::GetInstance() {
 }
 
 ErrorCheck::ErrorCheck() :
-	isError_(false),
-	finalize_{ []() {Engine::Finalize(); } }
+	isError_(false)
 {}
 
 ErrorCheck::~ErrorCheck() {
@@ -43,20 +42,14 @@ void ErrorCheck::ErrorTextBox(const std::string& text, const std::string& boxNam
 		);
 	}
 	isError_ = true;
-
-	CrashProgram();
-}
-
-void ErrorCheck::SetFinalize(std::function<void(void)> finalize) {
-	finalize_ = finalize;
 }
 
 void ErrorCheck::CrashProgram() {
-	finalize_();
+	if (isError_) {
+		Lamb::AddLog("WARNIG CrashProgram : Please check the Error.log");
 
-	Lamb::AddLog("WARNIG CrashProgram : Please check the Error.log");
-
-	std::exit(EXIT_FAILURE);
+		std::exit(EXIT_FAILURE);
+	}
 }
 
 void ErrorCheck::ErrorLog(const std::string& text, const std::string& boxName) {

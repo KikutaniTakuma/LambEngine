@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <functional>
 
 /// <summary>
 /// エラーのチェック(ErrorTextBox()を呼び出したらメインループが止まる)
@@ -37,16 +36,12 @@ public:
 	inline bool GetError() const {
 		return isError_;
 	}
-
-	void SetFinalize(std::function<void(void)> finalize);
+	void CrashProgram();
 
 private:
 	void ErrorLog(const std::string& text, const std::string& boxName = "Error");
 
-	void CrashProgram();
 
 private:
 	bool isError_;
-
-	std::function<void(void)> finalize_;
 };
