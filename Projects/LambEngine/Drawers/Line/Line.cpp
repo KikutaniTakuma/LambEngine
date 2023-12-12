@@ -58,9 +58,11 @@ void Line::Initialize() {
 }
 
 void Line::Finalize() {
-	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
-	heap->ReleaseView(vertData_->GetViewHandleUINT());
-	vertData_.reset();
+	if (vertData_) {
+		CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
+		heap->ReleaseView(vertData_->GetViewHandleUINT());
+		vertData_.reset();
+	}
 
 	if (vertexBuffer_) {
 		vertexBuffer_->Release();
