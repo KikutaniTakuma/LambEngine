@@ -4,9 +4,13 @@
 #include <chrono>
 #include <format>
 #include <cassert>
+#include <cstdlib>
 #include <Windows.h>
+#undef max
+#undef min
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Engine/Engine.h"
 
 ErrorCheck* const ErrorCheck::GetInstance() {
 	static ErrorCheck instance;
@@ -15,8 +19,7 @@ ErrorCheck* const ErrorCheck::GetInstance() {
 
 ErrorCheck::ErrorCheck() :
 	isError_(false)
-{
-}
+{}
 
 ErrorCheck::~ErrorCheck() {
 }
@@ -39,6 +42,14 @@ void ErrorCheck::ErrorTextBox(const std::string& text, const std::string& boxNam
 		);
 	}
 	isError_ = true;
+}
+
+void ErrorCheck::CrashProgram() {
+	if (isError_) {
+		Lamb::AddLog("WARNIG CrashProgram : Please check the Error.log");
+
+		std::exit(EXIT_FAILURE);
+	}
 }
 
 void ErrorCheck::ErrorLog(const std::string& text, const std::string& boxName) {

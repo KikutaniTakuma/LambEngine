@@ -228,7 +228,8 @@ void Collider::DebugDraw(const Mat4x4& viewProjection) {
 	lines_[11]->end = positions[2];
 
 	for (auto& line : lines_) {
-		line->Draw(viewProjection, color_);
+		line->color = color_;
+		line->Draw(viewProjection);
 	}
 }
 

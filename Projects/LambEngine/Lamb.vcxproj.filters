@@ -34,9 +34,6 @@
     <ClCompile Include="Drawers\StringOut\StringOut.cpp">
       <Filter>Drawers\StringOut</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Action\Frame\Frame.cpp">
-      <Filter>Utils\Action\Frame</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\Camera\Camera.cpp">
       <Filter>Utils\Camera</Filter>
     </ClCompile>
@@ -207,12 +204,6 @@
     <Filter Include="Utils\Camera">
       <UniqueIdentifier>{83ad4e33-18a7-4b34-afb3-3b41fc1e2017}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils\Action">
-      <UniqueIdentifier>{d9155807-1673-4565-be3a-edfdf537e04f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\Action\Frame">
-      <UniqueIdentifier>{607698ed-b760-4d10-b8a3-22a385153c5f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils\ConvertString">
       <UniqueIdentifier>{5a7a3057-cf34-4af9-a2fc-9484d57e4dd8}</UniqueIdentifier>
     </Filter>
@@ -370,9 +361,6 @@
     </ClInclude>
     <ClInclude Include="Drawers\StringOut\StringOut.h">
       <Filter>Drawers\StringOut</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Action\Frame\Frame.h">
-      <Filter>Utils\Action\Frame</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Camera\Camera.h">
       <Filter>Utils\Camera</Filter>

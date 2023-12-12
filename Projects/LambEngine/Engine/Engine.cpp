@@ -154,6 +154,8 @@ void Engine::Finalize() {
 
 	// COM 終了
 	CoUninitialize();
+
+	ErrorCheck::GetInstance()->CrashProgram();
 }
 
 bool Engine::IsFinalize() {

@@ -1,7 +1,7 @@
 #pragma once
 #include <array>
 #include <immintrin.h>
-#include <concepts>
+#include "Utils/Cocepts/Cocepts.h"
 
 /// <summary>
 /// 4次元配列
@@ -49,11 +49,11 @@ public:
 	bool operator==(const Vector4& right) const noexcept;
 	bool operator!=(const Vector4& right) const noexcept;
 
-	template<std::integral T>
+	template<Lamb::IsInt T>
 	float& operator[](T index) noexcept {
 		return m[index];
 	}
-	template<std::integral T>
+	template<Lamb::IsInt T>
 	const float& operator[](T index) const noexcept {
 		return m[index];
 	}

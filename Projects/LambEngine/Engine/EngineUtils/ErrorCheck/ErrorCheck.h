@@ -36,9 +36,11 @@ public:
 	inline bool GetError() const {
 		return isError_;
 	}
+	void CrashProgram();
 
 private:
 	void ErrorLog(const std::string& text, const std::string& boxName = "Error");
+
 
 private:
 	bool isError_;

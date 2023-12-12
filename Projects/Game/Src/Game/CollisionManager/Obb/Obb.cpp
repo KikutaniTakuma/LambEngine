@@ -146,11 +146,13 @@ void Obb::Update() {
 
 void Obb::Draw(const Mat4x4& viewProjection) {
 	for (auto& line : lines_) {
-		line.Draw(viewProjection, color_);
+		line.color = color_;
+		line.Draw(viewProjection);
 	}
 
 	for (size_t i = 0llu; i < orientationLines_.size(); i++) {
-		orientationLines_[i].Draw(viewProjection, Vector4ToUint(Vector4{ orientations_[i], 1.0f}));
+		orientationLines_[i].color = Vector4ToUint(Vector4{ orientations_[i], 1.0f });
+		orientationLines_[i].Draw(viewProjection);
 	}
 }
 
