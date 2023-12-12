@@ -1,7 +1,5 @@
 #include "Utils/Random/Random.h"
 
-#include <algorithm>
-
 namespace Lamb {
 	float Random(float min, float max) {
 		static std::random_device seed;

@@ -1,11 +1,10 @@
 #pragma once
 
 #include <random>
-#include <cstdint>
+#include <algorithm>
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"
-#include "Utils/Cocepts/Cocepts.h"
 
 namespace Lamb {
 	/// <summary>
@@ -15,7 +14,7 @@ namespace Lamb {
 	/// <param name="min">最小値</param>
 	/// <param name="max">最大値</param>
 	/// <returns>ランダムな値</returns>
-	template<IsIntSmallerThan32bit T>
+	template<IsInt T> requires requires { sizeof(T) <= sizeof(long); }
 	T Random(T min, T max) {
 		static std::random_device seed;
 		static std::mt19937_64 rnd(seed());
