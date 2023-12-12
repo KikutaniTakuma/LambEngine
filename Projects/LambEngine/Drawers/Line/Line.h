@@ -11,6 +11,12 @@
 /// </summary>
 class Line {
 private:
+	struct VertxData {
+		Mat4x4 wvp;
+		Vector4 color;
+	};
+
+private:
 	static constexpr uint16_t kVertexNum = 2u;
 	static constexpr uint16_t kDrawMaxNumber_ = 4096u;
 	static uint32_t indexCount_;
@@ -34,24 +40,26 @@ private:
 	// 頂点バッファビュー
 	static D3D12_VERTEX_BUFFER_VIEW vertexView_;
 
-	static std::unique_ptr<StructuredBuffer<Mat4x4>> wvpMat_;
-	static std::unique_ptr<StructuredBuffer<Vector4>> color_;
+	static std::unique_ptr<StructuredBuffer<VertxData>> vertData_;
 
 public:
 	Line();
-	Line(const Line& right);
-	Line(Line&& right) noexcept;
-	~Line();
+	Line(const Line& right) = default;
+	Line(Line&& right) noexcept = default;
+	~Line() = default;
 
-	Line& operator=(const Line& right);
-	Line& operator=(Line&& right)noexcept;
+	Line& operator=(const Line& right) = default;
+	Line& operator=(Line&& right)noexcept = default;
 
 public:
 	void Debug(const std::string& guiName);
 
-	void Draw(const Mat4x4& viewProjection, uint32_t color);
+	void Draw(const Mat4x4& viewProjection);
+
+	static void Draw(const Vector3& start, const Vector3& end, const Mat4x4& viewProjection, uint32_t color);
 
 public:
 	Vector3 start;
 	Vector3 end;
+	uint32_t color;
 };

@@ -4,6 +4,7 @@
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "imgui.h"
+#include <numbers>
 
 uint32_t Line::indexCount_ = 0u;
 Shader Line::shader_ = {};
@@ -12,8 +13,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> Line::vertexBuffer_;
 // 頂点バッファビュー
 D3D12_VERTEX_BUFFER_VIEW Line::vertexView_;
 
-std::unique_ptr<StructuredBuffer<Mat4x4>> Line::wvpMat_;
-std::unique_ptr<StructuredBuffer<Vector4>> Line::color_;
+std::unique_ptr<StructuredBuffer<Line::VertxData>> Line::vertData_;
 
 void Line::Initialize() {
 	ShaderManager* const shaderManager = ShaderManager::GetInstance();
@@ -23,7 +23,7 @@ void Line::Initialize() {
 	D3D12_DESCRIPTOR_RANGE range = {};
 	range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	range.BaseShaderRegister = 0;
-	range.NumDescriptors = 2;
+	range.NumDescriptors = 1;
 	range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	D3D12_ROOT_PARAMETER paramater = {};
@@ -39,13 +39,11 @@ void Line::Initialize() {
 	pipline_ = PipelineManager::Create();
 	PipelineManager::StateReset();
 
-	wvpMat_ = std::make_unique<StructuredBuffer<Mat4x4>>(kDrawMaxNumber_);
-	color_ = std::make_unique<StructuredBuffer<Vector4>>(kDrawMaxNumber_);
+	vertData_ = std::make_unique<StructuredBuffer<VertxData>>(kDrawMaxNumber_);
 
 	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
-	heap->BookingHeapPos(2);
-	heap->CreateStructuredBufferView(*wvpMat_);
-	heap->CreateStructuredBufferView(*color_);
+	heap->BookingHeapPos(1);
+	heap->CreateStructuredBufferView(*vertData_);
 
 	vertexBuffer_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(Vector4) * kVertexNum);
 	vertexView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
@@ -61,10 +59,8 @@ void Line::Initialize() {
 
 void Line::Finalize() {
 	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
-	heap->ReleaseView(wvpMat_->GetViewHandleUINT());
-	heap->ReleaseView(color_->GetViewHandleUINT());
-	wvpMat_.reset();
-	color_.reset();
+	heap->ReleaseView(vertData_->GetViewHandleUINT());
+	vertData_.reset();
 
 	if (vertexBuffer_) {
 		vertexBuffer_->Release();
@@ -83,7 +79,7 @@ void Line::AllDraw() {
 
 	pipline_->Use();
 	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
-	heap->Use(wvpMat_->GetViewHandleUINT(), 0);
+	heap->Use(vertData_->GetViewHandleUINT(), 0);
 	auto commandList = DirectXCommand::GetInstance()->GetCommandList();
 	commandList->IASetVertexBuffers(0, 1, &vertexView_);
 	commandList->DrawInstanced(kVertexNum, indexCount_, 0, 0);
@@ -91,43 +87,11 @@ void Line::AllDraw() {
 	ResetDrawCount();
 }
 
-Line::Line() : 
-	start(),
-	end()
-{
-	
-}
-
-Line::Line(const Line& right):
-	Line()
-{
-	*this = right;
-}
-Line::Line(Line&& right) noexcept :
-	Line()
-{
-	*this = std::move(right);
-}
-
-Line& Line::operator=(const Line& right) {
-	start = right.start;
-	end = right.end;
-
-	return *this;
-}
-Line& Line::operator=(Line&& right)noexcept {
-	start = std::move(right.start);
-	end = std::move(right.end);
-
-	return *this;
-}
-
-Line::~Line() {
-	if (vertexBuffer_) {
-		vertexBuffer_->Release();
-		vertexBuffer_.Reset();
-	}
-}
+Line::Line():
+	start{},
+	end{},
+	color(std::numeric_limits<uint32_t>::max())
+{}
 
 void Line::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
@@ -138,7 +102,7 @@ void Line::Debug([[maybe_unused]]const std::string& guiName) {
 #endif // _DEBUG
 }
 
-void Line::Draw(const Mat4x4& viewProjection, uint32_t color) {
+void Line::Draw(const Mat4x4& viewProjection) {
 	assert(indexCount_ < kDrawMaxNumber_);
 	if (!(indexCount_ < kDrawMaxNumber_)) {
 		Lamb::ErrorLog("Over Draw index", "Draw", "Line");
@@ -147,14 +111,35 @@ void Line::Draw(const Mat4x4& viewProjection, uint32_t color) {
 
 	auto&& colorFloat = UintToVector4(color);
 
-	(*color_)[indexCount_] = colorFloat;
+	(*vertData_)[indexCount_].color = colorFloat;
 
 	Vector3 scale;
 	scale.x = (end - start).Length();
 	Vector3 to = (end - start).Normalize();
 	Vector3 translate = start;
 
-	(*wvpMat_)[indexCount_] = Mat4x4::MakeAffin(scale, Vector3::kXIndentity, to, translate) * viewProjection;
+	(*vertData_)[indexCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIndentity, to, translate) * viewProjection;
+
+	indexCount_++;
+}
+
+void Line::Draw(const Vector3& start, const Vector3& end, const Mat4x4& viewProjection, uint32_t color = std::numeric_limits<uint32_t>::max()) {
+	assert(indexCount_ < kDrawMaxNumber_);
+	if (!(indexCount_ < kDrawMaxNumber_)) {
+		Lamb::ErrorLog("Over Draw index", "Draw", "Line");
+		return;
+	}
+
+	auto&& colorFloat = UintToVector4(color);
+
+	(*vertData_)[indexCount_].color = colorFloat;
+
+	Vector3 scale;
+	scale.x = (end - start).Length();
+	Vector3 to = (end - start).Normalize();
+	Vector3 translate = start;
+
+	(*vertData_)[indexCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIndentity, to, translate) * viewProjection;
 
 	indexCount_++;
 }
