@@ -44,11 +44,11 @@ public:
 	}
 
 public:
-	IDxcBlob* LoadVertexShader(const std::string& fileName);
-	IDxcBlob* LoadHullShader(const std::string& fileName);
-	IDxcBlob* LoadDomainShader(const std::string& fileName);
-	IDxcBlob* LoadGeometoryShader(const std::string& fileName);
-	IDxcBlob* LoadPixelShader(const std::string& fileName);
+	IDxcBlob* const LoadVertexShader(const std::string& fileName);
+	IDxcBlob* const LoadHullShader(const std::string& fileName);
+	IDxcBlob* const LoadDomainShader(const std::string& fileName);
+	IDxcBlob* const LoadGeometoryShader(const std::string& fileName);
+	IDxcBlob* const LoadPixelShader(const std::string& fileName);
 
 private:
 	static ShaderManager* instance_;

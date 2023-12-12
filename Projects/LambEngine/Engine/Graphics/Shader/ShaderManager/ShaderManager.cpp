@@ -37,7 +37,7 @@ void ShaderManager::Finalize() {
 	instance_ = nullptr;
 }
 
-IDxcBlob* ShaderManager::LoadVertexShader(const std::string& fileName) {
+IDxcBlob* const ShaderManager::LoadVertexShader(const std::string& fileName) {
 	auto itr = vertexShader_.find(fileName);
 	if (itr == vertexShader_.end()) {
 		IDxcBlob* shader = shaderFactory_->CompilerShader(ConvertString(fileName), L"vs_6_0");
@@ -46,7 +46,7 @@ IDxcBlob* ShaderManager::LoadVertexShader(const std::string& fileName) {
 	}
 	return vertexShader_[fileName].Get();
 }
-IDxcBlob* ShaderManager::LoadHullShader(const std::string& fileName) {
+IDxcBlob* const ShaderManager::LoadHullShader(const std::string& fileName) {
 	auto itr = hullShader_.find(fileName);
 	if (itr == hullShader_.end()) {
 		IDxcBlob* shader = shaderFactory_->CompilerShader(ConvertString(fileName), L"hs_6_0");
@@ -56,7 +56,7 @@ IDxcBlob* ShaderManager::LoadHullShader(const std::string& fileName) {
 
 	return hullShader_[fileName].Get();
 }
-IDxcBlob* ShaderManager::LoadDomainShader(const std::string& fileName) {
+IDxcBlob* const ShaderManager::LoadDomainShader(const std::string& fileName) {
 	auto itr = domainShader_.find(fileName);
 	if (itr == domainShader_.end()) {
 		IDxcBlob* shader = shaderFactory_->CompilerShader(ConvertString(fileName), L"ds_6_0");
@@ -65,7 +65,7 @@ IDxcBlob* ShaderManager::LoadDomainShader(const std::string& fileName) {
 	}
 	return domainShader_[fileName].Get();
 }
-IDxcBlob* ShaderManager::LoadGeometoryShader(const std::string& fileName) {
+IDxcBlob* const ShaderManager::LoadGeometoryShader(const std::string& fileName) {
 	auto itr = geometoryShader_.find(fileName);
 	if (itr == geometoryShader_.end()) {
 		IDxcBlob* shader = shaderFactory_->CompilerShader(ConvertString(fileName), L"gs_6_0");
@@ -74,7 +74,7 @@ IDxcBlob* ShaderManager::LoadGeometoryShader(const std::string& fileName) {
 	}
 	return geometoryShader_[fileName].Get();
 }
-IDxcBlob* ShaderManager::LoadPixelShader(const std::string& fileName) {
+IDxcBlob* const ShaderManager::LoadPixelShader(const std::string& fileName) {
 	auto itr = pixelShader_.find(fileName);
 	if (itr == pixelShader_.end()) {
 		IDxcBlob* shader = shaderFactory_->CompilerShader(ConvertString(fileName), L"ps_6_0");
