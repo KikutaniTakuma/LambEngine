@@ -13,6 +13,8 @@
 
 #include "Math/Vector2.h"
 
+#include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+
 void Framework::Initialize() {
 	// ライブラリ初期化
 	if (!Engine::Initialize("DirectXGame", Vector2{ 1280.0f, 720.0f })) {
@@ -23,6 +25,8 @@ void Framework::Initialize() {
 		);
 		return;
 	}
+
+	ErrorCheck::GetInstance()->SetFinalize([this]() {this->Finalize(); });
 
 	// 入力処理初期化
 	Input::Initialize();
