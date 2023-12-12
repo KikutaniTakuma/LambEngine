@@ -7,8 +7,8 @@
 /// <summary>
 /// ストラクチャードバッファ
 /// </summary>
-/// <typeparam name="T">ポインタ以外をサポート</typeparam>
-template<Lamb::IsNotPtr T>
+/// <typeparam name="T">ポインタと参照型以外をサポート</typeparam>
+template<Lamb::IsNotReferenceAndPtr T>
 class StructuredBuffer {
 public:
 	StructuredBuffer() noexcept :

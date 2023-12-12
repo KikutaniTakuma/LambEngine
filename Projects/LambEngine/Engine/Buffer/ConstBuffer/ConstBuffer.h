@@ -7,7 +7,7 @@
 /// <summary>
 /// 定数バッファ
 /// </summary>
-template<Lamb::IsNotPtr T>
+template<Lamb::IsNotReferenceAndPtr T>
 class ConstBuffer {
 public:
 	inline ConstBuffer() noexcept:
@@ -18,7 +18,9 @@ public:
 		isCreateView_(false),
 		roootParamater_(),
 		shaderVisibility_(D3D12_SHADER_VISIBILITY_ALL),
-		shaderRegister_(0)
+		shaderRegister_(0),
+		descriptorHandle_{},
+		dsecIndex_()
 	{
 		// バイトサイズは256アライメントする(vramを効率的に使うための仕組み)
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce((sizeof(T) + 0xff) & ~0xff);
