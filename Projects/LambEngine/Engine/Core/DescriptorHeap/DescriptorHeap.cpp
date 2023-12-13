@@ -157,10 +157,10 @@ void DescriptorHeap::CreateHeapHandles() {
 	heapHandles_.push_back({ heap_->GetCPUDescriptorHandleForHeapStart(),
 							heap_->GetGPUDescriptorHandleForHeapStart() });
 	auto heapHandleFirstItr = heapHandles_.begin();
-	for (uint32_t i = 1; i < heapSize_; i++) {
+	for (uint64_t i = 1llu; i < static_cast<uint64_t>(heapSize_); i++) {
 		auto hadleTmp = *heapHandleFirstItr;
-		hadleTmp.first.ptr += incrementSRVCBVUAVHeap * i;
-		hadleTmp.second.ptr += incrementSRVCBVUAVHeap * i;
+		hadleTmp.first.ptr += static_cast<uint64_t>(incrementSRVCBVUAVHeap) * i;
+		hadleTmp.second.ptr += static_cast<uint64_t>(incrementSRVCBVUAVHeap) * i;
 		heapHandles_.push_back(hadleTmp);
 	}
 }
