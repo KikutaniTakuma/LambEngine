@@ -151,7 +151,7 @@ void DescriptorHeap::UseThisPosition(uint32_t handle) {
 }
 
 void DescriptorHeap::CreateHeapHandles() {
-	UINT incrementSRVCBVUAVHeap = DirectXDevice::GetInstance()->GetIncrementSRVCBVUAVHeap();
+	uint64_t incrementSRVCBVUAVHeap = static_cast<uint64_t>(DirectXDevice::GetInstance()->GetIncrementSRVCBVUAVHeap());
 
 	heapHandles_.reserve(heapSize_);
 	heapHandles_.push_back({ heap_->GetCPUDescriptorHandleForHeapStart(),
@@ -159,8 +159,8 @@ void DescriptorHeap::CreateHeapHandles() {
 	auto heapHandleFirstItr = heapHandles_.begin();
 	for (uint64_t i = 1llu; i < static_cast<uint64_t>(heapSize_); i++) {
 		auto hadleTmp = *heapHandleFirstItr;
-		hadleTmp.first.ptr += static_cast<uint64_t>(incrementSRVCBVUAVHeap) * i;
-		hadleTmp.second.ptr += static_cast<uint64_t>(incrementSRVCBVUAVHeap) * i;
+		hadleTmp.first.ptr += incrementSRVCBVUAVHeap * i;
+		hadleTmp.second.ptr += incrementSRVCBVUAVHeap * i;
 		heapHandles_.push_back(hadleTmp);
 	}
 }
