@@ -41,7 +41,7 @@ float4 main(Output input) : SV_TARGET{
     float pn = FractalSumNnoise(10.0f, input.uv + randomVec);
     float pn2 = FractalSumNnoise(5.0f, input.uv - randomVec);
     
-    float4 texColor = tex.Sample(smp, input.uv + (pn * 0.1f) + pn2 * 0.08f);
+    float4 texColor = tex.Sample(smp, input.uv + lerp((pn * 0.1f), pn2 * 0.08f, 3.0f));
 
     return texColor;
 }
