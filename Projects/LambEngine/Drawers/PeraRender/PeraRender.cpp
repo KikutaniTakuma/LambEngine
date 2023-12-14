@@ -59,8 +59,8 @@ PeraRender::~PeraRender() {
 	}
 }
 
-void PeraRender::Initialize(const std::string& vsFileName, const std::string& psFileName) {
-	CreateShader(vsFileName, psFileName);
+void PeraRender::Initialize(const std::string& psFileName) {
+	CreateShader("./Resources/Shaders/PostShader/Post.VS.hlsl", psFileName);
 
 	CreateGraphicsPipeline();
 

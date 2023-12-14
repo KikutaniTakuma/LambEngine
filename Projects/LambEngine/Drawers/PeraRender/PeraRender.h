@@ -17,13 +17,8 @@
 class PeraRender {
 public:
 	struct PeraVertexData {
-		Vector3 position_;
-		Vector2 uv_;
-	};
-
-	struct Wipe {
-		Vector2 center_;
-		float wipeSize_;
+		Vector3 position;
+		Vector2 uv;
 	};
 
 public:
@@ -37,7 +32,7 @@ public:
 	PeraRender& operator=(PeraRender&&) = delete;
 
 public:
-	void Initialize(const std::string& vsFileName, const std::string& psFileName);
+	void Initialize(const std::string& psFileName);
 
 private:
 	void CreateShader(const std::string& vsFileName, const std::string& psFileName);
