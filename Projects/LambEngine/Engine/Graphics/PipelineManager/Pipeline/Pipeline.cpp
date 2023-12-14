@@ -34,11 +34,11 @@ Pipeline& Pipeline::operator=(Pipeline&& right) noexcept {
 }
 
 bool Pipeline::operator==(const Pipeline& right) const {
-	return shader_.vertex_ == right.shader_.vertex_
-		&& shader_.pixel_ == right.shader_.pixel_
-		&& shader_.hull_ == right.shader_.hull_
-		&& shader_.domain_ == right.shader_.domain_
-		&& shader_.geometory_ == right.shader_.geometory_
+	return shader_.vertex == right.shader_.vertex
+		&& shader_.pixel == right.shader_.pixel
+		&& shader_.hull == right.shader_.hull
+		&& shader_.domain == right.shader_.domain
+		&& shader_.geometory == right.shader_.geometory
 		&& blend_ == right.blend_
 		&& cullMode_ == right.cullMode_
 		&& solidState_ == right.solidState_
@@ -64,7 +64,7 @@ void Pipeline::SetVertexInput(std::string semanticName, uint32_t semanticIndex, 
 void Pipeline::SetShader(const Shader& shader) {
 	shader_ = shader;
 
-	assert(shader_.hull_ == shader_.domain_ || shader_.hull_ != nullptr && shader_.domain_ != nullptr);
+	assert(shader_.hull == shader_.domain || shader_.hull != nullptr && shader_.domain != nullptr);
 }
 
 void Pipeline::Create(
@@ -116,27 +116,27 @@ void Pipeline::Create(
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 
 	graphicsPipelineStateDesc.VS = {
-			shader_.vertex_->GetBufferPointer(),
-			shader_.vertex_->GetBufferSize()
+			shader_.vertex->GetBufferPointer(),
+			shader_.vertex->GetBufferSize()
 	};
 	graphicsPipelineStateDesc.PS = {
-			shader_.pixel_->GetBufferPointer(),
-			shader_.pixel_->GetBufferSize()
+			shader_.pixel->GetBufferPointer(),
+			shader_.pixel->GetBufferSize()
 	};
-	if (shader_.hull_ && shader_.domain_) {
+	if (shader_.hull && shader_.domain) {
 		graphicsPipelineStateDesc.HS = {
-				shader_.hull_->GetBufferPointer(),
-				shader_.hull_->GetBufferSize()
+				shader_.hull->GetBufferPointer(),
+				shader_.hull->GetBufferSize()
 		};
 		graphicsPipelineStateDesc.DS = {
-				shader_.domain_->GetBufferPointer(),
-				shader_.domain_->GetBufferSize()
+				shader_.domain->GetBufferPointer(),
+				shader_.domain->GetBufferSize()
 		};
 	}
-	if (shader_.geometory_) {
+	if (shader_.geometory) {
 		graphicsPipelineStateDesc.GS = {
-				shader_.geometory_->GetBufferPointer(),
-				shader_.geometory_->GetBufferSize()
+				shader_.geometory->GetBufferPointer(),
+				shader_.geometory->GetBufferSize()
 		};
 	}
 
@@ -249,11 +249,11 @@ bool Pipeline::IsSame(
 	ID3D12RootSignature* rootSignature,
 	bool isDepth
 ) {
-	return shader_.vertex_ == shader.vertex_
-		&& shader_.pixel_ == shader.pixel_
-		&& shader_.hull_ == shader.hull_
-		&& shader_.domain_ == shader.domain_
-		&& shader_.geometory_ == shader.geometory_
+	return shader_.vertex == shader.vertex
+		&& shader_.pixel == shader.pixel
+		&& shader_.hull == shader.hull
+		&& shader_.domain == shader.domain
+		&& shader_.geometory == shader.geometory
 		&& blend_ == blend
 		&& cullMode_ == cullMode
 		&& solidState_ == solidState

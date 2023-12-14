@@ -75,6 +75,7 @@ private:
 
 	ConstBuffer<Mat4x4> wvpMat_;
 	ConstBuffer<Vector4> colorBuf_;
+	ConstBuffer<Vector2> randomVec_;
 
 	bool isPreDraw_;
 

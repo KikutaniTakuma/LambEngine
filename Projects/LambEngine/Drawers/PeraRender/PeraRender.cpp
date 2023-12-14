@@ -6,6 +6,8 @@
 #include <cassert>
 #include <numbers>
 
+#include "Utils/Random/Random.h"
+
 PeraRender::PeraRender():
 	render_(),
 	peraVertexResource_(nullptr),
@@ -101,14 +103,18 @@ void PeraRender::Initialize(const std::string& psFileName) {
 	srvHeap->CreatePerarenderView(render_);
 	srvHeap->CreateConstBufferView(wvpMat_);
 	srvHeap->CreateConstBufferView(colorBuf_);
+	srvHeap->CreateConstBufferView(randomVec_);
+
+	randomVec_->x = Lamb::Random(0.0f, 1.0f);
+	randomVec_->y = Lamb::Random(0.0f, 1.0f);
 }
 
 void PeraRender::CreateShader(const std::string& vsFileName, const std::string& psFileName) {
 	static ShaderManager* const shaderManager = ShaderManager::GetInstance();
-	shader_.vertex_ = shaderManager->LoadVertexShader(vsFileName);
-	assert(shader_.vertex_);
-	shader_.pixel_ = shaderManager->LoadPixelShader(psFileName);
-	assert(shader_.pixel_);
+	shader_.vertex = shaderManager->LoadVertexShader(vsFileName);
+	assert(shader_.vertex);
+	shader_.pixel = shaderManager->LoadPixelShader(psFileName);
+	assert(shader_.pixel);
 }
 
 void PeraRender::CreateGraphicsPipeline() {
@@ -119,7 +125,7 @@ void PeraRender::CreateGraphicsPipeline() {
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 1;
+	cbvRange[0].NumDescriptors = 3;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
@@ -174,6 +180,9 @@ void PeraRender::Update() {
 	}
 
 	*colorBuf_ = UintToVector4(color);
+
+	//randomVec_->x += 0.0f;
+	randomVec_->x += 0.0025f;
 }
 
 void PeraRender::PreDraw() {

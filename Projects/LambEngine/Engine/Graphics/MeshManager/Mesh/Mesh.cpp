@@ -545,14 +545,14 @@ void Mesh::LoadShader(
 ) {
 	static ShaderManager* const shaderManager = shaderManager->GetInstance();
 	if (!loadShaderFlg_) {
-		shader_.vertex_ = shaderManager->LoadVertexShader(vertex);
-		shader_.pixel_ = shaderManager->LoadPixelShader(pixel);
+		shader_.vertex = shaderManager->LoadVertexShader(vertex);
+		shader_.pixel = shaderManager->LoadPixelShader(pixel);
 		if (geometory.size() != 0LLU) {
-			shader_.geometory_ = shaderManager->LoadGeometoryShader(geometory);
+			shader_.geometory = shaderManager->LoadGeometoryShader(geometory);
 		}
 		if (hull.size() != 0LLU && geometory.size() != 0LLU) {
-			shader_.hull_ = shaderManager->LoadHullShader(hull);
-			shader_.domain_ = shaderManager->LoadHullShader(domain);
+			shader_.hull = shaderManager->LoadHullShader(hull);
+			shader_.domain = shaderManager->LoadHullShader(domain);
 		}
 		loadShaderFlg_ = true;
 	}

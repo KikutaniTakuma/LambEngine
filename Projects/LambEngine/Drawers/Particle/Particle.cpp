@@ -59,10 +59,10 @@ void Particle::Finalize() {
 
 void Particle::LoadShader(const std::string& vsFileName, const std::string& psFileName) {
 	static ShaderManager* const shaderManager = shaderManager->GetInstance();
-	shader_.vertex_ = shaderManager->LoadVertexShader(vsFileName);
-	assert(shader_.vertex_);
-	shader_.pixel_ = shaderManager->LoadPixelShader(psFileName);
-	assert(shader_.pixel_);
+	shader_.vertex = shaderManager->LoadVertexShader(vsFileName);
+	assert(shader_.vertex);
+	shader_.pixel = shaderManager->LoadPixelShader(psFileName);
+	assert(shader_.pixel);
 }
 
 void Particle::CreateGraphicsPipeline() {
