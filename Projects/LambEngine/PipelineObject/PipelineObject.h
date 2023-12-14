@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "../Engine/Graphics/Shader/Shader.h"
 
 class PipelineObject {
 public:
@@ -11,11 +12,16 @@ public:
 	PipelineObject& operator=(const PipelineObject&) = delete;
 	PipelineObject& operator=(PipelineObject&&) = delete;
 
-private:
-	void Initialize(const std::string& vsShader, const std::string& psShader);
+protected:
+	void LoadShader(const std::string& vsShader, const std::string& psShader);
 
-	void Use();
+public:
+	virtual void Use() = 0;
+
+	virtual void Init(const std::string& vsShader, const std::string& psShader) = 0;
 
 protected:
+	Shader shader_;
+
 	class Pipeline* pipeline_;
 };
