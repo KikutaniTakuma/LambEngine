@@ -57,7 +57,7 @@ public:
 	void SwapChainPresent();
 
 public:
-	IDXGISwapChain4* GetSwapChain() const {
+	IDXGISwapChain4* const GetSwapChain() const {
 		return swapChain_.Get();
 	}
 

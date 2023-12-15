@@ -100,7 +100,7 @@ void StringOutPutManager::LoadFont(const std::string& fontName) {
 	future.wait();
 }
 
-DirectX::SpriteFont* StringOutPutManager::GetFont(const std::string& fontName) {
+DirectX::SpriteFont* const StringOutPutManager::GetFont(const std::string& fontName) {
 	auto spriteFontItr = spriteFonts_.find(fontName);
 	if (spriteFontItr != spriteFonts_.end()) {
 		return spriteFonts_[fontName].get();
@@ -110,7 +110,7 @@ DirectX::SpriteFont* StringOutPutManager::GetFont(const std::string& fontName) {
 	}
 }
 
-DirectX::SpriteBatch* StringOutPutManager::GetBatch(const std::string& fontName) {
+DirectX::SpriteBatch* const StringOutPutManager::GetBatch(const std::string& fontName) {
 	auto spriteBatchItr = spriteBatch_.find(fontName);
 	if (spriteBatchItr != spriteBatch_.end()) {
 		return spriteBatch_[fontName].get();

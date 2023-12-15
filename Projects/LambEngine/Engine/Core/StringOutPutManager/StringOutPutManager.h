@@ -29,9 +29,9 @@ private:
 public:
 	void LoadFont(const std::string& fontName);
 
-	DirectX::SpriteFont* GetFont(const std::string& fontName);
+	DirectX::SpriteFont* const GetFont(const std::string& fontName);
 
-	DirectX::SpriteBatch* GetBatch(const std::string& fontName);
+	DirectX::SpriteBatch* const GetBatch(const std::string& fontName);
 
 	void GmemoryCommit();
 
