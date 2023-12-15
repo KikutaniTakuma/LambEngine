@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <typeinfo>
+#include "Utils/ExecutionLog/ExecutionLog.h"
 
 class Error {
 public:
@@ -44,6 +45,7 @@ public:
 		code_.errorCode_ = errorCode;
 		code_.className_ = typeid(T).name();
 		code_.functionName_ = functionName;
+		Lamb::DebugLog(typeid(Error).name() + code_.className() + " : " + code_.function() + " : " + code_.what());
 
 		return *this;
 	}
