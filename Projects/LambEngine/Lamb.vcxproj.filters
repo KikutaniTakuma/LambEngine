@@ -339,6 +339,9 @@
     <Filter Include="PipelineObject\WaterPipeline">
       <UniqueIdentifier>{bdf75616-892b-4ee7-bcc0-2e4c1686180f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Error">
+      <UniqueIdentifier>{89dc16ed-3ed4-40e0-b34e-752af2811991}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -517,6 +520,9 @@
     </ClInclude>
     <ClInclude Include="PipelineObject\WaterPipeline\WaterPipeline.h">
       <Filter>PipelineObject\WaterPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Error\Error.h">
+      <Filter>Error</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
