@@ -157,6 +157,12 @@
     <ClCompile Include="Math\Vector4.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="PipelineObject\PipelineObject.cpp">
+      <Filter>PipelineObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PipelineObject\WaterPipeline\WaterPipeline.cpp">
+      <Filter>PipelineObject\WaterPipeline</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -327,6 +333,12 @@
     <Filter Include="Math">
       <UniqueIdentifier>{f4d2bb2b-5300-4906-bcac-3c4a0124dcf7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PipelineObject">
+      <UniqueIdentifier>{66d80ced-8ef5-46f0-ba3a-0d1f3f777498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PipelineObject\WaterPipeline">
+      <UniqueIdentifier>{bdf75616-892b-4ee7-bcc0-2e4c1686180f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -496,6 +508,15 @@
     </ClInclude>
     <ClInclude Include="Math\Vector4.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="PipelineObject\PipelineObject.h">
+      <Filter>PipelineObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Shader\Shader.h">
+      <Filter>Engine\Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="PipelineObject\WaterPipeline\WaterPipeline.h">
+      <Filter>PipelineObject\WaterPipeline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

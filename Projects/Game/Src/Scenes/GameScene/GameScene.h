@@ -28,7 +28,9 @@ public:
 	void Draw() override;
 
 public:
+	PeraRender pera_;
+
 	std::unique_ptr<Model> model_;
 
-	Collider collider_;
+	Camera staticCamera_;
 };

@@ -9,6 +9,10 @@ cbuffer Color : register(b1){
     float4 color;
 }
 
+cbuffer Color : register(b2){
+    float2 randomVec;
+}
+
 struct Output{
     float4 svPos : SV_POSITION;
     float2 uv : TEXCOORD;

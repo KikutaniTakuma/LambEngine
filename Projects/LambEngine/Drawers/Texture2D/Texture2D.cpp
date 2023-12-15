@@ -187,10 +187,10 @@ void Texture2D::Finalize() {
 
 void Texture2D::LoadShader(const std::string& vsFileName, const std::string& psFileName) {
 	static ShaderManager* const shaderManager = ShaderManager::GetInstance();
-	shader_.vertex_ = shaderManager->LoadVertexShader(vsFileName);
-	assert(shader_.vertex_);
-	shader_.pixel_ = shaderManager->LoadPixelShader(psFileName);
-	assert(shader_.pixel_);
+	shader_.vertex = shaderManager->LoadVertexShader(vsFileName);
+	assert(shader_.vertex);
+	shader_.pixel = shaderManager->LoadPixelShader(psFileName);
+	assert(shader_.pixel);
 }
 
 void Texture2D::CreateGraphicsPipeline() {
