@@ -11,6 +11,8 @@
 #undef max
 #undef min
 
+class Error;
+
 /// <summary>
 /// ログ関連
 /// </summary>
@@ -77,6 +79,8 @@ namespace Lamb {
 		const std::string& functionName = std::string{},
 		const std::string& className = "Error"
 		);
+
+	void ErrorLog(const Error& err);
 
 	/// <summary>
 	/// 今の時間を文字列として出力する

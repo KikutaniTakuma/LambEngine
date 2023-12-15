@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <cassert>
 #include <chrono>
+#include "Error/Error.h"
 
 namespace Lamb {
 	bool AddLog(const std::string& text) {
@@ -75,6 +76,14 @@ namespace Lamb {
 				className
 			);
 		}
+	}
+
+	void ErrorLog(const Error& err) {
+		static ErrorCheck* const errorCheck = ErrorCheck::GetInstance();
+		errorCheck->ErrorTextBox(
+			err.code().function() + " failed : " + err.code().what(),
+			err.code().className()
+		);
 	}
 
 	std::string NowTime() {
