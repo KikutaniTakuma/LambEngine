@@ -8,6 +8,8 @@
 
 #include "Utils/Random/Random.h"
 
+#include "Utils/EngineInfo/EngineInfo.h"
+
 PeraRender::PeraRender():
 	render_(),
 	peraVertexResource_(nullptr),
@@ -182,7 +184,7 @@ void PeraRender::Update() {
 	*colorBuf_ = UintToVector4(color);
 
 	//randomVec_->x += 0.0f;
-	randomVec_->x += 0.0025f;
+	randomVec_->x += 0.15f * Lamb::DeltaTime();
 }
 
 void PeraRender::PreDraw() {
