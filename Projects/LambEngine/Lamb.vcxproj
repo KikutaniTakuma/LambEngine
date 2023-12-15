@@ -210,6 +210,7 @@
     <ClInclude Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.h" />
     <ClInclude Include="Engine\Graphics\TextureManager\TextureManager.h" />
     <ClInclude Include="Engine\Graphics\TextureManager\Texture\Texture.h" />
+    <ClInclude Include="Error\Error.h" />
     <ClInclude Include="Input\Gamepad\Gamepad.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\KeyInput\KeyInput.h" />
