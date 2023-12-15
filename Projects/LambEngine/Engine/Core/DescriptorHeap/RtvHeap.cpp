@@ -6,6 +6,7 @@
 #include "Math/Vector4.h"
 #include <algorithm>
 #include <cassert>
+#include "Error/Error.h"
 
 RtvHeap* RtvHeap::instance_ = nullptr;
 
@@ -73,8 +74,7 @@ void RtvHeap::CreateBackBuffer(
 
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			Lamb::ErrorLog("GetBuffer() Failed", "CreateBackBuffer()", "RtvHeap");
-			return;
+			throw Error{}.set<RtvHeap>("GetBuffer() Failed", "CreateBackBuffer()");
 		}
 
 		device->CreateRenderTargetView(backBuffer[i].Get(), &rtvDesc, heapHandles_[i].first);
@@ -120,7 +120,7 @@ void RtvHeap::ClearRenderTargetView(uint32_t handle, const Vector4& clearColor) 
 uint32_t RtvHeap::CreateView(class RenderTarget& peraRender) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		Lamb::ErrorLog("Over HeapSize", "CreateView", "RtvHeap");
+		throw Error{}.set<RtvHeap>("Over HeapSize", "CreateView");
 	}
 
 	if (bookingHandle_.empty()) {

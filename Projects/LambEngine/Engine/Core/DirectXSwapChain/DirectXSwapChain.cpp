@@ -8,6 +8,8 @@
 #include "Math/Vector4.h"
 #include <cassert>
 
+#include "Error/Error.h"
+
 DirectXSwapChain* DirectXSwapChain::instance_ = nullptr;
 
 DirectXSwapChain* const DirectXSwapChain::GetInstance() {
@@ -45,8 +47,7 @@ DirectXSwapChain::DirectXSwapChain():
 	HRESULT hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue, WindowFactory::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("something error", "CreateSwapChainForHwnd()", "DirectXSwapChain");
-		return;
+		throw Error{}.set<DirectXSwapChain>("something error", "CreateSwapChainForHwnd()");
 	}
 
 	dxgiFactory->MakeWindowAssociation(
@@ -102,22 +103,13 @@ void DirectXSwapChain::ClearBackBuffer() {
 
 void DirectXSwapChain::ChangeBackBufferState() {
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
-	if (isRenderState_) {
-		Barrier(
-			swapChainResource_[backBufferIndex].Get(),
-			D3D12_RESOURCE_STATE_RENDER_TARGET,
-			D3D12_RESOURCE_STATE_PRESENT
-		);
-		isRenderState_ = false;
-	}
-	else {
-		Barrier(
-			swapChainResource_[backBufferIndex].Get(),
-			D3D12_RESOURCE_STATE_PRESENT,
-			D3D12_RESOURCE_STATE_RENDER_TARGET
-		);
-		isRenderState_ = true;
-	}
+	Barrier(
+		swapChainResource_[backBufferIndex].Get(),
+		isRenderState_ ? D3D12_RESOURCE_STATE_RENDER_TARGET : D3D12_RESOURCE_STATE_PRESENT,
+		isRenderState_ ? D3D12_RESOURCE_STATE_PRESENT : D3D12_RESOURCE_STATE_RENDER_TARGET
+	);
+
+	isRenderState_ = !isRenderState_;
 }
 
 void DirectXSwapChain::SwapChainPresent() {

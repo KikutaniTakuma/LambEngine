@@ -8,6 +8,8 @@
 #include <cassert>
 #include <filesystem>
 
+#include "Error/Error.h"
+
 StringOutPutManager* StringOutPutManager::instance_ = nullptr;
 
 void StringOutPutManager::Initialize() {
@@ -39,8 +41,7 @@ StringOutPutManager::StringOutPutManager():
 void StringOutPutManager::LoadFont(const std::string& fontName) {
 	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
 	if (!std::filesystem::exists(std::filesystem::path(fontName))) {
-		Lamb::ErrorLog("This file is not exist -> " + fontName, "LoadFont()", "StringOutPutManager");
-		return;
+		throw Error{}.set<StringOutPutManager>("This file is not exist -> " + fontName, "LoadFont()");
 	}
 
 	// もしロード済みなら早期リターン

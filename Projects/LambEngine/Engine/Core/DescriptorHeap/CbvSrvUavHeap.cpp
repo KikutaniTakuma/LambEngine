@@ -64,8 +64,7 @@ uint32_t CbvSrvUavHeap::CreateTxtureView(Texture* tex) {
 	}
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		Lamb::ErrorLog("Over HeapSize", "CreateTxtureView()", "CbvSrvUavHeap");
-		return std::numeric_limits<uint32_t>::max();
+		throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreateTxtureView()");
 	}
 
 	if (bookingHandle_.empty()) {
@@ -96,8 +95,7 @@ void CbvSrvUavHeap::CreateTxtureView(Texture* tex, uint32_t heapIndex) {
 	assert(tex != nullptr);
 	assert(heapIndex < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		Lamb::ErrorLog("Over HeapSize", "CreateTxtureView()", "CbvSrvUavHeap");
-		return;
+		throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreateTxtureView()");
 	}
 
 	tex->CreateSRVView(
@@ -110,8 +108,7 @@ void CbvSrvUavHeap::CreateTxtureView(Texture* tex, uint32_t heapIndex) {
 uint32_t CbvSrvUavHeap::CreatePerarenderView(RenderTarget& renderTarget) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		Lamb::ErrorLog("Over HeapSize", "CreatePerarenderView()", "CbvSrvUavHeap");
-		return std::numeric_limits<uint32_t>::max();
+		throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreatePerarenderView()");
 	}
 
 	if (bookingHandle_.empty()) {
@@ -132,8 +129,7 @@ uint32_t CbvSrvUavHeap::CreatePerarenderView(RenderTarget& renderTarget) {
 uint32_t CbvSrvUavHeap::CreateDepthTextureView(class DepthBuffer& depthBuffer) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		Lamb::ErrorLog("Over HeapSize", "CreateDepthTextureView()", "CbvSrvUavHeap");
-		return std::numeric_limits<uint32_t>::max();
+		throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreateDepthTextureView()");
 	}
 
 	if (bookingHandle_.empty()) {

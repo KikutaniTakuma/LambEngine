@@ -6,6 +6,8 @@
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include <cassert>
 
+#include "Error/Error.h"
+
 TextureManager* TextureManager::instance_ = nullptr;
 
 TextureManager* const TextureManager::GetInstance() {
@@ -44,8 +46,7 @@ TextureManager::TextureManager() :
 	HRESULT hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(commandQueue_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("CreateCommandQueue() Failed", "Constructor", "TextureManager");
-		return;
+		throw Error{}.set<TextureManager>("CreateCommandQueue() Failed", "Constructor");
 	}
 
 	// コマンドアロケータを生成する
@@ -53,8 +54,7 @@ TextureManager::TextureManager() :
 	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("CreateCommandAllocator() Failed", "Constructor", "TextureManager");
-		return;
+		throw Error{}.set<TextureManager>("CreateCommandAllocator() Failed", "Constructor");
 	}
 
 	// コマンドリストを作成する
@@ -62,8 +62,7 @@ TextureManager::TextureManager() :
 	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(commandList_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("CreateCommandList() Failed", "Constructor", "TextureManager");
-		return;
+		throw Error{}.set<TextureManager>("CreateCommandList() Failed", "Constructor");
 	}
 
 	// 初期値0でFenceを作る
@@ -72,8 +71,7 @@ TextureManager::TextureManager() :
 	hr = device->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("CreateFence() Failed", "Constructor", "TextureManager");
-		return;
+		throw Error{}.set<TextureManager>("CreateFence() Failed", "Constructor");
 	}
 
 	// FenceのSignalを持つためのイベントを作成する
@@ -81,8 +79,7 @@ TextureManager::TextureManager() :
 	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
 	assert(fenceEvent_ != nullptr);
 	if (!(fenceEvent_ != nullptr)) {
-		Lamb::ErrorLog("CreateEvent() Failed", "Constructor", "TextureManager");
-		return;
+		throw Error{}.set<TextureManager>("CreateEvent() Failed", "Constructor");
 	}
 
 	srvHeap_ = CbvSrvUavHeap::GetInstance();
@@ -125,12 +122,12 @@ Texture* const TextureManager::LoadTexture(const std::string& fileName) {
 		auto hr = commandAllocator_->Reset();
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			Lamb::ErrorLog("CommandAllocator somthing error", "Reset()", "TextureManager");
+			throw Error{}.set<TextureManager>("CommandAllocator somthing error", "Reset()");
 		}
 		hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			Lamb::ErrorLog("CommandList somthing error", "Reset()", "TextureManager");
+			throw Error{}.set<TextureManager>("CommandList somthing error", "Reset()");
 		}
 		///
 
@@ -235,12 +232,12 @@ void TextureManager::ResetCommandList() {
 		auto hr = commandAllocator_->Reset();
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			Lamb::ErrorLog("CommandAllocator somthing error", "Reset()", "TextureManager");
+			throw Error{}.set<TextureManager>("CommandAllocator somthing error", "Reset()");
 		}
 		hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			Lamb::ErrorLog("CommandList somthing error", "Reset()", "TextureManager");
+			throw Error{}.set<TextureManager>("CommandList somthing error", "Reset()");
 		}
 
 		isThreadFinish_ = false;

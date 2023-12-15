@@ -124,7 +124,7 @@ private:
 	/// 描画関係
 	/// 
 private:
-	bool InitializeDraw();
+	void InitializeDraw();
 
 private:
 	std::unique_ptr<class DepthBuffer> depthStencil_;

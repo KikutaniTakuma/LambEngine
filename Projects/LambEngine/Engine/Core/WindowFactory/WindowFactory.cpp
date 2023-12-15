@@ -10,6 +10,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 #include "Input/Input.h"
 
+#include "Error/Error.h"
+
 WindowFactory::WindowFactory():
 	hwnd_{},
 	wndEx_{},
@@ -48,9 +50,7 @@ void WindowFactory::Create(
 	HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 	assert(SUCCEEDED(hr));
 	if (FAILED(hr)) {
-		Lamb::ErrorLog("CoInitializeEx failed", "Create()", "WindowFactory");
-
-		return;
+		throw Error{}.set<WindowFactory>("CoInitializeEx failed", "Create()");
 	}
 
 	windowName_ = windowTitle;

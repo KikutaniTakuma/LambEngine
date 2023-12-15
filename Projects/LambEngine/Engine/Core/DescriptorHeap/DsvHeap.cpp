@@ -3,6 +3,7 @@
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include <cassert>
 #include <algorithm>
+#include "Error/Error.h"
 
 DsvHeap* DsvHeap::instance_ = nullptr;
 
@@ -56,7 +57,7 @@ void DsvHeap::CreateHeapHandles() {
 uint32_t DsvHeap::CreateView(DepthBuffer& depthStencilBuffer) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		Lamb::ErrorLog("Over HeapSize", "CreateConstBufferView()","DsvHeap");
+		throw Error{}.set<DsvHeap>("Over HeapSize", "CreateConstBufferView()");
 	}
 
 	if (bookingHandle_.empty()) {

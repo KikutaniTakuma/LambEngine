@@ -9,6 +9,7 @@
 #include <cassert>
 #include "Math/Vector4.h"
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
+#include "Error/Error.h"
 
 RenderTarget::RenderTarget():
 	resource_(),
@@ -36,24 +37,29 @@ RenderTarget::RenderTarget():
 
 	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
 
-	// 実際にリソースを作る
-	HRESULT hr = device->
-		CreateCommittedResource(
-			&heapPropaerties, 
-			D3D12_HEAP_FLAG_NONE, 
-			&resDesc, 
-			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE, 
-			&clearValue, 
-			IID_PPV_ARGS(resource_.GetAddressOf())
-		);
-	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("CreateCommittedResource Function Failed", "Constructor", "RenderTarget");
+	try {
+		// 実際にリソースを作る
+		HRESULT hr = device->
+			CreateCommittedResource(
+				&heapPropaerties,
+				D3D12_HEAP_FLAG_NONE,
+				&resDesc,
+				D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+				&clearValue,
+				IID_PPV_ARGS(resource_.GetAddressOf())
+			);
+		if (!SUCCEEDED(hr)) {
+			throw Error{}.set<RenderTarget>("CreateCommittedResource Function Failed", "Constructor");
+		}
+
+		RtvHeap* const rtvHeap = RtvHeap::GetInstance();
+		rtvHeap->BookingHeapPos(1u);
+		rtvHeap->CreateView(*this);
+	}
+	catch (const Error& err) {
+		Lamb::ErrorLog(err);
 		return;
 	}
-
-	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->BookingHeapPos(1u);
-	rtvHeap->CreateView(*this);
 
 	srvDesc_ = {};
 	srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;

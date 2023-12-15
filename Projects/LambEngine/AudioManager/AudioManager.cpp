@@ -3,6 +3,7 @@
 #include "Utils/EngineInfo/EngineInfo.h"
 #include <cassert>
 #include <filesystem>
+#include "Error/Error.h"
 
 AudioManager* AudioManager::instance_ = nullptr;
 void AudioManager::Inititalize() {
@@ -25,13 +26,13 @@ AudioManager::AudioManager() :
 	HRESULT hr = XAudio2Create(xAudio2_.GetAddressOf(), 0u, XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("XAudio2Create()", "Constructor", "AudioManager");
+		throw Error{}.set<AudioManager>("XAudio2Create()", "Constructor");
 	}
 
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("CreateMasteringVoicey()", "Constructor", "AudioManager");
+		throw Error{}.set<AudioManager>("CreateMasteringVoicey()", "Constructor");
 	}
 }
 AudioManager::~AudioManager() {
@@ -44,6 +45,7 @@ AudioManager::~AudioManager() {
 Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 	if (!std::filesystem::exists(std::filesystem::path(fileName))) {
 		Lamb::ErrorLog(" There is not this file -> " + fileName, "LoadWav()", "AudioManager");
+		throw Error{}.set<AudioManager>("There is not this file -> " + fileName, "LoadWav()");
 	}
 
 
