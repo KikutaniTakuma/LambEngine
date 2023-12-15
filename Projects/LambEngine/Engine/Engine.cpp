@@ -315,14 +315,3 @@ void Engine::FrameEnd() {
 		Lamb::ErrorLog(err);
 	}
 }
-
-
-
-
-
-/// 
-/// 各種解放処理なくなっちゃた
-/// 
-Engine::~Engine() {
-	
-}

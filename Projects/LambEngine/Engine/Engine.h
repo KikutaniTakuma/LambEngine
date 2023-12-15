@@ -26,7 +26,7 @@ private:
 	Engine() = default;
 	Engine(const Engine&) = delete;
 	Engine(Engine&&) = default;
-	~Engine();
+	~Engine() = default;
 
 	Engine& operator=(const Engine&) = delete;
 	Engine& operator=(Engine&&) = delete;
