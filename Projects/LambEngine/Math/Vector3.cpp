@@ -2,9 +2,10 @@
 #include <cmath>
 #include "Mat4x4.h"
 #include "Vector2.h"
-#include <cassert>
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Quaternion.h"
+
+#include "Error/Error.h"
 
 Vector3::Vector3() noexcept :
 	x(0.0f),
@@ -105,16 +106,15 @@ Vector3& Vector3::operator/=(float scalar) noexcept {
 	return *this;
 }
 
-Vector3 Vector3::operator*(const Mat4x4& mat) const noexcept {
+Vector3 Vector3::operator*(const Mat4x4& mat) const {
 	Vector3 result;
 	Vector4 vec = { *this,1.0f };
 	result.x = x * mat[0][0] + y * mat[1][0] + z * mat[2][0] + 1.0f * mat[3][0];
 	result.y = x * mat[0][1] + y * mat[1][1] + z * mat[2][1] + 1.0f * mat[3][1];
 	result.z = x * mat[0][2] + y * mat[1][2] + z * mat[2][2] + 1.0f * mat[3][2];
 	float&& w = x * mat[0][3] + y * mat[1][3] + z * mat[2][3] + 1.0f * mat[3][3];
-	assert(w != 0.0f);
 	if (w == 0.0f) {
-		Lamb::ErrorLog("Vector3 * Matrix4x4 : w = 0.0f", "operator*", "Vector3");
+		throw Error{}.set<Vector3>("Vector3 * Matrix4x4 : w = 0.0f", "operator*");
 	}
 	w = 1.0f / w;
 	result.x *= w;
@@ -132,9 +132,8 @@ Vector3 operator*(const Mat4x4& left, const Vector3& right) {
 	result.y = left[1].Dot(vec);
 	result.z = left[2].Dot(vec);
 	float&& w = left[3].Dot(vec);
-	assert(w != 0.0f);
 	if (w == 0.0f) {
-		Lamb::ErrorLog("Vector3 * Matrix4x4 : w = 0.0f", "operator*", "Vector3");
+		throw Error{}.set<Vector3>("Matrix4x4 * Vector3 : w = 0.0f", "operator*");
 	}
 
 	w = 1.0f / w;
@@ -145,7 +144,7 @@ Vector3 operator*(const Mat4x4& left, const Vector3& right) {
 	return result;
 }
 
-Vector3& Vector3::operator*=(const Mat4x4& mat) noexcept {
+Vector3& Vector3::operator*=(const Mat4x4& mat) {
 	*this = *this * mat;
 
 	return *this;
@@ -175,14 +174,18 @@ bool Vector3::operator!=(const Vector3& right) const noexcept {
 	return x != right.x || y != right.y || z != right.z;
 }
 
-float& Vector3::operator[](size_t index) noexcept {
-	assert(index < 3llu);
+float& Vector3::operator[](size_t index) {
+	if (3llu <= index) {
+		throw Error{}.set<Vector3>("index is over", "operator[]");
+	}
 	std::array<float*,3> tmp = { &x,&y,&z };
 	return *tmp[index];
 }
 
-const float& Vector3::operator[](size_t index) const noexcept {
-	assert(index < 3llu);
+const float& Vector3::operator[](size_t index) const {
+	if (3llu <= index) {
+		throw Error{}.set<Vector3>("index is over", "operator[]");
+	}
 	std::array<const float*, 3> tmp = { &x,&y,&z };
 	return *tmp[index];
 }
