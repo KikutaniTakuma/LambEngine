@@ -155,11 +155,11 @@ ID3D12DescriptorHeap* DirectXDevice::CreateDescriptorHeap(
 	descriptorHeapDesc.Type = heapType;
 	descriptorHeapDesc.NumDescriptors = numDescriptors;
 	descriptorHeapDesc.Flags = shaderrVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	if (SUCCEEDED(device_->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap)))) {
-		return descriptorHeap;
+	if (!SUCCEEDED(device_->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap)))) {
+		throw Error{}.set<DirectXDevice>("somthing error", "CreateDescriptorHeap()");
 	}
-	
-	throw Error{}.set<DirectXDevice>("somthing error", "CreateDescriptorHeap()");
+
+	return descriptorHeap;
 }
 
 [[nodiscard]]
