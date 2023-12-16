@@ -2,10 +2,6 @@
 #include <string>
 #include <format>
 #include <concepts>
-#include "Math/Vector2.h"
-#include "Math/Vector3.h"
-#include "Math/Vector4.h"
-#include "Math/Quaternion.h"
 
 #include <Windows.h>
 #undef max

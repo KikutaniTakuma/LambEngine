@@ -6,6 +6,11 @@
 #include <chrono>
 #include "Error/Error.h"
 
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math/Vector4.h"
+#include "Math/Quaternion.h"
+
 namespace Lamb {
 	bool AddLog(const std::string& text) {
 		static const std::filesystem::path fileName = "./Log/Execution.log";
