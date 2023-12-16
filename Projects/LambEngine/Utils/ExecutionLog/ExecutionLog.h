@@ -1,13 +1,18 @@
 #pragma once
 #include <string>
 #include <format>
-#include <concepts>
+#include "Utils/Cocepts/Cocepts.h"
 
 #include <Windows.h>
 #undef max
 #undef min
 
 class Error;
+class Vector2;
+class Vector3;
+class Vector4;
+class Quaternion;
+
 
 /// <summary>
 /// ログ関連
@@ -59,7 +64,7 @@ namespace Lamb {
 	/// </summary>
 	/// <param name="text">ログテキスト</param>
 	/// <param name="vec">vector</param>
-	template<class T>
+	template<Lamb::IsNumber T>
 	void DebugLog(const std::string& text, const T& number) {
 		OutputDebugStringA((text + std::string{ " : " } + std::format("{}", number) + "\n").c_str());
 	}
