@@ -1,8 +1,11 @@
 #include "DirectXDevice.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Utils/ConvertString/ConvertString.h"
+#include "Math/Vector2.h"
+
 #include <cassert>
 #include <format>
+#include <array>
 
 #include "Error/Error.h"
 
