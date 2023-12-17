@@ -77,7 +77,7 @@ void Engine::Debug::InitializeDebugLayer() {
 
 Engine* Engine::instance_ = nullptr;
 
-bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize) {
+void Engine::Initialize(const std::string& windowName, const Vector2& windowSize) {
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 	if (hr != S_OK) {
 		throw Lamb::Error::Code<Engine>("CoInitializeEx failed", "Initialize()");
@@ -121,8 +121,6 @@ bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	AudioManager::Inititalize();
 	PipelineManager::Initialize();
 	MeshManager::Initialize();
-
-	return true;
 }
 
 void Engine::Finalize() {
