@@ -66,7 +66,7 @@ ShaderFactory::ShaderFactory():
 }
 
 [[nodiscard]]
-IDxcBlob* ShaderFactory::CompilerShader(
+IDxcBlob* ShaderFactory::CompileShader(
 	// CompilerするShaderファイルへのパス
 	const std::wstring& filePath,
 	// Compilerに使用するProfile
