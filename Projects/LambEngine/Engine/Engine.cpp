@@ -65,7 +65,7 @@ void Engine::Debug::InitializeDebugLayer() {
 		debugController_->SetEnableGPUBasedValidation(TRUE);
 	}
 	else {
-		throw Error::Code<Engine::Debug>("D3D12GetDebugInterface failed", "InitializeDebugLayer()");
+		throw Lamb::Error::Code<Engine::Debug>("D3D12GetDebugInterface failed", "InitializeDebugLayer()");
 	}
 }
 
@@ -80,7 +80,7 @@ Engine* Engine::instance_ = nullptr;
 bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize) {
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 	if (hr != S_OK) {
-		throw Error{ }.Code<Engine>("CoInitializeEx failed", "Initialize()");
+		throw Lamb::Error::Code<Engine>("CoInitializeEx failed", "Initialize()");
 	}
 	instance_ = new Engine();
 	assert(instance_);

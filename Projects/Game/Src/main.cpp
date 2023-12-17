@@ -10,7 +10,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 		game->Execution();
 	}
-	catch (const class Error& err) {
+	catch (const Lamb::Error& err) {
 		Lamb::ErrorLog(err);
 	}
 

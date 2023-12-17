@@ -114,7 +114,7 @@ Vector3 Vector3::operator*(const Mat4x4& mat) const {
 	result.z = x * mat[0][2] + y * mat[1][2] + z * mat[2][2] + 1.0f * mat[3][2];
 	float&& w = x * mat[0][3] + y * mat[1][3] + z * mat[2][3] + 1.0f * mat[3][3];
 	if (w == 0.0f) {
-		throw Error::Code<Vector3>("Vector3 * Matrix4x4 : w = 0.0f", "operator*");
+		throw Lamb::Error::Code<Vector3>("Vector3 * Matrix4x4 : w = 0.0f", "operator*");
 	}
 	w = 1.0f / w;
 	result.x *= w;
@@ -133,7 +133,7 @@ Vector3 operator*(const Mat4x4& left, const Vector3& right) {
 	result.z = left[2].Dot(vec);
 	float&& w = left[3].Dot(vec);
 	if (w == 0.0f) {
-		throw Error::Code<Vector3>("Matrix4x4 * Vector3 : w = 0.0f", "operator*");
+		throw Lamb::Error::Code<Vector3>("Matrix4x4 * Vector3 : w = 0.0f", "operator*");
 	}
 
 	w = 1.0f / w;
@@ -176,7 +176,7 @@ bool Vector3::operator!=(const Vector3& right) const noexcept {
 
 float& Vector3::operator[](size_t index) {
 	if (3llu <= index) {
-		throw Error::Code<Vector3>("index is over", "operator[]");
+		throw Lamb::Error::Code<Vector3>("index is over", "operator[]");
 	}
 	std::array<float*,3> tmp = { &x,&y,&z };
 	return *tmp[index];
@@ -184,7 +184,7 @@ float& Vector3::operator[](size_t index) {
 
 const float& Vector3::operator[](size_t index) const {
 	if (3llu <= index) {
-		throw Error::Code<Vector3>("index is over", "operator[]");
+		throw Lamb::Error::Code<Vector3>("index is over", "operator[]");
 	}
 	std::array<const float*, 3> tmp = { &x,&y,&z };
 	return *tmp[index];

@@ -48,7 +48,7 @@ void DirectXCommand::CloseCommandlist() {
 	isCommandListClose_ = true;
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error::Code<DirectXCommand>("Close()", "CommandList ");
+		throw Lamb::Error::Code<DirectXCommand>("Close()", "CommandList ");
 	}
 }
 
@@ -62,12 +62,12 @@ void DirectXCommand::ResetCommandlist() {
 	HRESULT hr = commandAllocator_->Reset();
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error::Code<DirectXCommand>("Reset()", "CommandAllocator");
+		throw Lamb::Error::Code<DirectXCommand>("Reset()", "CommandAllocator");
 	}
 	hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error::Code<DirectXCommand>("Reset()", "CommandList");
+		throw Lamb::Error::Code<DirectXCommand>("Reset()", "CommandList");
 	}
 	isCommandListClose_ = false;
 }
@@ -97,7 +97,7 @@ void DirectXCommand::CreateCommandQueue() {
 	HRESULT hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(commandQueue_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error::Code<DirectXCommand>("device somethig error", "CreateCommandQueue()");
+		throw Lamb::Error::Code<DirectXCommand>("device somethig error", "CreateCommandQueue()");
 	}
 }
 
@@ -109,7 +109,7 @@ void DirectXCommand::CreateCommandAllocator() {
 	HRESULT hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error::Code<DirectXCommand>("device somethig error", "CreateCommandAllocator()");
+		throw Lamb::Error::Code<DirectXCommand>("device somethig error", "CreateCommandAllocator()");
 	}
 }
 
@@ -121,7 +121,7 @@ void DirectXCommand::CreateGraphicsCommandList() {
 	HRESULT hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(commandList_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error::Code<DirectXCommand>("device somethig error", "CreateGraphicsCommandList()");
+		throw Lamb::Error::Code<DirectXCommand>("device somethig error", "CreateGraphicsCommandList()");
 	}
 }
 
@@ -134,7 +134,7 @@ void DirectXCommand::CrateFence() {
 	HRESULT hr = device->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error::Code<DirectXCommand>("device somethig error", "CreateFence()");
+		throw Lamb::Error::Code<DirectXCommand>("device somethig error", "CreateFence()");
 	}
 
 	// FenceのSignalを持つためのイベントを作成する
@@ -142,7 +142,7 @@ void DirectXCommand::CrateFence() {
 	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
 	assert(fenceEvent_ != nullptr);
 	if (!(fenceEvent_ != nullptr)) {
-		throw Error::Code<DirectXCommand>("device somethig error", "CreateEvent()");
+		throw Lamb::Error::Code<DirectXCommand>("device somethig error", "CreateEvent()");
 	}
 }
 
