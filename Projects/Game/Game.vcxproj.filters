@@ -20,9 +20,6 @@
     <ClCompile Include="Src\World\World.cpp">
       <Filter>World</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Framework\Framework.cpp">
-      <Filter>Framework</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Scenes\Manager\SceneManager.cpp">
       <Filter>Scenes\Manager</Filter>
     </ClCompile>
@@ -63,9 +60,6 @@
     </Filter>
     <Filter Include="World">
       <UniqueIdentifier>{b8981fb7-5ba2-4533-897e-e706c7dc3049}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework">
-      <UniqueIdentifier>{797ec55f-9d83-40e7-8a03-f4f9142c24d6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scenes">
       <UniqueIdentifier>{fad8cc50-c290-488f-b4fb-cdbad1bbd763}</UniqueIdentifier>
@@ -116,9 +110,6 @@
     </ClInclude>
     <ClInclude Include="Src\World\World.h">
       <Filter>World</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Framework\Framework.h">
-      <Filter>Framework</Filter>
     </ClInclude>
     <ClInclude Include="Src\Scenes\Manager\SceneManager.h">
       <Filter>Scenes\Manager</Filter>

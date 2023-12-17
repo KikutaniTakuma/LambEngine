@@ -151,6 +151,7 @@
     <ClCompile Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.cpp" />
     <ClCompile Include="Engine\Graphics\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Engine\Graphics\TextureManager\Texture\Texture.cpp" />
+    <ClCompile Include="Framework\Framework.cpp" />
     <ClCompile Include="Input\Gamepad\Gamepad.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Input\KeyInput\KeyInput.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="Engine\Graphics\TextureManager\TextureManager.h" />
     <ClInclude Include="Engine\Graphics\TextureManager\Texture\Texture.h" />
     <ClInclude Include="Error\Error.h" />
+    <ClInclude Include="Framework\Framework.h" />
     <ClInclude Include="Input\Gamepad\Gamepad.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\KeyInput\KeyInput.h" />
