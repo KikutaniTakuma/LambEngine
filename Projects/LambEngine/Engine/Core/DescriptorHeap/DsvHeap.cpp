@@ -4,6 +4,7 @@
 #include <cassert>
 #include <algorithm>
 #include "Error/Error.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 DsvHeap* DsvHeap::instance_ = nullptr;
 
@@ -13,8 +14,7 @@ void DsvHeap::Initialize(UINT heapSize) {
 }
 
 void DsvHeap::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 DsvHeap* const DsvHeap::GetInstance() {

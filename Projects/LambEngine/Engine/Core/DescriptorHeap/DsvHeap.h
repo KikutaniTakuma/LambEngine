@@ -4,13 +4,15 @@
 class DsvHeap final : public DescriptorHeap{
 private:
 	DsvHeap(uint32_t heapSize);
-	~DsvHeap();
 
 	DsvHeap() = delete;
 	DsvHeap(const DsvHeap&) = delete;
 	DsvHeap(DsvHeap&&) = delete;
 	DsvHeap& operator=(const DsvHeap&) = delete;
 	DsvHeap& operator=(DsvHeap&&) = delete;
+
+public:
+	~DsvHeap();
 
 public:
 	static void Initialize(UINT heapSize);

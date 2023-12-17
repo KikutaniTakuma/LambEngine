@@ -17,9 +17,10 @@ private:
 	CbvSrvUavHeap(const CbvSrvUavHeap& right) = delete;
 	CbvSrvUavHeap(CbvSrvUavHeap&& right) noexcept = delete;
 	CbvSrvUavHeap(UINT numDescriptor);
-	~CbvSrvUavHeap();
 	CbvSrvUavHeap& operator=(const CbvSrvUavHeap& right) = delete;
 	CbvSrvUavHeap& operator=(CbvSrvUavHeap&& right) noexcept = delete;
+public:
+	~CbvSrvUavHeap();
 
 public:
 	static void Initialize(UINT heapSize);

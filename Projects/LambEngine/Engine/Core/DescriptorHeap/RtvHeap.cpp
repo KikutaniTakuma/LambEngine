@@ -8,6 +8,8 @@
 #include <cassert>
 #include "Error/Error.h"
 
+#include "Utils/SafeDelete/SafeDelete.h"
+
 RtvHeap* RtvHeap::instance_ = nullptr;
 
 void RtvHeap::Initialize(UINT heapSize) {
@@ -16,8 +18,7 @@ void RtvHeap::Initialize(UINT heapSize) {
 }
 
 void RtvHeap::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 RtvHeap* const RtvHeap::GetInstance() {

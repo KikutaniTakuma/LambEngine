@@ -4,14 +4,14 @@
 #include <cassert>
 #include <filesystem>
 #include "Error/Error.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 AudioManager* AudioManager::instance_ = nullptr;
 void AudioManager::Inititalize() {
 	instance_ = new AudioManager{};
 }
 void AudioManager::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 AudioManager::AudioManager() :

@@ -26,9 +26,10 @@ private:
 	AudioManager();
 	AudioManager(const AudioManager&) = delete;
 	AudioManager(AudioManager&&) noexcept = delete;
-	~AudioManager();
 	AudioManager& operator=(const AudioManager&) = delete;
 	AudioManager& operator=(AudioManager&&) noexcept = delete;
+public:
+	~AudioManager();
 
 public:
 	static void Inititalize();

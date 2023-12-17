@@ -8,6 +8,7 @@
 #include <cmath>
 #include <algorithm>
 #include <numeric>
+#include "Utils/SafeDelete/SafeDelete.h"
 
 CbvSrvUavHeap* CbvSrvUavHeap::instance_ = nullptr;
 
@@ -16,8 +17,7 @@ void CbvSrvUavHeap::Initialize(UINT heapSize) {
 }
 
 void CbvSrvUavHeap::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 CbvSrvUavHeap* const CbvSrvUavHeap::GetInstance() {
