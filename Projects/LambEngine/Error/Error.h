@@ -5,28 +5,6 @@
 
 class Error {
 public:
-	class Code {
-		friend Error;
-	public:
-		const std::string& what() const {
-			return errorCode_;
-		}
-
-		const std::string& function() const {
-			return functionName_;
-		}
-
-		const std::string& className() const {
-			return className_;
-		}
-
-	private:
-		std::string className_;
-		std::string errorCode_;
-		std::string functionName_;
-	};
-
-public:
 	Error() = default;
 	Error(const Error&) = default;
 	Error(Error&&) = default;
@@ -36,20 +14,34 @@ public:
 	Error& operator=(Error&&) = default;
 
 public:
-	const Error::Code& code() const {
-		return code_;
+	const std::string& What() const {
+		return errorCode_;
 	}
 
-	template<class T>
-	const Error& set(const std::string& errorCode, const std::string& functionName) {
-		code_.errorCode_ = errorCode;
-		code_.className_ = typeid(T).name();
-		code_.functionName_ = functionName;
-		Lamb::DebugLog(typeid(Error).name() + code_.className() + " : " + code_.function() + " : " + code_.what());
+	const std::string& FunctionName() const {
+		return functionName_;
+	}
 
-		return *this;
+	const std::string& ClassName() const {
+		return className_;
 	}
 
 private:
-	Code code_;
+	std::string className_;
+	std::string errorCode_;
+	std::string functionName_;
+
+public:
+	template<class T>
+	static const Error& Code(const std::string& errorCode, const std::string& functionName) {
+		static Error err;
+		err = Error{};
+
+		err.errorCode_ = errorCode;
+		err.className_ = typeid(T).name();
+		err.functionName_ = functionName;
+		Lamb::DebugLog(std::string{ typeid(Error).name() } + " " + err.ClassName() + " : " + err.FunctionName() + " : " + err.What());
+
+		return err;
+	}
 };
