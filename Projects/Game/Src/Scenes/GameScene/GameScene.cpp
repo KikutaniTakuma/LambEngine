@@ -16,7 +16,7 @@ void GameScene::Initialize() {
 	camera_->farClip = 3000.0f;
 	camera_->pos.z = -5.0f;
 
-	pera_.Initialize("./Resources/Shaders/PostShader/PostPerlin.PS..hlsl");
+	pera_.Initialize("./Resources/Shaders/PostShader/PostPerlin.PS.hlsl");
 	pera_.scale = Lamb::ClientSize();
 
 	model_.reset(new Model{});
