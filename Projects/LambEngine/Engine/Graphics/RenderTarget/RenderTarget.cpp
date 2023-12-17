@@ -49,7 +49,7 @@ RenderTarget::RenderTarget():
 				IID_PPV_ARGS(resource_.GetAddressOf())
 			);
 		if (!SUCCEEDED(hr)) {
-			throw Error{}.set<RenderTarget>("CreateCommittedResource Function Failed", "Constructor");
+			throw Error::Code<RenderTarget>("CreateCommittedResource Function Failed", "Constructor");
 		}
 
 		RtvHeap* const rtvHeap = RtvHeap::GetInstance();

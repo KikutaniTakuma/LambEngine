@@ -50,7 +50,7 @@ public:
 	uint32_t CreateConstBufferView(ConstBuffer<T>& conBuf) {
 		assert(currentHandleIndex_ < heapSize_);
 		if (currentHandleIndex_ >= heapSize_) {
-			throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreateConstBufferView()");
+			throw Error::Code<CbvSrvUavHeap>("Over HeapSize", "CreateConstBufferView()");
 		}
 
 		if (bookingHandle_.empty()) {
@@ -79,7 +79,7 @@ public:
 	void CreateConstBufferView(ConstBuffer<T>& conBuf, UINT heapIndex) {
 		assert(heapIndex < heapSize_);
 		if (heapIndex >= heapSize_) {
-			throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreateConstBufferView()");
+			throw Error::Code<CbvSrvUavHeap>("Over HeapSize", "CreateConstBufferView()");
 		}
 
 		conBuf.CrerateView(heapHandles_[heapIndex].first, heapHandles_[heapIndex].second, heapIndex);
@@ -95,7 +95,7 @@ public:
 	uint32_t CreateStructuredBufferView(StructuredBuffer<T>& strcBuf) {
 		assert(currentHandleIndex_ < heapSize_);
 		if (currentHandleIndex_ >= heapSize_) {
-			throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreateStructuredBufferView()");
+			throw Error::Code<CbvSrvUavHeap>("Over HeapSize", "CreateStructuredBufferView()");
 		}
 		if (bookingHandle_.empty()) {
 			useHandle_.push_back(currentHandleIndex_);
@@ -122,7 +122,7 @@ public:
 	void CreateStructuredBufferView(StructuredBuffer<T>& strcBuf, UINT heapIndex) {
 		assert(heapIndex < heapSize_);
 		if (heapIndex >= heapSize_) {
-			throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreateStructuredBufferView()");
+			throw Error::Code<CbvSrvUavHeap>("Over HeapSize", "CreateStructuredBufferView()");
 		}
 		
 		strcBuf.CrerateView(heapHandles_[heapIndex].first, heapHandles_[heapIndex].second, heapIndex);

@@ -74,7 +74,7 @@ void RtvHeap::CreateBackBuffer(
 
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			throw Error{}.set<RtvHeap>("GetBuffer() Failed", "CreateBackBuffer()");
+			throw Error::Code<RtvHeap>("GetBuffer() Failed", "CreateBackBuffer()");
 		}
 
 		device->CreateRenderTargetView(backBuffer[i].Get(), &rtvDesc, heapHandles_[i].first);
@@ -120,7 +120,7 @@ void RtvHeap::ClearRenderTargetView(uint32_t handle, const Vector4& clearColor) 
 uint32_t RtvHeap::CreateView(class RenderTarget& peraRender) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		throw Error{}.set<RtvHeap>("Over HeapSize", "CreateView");
+		throw Error::Code<RtvHeap>("Over HeapSize", "CreateView");
 	}
 
 	if (bookingHandle_.empty()) {
