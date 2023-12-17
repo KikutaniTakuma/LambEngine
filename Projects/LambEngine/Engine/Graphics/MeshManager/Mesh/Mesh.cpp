@@ -37,13 +37,16 @@ Mesh::~Mesh() {
 
 void Mesh::LoadObj(const std::string& objFileName) {
 	if (!isLoad_) {
-		std::ifstream objFile;
-		try {
-			objFile.open(objFileName);
+		std::ifstream file{ objFileName };
+		if (file.fail()) {
+			if (!std::filesystem::exists(objFileName)) {
+				throw Lamb::Error::Code<Mesh>("this file is not exist -> " + objFileName, __func__);
+			}
+			else {
+				throw Lamb::Error::Code<Mesh>("something error -> " + objFileName, __func__);
+			}
 		}
-		catch (const std::exception& err) {
-			throw Lamb::Error::Code<Mesh>(err.what(), __func__);
-		}
+		
 
 		objFileName_ = objFileName;
 
@@ -58,7 +61,7 @@ void Mesh::LoadObj(const std::string& objFileName) {
 
 		std::string lineBuf;
 
-		while (std::getline(objFile, lineBuf)) {
+		while (std::getline(file, lineBuf)) {
 			std::string identifier;
 			std::istringstream line(lineBuf);
 			line >> identifier;
@@ -138,7 +141,7 @@ void Mesh::LoadObj(const std::string& objFileName) {
 				LoadMtl(path.parent_path().string() + "/" + mtlFileName);
 			}
 		}
-		objFile.close();
+		file.close();
 
 		for (auto i : indexDatas) {
 			// 使用するリソースのサイズは頂点数分のサイズ
@@ -166,12 +169,14 @@ void Mesh::LoadObj(const std::string& objFileName) {
 }
 
 void Mesh::LoadMtl(const std::string& fileName) {
-	std::ifstream file;
-	try {
-		file.open(fileName);
-	}
-	catch (const std::exception& err) {
-		throw Lamb::Error::Code<Mesh>(err.what(), __func__);
+	std::ifstream file{fileName};
+	if (file.fail()) {
+		if (!std::filesystem::exists(fileName)) {
+			throw Lamb::Error::Code<Mesh>("this file is not exist -> " + fileName, __func__);
+		}
+		else {
+			throw Lamb::Error::Code<Mesh>("something error -> " + fileName, __func__);
+		}
 	}
 
 	std::string lineBuf;
@@ -207,12 +212,14 @@ void Mesh::LoadMtl(const std::string& fileName) {
 
 void Mesh::ThreadLoadObj(const std::string& objFileName) {
 	if (!isLoad_) {
-		std::ifstream objFile;
-		try {
-			objFile.open(objFileName);
-		}
-		catch (const std::exception& err) {
-			throw Lamb::Error::Code<Mesh>(err.what(), __func__);
+		std::ifstream file{objFileName};
+		if (file.fail()) {
+			if (!std::filesystem::exists(objFileName)) {
+				throw Lamb::Error::Code<Mesh>("this file is not exist -> " + objFileName, __func__);
+			}
+			else {
+				throw Lamb::Error::Code<Mesh>("something error -> " + objFileName, __func__);
+			}
 		}
 
 		objFileName_ = objFileName;
@@ -228,7 +235,7 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 
 		std::string lineBuf;
 
-		while (std::getline(objFile, lineBuf)) {
+		while (std::getline(file, lineBuf)) {
 			if (Lamb::IsEngineFianlize()) {
 				return;
 			}
@@ -312,7 +319,7 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 				ThreadLoadMtl(path.parent_path().string() + "/" + mtlFileName);
 			}
 		}
-		objFile.close();
+		file.close();
 
 		for (auto i : indexDatas) {
 			// 使用するリソースのサイズは頂点数分のサイズ
@@ -336,12 +343,14 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 	}
 }
 void Mesh::ThreadLoadMtl(const std::string& fileName) {
-	std::ifstream file;
-	try {
-		file.open(fileName);
-	}
-	catch (const std::exception& err) {
-		throw Lamb::Error::Code<Mesh>(err.what(), __func__);
+	std::ifstream file{fileName};
+	if (file.fail()) {
+		if (!std::filesystem::exists(fileName)) {
+			throw Lamb::Error::Code<Mesh>("this file is not exist -> " + fileName, __func__);
+		}
+		else {
+			throw Lamb::Error::Code<Mesh>("something error -> " + fileName, __func__);
+		}
 	}
 	std::string lineBuf;
 	std::unordered_map<std::string, Texture*>::iterator texItr;

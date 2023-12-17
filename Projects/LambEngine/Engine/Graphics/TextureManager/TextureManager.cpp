@@ -6,6 +6,7 @@
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Utils/SafeDelete/SafeDelete.h"
 #include <cassert>
+#include <filesystem>
 
 #include "Error/Error.h"
 
@@ -95,6 +96,10 @@ TextureManager::~TextureManager() {
 
 
 Texture* const TextureManager::LoadTexture(const std::string& fileName) {
+	if (!std::filesystem::exists(fileName)) {
+		throw Lamb::Error::Code<TextureManager>("this file is not exist -> " + fileName, __func__);
+	}
+
 	auto itr = textures_.find(fileName);
 	if (itr == textures_.end()) {
 		auto tex = std::make_unique<Texture>();
@@ -146,6 +151,9 @@ Texture* const TextureManager::LoadTexture(const std::string& fileName) {
 }
 
 Texture* const TextureManager::LoadTexture(const std::string& fileName, ID3D12GraphicsCommandList* const commandList) {
+	if (!std::filesystem::exists(fileName)) {
+		throw Lamb::Error::Code<TextureManager>("this file is not exist -> " + fileName, __func__);
+	}
 	auto itr = textures_.find(fileName);
 	if (itr == textures_.end()) {
 		auto tex = std::make_unique<Texture>();

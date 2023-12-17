@@ -115,7 +115,7 @@ void Texture::Unload() {
 
 
 DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
-	if (!std::filesystem::exists(std::filesystem::path(filePath))) {
+	if (!std::filesystem::exists(filePath)) {
 		throw Lamb::Error::Code<Texture>("This file is not exist -> " + filePath, __func__);
 	}
 
