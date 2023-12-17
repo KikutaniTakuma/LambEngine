@@ -235,11 +235,6 @@
     <ClInclude Include="Utils\ScreenOut\ScreenOut.h" />
     <ClInclude Include="Utils\UtilsLib\UtilsLib.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
-      <Project>{cce141c6-6223-414a-b5cd-00cab7e683a3}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
