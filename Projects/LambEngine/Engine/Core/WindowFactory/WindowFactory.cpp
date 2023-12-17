@@ -97,11 +97,10 @@ void WindowFactory::Create(
 		ChangeWindowMode();
 	}
 
-	Lamb::AddLog("Create Window succeeded\n" + 
-		std::string{ "                      Window name : " } + ConvertString(windowTitle) +
-		"\n                      size : " + std::to_string(width) + ", " + std::to_string(height) + 
-		"\n                      window mode : " + (isFullscreen ? std::string{ "fullscreen" } : std::string{ "window" })
-	);
+	Lamb::AddLog("Create Window succeeded");
+	Lamb::AddLog(std::string{ "Window name : " } + ConvertString(windowTitle));
+	Lamb::AddLog("size : " + std::to_string(width) + ", " + std::to_string(height));
+	Lamb::AddLog("window mode : " + (isFullscreen ? std::string{ "fullscreen" } : std::string{ "windowed" }));
 }
 
 bool WindowFactory::WindowMassage() {
