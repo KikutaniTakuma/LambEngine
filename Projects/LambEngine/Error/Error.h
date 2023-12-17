@@ -6,6 +6,10 @@
 namespace Lamb {
 	class Error {
 	public:
+		class Function{};
+		class Value{};
+
+	public:
 		Error() = default;
 		Error(const Error&) = default;
 		Error(Error&&) = default;
