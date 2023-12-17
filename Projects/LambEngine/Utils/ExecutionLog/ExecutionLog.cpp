@@ -13,7 +13,7 @@
 
 namespace Lamb {
 	bool AddLog(const std::string& text) {
-		static const std::filesystem::path fileName = "./Log/Execution.log";
+		const std::filesystem::path fileName = "./Log/Execution.log";
 		static bool isOpned = false;
 
 #ifdef _DEBUG
@@ -22,7 +22,18 @@ namespace Lamb {
 
 
 		if (!std::filesystem::exists(fileName.parent_path())) {
-			std::filesystem::create_directories(fileName.parent_path());
+			try {
+				std::filesystem::create_directories(fileName.parent_path());
+			}
+			catch (const std::exception& err) {
+				MessageBoxA(
+					NULL,
+					err.what(), ("Error : " + std::string{ typeid(ErrorCheck).name() }).c_str(),
+					MB_OK | MB_SYSTEMMODAL | MB_ICONERROR
+				);
+
+				return false;
+			}
 		}
 
 		std::ofstream file;
