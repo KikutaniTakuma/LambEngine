@@ -16,7 +16,7 @@
 
 void Framework::Initialize() {
 	// ライブラリ初期化
-	Engine::Initialize("DirectXGame", Vector2{ 1280.0f, 720.0f });
+	Engine::Initialize("LambEngine_demo", Vector2{ 1280.0f, 720.0f });
 
 	// 入力処理初期化
 	Input::Initialize();
