@@ -23,7 +23,7 @@ DepthBuffer::DepthBuffer():
 	depthStencilResource_ = directXDevice->CreateDepthStencilTextureResource(Lamb::ClientSize());
 	assert(depthStencilResource_);
 	if (!depthStencilResource_) {
-		throw Lamb::Error::Code<DepthBuffer>("something error", "CreateDepthStencilTextureResource()");
+		throw Lamb::Error::Code<DepthBuffer>("something error", "CreateDepthStencilTextureResource");
 	}
 
 	srvDesc_ = {};
@@ -53,7 +53,7 @@ DepthBuffer::DepthBuffer(const Vector2& bufSize):
 	depthStencilResource_ = directXDevice->CreateDepthStencilTextureResource(bufSize);
 	assert(depthStencilResource_);
 	if (!depthStencilResource_) {
-		throw Lamb::Error::Code<DepthBuffer>("something error", "CreateDepthStencilTextureResource()");
+		throw Lamb::Error::Code<DepthBuffer>("something error", "CreateDepthStencilTextureResource");
 	}
 
 	srvDesc_ = {};

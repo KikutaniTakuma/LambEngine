@@ -116,7 +116,7 @@ void Texture::Unload() {
 
 DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 	if (!std::filesystem::exists(std::filesystem::path(filePath))) {
-		throw Lamb::Error::Code<Texture>("This file is not exist -> " + filePath, "LoadTexture()");
+		throw Lamb::Error::Code<Texture>("This file is not exist -> " + filePath, __func__);
 	}
 
 	// テクスチャファイルを読み込んでプログラムを扱えるようにする
@@ -124,14 +124,14 @@ DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 	std::wstring filePathW = ConvertString(filePath);
 	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<Texture>("DirectX::LoadFromWICFile() failed", "LoadTexture()");
+		throw Lamb::Error::Code<Texture>("DirectX::LoadFromWICFile() failed", __func__);
 	}
 
 	// ミップマップの作成
 	DirectX::ScratchImage mipImages{};
 	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<Texture>("DirectX::GenerateMipMaps failed", "LoadTexture()");
+		throw Lamb::Error::Code<Texture>("DirectX::GenerateMipMaps failed", __func__);
 	}
 
 
@@ -171,7 +171,7 @@ ID3D12Resource* Texture::CreateTextureResource(const DirectX::TexMetadata& metaD
 		IID_PPV_ARGS(&resource)
 	);
 	if (hr != S_OK) {
-		throw Lamb::Error::Code<Texture>("somehitng error", "CreateTextureResource");
+		throw Lamb::Error::Code<Texture>("somehitng error", __func__);
 	}
 	return resource;
 }

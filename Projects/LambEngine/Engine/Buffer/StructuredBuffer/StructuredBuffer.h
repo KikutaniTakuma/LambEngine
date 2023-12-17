@@ -170,7 +170,7 @@ public:
 		}
 
 		if (indexNum < 1) {
-			throw Lamb::Error::Code<StructuredBuffer<T>>("Index must be greater than or equal to 1 ->" + std::to_string(indexNum), "Resize()");
+			throw Lamb::Error::Code<StructuredBuffer<T>>("Index must be greater than or equal to 1 ->" + std::to_string(indexNum), __func__);
 		}
 
 		std::vector<T> tmp;

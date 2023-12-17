@@ -122,12 +122,12 @@ Texture* const TextureManager::LoadTexture(const std::string& fileName) {
 		auto hr = commandAllocator_->Reset();
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			throw Lamb::Error::Code<TextureManager>("CommandAllocator somthing error", "Reset()");
+			throw Lamb::Error::Code<TextureManager>("CommandAllocator somthing error", __func__);
 		}
 		hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			throw Lamb::Error::Code<TextureManager>("CommandList somthing error", "Reset()");
+			throw Lamb::Error::Code<TextureManager>("CommandList somthing error", __func__);
 		}
 		///
 
@@ -232,12 +232,12 @@ void TextureManager::ResetCommandList() {
 		auto hr = commandAllocator_->Reset();
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			throw Lamb::Error::Code<TextureManager>("CommandAllocator somthing error", "Reset()");
+			throw Lamb::Error::Code<TextureManager>("CommandAllocator somthing error", __func__);
 		}
 		hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			throw Lamb::Error::Code<TextureManager>("CommandList somthing error", "Reset()");
+			throw Lamb::Error::Code<TextureManager>("CommandList somthing error", __func__);
 		}
 
 		isThreadFinish_ = false;

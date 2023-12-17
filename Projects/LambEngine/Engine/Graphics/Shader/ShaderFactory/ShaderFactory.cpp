@@ -37,7 +37,7 @@ ShaderFactory::ShaderFactory():
 	HRESULT hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(dxcUtils_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<ShaderFactory>("dxcUtils failed", "DxcCreateInstance()");
+		throw Lamb::Error::Code<ShaderFactory>("dxcUtils failed", "DxcCreateInstance");
 	}
 	else {
 		Lamb::AddLog("ShaderFactory : Create DxcUtils Succeeded");
@@ -46,7 +46,7 @@ ShaderFactory::ShaderFactory():
 	hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(dxcCompiler_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<ShaderFactory>("dxcCompiler failed", "DxcCreateInstance()");
+		throw Lamb::Error::Code<ShaderFactory>("dxcCompiler failed", "DxcCreateInstance");
 	}
 	else {
 		Lamb::AddLog("ShaderFactory : Create IDxcCompiler3 Succeeded");
@@ -56,7 +56,7 @@ ShaderFactory::ShaderFactory():
 	hr = dxcUtils_->CreateDefaultIncludeHandler(includeHandler_.GetAddressOf());
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<ShaderFactory>("IDxcUtils failed", "CreateDefaultIncludeHandler()");
+		throw Lamb::Error::Code<ShaderFactory>("IDxcUtils failed", "CreateDefaultIncludeHandler");
 	}
 	else {
 		Lamb::AddLog("ShaderFactory : Create IDxcIncludeHandler Succeeded");
@@ -81,7 +81,7 @@ IDxcBlob* ShaderFactory::CompilerShader(
 	// 読めなかったら止める
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<ShaderFactory>("Shader Load failed", "CompilerShader");
+		throw Lamb::Error::Code<ShaderFactory>("Shader Load failed", __func__);
 	}
 	// 読み込んだファイルの内容を設定する
 	DxcBuffer shaderSourceBuffer;

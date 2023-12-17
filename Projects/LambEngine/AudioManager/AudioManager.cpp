@@ -44,7 +44,7 @@ AudioManager::~AudioManager() {
 
 Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 	if (!std::filesystem::exists(std::filesystem::path(fileName))) {
-		throw Lamb::Error::Code<AudioManager>("There is not this file -> " + fileName, "LoadWav()");
+		throw Lamb::Error::Code<AudioManager>("There is not this file -> " + fileName, __func__);
 	}
 
 

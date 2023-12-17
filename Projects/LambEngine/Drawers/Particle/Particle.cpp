@@ -105,7 +105,7 @@ void Particle::CreateGraphicsPipeline() {
 
 	for (auto& i : graphicsPipelineState_) {
 		if (!i) {
-			throw Lamb::Error::Code<Particle>("pipeline is nullptr", "CreateGraphicsPipeline()");
+			throw Lamb::Error::Code<Particle>("pipeline is nullptr", __func__);
 		}
 	}
 }

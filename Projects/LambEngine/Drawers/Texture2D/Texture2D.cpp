@@ -240,7 +240,7 @@ void Texture2D::CreateGraphicsPipeline() {
 
 	for (auto& i : graphicsPipelineState_) {
 		if (!i) {
-			throw Lamb::Error::Code<Texture2D>("pipeline is nullptr", "CreateGraphicsPipeline()");
+			throw Lamb::Error::Code<Texture2D>("pipeline is nullptr", __func__);
 		}
 	}
 }

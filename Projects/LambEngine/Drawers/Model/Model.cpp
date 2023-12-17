@@ -222,7 +222,7 @@ void Model::LoadObj(const std::string& fileName) {
 		mesh_ = MeshManager::GetInstance()->LoadObj(fileName);
 
 		if (!mesh_) {
-			throw Lamb::Error::Code<Model>("mesh is nullptr", "LoadObj()");
+			throw Lamb::Error::Code<Model>("mesh is nullptr", __func__);
 		}
 
 		isLoadObj_ = true;
@@ -291,7 +291,7 @@ void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 		auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 
 		if (!pipeline_) {
-			throw Lamb::Error::Code<Model>("pipeline is nullptr", "Draw()");
+			throw Lamb::Error::Code<Model>("pipeline is nullptr", __func__);
 		}
 
 		for (auto& i : data_) {

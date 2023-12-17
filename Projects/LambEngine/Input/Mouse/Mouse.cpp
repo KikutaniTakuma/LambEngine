@@ -10,7 +10,7 @@ Mouse* Mouse::instance_ = nullptr;
 void Mouse::Initialize(IDirectInput8* input) {
 	instance_ = new Mouse(input);
 	if (!instance_) {
-		throw Lamb::Error::Code<Mouse>("instance failed", "Initialize()");
+		throw Lamb::Error::Code<Mouse>("instance failed", __func__);
 	}
 }
 

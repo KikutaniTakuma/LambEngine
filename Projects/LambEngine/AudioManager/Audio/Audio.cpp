@@ -27,10 +27,10 @@ Audio::~Audio() {
 
 void Audio::Load(const std::string& fileName, bool loopFlg) {
 	if (!std::filesystem::exists(std::filesystem::path{ fileName })) {
-		throw Lamb::Error::Code<Audio>(("This file is not found -> " + fileName), "Load()");
+		throw Lamb::Error::Code<Audio>(("This file is not found -> " + fileName), __func__);
 	}
 	if (std::filesystem::path{fileName}.extension() != ".wav") {
-		throw Lamb::Error::Code<Audio>(("This file is not wav -> " + fileName), "Load()");
+		throw Lamb::Error::Code<Audio>(("This file is not wav -> " + fileName), __func__);
 	}
 
 
@@ -39,7 +39,7 @@ void Audio::Load(const std::string& fileName, bool loopFlg) {
 		file.open(fileName, std::ios::binary);
 	}
 	catch (const std::exception& err) {
-		throw Lamb::Error::Code<Audio>(err.what(), "Load()");
+		throw Lamb::Error::Code<Audio>(err.what(), __func__);
 	}
 
 	fileName_ = fileName;
@@ -132,13 +132,13 @@ void Audio::Start(float volume) {
 		buf.LoopCount = loopFlg_ ? XAUDIO2_LOOP_INFINITE : 0;
 
 		if (!SUCCEEDED(hr)) {
-			throw Lamb::Error::Code<Audio>("SubmitSourceBuffer() failed", "Start()");
+			throw Lamb::Error::Code<Audio>("SubmitSourceBuffer() failed", __func__);
 		}
 		hr = pSourceVoice_->SubmitSourceBuffer(&buf);
 	}
 	hr = pSourceVoice_->Start();
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<Audio>("function is something error", "Start()");
+		throw Lamb::Error::Code<Audio>("function is something error", __func__);
 	}
 	pSourceVoice_->SetVolume(volume_);
 

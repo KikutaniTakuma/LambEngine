@@ -42,7 +42,7 @@ void Mesh::LoadObj(const std::string& objFileName) {
 			objFile.open(objFileName);
 		}
 		catch (const std::exception& err) {
-			throw Lamb::Error::Code<Mesh>(err.what(), "LoadObj");
+			throw Lamb::Error::Code<Mesh>(err.what(), __func__);
 		}
 
 		objFileName_ = objFileName;
@@ -103,7 +103,7 @@ void Mesh::LoadObj(const std::string& objFileName) {
 
 					// エラーチェック
 					if (idnexItr == indcoes.rend()) {
-						throw Lamb::Error::Code<Mesh>("Not supported for rectangles or more", "LoadObj()");
+						throw Lamb::Error::Code<Mesh>("Not supported for rectangles or more", __func__);
 					}
 
 					if (count == 2) {
@@ -171,7 +171,7 @@ void Mesh::LoadMtl(const std::string& fileName) {
 		file.open(fileName);
 	}
 	catch (const std::exception& err) {
-		throw Lamb::Error::Code<Mesh>(err.what(), "LoadMtl");
+		throw Lamb::Error::Code<Mesh>(err.what(), __func__);
 	}
 
 	std::string lineBuf;
@@ -212,7 +212,7 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 			objFile.open(objFileName);
 		}
 		catch (const std::exception& err) {
-			throw Lamb::Error::Code<Mesh>(err.what(), "ThreadLoadObj");
+			throw Lamb::Error::Code<Mesh>(err.what(), __func__);
 		}
 
 		objFileName_ = objFileName;
@@ -341,7 +341,7 @@ void Mesh::ThreadLoadMtl(const std::string& fileName) {
 		file.open(fileName);
 	}
 	catch (const std::exception& err) {
-		throw Lamb::Error::Code<Mesh>(err.what(), "ThreadLoadMtl");
+		throw Lamb::Error::Code<Mesh>(err.what(), __func__);
 	}
 	std::string lineBuf;
 	std::unordered_map<std::string, Texture*>::iterator texItr;
@@ -482,7 +482,7 @@ void Mesh::Draw() {
 		auto commandList = DirectXCommand::GetInstance()->GetCommandList();
 
 		if (!pipeline_) {
-			throw Lamb::Error::Code<Mesh>("pipeline is nullptr", "Draw()");
+			throw Lamb::Error::Code<Mesh>("pipeline is nullptr", __func__);
 		}
 
 		for (auto& i : resource_) {

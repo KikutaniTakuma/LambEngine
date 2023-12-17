@@ -44,7 +44,7 @@ namespace Lamb {
 
 			err.errorCode_ = errorCode;
 			err.className_ = typeid(T).name();
-			err.functionName_ = functionName;
+			err.functionName_ = functionName + "()";
 			Lamb::DebugLog(std::string{ typeid(Error).name() } + " " + err.ClassName() + " : " + err.FunctionName() + " : " + err.What());
 
 			return err;
