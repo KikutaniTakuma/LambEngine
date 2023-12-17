@@ -3,6 +3,7 @@
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include <cassert>
 #include "Error/Error.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 DirectXCommand* DirectXCommand::instance_ = nullptr;
 
@@ -15,8 +16,7 @@ void DirectXCommand::Initialize() {
 	instance_ = new DirectXCommand;
 }
 void DirectXCommand::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 

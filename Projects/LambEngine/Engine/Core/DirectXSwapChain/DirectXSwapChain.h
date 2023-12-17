@@ -14,10 +14,11 @@ private:
 	DirectXSwapChain();
 	DirectXSwapChain(const DirectXSwapChain&) = delete;
 	DirectXSwapChain(DirectXSwapChain&&) = delete;
-	~DirectXSwapChain() = default;
 
 	DirectXSwapChain& operator=(const DirectXSwapChain&) = delete;
 	DirectXSwapChain& operator=(DirectXSwapChain&&) = delete;
+public:
+	~DirectXSwapChain() = default;
 
 public:
 	static DirectXSwapChain* const GetInstance();

@@ -8,6 +8,7 @@
 #include <array>
 
 #include "Error/Error.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 DirectXDevice* DirectXDevice::instance_ = nullptr;
 
@@ -19,8 +20,7 @@ void DirectXDevice::Initialize() {
 	instance_ = new DirectXDevice{};
 }
 void DirectXDevice::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 

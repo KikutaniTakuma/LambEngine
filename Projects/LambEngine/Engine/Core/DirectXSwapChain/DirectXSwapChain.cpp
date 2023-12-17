@@ -9,6 +9,7 @@
 #include <cassert>
 
 #include "Error/Error.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 DirectXSwapChain* DirectXSwapChain::instance_ = nullptr;
 
@@ -21,8 +22,7 @@ void DirectXSwapChain::Initialize() {
 	instance_ = new DirectXSwapChain{};
 }
 void DirectXSwapChain::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 DirectXSwapChain::DirectXSwapChain():

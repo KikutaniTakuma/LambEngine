@@ -5,10 +5,11 @@ private:
 	ImGuiManager();
 	ImGuiManager(const ImGuiManager&) = delete;
 	ImGuiManager(ImGuiManager&&) = delete;
-	~ImGuiManager();
 
 	ImGuiManager& operator=(const ImGuiManager&) = delete;
 	ImGuiManager& operator=(ImGuiManager&&) = delete;
+public:
+	~ImGuiManager();
 
 public:
 	static ImGuiManager* const GetInstance();

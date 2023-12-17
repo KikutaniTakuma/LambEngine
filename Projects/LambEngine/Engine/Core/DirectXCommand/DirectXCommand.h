@@ -12,10 +12,11 @@ private:
 	DirectXCommand();
 	DirectXCommand(const DirectXCommand&) = delete;
 	DirectXCommand(DirectXCommand&&) = delete;
-	~DirectXCommand();
 
 	DirectXCommand& operator=(const DirectXCommand&) = delete;
 	DirectXCommand& operator=(DirectXCommand&&) = delete;
+public:
+	~DirectXCommand();
 
 public:
 	static DirectXCommand* const GetInstance();

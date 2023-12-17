@@ -12,6 +12,8 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 #include "Error/Error.h"
 
+#include "Utils/SafeDelete/SafeDelete.h"
+
 WindowFactory::WindowFactory():
 	hwnd_{},
 	wndEx_{},

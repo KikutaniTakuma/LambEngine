@@ -10,6 +10,8 @@
 
 #include "Error/Error.h"
 
+#include "Utils/SafeDelete/SafeDelete.h"
+
 StringOutPutManager* StringOutPutManager::instance_ = nullptr;
 
 void StringOutPutManager::Initialize() {
@@ -19,8 +21,7 @@ void StringOutPutManager::Initialize() {
 }
 
 void StringOutPutManager::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 StringOutPutManager* const StringOutPutManager::GetInstance() {
