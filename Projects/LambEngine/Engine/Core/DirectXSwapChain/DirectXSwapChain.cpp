@@ -55,6 +55,8 @@ DirectXSwapChain::DirectXSwapChain():
 
 	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
 	rtvHeap->CreateBackBuffer(swapChainResource_, swapChain_.Get());
+
+	Lamb::AddLog("Initialize DirectXSwapChain succeeded");
 }
 
 void DirectXSwapChain::SetViewPort(uint32_t width, uint32_t height) {

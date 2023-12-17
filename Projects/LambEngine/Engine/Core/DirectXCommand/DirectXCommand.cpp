@@ -36,6 +36,8 @@ DirectXCommand::DirectXCommand():
 	CreateGraphicsCommandList();
 
 	CrateFence();
+
+	Lamb::AddLog("Initialize DirectXCommand succeeded");
 }
 
 DirectXCommand::~DirectXCommand() {
@@ -99,6 +101,9 @@ void DirectXCommand::CreateCommandQueue() {
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
 	}
+	else {
+		Lamb::AddLog(std::string{__func__} + " succeeded");
+	}
 }
 
 void DirectXCommand::CreateCommandAllocator() {
@@ -111,6 +116,9 @@ void DirectXCommand::CreateCommandAllocator() {
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
 	}
+	else {
+		Lamb::AddLog(std::string{ __func__ } + " succeeded");
+	}
 }
 
 void DirectXCommand::CreateGraphicsCommandList() {
@@ -122,6 +130,9 @@ void DirectXCommand::CreateGraphicsCommandList() {
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
+	}
+	else {
+		Lamb::AddLog(std::string{ __func__ } + " succeeded");
 	}
 }
 
@@ -144,6 +155,8 @@ void DirectXCommand::CrateFence() {
 	if (!(fenceEvent_ != nullptr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
 	}
+
+	Lamb::AddLog(std::string{ __func__ } + " succeeded");
 }
 
 void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {

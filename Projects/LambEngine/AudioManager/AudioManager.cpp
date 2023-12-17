@@ -34,6 +34,8 @@ AudioManager::AudioManager() :
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<AudioManager>("CreateMasteringVoicey()", "Constructor");
 	}
+
+	Lamb::AddLog("Initialize AudioManager succeeded");
 }
 AudioManager::~AudioManager() {
 	xAudio2_.Reset();

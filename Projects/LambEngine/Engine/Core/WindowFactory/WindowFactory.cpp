@@ -8,11 +8,12 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ConvertString/ConvertString.h"
 #include "Input/Input.h"
 
 #include "Error/Error.h"
 
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
 
 WindowFactory::WindowFactory():
 	hwnd_{},
@@ -95,6 +96,12 @@ void WindowFactory::Create(
 	if (isFullscreen_) {
 		ChangeWindowMode();
 	}
+
+	Lamb::AddLog("Create Window succeeded\n" + 
+		std::string{ "                      Window name : " } + ConvertString(windowTitle) +
+		"\n                      size : " + std::to_string(width) + ", " + std::to_string(height) + 
+		"\n                      window mode : " + (isFullscreen ? std::string{ "fullscreen" } : std::string{ "window" })
+	);
 }
 
 bool WindowFactory::WindowMassage() {

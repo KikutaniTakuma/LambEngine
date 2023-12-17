@@ -29,6 +29,8 @@ DsvHeap::DsvHeap(uint32_t heapSize) :
 	CreateHeapHandles();
 
 	bookingHandle_.clear();
+
+	Lamb::AddLog("Initialize DsvHeap succeeded : heap size is " + std::to_string(heapSize_));
 }
 
 DsvHeap::~DsvHeap() {

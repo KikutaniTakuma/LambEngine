@@ -32,6 +32,8 @@ CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor) :
 	CreateHeapHandles();
 
 	bookingHandle_.clear();
+
+	Lamb::AddLog("Initialize CbvSrvUavHeap succeeded : heap size is " + std::to_string(heapSize_));
 }
 
 CbvSrvUavHeap::~CbvSrvUavHeap() {

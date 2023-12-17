@@ -63,6 +63,8 @@ void Engine::Debug::InitializeDebugLayer() {
 		debugController_->EnableDebugLayer();
 		// さらにGPU側でもチェックするようにする
 		debugController_->SetEnableGPUBasedValidation(TRUE);
+
+		Lamb::AddLog("InitializeDebugLayer succeeded");
 	}
 	else {
 		throw Lamb::Error::Code<Engine::Debug>("D3D12GetDebugInterface failed", __func__);
@@ -79,8 +81,11 @@ Engine* Engine::instance_ = nullptr;
 
 void Engine::Initialize(const std::string& windowName, const Vector2& windowSize, float fpsLimit) {
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
-	if (hr != S_OK) {
+	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<Engine>("CoInitializeEx failed", __func__);
+	}
+	else {
+		Lamb::AddLog("CoInitializeEx succeeded");
 	}
 	instance_ = new Engine();
 	assert(instance_);
@@ -88,6 +93,7 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	const auto&& windowTitle = ConvertString(windowName);
 
 	FrameInfo::GetInstance()->SetFpsLimit(static_cast<double>(fpsLimit));
+	Lamb::AddLog("Set fps limit : " + std::to_string(fpsLimit));
 
 	// Window生成
 	WindowFactory::GetInstance()->Create(windowTitle, static_cast<int32_t>(windowSize.x), static_cast<int32_t>(windowSize.y));

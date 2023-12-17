@@ -41,7 +41,7 @@ ShaderFactory::ShaderFactory():
 		throw Lamb::Error::Code<ShaderFactory>("dxcUtils failed", "DxcCreateInstance");
 	}
 	else {
-		Lamb::AddLog("ShaderFactory : Create DxcUtils Succeeded");
+		Lamb::AddLog("Create DxcUtils succeeded");
 	}
 
 	hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(dxcCompiler_.GetAddressOf()));
@@ -50,7 +50,7 @@ ShaderFactory::ShaderFactory():
 		throw Lamb::Error::Code<ShaderFactory>("dxcCompiler failed", "DxcCreateInstance");
 	}
 	else {
-		Lamb::AddLog("ShaderFactory : Create IDxcCompiler3 Succeeded");
+		Lamb::AddLog("Create IDxcCompiler3 succeeded");
 	}
 
 	includeHandler_ = nullptr;
@@ -60,10 +60,10 @@ ShaderFactory::ShaderFactory():
 		throw Lamb::Error::Code<ShaderFactory>("IDxcUtils failed", "CreateDefaultIncludeHandler");
 	}
 	else {
-		Lamb::AddLog("ShaderFactory : Create IDxcIncludeHandler Succeeded");
+		Lamb::AddLog("Create IDxcIncludeHandler succeeded");
 	}
 
-	Lamb::AddLog("ShaderFactory Create Succeeded");
+	Lamb::AddLog("Initialize ShaderFactory succeeded");
 }
 
 [[nodiscard]]
@@ -79,7 +79,7 @@ IDxcBlob* ShaderFactory::CompileShader(
 
 	// 1. hlslファイルを読む
 	// これからシェーダーをコンパイルする旨をログに出す
-	Lamb::AddLog(ConvertString(std::format(L"Begin CompilerShader, path:{}, profile:{}", filePath, profile)));
+	Lamb::AddLog(ConvertString(std::format(L"Begin CompilerShader : path:{} : profile:{}", filePath, profile)));
 	// hlslファイルを読む
 	Microsoft::WRL::ComPtr<IDxcBlobEncoding> shaderSource;
 	HRESULT hr = dxcUtils_->LoadFile(filePath.c_str(), nullptr, shaderSource.GetAddressOf());
@@ -138,7 +138,7 @@ IDxcBlob* ShaderFactory::CompileShader(
 		throw Lamb::Error::Code<ShaderFactory>("shaderResult->GetOutput() failed", __func__);
 	}
 	// 成功したログを出す
-	Lamb::AddLog(ConvertString(std::format(L"Compile Succeeded, path:{}, profile:{}", filePath, profile)));
+	Lamb::AddLog(ConvertString(std::format(L"Compile succeeded : path:{} : profile:{}", filePath, profile)));
 
 	// 実行用バイナリをリターン
 	return shaderBlob;

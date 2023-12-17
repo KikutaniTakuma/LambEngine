@@ -23,7 +23,12 @@ MeshManager::~MeshManager() {
 
 void MeshManager::Initialize() {
 	instance_ = new MeshManager{};
-	assert(instance_);
+	if (instance_) {
+		Lamb::AddLog("Initialize MeshManager succeeded");
+	}
+	else {
+		throw Lamb::Error::Code<MeshManager>("instance is nullptr", __func__);
+	}
 }
 void MeshManager::Finalize() {
 	Lamb::SafeDelete(instance_);

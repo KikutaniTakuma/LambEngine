@@ -84,6 +84,8 @@ KeyInput::KeyInput(IDirectInput8* input):
 	}
 
 	initalizeSucceeded_ = true;
+
+	Lamb::AddLog("Initialize KeyInput succeeded");
 }
 
 KeyInput::~KeyInput() {

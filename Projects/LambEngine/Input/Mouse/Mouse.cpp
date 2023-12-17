@@ -47,6 +47,8 @@ Mouse::Mouse(IDirectInput8* input) :
 	}
 
 	initalizeSucceeded_ = true;
+
+	Lamb::AddLog("Initialize Mouse succeeded");
 }
 
 Mouse::~Mouse() {

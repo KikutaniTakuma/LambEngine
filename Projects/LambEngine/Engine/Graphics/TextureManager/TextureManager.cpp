@@ -84,6 +84,8 @@ TextureManager::TextureManager() :
 	}
 
 	srvHeap_ = CbvSrvUavHeap::GetInstance();
+
+	Lamb::AddLog("Initialize TextureManager succeeded");
 }
 
 TextureManager::~TextureManager() {

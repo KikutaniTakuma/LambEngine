@@ -50,15 +50,13 @@ DirectXDevice::DirectXDevice():
 	// 使用しているデバイスによってD3D_FEATURE_LEVELの対応バージョンが違うので成功するまでバージョンを変えて繰り返す
 	CreateDevice();
 
-	if (device_ == nullptr) {
-		return;
-	}
-
 #ifdef _DEBUG
 	InfoQueue();
 #endif
 
 	CreateHeapIncrements();
+
+	Lamb::AddLog("Initialize DirectXDevice succeeded");
 }
 
 void DirectXDevice::SettingAdapter() {
@@ -103,7 +101,7 @@ void DirectXDevice::CreateDevice() {
 	}
 
 	if (device_ == nullptr) {
-		return;
+		throw Lamb::Error::Code<DirectXDevice>("device not found", __func__);
 	}
 	Lamb::AddLog("Complete create D3D12Device");
 }

@@ -33,6 +33,8 @@ RtvHeap::RtvHeap(uint32_t heapSize):
 	CreateHeapHandles();
 
 	bookingHandle_.clear();
+
+	Lamb::AddLog("Initialize RtvHeap succeeded : heap size is " + std::to_string(heapSize_));
 }
 
 RtvHeap::~RtvHeap() {
@@ -83,6 +85,8 @@ void RtvHeap::CreateBackBuffer(
 		useHandle_.push_back(i);
 		currentHandleIndex_++;
 	}
+
+	Lamb::AddLog(std::string{ __func__ } + " succeeded");
 }
 
 void RtvHeap::SetMainRtv() {

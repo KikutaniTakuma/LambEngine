@@ -21,7 +21,7 @@ ShaderManager::ShaderManager() {
 
 	shaderFactory_ = ShaderFactory::GetInstance();
 
-	Lamb::AddLog("ShaderManager Create Succeeded");
+	Lamb::AddLog("Initialize ShaderManager succeeded");
 }
 
 ShaderManager::~ShaderManager() {

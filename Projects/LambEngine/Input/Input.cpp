@@ -27,7 +27,7 @@ Input::Input():
 	);
 	assert(SUCCEEDED(hr));
 	if (SUCCEEDED(hr)) {
-		Lamb::AddLog("DirectInput Create Succeeded");
+		Lamb::AddLog("DirectInput8Create succeeded");
 	}
 	else {
 		throw Lamb::Error::Code<Input>("DirectInput8Create() Failed", "InitializeInput");
@@ -38,7 +38,9 @@ Input::Input():
 
 	gamepad_ = Gamepad::GetInstance();
 	key_ = KeyInput::GetInstance();
-	mouse_ = Mouse::GetInstance();        
+	mouse_ = Mouse::GetInstance();
+
+	Lamb::AddLog("Initialize AllInput succeeded");
 }
 
 Input::~Input() {
