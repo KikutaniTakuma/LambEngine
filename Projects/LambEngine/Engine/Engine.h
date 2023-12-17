@@ -37,7 +37,7 @@ public:
 	/// </summary>
 	/// <param name="windowName">Windowの名前</param>
 	/// <param name="windowSize">ウィンドウの大きさ(バックバッファの大きさも同じになる)</param>
-	static bool Initialize(const std::string& windowName, const Vector2& windowSize);
+	static void Initialize(const std::string& windowName, const Vector2& windowSize);
 
 	static void Finalize();
 

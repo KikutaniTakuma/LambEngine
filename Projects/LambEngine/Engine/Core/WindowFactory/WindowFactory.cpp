@@ -47,12 +47,6 @@ void WindowFactory::Create(
 	int32_t height, 
 	bool isFullscreen
 ) {
-	HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-	assert(SUCCEEDED(hr));
-	if (FAILED(hr)) {
-		throw Error{}.set<WindowFactory>("CoInitializeEx failed", "Create()");
-	}
-
 	windowName_ = windowTitle;
 
 	// 最大化ボタンを持たないかつサイズ変更不可

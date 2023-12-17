@@ -2,6 +2,7 @@
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Utils/ConvertString/ConvertString.h"
 
+#include "Error/Error.h"
 
 #include <cassert>
 #pragma warning(disable: 6387)
@@ -36,8 +37,7 @@ ShaderFactory::ShaderFactory():
 	HRESULT hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(dxcUtils_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("dxcUtils failed", "DxcCreateInstance()", "ShaderManager");
-		return;
+		throw Lamb::Error::Code<ShaderFactory>("dxcUtils failed", "DxcCreateInstance");
 	}
 	else {
 		Lamb::AddLog("ShaderFactory : Create DxcUtils Succeeded");
@@ -46,8 +46,7 @@ ShaderFactory::ShaderFactory():
 	hr = DxcCreateInstance(CLSID_DxcCompiler, IID_PPV_ARGS(dxcCompiler_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("dxcCompiler failed", "DxcCreateInstance() ", "ShaderManager");
-		return;
+		throw Lamb::Error::Code<ShaderFactory>("dxcCompiler failed", "DxcCreateInstance");
 	}
 	else {
 		Lamb::AddLog("ShaderFactory : Create IDxcCompiler3 Succeeded");
@@ -57,8 +56,7 @@ ShaderFactory::ShaderFactory():
 	hr = dxcUtils_->CreateDefaultIncludeHandler(includeHandler_.GetAddressOf());
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("IDxcUtils failed", "CreateDefaultIncludeHandler()" "ShaderManager");
-		return;
+		throw Lamb::Error::Code<ShaderFactory>("IDxcUtils failed", "CreateDefaultIncludeHandler");
 	}
 	else {
 		Lamb::AddLog("ShaderFactory : Create IDxcIncludeHandler Succeeded");
@@ -83,7 +81,7 @@ IDxcBlob* ShaderFactory::CompilerShader(
 	// 読めなかったら止める
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("Shader Load failed", "CompilerShader", "ShaderManager");
+		throw Lamb::Error::Code<ShaderFactory>("Shader Load failed", __func__);
 	}
 	// 読み込んだファイルの内容を設定する
 	DxcBuffer shaderSourceBuffer;
@@ -114,24 +112,19 @@ IDxcBlob* ShaderFactory::CompilerShader(
 	// コンパイルエラーではなくdxcが起動できないなど致命的な状況
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("Danger!! Cannot use ""dxc""", "CompilerShader", "ShaderManager");
-		return nullptr;
+		throw Lamb::Error::Code<ShaderFactory>("Danger!! Cannot use ""dxc""", "CompilerShader");
 	}
 
 	if (!shaderResult) {
-		Lamb::ErrorLog("Create ShaderResult failed", "CompilerShader", "ShaderManager");
-		return nullptr;
+		throw Lamb::Error::Code<ShaderFactory>("Create ShaderResult failed", "CompilerShader");
 	}
 
 	// 3. 警告・エラーが出てないか確認する
 	Microsoft::WRL::ComPtr<IDxcBlobUtf8> shaderError;
 	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(shaderError.GetAddressOf()), nullptr);
 	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
-		//Log::AddLog(shaderError->GetStringPointer());
-		Lamb::ErrorLog(shaderError->GetStringPointer(), "CompilerShader", "ShaderManager");
 		// 警告・エラーダメゼッタイ
-		assert(false);
-		return nullptr;
+		throw Lamb::Error::Code<ShaderFactory>(shaderError->GetStringPointer(), "CompilerShader");
 	}
 
 	// 4. Compileを受け取って返す

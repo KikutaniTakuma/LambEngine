@@ -3,20 +3,31 @@
 #include <typeinfo>
 #include "Utils/ExecutionLog/ExecutionLog.h"
 
-class Error {
-public:
-	class Code {
-		friend Error;
+namespace Lamb {
+	class Error {
 	public:
-		const std::string& what() const {
+		class Function{};
+		class Value{};
+
+	public:
+		Error() = default;
+		Error(const Error&) = default;
+		Error(Error&&) = default;
+		~Error() = default;
+
+		Error& operator=(const Error&) = default;
+		Error& operator=(Error&&) = default;
+
+	public:
+		const std::string& What() const {
 			return errorCode_;
 		}
 
-		const std::string& function() const {
+		const std::string& FunctionName() const {
 			return functionName_;
 		}
 
-		const std::string& className() const {
+		const std::string& ClassName() const {
 			return className_;
 		}
 
@@ -24,32 +35,19 @@ public:
 		std::string className_;
 		std::string errorCode_;
 		std::string functionName_;
+
+	public:
+		template<class T>
+		static const Error& Code(const std::string& errorCode, const std::string& functionName) {
+			static Error err;
+			err = Error{};
+
+			err.errorCode_ = errorCode;
+			err.className_ = typeid(T).name();
+			err.functionName_ = functionName + "()";
+			Lamb::DebugLog(std::string{ typeid(Error).name() } + " " + err.ClassName() + " : " + err.FunctionName() + " : " + err.What());
+
+			return err;
+		}
 	};
-
-public:
-	Error() = default;
-	Error(const Error&) = default;
-	Error(Error&&) = default;
-	~Error() = default;
-
-	Error& operator=(const Error&) = default;
-	Error& operator=(Error&&) = default;
-
-public:
-	const Error::Code& code() const {
-		return code_;
-	}
-
-	template<class T>
-	const Error& set(const std::string& errorCode, const std::string& functionName) {
-		code_.errorCode_ = errorCode;
-		code_.className_ = typeid(T).name();
-		code_.functionName_ = functionName;
-		Lamb::DebugLog(typeid(Error).name() + code_.className() + " : " + code_.function() + " : " + code_.what());
-
-		return *this;
-	}
-
-private:
-	Code code_;
-};
+}

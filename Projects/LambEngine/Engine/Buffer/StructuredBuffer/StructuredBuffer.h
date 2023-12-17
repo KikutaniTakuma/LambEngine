@@ -2,6 +2,7 @@
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Utils/Cocepts/Cocepts.h"
+#include "Error/Error.h"
 #include <cassert>
 
 /// <summary>
@@ -164,14 +165,12 @@ public:
 	}
 
 	void Resize(uint32_t indexNum) {
-		assert(0 < indexNum);
 		if (indexNum == instanceNum_) {
 			return;
 		}
 
 		if (indexNum < 1) {
-			Lamb::ErrorLog("Index must be greater than or equal to 1 ->" + std::to_string(indexNum), "Resize()","StructuredBuffer");
-			return;
+			throw Lamb::Error::Code<StructuredBuffer<T>>("Index must be greater than or equal to 1 ->" + std::to_string(indexNum), __func__);
 		}
 
 		std::vector<T> tmp;

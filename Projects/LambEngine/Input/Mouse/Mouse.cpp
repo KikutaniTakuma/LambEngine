@@ -2,16 +2,15 @@
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "imgui.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Error/Error.h"
 
 
 Mouse* Mouse::instance_ = nullptr;
 
 void Mouse::Initialize(IDirectInput8* input) {
 	instance_ = new Mouse(input);
-	assert(instance_);
 	if (!instance_) {
-		Lamb::ErrorLog("instance failed", "Initialize()", "Mouse");
-		return;
+		throw Lamb::Error::Code<Mouse>("instance failed", __func__);
 	}
 }
 
@@ -32,22 +31,19 @@ Mouse::Mouse(IDirectInput8* input) :
 	HRESULT hr = input->CreateDevice(GUID_SysMouse, mouse_.GetAddressOf(), NULL);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("CreateDevice failed", "Constructor", "Mouse");
-		return;
+		throw Lamb::Error::Code<Mouse>("CreateDevice failed", "Constructor");
 	}
 
 	hr = mouse_->SetDataFormat(&c_dfDIMouse2);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("SetDataFormat failed", "Constructor", "Mouse");
-		return;
+		throw Lamb::Error::Code<Mouse>("SetDataFormat failed", "Constructor");
 	}
 
 	hr = mouse_->SetCooperativeLevel(WindowFactory::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("SetCooperativeLevel failed", "Constructor", "Mouse");
-		return;
+		throw Lamb::Error::Code<Mouse>("SetCooperativeLevel failed", "Constructor");
 	}
 
 	initalizeSucceeded_ = true;
@@ -181,6 +177,7 @@ void Mouse::Show(bool flg) {
 }
 
 void Mouse::Debug() {
+#ifdef _DEBUG
 	ImGui::Begin("Mouse Debug");
 	ImGui::Text("Left          : %d", LongPush(Mouse::Button::Left));
 	ImGui::Text("Midle         : %d", LongPush(Mouse::Button::Middle));
@@ -195,4 +192,5 @@ void Mouse::Debug() {
 	ImGui::Text("Wheel         : %.0f", GetWheel());
 	ImGui::Text("WheelVelocity : %.0f", GetWheelVelocity());
 	ImGui::End();
+#endif // _DEBUG
 }

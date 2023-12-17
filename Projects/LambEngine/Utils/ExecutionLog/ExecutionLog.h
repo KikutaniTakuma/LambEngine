@@ -7,7 +7,6 @@
 #undef max
 #undef min
 
-class Error;
 class Vector2;
 class Vector3;
 class Vector4;
@@ -81,7 +80,7 @@ namespace Lamb {
 		const std::string& className = "Error"
 		);
 
-	void ErrorLog(const Error& err);
+	void ErrorLog(const class Error& err);
 
 	/// <summary>
 	/// 今の時間を文字列として出力する

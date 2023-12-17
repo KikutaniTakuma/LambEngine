@@ -12,6 +12,8 @@
 #undef max
 #undef min
 
+#include "Error/Error.h"
+
 Shader Model::shader_ = {};
 
 Pipeline* Model::pipeline_ = {};
@@ -220,8 +222,7 @@ void Model::LoadObj(const std::string& fileName) {
 		mesh_ = MeshManager::GetInstance()->LoadObj(fileName);
 
 		if (!mesh_) {
-			Lamb::ErrorLog("mesh is nullptr","LoadObj()", "Model");
-			return;
+			throw Lamb::Error::Code<Model>("mesh is nullptr", __func__);
 		}
 
 		isLoadObj_ = true;
@@ -290,8 +291,7 @@ void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 		auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 
 		if (!pipeline_) {
-			Lamb::ErrorLog("pipeline is nullptr", "Draw()", "Model");
-			return;
+			throw Lamb::Error::Code<Model>("pipeline is nullptr", __func__);
 		}
 
 		for (auto& i : data_) {
