@@ -20,10 +20,11 @@ private:
 	ShaderManager();
 	ShaderManager(const ShaderManager&)  =delete;
 	ShaderManager(ShaderManager&&) = delete;
-	~ShaderManager();
 	
 	ShaderManager& operator=(const ShaderManager&) = delete;
 	ShaderManager& operator=(ShaderManager&&) = delete;
+public:
+	~ShaderManager();
 
 public:
 	static void Initialize();

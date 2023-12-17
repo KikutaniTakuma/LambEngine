@@ -2,6 +2,7 @@
 #include <cassert>
 #include <algorithm>
 #include "Engine/Graphics/RootSignature/RootSignature.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 PipelineManager* PipelineManager::instance_ = nullptr;
 
@@ -10,8 +11,7 @@ void PipelineManager::Initialize() {
 	assert(instance_);
 }
 void PipelineManager::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 void PipelineManager::CreateRootSgnature(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture) {

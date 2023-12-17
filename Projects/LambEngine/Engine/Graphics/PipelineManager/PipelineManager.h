@@ -17,10 +17,11 @@ private:
 	PipelineManager();
 	PipelineManager(const PipelineManager&) = delete;
 	PipelineManager(PipelineManager&&) = delete;
-	~PipelineManager() = default;
 
 	PipelineManager& operator=(const PipelineManager&) = delete;
 	PipelineManager& operator=(PipelineManager&&) = delete;
+public:
+	~PipelineManager() = default;
 
 /// <summary>
 /// 静的関数

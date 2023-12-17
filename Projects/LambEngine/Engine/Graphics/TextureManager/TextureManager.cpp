@@ -4,6 +4,7 @@
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 #include <cassert>
 
 #include "Error/Error.h"
@@ -21,8 +22,7 @@ void TextureManager::Initialize() {
 }
 
 void TextureManager::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 TextureManager::TextureManager() :

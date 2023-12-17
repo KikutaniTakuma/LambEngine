@@ -1,5 +1,6 @@
 #include "MeshManager.h"
 #include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 MeshManager* MeshManager::instance_ = nullptr;
 
@@ -25,8 +26,7 @@ void MeshManager::Initialize() {
 	assert(instance_);
 }
 void MeshManager::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 Mesh* MeshManager::LoadObj(const std::string& objFileName) {

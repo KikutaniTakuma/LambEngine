@@ -13,10 +13,11 @@ private:
 	MeshManager() = default;
 	MeshManager(const MeshManager&) = delete;
 	MeshManager(MeshManager&&) = delete;
-	~MeshManager();
 
 	MeshManager& operator=(const MeshManager&) = delete;
 	MeshManager& operator=(MeshManager&&) = delete;
+public:
+	~MeshManager();
 
 public:
 	static MeshManager* const GetInstance();

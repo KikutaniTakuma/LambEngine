@@ -2,6 +2,7 @@
 #include "../ShaderFactory/ShaderFactory.h"
 #include "Engine/Engine.h"
 #include "Utils/ConvertString/ConvertString.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 #include <cassert>
 #include <format>
 #include "Utils/ExecutionLog/ExecutionLog.h"
@@ -33,8 +34,7 @@ void ShaderManager::Initialize() {
 }
 
 void ShaderManager::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 IDxcBlob* const ShaderManager::LoadVertexShader(const std::string& fileName) {
