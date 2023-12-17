@@ -70,8 +70,6 @@ FrameInfo::~FrameInfo() {
 	//現在の画面情報を取得
 	EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &mode);
 
-	auto playtime =
-		std::chrono::duration_cast<std::chrono::milliseconds>(end - gameStartTime_);
 
 	maxFps_ = std::clamp(maxFps_, 0.0, kMaxMonitorFps_);
 	minFps_ = std::clamp(minFps_, 0.0, kMaxMonitorFps_);
@@ -85,6 +83,17 @@ FrameInfo::~FrameInfo() {
 	}
 
 	avgFps /= size;
+
+	auto playtime =
+		std::chrono::duration_cast<std::chrono::seconds>(end - gameStartTime_);
+
+	auto h = std::chrono::duration_cast<std::chrono::hours>(playtime);
+	playtime -= h;
+	auto m = std::chrono::duration_cast<std::chrono::minutes>(playtime);
+	playtime -= m;
+	auto s = playtime;
+
+	Lamb::AddLog(std::format("Play time : {} {} {}", h,m,s));
 
 	Lamb::AddLog(std::format("Average Fps : {:.2f}", avgFps));
 	if (std::chrono::duration_cast<std::chrono::seconds>(end - gameStartTime_) > std::chrono::seconds(1)) {
