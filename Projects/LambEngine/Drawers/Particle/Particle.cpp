@@ -7,6 +7,7 @@
 
 #include "Utils/UtilsLib/UtilsLib.h"
 #include "Utils/Random/Random.h"
+#include "Error/Error.h"
 
 #include "../externals/nlohmann/json.hpp"
 #include <cassert>
@@ -104,8 +105,7 @@ void Particle::CreateGraphicsPipeline() {
 
 	for (auto& i : graphicsPipelineState_) {
 		if (!i) {
-			Lamb::ErrorLog("pipeline is nullptr", "CreateGraphicsPipeline()","Particle");
-			return;
+			throw Lamb::Error::Code<Particle>("pipeline is nullptr", "CreateGraphicsPipeline()");
 		}
 	}
 }

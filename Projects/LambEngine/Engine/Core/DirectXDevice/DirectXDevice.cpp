@@ -225,7 +225,6 @@ ID3D12Resource* DirectXDevice::CreateDepthStencilTextureResource(int32_t width, 
 			&depthClearValue,
 			IID_PPV_ARGS(&resource))
 	)) {
-		assert(!"CreateDepthStencilTextureResource Failed");
 		throw Lamb::Error::Code<DirectXDevice>("somthing error", "CreateDepthStencilTextureResource()");
 	}
 
