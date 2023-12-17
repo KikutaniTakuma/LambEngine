@@ -37,7 +37,8 @@ public:
 	/// </summary>
 	/// <param name="windowName">Windowの名前</param>
 	/// <param name="windowSize">ウィンドウの大きさ(バックバッファの大きさも同じになる)</param>
-	static void Initialize(const std::string& windowName, const Vector2& windowSize);
+	/// <param name="fpsLimit">最大fps設定デフォルトで60</param>
+	static void Initialize(const std::string& windowName, const Vector2& windowSize, float fpsLimit = 60.0f);
 
 	static void Finalize();
 

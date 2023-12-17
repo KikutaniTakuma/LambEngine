@@ -77,7 +77,7 @@ void Engine::Debug::InitializeDebugLayer() {
 
 Engine* Engine::instance_ = nullptr;
 
-void Engine::Initialize(const std::string& windowName, const Vector2& windowSize) {
+void Engine::Initialize(const std::string& windowName, const Vector2& windowSize, float fpsLimit) {
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 	if (hr != S_OK) {
 		throw Lamb::Error::Code<Engine>("CoInitializeEx failed", __func__);
@@ -86,6 +86,8 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	assert(instance_);
 
 	const auto&& windowTitle = ConvertString(windowName);
+
+	FrameInfo::GetInstance()->SetFpsLimit(static_cast<double>(fpsLimit));
 
 	// Window生成
 	WindowFactory::GetInstance()->Create(windowTitle, static_cast<int32_t>(windowSize.x), static_cast<int32_t>(windowSize.y));
