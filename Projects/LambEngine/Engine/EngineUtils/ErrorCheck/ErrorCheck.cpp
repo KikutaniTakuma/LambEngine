@@ -22,9 +22,6 @@ ErrorCheck::ErrorCheck() :
 	isError_(false)
 {}
 
-ErrorCheck::~ErrorCheck() {
-}
-
 void ErrorCheck::ErrorTextBox(const std::string& text, const std::string& boxName) {
 	ErrorLog(text, boxName);
 

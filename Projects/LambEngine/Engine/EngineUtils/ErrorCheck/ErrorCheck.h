@@ -9,7 +9,7 @@ private:
 	ErrorCheck();
 	ErrorCheck(const ErrorCheck&) = delete;
 	ErrorCheck(ErrorCheck&&) noexcept = delete;
-	~ErrorCheck();
+	~ErrorCheck() = default;
 
 	ErrorCheck& operator=(const ErrorCheck&) = delete;
 	ErrorCheck& operator=(ErrorCheck&&) noexcept = delete;
