@@ -56,7 +56,7 @@ void GameScene::Draw() {
 	camera_->Update(Vector3::kZero);
 	
 	pera_.PreDraw();
-	//model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
-	tex_->Draw(staticCamera_.GetViewOthographics());
-	pera_.Draw(camera_->GetViewProjection(), Pipeline::Normal);
+	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+	//tex_->Draw(staticCamera_.GetViewOthographics());
+	pera_.Draw(camera_->GetViewProjection(), Pipeline::Add);
 }
