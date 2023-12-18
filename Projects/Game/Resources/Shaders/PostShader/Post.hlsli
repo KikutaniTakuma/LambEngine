@@ -9,7 +9,7 @@ cbuffer Color : register(b1){
     float4 color;
 }
 
-cbuffer Color : register(b2){
+cbuffer RamdomVec : register(b2){
     float2 randomVec;
 }
 

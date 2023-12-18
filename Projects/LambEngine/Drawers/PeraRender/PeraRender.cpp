@@ -233,3 +233,13 @@ void PeraRender::Draw(
 	commandList->IASetIndexBuffer(&indexView_);
 	commandList->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
+
+void PeraRender::Debug([[maybe_unused]]const std::string& guiName) {
+#ifdef _DEBUG
+	ImGui::Begin(guiName.c_str());
+	ImGui::DragFloat3("pos", &pos.x, 0.01f);
+	ImGui::DragFloat3("scale", &scale.x, 0.01f);
+	ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+	ImGui::End();
+#endif // _DEBUG
+}

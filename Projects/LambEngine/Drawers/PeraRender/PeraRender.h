@@ -58,6 +58,8 @@ public:
 		render_.SetMainRenderTarget();
 	}
 
+	void Debug(const std::string& guiName);
+
 public:
 	Vector3 pos;
 	Vector3 rotate;

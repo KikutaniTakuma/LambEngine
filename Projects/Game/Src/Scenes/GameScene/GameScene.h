@@ -32,5 +32,7 @@ public:
 
 	std::unique_ptr<Model> model_;
 
+	std::unique_ptr<Texture2D> tex_;
+
 	Camera staticCamera_;
 };

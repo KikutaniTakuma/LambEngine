@@ -11,10 +11,10 @@ float Perlin(float density, float2 uv)
     float2 v10 = RandomVector(uvFloor + float2(1.0f, 0.0f));
     float2 v11 = RandomVector(uvFloor + float2(1.0f, 1.0f));
 
-    float c00 = dot(v00, uvFrac - float2(0, 0));
-    float c01 = dot(v01, uvFrac - float2(0, 1));
-    float c10 = dot(v10, uvFrac - float2(1, 0));
-    float c11 = dot(v11, uvFrac - float2(1, 1));
+    float c00 = dot(v00, uvFrac - float2(0.0f, 0.0f));
+    float c01 = dot(v01, uvFrac - float2(0.0f, 1.0f));
+    float c10 = dot(v10, uvFrac - float2(1.0f, 0.0f));
+    float c11 = dot(v11, uvFrac - float2(1.0f, 1.0f));
 
     float2 u = uvFrac * uvFrac * (3.0f - 2.0f * uvFrac);
 
@@ -37,11 +37,61 @@ float FractalSumNnoise(float density, float2 uv)
     return fn;
 }
 
-float4 main(Output input) : SV_TARGET{
-    float pn = FractalSumNnoise(10.0f, input.uv + randomVec);
-    float pn2 = FractalSumNnoise(5.0f, input.uv - randomVec);
+float CreateNoise(float2 uv)
+{
+    float pn = FractalSumNnoise(10.0f, uv + randomVec);
+    float pn2 = FractalSumNnoise(5.0f, uv - randomVec);
+    uv.x *= -1.0f;
+    float pn3 = FractalSumNnoise(10.0f, uv + randomVec);
+    uv.x *= -1.0f;
+    uv.y *= -1.0f;
+    float pn4 = FractalSumNnoise(5.0f, uv + randomVec);
     
-    float4 texColor = tex.Sample(smp, input.uv + lerp((pn * 0.1f), pn2 * 0.08f, 3.0f));
+    float noise = lerp((pn * 0.1f), (pn2 * 0.08f), 3.0f);
+    float noise2 = lerp((pn3 * 0.1f), (pn4 * 0.08f), 3.0f);
+    
+    return lerp(noise,noise2, 0.5f);
+}
 
-    return texColor;
+float3 CreateNormal(float2 uv)
+{
+    float right = CreateNoise(float2(uv.x + 1.0f, uv.y));
+    float left = CreateNoise(float2(uv.x - 1.0f, uv.y));
+    float up = CreateNoise(float2(uv.x, uv.y + 1.0f));
+    float bottom = CreateNoise(float2(uv.x, uv.y - 1.0f));
+    
+    float dfx = right - left;
+    float dfy = up - bottom;
+    
+    float3 n = float3(-dfx, -dfy, 2.0f);
+    
+    n = normalize(n);
+    
+    n = (n / 0.02f * 1.0f) * 0.5f;
+    
+    return n;
+}
+
+float4 main(Output input) : SV_TARGET{
+    float noise = CreateNoise(input.uv);
+    
+    float4 texColor = tex.Sample(smp, input.uv + noise);
+    
+    float3 normal = CreateNormal(input.uv);
+    
+    float3 ligDirection = normalize(float3(1.0f, -1.0f, 0.0f));
+    
+    // ディレクションライト拡散反射光
+    float t = dot(normal, ligDirection);
+
+    t *= -1.0f;
+    t = (t + abs(t)) * 0.5f;
+
+    float3 lig = float3(1.0f,1.0f,1.0f) * t;
+    
+    //lig.xyz += 0.2f;
+    
+    lig = pow(lig, 1.0f);
+
+    return /*texColor * color * */float4(lig, 1.0f);
 }
