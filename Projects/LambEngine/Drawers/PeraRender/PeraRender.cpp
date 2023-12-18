@@ -240,6 +240,7 @@ void PeraRender::Debug([[maybe_unused]]const std::string& guiName) {
 	ImGui::DragFloat3("pos", &pos.x, 0.01f);
 	ImGui::DragFloat3("scale", &scale.x, 0.01f);
 	ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+	ImGui::ColorEdit4("color", colorBuf_->m.data());
 	ImGui::End();
 #endif // _DEBUG
 }
