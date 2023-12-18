@@ -93,5 +93,8 @@ void Framework::Execution() {
 	catch (const Lamb::Error& err) {
 		Lamb::ErrorLog(err);
 	}
+	catch (const std::exception& err) {
+		Lamb::ErrorLog(err.what(), __func__);
+	}
 	this->Finalize();
 }
