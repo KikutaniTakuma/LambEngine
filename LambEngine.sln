@@ -36,6 +36,8 @@ Global
 		{5A50F54F-3C40-432B-8813-E50FF8D5E787}.Debug|x86.Build.0 = Debug|x64
 		{5A50F54F-3C40-432B-8813-E50FF8D5E787}.Release|x64.ActiveCfg = Release|x64
 		{5A50F54F-3C40-432B-8813-E50FF8D5E787}.Release|x64.Build.0 = Release|x64
+		{5A50F54F-3C40-432B-8813-E50FF8D5E787}.Release|x86.ActiveCfg = Release|x64
+		{5A50F54F-3C40-432B-8813-E50FF8D5E787}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
