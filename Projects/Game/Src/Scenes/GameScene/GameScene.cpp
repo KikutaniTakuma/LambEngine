@@ -30,7 +30,7 @@ void GameScene::Initialize() {
 
 	tex_.reset(new Texture2D{});
 
-	//tex_->scale = Lamb::ClientSize();
+	tex_->scale = Lamb::ClientSize();
 }
 
 void GameScene::Finalize() {
@@ -57,6 +57,6 @@ void GameScene::Draw() {
 	
 	pera_.PreDraw();
 	//model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
-	tex_->Draw(camera_->GetViewProjection());
-	pera_.Draw(camera_->GetViewProjection(), Pipeline::Add);
+	tex_->Draw(staticCamera_.GetViewOthographics());
+	pera_.Draw(camera_->GetViewProjection(), Pipeline::Normal);
 }
