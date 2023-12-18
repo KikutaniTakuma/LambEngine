@@ -101,11 +101,13 @@ void PeraRender::Initialize(const std::string& psFileName) {
 	peraVertexResource_->Unmap(0, nullptr);
 
 	static auto srvHeap = CbvSrvUavHeap::GetInstance();
-	srvHeap->BookingHeapPos(3u);
+	srvHeap->BookingHeapPos(4u);
 	srvHeap->CreatePerarenderView(render_);
 	srvHeap->CreateConstBufferView(wvpMat_);
 	srvHeap->CreateConstBufferView(colorBuf_);
 	srvHeap->CreateConstBufferView(randomVec_);
+
+	*colorBuf_ = color;
 
 	randomVec_->x = Lamb::Random(0.0f, 1.0f);
 	randomVec_->y = Lamb::Random(0.0f, 1.0f);
