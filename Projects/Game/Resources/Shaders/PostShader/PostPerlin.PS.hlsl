@@ -87,11 +87,11 @@ float4 main(Output input) : SV_TARGET{
     t *= -1.0f;
     t = (t + abs(t)) * 0.5f;
 
-    float3 lig = float3(1.0f,1.0f,1.0f) * t;
+    float3 lig = float3(1.50f,15.0f,15.0f) * t;
     
-    //lig.xyz += 0.2f;
+    lig.xyz += 0.2f;
     
-    lig = pow(lig, 1.0f);
+    lig = pow(lig, 0.3f);
 
-    return /*texColor * color * */float4(lig, 1.0f);
+    return texColor * color * float4(lig, 1.0f);
 }
