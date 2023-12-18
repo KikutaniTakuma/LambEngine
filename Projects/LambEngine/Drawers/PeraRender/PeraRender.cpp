@@ -183,8 +183,8 @@ void PeraRender::Update() {
 
 	*colorBuf_ = UintToVector4(color);
 
-	//randomVec_->x += 0.0f;
-	randomVec_->x += 0.15f * Lamb::DeltaTime();
+	randomVec_->x += 0.05f * Lamb::DeltaTime() * Lamb::Random(0.8f,1.2f);
+	randomVec_->y += 0.05f * Lamb::DeltaTime() * Lamb::Random(0.8f,1.2f);
 }
 
 void PeraRender::PreDraw() {
