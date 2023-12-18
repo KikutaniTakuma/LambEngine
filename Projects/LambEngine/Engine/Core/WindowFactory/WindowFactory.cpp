@@ -8,9 +8,12 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
+#include "Utils/ConvertString/ConvertString.h"
 #include "Input/Input.h"
 
 #include "Error/Error.h"
+
+#include "Utils/ExecutionLog/ExecutionLog.h"
 
 WindowFactory::WindowFactory():
 	hwnd_{},
@@ -47,12 +50,6 @@ void WindowFactory::Create(
 	int32_t height, 
 	bool isFullscreen
 ) {
-	HRESULT hr = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-	assert(SUCCEEDED(hr));
-	if (FAILED(hr)) {
-		throw Error{}.set<WindowFactory>("CoInitializeEx failed", "Create()");
-	}
-
 	windowName_ = windowTitle;
 
 	// 最大化ボタンを持たないかつサイズ変更不可
@@ -99,6 +96,11 @@ void WindowFactory::Create(
 	if (isFullscreen_) {
 		ChangeWindowMode();
 	}
+
+	Lamb::AddLog("Create Window succeeded");
+	Lamb::AddLog(std::string{ "Window name : " } + ConvertString(windowTitle));
+	Lamb::AddLog("size : " + std::to_string(width) + ", " + std::to_string(height));
+	Lamb::AddLog("window mode : " + (isFullscreen ? std::string{ "fullscreen" } : std::string{ "windowed" }));
 }
 
 bool WindowFactory::WindowMassage() {

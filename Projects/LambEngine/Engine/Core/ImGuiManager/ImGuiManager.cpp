@@ -12,6 +12,8 @@
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"
 
+#include "Utils/SafeDelete/SafeDelete.h"
+
 ImGuiManager* ImGuiManager::instance_ = nullptr;
 
 ImGuiManager* const ImGuiManager::GetInstance() {
@@ -23,8 +25,7 @@ void ImGuiManager::Initialize() {
 	assert(!!instance_);
 }
 void ImGuiManager::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 ImGuiManager::ImGuiManager() {

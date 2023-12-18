@@ -1,10 +1,14 @@
 #include "DirectXDevice.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Utils/ConvertString/ConvertString.h"
+#include "Math/Vector2.h"
+
 #include <cassert>
 #include <format>
+#include <array>
 
 #include "Error/Error.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 DirectXDevice* DirectXDevice::instance_ = nullptr;
 
@@ -16,8 +20,7 @@ void DirectXDevice::Initialize() {
 	instance_ = new DirectXDevice{};
 }
 void DirectXDevice::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 
@@ -34,28 +37,26 @@ DirectXDevice::DirectXDevice():
 	HRESULT hr = CreateDXGIFactory(IID_PPV_ARGS(dxgiFactory_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error{}.set<DirectXDevice>("somthing error", "CreateDXGIFactory()");
+		throw Lamb::Error::Code<DirectXDevice>("somthing error", "CreateDXGIFactory");
 	}
 
 	// 使用するグラボの設定
 	SettingAdapter();
 	if (useAdapter_ == nullptr) {
-		throw Error{}.set<DirectXDevice>("GPU not Found", "SettingAdapter()");
+		throw Lamb::Error::Code<DirectXDevice>("GPU not Found", "SettingAdapter");
 	}
 
 	// Deviceの初期化
 	// 使用しているデバイスによってD3D_FEATURE_LEVELの対応バージョンが違うので成功するまでバージョンを変えて繰り返す
 	CreateDevice();
 
-	if (device_ == nullptr) {
-		return;
-	}
-
 #ifdef _DEBUG
 	InfoQueue();
 #endif
 
 	CreateHeapIncrements();
+
+	Lamb::AddLog("Initialize DirectXDevice succeeded");
 }
 
 void DirectXDevice::SettingAdapter() {
@@ -67,7 +68,7 @@ void DirectXDevice::SettingAdapter() {
 		DXGI_ADAPTER_DESC3 adapterDesc{};
 		HRESULT hr = useAdapter_->GetDesc3(&adapterDesc);
 		if (hr != S_OK) {
-			throw Error{}.set<DirectXDevice>("GetDesc3() Failed", "SettingAdapter()");
+			throw Lamb::Error::Code<DirectXDevice>("GetDesc3() Failed", __func__);
 		}
 
 		if (!(adapterDesc.Flags & DXGI_ADAPTER_FLAG3_SOFTWARE)) {
@@ -100,7 +101,7 @@ void DirectXDevice::CreateDevice() {
 	}
 
 	if (device_ == nullptr) {
-		return;
+		throw Lamb::Error::Code<DirectXDevice>("device not found", __func__);
 	}
 	Lamb::AddLog("Complete create D3D12Device");
 }
@@ -152,18 +153,18 @@ ID3D12DescriptorHeap* DirectXDevice::CreateDescriptorHeap(
 	descriptorHeapDesc.Type = heapType;
 	descriptorHeapDesc.NumDescriptors = numDescriptors;
 	descriptorHeapDesc.Flags = shaderrVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-	if (SUCCEEDED(device_->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap)))) {
-		return descriptorHeap;
+	if (!SUCCEEDED(device_->CreateDescriptorHeap(&descriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap)))) {
+		throw Lamb::Error::Code<DirectXDevice>("somthing error", __func__);
 	}
-	
-	throw Error{}.set<DirectXDevice>("somthing error", "CreateDescriptorHeap()");
+
+	return descriptorHeap;
 }
 
 [[nodiscard]]
 ID3D12Resource* DirectXDevice::CreateBufferResuorce(size_t sizeInBytes) {
 	if (!device_) {
 		OutputDebugStringA("device is nullptr!!");
-		throw Error{}.set<DirectXDevice>("device is nullptr", "CreateBufferResuorce()");
+		throw Lamb::Error::Code<DirectXDevice>("device is nullptr", __func__);
 	}
 
 	// Resourceを生成する
@@ -188,7 +189,7 @@ ID3D12Resource* DirectXDevice::CreateBufferResuorce(size_t sizeInBytes) {
 	HRESULT hr = device_->CreateCommittedResource(&uploadHeapProp, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resource));
 	if (!SUCCEEDED(hr)) {
 		OutputDebugStringA("CreateCommittedResource Function Failed!!");
-		throw Error{}.set<DirectXDevice>("somthing error", "CreateBufferResuorce()");
+		throw Lamb::Error::Code<DirectXDevice>("somthing error", __func__);
 	}
 
 	return resource;
@@ -222,8 +223,7 @@ ID3D12Resource* DirectXDevice::CreateDepthStencilTextureResource(int32_t width, 
 			&depthClearValue,
 			IID_PPV_ARGS(&resource))
 	)) {
-		assert(!"CreateDepthStencilTextureResource Failed");
-		throw Error{}.set<DirectXDevice>("somthing error", "CreateDepthStencilTextureResource()");
+		throw Lamb::Error::Code<DirectXDevice>("somthing error", __func__);
 	}
 
 	return resource;

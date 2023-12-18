@@ -8,6 +8,8 @@
 #include <cassert>
 #include "Error/Error.h"
 
+#include "Utils/SafeDelete/SafeDelete.h"
+
 RtvHeap* RtvHeap::instance_ = nullptr;
 
 void RtvHeap::Initialize(UINT heapSize) {
@@ -16,8 +18,7 @@ void RtvHeap::Initialize(UINT heapSize) {
 }
 
 void RtvHeap::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 RtvHeap* const RtvHeap::GetInstance() {
@@ -32,6 +33,8 @@ RtvHeap::RtvHeap(uint32_t heapSize):
 	CreateHeapHandles();
 
 	bookingHandle_.clear();
+
+	Lamb::AddLog("Initialize RtvHeap succeeded : heap size is " + std::to_string(heapSize_));
 }
 
 RtvHeap::~RtvHeap() {
@@ -74,7 +77,7 @@ void RtvHeap::CreateBackBuffer(
 
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			throw Error{}.set<RtvHeap>("GetBuffer() Failed", "CreateBackBuffer()");
+			throw Lamb::Error::Code<RtvHeap>("GetBuffer() Failed", __func__);
 		}
 
 		device->CreateRenderTargetView(backBuffer[i].Get(), &rtvDesc, heapHandles_[i].first);
@@ -82,6 +85,8 @@ void RtvHeap::CreateBackBuffer(
 		useHandle_.push_back(i);
 		currentHandleIndex_++;
 	}
+
+	Lamb::AddLog(std::string{ __func__ } + " succeeded");
 }
 
 void RtvHeap::SetMainRtv() {
@@ -120,7 +125,7 @@ void RtvHeap::ClearRenderTargetView(uint32_t handle, const Vector4& clearColor) 
 uint32_t RtvHeap::CreateView(class RenderTarget& peraRender) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		throw Error{}.set<RtvHeap>("Over HeapSize", "CreateView");
+		throw Lamb::Error::Code<RtvHeap>("Over HeapSize", __func__);
 	}
 
 	if (bookingHandle_.empty()) {

@@ -10,6 +10,8 @@
 
 #include "Error/Error.h"
 
+#include "Utils/SafeDelete/SafeDelete.h"
+
 StringOutPutManager* StringOutPutManager::instance_ = nullptr;
 
 void StringOutPutManager::Initialize() {
@@ -19,8 +21,7 @@ void StringOutPutManager::Initialize() {
 }
 
 void StringOutPutManager::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 StringOutPutManager* const StringOutPutManager::GetInstance() {
@@ -41,7 +42,7 @@ StringOutPutManager::StringOutPutManager():
 void StringOutPutManager::LoadFont(const std::string& fontName) {
 	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
 	if (!std::filesystem::exists(std::filesystem::path(fontName))) {
-		throw Error{}.set<StringOutPutManager>("This file is not exist -> " + fontName, "LoadFont()");
+		throw Lamb::Error::Code<StringOutPutManager>("This file is not exist -> " + fontName, __func__);
 	}
 
 	// もしロード済みなら早期リターン

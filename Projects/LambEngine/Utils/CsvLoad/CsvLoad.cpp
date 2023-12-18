@@ -1,5 +1,5 @@
 #include "CsvLoad.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Error/Error.h"
 #include <filesystem>
 #include <fstream>
 #include <sstream>
@@ -9,15 +9,13 @@ std::vector<std::vector<int32_t>> CsvLoad(const std::string& fileName) {
 	std::vector<std::vector<int32_t>> result;
 
 	if (!(std::filesystem::path(fileName).extension() == ".csv")) {
-		Lamb::ErrorLog("This file is not csv -> " + fileName, "CsvLoad()");
-		return std::vector<std::vector<int32_t>>(0);
+		throw Lamb::Error::Code<Lamb::Error::Function>("This file is not csv -> " + fileName, __func__);
+	}
+	else if(std::filesystem::exists(fileName)){
+		throw Lamb::Error::Code<Lamb::Error::Function>("This file is not exists -> " + fileName, __func__);
 	}
 
 	std::ifstream file{ fileName };
-	if (file.fail()) {
-		Lamb::ErrorLog("This file is not exist -> " + fileName, "CsvLoad()");
-		return std::vector<std::vector<int32_t>>(0);
-	}
 
 	std::string line;
 	while (std::getline(file, line))

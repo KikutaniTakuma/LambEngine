@@ -13,11 +13,12 @@
 class WindowFactory {
 private:
 	WindowFactory();
-	~WindowFactory();
 	WindowFactory(const WindowFactory&) = delete;
 	WindowFactory(WindowFactory&&) = delete;
 	const WindowFactory& operator=(const WindowFactory&) = delete;
 	const WindowFactory& operator=(WindowFactory&&) = delete;
+public:
+	~WindowFactory();
 
 public:
 	/// <summary>

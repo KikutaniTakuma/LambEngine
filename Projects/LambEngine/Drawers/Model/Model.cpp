@@ -12,6 +12,8 @@
 #undef max
 #undef min
 
+#include "Error/Error.h"
+
 Shader Model::shader_ = {};
 
 Pipeline* Model::pipeline_ = {};
@@ -220,8 +222,7 @@ void Model::LoadObj(const std::string& fileName) {
 		mesh_ = MeshManager::GetInstance()->LoadObj(fileName);
 
 		if (!mesh_) {
-			Lamb::ErrorLog("mesh is nullptr","LoadObj()", "Model");
-			return;
+			throw Lamb::Error::Code<Model>("mesh is nullptr", __func__);
 		}
 
 		isLoadObj_ = true;
@@ -263,6 +264,10 @@ void Model::MeshChangeTexture(const std::string& useMtlName, Texture* tex) {
 
 void Model::Update() {
 	*dirLig_ = light;
+	wvpData_->worldMat.Affin(scale, rotate, pos);
+	if (parent_) {
+		wvpData_->worldMat *= parent_->wvpData_->worldMat;
+	}
 
 	if (!isLoadObj_ && mesh_ && mesh_->GetIsLoad()) {
 		isLoadObj_ = true;
@@ -276,10 +281,6 @@ void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 			data_ = mesh_->CopyBuffer();
 		}
 
-		wvpData_->worldMat.Affin(scale, rotate, pos);
-		if (parent_) {
-			wvpData_->worldMat *= parent_->wvpData_->worldMat;
-		}
 		wvpData_->viewProjectoionMat = viewProjectionMat;
 
 		*colorBuf_ = UintToVector4(color);
@@ -290,8 +291,7 @@ void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 		auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 
 		if (!pipeline_) {
-			Lamb::ErrorLog("pipeline is nullptr", "Draw()", "Model");
-			return;
+			throw Lamb::Error::Code<Model>("pipeline is nullptr", __func__);
 		}
 
 		for (auto& i : data_) {

@@ -2,6 +2,7 @@
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include <cassert>
 #include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Error/Error.h"
 
 void KeyInput::Input() {
 	if (!initalizeSucceeded_) {
@@ -67,25 +68,24 @@ KeyInput::KeyInput(IDirectInput8* input):
 	HRESULT hr = input->CreateDevice(GUID_SysKeyboard, keyBoard_.GetAddressOf(), NULL);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("CreateDevice failed","Constructor", "KeyInput");
-		return;
+		throw Lamb::Error::Code<KeyInput>("CreateDevice failed", "Constructor");
 	}
 
 	hr = keyBoard_->SetDataFormat(&c_dfDIKeyboard);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("SetDataFormat failed", "Constructor", "KeyInput");
-		return;
+		throw Lamb::Error::Code<KeyInput>("SetDataFormat failed", "Constructor");
 	}
 
 	hr = keyBoard_->SetCooperativeLevel(WindowFactory::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("SetCooperativeLevel failed", "Constructor", "KeyInput");
-		return;
+		throw Lamb::Error::Code<KeyInput>("SetDataFormat failed", "Constructor");
 	}
 
 	initalizeSucceeded_ = true;
+
+	Lamb::AddLog("Initialize KeyInput succeeded");
 }
 
 KeyInput::~KeyInput() {

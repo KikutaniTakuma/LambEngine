@@ -11,6 +11,7 @@
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Engine/Engine.h"
+#include <typeinfo>
 
 ErrorCheck* const ErrorCheck::GetInstance() {
 	static ErrorCheck instance;
@@ -21,9 +22,6 @@ ErrorCheck::ErrorCheck() :
 	isError_(false)
 {}
 
-ErrorCheck::~ErrorCheck() {
-}
-
 void ErrorCheck::ErrorTextBox(const std::string& text, const std::string& boxName) {
 	ErrorLog(text, boxName);
 
@@ -31,14 +29,14 @@ void ErrorCheck::ErrorTextBox(const std::string& text, const std::string& boxNam
 		MessageBoxA(
 			WindowFactory::GetInstance()->GetHwnd(), 
 			text.c_str(), boxName.c_str(), 
-			MB_OK | MB_SYSTEMMODAL | MB_ICONERROR
+			MB_OK | MB_APPLMODAL | MB_ICONERROR
 		);
 	}
 	else {
 		MessageBoxA(
 			WindowFactory::GetInstance()->GetHwnd(), 
 			text.c_str(), ("Error : " + boxName).c_str(),
-			MB_OK | MB_SYSTEMMODAL| MB_ICONERROR
+			MB_OK | MB_APPLMODAL | MB_ICONERROR
 		);
 	}
 	isError_ = true;
@@ -57,10 +55,20 @@ void ErrorCheck::ErrorLog(const std::string& text, const std::string& boxName) {
 	if (!std::filesystem::exists(directoryPath)) {
 		std::filesystem::create_directory(directoryPath);
 	}
+	std::ofstream file;
+	try {
+		file.open(directoryPath.string() + "Error.log", std::ios::app);
+	}
+	catch (const std::exception& err) {
+		MessageBoxA(
+			WindowFactory::GetInstance()->GetHwnd(),
+			err.what(), ("Error : " + std::string{ typeid(ErrorCheck).name() }).c_str(),
+			MB_OK | MB_SYSTEMMODAL | MB_ICONERROR
+		);
 
-	std::ofstream file(directoryPath.string() + "Error.log", std::ios::app);
-	assert(file);
+		return;
+	}
 
-	file << Lamb::NowTime() << ":"  << std::format("{} / {}", boxName, text) << std::endl;
+	file << Lamb::NowTime() << ": "  << std::format("{} : {}", boxName, text) << std::endl;
 	file.close();
 }

@@ -21,7 +21,7 @@ private:
 	void Draw()override;
 
 private:
-	class SceneManager* sceneManager_;
+	class SceneManager* sceneManager_ = nullptr;
 
-	class ParticleEditor* particleEditor_;
+	class ParticleEditor* particleEditor_ = nullptr;
 };

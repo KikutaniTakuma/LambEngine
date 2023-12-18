@@ -4,14 +4,14 @@
 #include <cassert>
 #include <filesystem>
 #include "Error/Error.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 AudioManager* AudioManager::instance_ = nullptr;
 void AudioManager::Inititalize() {
 	instance_ = new AudioManager{};
 }
 void AudioManager::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 AudioManager::AudioManager() :
@@ -26,14 +26,16 @@ AudioManager::AudioManager() :
 	HRESULT hr = XAudio2Create(xAudio2_.GetAddressOf(), 0u, XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error{}.set<AudioManager>("XAudio2Create()", "Constructor");
+		throw Lamb::Error::Code<AudioManager>("XAudio2Create()", "Constructor");
 	}
 
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error{}.set<AudioManager>("CreateMasteringVoicey()", "Constructor");
+		throw Lamb::Error::Code<AudioManager>("CreateMasteringVoicey()", "Constructor");
 	}
+
+	Lamb::AddLog("Initialize AudioManager succeeded");
 }
 AudioManager::~AudioManager() {
 	xAudio2_.Reset();
@@ -44,8 +46,7 @@ AudioManager::~AudioManager() {
 
 Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 	if (!std::filesystem::exists(std::filesystem::path(fileName))) {
-		Lamb::ErrorLog(" There is not this file -> " + fileName, "LoadWav()", "AudioManager");
-		throw Error{}.set<AudioManager>("There is not this file -> " + fileName, "LoadWav()");
+		throw Lamb::Error::Code<AudioManager>("There is not this file -> " + fileName, __func__);
 	}
 
 

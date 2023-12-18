@@ -5,6 +5,7 @@
 #include "Engine/Graphics/RootSignature/RootSignature.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
+#include "Error/Error.h"
 
 Pipeline::Pipeline():
 	graphicsPipelineState_(),
@@ -203,8 +204,7 @@ void Pipeline::Create(
 	HRESULT hr = device->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(graphicsPipelineState_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		Lamb::ErrorLog("CreateGraphicsPipelineState", "Create()", "Pipeline");
-		return;
+		throw Lamb::Error::Code<Pipeline>("CreateGraphicsPipelineState failed", __func__);
 	}
 }
 
@@ -213,8 +213,7 @@ void Pipeline::Use() const {
 
 	assert(graphicsPipelineState_);
 	if (!graphicsPipelineState_) {
-		Lamb::ErrorLog("GraphicsPipelineState is nullptr", "Use()", "Pipeline");
-		return;
+		throw Lamb::Error::Code<Pipeline>("GraphicsPipelineState is nullptr", __func__);
 	}
 	auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 	commandlist->SetGraphicsRootSignature(rootSignature_);
@@ -234,7 +233,7 @@ void Pipeline::Use() const {
 	default:
 	case D3D12_PRIMITIVE_TOPOLOGY_TYPE_UNDEFINED:
 	case D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT:
-		Lamb::ErrorLog("Cannot use this primitive topology type", "Use()", "Pipline");
+		throw Lamb::Error::Code<Pipeline>("Cannot use this primitive topology type", __func__);
 		break;
 	}
 }

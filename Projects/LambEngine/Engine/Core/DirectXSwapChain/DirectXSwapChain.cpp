@@ -9,6 +9,7 @@
 #include <cassert>
 
 #include "Error/Error.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 DirectXSwapChain* DirectXSwapChain::instance_ = nullptr;
 
@@ -21,8 +22,7 @@ void DirectXSwapChain::Initialize() {
 	instance_ = new DirectXSwapChain{};
 }
 void DirectXSwapChain::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 DirectXSwapChain::DirectXSwapChain():
@@ -47,7 +47,7 @@ DirectXSwapChain::DirectXSwapChain():
 	HRESULT hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue, WindowFactory::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error{}.set<DirectXSwapChain>("something error", "CreateSwapChainForHwnd()");
+		throw Lamb::Error::Code<DirectXSwapChain>("something error", "CreateSwapChainForHwnd");
 	}
 
 	dxgiFactory->MakeWindowAssociation(
@@ -55,6 +55,8 @@ DirectXSwapChain::DirectXSwapChain():
 
 	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
 	rtvHeap->CreateBackBuffer(swapChainResource_, swapChain_.Get());
+
+	Lamb::AddLog("Initialize DirectXSwapChain succeeded");
 }
 
 void DirectXSwapChain::SetViewPort(uint32_t width, uint32_t height) {

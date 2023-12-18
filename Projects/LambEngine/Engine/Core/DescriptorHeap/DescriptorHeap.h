@@ -11,10 +11,11 @@ protected:
 	DescriptorHeap();
 	DescriptorHeap(const DescriptorHeap&) = delete;
 	DescriptorHeap(DescriptorHeap&&) = delete;
-	virtual ~DescriptorHeap();
 
 	DescriptorHeap& operator=(const DescriptorHeap&) = delete;
 	DescriptorHeap& operator=(DescriptorHeap&&) = delete;
+public:
+	virtual ~DescriptorHeap();
 
 protected:
 	/// <summary>

@@ -9,10 +9,11 @@ public:
 	RtvHeap(const RtvHeap&) = delete;
 	RtvHeap(RtvHeap&&) = delete;
 	RtvHeap(uint32_t heapSize);
-	~RtvHeap();
 
 	RtvHeap& operator=(const RtvHeap&) = delete;
 	RtvHeap& operator=(RtvHeap&&) = delete;
+public:
+	~RtvHeap();
 
 public:
 	static void Initialize(UINT heapSize);

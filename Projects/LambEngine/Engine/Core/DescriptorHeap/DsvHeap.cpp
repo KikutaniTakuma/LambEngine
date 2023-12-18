@@ -4,6 +4,7 @@
 #include <cassert>
 #include <algorithm>
 #include "Error/Error.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 DsvHeap* DsvHeap::instance_ = nullptr;
 
@@ -13,8 +14,7 @@ void DsvHeap::Initialize(UINT heapSize) {
 }
 
 void DsvHeap::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 DsvHeap* const DsvHeap::GetInstance() {
@@ -29,6 +29,8 @@ DsvHeap::DsvHeap(uint32_t heapSize) :
 	CreateHeapHandles();
 
 	bookingHandle_.clear();
+
+	Lamb::AddLog("Initialize DsvHeap succeeded : heap size is " + std::to_string(heapSize_));
 }
 
 DsvHeap::~DsvHeap() {
@@ -57,7 +59,7 @@ void DsvHeap::CreateHeapHandles() {
 uint32_t DsvHeap::CreateView(DepthBuffer& depthStencilBuffer) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		throw Error{}.set<DsvHeap>("Over HeapSize", "CreateConstBufferView()");
+		throw Lamb::Error::Code<DsvHeap>("Over HeapSize", __func__);
 	}
 
 	if (bookingHandle_.empty()) {

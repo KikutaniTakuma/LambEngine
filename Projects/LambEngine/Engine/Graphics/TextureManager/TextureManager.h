@@ -15,10 +15,11 @@ private:
 	TextureManager();
 	TextureManager(const TextureManager&) = delete;
 	TextureManager(TextureManager&&) noexcept = delete;
-	~TextureManager();
 
 	TextureManager& operator=(const TextureManager&) = delete;
 	TextureManager& operator=(TextureManager&&) noexcept = delete;
+public:
+	~TextureManager();
 
 public:
 	static TextureManager* const GetInstance();

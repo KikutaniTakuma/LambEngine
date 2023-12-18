@@ -39,8 +39,8 @@ public:
 	Vector3 operator/(float scalar) const noexcept;
 	Vector3& operator/=(float scalar) noexcept;
 
-	Vector3 operator*(const class Mat4x4& mat) const noexcept;
-	Vector3& operator*=(const class Mat4x4& mat) noexcept;
+	Vector3 operator*(const class Mat4x4& mat) const;
+	Vector3& operator*=(const class Mat4x4& mat);
 	friend Vector3 operator*(const class Mat4x4& left, const Vector3& right);
 
 	Vector3& operator=(const class Vector2& right) noexcept;
@@ -55,8 +55,8 @@ public:
 	bool operator!=(const Vector3& right) const noexcept;
 
 	// 
-	float& operator[](size_t index) noexcept;
-	const float& operator[](size_t index) const noexcept;
+	float& operator[](size_t index);
+	const float& operator[](size_t index) const;
 
 
 /// <summary>

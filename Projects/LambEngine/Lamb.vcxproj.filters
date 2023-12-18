@@ -163,6 +163,9 @@
     <ClCompile Include="PipelineObject\WaterPipeline\WaterPipeline.cpp">
       <Filter>PipelineObject\WaterPipeline</Filter>
     </ClCompile>
+    <ClCompile Include="Framework\Framework.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -341,6 +344,9 @@
     </Filter>
     <Filter Include="Error">
       <UniqueIdentifier>{89dc16ed-3ed4-40e0-b34e-752af2811991}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{78585073-0027-4de9-838a-35e5a2880153}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -523,6 +529,9 @@
     </ClInclude>
     <ClInclude Include="Error\Error.h">
       <Filter>Error</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Framework.h">
+      <Filter>Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

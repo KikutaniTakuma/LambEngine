@@ -11,10 +11,11 @@ private:
 	StringOutPutManager();
 	StringOutPutManager(const StringOutPutManager&) = delete;
 	StringOutPutManager(StringOutPutManager&) = delete;
-	~StringOutPutManager() = default;
 
 	StringOutPutManager& operator=(const StringOutPutManager&) = delete;
 	StringOutPutManager& operator=(StringOutPutManager&&) = delete;
+public:
+	~StringOutPutManager() = default;
 
 public:
 	static void Initialize();

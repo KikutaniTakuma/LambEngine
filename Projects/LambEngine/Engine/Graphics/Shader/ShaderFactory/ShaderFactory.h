@@ -31,7 +31,7 @@ private:
 
 public:
 	[[nodiscard]]
-	IDxcBlob* CompilerShader(
+	IDxcBlob* CompileShader(
 		// CompilerするShaderファイルへのパス
 		const std::wstring& filePath,
 		// Compilerに使用するProfile

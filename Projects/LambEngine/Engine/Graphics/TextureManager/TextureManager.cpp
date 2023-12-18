@@ -4,7 +4,9 @@
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 #include <cassert>
+#include <filesystem>
 
 #include "Error/Error.h"
 
@@ -21,8 +23,7 @@ void TextureManager::Initialize() {
 }
 
 void TextureManager::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 TextureManager::TextureManager() :
@@ -46,7 +47,7 @@ TextureManager::TextureManager() :
 	HRESULT hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(commandQueue_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error{}.set<TextureManager>("CreateCommandQueue() Failed", "Constructor");
+		throw Lamb::Error::Code<TextureManager>("CreateCommandQueue() Failed", "Constructor");
 	}
 
 	// コマンドアロケータを生成する
@@ -54,7 +55,7 @@ TextureManager::TextureManager() :
 	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error{}.set<TextureManager>("CreateCommandAllocator() Failed", "Constructor");
+		throw Lamb::Error::Code<TextureManager>("CreateCommandAllocator() Failed", "Constructor");
 	}
 
 	// コマンドリストを作成する
@@ -62,7 +63,7 @@ TextureManager::TextureManager() :
 	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(commandList_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error{}.set<TextureManager>("CreateCommandList() Failed", "Constructor");
+		throw Lamb::Error::Code<TextureManager>("CreateCommandList() Failed", "Constructor");
 	}
 
 	// 初期値0でFenceを作る
@@ -71,7 +72,7 @@ TextureManager::TextureManager() :
 	hr = device->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Error{}.set<TextureManager>("CreateFence() Failed", "Constructor");
+		throw Lamb::Error::Code<TextureManager>("CreateFence() Failed", "Constructor");
 	}
 
 	// FenceのSignalを持つためのイベントを作成する
@@ -79,10 +80,12 @@ TextureManager::TextureManager() :
 	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
 	assert(fenceEvent_ != nullptr);
 	if (!(fenceEvent_ != nullptr)) {
-		throw Error{}.set<TextureManager>("CreateEvent() Failed", "Constructor");
+		throw Lamb::Error::Code<TextureManager>("CreateEvent() Failed", "Constructor");
 	}
 
 	srvHeap_ = CbvSrvUavHeap::GetInstance();
+
+	Lamb::AddLog("Initialize TextureManager succeeded");
 }
 
 TextureManager::~TextureManager() {
@@ -95,6 +98,10 @@ TextureManager::~TextureManager() {
 
 
 Texture* const TextureManager::LoadTexture(const std::string& fileName) {
+	if (!std::filesystem::exists(fileName)) {
+		throw Lamb::Error::Code<TextureManager>("this file is not exist -> " + fileName, __func__);
+	}
+
 	auto itr = textures_.find(fileName);
 	if (itr == textures_.end()) {
 		auto tex = std::make_unique<Texture>();
@@ -122,12 +129,12 @@ Texture* const TextureManager::LoadTexture(const std::string& fileName) {
 		auto hr = commandAllocator_->Reset();
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			throw Error{}.set<TextureManager>("CommandAllocator somthing error", "Reset()");
+			throw Lamb::Error::Code<TextureManager>("CommandAllocator somthing error", __func__);
 		}
 		hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			throw Error{}.set<TextureManager>("CommandList somthing error", "Reset()");
+			throw Lamb::Error::Code<TextureManager>("CommandList somthing error", __func__);
 		}
 		///
 
@@ -146,6 +153,9 @@ Texture* const TextureManager::LoadTexture(const std::string& fileName) {
 }
 
 Texture* const TextureManager::LoadTexture(const std::string& fileName, ID3D12GraphicsCommandList* const commandList) {
+	if (!std::filesystem::exists(fileName)) {
+		throw Lamb::Error::Code<TextureManager>("this file is not exist -> " + fileName, __func__);
+	}
 	auto itr = textures_.find(fileName);
 	if (itr == textures_.end()) {
 		auto tex = std::make_unique<Texture>();
@@ -232,12 +242,12 @@ void TextureManager::ResetCommandList() {
 		auto hr = commandAllocator_->Reset();
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			throw Error{}.set<TextureManager>("CommandAllocator somthing error", "Reset()");
+			throw Lamb::Error::Code<TextureManager>("CommandAllocator somthing error", __func__);
 		}
 		hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
 		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
-			throw Error{}.set<TextureManager>("CommandList somthing error", "Reset()");
+			throw Lamb::Error::Code<TextureManager>("CommandList somthing error", __func__);
 		}
 
 		isThreadFinish_ = false;

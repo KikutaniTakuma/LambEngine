@@ -5,6 +5,8 @@
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "../MeshManager.h"
 #include "Utils/EngineInfo/EngineInfo.h"
+#include "Error/Error.h"
+
 #include <fstream>
 #include <sstream>
 #include <cassert>
@@ -35,18 +37,16 @@ Mesh::~Mesh() {
 
 void Mesh::LoadObj(const std::string& objFileName) {
 	if (!isLoad_) {
-		std::ifstream objFile(objFileName);
-		assert(objFile);
-		if (objFile.fail()) {
-			if (std::filesystem::exists(std::filesystem::path(objFileName))) {
-				Lamb::ErrorLog(objFileName + " open failed", "LoadObj()", "Mesh");
+		std::ifstream file{ objFileName };
+		if (file.fail()) {
+			if (!std::filesystem::exists(objFileName)) {
+				throw Lamb::Error::Code<Mesh>("this file is not exist -> " + objFileName, __func__);
 			}
 			else {
-				Lamb::ErrorLog("Not found objFile -> " + objFileName, "LoadObj()", "Mesh");
+				throw Lamb::Error::Code<Mesh>("something error -> " + objFileName, __func__);
 			}
-
-			return;
 		}
+		
 
 		objFileName_ = objFileName;
 
@@ -61,7 +61,7 @@ void Mesh::LoadObj(const std::string& objFileName) {
 
 		std::string lineBuf;
 
-		while (std::getline(objFile, lineBuf)) {
+		while (std::getline(file, lineBuf)) {
 			std::string identifier;
 			std::istringstream line(lineBuf);
 			line >> identifier;
@@ -106,10 +106,7 @@ void Mesh::LoadObj(const std::string& objFileName) {
 
 					// エラーチェック
 					if (idnexItr == indcoes.rend()) {
-						//assert(!"Obj Load Error : Cannot Load Rectangles or more");
-						Lamb::ErrorLog("Not supported for rectangles or more", "LoadObj()", "Mesh");
-						objFile.close();
-						return;
+						throw Lamb::Error::Code<Mesh>("Not supported for rectangles or more", __func__);
 					}
 
 					if (count == 2) {
@@ -144,7 +141,7 @@ void Mesh::LoadObj(const std::string& objFileName) {
 				LoadMtl(path.parent_path().string() + "/" + mtlFileName);
 			}
 		}
-		objFile.close();
+		file.close();
 
 		for (auto i : indexDatas) {
 			// 使用するリソースのサイズは頂点数分のサイズ
@@ -172,9 +169,15 @@ void Mesh::LoadObj(const std::string& objFileName) {
 }
 
 void Mesh::LoadMtl(const std::string& fileName) {
-	std::ifstream file(fileName);
-	assert(file);
-	if (!file) { Lamb::ErrorLog("Not Found mtlFile", "LoadMtl()", "Mesh"); }
+	std::ifstream file{fileName};
+	if (file.fail()) {
+		if (!std::filesystem::exists(fileName)) {
+			throw Lamb::Error::Code<Mesh>("this file is not exist -> " + fileName, __func__);
+		}
+		else {
+			throw Lamb::Error::Code<Mesh>("something error -> " + fileName, __func__);
+		}
+	}
 
 	std::string lineBuf;
 	std::unordered_map<std::string, Texture*>::iterator texItr;
@@ -209,17 +212,14 @@ void Mesh::LoadMtl(const std::string& fileName) {
 
 void Mesh::ThreadLoadObj(const std::string& objFileName) {
 	if (!isLoad_) {
-		std::ifstream objFile(objFileName);
-		assert(objFile);
-		if (objFile.fail()) {
-			if (std::filesystem::exists(std::filesystem::path(objFileName))) {
-				Lamb::ErrorLog(objFileName + " open failed", "ThreadLoadObj()", "Mesh");
+		std::ifstream file{objFileName};
+		if (file.fail()) {
+			if (!std::filesystem::exists(objFileName)) {
+				throw Lamb::Error::Code<Mesh>("this file is not exist -> " + objFileName, __func__);
 			}
 			else {
-				Lamb::ErrorLog("Not found objFile -> " + objFileName, "ThreadLoadObj()", "Mesh");
+				throw Lamb::Error::Code<Mesh>("something error -> " + objFileName, __func__);
 			}
-
-			return;
 		}
 
 		objFileName_ = objFileName;
@@ -235,7 +235,7 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 
 		std::string lineBuf;
 
-		while (std::getline(objFile, lineBuf)) {
+		while (std::getline(file, lineBuf)) {
 			if (Lamb::IsEngineFianlize()) {
 				return;
 			}
@@ -284,10 +284,7 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 
 					// エラーチェック
 					if (idnexItr == indcoes.rend()) {
-						//assert(!"Obj Load Error : Cannot Load Rectangles or more");
-						Lamb::ErrorLog("Not supported for rectangles or more", "ThreadLoadObj()", "Mesh");
-						objFile.close();
-						return;
+						throw Lamb::Error::Code<Mesh>("Not supported for rectangles or more", "ThreadLoadObj()");
 					}
 
 					if (count == 2) {
@@ -322,7 +319,7 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 				ThreadLoadMtl(path.parent_path().string() + "/" + mtlFileName);
 			}
 		}
-		objFile.close();
+		file.close();
 
 		for (auto i : indexDatas) {
 			// 使用するリソースのサイズは頂点数分のサイズ
@@ -346,10 +343,15 @@ void Mesh::ThreadLoadObj(const std::string& objFileName) {
 	}
 }
 void Mesh::ThreadLoadMtl(const std::string& fileName) {
-	std::ifstream file(fileName);
-	assert(file);
-	if (!file) { Lamb::ErrorLog("Not Found mtlFile", "ThreadLoadMtl()", "Mesh"); }
-
+	std::ifstream file{fileName};
+	if (file.fail()) {
+		if (!std::filesystem::exists(fileName)) {
+			throw Lamb::Error::Code<Mesh>("this file is not exist -> " + fileName, __func__);
+		}
+		else {
+			throw Lamb::Error::Code<Mesh>("something error -> " + fileName, __func__);
+		}
+	}
 	std::string lineBuf;
 	std::unordered_map<std::string, Texture*>::iterator texItr;
 	std::unordered_map<std::string, bool> isTexLoad;
@@ -489,8 +491,7 @@ void Mesh::Draw() {
 		auto commandList = DirectXCommand::GetInstance()->GetCommandList();
 
 		if (!pipeline_) {
-		Lamb::ErrorLog("pipeline is nullptr", "Draw()", "Mesh");
-			return;
+			throw Lamb::Error::Code<Mesh>("pipeline is nullptr", __func__);
 		}
 
 		for (auto& i : resource_) {

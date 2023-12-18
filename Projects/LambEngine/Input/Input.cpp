@@ -1,6 +1,7 @@
 #include "Input.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Error/Error.h"
 
 Input* Input::instance_ = nullptr;
 
@@ -26,11 +27,10 @@ Input::Input():
 	);
 	assert(SUCCEEDED(hr));
 	if (SUCCEEDED(hr)) {
-		Lamb::AddLog("DirectInput Create Succeeded");
+		Lamb::AddLog("DirectInput8Create succeeded");
 	}
 	else {
-		Lamb::ErrorLog("DirectInput8Create() Failed", "InitializeInput()", "Engine");
-		return;
+		throw Lamb::Error::Code<Input>("DirectInput8Create() Failed", "InitializeInput");
 	}
 
 	KeyInput::Initialize(directInput_.Get());
@@ -38,7 +38,9 @@ Input::Input():
 
 	gamepad_ = Gamepad::GetInstance();
 	key_ = KeyInput::GetInstance();
-	mouse_ = Mouse::GetInstance();        
+	mouse_ = Mouse::GetInstance();
+
+	Lamb::AddLog("Initialize AllInput succeeded");
 }
 
 Input::~Input() {

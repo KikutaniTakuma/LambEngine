@@ -76,7 +76,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <AdditionalLibraryDirectories>$(ProjectDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>DirectXTex.lib;DirectXTK12.lib;ImGui.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"
@@ -112,8 +113,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <AdditionalLibraryDirectories>$(ProjectDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <AdditionalDependencies>DirectXTex.lib;DirectXTK12.lib;ImGui.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxcompiler.dll" "$(TargetDir)dxcompiler.dll"
@@ -124,7 +126,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp" />
-    <ClCompile Include="Src\Framework\Framework.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Collider\Collider.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Obb\Obb.cpp" />
@@ -141,7 +142,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h" />
-    <ClInclude Include="Src\Framework\Framework.h" />
     <ClInclude Include="Src\Game\CollisionManager\Collider\Collider.h" />
     <ClInclude Include="Src\Game\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Src\Game\CollisionManager\Obb\Obb.h" />

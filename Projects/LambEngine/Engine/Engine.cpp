@@ -63,6 +63,11 @@ void Engine::Debug::InitializeDebugLayer() {
 		debugController_->EnableDebugLayer();
 		// さらにGPU側でもチェックするようにする
 		debugController_->SetEnableGPUBasedValidation(TRUE);
+
+		Lamb::AddLog("InitializeDebugLayer succeeded");
+	}
+	else {
+		throw Lamb::Error::Code<Engine::Debug>("D3D12GetDebugInterface failed", __func__);
 	}
 }
 
@@ -74,58 +79,56 @@ void Engine::Debug::InitializeDebugLayer() {
 
 Engine* Engine::instance_ = nullptr;
 
-bool Engine::Initialize(const std::string& windowName, const Vector2& windowSize) {
-	try {
-		HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
-		if (hr != S_OK) {
-			throw Error{ }.set<Engine>("CoInitializeEx failed", "Initialize()");
-		}
-		instance_ = new Engine();
-		assert(instance_);
+void Engine::Initialize(const std::string& windowName, const Vector2& windowSize, float fpsLimit) {
+	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
+	if (!SUCCEEDED(hr)) {
+		throw Lamb::Error::Code<Engine>("CoInitializeEx failed", __func__);
+	}
+	else {
+		Lamb::AddLog("CoInitializeEx succeeded");
+	}
+	instance_ = new Engine();
+	assert(instance_);
 
-		const auto&& windowTitle = ConvertString(windowName);
+	const auto&& windowTitle = ConvertString(windowName);
 
-		// Window生成
-		WindowFactory::GetInstance()->Create(windowTitle, static_cast<int32_t>(windowSize.x), static_cast<int32_t>(windowSize.y));
+	FrameInfo::GetInstance()->SetFpsLimit(static_cast<double>(fpsLimit));
+	Lamb::AddLog("Set fps limit : " + std::to_string(fpsLimit));
+
+	// Window生成
+	WindowFactory::GetInstance()->Create(windowTitle, static_cast<int32_t>(windowSize.x), static_cast<int32_t>(windowSize.y));
 
 #ifdef _DEBUG
-		// DebugLayer有効化
-		debugLayer_.InitializeDebugLayer();
+	// DebugLayer有効化
+	debugLayer_.InitializeDebugLayer();
 #endif
 
-		// デバイス生成
-		instance_->InitializeDirectXDevice();
+	// デバイス生成
+	instance_->InitializeDirectXDevice();
 
-		// ディスクリプタヒープ初期化
-		RtvHeap::Initialize(128u);
-		DsvHeap::Initialize(128u);
-		CbvSrvUavHeap::Initialize(4096u);
+	// ディスクリプタヒープ初期化
+	RtvHeap::Initialize(128u);
+	DsvHeap::Initialize(128u);
+	CbvSrvUavHeap::Initialize(4096u);
 
-		// コマンドリスト生成
-		instance_->InitializeDirectXCommand();
+	// コマンドリスト生成
+	instance_->InitializeDirectXCommand();
 
-		// スワップチェーン生成
-		instance_->InitializeDirectXSwapChain();
+	// スワップチェーン生成
+	instance_->InitializeDirectXSwapChain();
 
-		ImGuiManager::Initialize();
+	ImGuiManager::Initialize();
 
-		instance_->InitializeDraw();
+	instance_->InitializeDraw();
 
-		instance_->InitializeDirectXTK();
+	instance_->InitializeDirectXTK();
 
-		// 各種マネージャー初期化
-		ShaderManager::Initialize();
-		TextureManager::Initialize();
-		AudioManager::Inititalize();
-		PipelineManager::Initialize();
-		MeshManager::Initialize();
-	}
-	catch(const Error& err){
-		Lamb::ErrorLog(err);
-		return false;
-	}
-
-	return true;
+	// 各種マネージャー初期化
+	ShaderManager::Initialize();
+	TextureManager::Initialize();
+	AudioManager::Inititalize();
+	PipelineManager::Initialize();
+	MeshManager::Initialize();
 }
 
 void Engine::Finalize() {
@@ -259,59 +262,52 @@ void Engine::FrameEnd() {
 	if (err->GetError()) {
 		return;
 	}
-	try {
-		FlgManager::GetInstance()->AllFlgUpdate();
+	FlgManager::GetInstance()->AllFlgUpdate();
 
-		static FrameInfo* const frameInfo = FrameInfo::GetInstance();
-		frameInfo->DrawFps();
+	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
+	frameInfo->DrawFps();
 
-		Lamb::screenout.Draw();
+	Lamb::screenout.Draw();
 
-		ImGuiManager::GetInstance()->End();
+	ImGuiManager::GetInstance()->End();
 
-		instance_->directXSwapChain_->ChangeBackBufferState();
+	instance_->directXSwapChain_->ChangeBackBufferState();
 
-		// コマンドリストを確定させる
-		instance_->directXCommand_->CloseCommandlist();
+	// コマンドリストを確定させる
+	instance_->directXCommand_->CloseCommandlist();
 
-		// GPUにコマンドリストの実行を行わせる
-		instance_->directXCommand_->ExecuteCommandLists();
+	// GPUにコマンドリストの実行を行わせる
+	instance_->directXCommand_->ExecuteCommandLists();
 
 
-		// GPUとOSに画面の交換を行うように通知する
-		instance_->directXSwapChain_->SwapChainPresent();
+	// GPUとOSに画面の交換を行うように通知する
+	instance_->directXSwapChain_->SwapChainPresent();
 
-		instance_->stringOutPutManager_->GmemoryCommit();
+	instance_->stringOutPutManager_->GmemoryCommit();
 
-		instance_->directXCommand_->WaitForFinishCommnadlist();
+	instance_->directXCommand_->WaitForFinishCommnadlist();
 
-		instance_->directXCommand_->ResetCommandlist();
+	instance_->directXCommand_->ResetCommandlist();
 
-		// テクスチャの非同期読み込み
-		auto textureManager = TextureManager::GetInstance();
-		textureManager->ThreadLoadTexture();
-		textureManager->ResetCommandList();
+	// テクスチャの非同期読み込み
+	auto textureManager = TextureManager::GetInstance();
+	textureManager->ThreadLoadTexture();
+	textureManager->ResetCommandList();
 
-		// このフレームで画像読み込みが発生していたら開放する
-		// またUnloadされていたらそれをコンテナから削除する
-		textureManager->ReleaseIntermediateResource();
+	// このフレームで画像読み込みが発生していたら開放する
+	// またUnloadされていたらそれをコンテナから削除する
+	textureManager->ReleaseIntermediateResource();
 
-		// メッシュの非同期読み込み
-		auto meshManager = MeshManager::GetInstance();
-		meshManager->ThreadLoad();
-		meshManager->JoinThread();
-		meshManager->CheckLoadFinish();
+	// メッシュの非同期読み込み
+	auto meshManager = MeshManager::GetInstance();
+	meshManager->ThreadLoad();
+	meshManager->JoinThread();
+	meshManager->CheckLoadFinish();
 
-		// 音の非同期読み込み
-		auto audioManager = AudioManager::GetInstance();
-		audioManager->ThreadLoad();
-		audioManager->CheckThreadLoadFinish();
+	// 音の非同期読み込み
+	auto audioManager = AudioManager::GetInstance();
+	audioManager->ThreadLoad();
+	audioManager->CheckThreadLoadFinish();
 
-		frameInfo->End();
-
-	}
-
-	catch (const Error& err) {
-		Lamb::ErrorLog(err);
-	}
+	frameInfo->End();
 }

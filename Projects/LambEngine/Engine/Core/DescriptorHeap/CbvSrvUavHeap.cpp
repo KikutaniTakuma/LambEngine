@@ -8,6 +8,7 @@
 #include <cmath>
 #include <algorithm>
 #include <numeric>
+#include "Utils/SafeDelete/SafeDelete.h"
 
 CbvSrvUavHeap* CbvSrvUavHeap::instance_ = nullptr;
 
@@ -16,8 +17,7 @@ void CbvSrvUavHeap::Initialize(UINT heapSize) {
 }
 
 void CbvSrvUavHeap::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 CbvSrvUavHeap* const CbvSrvUavHeap::GetInstance() {
@@ -32,6 +32,8 @@ CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor) :
 	CreateHeapHandles();
 
 	bookingHandle_.clear();
+
+	Lamb::AddLog("Initialize CbvSrvUavHeap succeeded : heap size is " + std::to_string(heapSize_));
 }
 
 CbvSrvUavHeap::~CbvSrvUavHeap() {
@@ -64,7 +66,7 @@ uint32_t CbvSrvUavHeap::CreateTxtureView(Texture* tex) {
 	}
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreateTxtureView()");
+		throw Lamb::Error::Code<CbvSrvUavHeap>("Over HeapSize", __func__);
 	}
 
 	if (bookingHandle_.empty()) {
@@ -95,7 +97,7 @@ void CbvSrvUavHeap::CreateTxtureView(Texture* tex, uint32_t heapIndex) {
 	assert(tex != nullptr);
 	assert(heapIndex < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreateTxtureView()");
+		throw Lamb::Error::Code<CbvSrvUavHeap>("Over HeapSize", __func__);
 	}
 
 	tex->CreateSRVView(
@@ -108,7 +110,7 @@ void CbvSrvUavHeap::CreateTxtureView(Texture* tex, uint32_t heapIndex) {
 uint32_t CbvSrvUavHeap::CreatePerarenderView(RenderTarget& renderTarget) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreatePerarenderView()");
+		throw Lamb::Error::Code<CbvSrvUavHeap>("Over HeapSize", __func__);
 	}
 
 	if (bookingHandle_.empty()) {
@@ -129,7 +131,7 @@ uint32_t CbvSrvUavHeap::CreatePerarenderView(RenderTarget& renderTarget) {
 uint32_t CbvSrvUavHeap::CreateDepthTextureView(class DepthBuffer& depthBuffer) {
 	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
-		throw Error{}.set<CbvSrvUavHeap>("Over HeapSize", "CreateDepthTextureView()");
+		throw Lamb::Error::Code<CbvSrvUavHeap>("Over HeapSize", __func__);
 	}
 
 	if (bookingHandle_.empty()) {
