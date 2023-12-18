@@ -91,6 +91,10 @@ public:
 		}
 	}
 
+	const Mat4x4& GetWorldMatrix() const {
+		return wvpData_->worldMat;
+	}
+
 public:
 	Vector3 pos;
 	Vector3 rotate;

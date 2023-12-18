@@ -264,6 +264,10 @@ void Model::MeshChangeTexture(const std::string& useMtlName, Texture* tex) {
 
 void Model::Update() {
 	*dirLig_ = light;
+	wvpData_->worldMat.Affin(scale, rotate, pos);
+	if (parent_) {
+		wvpData_->worldMat *= parent_->wvpData_->worldMat;
+	}
 
 	if (!isLoadObj_ && mesh_ && mesh_->GetIsLoad()) {
 		isLoadObj_ = true;
@@ -277,10 +281,6 @@ void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 			data_ = mesh_->CopyBuffer();
 		}
 
-		wvpData_->worldMat.Affin(scale, rotate, pos);
-		if (parent_) {
-			wvpData_->worldMat *= parent_->wvpData_->worldMat;
-		}
 		wvpData_->viewProjectoionMat = viewProjectionMat;
 
 		*colorBuf_ = UintToVector4(color);
