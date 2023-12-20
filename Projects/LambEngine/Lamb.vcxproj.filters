@@ -348,6 +348,9 @@
     <Filter Include="Framework">
       <UniqueIdentifier>{78585073-0027-4de9-838a-35e5a2880153}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\EngineUtils\LambPtr">
+      <UniqueIdentifier>{685001fb-5c52-43ec-bceb-9e1ae9b279df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -532,6 +535,9 @@
     </ClInclude>
     <ClInclude Include="Framework\Framework.h">
       <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineUtils\LambPtr\LambPtr.h">
+      <Filter>Engine\EngineUtils\LambPtr</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
