@@ -21,7 +21,7 @@ class Mesh {
 
 public:
 	struct ResourceData {
-		std::pair<ID3D12Resource*, D3D12_VERTEX_BUFFER_VIEW> resource;
+		std::pair<Lamb::LambPtr<ID3D12Resource>, D3D12_VERTEX_BUFFER_VIEW> resource;
 		uint32_t vertNum;
 		Texture* tex;
 	};
@@ -80,7 +80,7 @@ private:
 	};
 
 	struct VertResourece {
-		Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer = nullptr;
+		Lamb::LambPtr<ID3D12Resource> vertexBuffer = nullptr;
 		// 頂点バッファビュー
 		D3D12_VERTEX_BUFFER_VIEW vertexView{};
 		// 頂点バッファマップ

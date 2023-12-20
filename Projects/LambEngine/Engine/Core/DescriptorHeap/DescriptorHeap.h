@@ -15,7 +15,7 @@ protected:
 	DescriptorHeap& operator=(const DescriptorHeap&) = delete;
 	DescriptorHeap& operator=(DescriptorHeap&&) = delete;
 public:
-	virtual ~DescriptorHeap();
+	virtual ~DescriptorHeap() = default;
 
 protected:
 	/// <summary>
@@ -83,13 +83,8 @@ protected:
 	/// </summary>
 	virtual void CreateHeapHandles();
 
-	/// <summary>
-	/// ヒープを解放する
-	/// </summary>
-	void Reset();
-
 protected:
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> heap_;
+	Lamb::LambPtr<ID3D12DescriptorHeap> heap_;
 
 	UINT heapSize_;
 	UINT currentHandleIndex_;

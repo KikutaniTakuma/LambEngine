@@ -93,7 +93,7 @@ public:
 /// メンバ変数
 /// </summary>
 private:
-	Microsoft::WRL::ComPtr<ID3D12PipelineState> graphicsPipelineState_;
+	Lamb::LambPtr<ID3D12PipelineState> graphicsPipelineState_;
 
 	Shader shader_;
 

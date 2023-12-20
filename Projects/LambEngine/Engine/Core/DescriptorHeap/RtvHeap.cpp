@@ -37,10 +37,6 @@ RtvHeap::RtvHeap(uint32_t heapSize):
 	Lamb::AddLog("Initialize RtvHeap succeeded : heap size is " + std::to_string(heapSize_));
 }
 
-RtvHeap::~RtvHeap() {
-	Reset();
-}
-
 void RtvHeap::CreateDescriptorHeap(uint32_t heapSize) {
 	heapSize_ = std::clamp(heapSize, DirectXSwapChain::kBackBufferNumber_, 0xffu);
 	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, heapSize_, false);
@@ -61,7 +57,7 @@ void RtvHeap::CreateHeapHandles() {
 }
 
 void RtvHeap::CreateBackBuffer(
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber_>& backBuffer,
+	std::array<Lamb::LambPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber_>& backBuffer,
 	IDXGISwapChain4* const swapChain
 ) {
 	assert(!!swapChain);

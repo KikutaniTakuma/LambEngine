@@ -1,10 +1,10 @@
 #pragma once
 #include <memory>
-#include <wrl.h>
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
 #undef max
 #undef min
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 class DepthBuffer {
 public:
@@ -28,7 +28,7 @@ public:
 private:
 	std::unique_ptr<class Texture> tex_;
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource_;
+	Lamb::LambPtr<ID3D12Resource> depthStencilResource_;
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc_;
 
 	D3D12_CPU_DESCRIPTOR_HANDLE handle_;

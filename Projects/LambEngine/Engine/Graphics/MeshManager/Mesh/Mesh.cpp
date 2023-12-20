@@ -32,7 +32,7 @@ Mesh::Mesh() :
 }
 
 Mesh::~Mesh() {
-	ReleaseResource();
+	//ReleaseResource();
 }
 
 void Mesh::LoadObj(const std::string& objFileName) {

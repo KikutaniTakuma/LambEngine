@@ -88,12 +88,7 @@ public:
 		roootParamater_.DescriptorTable.NumDescriptorRanges = 1;
 	}
 
-	inline ~StructuredBuffer() noexcept {
-		if (bufferResource_) {
-			bufferResource_->Release();
-			bufferResource_.Reset();
-		}
-	}
+	~StructuredBuffer() = default;
 
 	inline StructuredBuffer(const StructuredBuffer& right) noexcept:
 		StructuredBuffer{ right.Size() }
@@ -239,7 +234,7 @@ public:
 	}
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> bufferResource_;
+	Lamb::LambPtr<ID3D12Resource> bufferResource_;
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc_;
 
 	D3D12_DESCRIPTOR_RANGE range_;

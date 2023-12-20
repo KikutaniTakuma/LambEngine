@@ -36,10 +36,6 @@ CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor) :
 	Lamb::AddLog("Initialize CbvSrvUavHeap succeeded : heap size is " + std::to_string(heapSize_));
 }
 
-CbvSrvUavHeap::~CbvSrvUavHeap() {
-	Reset();
-}
-
 void CbvSrvUavHeap::CreateDescriptorHeap(uint32_t heapSize) {
 	// 1～(10^6-1)でクランプ
 	heapSize_ = std::clamp(heapSize, 1u, static_cast<UINT>(std::pow(10u, 6u)) - 1u);

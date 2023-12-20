@@ -36,7 +36,7 @@ private:
 
 	static class Pipeline* pipline_;
 
-	static Microsoft::WRL::ComPtr<ID3D12Resource> vertexBuffer_;
+	static Lamb::LambPtr<ID3D12Resource> vertexBuffer_;
 	// 頂点バッファビュー
 	static D3D12_VERTEX_BUFFER_VIEW vertexView_;
 

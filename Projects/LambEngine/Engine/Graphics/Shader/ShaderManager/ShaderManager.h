@@ -8,7 +8,7 @@
 
 #include <unordered_map>
 #include <string>
-#include <wrl.h>
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 #include "../Shader.h"
 
@@ -48,9 +48,9 @@ private:
 private:
 	class ShaderFactory* shaderFactory_;
 
-	std::unordered_map<std::string, Microsoft::WRL::ComPtr<IDxcBlob>> vertexShader_;
-	std::unordered_map<std::string, Microsoft::WRL::ComPtr<IDxcBlob>> hullShader_;
-	std::unordered_map<std::string, Microsoft::WRL::ComPtr<IDxcBlob>> domainShader_;
-	std::unordered_map<std::string, Microsoft::WRL::ComPtr<IDxcBlob>> geometoryShader_;
-	std::unordered_map<std::string, Microsoft::WRL::ComPtr<IDxcBlob>> pixelShader_;
+	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> vertexShader_;
+	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> hullShader_;
+	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> domainShader_;
+	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> geometoryShader_;
+	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> pixelShader_;
 };

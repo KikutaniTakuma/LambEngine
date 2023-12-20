@@ -53,14 +53,9 @@ PeraRender::PeraRender(uint32_t width, uint32_t height):
 PeraRender::~PeraRender() {
 	static auto srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->ReleaseView(render_.GetViewHandleUINT());
-	if (peraVertexResource_) {
-		peraVertexResource_->Release();
-		peraVertexResource_.Reset();
-	}
-	if (indexResource_) {
-		indexResource_->Release();
-		indexResource_.Reset();
-	}
+	srvHeap->ReleaseView(wvpMat_.GetViewHandleUINT());
+	srvHeap->ReleaseView(colorBuf_.GetViewHandleUINT());
+	srvHeap->ReleaseView(randomVec_.GetViewHandleUINT());
 }
 
 void PeraRender::Initialize(const std::string& psFileName) {

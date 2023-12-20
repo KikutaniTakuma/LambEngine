@@ -22,7 +22,7 @@ std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> Particle::graphicsP
 Shader Particle::shader_ = {};
 
 D3D12_INDEX_BUFFER_VIEW Particle::indexView_ = {};
-Microsoft::WRL::ComPtr<ID3D12Resource> Particle::indexResource_ = nullptr;
+Lamb::LambPtr<ID3D12Resource> Particle::indexResource_ = nullptr;
 
 void Particle::Initialize(const std::string& vsFileName, const std::string& psFileName) {
 	if (indexResource_) {
@@ -51,11 +51,7 @@ void Particle::Initialize(const std::string& vsFileName, const std::string& psFi
 }
 
 void Particle::Finalize() {
-	if (indexResource_) {
-		indexResource_->Release();
-		indexResource_.Reset();
-		indexResource_ = nullptr;
-	}
+	indexResource_.Reset();
 }
 
 void Particle::LoadShader(const std::string& vsFileName, const std::string& psFileName) {
@@ -418,12 +414,6 @@ Particle::~Particle() {
 
 	srvHeap_->ReleaseView(wvpMat_.GetViewHandleUINT());
 	srvHeap_->ReleaseView(colorBuf_.GetViewHandleUINT());
-
-	if (vertexResource_) {
-		vertexResource_->Release();
-		vertexResource_.Reset();
-		vertexResource_ = nullptr;
-	}
 }
 
 

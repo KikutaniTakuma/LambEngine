@@ -10,10 +10,6 @@ DescriptorHeap::DescriptorHeap() :
 	bookingHandle_{}
 {}
 
-DescriptorHeap::~DescriptorHeap() {
-	Reset();
-}
-
 uint32_t DescriptorHeap::BookingHeapPos(UINT nextCreateViewNum) {
 	// リリースハンドルがないなら予約しない
 	if (releaseHandle_.empty()) {
@@ -162,12 +158,5 @@ void DescriptorHeap::CreateHeapHandles() {
 		hadleTmp.first.ptr += incrementSRVCBVUAVHeap * i;
 		hadleTmp.second.ptr += incrementSRVCBVUAVHeap * i;
 		heapHandles_.push_back(hadleTmp);
-	}
-}
-
-void DescriptorHeap::Reset() {
-	if (heap_) {
-		heap_->Release();
-		heap_.Reset();
 	}
 }

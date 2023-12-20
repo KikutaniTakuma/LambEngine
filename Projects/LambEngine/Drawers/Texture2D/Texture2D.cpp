@@ -16,7 +16,7 @@ std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum) * 2> Texture2D::grap
 Shader Texture2D::shader_ = {};
 
 D3D12_INDEX_BUFFER_VIEW Texture2D::indexView_ = {};
-Microsoft::WRL::ComPtr<ID3D12Resource> Texture2D::indexResource_ = nullptr;
+Lamb::LambPtr<ID3D12Resource> Texture2D::indexResource_ = nullptr;
 
 Texture2D::Texture2D() :
 	scale(Vector2::identity),
@@ -38,12 +38,6 @@ Texture2D::Texture2D() :
 {
 	*wvpMat_ = Mat4x4::kIdentity;
 	*colorBuf_ = Vector4::kIdentity;
-
-	if (vertexResource_) {
-		vertexResource_->Release();
-		vertexResource_.Reset();
-		vertexResource_ = nullptr;
-	}
 
 	vertexResource_ =DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(VertexData) * 4);
 
@@ -144,12 +138,6 @@ Texture2D::~Texture2D() {
 	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
 	descriptorHeap->ReleaseView(wvpMat_.GetViewHandleUINT());
 	descriptorHeap->ReleaseView(colorBuf_.GetViewHandleUINT());
-
-	if (vertexResource_) {
-		vertexResource_->Release();
-		vertexResource_.Reset();
-		vertexResource_ = nullptr;
-	}
 }
 
 void Texture2D::Initialize(const std::string& vsFileName, const std::string& psFileName) {
@@ -179,11 +167,7 @@ void Texture2D::Initialize(const std::string& vsFileName, const std::string& psF
 }
 
 void Texture2D::Finalize() {
-	if (indexResource_) { 
-		indexResource_->Release();
-		indexResource_.Reset();
-		indexResource_ = nullptr;
-	}
+	indexResource_.Reset();
 }
 
 void Texture2D::LoadShader(const std::string& vsFileName, const std::string& psFileName) {

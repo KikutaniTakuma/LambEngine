@@ -98,11 +98,9 @@ void Texture::Unload() {
 		srvDesc_ = {};
 
 		if (intermediateResource_) {
-			intermediateResource_->Release();
 			intermediateResource_.Reset();
 		}
 		if (textureResouce_) {
-			textureResouce_->Release();
 			textureResouce_.Reset();
 		}
 
@@ -256,7 +254,7 @@ void Texture::Use(UINT rootParamator) {
 }
 
 void Texture::Set(
-	const Microsoft::WRL::ComPtr<ID3D12Resource>& resource,
+	const Lamb::LambPtr<ID3D12Resource>& resource,
 	D3D12_SHADER_RESOURCE_VIEW_DESC viewDesc,
 	D3D12_GPU_DESCRIPTOR_HANDLE handle,
 	UINT handleUINT
@@ -268,7 +266,6 @@ void Texture::Set(
 		textureResouce_.Reset();
 	}
 
-	resource->AddRef();
 	textureResouce_ = resource;
 	srvDesc_ = viewDesc;
 	srvHeapHandle_ = handle;

@@ -1,10 +1,9 @@
 #pragma once
-#include <wrl.h>
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
 #include <dxgi1_6.h>
 #pragma comment(lib, "dxgi.lib")
-#include <cstdint>
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 /// <summary>
 /// デバイス等の管理クラス
@@ -87,9 +86,9 @@ public:
 	}
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Device> device_;
-	Microsoft::WRL::ComPtr<IDXGIFactory7> dxgiFactory_;
-	Microsoft::WRL::ComPtr<IDXGIAdapter4> useAdapter_;
+	Lamb::LambPtr<ID3D12Device> device_;
+	Lamb::LambPtr<IDXGIFactory7> dxgiFactory_;
+	Lamb::LambPtr<IDXGIAdapter4> useAdapter_;
 
 	UINT incrementSRVCBVUAVHeap_;
 	UINT incrementRTVHeap_;

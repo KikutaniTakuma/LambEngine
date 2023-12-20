@@ -42,23 +42,23 @@ namespace Lamb {
 
 	public:
 		LambPtr<T>& operator=(const LambPtr<T>& right) {
-			right.AddRef();
-
 			this->Delete();
 
 			this->ptr_ = right.ptr_;
 			this->refCount_ = right.refCount_;
+
+			this->AddRef();
 
 			return *this;
 		}
 
 		LambPtr<T>& operator=(LambPtr<T>&& right) noexcept {
-			right.AddRef();
-
 			this->Delete();
 
 			this->ptr_ = right.ptr_;
 			this->refCount_ = right.refCount_;
+
+			this->AddRef();
 
 			return *this;
 		}
