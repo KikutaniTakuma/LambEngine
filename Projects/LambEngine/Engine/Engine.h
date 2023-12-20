@@ -60,6 +60,11 @@ public:
 
 	static D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle();
 
+private:
+	std::string GetCpuName() const;
+
+	void HardwareLog() const;
+
 #ifdef _DEBUG
 	///
 	/// Debug用
