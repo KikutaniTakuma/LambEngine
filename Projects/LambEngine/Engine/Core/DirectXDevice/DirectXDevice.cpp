@@ -188,7 +188,6 @@ ID3D12Resource* DirectXDevice::CreateBufferResuorce(size_t sizeInBytes) {
 	resource = nullptr;
 	HRESULT hr = device_->CreateCommittedResource(&uploadHeapProp, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&resource));
 	if (!SUCCEEDED(hr)) {
-		OutputDebugStringA("CreateCommittedResource Function Failed!!");
 		throw Lamb::Error::Code<DirectXDevice>("somthing error", __func__);
 	}
 
