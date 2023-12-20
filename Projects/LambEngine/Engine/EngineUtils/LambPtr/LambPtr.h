@@ -5,13 +5,22 @@
 struct IUnknown;
 
 namespace Lamb {
+	/// <summary>
+	/// IUnknownを継承しているかつ、デストラクタにアクセス可能な型制限のコンセプト
+	/// </summary>
 	template<class T>
 	concept IsDirectX = std::is_base_of_v<IUnknown, T>&& requires(T a){
 		{ a.~T() } -> std::convertible_to<void>;
 	};
 
+	/// <summary>
+	/// ComPtrがうんちだったから自作した
+	/// </summary>
 	template<IsDirectX T>
 	class LambPtr {
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	public:
 		LambPtr() :
 			ptr_{ nullptr },
@@ -34,10 +43,17 @@ namespace Lamb {
 		{
 			*this = std::move(right);
 		}
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	public:
 		~LambPtr() {
 			Delete();
 		}
 
+	/// <summary>
+	/// 代入演算子
+	/// </summary>
 	public:
 		LambPtr<T>& operator=(const LambPtr<T>& right) {
 			this->Delete();
@@ -73,6 +89,10 @@ namespace Lamb {
 			return *this;
 		}
 
+	/// <summary>
+	/// 演算子のオーバーロード
+	/// </summary>
+	public:
 		T* operator->() {
 			return ptr_;
 		}
@@ -113,31 +133,60 @@ namespace Lamb {
 			return ptr_ != right.ptr_;
 		}
 
+	/// <summary>
+	/// メンバ関数
+	/// </summary>
 	public:
+		/// <summary>
+		/// 管理するポインタがnullptrだったらtrueを返す
+		/// </summary>
+		/// <returns>nullptrだったらtrue</returns>
 		bool Empty() const {
 			return !(*this);
 		}
 
+		/// <summary>
+		/// ポインタを取得する関数
+		/// </summary>
+		/// <returns>管理してるポインタ</returns>
 		T* Get() {
 			return ptr_;
 		}
 
+		/// <summary>
+		/// ポインタを取得する関数
+		/// </summary>
+		/// <returns>管理してるポインタ</returns>
 		T* const Get() const {
 			return ptr_;
 		}
 
+		/// <summary>
+		/// 管理してるポインタのポインタを取得する
+		/// </summary>
+		/// <returns>管理してるポインタのポインタ</returns>
 		T** GetAddressOf() {
 			return &ptr_;
 		}
-
+		/// <summary>
+		/// 管理してるポインタのポインタを取得する
+		/// </summary>
+		/// <returns>管理してるポインタのポインタ</returns>
 		T* const* GetAddressOf() const {
 			return &ptr_;
 		}
 
+		/// <summary>
+		/// リセット関数(実質Delete関数と同じなのでそのラッパー関数)
+		/// </summary>
 		void Reset() {
 			Delete();
 		}
 
+		/// <summary>
+		/// リセットして新しいポインタを設定する
+		/// </summary>
+		/// <param name="ptr">新しいポインタ</param>
 		void Reset(T* ptr) {
 			Reset();
 			*this = ptr;
@@ -145,6 +194,9 @@ namespace Lamb {
 
 
 	private:
+		/// <summary>
+		/// メンバを解放する
+		/// </summary>
 		void Delete() {
 			if (ptr_ && refCount_) {
 				if (*refCount_ == 0u) {
@@ -169,16 +221,27 @@ namespace Lamb {
 			}
 		}
 
+		/// <summary>
+		/// リファレンスカウントを増加させる
+		/// </summary>
 		void AddRef() {
 			if (ptr_ && refCount_) {
 				(*refCount_)++;
 			}
 		}
 
-
+	/// <summary>
+	/// メンバ変数
+	/// </summary>
 	private:
+		/// <summary>
+		/// 管理するポインタ
+		/// </summary>
 		T* ptr_;
 
+		/// <summary>
+		/// リファレンスカウント
+		/// </summary>
 		uint32_t* refCount_;
 	};
 }
