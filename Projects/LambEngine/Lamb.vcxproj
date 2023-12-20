@@ -199,6 +199,7 @@
     <ClInclude Include="Engine\EngineUtils\ErrorCheck\ErrorCheck.h" />
     <ClInclude Include="Engine\EngineUtils\FlgManager\FlgManager.h" />
     <ClInclude Include="Engine\EngineUtils\FrameInfo\FrameInfo.h" />
+    <ClInclude Include="Engine\EngineUtils\LambPtr\LambPtr.h" />
     <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h" />
     <ClInclude Include="Engine\Graphics\MeshManager\MeshManager.h" />
     <ClInclude Include="Engine\Graphics\MeshManager\Mesh\Mesh.h" />
