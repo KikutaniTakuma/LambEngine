@@ -242,7 +242,6 @@ void Texture::CreateSRVView(
 
 void Texture::ReleaseIntermediateResource() {
 	if (intermediateResource_) {
-		intermediateResource_->Release();
 		intermediateResource_.Reset();
 	}
 }
@@ -262,7 +261,6 @@ void Texture::Set(
 	if (CanUse()) {
 		CbvSrvUavHeap* srvHeap = CbvSrvUavHeap::GetInstance();
 		srvHeap->ReleaseView(srvHeapHandleUint_);
-		textureResouce_->Release();
 		textureResouce_.Reset();
 	}
 

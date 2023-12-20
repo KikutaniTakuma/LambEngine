@@ -6,7 +6,7 @@
 #define DIRECTINPUT_VERSION 0x0800
 #include <Xinput.h>
 #pragma comment (lib, "xinput.lib")
-#include <stdint.h>
+#include <cstdint>
 
 // Xボックスコントローラーでやったのでコメントアウトの説明はそれ
 // ほかのコントローラーは分からないので検証必須

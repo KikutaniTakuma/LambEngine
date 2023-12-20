@@ -7,7 +7,8 @@
 #pragma comment(lib, "dxguid.lib")
 #include <dxcapi.h>
 #pragma comment(lib, "dxcompiler.lib")
-#include <wrl.h>
+
+#include "EngineUtils/LambPtr/LambPtr.h"
 
 #include <string>
 #include <memory>
@@ -79,7 +80,7 @@ private:
 		void InitializeDebugLayer();
 
 	private:
-		Microsoft::WRL::ComPtr<ID3D12Debug1> debugController_;
+		Lamb::LambPtr<ID3D12Debug1> debugController_;
 	};
 
 	static Debug debugLayer_;

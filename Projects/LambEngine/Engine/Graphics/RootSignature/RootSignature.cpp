@@ -93,8 +93,8 @@ void RootSignature::Create(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParam
 	descriptionRootSignature.NumStaticSamplers = isTexture_ ? 1u : 0u;
 
 	// シリアライズしてバイナリにする
-	Microsoft::WRL::ComPtr<ID3DBlob> signatureBlob;
-	Microsoft::WRL::ComPtr<ID3DBlob> errorBlob;
+	Lamb::LambPtr<ID3DBlob> signatureBlob;
+	Lamb::LambPtr<ID3DBlob> errorBlob;
 	HRESULT  hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, signatureBlob.GetAddressOf(), errorBlob.GetAddressOf());
 	if (FAILED(hr)) {
 		throw Lamb::Error::Code<RootSignature>(reinterpret_cast<char*>(errorBlob->GetBufferPointer()), __func__);
@@ -109,8 +109,6 @@ void RootSignature::Create(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParam
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<RootSignature>("CreateRootSignature failed", __func__);
 	}
-	if (errorBlob) { errorBlob.Reset(); }
-	signatureBlob.Reset();
 }
 
 bool operator==(const D3D12_ROOT_PARAMETER& left, const D3D12_ROOT_PARAMETER& right) {

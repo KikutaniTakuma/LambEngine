@@ -1,12 +1,12 @@
 #pragma once
 #include <array>
-#include <wrl.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
 
 #include "Math/Vector2.h"
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 /// <summary>
 /// マウスの入力
@@ -73,7 +73,7 @@ public:
 	}
 
 private:
-	Microsoft::WRL::ComPtr<IDirectInputDevice8> mouse_;
+	Lamb::LambPtr<IDirectInputDevice8> mouse_;
 
 	DIMOUSESTATE2 mosueState_;
 	DIMOUSESTATE2 preMosueState_;
