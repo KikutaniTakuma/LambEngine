@@ -7,9 +7,7 @@ struct IUnknown;
 namespace Lamb {
 	template<class T>
 	concept IsDirectX = std::is_base_of_v<IUnknown, T>&& requires(T a){
-		{
-			a.~T()
-		} -> std::convertible_to<void>;
+		{ a.~T() } -> std::convertible_to<void>;
 	};
 
 	template<IsDirectX T>
