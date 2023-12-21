@@ -52,7 +52,7 @@ private:
 	static Engine* instance_;
 
 private:
-	bool isFinalize_;
+	bool isFinalize_ = false;
 
 public:
 	static inline Engine* const GetInstance() {
