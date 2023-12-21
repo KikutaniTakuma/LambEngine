@@ -33,11 +33,13 @@ DirectXSwapChain::DirectXSwapChain():
 	IDXGIFactory7* const dxgiFactory = DirectXDevice::GetInstance()->GetDxgiFactory();
 	ID3D12CommandQueue* const commandQueue = DirectXCommand::GetInstance()->GetCommandQueue();
 
+	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
+
 	// スワップチェーンの作成
 	swapChain_ = nullptr;
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	swapChainDesc.Width = 1280;
-	swapChainDesc.Height = 720;
+	swapChainDesc.Width = static_cast<UINT>(clientSize.x);
+	swapChainDesc.Height = static_cast<UINT>(clientSize.y);
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
