@@ -1,6 +1,16 @@
 #pragma once
+#include <string>
+#include "Math/Vector2.h"
 
 class Framework {
+public:
+	struct InitDesc {
+		std::string windowName = "LambEngine_demo";
+		Vector2 windowSize = {1280.0f, 720.0f};
+		float maxFps = 60.0f;
+		bool isFullesceen = false;
+	};
+
 public:
 	Framework() = default;
 	Framework(const Framework&) = delete;
@@ -24,4 +34,6 @@ public:
 
 protected:
 	bool isEnd_;
+
+	InitDesc initDesc_;
 };
