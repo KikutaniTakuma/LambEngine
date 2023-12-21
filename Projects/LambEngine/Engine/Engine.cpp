@@ -54,7 +54,7 @@ Engine::Debug::~Debug() {
 	debugController_.Reset();
 
 	// リソースリークチェック
-	Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
+	Lamb::LambPtr<IDXGIDebug1> debug;
 	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(debug.GetAddressOf())))) {
 		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
 		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
