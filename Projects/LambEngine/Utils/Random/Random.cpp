@@ -1,9 +1,10 @@
 #include "Utils/Random/Random.h"
 
 namespace Lamb {
+	std::random_device seed;
+	std::mt19937_64 rnd(seed());
+
 	float Random(float min, float max) {
-		static std::random_device seed;
-		static std::mt19937_64 rnd(seed());
 		if (max < min) {
 			std::swap(min, max);
 		}
@@ -13,8 +14,6 @@ namespace Lamb {
 	}
 
 	double Random(double min, double max) {
-		static std::random_device seed;
-		static std::mt19937_64 rnd(seed());
 		if (max < min) {
 			std::swap(min, max);
 		}
