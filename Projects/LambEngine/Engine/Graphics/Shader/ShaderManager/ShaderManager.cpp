@@ -1,12 +1,10 @@
 #include "ShaderManager.h"
 #include "../ShaderFactory/ShaderFactory.h"
-#include "Engine/Engine.h"
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/SafeDelete/SafeDelete.h"
 #include <cassert>
 #include <format>
 #include "Utils/ExecutionLog/ExecutionLog.h"
-#pragma warning(disable: 6387)
 
 ShaderManager* ShaderManager::instance_ = nullptr;
 
