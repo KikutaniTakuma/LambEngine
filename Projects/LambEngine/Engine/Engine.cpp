@@ -88,7 +88,7 @@ void Engine::Debug::InitializeDebugLayer() {
 
 Engine* Engine::instance_ = nullptr;
 
-void Engine::Initialize(const std::string& windowName, const Vector2& windowSize, float fpsLimit) {
+void Engine::Initialize(const std::string& windowName, const Vector2& windowSize, float fpsLimit, bool isFullscreen) {
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<Engine>("CoInitializeEx failed", __func__);
@@ -106,7 +106,7 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	Lamb::AddLog("Set fps limit : " + std::to_string(fpsLimit));
 
 	// Window生成
-	WindowFactory::GetInstance()->Create(windowTitle, static_cast<int32_t>(windowSize.x), static_cast<int32_t>(windowSize.y));
+	WindowFactory::GetInstance()->Create(windowTitle, static_cast<int32_t>(windowSize.x), static_cast<int32_t>(windowSize.y), isFullscreen);
 
 #ifdef _DEBUG
 	// DebugLayer有効化
