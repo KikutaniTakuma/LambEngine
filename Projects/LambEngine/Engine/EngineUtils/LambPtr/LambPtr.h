@@ -9,14 +9,17 @@ namespace Lamb {
 	/// IUnknownを継承しているかつ、デストラクタにアクセス可能な型制限のコンセプト
 	/// </summary>
 	template<class T>
-	concept IsDirectX = std::is_base_of_v<IUnknown, T>&& requires(T a){
+	concept IsIUnknownBased = std::is_base_of_v<IUnknown, T>&& requires(T a){
 		{ a.~T() } -> std::convertible_to<void>;
 	};
 
 	/// <summary>
-	/// ComPtrがうんちだったから自作した
+	/// <para>ComPtrに変わる自作スマートポインタ</para>
+	/// <para>機能</para>
+	/// <para>・参照カウント(std::shared_ptrのようなもの)</para>
+	/// <para>・あったら便利な機能は一通り</para>
 	/// </summary>
-	template<IsDirectX T>
+	template<IsIUnknownBased T>
 	class LambPtr {
 	/// <summary>
 	/// コンストラクタ
