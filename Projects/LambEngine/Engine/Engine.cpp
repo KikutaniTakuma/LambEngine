@@ -2,9 +2,14 @@
 #include <cassert>
 #include <format>
 #include <filesystem>
+
+#include <dxgi1_6.h>
+#pragma comment(lib, "dxgi.lib")
+#include <dxgidebug.h>
+#pragma comment(lib, "dxguid.lib")
+
 #include <Wbemidl.h>
 #include <comdef.h>
-
 #pragma comment(lib, "wbemuuid.lib")
 
 #include "Core/WindowFactory/WindowFactory.h"
