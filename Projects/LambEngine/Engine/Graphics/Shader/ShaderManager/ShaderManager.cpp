@@ -38,6 +38,10 @@ void ShaderManager::Finalize() {
 }
 
 IDxcBlob* const ShaderManager::LoadVertexShader(const std::string& fileName) {
+	if (fileName.empty()) {
+		return nullptr;
+	}
+
 	auto itr = vertexShader_.find(fileName);
 	if (itr == vertexShader_.end()) {
 		IDxcBlob* shader = shaderFactory_->CompileShader(ConvertString(fileName), L"vs_6_0");
@@ -47,6 +51,10 @@ IDxcBlob* const ShaderManager::LoadVertexShader(const std::string& fileName) {
 	return vertexShader_[fileName].Get();
 }
 IDxcBlob* const ShaderManager::LoadHullShader(const std::string& fileName) {
+	if (fileName.empty()) {
+		return nullptr;
+	}
+
 	auto itr = hullShader_.find(fileName);
 	if (itr == hullShader_.end()) {
 		IDxcBlob* shader = shaderFactory_->CompileShader(ConvertString(fileName), L"hs_6_0");
@@ -57,6 +65,10 @@ IDxcBlob* const ShaderManager::LoadHullShader(const std::string& fileName) {
 	return hullShader_[fileName].Get();
 }
 IDxcBlob* const ShaderManager::LoadDomainShader(const std::string& fileName) {
+	if (fileName.empty()) {
+		return nullptr;
+	}
+
 	auto itr = domainShader_.find(fileName);
 	if (itr == domainShader_.end()) {
 		IDxcBlob* shader = shaderFactory_->CompileShader(ConvertString(fileName), L"ds_6_0");
@@ -66,6 +78,10 @@ IDxcBlob* const ShaderManager::LoadDomainShader(const std::string& fileName) {
 	return domainShader_[fileName].Get();
 }
 IDxcBlob* const ShaderManager::LoadGeometoryShader(const std::string& fileName) {
+	if (fileName.empty()) {
+		return nullptr;
+	}
+
 	auto itr = geometoryShader_.find(fileName);
 	if (itr == geometoryShader_.end()) {
 		IDxcBlob* shader = shaderFactory_->CompileShader(ConvertString(fileName), L"gs_6_0");
@@ -75,6 +91,10 @@ IDxcBlob* const ShaderManager::LoadGeometoryShader(const std::string& fileName) 
 	return geometoryShader_[fileName].Get();
 }
 IDxcBlob* const ShaderManager::LoadPixelShader(const std::string& fileName) {
+	if (fileName.empty()) {
+		return nullptr;
+	}
+
 	auto itr = pixelShader_.find(fileName);
 	if (itr == pixelShader_.end()) {
 		IDxcBlob* shader = shaderFactory_->CompileShader(ConvertString(fileName), L"ps_6_0");
