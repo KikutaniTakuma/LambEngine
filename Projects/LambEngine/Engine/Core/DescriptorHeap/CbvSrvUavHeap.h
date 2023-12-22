@@ -20,7 +20,7 @@ private:
 	CbvSrvUavHeap& operator=(const CbvSrvUavHeap& right) = delete;
 	CbvSrvUavHeap& operator=(CbvSrvUavHeap&& right) noexcept = delete;
 public:
-	~CbvSrvUavHeap();
+	~CbvSrvUavHeap() = default;
 
 public:
 	static void Initialize(UINT heapSize);

@@ -1,8 +1,9 @@
 #pragma once
-#include <wrl.h>
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
 #include <vector>
+
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 /// <summary>
 /// ルートシグネチャを管理
@@ -32,7 +33,7 @@ public:
 	bool IsSame(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture) const;
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12RootSignature> rootSignature_;
+	Lamb::LambPtr<ID3D12RootSignature> rootSignature_;
 	std::vector<std::pair<D3D12_ROOT_PARAMETER, std::vector<D3D12_DESCRIPTOR_RANGE>>> rootParamater_;
 	
 	bool isTexture_;

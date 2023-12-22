@@ -16,7 +16,7 @@
 
 void Framework::Initialize() {
 	// ライブラリ初期化
-	Engine::Initialize("LambEngine_demo", Vector2{ 1280.0f, 720.0f });
+	Engine::Initialize(initDesc_.windowName, initDesc_.windowSize, initDesc_.maxFps, initDesc_.isFullesceen);
 
 	// 入力処理初期化
 	Input::Initialize();

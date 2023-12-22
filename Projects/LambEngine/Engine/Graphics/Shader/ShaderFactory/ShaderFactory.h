@@ -5,9 +5,10 @@
 #pragma comment(lib, "dxgi.lib")
 #include <dxcapi.h>
 #pragma comment(lib, "dxcompiler.lib")
-#include <wrl.h>
 
 #include <string>
+
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 class ShaderFactory {
 private:
@@ -38,7 +39,7 @@ public:
 		const wchar_t* profile);
 
 private:
-	Microsoft::WRL::ComPtr<IDxcUtils> dxcUtils_;
-	Microsoft::WRL::ComPtr<IDxcCompiler3> dxcCompiler_;
-	Microsoft::WRL::ComPtr<IDxcIncludeHandler> includeHandler_;
+	Lamb::LambPtr<IDxcUtils> dxcUtils_;
+	Lamb::LambPtr<IDxcCompiler3> dxcCompiler_;
+	Lamb::LambPtr<IDxcIncludeHandler> includeHandler_;
 };

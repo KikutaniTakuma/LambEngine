@@ -1,13 +1,8 @@
 #pragma once
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
-#include <dxgi1_6.h>
-#pragma comment(lib, "dxgi.lib")
-#include <dxgidebug.h>
-#pragma comment(lib, "dxguid.lib")
-#include <dxcapi.h>
-#pragma comment(lib, "dxcompiler.lib")
-#include <wrl.h>
+
+#include "EngineUtils/LambPtr/LambPtr.h"
 
 #include <string>
 #include <memory>
@@ -38,7 +33,13 @@ public:
 	/// <param name="windowName">Windowの名前</param>
 	/// <param name="windowSize">ウィンドウの大きさ(バックバッファの大きさも同じになる)</param>
 	/// <param name="fpsLimit">最大fps設定デフォルトで60</param>
-	static void Initialize(const std::string& windowName, const Vector2& windowSize, float fpsLimit = 60.0f);
+	/// <param name="isFullscreen">フルスクリーンモードか否か</param>
+	static void Initialize(
+		const std::string& windowName, 
+		const Vector2& windowSize, 
+		float fpsLimit = 60.0f, 
+		bool isFullscreen = false
+	);
 
 	static void Finalize();
 
@@ -51,7 +52,7 @@ private:
 	static Engine* instance_;
 
 private:
-	bool isFinalize_;
+	bool isFinalize_ = false;
 
 public:
 	static inline Engine* const GetInstance() {
@@ -59,6 +60,11 @@ public:
 	}
 
 	static D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle();
+
+private:
+	std::string GetCpuName() const;
+
+	void HardwareLog() const;
 
 #ifdef _DEBUG
 	///
@@ -74,7 +80,7 @@ private:
 		void InitializeDebugLayer();
 
 	private:
-		Microsoft::WRL::ComPtr<ID3D12Debug1> debugController_;
+		Lamb::LambPtr<ID3D12Debug1> debugController_;
 	};
 
 	static Debug debugLayer_;

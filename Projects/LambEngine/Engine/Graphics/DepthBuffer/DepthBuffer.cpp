@@ -72,7 +72,6 @@ DepthBuffer::~DepthBuffer() {
 	dsvHeap->ReleaseView(hadleUINT_);
 
 	if (depthStencilResource_) {
-		depthStencilResource_->Release();
 		depthStencilResource_.Reset();
 	}
 }
@@ -106,7 +105,7 @@ void DepthBuffer::CreateSRView(D3D12_CPU_DESCRIPTOR_HANDLE heapHandle, D3D12_GPU
 	tex_ = std::make_unique<Texture>();
 	assert(tex_);
 	tex_->Set(
-		depthStencilResource_.Get(),
+		depthStencilResource_,
 		srvDesc_,
 		srvHandleGPU_,
 		srvHadleUINT_

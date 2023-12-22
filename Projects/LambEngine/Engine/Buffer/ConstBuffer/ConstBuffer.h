@@ -1,7 +1,6 @@
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
-#include <wrl.h>
 #include "Utils/Cocepts/Cocepts.h"
 
 /// <summary>
@@ -33,12 +32,7 @@ public:
 		roootParamater_.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	}
 
-	inline ~ConstBuffer() noexcept {
-		if(bufferResource_){
-			bufferResource_->Release();
-			bufferResource_.Reset();
-		}
-	}
+	~ConstBuffer() = default;
 
 	inline ConstBuffer(const ConstBuffer& right) noexcept :
 		ConstBuffer{}
@@ -106,7 +100,7 @@ public:
 	}
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> bufferResource_;
+	Lamb::LambPtr<ID3D12Resource> bufferResource_;
 	D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc_;
 
 	T* data_;

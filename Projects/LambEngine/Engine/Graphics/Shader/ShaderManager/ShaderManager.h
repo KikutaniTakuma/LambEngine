@@ -1,14 +1,12 @@
 #pragma once
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
-#include <dxgi1_6.h>
-#pragma comment(lib, "dxgi.lib")
 #include <dxcapi.h>
 #pragma comment(lib, "dxcompiler.lib")
 
 #include <unordered_map>
 #include <string>
-#include <wrl.h>
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 #include "../Shader.h"
 
@@ -48,9 +46,9 @@ private:
 private:
 	class ShaderFactory* shaderFactory_;
 
-	std::unordered_map<std::string, Microsoft::WRL::ComPtr<IDxcBlob>> vertexShader_;
-	std::unordered_map<std::string, Microsoft::WRL::ComPtr<IDxcBlob>> hullShader_;
-	std::unordered_map<std::string, Microsoft::WRL::ComPtr<IDxcBlob>> domainShader_;
-	std::unordered_map<std::string, Microsoft::WRL::ComPtr<IDxcBlob>> geometoryShader_;
-	std::unordered_map<std::string, Microsoft::WRL::ComPtr<IDxcBlob>> pixelShader_;
+	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> vertexShader_;
+	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> hullShader_;
+	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> domainShader_;
+	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> geometoryShader_;
+	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> pixelShader_;
 };

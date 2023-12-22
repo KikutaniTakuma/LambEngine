@@ -7,6 +7,9 @@
 #include "Math/Vector4.h"
 
 namespace Lamb {
+	extern std::random_device seed;
+	extern std::mt19937_64 rnd;
+
 	/// <summary>
 	/// 整数型のランダム関数
 	/// </summary>
@@ -16,8 +19,6 @@ namespace Lamb {
 	/// <returns>ランダムな値</returns>
 	template<IsInt T> requires requires { sizeof(T) <= sizeof(long); }
 	T Random(T min, T max) {
-		static std::random_device seed;
-		static std::mt19937_64 rnd(seed());
 		if (max < min) {
 			std::swap(min, max);
 		}

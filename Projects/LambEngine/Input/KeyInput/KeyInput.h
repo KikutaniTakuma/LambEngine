@@ -1,11 +1,12 @@
 #pragma once
 #include <array>
-#include <wrl.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
+
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 /// <summary>
 /// キーボードの入力
@@ -58,7 +59,7 @@ public:
 
 
 private:
-	Microsoft::WRL::ComPtr<IDirectInputDevice8> keyBoard_;
+	Lamb::LambPtr<IDirectInputDevice8> keyBoard_;
 
 	// キー入力バッファー
 	std::array<BYTE, 0x100> key_;

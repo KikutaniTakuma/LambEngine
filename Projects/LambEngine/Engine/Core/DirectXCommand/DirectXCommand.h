@@ -1,11 +1,11 @@
 #pragma once
 
-#include <wrl.h>
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
 #undef max
 #undef min
-#include <cstdint>
+
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 class DirectXCommand {
 private:
@@ -71,12 +71,12 @@ public:
 	}
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_;
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator_;
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList_;
+	Lamb::LambPtr<ID3D12CommandQueue> commandQueue_;
+	Lamb::LambPtr<ID3D12CommandAllocator> commandAllocator_;
+	Lamb::LambPtr<ID3D12GraphicsCommandList> commandList_;
 	bool isCommandListClose_;
 
-	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
+	Lamb::LambPtr<ID3D12Fence> fence_;
 	uint64_t fenceVal_;
 	HANDLE fenceEvent_;
 };

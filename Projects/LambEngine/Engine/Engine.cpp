@@ -3,6 +3,15 @@
 #include <format>
 #include <filesystem>
 
+#include <dxgi1_6.h>
+#pragma comment(lib, "dxgi.lib")
+#include <dxgidebug.h>
+#pragma comment(lib, "dxguid.lib")
+
+#include <Wbemidl.h>
+#include <comdef.h>
+#pragma comment(lib, "wbemuuid.lib")
+
 #include "Core/WindowFactory/WindowFactory.h"
 #include "Core/DirectXDevice/DirectXDevice.h"
 #include "Core/DirectXCommand/DirectXCommand.h"
@@ -45,7 +54,7 @@ Engine::Debug::~Debug() {
 	debugController_.Reset();
 
 	// リソースリークチェック
-	Microsoft::WRL::ComPtr<IDXGIDebug1> debug;
+	Lamb::LambPtr<IDXGIDebug1> debug;
 	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(debug.GetAddressOf())))) {
 		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
 		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
@@ -79,7 +88,7 @@ void Engine::Debug::InitializeDebugLayer() {
 
 Engine* Engine::instance_ = nullptr;
 
-void Engine::Initialize(const std::string& windowName, const Vector2& windowSize, float fpsLimit) {
+void Engine::Initialize(const std::string& windowName, const Vector2& windowSize, float fpsLimit, bool isFullscreen) {
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<Engine>("CoInitializeEx failed", __func__);
@@ -90,18 +99,21 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	instance_ = new Engine();
 	assert(instance_);
 
+
 	const auto&& windowTitle = ConvertString(windowName);
 
 	FrameInfo::GetInstance()->SetFpsLimit(static_cast<double>(fpsLimit));
 	Lamb::AddLog("Set fps limit : " + std::to_string(fpsLimit));
 
 	// Window生成
-	WindowFactory::GetInstance()->Create(windowTitle, static_cast<int32_t>(windowSize.x), static_cast<int32_t>(windowSize.y));
+	WindowFactory::GetInstance()->Create(windowTitle, static_cast<int32_t>(windowSize.x), static_cast<int32_t>(windowSize.y), isFullscreen);
 
 #ifdef _DEBUG
 	// DebugLayer有効化
 	debugLayer_.InitializeDebugLayer();
 #endif
+
+	instance_->HardwareLog();
 
 	// デバイス生成
 	instance_->InitializeDirectXDevice();
@@ -170,6 +182,120 @@ bool Engine::IsFinalize() {
 
 D3D12_CPU_DESCRIPTOR_HANDLE Engine::GetDsvHandle() {
 	return instance_->depthStencil_->GetDepthHandle();
+}
+
+std::string Engine::GetCpuName() const {
+	// COMセキュリティの設定
+	HRESULT hres = CoInitializeSecurity(
+		nullptr,
+		-1,
+		nullptr,
+		nullptr,
+		RPC_C_AUTHN_LEVEL_DEFAULT,
+		RPC_C_IMP_LEVEL_IMPERSONATE,
+		nullptr,
+		EOAC_NONE,
+		nullptr
+	);
+
+	if (FAILED(hres)) {
+		return std::string{};
+	}
+
+	// WMIセットアップ
+	IWbemLocator* pLoc = nullptr;
+	hres = CoCreateInstance(
+		CLSID_WbemLocator,
+		nullptr,
+		CLSCTX_INPROC_SERVER,
+		IID_IWbemLocator,
+		reinterpret_cast<LPVOID*>(&pLoc)
+	);
+
+	if (FAILED(hres)) {
+		return std::string{};
+	}
+
+	IWbemServices* pSvc = nullptr;
+	hres = pLoc->ConnectServer(
+		_bstr_t(L"ROOT\\CIMv2"),
+		nullptr,
+		nullptr,
+		0,
+		LONG{},
+		0,
+		0,
+		&pSvc
+	);
+
+	if (FAILED(hres)) {
+		pLoc->Release();
+		return std::string{};
+	}
+
+	// WMIクエリのセットアップ
+	IEnumWbemClassObject* pEnumerator = nullptr;
+	hres = pSvc->ExecQuery(
+		bstr_t("WQL"),
+		bstr_t("SELECT * FROM Win32_Processor"),
+		WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY,
+		nullptr,
+		&pEnumerator
+	);
+
+	if (FAILED(hres)) {
+		pSvc->Release();
+		pLoc->Release();
+		return std::string{};
+	}
+
+	// WMIクエリの実行
+	IWbemClassObject* pclsObj = nullptr;
+	ULONG uReturn = 0;
+
+	while (pEnumerator) {
+		hres = pEnumerator->Next(WBEM_INFINITE, 1, &pclsObj, &uReturn);
+
+		if (uReturn == 0) {
+			break;
+		}
+
+		VARIANT vtProp = {};
+
+		// "Name"プロパティを取得
+		hres = pclsObj->Get(L"Name", 0, &vtProp, 0, 0);
+		if (SUCCEEDED(hres)) {
+			// CPU情報を取得
+			std::wstring cpuInfo = vtProp.bstrVal;
+			VariantClear(&vtProp);
+
+			// WMIオブジェクトの解放
+			pclsObj->Release();
+			pSvc->Release();
+			pLoc->Release();
+
+			// std::wstringをstd::stringに変換して返す
+			return ConvertString(cpuInfo);
+		}
+	}
+
+	// WMIオブジェクトの解放
+	pSvc->Release();
+	pLoc->Release();
+
+	return std::string{};
+}
+
+void Engine::HardwareLog() const {
+	Lamb::AddLog("cpu : " + instance_->GetCpuName());
+
+	MEMORYSTATUSEX memoryStatus;
+	memoryStatus.dwLength = sizeof(memoryStatus);
+
+	if (GlobalMemoryStatusEx(&memoryStatus)) {
+		Lamb::AddLog(std::format("main memory : {} MB", memoryStatus.ullTotalPhys / (1024 * 1024)));
+		Lamb::AddLog(std::format("main memory Use rate : {} %", memoryStatus.dwMemoryLoad));
+	}
 }
 
 

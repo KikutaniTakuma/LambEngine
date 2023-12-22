@@ -63,7 +63,7 @@ private:
 	static Shader shader_;
 
 	static D3D12_INDEX_BUFFER_VIEW indexView_;
-	static Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
+	static Lamb::LambPtr<ID3D12Resource> indexResource_;
 
 
 public:
@@ -147,7 +147,7 @@ public:
 
 private:
 	D3D12_VERTEX_BUFFER_VIEW vertexView_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
+	Lamb::LambPtr<ID3D12Resource> vertexResource_;
 
 	ConstBuffer<Mat4x4> wvpMat_;
 	ConstBuffer<Vector4> colorBuf_;

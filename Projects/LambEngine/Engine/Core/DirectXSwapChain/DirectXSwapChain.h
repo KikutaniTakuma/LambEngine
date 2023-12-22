@@ -1,13 +1,13 @@
 #pragma once
 #include <cstdint>
 #include <array>
-#include <wrl.h>
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
 #include <dxgi1_6.h>
 #pragma comment(lib, "dxgi.lib")
 #undef max
 #undef min
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 class DirectXSwapChain {
 private:
@@ -70,7 +70,7 @@ public:
 	static constexpr uint32_t kBackBufferNumber_ = 2u;
 
 private:
-	Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain_;
-	std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, kBackBufferNumber_> swapChainResource_;
+	Lamb::LambPtr<IDXGISwapChain4> swapChain_;
+	std::array<Lamb::LambPtr<ID3D12Resource>, kBackBufferNumber_> swapChainResource_;
 	bool isRenderState_;
 };

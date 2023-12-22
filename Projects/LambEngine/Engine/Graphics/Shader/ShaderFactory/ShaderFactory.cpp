@@ -81,7 +81,7 @@ IDxcBlob* ShaderFactory::CompileShader(
 	// これからシェーダーをコンパイルする旨をログに出す
 	Lamb::AddLog(ConvertString(std::format(L"Begin CompilerShader : path:{} : profile:{}", filePath, profile)));
 	// hlslファイルを読む
-	Microsoft::WRL::ComPtr<IDxcBlobEncoding> shaderSource;
+	Lamb::LambPtr<IDxcBlobEncoding> shaderSource;
 	HRESULT hr = dxcUtils_->LoadFile(filePath.c_str(), nullptr, shaderSource.GetAddressOf());
 	// 読めなかったら止める
 	if (!SUCCEEDED(hr)) {
@@ -104,7 +104,7 @@ IDxcBlob* ShaderFactory::CompileShader(
 		L"-Zpr" // メモリレイアウトを優先
 	};
 	// 実際にShaderをコンパイルする
-	Microsoft::WRL::ComPtr<IDxcResult> shaderResult = nullptr;
+	Lamb::LambPtr<IDxcResult> shaderResult;
 	hr = dxcCompiler_->Compile(
 		&shaderSourceBuffer, // 読みこんだファイル
 		arguments,           // コンパイルオプション
@@ -124,7 +124,7 @@ IDxcBlob* ShaderFactory::CompileShader(
 	}
 
 	// 3. 警告・エラーが出てないか確認する
-	Microsoft::WRL::ComPtr<IDxcBlobUtf8> shaderError;
+	Lamb::LambPtr<IDxcBlobUtf8> shaderError;
 	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(shaderError.GetAddressOf()), nullptr);
 	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
 		// 警告・エラーダメゼッタイ

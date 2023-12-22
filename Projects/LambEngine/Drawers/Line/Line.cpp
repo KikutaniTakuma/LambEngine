@@ -10,7 +10,7 @@
 uint32_t Line::indexCount_ = 0u;
 Shader Line::shader_ = {};
 Pipeline* Line::pipline_ = nullptr;
-Microsoft::WRL::ComPtr<ID3D12Resource> Line::vertexBuffer_;
+Lamb::LambPtr<ID3D12Resource> Line::vertexBuffer_;
 // 頂点バッファビュー
 D3D12_VERTEX_BUFFER_VIEW Line::vertexView_;
 
@@ -66,7 +66,6 @@ void Line::Finalize() {
 	}
 
 	if (vertexBuffer_) {
-		vertexBuffer_->Release();
 		vertexBuffer_.Reset();
 	}
 }

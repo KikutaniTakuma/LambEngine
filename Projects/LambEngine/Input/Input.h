@@ -33,7 +33,7 @@ public:
 	void InputStart();
 
 private:
-	Microsoft::WRL::ComPtr<IDirectInput8> directInput_;
+	Lamb::LambPtr<IDirectInput8> directInput_;
 
 	Gamepad* gamepad_;
 	KeyInput* key_;

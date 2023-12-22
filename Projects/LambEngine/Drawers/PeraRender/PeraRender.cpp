@@ -48,14 +48,6 @@ PeraRender::PeraRender(uint32_t width, uint32_t height):
 
 PeraRender::~PeraRender() {
 	peraPipelineObject_.reset();
-	if (peraVertexResource_) {
-		peraVertexResource_->Release();
-		peraVertexResource_.Reset();
-	}
-	if (indexResource_) {
-		indexResource_->Release();
-		indexResource_.Reset();
-	}
 }
 
 void PeraRender::Initialize(const std::string& psFileName) {

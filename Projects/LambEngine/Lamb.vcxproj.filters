@@ -345,6 +345,9 @@
     <Filter Include="Framework">
       <UniqueIdentifier>{78585073-0027-4de9-838a-35e5a2880153}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\EngineUtils\LambPtr">
+      <UniqueIdentifier>{685001fb-5c52-43ec-bceb-9e1ae9b279df}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Engine\Graphics\PipelineObject">
       <UniqueIdentifier>{66d80ced-8ef5-46f0-ba3a-0d1f3f777498}</UniqueIdentifier>
     </Filter>
@@ -532,6 +535,9 @@
     </ClInclude>
     <ClInclude Include="Framework\Framework.h">
       <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineUtils\LambPtr\LambPtr.h">
+      <Filter>Engine\EngineUtils\LambPtr</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\PipelineObject.h">
       <Filter>Engine\Graphics\PipelineObject</Filter>

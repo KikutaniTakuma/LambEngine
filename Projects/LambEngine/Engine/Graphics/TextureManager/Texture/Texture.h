@@ -5,11 +5,12 @@
 
 #include "../externals/DirectXTex/DirectXTex.h"
 #include "../externals/DirectXTex/d3dx12.h"
-#include <wrl.h>
 
 #include <string>
 
 #include "Math/Vector2.h"
+
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 /// <summary>
 /// テクスチャの読み込みやリソースの管理を担う
@@ -77,7 +78,7 @@ public:
 	void Use(UINT rootParamator);
 
 	void Set(
-		const Microsoft::WRL::ComPtr<ID3D12Resource>& resource,
+		const Lamb::LambPtr<ID3D12Resource>& resource,
 		D3D12_SHADER_RESOURCE_VIEW_DESC viewDesc,
 		D3D12_GPU_DESCRIPTOR_HANDLE handle,
 		UINT handleUINT
@@ -88,8 +89,8 @@ public:
 /// メンバ変数
 /// </summary>
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> textureResouce_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource_;
+	Lamb::LambPtr<ID3D12Resource> textureResouce_;
+	Lamb::LambPtr<ID3D12Resource> intermediateResource_;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc_;
 

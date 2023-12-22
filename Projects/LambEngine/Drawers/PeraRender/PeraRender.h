@@ -73,8 +73,10 @@ private:
 	bool isPreDraw_;
 
 	D3D12_VERTEX_BUFFER_VIEW peraVertexView_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> peraVertexResource_ = nullptr;
+	Lamb::LambPtr<ID3D12Resource> peraVertexResource_ = nullptr;
 
 	D3D12_INDEX_BUFFER_VIEW indexView_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
+	Lamb::LambPtr<ID3D12Resource> indexResource_;
+
+	std::array<class Pipeline*, Pipeline::Blend::BlendTypeNum> piplines_;
 };

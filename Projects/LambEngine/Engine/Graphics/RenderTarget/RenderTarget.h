@@ -40,7 +40,7 @@ public:
 	}
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> resource_;
+	Lamb::LambPtr<ID3D12Resource> resource_;
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc_;
 
 	D3D12_GPU_DESCRIPTOR_HANDLE srvHeapHandle_;
