@@ -145,6 +145,9 @@
     <ClCompile Include="Engine\Graphics\MeshManager\Mesh\Mesh.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.cpp" />
+    <ClCompile Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.cpp" />
+    <ClCompile Include="Engine\Graphics\PipelineObject\PipelineObject.cpp" />
+    <ClCompile Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.cpp" />
     <ClCompile Include="Engine\Graphics\RenderTarget\RenderTarget.cpp" />
     <ClCompile Include="Engine\Graphics\RootSignature\RootSignature.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.cpp" />
@@ -161,8 +164,6 @@
     <ClCompile Include="Math\Vector2.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
-    <ClCompile Include="PipelineObject\PipelineObject.cpp" />
-    <ClCompile Include="PipelineObject\WaterPipeline\WaterPipeline.cpp" />
     <ClCompile Include="Utils\Camera\Camera.cpp" />
     <ClCompile Include="Utils\ConvertString\ConvertString.cpp" />
     <ClCompile Include="Utils\CsvLoad\CsvLoad.cpp" />
@@ -204,6 +205,9 @@
     <ClInclude Include="Engine\Graphics\MeshManager\Mesh\Mesh.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.h" />
+    <ClInclude Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.h" />
+    <ClInclude Include="Engine\Graphics\PipelineObject\PipelineObject.h" />
+    <ClInclude Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.h" />
     <ClInclude Include="Engine\Graphics\RenderTarget\RenderTarget.h" />
     <ClInclude Include="Engine\Graphics\RootSignature\RootSignature.h" />
     <ClInclude Include="Engine\Graphics\Shader\Shader.h" />
@@ -222,8 +226,6 @@
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
-    <ClInclude Include="PipelineObject\PipelineObject.h" />
-    <ClInclude Include="PipelineObject\WaterPipeline\WaterPipeline.h" />
     <ClInclude Include="Utils\Camera\Camera.h" />
     <ClInclude Include="Utils\Cocepts\Cocepts.h" />
     <ClInclude Include="Utils\ConvertString\ConvertString.h" />
