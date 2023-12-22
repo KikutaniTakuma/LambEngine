@@ -7,6 +7,7 @@
 #include "Utils/ScreenOut/ScreenOut.h"
 #include <numbers>
 #include <format>
+#include "Engine/Graphics/PipelineObject/WaterPipeline/WaterPipeline.h"
 
 GameScene::GameScene() :
 	BaseScene(BaseScene::ID::Game)
@@ -16,7 +17,11 @@ void GameScene::Initialize() {
 	camera_->farClip = 3000.0f;
 	camera_->pos.z = -5.0f;
 
-	pera_.Initialize("./Resources/Shaders/PostShader/PostPerlin.PS.hlsl");
+	WaterPipeline* waterPipelineObject = new WaterPipeline{};
+	waterPipelineObject->Init();
+
+	//pera_.Initialize("./Resources/Shaders/PostShader/PostNone.PS.hlsl");
+	pera_.Initialize(waterPipelineObject);
 	//pera_.scale = Lamb::ClientSize();
 	pera_.scale.x = 5.0f;
 	pera_.scale.y = 5.0f;
