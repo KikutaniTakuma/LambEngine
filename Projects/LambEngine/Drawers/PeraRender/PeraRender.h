@@ -2,10 +2,7 @@
 #include <string>
 #include <array>
 
-#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
-#include "Engine/Graphics/RenderTarget/RenderTarget.h"
-#include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
-#include "Engine/Graphics/PipelineManager/PipelineManager.h"
+#include "Engine/Graphics/PipelineObject/PeraPipeline/PeraPipeline.h"
 
 #include "Math/Vector3.h"
 #include "Math/Vector2.h"
@@ -33,11 +30,7 @@ public:
 
 public:
 	void Initialize(const std::string& psFileName);
-
-private:
-	void CreateShader(const std::string& vsFileName, const std::string& psFileName);
-
-	void CreateGraphicsPipeline();
+	void Initialize(PeraPipeline* pipelineObject);
 
 public:
 	void Update();
@@ -47,18 +40,20 @@ public:
 	void Draw(const Mat4x4& viewProjection, Pipeline::Blend blend, PeraRender* pera = nullptr);
 
 	Texture* GetTex() const {
-		return render_.GetTex();
+		return peraPipelineObject_->GetRender().GetTex();
 	}
 
 	void ChangeResourceState() {
-		render_.ChangeResourceState();
+		peraPipelineObject_->GetRender().ChangeResourceState();
 	}
 
 	void SetMainRenderTarget() {
-		render_.SetMainRenderTarget();
+		peraPipelineObject_->GetRender().SetMainRenderTarget();
 	}
 
 	void Debug(const std::string& guiName);
+
+	void ResetPipelineObject(PeraPipeline* pipelineObject);
 
 public:
 	Vector3 pos;
@@ -73,20 +68,13 @@ public:
 	uint32_t color;
 
 private:
-	RenderTarget render_;
-
-	ConstBuffer<Mat4x4> wvpMat_;
-	ConstBuffer<Vector4> colorBuf_;
-	ConstBuffer<Vector2> randomVec_;
+	std::unique_ptr<PeraPipeline> peraPipelineObject_;
 
 	bool isPreDraw_;
 
 	D3D12_VERTEX_BUFFER_VIEW peraVertexView_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> peraVertexResource_ = nullptr;
-	Shader shader_;
 
 	D3D12_INDEX_BUFFER_VIEW indexView_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
-
-	std::array<class Pipeline*, Pipeline::Blend::BlendTypeNum> piplines_;
 };
