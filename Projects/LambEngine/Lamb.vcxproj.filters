@@ -157,14 +157,17 @@
     <ClCompile Include="Math\Vector4.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="PipelineObject\PipelineObject.cpp">
-      <Filter>PipelineObject</Filter>
-    </ClCompile>
-    <ClCompile Include="PipelineObject\WaterPipeline\WaterPipeline.cpp">
-      <Filter>PipelineObject\WaterPipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Framework.cpp">
       <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\PipelineObject.cpp">
+      <Filter>Engine\Graphics\PipelineObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.cpp">
+      <Filter>Engine\Graphics\PipelineObject\WaterPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.cpp">
+      <Filter>Engine\Graphics\PipelineObject\PeraPipeline</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -336,17 +339,20 @@
     <Filter Include="Math">
       <UniqueIdentifier>{f4d2bb2b-5300-4906-bcac-3c4a0124dcf7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PipelineObject">
-      <UniqueIdentifier>{66d80ced-8ef5-46f0-ba3a-0d1f3f777498}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PipelineObject\WaterPipeline">
-      <UniqueIdentifier>{bdf75616-892b-4ee7-bcc0-2e4c1686180f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Error">
       <UniqueIdentifier>{89dc16ed-3ed4-40e0-b34e-752af2811991}</UniqueIdentifier>
     </Filter>
     <Filter Include="Framework">
       <UniqueIdentifier>{78585073-0027-4de9-838a-35e5a2880153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject">
+      <UniqueIdentifier>{66d80ced-8ef5-46f0-ba3a-0d1f3f777498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject\WaterPipeline">
+      <UniqueIdentifier>{bdf75616-892b-4ee7-bcc0-2e4c1686180f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject\PeraPipeline">
+      <UniqueIdentifier>{4fd0d217-6bd2-4ca7-8592-5b493248756a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -518,20 +524,23 @@
     <ClInclude Include="Math\Vector4.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="PipelineObject\PipelineObject.h">
-      <Filter>PipelineObject</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Shader\Shader.h">
       <Filter>Engine\Graphics\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="PipelineObject\WaterPipeline\WaterPipeline.h">
-      <Filter>PipelineObject\WaterPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Error\Error.h">
       <Filter>Error</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Framework.h">
       <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\PipelineObject.h">
+      <Filter>Engine\Graphics\PipelineObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.h">
+      <Filter>Engine\Graphics\PipelineObject\WaterPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.h">
+      <Filter>Engine\Graphics\PipelineObject\PeraPipeline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
