@@ -102,7 +102,7 @@ public:
 
 	uint32_t color;
 
-	Mesh::DirectionLight light;
+	Mesh::Light light;
 
 private:
 	Model* parent_;
@@ -114,7 +114,7 @@ private:
 
 	ConstBuffer<Mesh::MatrixData> wvpData_;
 
-	ConstBuffer<Mesh::DirectionLight> dirLig_;
+	ConstBuffer<Mesh::Light> dirLig_;
 
 	ConstBuffer<Vector4> colorBuf_;
 };

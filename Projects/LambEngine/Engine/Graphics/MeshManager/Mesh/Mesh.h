@@ -45,7 +45,7 @@ public:
 		Mat4x4 viewProjectoionMat;
 	};
 
-	struct DirectionLight {
+	struct Light {
 		Vector3 ligDirection;
 		float pad0;
 		Vector3 ligColor;
@@ -154,7 +154,7 @@ public:
 	void Use(
 		const Mat4x4& wvpMat,
 		const Mat4x4& viewOrojection,
-		const DirectionLight& light,
+		const Light& light,
 		const Vector4& color
 		);
 
@@ -176,7 +176,7 @@ private:
 	bool isObjLoad_;
 
 	StructuredBuffer<MatrixData> wvpMats_;
-	ConstBuffer<DirectionLight> dirLig_;
+	ConstBuffer<Light> dirLig_;
 	ConstBuffer<Vector4> color_;
 
 	uint32_t drawCount_;

@@ -14,6 +14,9 @@ void WaterPipeline::Update() {
 	*colorBuf_ = color;
 
 	*wvpMat_ = wvp;
+
+	light_->ligColor = Vector3::kIdentity;
+	light_->ligDirection = Vector3{ 1.0f,-1.0f,-1.0f }.Normalize();
 }
 
 void WaterPipeline::Init(
@@ -47,7 +50,7 @@ void WaterPipeline::Init(
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 3;
+	cbvRange[0].NumDescriptors = 5;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
@@ -81,11 +84,13 @@ void WaterPipeline::Init(
 
 
 	static auto srvHeap = CbvSrvUavHeap::GetInstance();
-	srvHeap->BookingHeapPos(4u);
+	srvHeap->BookingHeapPos(6u);
 	srvHeap->CreatePerarenderView(*render_);
 	srvHeap->CreateConstBufferView(wvpMat_);
 	srvHeap->CreateConstBufferView(colorBuf_);
 	srvHeap->CreateConstBufferView(randomVec_);
+	srvHeap->CreateConstBufferView(normalRotate_);
+	srvHeap->CreateConstBufferView(light_);
 
 	randomVec_->x = Lamb::Random(0.0f, 1.0f);
 	randomVec_->y = Lamb::Random(0.0f, 1.0f);
@@ -98,6 +103,8 @@ WaterPipeline::~WaterPipeline() {
 		srvHeap->ReleaseView(wvpMat_.GetViewHandleUINT());
 		srvHeap->ReleaseView(colorBuf_.GetViewHandleUINT());
 		srvHeap->ReleaseView(randomVec_.GetViewHandleUINT());
+		srvHeap->ReleaseView(normalRotate_.GetViewHandleUINT());
+		srvHeap->ReleaseView(light_.GetViewHandleUINT());
 	}
 
 	render_.reset();

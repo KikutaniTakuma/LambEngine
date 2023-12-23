@@ -35,4 +35,6 @@ public:
 	std::unique_ptr<Texture2D> tex_;
 
 	Camera staticCamera_;
+
+	class WaterPipeline* waterPipelineObject_ = nullptr;
 };

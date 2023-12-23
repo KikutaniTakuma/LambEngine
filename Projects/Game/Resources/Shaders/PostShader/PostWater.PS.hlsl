@@ -1,5 +1,28 @@
-#include "Post.hlsli"
+#include "PostWater.hlsli"
 #include "Random.hlsli"
+
+cbuffer RamdomVec : register(b2)
+{
+    float2 randomVec;
+}
+
+cbuffer Rotate : register(b3)
+{
+    float4x4 normalRotate;
+}
+
+struct Light
+{
+    float3 ligDirection;
+    float3 ligColor;
+    float3 eyePos;
+
+    float3 ptPos;
+    float3 ptColor;
+    float ptRange;
+};
+
+ConstantBuffer<Light> light : register(b4);
 
 float Perlin(float density, float2 uv)
 {
@@ -63,12 +86,11 @@ float3 CreateNormal(float2 uv)
     float dfx = right - left;
     float dfy = up - bottom;
     
-    float3 n = float3(-dfx, -dfy, 2.0f);
+    float3 n = normalize(float3(-dfx, -dfy, 2.0f));
     
-    n = normalize(n);
-    
-    n = (n / 0.02f * 1.0f) * 0.5f;
-    
+    float a = 0.01f;
+    n = (n / a * 1.0f) * 0.5f;
+   
     return n;
 }
 
@@ -77,8 +99,12 @@ float4 main(Output input) : SV_TARGET{
     
     float4 texColor = tex.Sample(smp, input.uv + noise);
     
-    float3 normal = CreateNormal(input.uv);
+    //float4 normalTmp = float4(CreateNormal(input.uv), 1.0f);
+    //normalTmp = mul(normalTmp, normalRotate);
     
+    //float3 normal = normalTmp.xyz;
+    float3 normal = CreateNormal(input.uv);
+    //normal = normalize(normal);
     float3 ligDirection = normalize(float3(1.0f, -1.0f, 0.0f));
     
     // ディレクションライト拡散反射光
@@ -87,11 +113,33 @@ float4 main(Output input) : SV_TARGET{
     t *= -1.0f;
     t = (t + abs(t)) * 0.5f;
 
-    float3 lig = float3(1.50f,15.0f,15.0f) * t;
+    float3 diffDirection = float3(15.0f,15.0f,15.0f) * t;
+    
+    
+    
+    float3 refVec = reflect(ligDirection, normal);
+    refVec = normalize(refVec);
+
+    float3 toEye = light.eyePos - input.worldPos.xyz;
+    toEye = normalize(toEye);
+
+    t = dot(refVec, toEye);
+    t = (t + abs(t)) * 0.5f;
+
+    t = pow(t, 5.0f);
+    float3 specDirection = float3(15.0f, 15.0f, 15.0f) * t;
+    
+    
+    
+    float3 lig = diffDirection /*+ specDirection*/;
     
     lig.xyz += 0.2f;
     
     lig = pow(lig, 0.3f);
+    
+    //texColor *= color;
+    //texColor.xyz *= lig;
 
     return texColor * color * float4(lig, 1.0f);
+    //return float4(normal, 1.0f);
 }

@@ -16,16 +16,17 @@ GameScene::GameScene() :
 void GameScene::Initialize() {
 	camera_->farClip = 3000.0f;
 	camera_->pos.z = -5.0f;
+	camera_->rotate.x = 0.29f;
 
-	WaterPipeline* waterPipelineObject = new WaterPipeline{};
-	waterPipelineObject->Init();
+	waterPipelineObject_ = new WaterPipeline{};
+	waterPipelineObject_->Init();
 
 	//pera_.Initialize("./Resources/Shaders/PostShader/PostNone.PS.hlsl");
-	pera_.Initialize(waterPipelineObject);
+	pera_.Initialize(waterPipelineObject_);
 	//pera_.scale = Lamb::ClientSize();
 	pera_.scale.x = 5.0f;
 	pera_.scale.y = 5.0f;
-	pera_.rotate.x = 1.08f;
+	pera_.rotate.x = 1.57f;
 
 	model_.reset(new Model{});
 
@@ -59,6 +60,9 @@ void GameScene::Update() {
 
 void GameScene::Draw() {
 	camera_->Update(Vector3::kZero);
+
+	waterPipelineObject_->SetCameraPos(camera_->GetPos());
+	waterPipelineObject_->SetRotate(pera_.rotate);
 	
 	pera_.PreDraw();
 	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());

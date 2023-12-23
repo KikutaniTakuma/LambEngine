@@ -473,7 +473,7 @@ void Mesh::ResizeBuffers() {
 void Mesh::Use(
 	const Mat4x4& wvpMat,
 	const Mat4x4& viewOrojection,
-	const Mesh::DirectionLight& light,
+	const Mesh::Light& light,
 	const Vector4& color
 ) {
 	ResizeBuffers();
