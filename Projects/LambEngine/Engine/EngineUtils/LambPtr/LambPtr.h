@@ -119,6 +119,10 @@ namespace Lamb {
 
 			this->ptr_ = right;
 
+			if (!refCount_) {
+				refCount_ = new uint32_t{ 0u };
+			}
+
 			return *this;
 		}
 
@@ -270,6 +274,9 @@ namespace Lamb {
 			if (refCount_ && *refCount_ == 0) {
 				delete refCount_;
 				refCount_ = nullptr;
+			}
+			else if(refCount_){
+				(*refCount_)--;
 			}
 
 			return tmp;
