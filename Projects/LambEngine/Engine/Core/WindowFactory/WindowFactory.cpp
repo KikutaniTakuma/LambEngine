@@ -32,9 +32,11 @@ WindowFactory::~WindowFactory() {
 }
 
 LRESULT WindowFactory::WindowProcedure(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
+#ifdef _DEBUG
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
 		return true;
 	}
+#endif // _DEBUG
 
 	switch (msg) {
 	case WM_DESTROY:        // ウィンドウが破棄された
