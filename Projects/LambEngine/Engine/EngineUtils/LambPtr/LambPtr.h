@@ -195,6 +195,10 @@ namespace Lamb {
 			*this = ptr;
 		}
 
+		uint32_t UseCount() const {
+			return (ptr_ && refCount_) ? *refCount_ + 1u : 0u;
+		}
+
 
 	private:
 		/// <summary>
