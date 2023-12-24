@@ -28,9 +28,5 @@ public:
 	void Draw() override;
 
 public:
-	PeraRender pera_;
-
-	std::unique_ptr<Model> model_;
-
-	Camera staticCamera_;
+	Texture2D tex_;
 };

@@ -16,14 +16,8 @@ void GameScene::Initialize() {
 	camera_->farClip = 3000.0f;
 	camera_->pos.z = -5.0f;
 
-	pera_.Initialize("./Resources/Shaders/PostShader/PostPerlin.PS.hlsl");
-	pera_.scale = Lamb::ClientSize();
-
-	model_.reset(new Model{});
-
-	model_->LoadObj("./Resources/Ball.obj");
-	staticCamera_.pos.z = -0.01f;
-	staticCamera_.Update();
+	tex_.isSameTexSize = true;
+	tex_.texScalar = 150.0f;
 }
 
 void GameScene::Finalize() {
@@ -32,15 +26,12 @@ void GameScene::Finalize() {
 
 void GameScene::Update() {
 	camera_->Debug("camera");
-	pera_.Update();
-	model_->Debug("model");
-	model_->Update();
+	tex_.Debug("tex_");
+	tex_.Update();
 }
 
 void GameScene::Draw() {
 	camera_->Update(Vector3::kZero);
 	
-	pera_.PreDraw();
-	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
-	pera_.Draw(staticCamera_.GetViewOthographics(), Pipeline::Normal);
+	tex_.Draw(camera_->GetViewOthographics(), Pipeline::Normal,true, false);
 }
