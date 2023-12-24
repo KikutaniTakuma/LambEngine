@@ -253,6 +253,12 @@ namespace Lamb {
 			if (ptr_ && refCount_) {
 				(*refCount_)++;
 			}
+			else if (!refCount_) {
+				if (ptr_) {
+					ptr_->Release();
+				}
+				throw Lamb::Error::Code<LambPtr<T>>("refCount_ is nullptr", __func__);
+			}
 		}
 
 	/// <summary>
