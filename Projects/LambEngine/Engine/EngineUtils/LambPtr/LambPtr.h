@@ -195,6 +195,24 @@ namespace Lamb {
 			*this = ptr;
 		}
 
+		/// <summary>
+		/// <para>所持してるポインタを返して所有権を手放す</para>
+		/// <para>この関数を呼んだら解放が呼ばれずnullptrになる</para>
+		/// </summary>
+		/// <returns>所持してるポインタ</returns>
+		[[nodiscard]]
+		T* Release() {
+			T* tmp = ptr_;
+			ptr_ = nullptr;
+
+			if (refCount_ && *refCount_ == 0) {
+				delete refCount_;
+				refCount_ = nullptr;
+			}
+
+			return tmp;
+		}
+
 		uint32_t UseCount() const {
 			return (ptr_ && refCount_) ? *refCount_ + 1u : 0u;
 		}
