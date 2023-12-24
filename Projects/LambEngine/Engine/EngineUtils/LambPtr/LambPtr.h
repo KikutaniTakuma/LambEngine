@@ -22,22 +22,26 @@ namespace Lamb {
 	/// </summary>
 	template<IsIUnknownBased T>
 	class LambPtr {
+		template<IsIUnknownBased U> friend class LambPtr;
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	public:
 		LambPtr() :
 			ptr_{ nullptr },
-			refCount_{ new uint32_t{} }
-		{
-			*refCount_ = 0u;
-		}
+			refCount_{ new uint32_t{0u} }
+		{}
 		LambPtr(T* ptr) :
 			LambPtr{}
 		{
 			*this = ptr;
 		}
-		LambPtr(const LambPtr<T>& right) :
+		LambPtr(std::nullptr_t ptr) :
+			ptr_{ ptr },
+			refCount_{ new uint32_t{0u} }
+		{}
+		LambPtr(const LambPtr& right) :
 			LambPtr{}
 		{
 			*this = right;
@@ -47,6 +51,26 @@ namespace Lamb {
 		{
 			*this = std::move(right);
 		}
+
+		template<IsIUnknownBased U>
+		LambPtr(U* ptr) :
+			LambPtr{}
+		{
+			*this = ptr;
+		}
+		template<IsIUnknownBased U>
+		LambPtr(const LambPtr<U>& right) :
+			LambPtr{}
+		{
+			*this = right;
+		}
+		template<IsIUnknownBased U>
+		LambPtr(LambPtr<U>&& right) :
+			LambPtr{}
+		{
+			*this = right;
+		}
+
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -69,7 +93,6 @@ namespace Lamb {
 
 			return *this;
 		}
-
 		LambPtr<T>& operator=(LambPtr<T>&& right) noexcept {
 			this->Delete();
 
@@ -80,14 +103,56 @@ namespace Lamb {
 
 			return *this;
 		}
-
 		LambPtr<T>& operator=(T* right) {
 			this->Delete();
 
 			this->ptr_ = right;
 
 			if (ptr_ && !refCount_) {
-				refCount_ = new uint32_t{};
+				refCount_ = new uint32_t{0u};
+			}
+
+			return *this;
+		}
+		LambPtr<T>& operator=(std::nullptr_t right) {
+			this->Delete();
+
+			this->ptr_ = right;
+
+			return *this;
+		}
+
+
+		template<IsIUnknownBased U>
+		LambPtr<T>& operator=(const LambPtr<U>& right) {
+			this->Delete();
+
+			this->ptr_ = right.ptr_;
+			this->refCount_ = right.refCount_;
+
+			this->AddRef();
+
+			return *this;
+		}
+		template<IsIUnknownBased U>
+		LambPtr<T>& operator=(LambPtr<U>&& right) noexcept {
+			this->Delete();
+
+			this->ptr_ = right.ptr_;
+			this->refCount_ = right.refCount_;
+
+			this->AddRef();
+
+			return *this;
+		}
+		template<IsIUnknownBased U>
+		LambPtr<T>& operator=(U* right) {
+			this->Delete();
+
+			this->ptr_ = right;
+
+			if (ptr_ && !refCount_) {
+				refCount_ = new uint32_t{0u};
 			}
 
 			return *this;
@@ -97,18 +162,16 @@ namespace Lamb {
 	/// 演算子のオーバーロード
 	/// </summary>
 	public:
-		T* operator->() {
+		T* const operator->() {
+			return ptr_;
+		}
+		T* const operator->() const {
 			return ptr_;
 		}
 
 		T& operator*() {
 			return *ptr_;
 		}
-
-		T* const operator->() const {
-			return ptr_;
-		}
-
 		const T& operator*() const {
 			return *ptr_;
 		}
@@ -116,15 +179,14 @@ namespace Lamb {
 		explicit operator bool() const {
 			return ptr_;
 		}
-
 		bool operator!() const {
 			return !ptr_;
 		}
 
+
 		bool operator==(T* right) const {
 			return ptr_ == right;
 		}
-
 		bool operator==(const LambPtr<T>& right) const {
 			return ptr_ == right.ptr_;
 		}
@@ -132,7 +194,6 @@ namespace Lamb {
 		bool operator!=(T* right) const {
 			return ptr_ != right;
 		}
-
 		bool operator!=(const LambPtr<T>& right) const {
 			return ptr_ != right.ptr_;
 		}
@@ -228,6 +289,7 @@ namespace Lamb {
 				if (*refCount_ == 0u) {
 					ptr_->Release();
 					ptr_ = nullptr;
+
 					delete refCount_;
 					refCount_ = nullptr;
 				}
