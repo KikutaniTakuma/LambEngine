@@ -19,8 +19,13 @@ void GameScene::Initialize() {
 	camera_->rotate.x = 0.29f;
 
 	waterPipelineObject_ = new WaterPipeline{};
-	waterPipelineObject_->Init();
-
+	try {
+		waterPipelineObject_->Init();
+	}
+	catch (const Lamb::Error& err) {
+		delete waterPipelineObject_;
+		throw err;
+	}
 	//pera_.Initialize("./Resources/Shaders/PostShader/PostNone.PS.hlsl");
 	pera_.Initialize(waterPipelineObject_);
 	//pera_.scale = Lamb::ClientSize();
