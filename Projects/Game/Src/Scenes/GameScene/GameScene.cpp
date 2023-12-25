@@ -28,10 +28,15 @@ void GameScene::Update() {
 	camera_->Debug("camera");
 	tex_.Debug("tex_");
 	tex_.Update();
+
+	model_.Debug("model_");
+	model_.Update();
 }
 
 void GameScene::Draw() {
 	camera_->Update(Vector3::kZero);
 	
 	tex_.Draw(camera_->GetViewOthographics(), Pipeline::Normal,true, false);
+
+	model_.Draw(camera_->GetViewProjection(), camera_->GetPos());
 }

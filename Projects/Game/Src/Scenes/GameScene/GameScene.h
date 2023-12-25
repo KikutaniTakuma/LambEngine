@@ -29,4 +29,6 @@ public:
 
 public:
 	Texture2D tex_;
+
+	Model model_;
 };
