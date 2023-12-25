@@ -1,5 +1,4 @@
 #pragma once
-#include <cstdint>
 #include <type_traits>
 #include "Error/Error.h"
 
@@ -16,9 +15,6 @@ namespace Lamb {
 
 	/// <summary>
 	/// <para>ComPtrに変わる自作スマートポインタ</para>
-	/// <para>機能</para>
-	/// <para>・参照カウント(std::shared_ptrのようなもの)</para>
-	/// <para>・あったら便利な機能は一通り</para>
 	/// </summary>
 	template<IsIUnknownBased T>
 	class LambPtr {
@@ -29,8 +25,7 @@ namespace Lamb {
 	/// </summary>
 	public:
 		LambPtr() :
-			ptr_{ nullptr },
-			refCount_{ new uint32_t{0u} }
+			ptr_{ nullptr }
 		{}
 		LambPtr(T* ptr) :
 			LambPtr{}
@@ -38,8 +33,7 @@ namespace Lamb {
 			*this = ptr;
 		}
 		LambPtr(std::nullptr_t ptr) :
-			ptr_{ ptr },
-			refCount_{ new uint32_t{0u} }
+			ptr_{ ptr }
 		{}
 		LambPtr(const LambPtr& right) :
 			LambPtr{}
@@ -87,7 +81,6 @@ namespace Lamb {
 			this->Delete();
 
 			this->ptr_ = right.ptr_;
-			this->refCount_ = right.refCount_;
 
 			this->AddRef();
 
@@ -97,9 +90,10 @@ namespace Lamb {
 			this->Delete();
 
 			this->ptr_ = right.ptr_;
-			this->refCount_ = right.refCount_;
 
 			this->AddRef();
+
+			right.Delete();
 
 			return *this;
 		}
@@ -108,20 +102,12 @@ namespace Lamb {
 
 			this->ptr_ = right;
 
-			if (ptr_ && !refCount_) {
-				refCount_ = new uint32_t{0u};
-			}
-
 			return *this;
 		}
 		LambPtr<T>& operator=(std::nullptr_t right) {
 			this->Delete();
 
 			this->ptr_ = right;
-
-			if (!refCount_) {
-				refCount_ = new uint32_t{ 0u };
-			}
 
 			return *this;
 		}
@@ -132,7 +118,6 @@ namespace Lamb {
 			this->Delete();
 
 			this->ptr_ = right.ptr_;
-			this->refCount_ = right.refCount_;
 
 			this->AddRef();
 
@@ -143,9 +128,10 @@ namespace Lamb {
 			this->Delete();
 
 			this->ptr_ = right.ptr_;
-			this->refCount_ = right.refCount_;
 
 			this->AddRef();
+
+			right.Delete();
 
 			return *this;
 		}
@@ -154,10 +140,6 @@ namespace Lamb {
 			this->Delete();
 
 			this->ptr_ = right;
-
-			if (ptr_ && !refCount_) {
-				refCount_ = new uint32_t{0u};
-			}
 
 			return *this;
 		}
@@ -257,7 +239,7 @@ namespace Lamb {
 		/// </summary>
 		/// <param name="ptr">新しいポインタ</param>
 		void Reset(T* ptr) {
-			Reset();
+			Delete();
 			*this = ptr;
 		}
 
@@ -271,19 +253,7 @@ namespace Lamb {
 			T* tmp = ptr_;
 			ptr_ = nullptr;
 
-			if (refCount_ && *refCount_ == 0) {
-				delete refCount_;
-				refCount_ = nullptr;
-			}
-			else if(refCount_){
-				(*refCount_)--;
-			}
-
 			return tmp;
-		}
-
-		uint32_t UseCount() const {
-			return (ptr_ && refCount_) ? *refCount_ + 1u : 0u;
 		}
 
 
@@ -292,42 +262,15 @@ namespace Lamb {
 		/// メンバを解放する
 		/// </summary>
 		void Delete() {
-			if (ptr_ && refCount_) {
-				if (*refCount_ == 0u) {
-					ptr_->Release();
-					ptr_ = nullptr;
-
-					delete refCount_;
-					refCount_ = nullptr;
-				}
-				else {
-					ptr_ = nullptr;
-					(*refCount_)--;
-					refCount_ = nullptr;
-				}
-			}
-			else if (ptr_) {
+			if (ptr_) {
 				ptr_->Release();
 				ptr_ = nullptr;
 			}
-			else {
-				delete refCount_;
-				refCount_ = nullptr;
-			}
 		}
 
-		/// <summary>
-		/// リファレンスカウントを増加させる
-		/// </summary>
 		void AddRef() {
-			if (ptr_ && refCount_) {
-				(*refCount_)++;
-			}
-			else if (!refCount_) {
-				if (ptr_) {
-					ptr_->Release();
-				}
-				throw Lamb::Error::Code<LambPtr<T>>("refCount_ is nullptr", __func__);
+			if (ptr_) {
+				ptr_->AddRef();
 			}
 		}
 
@@ -339,10 +282,5 @@ namespace Lamb {
 		/// 管理するポインタ
 		/// </summary>
 		T* ptr_;
-
-		/// <summary>
-		/// リファレンスカウント
-		/// </summary>
-		uint32_t* refCount_;
 	};
 }
