@@ -24,19 +24,20 @@ public:
 	bool operator!=(const RootSignature& right) const;
 
 public:
-	void Create(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture);
+	void Create(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture, bool isOutRangeBorder);
 
 	inline ID3D12RootSignature* Get() const {
 		return rootSignature_.Get();
 	}
 
-	bool IsSame(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture) const;
+	bool IsSame(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture, bool isOutRangeBorder) const;
 
 private:
 	Lamb::LambPtr<ID3D12RootSignature> rootSignature_;
 	std::vector<std::pair<D3D12_ROOT_PARAMETER, std::vector<D3D12_DESCRIPTOR_RANGE>>> rootParamater_;
 	
 	bool isTexture_;
+	bool isOutRangeBorder_;
 };
 
 bool operator==(const D3D12_ROOT_PARAMETER& left, const D3D12_ROOT_PARAMETER& right);

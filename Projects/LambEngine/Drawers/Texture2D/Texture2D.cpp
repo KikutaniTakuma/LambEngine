@@ -12,7 +12,10 @@
 /// 静的変数のインスタンス化
 /// </summary>
 
-std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum) * 2> Texture2D::graphicsPipelineState_ = {};
+std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> Texture2D::graphicsPipelineState_ = {};
+std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> Texture2D::graphicsPipelineStateNoDepth_ = {};
+std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> Texture2D::graphicsPipelineStateNoWrap_ = {};
+std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> Texture2D::graphicsPipelineStateNoWrapNoDepth_ = {};
 Shader Texture2D::shader_ = {};
 
 D3D12_INDEX_BUFFER_VIEW Texture2D::indexView_ = {};
@@ -203,21 +206,36 @@ void Texture2D::CreateGraphicsPipeline() {
 	rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 
-	PipelineManager::CreateRootSgnature(rootPrams.data(), rootPrams.size(), true);
+	PipelineManager::CreateRootSgnature(rootPrams.data(), rootPrams.size(), true, false);
 	PipelineManager::SetShader(shader_);
 	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT);
 	PipelineManager::SetVertexInput("TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT);
 
 	for (int32_t i = Pipeline::Blend::None; i < graphicsPipelineState_.size(); i++) {
-		if (i < Pipeline::Blend::BlendTypeNum) {
-			PipelineManager::SetState(Pipeline::Blend(i), Pipeline::SolidState::Solid);
-			graphicsPipelineState_[i] = PipelineManager::Create();
-		}
-		else {
-			PipelineManager::IsDepth(false);
-			PipelineManager::SetState(Pipeline::Blend(i - Pipeline::Blend::BlendTypeNum), Pipeline::SolidState::Solid);
-			graphicsPipelineState_[i] = PipelineManager::Create();
-		}
+		PipelineManager::IsDepth(true);
+		PipelineManager::SetState(Pipeline::Blend(i), Pipeline::SolidState::Solid);
+		graphicsPipelineState_[i] = PipelineManager::Create();
+
+		PipelineManager::IsDepth(false);
+		PipelineManager::SetState(Pipeline::Blend(i), Pipeline::SolidState::Solid);
+		graphicsPipelineStateNoDepth_[i] = PipelineManager::Create();
+	}
+
+	PipelineManager::StateReset();
+
+	PipelineManager::CreateRootSgnature(rootPrams.data(), rootPrams.size(), true, true);
+	PipelineManager::SetShader(shader_);
+	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT);
+	PipelineManager::SetVertexInput("TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT);
+
+	for (int32_t i = Pipeline::Blend::None; i < graphicsPipelineStateNoWrap_.size(); i++) {
+		PipelineManager::IsDepth(true);
+		PipelineManager::SetState(Pipeline::Blend(i), Pipeline::SolidState::Solid);
+		graphicsPipelineStateNoWrap_[i] = PipelineManager::Create();
+
+		PipelineManager::IsDepth(false);
+		PipelineManager::SetState(Pipeline::Blend(i), Pipeline::SolidState::Solid);
+		graphicsPipelineStateNoWrapNoDepth_[i] = PipelineManager::Create();
 	}
 
 	PipelineManager::StateReset();
@@ -290,7 +308,8 @@ void Texture2D::Update() {
 void Texture2D::Draw(
 	const Mat4x4& viewProjection,
 	Pipeline::Blend blend,
-	bool isDepth
+	bool isDepth,
+	bool isWrap
 ) {
 	if (tex_ && isLoad_) {
 		const Vector2& uv0 = { uvPibot.x, uvPibot.y + uvSize.y }; const Vector2& uv1 = uvSize + uvPibot;
@@ -314,11 +333,17 @@ void Texture2D::Draw(
 
 
 		// 各種描画コマンドを積む
-		if (isDepth) {
-			graphicsPipelineState_[blend]->Use();
+		if (!isDepth && isWrap) {
+			graphicsPipelineStateNoDepth_[blend]->Use();
+		}
+		else if (isDepth && !isWrap) {
+			graphicsPipelineStateNoWrap_[blend]->Use();
+		}
+		else if (!isDepth && !isWrap) {
+			graphicsPipelineStateNoWrapNoDepth_[blend]->Use();
 		}
 		else {
-			graphicsPipelineState_[blend + Pipeline::Blend::BlendTypeNum]->Use();
+			graphicsPipelineState_[blend]->Use();
 		}
 		
 		tex_->Use(0);
