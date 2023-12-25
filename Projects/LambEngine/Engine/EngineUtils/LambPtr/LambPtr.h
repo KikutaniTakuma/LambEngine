@@ -290,6 +290,6 @@ namespace Lamb {
 		/// <summary>
 		/// 管理するポインタ
 		/// </summary>
-		T* ptr_;
+		alignas(8) T* ptr_;
 	};
 }
