@@ -243,6 +243,16 @@ namespace Lamb {
 		}
 
 		/// <summary>
+		/// リセットして新しいポインタを設定する
+		/// </summary>
+		/// <param name="ptr">新しいポインタ</param>
+		template<IsIUnknownBased U>
+		void Reset(U* ptr) {
+			Delete();
+			*this = ptr;
+		}
+
+		/// <summary>
 		/// <para>所持してるポインタを返して所有権を手放す</para>
 		/// <para>この関数を呼んだら解放が呼ばれずnullptrになる</para>
 		/// </summary>
