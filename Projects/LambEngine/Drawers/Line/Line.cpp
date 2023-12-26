@@ -44,7 +44,7 @@ void Line::Initialize() {
 
 	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
 	heap->BookingHeapPos(1);
-	heap->CreateStructuredBufferView(*vertData_);
+	heap->CreateView(*vertData_);
 
 	vertexBuffer_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(Vector4) * kVertexNum);
 	vertexView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
@@ -61,7 +61,7 @@ void Line::Initialize() {
 void Line::Finalize() {
 	if (vertData_) {
 		CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
-		heap->ReleaseView(vertData_->GetViewHandleUINT());
+		heap->ReleaseView(vertData_->GetHandleUINT());
 		vertData_.reset();
 	}
 
@@ -81,7 +81,7 @@ void Line::AllDraw() {
 
 	pipline_->Use();
 	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
-	heap->Use(vertData_->GetViewHandleUINT(), 0);
+	heap->Use(vertData_->GetHandleUINT(), 0);
 	auto commandList = DirectXCommand::GetInstance()->GetCommandList();
 	commandList->IASetVertexBuffers(0, 1, &vertexView_);
 	commandList->DrawInstanced(kVertexNum, indexCount_, 0, 0);

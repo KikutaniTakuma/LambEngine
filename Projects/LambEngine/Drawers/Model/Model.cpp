@@ -131,9 +131,9 @@ Model::Model() :
 
 	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
 	descriptorHeap->BookingHeapPos(3u);
-	descriptorHeap->CreateConstBufferView(wvpData_);
-	descriptorHeap->CreateConstBufferView(dirLig_);
-	descriptorHeap->CreateConstBufferView(colorBuf_);
+	descriptorHeap->CreateView(wvpData_);
+	descriptorHeap->CreateView(dirLig_);
+	descriptorHeap->CreateView(colorBuf_);
 }
 
 Model::Model(const std::string& fileName) :
@@ -298,7 +298,7 @@ void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 			pipeline_->Use();
 			i.second.tex->Use(0);
 
-			commandlist->SetGraphicsRootDescriptorTable(1, wvpData_.GetViewHandle());
+			commandlist->SetGraphicsRootDescriptorTable(1, wvpData_.GetHandleGPU());
 
 			commandlist->IASetVertexBuffers(0, 1, &i.second.view);
 			commandlist->DrawInstanced(i.second.vertNum, 1, 0, 0);
@@ -355,7 +355,7 @@ void Model::Debug([[maybe_unused]]const std::string& guiName) {
 
 Model::~Model() {
 	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
-	descriptorHeap->ReleaseView(wvpData_.GetViewHandleUINT());
-	descriptorHeap->ReleaseView(dirLig_.GetViewHandleUINT());
-	descriptorHeap->ReleaseView(colorBuf_.GetViewHandleUINT());
+	descriptorHeap->ReleaseView(wvpData_.GetHandleUINT());
+	descriptorHeap->ReleaseView(dirLig_.GetHandleUINT());
+	descriptorHeap->ReleaseView(colorBuf_.GetHandleUINT());
 }

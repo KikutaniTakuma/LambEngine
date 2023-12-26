@@ -142,7 +142,7 @@ Texture* const TextureManager::LoadTexture(const std::string& fileName) {
 			return nullptr;
 		}
 
-		tex->srvHeapHandleUint_ = srvHeap_->CreateTxtureView(tex.get());
+		srvHeap_->CreateView(*tex);
 
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 
@@ -164,7 +164,7 @@ Texture* const TextureManager::LoadTexture(const std::string& fileName, ID3D12Gr
 			return nullptr;
 		}
 
-		tex->srvHeapHandleUint_ = srvHeap_->CreateTxtureView(tex.get());
+		srvHeap_->CreateView(*tex);
 
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 

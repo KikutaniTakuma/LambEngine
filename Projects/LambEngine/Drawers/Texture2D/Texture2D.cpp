@@ -56,8 +56,8 @@ Texture2D::Texture2D() :
 
 	auto srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->BookingHeapPos(2u);
-	srvHeap->CreateConstBufferView(wvpMat_);
-	srvHeap->CreateConstBufferView(colorBuf_);
+	srvHeap->CreateView(wvpMat_);
+	srvHeap->CreateView(colorBuf_);
 }
 
 Texture2D::Texture2D(const std::string& fileName):
@@ -139,17 +139,11 @@ Texture2D& Texture2D::operator=(Texture2D&& right) noexcept {
 
 Texture2D::~Texture2D() {
 	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
-	descriptorHeap->ReleaseView(wvpMat_.GetViewHandleUINT());
-	descriptorHeap->ReleaseView(colorBuf_.GetViewHandleUINT());
+	descriptorHeap->ReleaseView(wvpMat_.GetHandleUINT());
+	descriptorHeap->ReleaseView(colorBuf_.GetHandleUINT());
 }
 
 void Texture2D::Initialize(const std::string& vsFileName, const std::string& psFileName) {
-	if (indexResource_) { 
-		indexResource_->Release();
-		indexResource_.Reset();
-		indexResource_ = nullptr;
-	}
-	
 	LoadShader(vsFileName, psFileName);
 
 	uint16_t indices[] = {
@@ -347,7 +341,7 @@ void Texture2D::Draw(
 		}
 		
 		tex_->Use(0);
-		commandlist->SetGraphicsRootDescriptorTable(1, wvpMat_.GetViewHandle());
+		commandlist->SetGraphicsRootDescriptorTable(1, wvpMat_.GetHandleGPU());
 		commandlist->IASetVertexBuffers(0, 1, &vertexView_);
 		commandlist->IASetIndexBuffer(&indexView_);
 		commandlist->DrawIndexedInstanced(6, 1, 0, 0, 0);

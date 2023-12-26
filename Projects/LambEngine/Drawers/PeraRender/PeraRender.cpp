@@ -52,10 +52,10 @@ PeraRender::PeraRender(uint32_t width, uint32_t height):
 
 PeraRender::~PeraRender() {
 	static auto srvHeap = CbvSrvUavHeap::GetInstance();
-	srvHeap->ReleaseView(render_.GetViewHandleUINT());
-	srvHeap->ReleaseView(wvpMat_.GetViewHandleUINT());
-	srvHeap->ReleaseView(colorBuf_.GetViewHandleUINT());
-	srvHeap->ReleaseView(randomVec_.GetViewHandleUINT());
+	srvHeap->ReleaseView(render_.GetHandleUINT());
+	srvHeap->ReleaseView(wvpMat_.GetHandleUINT());
+	srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
+	srvHeap->ReleaseView(randomVec_.GetHandleUINT());
 }
 
 void PeraRender::Initialize(const std::string& psFileName) {
@@ -97,10 +97,10 @@ void PeraRender::Initialize(const std::string& psFileName) {
 
 	static auto srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->BookingHeapPos(3u);
-	srvHeap->CreatePerarenderView(render_);
-	srvHeap->CreateConstBufferView(wvpMat_);
-	srvHeap->CreateConstBufferView(colorBuf_);
-	srvHeap->CreateConstBufferView(randomVec_);
+	srvHeap->CreateView(render_);
+	srvHeap->CreateView(wvpMat_);
+	srvHeap->CreateView(colorBuf_);
+	srvHeap->CreateView(randomVec_);
 
 	randomVec_->x = Lamb::Random(0.0f, 1.0f);
 	randomVec_->y = Lamb::Random(0.0f, 1.0f);
@@ -223,7 +223,7 @@ void PeraRender::Draw(
 	piplines_[blend]->Use();
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	render_.UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootDescriptorTable(1, wvpMat_.GetViewHandle());
+	commandList->SetGraphicsRootDescriptorTable(1, wvpMat_.GetHandleGPU());
 	commandList->IASetVertexBuffers(0, 1, &peraVertexView_);
 	commandList->IASetIndexBuffer(&indexView_);
 	commandList->DrawIndexedInstanced(6, 1, 0, 0, 0);

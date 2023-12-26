@@ -25,12 +25,6 @@ D3D12_INDEX_BUFFER_VIEW Particle::indexView_ = {};
 Lamb::LambPtr<ID3D12Resource> Particle::indexResource_ = nullptr;
 
 void Particle::Initialize(const std::string& vsFileName, const std::string& psFileName) {
-	if (indexResource_) {
-		indexResource_->Release();
-		indexResource_.Reset();
-		indexResource_ = nullptr;
-	}
-
 	LoadShader(vsFileName, psFileName);
 
 	uint16_t indices[] = {
@@ -128,20 +122,14 @@ Particle::Particle() :
 {
 	srvHeap_ = CbvSrvUavHeap::GetInstance();
 	srvHeap_->BookingHeapPos(2u);
-	srvHeap_->CreateStructuredBufferView<Mat4x4>(wvpMat_);
-	srvHeap_->CreateStructuredBufferView<Vector4>(colorBuf_);
+	srvHeap_->CreateView(wvpMat_);
+	srvHeap_->CreateView(colorBuf_);
 	for (uint32_t i = 0; i < wvpMat_.Size(); i++) {
 		wvpMat_[i] = Mat4x4::kIdentity;
 	}
 
 	for (uint32_t i = 0; i < colorBuf_.Size(); i++) {
 		colorBuf_[i] = Vector4::kIdentity;
-	}
-
-	if (vertexResource_) { 
-		vertexResource_->Release(); 
-		vertexResource_.Reset();
-		vertexResource_ = nullptr;
 	}
 
 	vertexResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(VertexData) * 4);
@@ -203,8 +191,8 @@ Particle::Particle(uint32_t indexNum) :
 {
 	srvHeap_ = CbvSrvUavHeap::GetInstance();
 	srvHeap_->BookingHeapPos(2u);
-	srvHeap_->CreateStructuredBufferView<Mat4x4>(wvpMat_);
-	srvHeap_->CreateStructuredBufferView<Vector4>(colorBuf_);
+	srvHeap_->CreateView(wvpMat_);
+	srvHeap_->CreateView(colorBuf_);
 
 	for (uint32_t i = 0; i < wvpMat_.Size();i++) {
 		wvpMat_[i] = Mat4x4::kIdentity;
@@ -345,9 +333,7 @@ Particle& Particle::operator=(Particle&& right) noexcept {
 
 void Particle::Resize(uint32_t index) {
 	wvpMat_.Resize(index);
-	srvHeap_->CreateStructuredBufferView<Mat4x4>(wvpMat_, wvpMat_.GetViewHandleUINT());
 	colorBuf_.Resize(index);
-	srvHeap_->CreateStructuredBufferView<Vector4>(colorBuf_, colorBuf_.GetViewHandleUINT());
 	wtfs_.resize(index);
 }
 
@@ -412,8 +398,8 @@ Particle::~Particle() {
 //	}
 //#endif // _DEBUG
 
-	srvHeap_->ReleaseView(wvpMat_.GetViewHandleUINT());
-	srvHeap_->ReleaseView(colorBuf_.GetViewHandleUINT());
+	srvHeap_->ReleaseView(wvpMat_.GetHandleUINT());
+	srvHeap_->ReleaseView(colorBuf_.GetHandleUINT());
 }
 
 
@@ -961,7 +947,7 @@ void Particle::Draw(
 			// 各種描画コマンドを積む
 			graphicsPipelineState_[blend]->Use();
 			tex_->Use(0);
-			srvHeap_->Use(wvpMat_.GetViewHandleUINT(), 1);
+			srvHeap_->Use(wvpMat_.GetHandleUINT(), 1);
 			commandlist->IASetVertexBuffers(0, 1, &vertexView_);
 			commandlist->IASetIndexBuffer(&indexView_);
 			commandlist->DrawIndexedInstanced(6, drawCount, 0, 0, 0);

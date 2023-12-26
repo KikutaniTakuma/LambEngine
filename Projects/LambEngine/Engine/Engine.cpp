@@ -350,7 +350,7 @@ void Engine::InitializeDraw() {
 
 	CbvSrvUavHeap* cbvSrvUavHeap = CbvSrvUavHeap::GetInstance();
 	cbvSrvUavHeap->BookingHeapPos(1u);
-	cbvSrvUavHeap->CreateDepthTextureView(*depthStencil_);
+	cbvSrvUavHeap->CreateView(*depthStencil_);
 }
 
 
