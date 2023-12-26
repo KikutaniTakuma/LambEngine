@@ -166,6 +166,9 @@
     <ClCompile Include="Framework\Framework.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
+    <ClCompile Include="Drawers\BaseDrawer.cpp">
+      <Filter>Drawers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -538,6 +541,9 @@
     </ClInclude>
     <ClInclude Include="Engine\EngineUtils\LambPtr\LambPtr.h">
       <Filter>Engine\EngineUtils\LambPtr</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawers\BaseDrawer.h">
+      <Filter>Drawers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

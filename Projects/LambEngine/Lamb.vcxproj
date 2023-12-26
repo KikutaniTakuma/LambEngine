@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClCompile Include="AudioManager\AudioManager.cpp" />
     <ClCompile Include="AudioManager\Audio\Audio.cpp" />
+    <ClCompile Include="Drawers\BaseDrawer.cpp" />
     <ClCompile Include="Drawers\Line\Line.cpp" />
     <ClCompile Include="Drawers\Model\Model.cpp" />
     <ClCompile Include="Drawers\Particle\Particle.cpp" />
@@ -177,6 +178,7 @@
   <ItemGroup>
     <ClInclude Include="AudioManager\AudioManager.h" />
     <ClInclude Include="AudioManager\Audio\Audio.h" />
+    <ClInclude Include="Drawers\BaseDrawer.h" />
     <ClInclude Include="Drawers\Line\Line.h" />
     <ClInclude Include="Drawers\Model\Model.h" />
     <ClInclude Include="Drawers\Particle\Particle.h" />
