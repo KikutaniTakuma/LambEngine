@@ -545,5 +545,8 @@
     <ClInclude Include="Drawers\BaseDrawer.h">
       <Filter>Drawers</Filter>
     </ClInclude>
+    <ClInclude Include="Math\MathCommon.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
