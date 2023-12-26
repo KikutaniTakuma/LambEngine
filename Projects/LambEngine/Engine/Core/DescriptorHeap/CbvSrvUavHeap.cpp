@@ -56,3 +56,23 @@ void CbvSrvUavHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
 	auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, heapHandles_[handleIndex].second);
 }
+
+uint32_t CbvSrvUavHeap::CreateView(BaseBuffer& buffer) {
+	if (currentHandleIndex_ >= heapSize_) {
+		throw Lamb::Error::Code<DescriptorHeap>("Over HeapSize", __func__);
+	}
+
+	if (bookingHandle_.empty()) {
+		useHandle_.push_back(currentHandleIndex_);
+		buffer.CreateView(heapHandles_[currentHandleIndex_].first, heapHandles_[currentHandleIndex_].second, currentHandleIndex_);
+		currentHandleIndex_++;
+		return currentHandleIndex_ - 1u;
+	}
+	else {
+		uint32_t nowCreateViewHandle = bookingHandle_.front();
+		useHandle_.push_back(nowCreateViewHandle);
+		buffer.CreateView(heapHandles_[nowCreateViewHandle].first, heapHandles_[nowCreateViewHandle].second, nowCreateViewHandle);
+		bookingHandle_.pop_front();
+		return nowCreateViewHandle;
+	}
+}

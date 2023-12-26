@@ -37,4 +37,12 @@ public:
 	void SetHeap();
 	void Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex);
 	void Use(uint32_t handleIndex, UINT rootParmIndex);
+
+public:
+	/// <summary>
+	/// View生成用関数
+	/// </summary>
+	/// <param name="buffer"></param>
+	/// <returns></returns>
+	uint32_t CreateView(class BaseBuffer& buffer);
 };

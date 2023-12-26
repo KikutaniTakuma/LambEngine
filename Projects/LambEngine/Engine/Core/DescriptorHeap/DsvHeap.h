@@ -34,11 +34,6 @@ private:
 		return D3D12_GPU_DESCRIPTOR_HANDLE{};
 	}
 
-	[[deprecated("Don`t use this function")]]
-	uint32_t CreateView([[maybe_unused]] class BaseBuffer& buffer) override{
-		return 0xffffffffu;
-	}
-
 public:
 	uint32_t CreateView(class DepthBuffer& depthStencilBuffer);
 };
