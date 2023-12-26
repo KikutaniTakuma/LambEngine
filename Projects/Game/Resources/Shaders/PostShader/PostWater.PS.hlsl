@@ -90,8 +90,10 @@ float3 CreateNormal(float2 uv)
     
     float a = 0.01f;
     n = (n / a * 1.0f) * 0.5f;
+    
+    n = (n * 2.0f) - 1.0f;
    
-    return n;
+    return normalize(n);
 }
 
 float4 main(Output input) : SV_TARGET{
@@ -99,12 +101,9 @@ float4 main(Output input) : SV_TARGET{
     
     float4 texColor = tex.Sample(smp, input.uv + noise);
     
-    //float4 normalTmp = float4(CreateNormal(input.uv), 1.0f);
-    //normalTmp = mul(normalTmp, normalRotate);
     
-    //float3 normal = normalTmp.xyz;
     float3 normal = CreateNormal(input.uv);
-    //normal = normalize(normal);
+
     float3 ligDirection = normalize(float3(1.0f, -1.0f, 0.0f));
     
     // ディレクションライト拡散反射光
@@ -131,15 +130,15 @@ float4 main(Output input) : SV_TARGET{
     
     
     
-    float3 lig = diffDirection /*+ specDirection*/;
+    float3 lig = diffDirection + specDirection;
     
     lig.xyz += 0.2f;
     
-    lig = pow(lig, 0.3f);
+    lig = pow(lig,1.0f);
     
-    //texColor *= color;
-    //texColor.xyz *= lig;
+    texColor *= color;
+    texColor.xyz *= lig;
 
-    return texColor * color * float4(lig, 1.0f);
+    return texColor;
     //return float4(normal, 1.0f);
 }
