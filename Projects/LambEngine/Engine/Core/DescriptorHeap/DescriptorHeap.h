@@ -77,6 +77,8 @@ public:
 	/// <param name="handle">解放するハンドル</param>
 	void UseThisPosition(uint32_t handle);
 
+	virtual uint32_t CreateView(class BaseBuffer& buffer);
+
 protected:
 	/// <summary>
 	/// ヒープのハンドルを作る
