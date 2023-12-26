@@ -17,8 +17,6 @@ RenderTarget::RenderTarget() :
 	width_(static_cast<uint32_t>(WindowFactory::GetInstance()->GetClientSize().x)),
 	height_(static_cast<uint32_t>(WindowFactory::GetInstance()->GetClientSize().y)),
 	srvDesc_{},
-	srvHeapHandle_{},
-	srvHeapHandleUint_(),
 	rtvHeapHandle_{},
 	rtvHeapHandleUint_(0u)
 {
@@ -69,8 +67,6 @@ RenderTarget::RenderTarget(uint32_t width, uint32_t height) :
 	width_(width),
 	height_(height),
 	srvDesc_{},
-	srvHeapHandle_{},
-	srvHeapHandleUint_(),
 	rtvHeapHandle_{},
 	rtvHeapHandleUint_(0u)
 {
@@ -157,20 +153,25 @@ void RenderTarget::SetMainRenderTarget() {
 
 void RenderTarget::UseThisRenderTargetShaderResource() {
 	static auto mainComList = DirectXCommand::GetInstance()->GetCommandList();
-	mainComList->SetGraphicsRootDescriptorTable(0, srvHeapHandle_);
+	mainComList->SetGraphicsRootDescriptorTable(0, heapHandleGPU_);
 }
 
-void RenderTarget::CreateView(D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle, D3D12_GPU_DESCRIPTOR_HANDLE descHeapHandleGPU, UINT descHeapHandleUINT) {
+void RenderTarget::CreateView(
+	D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
+	D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
+	UINT heapHandle
+) {
 	static ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
 	
 	device->CreateShaderResourceView(
 		resource_.Get(),
 		&srvDesc_,
-		descHeapHandle
+		heapHandleCPU
 	);
 
-	srvHeapHandle_ = descHeapHandleGPU;
-	srvHeapHandleUint_ = descHeapHandleUINT;
+	heapHandleCPU_ = heapHandleCPU;
+	heapHandleGPU_ = heapHandleGPU;
+	heapHandle_ = heapHandle;
 
 	tex_.reset();
 	tex_ = std::make_unique<Texture>();
@@ -178,8 +179,8 @@ void RenderTarget::CreateView(D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle, D3D12_
 	tex_->Set(
 		resource_,
 		srvDesc_,
-		srvHeapHandle_,
-		srvHeapHandleUint_
+		heapHandleGPU_,
+		heapHandle_
 	);
 }
 

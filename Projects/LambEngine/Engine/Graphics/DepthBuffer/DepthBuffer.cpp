@@ -12,10 +12,7 @@ DepthBuffer::DepthBuffer():
 	depthStencilResource_{},
 	srvDesc_{},
 	handle_{},
-	hadleUINT_{},
-	srvHandleCPU_{},
-	srvHandleGPU_{},
-	srvHadleUINT_{}
+	hadleUINT_{}
 {
 	DirectXDevice* const directXDevice = DirectXDevice::GetInstance();
 
@@ -42,10 +39,7 @@ DepthBuffer::DepthBuffer(const Vector2& bufSize):
 	depthStencilResource_{},
 	srvDesc_{},
 	handle_{},
-	hadleUINT_{},
-	srvHandleCPU_{},
-	srvHandleGPU_{},
-	srvHadleUINT_{}
+	hadleUINT_{}
 {
 	DirectXDevice* const directXDevice = DirectXDevice::GetInstance();
 
@@ -88,18 +82,22 @@ void DepthBuffer::CreateDepthView(D3D12_CPU_DESCRIPTOR_HANDLE handle, uint32_t h
 
 	device->CreateDepthStencilView(depthStencilResource_.Get(), &dsvDesc, handle_);
 }
-void DepthBuffer::CreateSRView(D3D12_CPU_DESCRIPTOR_HANDLE heapHandle, D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU, UINT heapHandleUINT) {
+void DepthBuffer::CreateView(
+	D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
+	D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
+	UINT heapHandle
+) {
 	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
 
 	device->CreateShaderResourceView(
 		depthStencilResource_.Get(),
 		&srvDesc_,
-		heapHandle
+		heapHandleCPU
 	);
 
-	srvHandleCPU_ = heapHandle;
-	srvHandleGPU_ = heapHandleGPU;
-	srvHadleUINT_ = heapHandleUINT;
+	heapHandleCPU_ = heapHandleCPU;
+	heapHandleGPU_ = heapHandleGPU;
+	heapHandle_ = heapHandle;
 
 	tex_.reset();
 	tex_ = std::make_unique<Texture>();
@@ -107,8 +105,8 @@ void DepthBuffer::CreateSRView(D3D12_CPU_DESCRIPTOR_HANDLE heapHandle, D3D12_GPU
 	tex_->Set(
 		depthStencilResource_,
 		srvDesc_,
-		srvHandleGPU_,
-		srvHadleUINT_
+		heapHandleGPU_,
+		heapHandle_
 	);
 }
 
