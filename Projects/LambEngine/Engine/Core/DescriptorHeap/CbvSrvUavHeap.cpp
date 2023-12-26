@@ -59,7 +59,7 @@ void CbvSrvUavHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
 
 uint32_t CbvSrvUavHeap::CreateView(BaseBuffer& buffer) {
 	if (currentHandleIndex_ >= heapSize_) {
-		throw Lamb::Error::Code<DescriptorHeap>("Over HeapSize", __func__);
+		throw Lamb::Error::Code<CbvSrvUavHeap>("Over HeapSize", __func__);
 	}
 
 	if (bookingHandle_.empty()) {
