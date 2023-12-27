@@ -186,10 +186,10 @@
     <ClInclude Include="Drawers\PeraRender\PeraRender.h" />
     <ClInclude Include="Drawers\StringOut\StringOut.h" />
     <ClInclude Include="Drawers\Texture2D\Texture2D.h" />
-    <ClInclude Include="Engine\Buffer\BaseBuffer\BaseBuffer.h" />
     <ClInclude Include="Engine\Buffer\ConstBuffer\ConstBuffer.h" />
     <ClInclude Include="Engine\Buffer\StructuredBuffer\StructuredBuffer.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.h" />
+    <ClInclude Include="Engine\Core\DescriptorHeap\Descriptor.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\DescriptorHeap.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\DsvHeap.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\RtvHeap.h" />

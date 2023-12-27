@@ -2,15 +2,15 @@
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
 #include "Utils/Cocepts/Cocepts.h"
-#include "../BaseBuffer/BaseBuffer.h"
+#include "Engine/Core/DescriptorHeap/Descriptor.h"
 
 /// <summary>
 /// 定数バッファ
 /// </summary>
 template<Lamb::IsNotReferenceAndPtr T>
-class ConstBuffer final : public BaseBuffer {
+class ConstBuffer final : public Descriptor {
 public:
-	inline ConstBuffer() noexcept:
+	inline ConstBuffer() :
 		bufferResource_(),
 		cbvDesc_(),
 		data_(nullptr),

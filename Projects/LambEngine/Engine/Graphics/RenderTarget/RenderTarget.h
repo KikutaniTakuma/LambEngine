@@ -1,11 +1,11 @@
 #pragma once
 #include "Engine/Graphics/TextureManager/Texture/Texture.h"
-#include "Engine/Buffer/BaseBuffer/BaseBuffer.h"
+#include "Engine/Core/DescriptorHeap/Descriptor.h"
 
 /// <summary>
 /// ポストエフェクト用のレンダーターゲットリソース等を管理するクラス
 /// </summary>
-class RenderTarget final : public BaseBuffer {
+class RenderTarget final : public Descriptor {
 public:
 	RenderTarget();
 	RenderTarget(uint32_t width, uint32_t height);

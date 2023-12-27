@@ -360,9 +360,6 @@
     <Filter Include="Engine\Graphics\PipelineObject\PeraPipeline">
       <UniqueIdentifier>{4fd0d217-6bd2-4ca7-8592-5b493248756a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Buffer\BaseBuffer">
-      <UniqueIdentifier>{913955ef-0199-48c6-b3f3-a29763f8cd3d}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -560,8 +557,8 @@
     <ClInclude Include="Math\MathCommon.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Buffer\BaseBuffer\BaseBuffer.h">
-      <Filter>Engine\Buffer\BaseBuffer</Filter>
+    <ClInclude Include="Engine\Core\DescriptorHeap\Descriptor.h">
+      <Filter>Engine\Core\DescriptorHeap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
