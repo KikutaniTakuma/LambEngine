@@ -63,8 +63,6 @@ public:
 	Vector2 uvPibot;
 	Vector2 uvSize;
 
-	std::array<Vector3, 4> worldPos;
-
 	uint32_t color;
 
 private:
@@ -77,6 +75,4 @@ private:
 
 	D3D12_INDEX_BUFFER_VIEW indexView_;
 	Lamb::LambPtr<ID3D12Resource> indexResource_;
-
-	std::array<class Pipeline*, Pipeline::Blend::BlendTypeNum> piplines_;
 };

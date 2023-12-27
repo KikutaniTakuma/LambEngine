@@ -64,13 +64,12 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-	camera_->Update(Vector3::kZero);
+	camera_->Update();
 
-	waterPipelineObject_->SetCameraPos(camera_->GetPos());
-	waterPipelineObject_->SetRotate(pera_.rotate);
+	waterPipelineObject_->SetCameraPos(camera_->pos);
 	
 	pera_.PreDraw();
-	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+	//model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
 	//tex_->Draw(staticCamera_.GetViewOthographics());
 	pera_.Draw(camera_->GetViewProjection(), Pipeline::Add);
 }

@@ -5,6 +5,12 @@
 #include "Engine/Graphics/MeshManager/Mesh/Mesh.h"
 
 class WaterPipeline final : public PeraPipeline {
+private:
+	struct Normals {
+		Vector3 normal;
+		float pad;
+		Vector3 tangent;
+	};
 public:
 	WaterPipeline() = default;
 	WaterPipeline(const WaterPipeline&) = delete;
@@ -30,12 +36,8 @@ public:
 		light_->eyePos = cameraPos;
 	}
 
-	void SetRotate(const Vector3& rotate) {
-		*normalRotate_ = Mat4x4::MakeRotate(rotate);
-	}
-
 private:
+	ConstBuffer<Normals> normalVector_;
 	ConstBuffer<Vector2> randomVec_;
-	ConstBuffer<Mat4x4> normalRotate_;
 	ConstBuffer<Mesh::Light> light_;
 };

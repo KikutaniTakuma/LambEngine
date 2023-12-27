@@ -1,14 +1,9 @@
 #include "PostWater.hlsli"
 #include "Random.hlsli"
 
-cbuffer RamdomVec : register(b2)
+cbuffer RamdomVec : register(b3)
 {
     float2 randomVec;
-}
-
-cbuffer Rotate : register(b3)
-{
-    float4x4 normalRotate;
 }
 
 struct Light
@@ -103,8 +98,11 @@ float4 main(Output input) : SV_TARGET{
     
     
     float3 normal = CreateNormal(input.uv);
+    //normal = mul(normal, input.tangentBasis);
+    //normal = (normal.xyz + 1.0f) * 0.5f;
 
-    float3 ligDirection = normalize(float3(1.0f, -1.0f, 0.0f));
+    float3 ligDirection = light.ligDirection;
+    ligDirection = mul(ligDirection, input.tangentBasis);
     
     // ディレクションライト拡散反射光
     float t = dot(normal, ligDirection);
@@ -112,21 +110,20 @@ float4 main(Output input) : SV_TARGET{
     t *= -1.0f;
     t = (t + abs(t)) * 0.5f;
 
-    float3 diffDirection = float3(15.0f,15.0f,15.0f) * t;
+    float3 diffDirection = light.ligColor * t;
     
     
-    
-    float3 refVec = reflect(ligDirection, normal);
-    refVec = normalize(refVec);
-
     float3 toEye = light.eyePos - input.worldPos.xyz;
     toEye = normalize(toEye);
+    toEye = mul(toEye, input.tangentBasis);
+    
+    float3 refVec = -reflect(toEye, normal);
+    refVec = normalize(refVec);
 
     t = dot(refVec, toEye);
-    t = (t + abs(t)) * 0.5f;
 
-    t = pow(t, 5.0f);
-    float3 specDirection = float3(15.0f, 15.0f, 15.0f) * t;
+    t = pow(saturate(t), 20.0f);
+    float3 specDirection = light.ligColor * t;
     
     
     

@@ -13,10 +13,14 @@ void WaterPipeline::Update() {
 
 	*colorBuf_ = color;
 
-	*wvpMat_ = wvp;
+	wvpMat_->worldMat = worldMat;
+	wvpMat_->viewProjection = viewProjection;
 
-	light_->ligColor = Vector3::kIdentity;
-	light_->ligDirection = Vector3{ 1.0f,-1.0f,-1.0f }.Normalize();
+	normalVector_->normal = Vector3{ 0.0f,1.0f,0.0f };
+	normalVector_->tangent = Vector3{ 0.0f,0.0f,1.0f };
+
+	light_->ligColor = Vector3::kIdentity * 15.0f;
+	light_->ligDirection = Vector3{ 1.0f,-1.0f,0.0f }.Normalize();
 }
 
 void WaterPipeline::Init(
@@ -88,8 +92,8 @@ void WaterPipeline::Init(
 	srvHeap->CreateView(*render_);
 	srvHeap->CreateView(wvpMat_);
 	srvHeap->CreateView(colorBuf_);
+	srvHeap->CreateView(normalVector_);
 	srvHeap->CreateView(randomVec_);
-	srvHeap->CreateView(normalRotate_);
 	srvHeap->CreateView(light_);
 
 	randomVec_->x = Lamb::Random(0.0f, 1.0f);
@@ -103,7 +107,7 @@ WaterPipeline::~WaterPipeline() {
 		srvHeap->ReleaseView(wvpMat_.GetHandleUINT());
 		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
 		srvHeap->ReleaseView(randomVec_.GetHandleUINT());
-		srvHeap->ReleaseView(normalRotate_.GetHandleUINT());
+		srvHeap->ReleaseView(normalVector_.GetHandleUINT());
 		srvHeap->ReleaseView(light_.GetHandleUINT());
 	}
 

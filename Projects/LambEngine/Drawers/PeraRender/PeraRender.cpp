@@ -21,7 +21,6 @@ PeraRender::PeraRender():
 	isPreDraw_(false),
 	uvPibot(),
 	uvSize(Vector2::identity),
-	worldPos{},
 	color(std::numeric_limits<uint32_t>::max())
 {
 	peraPipelineObject_.reset(new PeraPipeline{});
@@ -38,7 +37,6 @@ PeraRender::PeraRender(uint32_t width, uint32_t height):
 	isPreDraw_(false),
 	uvPibot(),
 	uvSize(Vector2::identity),
-	worldPos{},
 	color(std::numeric_limits<uint32_t>::max())
 {
 	peraPipelineObject_.reset(new PeraPipeline{});
@@ -125,24 +123,6 @@ void PeraRender::Initialize(PeraPipeline* pipelineObject) {
 void PeraRender::Update() {
 	isPreDraw_ = false;
 
-	static const std::array<Vector3, 4> pv{
-			Vector3{ -0.5f,  0.5f, 0.1f },
-			Vector3{  0.5f,  0.5f, 0.1f },
-			Vector3{  0.5f, -0.5f, 0.1f },
-			Vector3{ -0.5f, -0.5f, 0.1f },
-	};
-
-	std::copy(pv.begin(), pv.end(), worldPos.begin());
-	auto&& worldMat =
-		Mat4x4::MakeAffin(
-			Vector3(scale.x, scale.y, 1.0f),
-			rotate,
-			pos
-		);
-	for (auto& i : worldPos) {
-		i *= worldMat;
-	}
-
 	peraPipelineObject_->color = UintToVector4(color);
 }
 
@@ -168,11 +148,18 @@ void PeraRender::Draw(
 	const Vector2& uv0 = { uvPibot.x, uvPibot.y + uvSize.y }; const Vector2& uv1 = uvSize + uvPibot;
 	const Vector2& uv2 = { uvPibot.x + uvSize.x, uvPibot.y }; const Vector2& uv3 = uvPibot;
 
+	const std::array<Vector3, 4> localpos{
+			Vector3{ -0.5f,  0.5f, 0.0f },
+			Vector3{  0.5f,  0.5f, 0.0f },
+			Vector3{  0.5f, -0.5f, 0.0f },
+			Vector3{ -0.5f, -0.5f, 0.0f },
+	};
+
 	std::array<PeraVertexData, 4> pv = {
-		worldPos[0], uv3,
-		worldPos[1], uv2,
-		worldPos[2], uv1,
-		worldPos[3], uv0,
+		localpos[0], uv3,
+		localpos[1], uv2,
+		localpos[2], uv1,
+		localpos[3], uv0,
 	};
 
 	PeraVertexData* mappedData = nullptr;
@@ -180,7 +167,12 @@ void PeraRender::Draw(
 	std::copy(pv.begin(), pv.end(), mappedData);
 	peraVertexResource_->Unmap(0, nullptr);
 
-	peraPipelineObject_->wvp = viewProjection;
+	peraPipelineObject_->worldMat = Mat4x4::MakeAffin(
+		Vector3(scale.x, scale.y, 1.0f),
+		rotate,
+		pos
+	);
+	peraPipelineObject_->viewProjection = viewProjection;
 
 	peraPipelineObject_->Update();
 

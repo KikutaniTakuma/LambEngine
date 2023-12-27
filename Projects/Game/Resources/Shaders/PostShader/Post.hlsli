@@ -2,7 +2,8 @@ Texture2D<float4> tex : register(t0);
 SamplerState smp : register(s0);
 
 cbuffer Matrix : register(b0){
-    float4x4 wvpmat;
+    float4x4 worldmat;
+    float4x4 viewProjectionMatrix;
 }
 
 cbuffer Color : register(b1){

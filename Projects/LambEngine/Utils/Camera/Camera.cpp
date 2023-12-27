@@ -33,7 +33,7 @@ Camera::Camera(Camera&& right) noexcept
 
 void Camera::Update() {
 	view_.Affin(scale, rotate, pos);
-	worldPos_ = { view_[0][3],view_[1][3], view_[2][3] };
+	worldPos_ = pos;
 	view_.Inverse();
 
 	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();

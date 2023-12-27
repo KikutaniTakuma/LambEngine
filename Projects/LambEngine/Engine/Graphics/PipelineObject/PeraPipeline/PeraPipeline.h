@@ -7,6 +7,12 @@
 #include <memory>
 
 class PeraPipeline : public PipelineObject{
+protected:
+	struct WvpMat {
+		Mat4x4 worldMat;
+		Mat4x4 viewProjection;
+	};
+
 public:
 	PeraPipeline() = default;
 	PeraPipeline(const PeraPipeline&) = delete;
@@ -44,13 +50,14 @@ public:
 	}
 
 public:
-	Mat4x4 wvp = Mat4x4::kIdentity;
+	Mat4x4 worldMat = Mat4x4::kIdentity;
+	Mat4x4 viewProjection = Mat4x4::kIdentity;
 	Vector4 color = Vector4::kIdentity;
 
 protected:
 	std::unique_ptr<RenderTarget> render_;
 
-	ConstBuffer<Mat4x4> wvpMat_;
+	ConstBuffer<WvpMat> wvpMat_;
 	ConstBuffer<Vector4> colorBuf_;
 	uint32_t width_ = 0u;
 	uint32_t height_ = 0u;

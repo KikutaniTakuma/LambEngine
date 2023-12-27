@@ -10,7 +10,8 @@
 void PeraPipeline::Update() {
 	*colorBuf_ = color;
 
-	*wvpMat_ = wvp;
+	wvpMat_->worldMat = worldMat;
+	wvpMat_->viewProjection = viewProjection;
 }
 
 void PeraPipeline::Use(Pipeline::Blend blendType) {
