@@ -2,10 +2,10 @@
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
 
-class BaseBuffer {
+class Descriptor {
 public:
-	BaseBuffer() = default;
-	virtual ~BaseBuffer() = default;
+	Descriptor() = default;
+	virtual ~Descriptor() = default;
 
 public:
 	virtual void CreateView(
