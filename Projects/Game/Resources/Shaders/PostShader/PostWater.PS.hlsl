@@ -105,17 +105,20 @@ float4 main(Output input) : SV_TARGET{
     ligDirection = mul(ligDirection, input.tangentBasis);
     
     // ディレクションライト拡散反射光
-    float t = dot(normal, ligDirection);
+    float t = dot(normal, -ligDirection);
 
-    t *= -1.0f;
-    t = (t + abs(t)) * 0.5f;
+    //t *= -1.0f;
+    //t = (t + abs(t)) * 0.5f;
+    
+    t = saturate(t);
+    //t = pow(t, 2.0f);
 
-    float3 diffDirection = light.ligColor * t;
+    float3 diffDirection = light.ligColor * t * 1.0f;
     
     
     float3 toEye = light.eyePos - input.worldPos.xyz;
-    toEye = normalize(toEye);
     toEye = mul(toEye, input.tangentBasis);
+    toEye = normalize(toEye);
     
     float3 refVec = -reflect(toEye, normal);
     refVec = normalize(refVec);
@@ -129,9 +132,9 @@ float4 main(Output input) : SV_TARGET{
     
     float3 lig = diffDirection + specDirection;
     
-    lig.xyz += 0.2f;
+    lig.xyz += 0.3f;
     
-    lig = pow(lig,1.0f);
+    lig = pow(lig, 1.3f);
     
     texColor *= color;
     texColor.xyz *= lig;
