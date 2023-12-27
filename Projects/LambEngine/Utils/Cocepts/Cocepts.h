@@ -15,6 +15,12 @@ namespace Lamb {
 		{ a.end() } -> std::input_or_output_iterator;
 	};
 
+	template <typename T, typename U>
+	concept IsContainsType = requires(T a) {
+		requires IsContainer<T>; // Tがコンテナであることを確認
+		requires std::same_as<typename T::value_type, U>; // Tの要素の型がUであることを確認
+	};
+
 	template<class T>
 	concept IsReference = std::is_reference_v<T>;
 
