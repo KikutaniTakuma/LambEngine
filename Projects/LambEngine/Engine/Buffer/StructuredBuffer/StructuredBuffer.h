@@ -208,7 +208,7 @@ public:
 		return bufferResource_->GetGPUVirtualAddress();
 	}
 
-	const D3D12_ROOT_PARAMETER& GetRoootParamater() noexcept {
+	const D3D12_ROOT_PARAMETER& GetRoootParamater() const noexcept {
 		return roootParamater_;
 	}
 
