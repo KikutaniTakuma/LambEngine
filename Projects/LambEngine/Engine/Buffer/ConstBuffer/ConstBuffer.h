@@ -10,7 +10,7 @@
 template<Lamb::IsNotReferenceAndPtr T>
 class ConstBuffer final : public Descriptor {
 public:
-	inline ConstBuffer() noexcept:
+	inline ConstBuffer() :
 		bufferResource_(),
 		cbvDesc_(),
 		data_(nullptr),

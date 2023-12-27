@@ -13,7 +13,7 @@
 template<Lamb::IsNotReferenceAndPtr T>
 class StructuredBuffer final : public Descriptor {
 public:
-	StructuredBuffer() noexcept :
+	StructuredBuffer() :
 		bufferResource_(),
 		srvDesc_(),
 		data_(nullptr),
@@ -51,7 +51,7 @@ public:
 		roootParamater_.DescriptorTable.NumDescriptorRanges = 1;
 	}
 
-	inline StructuredBuffer(uint32_t instanceNum) noexcept :
+	inline StructuredBuffer(uint32_t instanceNum) :
 		bufferResource_(),
 		srvDesc_(),
 		data_(nullptr),
@@ -91,21 +91,21 @@ public:
 
 	~StructuredBuffer() = default;
 
-	inline StructuredBuffer(const StructuredBuffer& right) noexcept:
+	inline StructuredBuffer(const StructuredBuffer& right) :
 		StructuredBuffer{ right.Size() }
 	{
 		*this = right;
 	}
 
 	template<Lamb::IsContainer Container>
-	inline StructuredBuffer(const Container& right) noexcept :
+	inline StructuredBuffer(const Container& right) :
 		StructuredBuffer{ right.size() }
 	{
 		*this = right;
 	}
 	inline StructuredBuffer(StructuredBuffer&&) = delete;
 
-	inline StructuredBuffer<T>& operator=(const StructuredBuffer& right) noexcept {
+	inline StructuredBuffer<T>& operator=(const StructuredBuffer& right) {
 		Resize(right.Size());
 
 		OnWright();
@@ -119,7 +119,7 @@ public:
 	inline StructuredBuffer<T>& operator=(StructuredBuffer&&) = delete;
 
 	template<Lamb::IsContainer Container>
-	inline StructuredBuffer<T>& operator=(const Container& right) noexcept {
+	inline StructuredBuffer<T>& operator=(const Container& right) {
 		Resize(right.size());
 
 		OnWright();
