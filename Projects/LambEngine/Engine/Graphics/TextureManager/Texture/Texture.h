@@ -10,13 +10,13 @@
 
 #include "Math/Vector2.h"
 
-#include "Engine/Buffer/BaseBuffer/BaseBuffer.h"
+#include "Engine/Core/DescriptorHeap/Descriptor.h"
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 /// <summary>
 /// テクスチャの読み込みやリソースの管理を担う
 /// </summary>
-class Texture final : public BaseBuffer {
+class Texture final : public Descriptor {
 	friend class TextureManager;
 
 public:

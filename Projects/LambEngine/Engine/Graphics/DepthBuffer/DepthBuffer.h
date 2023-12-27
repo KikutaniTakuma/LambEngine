@@ -5,9 +5,9 @@
 #undef max
 #undef min
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
-#include "Engine/Buffer/BaseBuffer/BaseBuffer.h"
+#include "Engine/Core/DescriptorHeap/Descriptor.h"
 
-class DepthBuffer final : public BaseBuffer{
+class DepthBuffer final : public Descriptor{
 public:
 	DepthBuffer();
 	DepthBuffer(const class Vector2& bufSize);

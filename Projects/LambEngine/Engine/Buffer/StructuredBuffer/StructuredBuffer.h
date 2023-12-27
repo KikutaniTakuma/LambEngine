@@ -4,14 +4,14 @@
 #include "Utils/Cocepts/Cocepts.h"
 #include "Error/Error.h"
 #include <cassert>
-#include "../BaseBuffer/BaseBuffer.h"
+#include "Engine/Core/DescriptorHeap/Descriptor.h"
 
 /// <summary>
 /// ストラクチャードバッファ
 /// </summary>
 /// <typeparam name="T">ポインタと参照型以外をサポート</typeparam>
 template<Lamb::IsNotReferenceAndPtr T>
-class StructuredBuffer final : public BaseBuffer {
+class StructuredBuffer final : public Descriptor {
 public:
 	StructuredBuffer() noexcept :
 		bufferResource_(),

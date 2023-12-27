@@ -44,5 +44,5 @@ public:
 	/// </summary>
 	/// <param name="buffer"></param>
 	/// <returns></returns>
-	uint32_t CreateView(class BaseBuffer& buffer);
+	uint32_t CreateView(class Descriptor& buffer);
 };

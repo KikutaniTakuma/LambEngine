@@ -10,7 +10,7 @@
 #include <numeric>
 #include "Utils/SafeDelete/SafeDelete.h"
 
-#include "Engine/Buffer/BaseBuffer/BaseBuffer.h"
+#include "Engine/Core/DescriptorHeap/Descriptor.h"
 
 CbvSrvUavHeap* CbvSrvUavHeap::instance_ = nullptr;
 
@@ -57,7 +57,7 @@ void CbvSrvUavHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
 	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, heapHandles_[handleIndex].second);
 }
 
-uint32_t CbvSrvUavHeap::CreateView(BaseBuffer& buffer) {
+uint32_t CbvSrvUavHeap::CreateView(Descriptor& buffer) {
 	if (currentHandleIndex_ >= heapSize_) {
 		throw Lamb::Error::Code<CbvSrvUavHeap>("Over HeapSize", __func__);
 	}
