@@ -354,9 +354,6 @@
     <Filter Include="Engine\EngineUtils\LambPtr">
       <UniqueIdentifier>{685001fb-5c52-43ec-bceb-9e1ae9b279df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Buffer\BaseBuffer">
-      <UniqueIdentifier>{913955ef-0199-48c6-b3f3-a29763f8cd3d}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -551,8 +548,8 @@
     <ClInclude Include="Math\MathCommon.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Buffer\BaseBuffer\BaseBuffer.h">
-      <Filter>Engine\Buffer\BaseBuffer</Filter>
+    <ClInclude Include="Engine\Core\DescriptorHeap\Descriptor.h">
+      <Filter>Engine\Core\DescriptorHeap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
