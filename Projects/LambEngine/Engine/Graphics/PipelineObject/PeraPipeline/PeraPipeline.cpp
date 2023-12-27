@@ -19,7 +19,7 @@ void PeraPipeline::Use(Pipeline::Blend blendType) {
 	auto* const commandList = DirectXCommand::GetInstance()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootDescriptorTable(1, wvpMat_.GetViewHandle());
+	commandList->SetGraphicsRootDescriptorTable(1, wvpMat_.GetHandleGPU());
 }
 
 void PeraPipeline::Init(
@@ -88,16 +88,16 @@ void PeraPipeline::Init(
 
 	auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->BookingHeapPos(3u);
-	srvHeap->CreatePerarenderView(*render_);
-	srvHeap->CreateConstBufferView(wvpMat_);
-	srvHeap->CreateConstBufferView(colorBuf_);
+	srvHeap->CreateView(*render_);
+	srvHeap->CreateView(wvpMat_);
+	srvHeap->CreateView(colorBuf_);
 }
 
 PeraPipeline::~PeraPipeline() {
 	if (render_) {
 		auto* const srvHeap = CbvSrvUavHeap::GetInstance();
-		srvHeap->ReleaseView(render_->GetViewHandleUINT());
-		srvHeap->ReleaseView(wvpMat_.GetViewHandleUINT());
-		srvHeap->ReleaseView(colorBuf_.GetViewHandleUINT());
+		srvHeap->ReleaseView(render_->GetHandleUINT());
+		srvHeap->ReleaseView(wvpMat_.GetHandleUINT());
+		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
 	}
 }

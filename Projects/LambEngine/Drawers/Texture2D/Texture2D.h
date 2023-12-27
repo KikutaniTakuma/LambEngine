@@ -2,6 +2,7 @@
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
+#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
 
 #include "Math/Vector3.h"
 #include "Math/Mat4x4.h"

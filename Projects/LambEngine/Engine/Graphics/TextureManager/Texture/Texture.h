@@ -10,12 +10,13 @@
 
 #include "Math/Vector2.h"
 
+#include "Engine/Buffer/BaseBuffer/BaseBuffer.h"
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 /// <summary>
 /// テクスチャの読み込みやリソースの管理を担う
 /// </summary>
-class Texture {
+class Texture final : public BaseBuffer {
 	friend class TextureManager;
 
 public:
@@ -57,11 +58,11 @@ private:
 /// View作成関数
 /// </summary>
 public:
-	void CreateSRVView(
+	void CreateView(
 		D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle,
 		D3D12_GPU_DESCRIPTOR_HANDLE descHeapHandleGPU, 
 		UINT descHeapHandleUINT
-	);
+	) override;
 
 /// <summary>
 /// CPU側のリソースを解放
@@ -93,9 +94,6 @@ private:
 	Lamb::LambPtr<ID3D12Resource> intermediateResource_;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc_;
-
-	D3D12_GPU_DESCRIPTOR_HANDLE srvHeapHandle_;
-	uint32_t srvHeapHandleUint_;
 
 	bool isLoad_;
 	bool threadLoadFlg_;

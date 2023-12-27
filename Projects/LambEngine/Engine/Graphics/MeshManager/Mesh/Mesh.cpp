@@ -26,9 +26,9 @@ Mesh::Mesh() :
 {
 	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
 	descriptorHeap->BookingHeapPos(3u);
-	descriptorHeap->CreateStructuredBufferView(wvpMats_);
-	descriptorHeap->CreateConstBufferView(dirLig_);
-	descriptorHeap->CreateConstBufferView(color_);
+	descriptorHeap->CreateView(wvpMats_);
+	descriptorHeap->CreateView(dirLig_);
+	descriptorHeap->CreateView(color_);
 }
 
 Mesh::~Mesh() {
@@ -498,8 +498,8 @@ void Mesh::Draw() {
 			pipeline_->Use();
 			i.second.tex->Use(0);
 
-			commandList->SetGraphicsRootDescriptorTable(1, wvpMats_.GetViewHandle());
-			commandList->SetGraphicsRootDescriptorTable(2, dirLig_.GetViewHandle());
+			commandList->SetGraphicsRootDescriptorTable(1, wvpMats_.GetHandleGPU());
+			commandList->SetGraphicsRootDescriptorTable(2, dirLig_.GetHandleGPU());
 
 			commandList->IASetVertexBuffers(0, 1, &i.second.resource.second);
 			commandList->DrawInstanced(i.second.vertNum, drawCount_, 0, 0);

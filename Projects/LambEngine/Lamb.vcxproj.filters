@@ -169,6 +169,9 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.cpp">
       <Filter>Engine\Graphics\PipelineObject\PeraPipeline</Filter>
     </ClCompile>
+    <ClCompile Include="Drawers\BaseDrawer.cpp">
+      <Filter>Drawers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -356,6 +359,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\PeraPipeline">
       <UniqueIdentifier>{4fd0d217-6bd2-4ca7-8592-5b493248756a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Buffer\BaseBuffer">
+      <UniqueIdentifier>{913955ef-0199-48c6-b3f3-a29763f8cd3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -547,6 +553,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.h">
       <Filter>Engine\Graphics\PipelineObject\PeraPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawers\BaseDrawer.h">
+      <Filter>Drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\MathCommon.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Buffer\BaseBuffer\BaseBuffer.h">
+      <Filter>Engine\Buffer\BaseBuffer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

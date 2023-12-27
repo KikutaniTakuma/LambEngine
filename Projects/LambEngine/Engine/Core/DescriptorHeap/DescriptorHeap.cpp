@@ -1,4 +1,6 @@
 #include "DescriptorHeap.h"
+#include "Engine/Buffer/BaseBuffer/BaseBuffer.h"
+#include "Error/Error.h"
 
 DescriptorHeap::DescriptorHeap() :
 	heap_{},

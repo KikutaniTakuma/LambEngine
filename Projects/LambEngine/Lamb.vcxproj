@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClCompile Include="AudioManager\AudioManager.cpp" />
     <ClCompile Include="AudioManager\Audio\Audio.cpp" />
+    <ClCompile Include="Drawers\BaseDrawer.cpp" />
     <ClCompile Include="Drawers\Line\Line.cpp" />
     <ClCompile Include="Drawers\Model\Model.cpp" />
     <ClCompile Include="Drawers\Particle\Particle.cpp" />
@@ -178,12 +179,14 @@
   <ItemGroup>
     <ClInclude Include="AudioManager\AudioManager.h" />
     <ClInclude Include="AudioManager\Audio\Audio.h" />
+    <ClInclude Include="Drawers\BaseDrawer.h" />
     <ClInclude Include="Drawers\Line\Line.h" />
     <ClInclude Include="Drawers\Model\Model.h" />
     <ClInclude Include="Drawers\Particle\Particle.h" />
     <ClInclude Include="Drawers\PeraRender\PeraRender.h" />
     <ClInclude Include="Drawers\StringOut\StringOut.h" />
     <ClInclude Include="Drawers\Texture2D\Texture2D.h" />
+    <ClInclude Include="Engine\Buffer\BaseBuffer\BaseBuffer.h" />
     <ClInclude Include="Engine\Buffer\ConstBuffer\ConstBuffer.h" />
     <ClInclude Include="Engine\Buffer\StructuredBuffer\StructuredBuffer.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.h" />
@@ -222,6 +225,7 @@
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\KeyInput\KeyInput.h" />
     <ClInclude Include="Input\Mouse\Mouse.h" />
+    <ClInclude Include="Math\MathCommon.h" />
     <ClInclude Include="Math\Mat4x4.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector2.h" />

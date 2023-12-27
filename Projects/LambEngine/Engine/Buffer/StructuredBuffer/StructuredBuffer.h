@@ -4,13 +4,14 @@
 #include "Utils/Cocepts/Cocepts.h"
 #include "Error/Error.h"
 #include <cassert>
+#include "../BaseBuffer/BaseBuffer.h"
 
 /// <summary>
 /// ストラクチャードバッファ
 /// </summary>
 /// <typeparam name="T">ポインタと参照型以外をサポート</typeparam>
 template<Lamb::IsNotReferenceAndPtr T>
-class StructuredBuffer {
+class StructuredBuffer final : public BaseBuffer {
 public:
 	StructuredBuffer() noexcept :
 		bufferResource_(),
@@ -175,11 +176,6 @@ public:
 
 		OffWright();
 
-		if (bufferResource_) {
-			bufferResource_->Release();
-			bufferResource_.Reset();
-		}
-
 		instanceNum_ = indexNum;
 		
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(T) * instanceNum_);
@@ -192,7 +188,7 @@ public:
 		srvDesc_.Buffer.NumElements = UINT(instanceNum_);
 		srvDesc_.Buffer.StructureByteStride = sizeof(T);
 
-		CrerateView(descriptorHandleCPU_, descriptorHandleGPU_, dsecIndex_);
+		CreateView(heapHandleCPU_, heapHandleGPU_, heapHandle_);
 
 		OnWright();
 
@@ -216,21 +212,18 @@ public:
 		return roootParamater_;
 	}
 
-	void CrerateView(D3D12_CPU_DESCRIPTOR_HANDLE descHandle, D3D12_GPU_DESCRIPTOR_HANDLE descHandleGPU, UINT dsecIndex) noexcept {
+	void CreateView(
+		D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
+		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
+		UINT heapHandle) noexcept
+	{
 		static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
-		device->CreateShaderResourceView(bufferResource_.Get(), &srvDesc_, descHandle);
-		descriptorHandleCPU_ = descHandle;
+		device->CreateShaderResourceView(bufferResource_.Get(), &srvDesc_, heapHandleCPU);
+		heapHandleCPU_ = heapHandleCPU;
+		heapHandleGPU_ = heapHandleGPU;
+		heapHandle_ = heapHandle;
+
 		isCreateView_ = true;
-		descriptorHandleGPU_ = descHandleGPU;
-		dsecIndex_ = dsecIndex;
-	}
-
-	D3D12_GPU_DESCRIPTOR_HANDLE GetViewHandle() const noexcept {
-		return descriptorHandleGPU_;
-	}
-
-	UINT GetViewHandleUINT() const noexcept {
-		return dsecIndex_;
 	}
 
 private:
@@ -246,11 +239,5 @@ private:
 
 	bool isCreateView_;
 
-
 	uint32_t instanceNum_;
-
-	D3D12_CPU_DESCRIPTOR_HANDLE descriptorHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE descriptorHandleGPU_;
-
-	UINT dsecIndex_;
 };

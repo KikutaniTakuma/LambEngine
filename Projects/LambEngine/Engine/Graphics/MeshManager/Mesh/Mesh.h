@@ -12,6 +12,7 @@
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
 
 #include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
+#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
 
 /// <summary>
 /// メッシュクラス。objファイルの読み込みやリソースを管理(基本的にポインタ型で使う)

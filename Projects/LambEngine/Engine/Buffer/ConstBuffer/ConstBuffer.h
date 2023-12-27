@@ -2,12 +2,13 @@
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
 #include "Utils/Cocepts/Cocepts.h"
+#include "../BaseBuffer/BaseBuffer.h"
 
 /// <summary>
 /// 定数バッファ
 /// </summary>
 template<Lamb::IsNotReferenceAndPtr T>
-class ConstBuffer {
+class ConstBuffer final : public BaseBuffer {
 public:
 	inline ConstBuffer() noexcept:
 		bufferResource_(),
@@ -17,9 +18,7 @@ public:
 		isCreateView_(false),
 		roootParamater_(),
 		shaderVisibility_(D3D12_SHADER_VISIBILITY_ALL),
-		shaderRegister_(0),
-		descriptorHandle_{},
-		dsecIndex_()
+		shaderRegister_(0)
 	{
 		// バイトサイズは256アライメントする(vramを効率的に使うための仕組み)
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce((sizeof(T) + 0xff) & ~0xff);
@@ -83,20 +82,17 @@ public:
 		return roootParamater_;
 	}
 
-	void CrerateView(D3D12_CPU_DESCRIPTOR_HANDLE descHandle, D3D12_GPU_DESCRIPTOR_HANDLE descHandleGPU, UINT dsecIndex) noexcept {
+	void CreateView(
+		D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
+		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
+		UINT heapHandle
+	) noexcept {
 		static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
-		device->CreateConstantBufferView(&cbvDesc_, descHandle);
-		descriptorHandle_ = descHandleGPU;
-		dsecIndex_ = dsecIndex;
+		device->CreateConstantBufferView(&cbvDesc_, heapHandleCPU);
+		heapHandleCPU_ = heapHandleCPU;
+		heapHandleGPU_ = heapHandleGPU;
+		heapHandle_ = heapHandle;
 		isCreateView_ = true;
-	}
-
-	D3D12_GPU_DESCRIPTOR_HANDLE GetViewHandle() const noexcept {
-		return descriptorHandle_;
-	}
-
-	UINT GetViewHandleUINT() const noexcept {
-		return dsecIndex_;
 	}
 
 private:
@@ -108,10 +104,6 @@ private:
 	bool isWright_;
 
 	bool isCreateView_;
-
-	D3D12_GPU_DESCRIPTOR_HANDLE descriptorHandle_;
-
-	UINT dsecIndex_;
 
 	D3D12_ROOT_PARAMETER roootParamater_;
 public:

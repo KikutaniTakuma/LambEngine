@@ -18,9 +18,7 @@ Texture::Texture():
 	isLoad_(false),
 	threadLoadFlg_(false),
 	size_(),
-	fileName_(),
-	srvHeapHandleUint_(0),
-	srvHeapHandle_{}
+	fileName_()
 {}
 
 Texture::~Texture() {
@@ -104,7 +102,7 @@ void Texture::Unload() {
 			textureResouce_.Reset();
 		}
 
-		CbvSrvUavHeap::GetInstance()->ReleaseView(srvHeapHandleUint_);
+		CbvSrvUavHeap::GetInstance()->ReleaseView(heapHandle_);
 
 		// Unload済み
 		isLoad_ = false;
@@ -227,16 +225,17 @@ ID3D12Resource* Texture::UploadTextureData(ID3D12Resource* texture, const Direct
 
 
 
-void Texture::CreateSRVView(
-	D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle,
-	D3D12_GPU_DESCRIPTOR_HANDLE descHeapHandleGPU,
-	UINT descHeapHandleUINT
+void Texture::CreateView(
+	D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
+	D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
+	UINT heapHandle
 ) {
 	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
-	device->CreateShaderResourceView(textureResouce_.Get(), &srvDesc_, descHeapHandle);
+	device->CreateShaderResourceView(textureResouce_.Get(), &srvDesc_, heapHandleCPU);
 
-	srvHeapHandle_ = descHeapHandleGPU;
-	srvHeapHandleUint_ = descHeapHandleUINT;
+	heapHandleCPU_ = heapHandleCPU;
+	heapHandleGPU_ = heapHandleGPU;
+	heapHandle_ = heapHandle;
 }
 
 
@@ -249,25 +248,26 @@ void Texture::ReleaseIntermediateResource() {
 void Texture::Use(UINT rootParamator) {
 	static TextureManager* textureManager = TextureManager::GetInstance();
 	assert(textureManager);
-	textureManager->Use(srvHeapHandleUint_, rootParamator);
+	textureManager->Use(heapHandle_, rootParamator);
 }
 
 void Texture::Set(
 	const Lamb::LambPtr<ID3D12Resource>& resource,
 	D3D12_SHADER_RESOURCE_VIEW_DESC viewDesc,
-	D3D12_GPU_DESCRIPTOR_HANDLE handle,
-	UINT handleUINT
+	D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
+	UINT heapHandle
 ) {
 	if (CanUse()) {
 		CbvSrvUavHeap* srvHeap = CbvSrvUavHeap::GetInstance();
-		srvHeap->ReleaseView(srvHeapHandleUint_);
+		srvHeap->ReleaseView(heapHandle_);
 		textureResouce_.Reset();
 	}
 
 	textureResouce_ = resource;
 	srvDesc_ = viewDesc;
-	srvHeapHandle_ = handle;
-	srvHeapHandleUint_ = handleUINT;
+
+	heapHandleGPU_ = heapHandleGPU;
+	heapHandle_ = heapHandle;
 
 	// load済み
 	isLoad_ = true;

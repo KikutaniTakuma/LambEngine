@@ -5,8 +5,9 @@
 #undef max
 #undef min
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
+#include "Engine/Buffer/BaseBuffer/BaseBuffer.h"
 
-class DepthBuffer {
+class DepthBuffer final : public BaseBuffer{
 public:
 	DepthBuffer();
 	DepthBuffer(const class Vector2& bufSize);
@@ -19,7 +20,10 @@ public:
 
 public:
 	void CreateDepthView(D3D12_CPU_DESCRIPTOR_HANDLE handle, uint32_t hadleUINT);
-	void CreateSRView(D3D12_CPU_DESCRIPTOR_HANDLE heapHandle, D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU, UINT heapHandleUINT);
+	void CreateView(D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
+		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
+		UINT heapHandle
+	) override;
 	
 public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDepthHandle() const;
@@ -33,8 +37,4 @@ private:
 
 	D3D12_CPU_DESCRIPTOR_HANDLE handle_;
 	uint32_t hadleUINT_;
-
-	D3D12_CPU_DESCRIPTOR_HANDLE srvHandleCPU_;
-	D3D12_GPU_DESCRIPTOR_HANDLE srvHandleGPU_;
-	uint32_t srvHadleUINT_;
 };

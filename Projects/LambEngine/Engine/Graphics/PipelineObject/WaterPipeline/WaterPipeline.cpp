@@ -85,12 +85,12 @@ void WaterPipeline::Init(
 
 	static auto srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->BookingHeapPos(6u);
-	srvHeap->CreatePerarenderView(*render_);
-	srvHeap->CreateConstBufferView(wvpMat_);
-	srvHeap->CreateConstBufferView(colorBuf_);
-	srvHeap->CreateConstBufferView(randomVec_);
-	srvHeap->CreateConstBufferView(normalRotate_);
-	srvHeap->CreateConstBufferView(light_);
+	srvHeap->CreateView(*render_);
+	srvHeap->CreateView(wvpMat_);
+	srvHeap->CreateView(colorBuf_);
+	srvHeap->CreateView(randomVec_);
+	srvHeap->CreateView(normalRotate_);
+	srvHeap->CreateView(light_);
 
 	randomVec_->x = Lamb::Random(0.0f, 1.0f);
 	randomVec_->y = Lamb::Random(0.0f, 1.0f);
@@ -99,12 +99,12 @@ void WaterPipeline::Init(
 WaterPipeline::~WaterPipeline() {
 	if (render_) {
 		auto* const srvHeap = CbvSrvUavHeap::GetInstance();
-		srvHeap->ReleaseView(render_->GetViewHandleUINT());
-		srvHeap->ReleaseView(wvpMat_.GetViewHandleUINT());
-		srvHeap->ReleaseView(colorBuf_.GetViewHandleUINT());
-		srvHeap->ReleaseView(randomVec_.GetViewHandleUINT());
-		srvHeap->ReleaseView(normalRotate_.GetViewHandleUINT());
-		srvHeap->ReleaseView(light_.GetViewHandleUINT());
+		srvHeap->ReleaseView(render_->GetHandleUINT());
+		srvHeap->ReleaseView(wvpMat_.GetHandleUINT());
+		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
+		srvHeap->ReleaseView(randomVec_.GetHandleUINT());
+		srvHeap->ReleaseView(normalRotate_.GetHandleUINT());
+		srvHeap->ReleaseView(light_.GetHandleUINT());
 	}
 
 	render_.reset();
