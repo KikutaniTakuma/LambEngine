@@ -97,7 +97,7 @@ public:
 		*this = right;
 	}
 
-	template<Lamb::IsContainer Container>
+	template<Lamb::IsContainsType<T> Container>
 	inline StructuredBuffer(const Container& right) :
 		StructuredBuffer{ right.size() }
 	{
@@ -118,7 +118,7 @@ public:
 	}
 	inline StructuredBuffer<T>& operator=(StructuredBuffer&&) = delete;
 
-	template<Lamb::IsContainer Container>
+	template<Lamb::IsContainsType<T> Container>
 	inline StructuredBuffer<T>& operator=(const Container& right) {
 		Resize(right.size());
 
