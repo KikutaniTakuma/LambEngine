@@ -73,6 +73,22 @@ float CreateNoise(float2 uv)
     return ddy(noise + noise2);
 }
 
+float CreateNoiseNoDdy(float2 uv)
+{
+    float pn = FractalSumNnoise(10.0f, uv + randomVec);
+    float pn2 = FractalSumNnoise(5.0f, uv - randomVec);
+    uv.x *= -1.0f;
+    float pn3 = FractalSumNnoise(10.0f, uv + randomVec);
+    uv.x *= -1.0f;
+    uv.y *= -1.0f;
+    float pn4 = FractalSumNnoise(5.0f, uv + randomVec);
+    
+    float noise = lerp((pn * 0.1f), (pn2 * 0.08f), 3.0f);
+    float noise2 = lerp((pn3 * 0.1f), (pn4 * 0.08f), 3.0f);
+    
+    return lerp(noise, noise2, 0.5f);
+}
+
 float3 CreateNormal(float2 uv)
 {
     float heightScale = 5.0f;
@@ -98,8 +114,9 @@ float3 CreateNormal(float2 uv)
 float4 main(Output input) : SV_TARGET{
     float noise = CreateNoise(input.uv);
     
-    float4 texColor = tex.Sample(smp, input.uv.xy + frac(noise));
+    float4 texColor = tex.Sample(smp, input.uv.xy + (CreateNoiseNoDdy(input.uv)));
     
+    float4 causticsColor = caustics.Sample(smp, input.uv.xy + frac(CreateNoiseNoDdy(input.uv)));
     
     float3 normal = CreateNormal(input.uv);
     //normal = mul(normal, input.tangentBasis);
@@ -139,10 +156,12 @@ float4 main(Output input) : SV_TARGET{
     
     lig = pow(lig, 1.5f);
     
-    texColor *= color;
-    texColor.xyz *= lig;
+    float4 finalColor = texColor + causticsColor;
+    
+    finalColor *= color;
+    finalColor.xyz *= lig;
 
-    return texColor;
+    return finalColor;
     //return float4(normal, 1.0f);
     
     //return float4(float3(noise, noise, noise) * 2.0f, 1.0f);
