@@ -7,7 +7,7 @@ float4 main(Output input) : SV_TARGET{
     
     float t = dot(color.xyz, float3(0.299f, 0.587f, 0.144f));
 
-    clip(t - 0.5f);
+    clip(t - 0.9f);
 
     return color;
 }
