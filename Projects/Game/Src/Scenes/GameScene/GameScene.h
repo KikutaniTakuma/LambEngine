@@ -29,6 +29,8 @@ public:
 
 public:
 	PeraRender pera_;
+	PeraRender luminate_;
+	PeraRender bloom_;
 
 	std::unique_ptr<Model> model_;
 

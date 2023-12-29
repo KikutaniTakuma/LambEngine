@@ -17,7 +17,7 @@ PeraRender::PeraRender():
 	indexResource_{nullptr},
 	pos{},
 	rotate{},
-	scale{Vector3::kIdentity},
+	scale{Lamb::ClientSize()},
 	isPreDraw_(false),
 	uvPibot(),
 	uvSize(Vector2::identity),

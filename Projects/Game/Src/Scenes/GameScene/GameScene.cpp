@@ -42,6 +42,10 @@ void GameScene::Initialize() {
 	tex_.reset(new Texture2D{});
 
 	tex_->scale = Lamb::ClientSize();
+	tex_->pos.z += 100.0f;
+
+	luminate_.Initialize("./Resources/Shaders/PostShader/PostGrayScale.PS.hlsl");
+	bloom_.Initialize("./Resources/Shaders/PostShader/PostAveraging.PS.hlsl");
 }
 
 void GameScene::Finalize() {
@@ -61,15 +65,29 @@ void GameScene::Update() {
 	tex_->Debug("tex_");
 
 	tex_->Update();
+
+	luminate_.Update();
+	bloom_.Update();
+
+	tex_->color = Vector4ToUint(Vector4{ 0.1f, 0.25f, 0.5f, 0.0f });
 }
 
 void GameScene::Draw() {
 	camera_->Update(Vector3::kZero);
 
 	waterPipelineObject_->SetCameraPos(camera_->pos);
-	
+
 	pera_.PreDraw();
+	tex_->Draw(staticCamera_.GetViewOthographics(), Pipeline::None, false);
 	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
-	//tex_->Draw(staticCamera_.GetViewOthographics());
-	pera_.Draw(camera_->GetViewProjection(), Pipeline::Add);
+	pera_.Draw(camera_->GetViewProjection(), Pipeline::None);
+	
+	pera_.Update();
+
+	pera_.PreDraw();
+	tex_->Draw(staticCamera_.GetViewOthographics(), Pipeline::None, false);
+	//model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+	pera_.Draw(camera_->GetViewProjection(), Pipeline::None, &luminate_);
+	luminate_.Draw(staticCamera_.GetViewOthographics(), Pipeline::Add, &bloom_);
+	bloom_.Draw(staticCamera_.GetViewOthographics(), Pipeline::Add);
 }
