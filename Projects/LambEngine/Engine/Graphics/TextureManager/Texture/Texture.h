@@ -45,7 +45,6 @@ public:
 private:
 	void Load(const std::string& filePath);
 	void Load(const std::string& filePath, ID3D12GraphicsCommandList* commandList);
-	void Unload();
 
 	DirectX::ScratchImage LoadTexture(const std::string& filePath);
 	ID3D12Resource* CreateTextureResource(const DirectX::TexMetadata& metaData);
@@ -53,6 +52,9 @@ private:
 	ID3D12Resource* UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages);
 	[[nodiscard]]
 	ID3D12Resource* UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages, ID3D12GraphicsCommandList* commandList);
+
+public:
+	void Unload();
 
 /// <summary>
 /// View作成関数
