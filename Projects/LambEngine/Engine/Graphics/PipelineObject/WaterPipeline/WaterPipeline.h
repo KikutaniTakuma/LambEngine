@@ -30,6 +30,8 @@ public:
 	) override;
 
 public:
+	void Use(Pipeline::Blend blendType) override;
+
 	void Update()override;
 
 	void SetCameraPos(const Vector3& cameraPos) {
@@ -40,4 +42,6 @@ private:
 	ConstBuffer<Normals> normalVector_;
 	ConstBuffer<Vector2> randomVec_;
 	ConstBuffer<Mesh::Light> light_;
+
+	class Texture* caustics_;
 };

@@ -4,6 +4,7 @@
 #include "Utils/Random/Random.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
 
 #include "Utils/EngineInfo/EngineInfo.h"
 
@@ -21,6 +22,10 @@ void WaterPipeline::Update() {
 
 	light_->ligColor = Vector3::kIdentity * 15.0f;
 	light_->ligDirection = Vector3{ 1.0f,-1.0f,0.0f }.Normalize();
+}
+
+void WaterPipeline::Use(Pipeline::Blend blendType) {
+	PeraPipeline::Use(blendType);
 }
 
 void WaterPipeline::Init(
@@ -49,7 +54,7 @@ void WaterPipeline::Init(
 
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> renderRange = {};
 	renderRange[0].BaseShaderRegister = 0;
-	renderRange[0].NumDescriptors = 1;
+	renderRange[0].NumDescriptors = 2;
 	renderRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
@@ -88,8 +93,9 @@ void WaterPipeline::Init(
 
 
 	static auto srvHeap = CbvSrvUavHeap::GetInstance();
-	srvHeap->BookingHeapPos(6u);
+	srvHeap->BookingHeapPos(7u);
 	srvHeap->CreateView(*render_);
+	caustics_ = TextureManager::GetInstance()->LoadTexture("./Resources/Water/caustics_01.bmp");
 	srvHeap->CreateView(wvpMat_);
 	srvHeap->CreateView(colorBuf_);
 	srvHeap->CreateView(normalVector_);
@@ -109,6 +115,9 @@ WaterPipeline::~WaterPipeline() {
 		srvHeap->ReleaseView(randomVec_.GetHandleUINT());
 		srvHeap->ReleaseView(normalVector_.GetHandleUINT());
 		srvHeap->ReleaseView(light_.GetHandleUINT());
+		if (caustics_) {
+			caustics_->Unload();
+		}
 	}
 
 	render_.reset();
