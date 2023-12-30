@@ -146,7 +146,7 @@ float4 main(Output input) : SV_TARGET{
 
     t = dot(refVec, toEye);
 
-    t = pow(saturate(t), 20.0f);
+    t = pow(saturate(t), 25.0f);
     float3 specDirection = light.ligColor * t;
     
     float3 lig = diffDirection + specDirection;
@@ -154,7 +154,7 @@ float4 main(Output input) : SV_TARGET{
     
     lig.xyz += 0.3f;
     
-    lig = pow(lig, 1.5f);
+    //lig = pow(lig, 1.0f);
     
     float4 finalColor = texColor + causticsColor;
     
