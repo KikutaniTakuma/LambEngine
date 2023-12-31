@@ -126,7 +126,7 @@ void GlobalVariables::SaveFile(const std::string& groupName) {
 	const std::filesystem::path kDirectoryPath = "./Datas/" + dataFileNmae;
 
 	if (!std::filesystem::exists(kDirectoryPath)) {
-		std::filesystem::create_directory(kDirectoryPath);
+		std::filesystem::create_directories(kDirectoryPath);
 	}
 
 	std::string groupNameTmp;
