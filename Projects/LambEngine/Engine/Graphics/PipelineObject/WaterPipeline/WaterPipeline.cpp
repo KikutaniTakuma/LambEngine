@@ -24,8 +24,8 @@ void WaterPipeline::Update() {
 	light_->ligDirection = Vector3{ 1.0f,-1.0f,0.0f }.Normalize();
 }
 
-void WaterPipeline::Use(Pipeline::Blend blendType) {
-	PeraPipeline::Use(blendType);
+void WaterPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
+	PeraPipeline::Use(blendType, isDepth);
 }
 
 void WaterPipeline::Init(
@@ -82,11 +82,14 @@ void WaterPipeline::Init(
 	PipelineManager::SetShader(shader_);
 	PipelineManager::SetState(Pipeline::None, Pipeline::SolidState::Solid);
 
-	PipelineManager::IsDepth(false);
-
 	for (int32_t i = Pipeline::Blend::None; i < Pipeline::Blend::BlendTypeNum; i++) {
 		PipelineManager::SetState(Pipeline::Blend(i), Pipeline::SolidState::Solid);
+		PipelineManager::IsDepth(true);
 		pipelines_[Pipeline::Blend(i)] = PipelineManager::Create();
+
+		PipelineManager::SetState(Pipeline::Blend(i), Pipeline::SolidState::Solid);
+		PipelineManager::IsDepth(false);
+		pipelinesNoDepth_[Pipeline::Blend(i)] = PipelineManager::Create();
 	}
 
 	PipelineManager::StateReset();

@@ -14,9 +14,13 @@ void PeraPipeline::Update() {
 	wvpMat_->viewProjection = viewProjection;
 }
 
-void PeraPipeline::Use(Pipeline::Blend blendType) {
-	pipelines_[blendType]->Use();
-
+void PeraPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
+	if (isDepth) {
+		pipelines_[blendType]->Use();
+	}
+	else {
+		pipelinesNoDepth_[blendType]->Use();
+	}
 	auto* const commandList = DirectXCommand::GetInstance()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
@@ -77,11 +81,15 @@ void PeraPipeline::Init(
 	PipelineManager::SetShader(shader_);
 	PipelineManager::SetState(Pipeline::None, Pipeline::SolidState::Solid);
 
-	PipelineManager::IsDepth(false);
 
 	for (int32_t i = Pipeline::Blend::None; i < Pipeline::Blend::BlendTypeNum; i++) {
 		PipelineManager::SetState(Pipeline::Blend(i), Pipeline::SolidState::Solid);
+		PipelineManager::IsDepth(true);
 		pipelines_[Pipeline::Blend(i)] = PipelineManager::Create();
+
+		PipelineManager::SetState(Pipeline::Blend(i), Pipeline::SolidState::Solid);
+		PipelineManager::IsDepth(false);
+		pipelinesNoDepth_[Pipeline::Blend(i)] = PipelineManager::Create();
 	}
 
 	PipelineManager::StateReset();

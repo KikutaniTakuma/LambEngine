@@ -30,7 +30,7 @@ public:
 	) override;
 
 public:
-	void Use(Pipeline::Blend blendType) override;
+	void Use(Pipeline::Blend blendType, bool isDepth) override;
 
 	void Update()override;
 

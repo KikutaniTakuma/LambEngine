@@ -134,7 +134,8 @@ void PeraRender::PreDraw() {
 void PeraRender::Draw(
 	const Mat4x4& viewProjection,
 	Pipeline::Blend blend, 
-	PeraRender* pera
+	PeraRender* pera, 
+	bool isDepth
 ) {
 	if (!!pera) {
 		pera->PreDraw();
@@ -179,7 +180,7 @@ void PeraRender::Draw(
 	// 各種描画コマンドを積む
 	ID3D12GraphicsCommandList* commandList = DirectXCommand::GetInstance()->GetCommandList();
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-	peraPipelineObject_->Use(blend);
+	peraPipelineObject_->Use(blend, isDepth);
 	commandList->IASetVertexBuffers(0, 1, &peraVertexView_);
 	commandList->IASetIndexBuffer(&indexView_);
 	commandList->DrawIndexedInstanced(6, 1, 0, 0, 0);
