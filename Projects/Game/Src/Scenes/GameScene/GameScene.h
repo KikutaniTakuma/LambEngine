@@ -29,4 +29,5 @@ public:
 
 public:
 	std::unique_ptr<class Water> water_;
+	std::unique_ptr<class Player> player_;
 };
