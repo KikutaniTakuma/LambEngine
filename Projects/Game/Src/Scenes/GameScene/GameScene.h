@@ -28,15 +28,5 @@ public:
 	void Draw() override;
 
 public:
-	PeraRender pera_;
-	PeraRender luminate_;
-	PeraRender bloom_;
-
-	std::unique_ptr<Model> model_;
-
-	std::unique_ptr<Texture2D> tex_;
-
-	Camera staticCamera_;
-
-	class WaterPipeline* waterPipelineObject_ = nullptr;
+	std::unique_ptr<class Water> water_;
 };
