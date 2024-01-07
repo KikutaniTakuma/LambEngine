@@ -312,14 +312,14 @@ Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
 	return result;
 }
-Quaternion Quaternion::MakeRotateXAxis(float eulerAngle) {
-	return Quaternion{ std::sin(eulerAngle * 0.5f),0.0f,0.0f,std::cos(eulerAngle * 0.5f), };
+Quaternion Quaternion::MakeRotateXAxis(float angle) {
+	return Quaternion{ std::sin(angle * 0.5f),0.0f,0.0f,std::cos(angle * 0.5f), };
 }
-Quaternion Quaternion::MakeRotateYAxis(float eulerAngle) {
-	return Quaternion{ 0.0f, std::sin(eulerAngle * 0.5f),0.0f,std::cos(eulerAngle * 0.5f) };
+Quaternion Quaternion::MakeRotateYAxis(float angle) {
+	return Quaternion{ 0.0f, std::sin(angle * 0.5f),0.0f,std::cos(angle * 0.5f) };
 }
-Quaternion Quaternion::MakeRotateZAxis(float eulerAngle) {
-	return Quaternion{ 0.0f, 0.0f, std::sin(eulerAngle * 0.5f),std::cos(eulerAngle * 0.5f) };
+Quaternion Quaternion::MakeRotateZAxis(float angle) {
+	return Quaternion{ 0.0f, 0.0f, std::sin(angle * 0.5f),std::cos(angle * 0.5f) };
 }
 
 Quaternion Quaternion::Slerp(const Quaternion& start, const Quaternion& end, float t) {
