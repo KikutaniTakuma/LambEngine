@@ -2,6 +2,7 @@
 #include "Utils/Camera/Camera.h"
 #include "Input/Input.h"
 #include "Utils/EngineInfo/EngineInfo.h"
+#include "Math/Quaternion.h"
 #include "imgui.h"
 
 #include <algorithm>
@@ -10,12 +11,25 @@ void Player::Initialize()
 {
 	model_.reset(new Model{"./Resources/Cube.obj"});
 
-	addSpeed_ = 1.0f;
-
-	speed_ = 0.0f;
 	attack_ = 2.0f;
 
-	speedDecay_ = -5.0f;
+	maxSpeed_ = 0.628f;
+	speed_ = 0.0f;
+	addSpeed_ = maxSpeed_ * 0.3f;
+	speedDecay_ = -maxSpeed_ * 0.5f;
+
+	float maxOffsetZ = 50.0f;
+	float minOffsetZ = 20.0f;
+
+	maxOffset_ = -Vector3::kZIndentity * minOffsetZ;
+	minOffset_ = -Vector3::kZIndentity * maxOffsetZ;
+	offset_ = -(maxOffset_ + minOffset_) * 0.5f;
+	offsetSpeed_ = 5.0f;
+
+	basisSpeedScale_ = 1.0f / minOffsetZ;
+	speedScale_ = 1.0f / (offset_.Length() * basisSpeedScale_);
+
+	rotate_ = 0.0f;
 }
 
 void Player::Move()
@@ -25,37 +39,55 @@ void Player::Move()
 
 	Vector3 move;
 
-	Vector2 stick = {
+	const Vector2 stick = {
 		gamepad->GetStick(Gamepad::Stick::LEFT_X),
 		gamepad->GetStick(Gamepad::Stick::LEFT_Y) 
 	};
 
-	bool isMove = true;
 
-	// 速度アップ
+	// オフセット移動
+	if (key->GetKey(DIK_W) || key->GetKey(DIK_UP) ||
+		gamepad->GetButton(Gamepad::Button::UP) || 0.0f < stick.y
+		) 
+	{
+		offset_.z += offsetSpeed_ * Lamb::DeltaTime();
+	}
+	if (key->GetKey(DIK_S) || key->GetKey(DIK_DOWN) ||
+		gamepad->GetButton(Gamepad::Button::DOWN) || stick.y < 0.0f
+		)
+	{
+		offset_.z -= offsetSpeed_ * Lamb::DeltaTime();
+	}
+
+	offset_.z = std::clamp(offset_.z, minOffset_.z, maxOffset_.z);
+
+	speedScale_ = 1.0f / (offset_.Length() * basisSpeedScale_);
+
+	bool isMove = true;
+	// 右へ
 	if (key->GetKey(DIK_D) || key->GetKey(DIK_RIGHT) || 
 		gamepad->GetButton(Gamepad::Button::RIGHT) || 0.0f < stick.x) 
 	{
-		speed_ += addSpeed_ * Lamb::DeltaTime();
+		speed_ -= addSpeed_ * Lamb::DeltaTime() * speedScale_;
 	}
-	// 上とは反対方向に移動
+	// 左へ
 	else if (key->GetKey(DIK_A) || key->GetKey(DIK_LEFT) || 
 		gamepad->GetButton(Gamepad::Button::LEFT) || stick.x < 0.0f) 
 	{
-		speed_ -= addSpeed_ * Lamb::DeltaTime();
+		speed_ += addSpeed_ * Lamb::DeltaTime() * speedScale_;
 	}
 	else {
 		isMove = false;
 	}
 
 	// 速度のクランプ
-	speed_ = std::clamp(speed_, -kMaxSpeed_, kMaxSpeed_);
+	speed_ = std::clamp(speed_, -maxSpeed_ * speedScale_, maxSpeed_ * speedScale_);
 
 	// 動いてなかったら
 	if (!isMove) {
 		// 速度が0未満
 		if (speed_ < 0.0f) {
-			speed_ -= speedDecay_ * Lamb::DeltaTime();
+			speed_ -= speedDecay_ * Lamb::DeltaTime() * speedScale_;
 			// 0以上になったら0を代入
 			if (0.0f <= speed_) {
 				speed_ = 0.0f;
@@ -63,7 +95,7 @@ void Player::Move()
 		}
 		// 速度が0より大きいい
 		else if(0.0f < speed_){
-			speed_ += speedDecay_ * Lamb::DeltaTime();
+			speed_ += speedDecay_ * Lamb::DeltaTime() * speedScale_;
 			// 0以下になったら0を代入
 			if (speed_ <= 0.0f) {
 				speed_ = 0.0f;
@@ -73,7 +105,11 @@ void Player::Move()
 }
 
 void Player::Update() {
-	model_->pos.x += speed_ * Lamb::DeltaTime();
+	rotate_ += speed_ * Lamb::DeltaTime() * speedScale_;
+
+	model_->pos = offset_ * Quaternion::MakeRotateYAxis(rotate_);
+	model_->rotate.y = rotate_;
+
 	model_->Update();
 }
 
@@ -89,8 +125,12 @@ void Player::Debug([[maybe_unused]]const std::string& guiName)
 	model_->Debug(guiName.c_str());
 
 	if (ImGui::TreeNode("ステータス")) {
+		ImGui::DragFloat("最大速度", &maxSpeed_, 0.01f, 0.0f, std::numbers::pi_v<float> *2.0f);
+		ImGui::DragFloat("速度加算", &addSpeed_, 0.01f, 0.0f, std::numbers::pi_v<float> * 2.0f);
+		ImGui::DragFloat("速度減衰", &speedDecay_);
 		ImGui::DragFloat("速度", &speed_);
 		ImGui::DragFloat("攻撃", &attack_);
+		ImGui::DragFloat3("オフセット", &offset_.x);
 		ImGui::TreePop();
 	}
 	ImGui::End();

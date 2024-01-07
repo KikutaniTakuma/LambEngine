@@ -44,7 +44,8 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-	camera_->Update(Vector3::kZero);
+	camera_->rotate.y = player_->GetRotate();
+	camera_->Update(player_->GetPos());
 
 	water_->Draw(camera_->GetViewProjection(), camera_->GetPos());
 
