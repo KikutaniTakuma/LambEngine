@@ -1,7 +1,7 @@
 #pragma once
 #include "Drawers/Model/Model.h"
+#include "../Bullet/Bullet.h"
 #include <memory>
-#include <numbers>
 
 class Player {
 public:
@@ -29,6 +29,8 @@ public:
 	// 調整
 	void Debug(const std::string& guiName);
 
+	void Collision(const class Enemy& enemy);
+
 public:
 	inline const Vector3& GetPos() const {
 		return model_->pos;
@@ -36,6 +38,14 @@ public:
 
 	inline float GetRotate() const {
 		return rotate_;
+	}
+
+	inline bool IsGameOver() const {
+		return hp_ < 0.0f;
+	}
+
+	inline const std::list<std::unique_ptr<class Bullet>> GetBullets() const {
+		return bullets_;
 	}
 
 private:
@@ -73,4 +83,20 @@ private:
 
 	// 攻撃値
 	float attack_;
+
+	// 弾(6発)
+	std::list<std::unique_ptr<class Bullet>> bullets_;
+
+	// 当たり判定で使う
+	float radius_;
+
+	// 当たったか
+	bool isCollisioned_;
+	// 無敵時間(秒)
+	float invincibleTime_;
+	// 当たってからの時間(秒)
+	float isCollisionedTime_;
+
+	// 体力
+	float hp_;
 };

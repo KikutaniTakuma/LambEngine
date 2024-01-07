@@ -4,8 +4,10 @@
 #include "Utils/EngineInfo/EngineInfo.h"
 #include "Math/Quaternion.h"
 #include "imgui.h"
+#include "../Enemy/Enemy.h"
 
 #include <algorithm>
+#include <numbers>
 
 void Player::Initialize()
 {
@@ -30,6 +32,14 @@ void Player::Initialize()
 	speedScale_ = 1.0f / (offset_.Length() * basisSpeedScale_);
 
 	rotate_ = 0.0f;
+
+	radius_ = 0.5f;
+	isCollisioned_ = false;
+	invincibleTime_ = 1.5f;
+	isCollisionedTime_ = 0.0f;
+
+
+	hp_ = 100.0f;
 }
 
 void Player::Move()
@@ -111,6 +121,14 @@ void Player::Update() {
 	model_->rotate.y = rotate_;
 
 	model_->Update();
+
+	if (isCollisioned_) {
+		isCollisionedTime_ += Lamb::DeltaTime();
+		if (invincibleTime_ < isCollisionedTime_) {
+			isCollisionedTime_ = 0.0f;
+			isCollisioned_ = false;
+		}
+	}
 }
 
 void Player::Draw(const Camera& camera)
@@ -135,4 +153,28 @@ void Player::Debug([[maybe_unused]]const std::string& guiName)
 	}
 	ImGui::End();
 #endif // _DEBUG
+}
+
+void Player::Collision(const Enemy& enemy)
+{
+	const auto& enemyBullets = enemy.GetBullets();
+
+	// もし無敵だったら
+	if (isCollisioned_) {
+		return;
+	}
+
+	bool isCollision = false;
+
+	for (const auto& i : enemyBullets) {
+		if (i->GetIsActive()) {
+			if (i->CollisionBullet(model_->pos, radius_)) {
+				isCollision = true;
+				isCollisioned_ = true;
+
+				hp_ -= i->GetAttack();
+				break;
+			}
+		}
+	}
 }
