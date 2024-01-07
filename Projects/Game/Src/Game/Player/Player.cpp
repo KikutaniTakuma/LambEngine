@@ -32,12 +32,13 @@ void Player::Move()
 
 	bool isMove = true;
 
-	// Dキーかアローキー(右)かスティックを右に倒したら
+	// 速度アップ
 	if (key->GetKey(DIK_D) || key->GetKey(DIK_RIGHT) || 
 		gamepad->GetButton(Gamepad::Button::RIGHT) || 0.0f < stick.x) 
 	{
 		speed_ += addSpeed_ * Lamb::DeltaTime();
 	}
+	// 上とは反対方向に移動
 	else if (key->GetKey(DIK_A) || key->GetKey(DIK_LEFT) || 
 		gamepad->GetButton(Gamepad::Button::LEFT) || stick.x < 0.0f) 
 	{
@@ -47,17 +48,23 @@ void Player::Move()
 		isMove = false;
 	}
 
+	// 速度のクランプ
 	speed_ = std::clamp(speed_, -kMaxSpeed_, kMaxSpeed_);
 
+	// 動いてなかったら
 	if (!isMove) {
+		// 速度が0未満
 		if (speed_ < 0.0f) {
 			speed_ -= speedDecay_ * Lamb::DeltaTime();
+			// 0以上になったら0を代入
 			if (0.0f <= speed_) {
 				speed_ = 0.0f;
 			}
 		}
+		// 速度が0より大きいい
 		else if(0.0f < speed_){
 			speed_ += speedDecay_ * Lamb::DeltaTime();
+			// 0以下になったら0を代入
 			if (speed_ <= 0.0f) {
 				speed_ = 0.0f;
 			}

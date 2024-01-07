@@ -29,12 +29,13 @@ public:
 	void Debug(const std::string& guiName);
 
 private:
+	// モデル
 	std::unique_ptr<Model> model_;
 
 	// 最大速度
 	const float kMaxSpeed_ = 10.0f;
 
-	// 固定速度
+	// 速度加算
 	float addSpeed_;
 
 	// 速度
