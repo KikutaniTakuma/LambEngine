@@ -50,6 +50,12 @@
     <ClCompile Include="Src\Game\Player\Player.cpp">
       <Filter>Game\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\Enemy\Enemy.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Bullet\Bullet.cpp">
+      <Filter>Game\Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -164,6 +170,12 @@
     </ClInclude>
     <ClInclude Include="Src\Game\Player\Player.h">
       <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Enemy\Enemy.h">
+      <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Bullet\Bullet.h">
+      <Filter>Game\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
