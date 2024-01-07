@@ -41,7 +41,6 @@ void Water::Update() {
 	pera_->rotate = rotate;
 	pera_->Update();
 
-	waterSurface_->Debug("tex_");
 
 	waterSurface_->Update();
 
@@ -69,6 +68,7 @@ void Water::Draw(const Mat4x4& cameraMat, const Vector3& cameraPos) {
 void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
+	waterSurface_->Debug(guiName.c_str());
 	ImGui::DragFloat3("pos", &pos.x, 0.01f);
 	ImGui::DragFloat3("scale", &scale.x, 0.01f);
 	ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
