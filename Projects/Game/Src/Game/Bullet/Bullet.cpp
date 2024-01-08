@@ -1,6 +1,7 @@
 #include "Bullet.h"
 #include "Utils/Camera/Camera.h"
 #include "imgui.h"
+#include "Utils/EngineInfo/EngineInfo.h"
 
 
 void Bullet::Initialize()
@@ -8,12 +9,16 @@ void Bullet::Initialize()
 	model_.reset(new Model{ "./Resources/Ball.obj" });
 	
 	isActive_ = false;
+
+	radius_ = 1.0f;
 }
 
 void Bullet::Update()
 {
 	if (isActive_) {
-		model_->pos += moveDirection_ * speed_;
+		model_->scale = Vector3::kIdentity * radius_;
+
+		model_->pos += moveDirection_ * speed_ * Lamb::DeltaTime();
 
 		model_->Update();
 	}
