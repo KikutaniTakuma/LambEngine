@@ -3,6 +3,7 @@
 #include "../Bullet/Bullet.h"
 #include <memory>
 #include <array>
+#include <list>
 #include <unordered_map>
 #include <functional>
 #include <optional>
@@ -55,12 +56,16 @@ private:
 	void CreateBullets();
 
 public:
-	const std::list<std::unique_ptr<class Bullet>>& GetBullets() const {
+	const std::list<std::unique_ptr<Bullet>>& GetBullets() const {
 		return bullets_;
 	}
 
 	bool IsGameClear() const {
 		return hp_ < 0.0f;
+	}
+
+	const Vector3& GetPos() const {
+		return model_->pos;
 	}
 
 private:
@@ -69,8 +74,11 @@ private:
 
 	std::unordered_map<std::optional<Behavior>, std::function<void(void)>> behavior_;
 
-	std::list<std::unique_ptr<class Bullet>> bullets_;
+	std::list<std::unique_ptr<Bullet>> bullets_;
 
 	// 体力
 	float hp_;
+
+	// 半径
+	float radius_;
 };

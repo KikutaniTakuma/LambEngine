@@ -7,16 +7,19 @@
 
 void Enemy::Initialize()
 {
-	model_.reset(new Model{ "./Resources/Cube.obj" });
+	model_.reset(new Model{ "./Resources/Ball.obj" });
 
 	CreateBullets();
 	CreateBehaviors();
+
+	radius_ = 12.0f;
 
 	hp_ = 1000.0f;
 }
 
 void Enemy::Update()
 {
+	model_->scale = Vector3::kIdentity * radius_;
 	model_->Update();
 }
 
@@ -29,8 +32,11 @@ void Enemy::Debug([[maybe_unused]]const std::string& guiName)
 {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-
+	ImGui::DragFloat("radius", &radius_);
+	ImGui::Text("hp : %.0f", hp_);
 	ImGui::End();
+
+	model_->scale = Vector3::kIdentity * radius_ * 0.5f;
 #endif // _DEBUG
 }
 
@@ -40,8 +46,9 @@ void Enemy::Collision(const Player& player)
 
 	for (const auto& i : playerBullets) {
 		if (i->GetIsActive()) {
-			if (i->CollisionBullet(model_->pos, 10.0f)) {
+			if (i->CollisionBullet(model_->pos, radius_)) {
 				hp_ -= i->GetAttack();
+				i->Unenable();
 			}
 		}
 	}
