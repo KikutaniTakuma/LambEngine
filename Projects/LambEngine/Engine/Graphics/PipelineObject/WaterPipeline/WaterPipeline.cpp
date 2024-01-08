@@ -9,8 +9,8 @@
 #include "Utils/EngineInfo/EngineInfo.h"
 
 void WaterPipeline::Update() {
-	randomVec_->x += 0.05f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
-	randomVec_->y += 0.05f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+	randomVec_->x += 0.009f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+	randomVec_->y += 0.009f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 
 	*colorBuf_ = color;
 

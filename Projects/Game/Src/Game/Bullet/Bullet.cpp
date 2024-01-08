@@ -54,8 +54,9 @@ void Bullet::SetStatus(
 	const Vector3& pos, 
 	const Vector3& moveDirection, 
 	float speed, 
-	float attack, 
-	uint32_t color)
+	float attack,
+	uint32_t color,
+	float radius)
 {
 	model_->pos = pos;
 	model_->color = color;
@@ -64,4 +65,6 @@ void Bullet::SetStatus(
 	speed_ = speed;
 
 	attack_ = attack;
+
+	radius_ = radius;
 }

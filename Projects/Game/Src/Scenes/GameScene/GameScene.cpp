@@ -19,8 +19,9 @@ GameScene::GameScene() :
 void GameScene::Initialize() {
 	camera_->farClip = 3000.0f;
 	camera_->pos.z = -5.0f;
-	camera_->rotate.x = 0.29f;
+	camera_->rotate.x = 0.04f;
 	camera_->offset.z = -60.0f;
+	camera_->offset.y = 8.0f;
 
 	water_.reset(new Water{});
 	water_->Init();
@@ -49,7 +50,7 @@ void GameScene::Update() {
 
 
 	enemy_->Debug("Boss");
-	enemy_->Update();
+	enemy_->Update(*player_);
 
 
 	player_->Attack(*enemy_);

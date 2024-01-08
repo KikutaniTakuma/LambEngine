@@ -34,7 +34,8 @@ public:
 		const Vector3& moveDirection,
 		float speed,
 		float attack,
-		uint32_t color
+		uint32_t color,
+		float radius = 1.0f
 	);
 
 	void Enable() {

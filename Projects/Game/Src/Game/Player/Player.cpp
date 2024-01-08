@@ -11,7 +11,8 @@
 
 void Player::Initialize()
 {
-	model_.reset(new Model{"./Resources/Cube.obj"});
+	model_.reset(new Model{"./Resources/Player/Player.obj"});
+	model_->scale *= 5.0f;
 
 	attack_ = 2.0f;
 
@@ -208,14 +209,15 @@ void Player::Attack(const Enemy& enemy) {
 
 	if (key->Pushed(DIK_SPACE) || gamepad->Pushed(Gamepad::Button::A)) {
 		float bulletIndex = static_cast<float>(std::distance(bullets_.begin(), currentBullet_));
-		float bulletStateScale = 20.0f * (1.0f - (bulletIndex * 0.15f));
+		float bulletStateScale = 20.0f * (1.0f - (bulletIndex * 0.07f));
 
 		currentBullet_->get()->SetStatus(
 			model_->pos,
 			(enemy.GetPos() - model_->pos).Normalize(),
 			bulletStateScale,
 			attack_ * bulletIndex,
-			0xff
+			0x808080ff,
+			0.5f
 		);
 		currentBullet_->get()->Enable();
 		currentBullet_++;

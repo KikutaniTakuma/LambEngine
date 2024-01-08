@@ -2,41 +2,71 @@
 #include "Utils/Camera/Camera.h"
 #include "imgui.h"
 #include "../Player/Player.h"
+#include "Math/Quaternion.h"
+#include "Math/MathCommon.h"
+
+#include "Utils/EngineInfo/EngineInfo.h"
 
 #include <numbers>
+#include "Input/Input.h"
 
 void Enemy::Initialize()
 {
-	model_.reset(new Model{ "./Resources/Ball.obj" });
+	model_.reset(new Model{ "./Resources/Enemy/Enemy.obj" });
+	model_->pos.y = 14.5f;
+	model_->scale = Vector3::kIdentity * 12.0f;
 
 	CreateBullets();
 	CreateBehaviors();
 
-	radius_ = 12.0f;
+	radius_ = 6.0f;
 
 	hp_ = 1000.0f;
+
+	currentBehavior_ = Behavior::None;
+	nextBehavior_ = std::nullopt;
 }
 
-void Enemy::Update()
+void Enemy::Update(const Player& player)
 {
-	model_->scale = Vector3::kIdentity * radius_;
+
+	if (KeyInput::GetInstance()->Pushed(DIK_1)) {
+		nextBehavior_ = Behavior::OneShot;
+	}
+
 	model_->Update();
+
+	toPlayer_ = player.GetPos() - model_->pos;
+	toPlayer_.Normalize();
+
+	SettingBehavior();
+
+	behavior_[currentBehavior_]();
+
+	for (auto& i : bullets_) {
+		i->Update();
+	}
+
+	behaviorTime_ += Lamb::DeltaTime();
 }
 
 void Enemy::Draw(const Camera& camera)
 {
 	model_->Draw(camera.GetViewProjection(), camera.GetPos());
+
+	for (auto& i : bullets_) {
+		i->Draw(camera);
+	}
 }
 
 void Enemy::Debug([[maybe_unused]]const std::string& guiName)
 {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
+	model_->Debug(guiName);
 	ImGui::DragFloat("radius", &radius_);
 	ImGui::Text("hp : %.0f", hp_);
 	ImGui::End();
-
-	model_->scale = Vector3::kIdentity * radius_ * 0.5f;
 #endif // _DEBUG
 }
 
@@ -56,19 +86,111 @@ void Enemy::Collision(const Player& player)
 
 
 void Enemy::CreateBehaviors() {
+	// 攻撃
+	behavior_[Behavior::OneShot] = [this]() {
+		if (behaviorTime_ == 0.0f) {
+			currentBullet_->get()->SetStatus(
+				Vector3{ model_->pos.x,model_->pos.y,model_->pos.z },
+				toPlayer_,
+				15.0f,
+				5.0f,
+				Vector4ToUint({0.8f, 0.2f, 0.2f, 1.0f})
+			);
+			currentBullet_->get()->Enable();
+
+			NextBullet();
+		}
+		else if (behaviorFinishTime_[currentBehavior_] < behaviorTime_) {
+			if (3 < oneShoeCount_) {
+				oneShoeCount_ = 0;
+				nextBehavior_ = Behavior::None;
+				return;
+			}
+			else {
+				oneShoeCount_++;
+				nextBehavior_ = Behavior::OneShot;
+				return;
+			}
+		}
+		nextBehavior_ = std::nullopt;
+	};
+	behavior_[Behavior::CrossAttack] = [this]() {
+		if (static_cast<int32_t>(behaviorTime_ * 100.0f) % 5 == 0) {
+			Vector3 toPlayer = toPlayer_;
+			for (int32_t i = 0; i < 4; i++) {
+				currentBullet_->get()->SetStatus(
+					Vector3{ model_->pos.x,model_->pos.y + radius_,model_->pos.z },
+					toPlayer * Quaternion::MakeRotateYAxis(static_cast<float>(i) * 90.0f * Lamb::Math::toRadian<float>),
+					15.0f,
+					5.0f,
+					Vector4ToUint({ 0.8f, 0.2f, 0.2f, 1.0f })
+				);
+				currentBullet_->get()->Enable();
+
+				NextBullet();
+			}
+		}
+		else if (behaviorFinishTime_[currentBehavior_] < behaviorTime_) {
+			nextBehavior_ = Behavior::None;
+		}
+		else {
+			nextBehavior_ = std::nullopt;
+		}
+		};
 	behavior_[Behavior::SpinningAttack] = [this]() {};
-	behavior_[Behavior::CrossAttack] = [this]() {};
+
 	behavior_[Behavior::EruptionAttack] = [this]() {};
 	behavior_[Behavior::LargeEruptionAttack] = [this]() {};
-	behavior_[Behavior::None] = []() {};
+
+	// 途中行動
+	behavior_[Behavior::Stan] = [this]() {};
+	behavior_[Behavior::Exhaustion] = [this]() {};
+	behavior_[Behavior::Charge] = [this]() {};
+
+	// 何もしない
+	behavior_[Behavior::None] = [this]() {};
+
+
+	behaviorFinishTime_[Behavior::OneShot] = 1.0f;
+	behaviorFinishTime_[Behavior::CrossAttack] = 1.0f;
+	behaviorFinishTime_[Behavior::SpinningAttack] = 1.5f;
+	behaviorFinishTime_[Behavior::EruptionAttack] = 0.0f;
+	behaviorFinishTime_[Behavior::LargeEruptionAttack] = 0.0f;
+
+	// 途中行動
+	behaviorFinishTime_[Behavior::Stan] = 0.0f;
+	behaviorFinishTime_[Behavior::Exhaustion] = 0.0f;
+	behaviorFinishTime_[Behavior::Charge] = 0.0f;
+
+	behaviorFinishTime_[Behavior::None] = 1.5f;
 }
 
 void Enemy::CreateBullets()
 {
-	bullets_.resize(50);
+	bullets_.resize(100);
 
 	for (auto& i : bullets_) {
 		i.reset(new Bullet{});
 		i->Initialize();
+	}
+
+	currentBullet_ = bullets_.begin();
+}
+
+void Enemy::SettingBehavior()
+{
+	if (nextBehavior_ == std::nullopt) {
+		return;
+	}
+
+	currentBehavior_ = nextBehavior_;
+	behaviorTime_ = 0.0f;
+}
+
+void Enemy::NextBullet()
+{
+	currentBullet_++;
+	if (currentBullet_ == bullets_.end()) {
+		currentBullet_ = bullets_.begin();
 	}
 }

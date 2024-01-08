@@ -57,7 +57,7 @@ float FractalSumNnoise(float density, float2 uv)
 
 float CreateNoise(float2 uv)
 {
-    float density = 5.0f;
+    float density = 20.0f;
     
     float pn = FractalSumNnoise(density, uv + randomVec);
     float pn2 = FractalSumNnoise(density, uv - randomVec);
@@ -75,13 +75,15 @@ float CreateNoise(float2 uv)
 
 float CreateNoiseNoDdy(float2 uv)
 {
-    float pn = FractalSumNnoise(10.0f, uv + randomVec);
-    float pn2 = FractalSumNnoise(5.0f, uv - randomVec);
+    float density = 20.0f;
+    
+    float pn = FractalSumNnoise(density * 2.0f, uv + randomVec);
+    float pn2 = FractalSumNnoise(density, uv - randomVec);
     uv.x *= -1.0f;
-    float pn3 = FractalSumNnoise(10.0f, uv + randomVec);
+    float pn3 = FractalSumNnoise(density * 2.0f, uv + randomVec);
     uv.x *= -1.0f;
     uv.y *= -1.0f;
-    float pn4 = FractalSumNnoise(5.0f, uv + randomVec);
+    float pn4 = FractalSumNnoise(density, uv + randomVec);
     
     float noise = lerp((pn * 0.1f), (pn2 * 0.08f), 3.0f);
     float noise2 = lerp((pn3 * 0.1f), (pn4 * 0.08f), 3.0f);
@@ -116,7 +118,7 @@ float4 main(Output input) : SV_TARGET{
     
     float4 texColor = tex.Sample(smp, input.uv.xy + (CreateNoiseNoDdy(input.uv)));
     
-    float4 causticsColor = caustics.Sample(smp, input.uv.xy + frac(CreateNoiseNoDdy(input.uv)));
+    float4 causticsColor = caustics.Sample(smp, input.causticsUv.xy + frac(CreateNoiseNoDdy(input.causticsUv * 0.1f)));
     
     float3 normal = CreateNormal(input.uv);
     //normal = mul(normal, input.tangentBasis);
