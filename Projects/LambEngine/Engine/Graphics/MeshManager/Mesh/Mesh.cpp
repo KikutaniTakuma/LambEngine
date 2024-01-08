@@ -19,7 +19,7 @@ Mesh::Mesh() :
 	texs_{},
 	isLoad_(false),
 	isObjLoad_(false),
-	wvpMats_{1u},
+	wvpMats_{256u},
 	dirLig_{},
 	color_{},
 	drawCount_{0u}
