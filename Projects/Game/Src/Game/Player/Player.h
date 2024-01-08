@@ -2,6 +2,7 @@
 #include "Drawers/Model/Model.h"
 #include "../Bullet/Bullet.h"
 #include <memory>
+#include <list>
 
 class Player {
 public:
@@ -31,6 +32,12 @@ public:
 
 	void Collision(const class Enemy& enemy);
 
+	void Attack(const class Enemy& enemy);
+
+private:
+	void CreateBullets();
+
+
 public:
 	inline const Vector3& GetPos() const {
 		return model_->pos;
@@ -44,7 +51,7 @@ public:
 		return hp_ < 0.0f;
 	}
 
-	inline const std::list<std::unique_ptr<class Bullet>> GetBullets() const {
+	inline const std::list<std::unique_ptr<Bullet>>& GetBullets() const {
 		return bullets_;
 	}
 
@@ -85,7 +92,10 @@ private:
 	float attack_;
 
 	// 弾(6発)
-	std::list<std::unique_ptr<class Bullet>> bullets_;
+	std::list<std::unique_ptr<Bullet>> bullets_;
+	bool isReloadable_;
+
+	decltype(bullets_)::iterator currentBullet_;
 
 	// 当たり判定で使う
 	float radius_;

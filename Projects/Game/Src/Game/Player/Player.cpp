@@ -15,7 +15,7 @@ void Player::Initialize()
 
 	attack_ = 2.0f;
 
-	maxSpeed_ = 0.628f;
+	maxSpeed_ = std::numbers::pi_v<float> / 8.0f;
 	speed_ = 0.0f;
 	addSpeed_ = maxSpeed_ * 0.3f;
 	speedDecay_ = -maxSpeed_ * 0.5f;
@@ -28,8 +28,8 @@ void Player::Initialize()
 	offset_ = -(maxOffset_ + minOffset_) * 0.5f;
 	offsetSpeed_ = 5.0f;
 
-	basisSpeedScale_ = 1.0f / minOffsetZ;
-	speedScale_ = 1.0f / (offset_.Length() * basisSpeedScale_);
+	basisSpeedScale_ = maxOffsetZ;
+	speedScale_ = 1.0f / (basisSpeedScale_ / offset_.Length());
 
 	rotate_ = 0.0f;
 
@@ -40,6 +40,10 @@ void Player::Initialize()
 
 
 	hp_ = 100.0f;
+
+	isReloadable_ = false;
+
+	CreateBullets();
 }
 
 void Player::Move()
@@ -71,7 +75,7 @@ void Player::Move()
 
 	offset_.z = std::clamp(offset_.z, minOffset_.z, maxOffset_.z);
 
-	speedScale_ = 1.0f / (offset_.Length() * basisSpeedScale_);
+	speedScale_ = 1.0f / (basisSpeedScale_ / offset_.Length());
 
 	bool isMove = true;
 	// 右へ
@@ -122,6 +126,10 @@ void Player::Update() {
 
 	model_->Update();
 
+	for (auto& i : bullets_) {
+		i->Update();
+	}
+
 	if (isCollisioned_) {
 		isCollisionedTime_ += Lamb::DeltaTime();
 		if (invincibleTime_ < isCollisionedTime_) {
@@ -134,6 +142,10 @@ void Player::Update() {
 void Player::Draw(const Camera& camera)
 {
 	model_->Draw(camera.GetViewProjection(), camera.GetPos());
+
+	for (auto& i : bullets_) {
+		i->Draw(camera);
+	}
 }
 
 void Player::Debug([[maybe_unused]]const std::string& guiName)
@@ -173,8 +185,51 @@ void Player::Collision(const Enemy& enemy)
 				isCollisioned_ = true;
 
 				hp_ -= i->GetAttack();
+
+				i->Unenable();
 				break;
 			}
 		}
 	}
+}
+
+void Player::Attack(const Enemy& enemy) {
+	static KeyInput* const key = Input::GetInstance()->GetKey();
+	static Gamepad* const gamepad = Input::GetInstance()->GetGamepad();
+
+	if (currentBullet_ == bullets_.end()) {
+		if (!bullets_.rbegin()->get()->GetIsActive()) {
+			currentBullet_ = bullets_.begin();
+		}
+		else {
+			return;
+		}
+	}
+
+	if (key->Pushed(DIK_SPACE) || gamepad->Pushed(Gamepad::Button::A)) {
+		float bulletIndex = static_cast<float>(std::distance(bullets_.begin(), currentBullet_));
+		float bulletStateScale = 20.0f * (1.0f - (bulletIndex * 0.15f));
+
+		currentBullet_->get()->SetStatus(
+			model_->pos,
+			(enemy.GetPos() - model_->pos).Normalize(),
+			bulletStateScale,
+			attack_ * bulletIndex,
+			0xff
+		);
+		currentBullet_->get()->Enable();
+		currentBullet_++;
+	}
+}
+
+void Player::CreateBullets() {
+	bullets_.resize(6u);
+
+	for (auto& i : bullets_) {
+		i.reset(new Bullet{});
+
+		i->Initialize();
+	}
+
+	currentBullet_ = bullets_.begin();
 }
