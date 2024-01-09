@@ -56,6 +56,9 @@
     <ClCompile Include="Src\Game\Bullet\Bullet.cpp">
       <Filter>Game\Bullet</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Scenes\TitleScene\TitleScene.cpp">
+      <Filter>Scenes\TitleScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -121,6 +124,9 @@
     <Filter Include="Game\Bullet">
       <UniqueIdentifier>{18a051cf-6b57-499a-9d1b-7ec0fe462e18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\TitleScene">
+      <UniqueIdentifier>{dbea924b-1ee0-4086-9471-d1d69b21d744}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -176,6 +182,9 @@
     </ClInclude>
     <ClInclude Include="Src\Game\Bullet\Bullet.h">
       <Filter>Game\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scenes\TitleScene\TitleScene.h">
+      <Filter>Scenes\TitleScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

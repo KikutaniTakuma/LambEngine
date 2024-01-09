@@ -86,7 +86,7 @@ public:
 	}
 
 	bool IsGameClear() const {
-		return hp_ < 0.0f;
+		return hp_ <= 0.0f;
 	}
 
 	const Vector3& GetPos() const {

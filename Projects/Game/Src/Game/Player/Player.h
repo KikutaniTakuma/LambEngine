@@ -53,7 +53,7 @@ public:
 
 	// 終わった瞬間を取得
 	inline bool IsGameOver() const {
-		return hp_ < 0.0f && particle_->GetIsParticleStart().OnExit();
+		return hp_ < 0.0f && !particle_->GetIsParticleStart();
 	}
 
 	inline float GetHp() const {
@@ -140,4 +140,6 @@ private:
 	std::unique_ptr<Texture2D> uiHp_;
 	std::unique_ptr<Texture2D> uiBulletFrame_;
 	std::array<std::unique_ptr<Texture2D>, 6> uiBullet_;
+
+	float chikachika_;
 };

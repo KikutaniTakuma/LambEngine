@@ -23,8 +23,7 @@ void GameScene::Initialize() {
 	camera_->offset.z = -60.0f;
 	camera_->offset.y = 8.0f;
 
-	water_.reset(new Water{});
-	water_->Init();
+	water_ = Water::GetInstance();
 
 	player_.reset(new Player{});
 	player_->Initialize();
@@ -51,6 +50,9 @@ void GameScene::Finalize() {
 void GameScene::Update() {
 	camera_->Debug("camera");
 
+	if (player_->IsGameOver()) {
+		sceneManager_->SceneChange(BaseScene::ID::Game);
+	}
 	//water_->Debug("water");
 	water_->Update();
 
@@ -60,7 +62,7 @@ void GameScene::Update() {
 	player_->Update(*camera_);
 
 
-	//enemy_->Debug("Boss");
+	enemy_->Debug("Boss");
 	enemy_->Update(*player_, *camera_);
 
 
@@ -82,6 +84,15 @@ void GameScene::Update() {
 	if (messageAlpah_ == 0.0f) {
 		enemy_->StartAttack();
 	}
+
+	if (input_->GetKey()->Pushed(DIK_ESCAPE) || input_->GetGamepad()->Pushed(Gamepad::Button::START)) {
+		sceneManager_->SceneChange(BaseScene::ID::Title);
+	}
+
+	if (enemy_->IsGameClear()) {
+		sceneManager_->SceneChange(BaseScene::ID::Title);
+	}
+
 }
 
 void GameScene::Draw() {

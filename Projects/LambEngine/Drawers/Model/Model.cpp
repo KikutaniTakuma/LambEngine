@@ -86,7 +86,7 @@ void Model::CreateGraphicsPipeline() {
 		PipelineManager::SetVertexInput("NORMAL", 0u, DXGI_FORMAT_R32G32B32_FLOAT);
 		PipelineManager::SetVertexInput("TEXCOORD", 0u, DXGI_FORMAT_R32G32_FLOAT);
 
-		PipelineManager::SetState(Pipeline::Blend::None, Pipeline::SolidState::Solid);
+		PipelineManager::SetState(Pipeline::Blend::Normal, Pipeline::SolidState::Solid);
 
 		pipeline_ = PipelineManager::Create();
 

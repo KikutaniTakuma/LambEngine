@@ -1,7 +1,27 @@
 #include "Water.h"
 #include "Utils/EngineInfo/EngineInfo.h"
 #include "imgui.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
+Water* Water::instance_ = nullptr;
+
+void Water::Initialize()
+{
+	if (!instance_) {
+		instance_ = new Water{};
+		instance_->Init();
+	}
+}
+
+void Water::Finalize()
+{
+	Lamb::SafeDelete(instance_);
+}
+
+Water* const Water::GetInstance()
+{
+	return instance_;
+}
 
 void Water::Init() {
 	waterPipelineObject_ = new WaterPipeline{};

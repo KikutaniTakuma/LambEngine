@@ -83,6 +83,8 @@ void Player::Initialize()
 		uiBullet_[i]->pos.y = -180.0f;
 	}
 	uiBullet_[5]->color = Vector4ToUint({ 0.2f, 0.8f, 0.8f, 1.0f });
+
+	chikachika_ = 0.0f;
 }
 
 void Player::Move()
@@ -177,6 +179,15 @@ void Player::Update(const Camera& camera) {
 	
 	model_->pos.y += std::cos(modelUpDown_) * 0.1f;
 
+	if (isCollisioned_) {
+		model_->color = Vector4ToUint({ 1.0f,1.0f,1.0f,std::abs(std::cos(chikachika_)) });
+		chikachika_ += std::numbers::pi_v<float> *Lamb::DeltaTime() * 3.0f;
+	}
+	else {
+		model_->color = Vector4ToUint({ 1.0f,1.0f,1.0f,1.0f });
+		chikachika_ = 0.0f;
+	}
+
 	model_->Update();
 
 	for (auto& i : bullets_) {
@@ -204,7 +215,6 @@ void Player::Update(const Camera& camera) {
 	uiBulletFrame_->Update();
 
 	for (size_t i = 0; i < uiBullet_.size(); i++) {
-		uiBullet_[i]->Debug("buletUI : " + std::to_string(i));
 		uiBullet_[i]->Update();
 	}
 

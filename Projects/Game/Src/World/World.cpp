@@ -1,6 +1,8 @@
 #include "World.h"
 #include "Scenes/Manager/SceneManager.h"
 #include "Editor/ParticleEditor/ParticleEditor.h"
+#include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
+#include "../Game/Water/Water.h"
 
 void World::Initialize() {
 	// ウィンドウ初期化オプション
@@ -17,15 +19,21 @@ void World::Initialize() {
 
 	Framework::Initialize();
 
+	Water::Initialize();
 	sceneManager_ = SceneManager::GetInstance();
 
-	sceneManager_->Initialize(BaseScene::ID::Game, BaseScene::ID::Game);
+	sceneManager_->Initialize(BaseScene::ID::Title, BaseScene::ID::Title);
 
 	ParticleEditor::Initialize();
 	particleEditor_ = ParticleEditor::GetInstance();
+
+	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/mincho_size_32.spritefont");
+
 }
 
 void World::Finalize() {
+	Water::Finalize();
+
 	if (sceneManager_) {
 		sceneManager_->Finalize();
 	}

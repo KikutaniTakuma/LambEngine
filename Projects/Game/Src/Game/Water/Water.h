@@ -6,10 +6,22 @@
 #include "Engine/Graphics/PipelineObject/WaterPipeline/WaterPipeline.h"
 
 class Water final {
-public:
-	Water()= default;
+private:
+	Water() = default;
 
+public:
 	~Water() = default;
+
+public:
+	static void Initialize();
+
+	static void Finalize();
+
+	static Water* const GetInstance();
+
+private:
+	static Water* instance_;
+
 
 public:
 	void Init();

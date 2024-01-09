@@ -29,7 +29,7 @@ public:
 	void Draw() override;
 
 public:
-	std::unique_ptr<class Water> water_;
+	class Water* water_;
 	std::unique_ptr<class Player> player_;
 	std::unique_ptr<class Enemy> enemy_;
 	std::unique_ptr<Camera> uiCamera_;

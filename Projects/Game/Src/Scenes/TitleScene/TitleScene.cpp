@@ -1,0 +1,69 @@
+#include "TitleScene.h"
+#include "Game/Water/Water.h"
+#include <cmath>
+#include <numbers>
+#include "Utils/EngineInfo/EngineInfo.h"
+
+TitleScene::TitleScene():
+	BaseScene{BaseScene::ID::Title}
+{
+}
+
+void TitleScene::Initialize()
+{
+	camera_->pos.y = 6.46f;
+	camera_->rotate = { 0.18f, 0.17f, 0.0f };
+
+	water_ = Water::GetInstance();
+
+	uiCamera_.reset(new Camera{});
+	uiCamera_->Update();
+
+	player_.reset(new Model{ "./Resources/Player/Player.obj" });
+	player_->pos = { 4.38f, 3.22f, 10.590f };
+	player_->rotate.y = -0.42f;
+	player_->scale *= 2.0f;
+
+	str_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
+	str_ << "水面";
+	str_.scale *= 14.8f * 0.5f;
+	str_.pos = { 52.0f, 136.0f };
+	str_.color = 0xff;
+
+	startMessage_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
+	startMessage_ << "Ａボタン押してちょんまげ";
+	startMessage_.pos = { 144.0f, 539.0f };
+}
+
+void TitleScene::Finalize()
+{
+}
+
+void TitleScene::Update()
+{
+	camera_->Debug("camera");
+
+	player_->Debug("player");
+	player_->Update();
+
+	water_->Update();
+
+	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
+		sceneManager_->SceneChange(BaseScene::ID::Game);
+	}
+
+	messageAlpah_ += std::numbers::pi_v<float> *0.5f * Lamb::DeltaTime();
+	startMessage_.color = static_cast<uint32_t>(255.0f * std::abs(std::cos(messageAlpah_)));
+}
+
+void TitleScene::Draw()
+{
+	camera_->Update();
+
+
+	water_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+	player_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+
+	str_.Draw();
+	startMessage_.Draw();
+}
