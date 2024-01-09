@@ -27,7 +27,7 @@ void Enemy::Initialize()
 	nextBehavior_ = std::nullopt;
 
 	particle_.reset(new Particle{});
-	particle_->LoadSettingDirectory("PlayerParticle");
+	//particle_->LoadSettingDirectory("PlayerParticle");
 
 	particle_->ParticleStart();
 
@@ -38,9 +38,9 @@ void Enemy::Initialize()
 void Enemy::Update(const Player& player, const Camera& camera)
 {
 
-	/*if (KeyInput::GetInstance()->Pushed(DIK_1)) {
+	if (KeyInput::GetInstance()->Pushed(DIK_1)) {
 		nextBehavior_ = Behavior::OneShot;
-	}*/
+	}
 
 	model_->Update();
 

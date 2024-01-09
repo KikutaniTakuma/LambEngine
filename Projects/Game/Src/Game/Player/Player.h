@@ -50,8 +50,9 @@ public:
 		return rotate_;
 	}
 
+	// 終わった瞬間を取得
 	inline bool IsGameOver() const {
-		return hp_ < 0.0f;
+		return hp_ < 0.0f && particle_->GetIsParticleStart().OnExit();
 	}
 
 	inline const std::list<std::unique_ptr<Bullet>>& GetBullets() const {
@@ -118,4 +119,6 @@ private:
 	std::unique_ptr<Particle> particle_;
 
 	std::unique_ptr<Camera> particleCamera_;
+
+	bool isParticled_;
 };

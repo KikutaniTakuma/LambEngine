@@ -57,6 +57,7 @@ void GameScene::Update() {
 
 	player_->Attack(*enemy_);
 
+	player_->Collision(*enemy_);
 	enemy_->Collision(*player_);
 }
 
@@ -74,5 +75,6 @@ void GameScene::Draw() {
 
 	meshManager_->Draw();
 
+	player_->ParticleDraw();
 	//enemy_->ParticleDraw();
 }

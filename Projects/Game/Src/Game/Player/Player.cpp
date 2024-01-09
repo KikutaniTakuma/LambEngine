@@ -33,13 +33,13 @@ void Player::Initialize()
 
 	rotate_ = 0.0f;
 
-	radius_ = 0.5f;
+	radius_ = 2.0f;
 	isCollisioned_ = false;
 	invincibleTime_ = 1.5f;
 	isCollisionedTime_ = 0.0f;
 
 
-	hp_ = 100.0f;
+	hp_ = 1.0f;
 
 	isReloadable_ = false;
 
@@ -47,10 +47,12 @@ void Player::Initialize()
 
 
 	particle_.reset(new Particle{});
-	particle_->LoadSettingDirectory("PlayerParticle");
+	particle_->LoadSettingDirectory("PlayerDeath");
 
 	particleCamera_.reset(new Camera{});
 	particleCamera_->Update();
+
+	isParticled_ = false;
 }
 
 void Player::Move()
@@ -126,6 +128,11 @@ void Player::Move()
 }
 
 void Player::Update(const Camera& camera) {
+	if (hp_ <= 0.0f && !particle_->GetIsParticleStart() && !isParticled_) {
+		particle_->ParticleStart();
+		isParticled_ = true;
+	}
+
 	rotate_ += speed_ * Lamb::DeltaTime() * speedScale_;
 
 	model_->pos = offset_ * Quaternion::MakeRotateYAxis(rotate_);
@@ -147,6 +154,7 @@ void Player::Update(const Camera& camera) {
 
 	particle_->emitterPos = model_->pos * camera.GetViewProjectionVp() * Mat4x4::MakeInverse(particleCamera_->GetViewOthographicsVp());
 	particle_->Update();
+
 }
 
 void Player::Draw(const Camera& camera)
@@ -178,6 +186,7 @@ void Player::Debug([[maybe_unused]]const std::string& guiName)
 		ImGui::DragFloat("攻撃", &attack_);
 		ImGui::DragFloat3("オフセット", &offset_.x);
 		ImGui::DragFloat3("エミッターポジション", &particle_->emitterPos.x);
+		ImGui::Text("hp : %.0f", hp_);
 		ImGui::TreePop();
 	}
 	ImGui::End();
