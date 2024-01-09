@@ -5,10 +5,14 @@
 void World::Initialize() {
 	// ウィンドウ初期化オプション
 	initDesc_ = Framework::InitDesc{
-		.windowName = "LambEngine_demo",
+		.windowName = "LE2A_06_キクタニ_タクマ_水面",
 		.windowSize = {1280.0f, 720.0f},
 		.maxFps = 60.0f,
+#ifdef _DEBUG
 		.isFullesceen = false
+#else
+		.isFullesceen = true
+#endif // _DEBUG
 	};
 
 	Framework::Initialize();
