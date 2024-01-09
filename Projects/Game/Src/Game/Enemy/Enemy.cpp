@@ -35,15 +35,23 @@ void Enemy::Initialize()
 	particleCamera_->Update();
 
 	toPlayerLength_ = 0.0f;
+
+	isAttackStart_ = false;
+
+	uiCamera_.reset(new Camera{});
+	uiCamera_->Update();
+	uiFrame_.reset(new Texture2D{});
+	uiFrame_->pos = { 357.0f, 278.0f };
+	uiFrame_->scale = { 500.0f, 80.0f };
+	uiFrame_->color = Vector4ToUint({ 0.1f,0.1f,0.1f,1.0f });
+	uiHp_.reset(new Texture2D{});
+	uiHp_->color = Vector4ToUint({ 0.8f,0.1f,0.1f,1.0f });
+	uiHp_->pos = { 357.0f, 278.0f };
+	uiHp_->scale = { 450.0f, 52.0f };
 }
 
 void Enemy::Update(const Player& player, const Camera& camera)
 {
-
-	if (KeyInput::GetInstance()->Pushed(DIK_1)) {
-		nextBehavior_ = Behavior::OneShot;
-	}
-
 	model_->Update();
 
 	playerPos_ = player.GetPos();
@@ -53,16 +61,30 @@ void Enemy::Update(const Player& player, const Camera& camera)
 
 	SettingBehavior();
 
-	behavior_[currentBehavior_]();
+	if (0.0f < player.GetHp()) {
+		behavior_[currentBehavior_]();
+	}
 
 	for (auto& i : bullets_) {
 		i->Update();
 	}
 
-	behaviorTime_ += Lamb::DeltaTime();
+	if (0.0f < player.GetHp()) {
+		behaviorTime_ += Lamb::DeltaTime();
+	}
 
 	particle_->emitterPos = model_->pos * camera.GetViewProjectionVp() * Mat4x4::MakeInverse(particleCamera_->GetViewOthographicsVp());
 	particle_->Update();
+
+	if (0.0f < hp_) {
+		uiHp_->uvPibot.x = 1.0f - (hp_ / 1000.0f);
+	}
+	else {
+		uiHp_->uvPibot.x = 2.0f;
+	}
+
+	uiFrame_->Update();
+	uiHp_->Update();
 }
 
 void Enemy::Draw(const Camera& camera)
@@ -74,9 +96,12 @@ void Enemy::Draw(const Camera& camera)
 	}
 }
 
-void Enemy::ParticleDraw()
+void Enemy::AfterDraw()
 {
 	particle_->Draw(Vector3::kZero, particleCamera_->GetViewOthographics());
+
+	uiFrame_->Draw(uiCamera_->GetViewOthographics(), Pipeline::Normal, false);
+	uiHp_->Draw(uiCamera_->GetViewOthographics(), Pipeline::Normal, false, false);
 }
 
 void Enemy::Debug([[maybe_unused]]const std::string& guiName)
@@ -102,6 +127,14 @@ void Enemy::Collision(const Player& player)
 				i->Unenable();
 			}
 		}
+	}
+}
+
+void Enemy::StartAttack()
+{
+	if (!isAttackStart_) {
+		nextBehavior_ = Behavior::OneShot;
+		isAttackStart_ = true;
 	}
 }
 

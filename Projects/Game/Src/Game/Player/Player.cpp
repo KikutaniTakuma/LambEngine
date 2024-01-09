@@ -13,7 +13,7 @@ void Player::Initialize()
 	model_.reset(new Model{"./Resources/Player/Player.obj"});
 	model_->scale *= 5.0f;
 
-	attack_ = 2.0f;
+	attack_ = 4.0f;
 
 	maxSpeed_ = std::numbers::pi_v<float> / 8.0f;
 	speed_ = 0.0f;
@@ -25,7 +25,7 @@ void Player::Initialize()
 
 	maxOffset_ = -Vector3::kZIndentity * minOffsetZ;
 	minOffset_ = -Vector3::kZIndentity * maxOffsetZ;
-	offset_ = -(maxOffset_ + minOffset_) * 0.5f;
+	offset_ = -Vector3::kZIndentity * 35.0f;
 	offsetSpeed_ = 5.0f;
 
 	basisSpeedScale_ = maxOffsetZ;
@@ -57,10 +57,40 @@ void Player::Initialize()
 
 	modelUpDown_ = 0.0f;
 	modelUpDownSpeed_ = std::numbers::pi_v<float>;
+
+
+	uiCamera_.reset(new Camera{});
+	uiCamera_->Update();
+	uiFrame_.reset(new Texture2D{});
+	uiFrame_->pos = { -466.0f, -279.0f };
+	uiFrame_->scale = { 270.0f, 80.0f };
+	uiFrame_->color = Vector4ToUint({ 0.1f,0.1f,0.1f,1.0f });
+	uiHp_.reset(new Texture2D{});
+	uiHp_->color = Vector4ToUint({ 0.1f,0.8f,0.1f,1.0f });
+	uiHp_->pos = { -466.0f, -279.0f };
+	uiHp_->scale = { 225.0f, 52.0f };
+
+	uiBulletFrame_.reset(new Texture2D{});
+	uiBulletFrame_->pos = { -466.0f, -180.0f };
+	uiBulletFrame_->scale = { 270.0f, 80.0f };
+	uiBulletFrame_->color = Vector4ToUint({ 0.1f,0.1f,0.1f,1.0f });
+
+	for (size_t i = 0; i < uiBullet_.size(); i++) {
+		uiBullet_[i].reset(new Texture2D{});
+		uiBullet_[i]->scale = { 30.0f, 60.0f };
+		uiBullet_[i]->color = Vector4ToUint({ 0.8f, 0.2f, 0.2f, 1.0f });
+		uiBullet_[i]->pos.x = -565.0f + 40.0f * static_cast<float>(i);
+		uiBullet_[i]->pos.y = -180.0f;
+	}
+	uiBullet_[5]->color = Vector4ToUint({ 0.2f, 0.8f, 0.8f, 1.0f });
 }
 
 void Player::Move()
 {
+	if (hp_ <= 0.0f) {
+		return;
+	}
+
 	static KeyInput* const key = Input::GetInstance()->GetKey();
 	static Gamepad* const gamepad = Input::GetInstance()->GetGamepad();
 
@@ -164,11 +194,29 @@ void Player::Update(const Camera& camera) {
 	particle_->emitterPos = model_->pos * camera.GetViewProjectionVp() * Mat4x4::MakeInverse(particleCamera_->GetViewOthographicsVp());
 	particle_->Update();
 
+	if (0.0f < hp_) {
+		uiHp_->uvPibot.x = 1.0f - (hp_ / 100.0f);
+	}
+	else {
+		uiHp_->uvPibot.x = 2.0f;
+	}
+
+	uiBulletFrame_->Update();
+
+	for (size_t i = 0; i < uiBullet_.size(); i++) {
+		uiBullet_[i]->Debug("buletUI : " + std::to_string(i));
+		uiBullet_[i]->Update();
+	}
+
+	uiFrame_->Update();
+	uiHp_->Update();
 }
 
 void Player::Draw(const Camera& camera)
 {
-	model_->Draw(camera.GetViewProjection(), camera.GetPos());
+	if (0.0f < hp_) {
+		model_->Draw(camera.GetViewProjection(), camera.GetPos());
+	}
 
 	for (auto& i : bullets_) {
 		i->Draw(camera);
@@ -176,9 +224,22 @@ void Player::Draw(const Camera& camera)
 
 }
 
-void Player::ParticleDraw()
+void Player::AfterDraw()
 {
 	particle_->Draw(Vector3::kZero, particleCamera_->GetViewOthographics());
+
+	uiFrame_->Draw(uiCamera_->GetViewOthographics(), Pipeline::Normal, false);
+	uiHp_->Draw(uiCamera_->GetViewOthographics(), Pipeline::Normal, false, false);
+
+	uiBulletFrame_->Draw(uiCamera_->GetViewOthographics(), Pipeline::Normal, false);
+	auto bullet = bullets_.begin();
+
+	for (size_t i = 0; i < uiBullet_.size(); i++) {
+		if (!(*bullet)->GetIsActive()) {
+			uiBullet_[i]->Draw(uiCamera_->GetViewOthographics(), Pipeline::Normal, false, false);
+		}
+		bullet++;
+	}
 }
 
 void Player::Debug([[maybe_unused]]const std::string& guiName)
@@ -231,6 +292,10 @@ void Player::Collision(const Enemy& enemy)
 }
 
 void Player::Attack(const Enemy& enemy) {
+	if (hp_ <= 0.0f) {
+		return;
+	}
+
 	static KeyInput* const key = Input::GetInstance()->GetKey();
 	static Gamepad* const gamepad = Input::GetInstance()->GetGamepad();
 

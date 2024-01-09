@@ -33,6 +33,15 @@ void GameScene::Initialize() {
 	enemy_->Initialize();
 
 	camera_->Update(player_->GetPos());
+
+	uiCamera_.reset(new Camera{});
+	uiCamera_->Update();
+
+	startMessage_.reset(new Texture2D{ "./Resources/Message/StartMessage.png" });
+	startMessage_->isSameTexSize = true;
+	startMessage_->texScalar = 0.63f;
+
+	messageAlpah_ = 1.0f;
 }
 
 void GameScene::Finalize() {
@@ -42,16 +51,16 @@ void GameScene::Finalize() {
 void GameScene::Update() {
 	camera_->Debug("camera");
 
-	water_->Debug("water");
+	//water_->Debug("water");
 	water_->Update();
 
 
 	player_->Move();
-	player_->Debug("player");
+	//player_->Debug("player");
 	player_->Update(*camera_);
 
 
-	enemy_->Debug("Boss");
+	//enemy_->Debug("Boss");
 	enemy_->Update(*player_, *camera_);
 
 
@@ -59,6 +68,20 @@ void GameScene::Update() {
 
 	player_->Collision(*enemy_);
 	enemy_->Collision(*player_);
+
+	//startMessage_->Debug("startMessage_");
+	if (0.0f < messageAlpah_) {
+		messageAlpah_ -= 0.2f * Lamb::DeltaTime();
+	}
+	else {
+		messageAlpah_ = 0.0f;
+	}
+	startMessage_->color = Vector4ToUint({1.0f,1.0f,1.0f,std::max(messageAlpah_,0.0f )});
+	startMessage_->Update();
+
+	if (messageAlpah_ == 0.0f) {
+		enemy_->StartAttack();
+	}
 }
 
 void GameScene::Draw() {
@@ -75,6 +98,9 @@ void GameScene::Draw() {
 
 	meshManager_->Draw();
 
-	player_->ParticleDraw();
-	//enemy_->ParticleDraw();
+	player_->AfterDraw();
+
+	enemy_->AfterDraw();
+
+	startMessage_->Draw(uiCamera_->GetViewOthographics());
 }

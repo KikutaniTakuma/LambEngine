@@ -2,6 +2,7 @@
 #include "Drawers/Model/Model.h"
 #include "../Bullet/Bullet.h"
 #include "Drawers/Particle/Particle.h"
+#include "Drawers/Texture2D/Texture2D.h"
 #include <memory>
 #include <array>
 #include <list>
@@ -58,12 +59,14 @@ public:
 	// 描画
 	void Draw(const class Camera& camera);
 
-	void ParticleDraw();
+	void AfterDraw();
 
 	// 調整
 	void Debug(const std::string& guiName);
 
 	void Collision(const class Player& player);
+
+	void StartAttack();
 
 private:
 	void CreateBehaviors();
@@ -126,4 +129,10 @@ private:
 	std::unique_ptr<Particle> particle_;
 
 	std::unique_ptr<Camera> particleCamera_;
+
+	bool isAttackStart_;
+
+	std::unique_ptr<Camera> uiCamera_;
+	std::unique_ptr<Texture2D> uiFrame_;
+	std::unique_ptr<Texture2D> uiHp_;
 };

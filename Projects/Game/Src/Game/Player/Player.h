@@ -3,6 +3,7 @@
 #include "../Bullet/Bullet.h"
 #include "Drawers/Particle/Particle.h"
 #include "Utils/Camera/Camera.h"
+#include "Drawers/Texture2D/Texture2D.h"
 #include <memory>
 #include <list>
 
@@ -29,7 +30,7 @@ public:
 	// 描画
 	void Draw(const class Camera& camera);
 
-	void ParticleDraw();
+	void AfterDraw();
 	// 調整
 	void Debug(const std::string& guiName);
 
@@ -53,6 +54,10 @@ public:
 	// 終わった瞬間を取得
 	inline bool IsGameOver() const {
 		return hp_ < 0.0f && particle_->GetIsParticleStart().OnExit();
+	}
+
+	inline float GetHp() const {
+		return hp_;
 	}
 
 	inline const std::list<std::unique_ptr<Bullet>>& GetBullets() const {
@@ -129,4 +134,10 @@ private:
 
 	//ゆらゆらさせてないポジション
 	Vector3 noUpDownPos_;
+
+	std::unique_ptr<Camera> uiCamera_;
+	std::unique_ptr<Texture2D> uiFrame_;
+	std::unique_ptr<Texture2D> uiHp_;
+	std::unique_ptr<Texture2D> uiBulletFrame_;
+	std::array<std::unique_ptr<Texture2D>, 6> uiBullet_;
 };
