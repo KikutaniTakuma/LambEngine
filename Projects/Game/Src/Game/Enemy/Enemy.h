@@ -1,6 +1,7 @@
 #pragma once
 #include "Drawers/Model/Model.h"
 #include "../Bullet/Bullet.h"
+#include "Drawers/Particle/Particle.h"
 #include <memory>
 #include <array>
 #include <list>
@@ -17,10 +18,8 @@ private:
 		// 十字攻撃(単発攻撃を3回行われたらこれが行われる)
 		// また、体力半分以下で回転攻撃に切り替わる
 		CrossAttack,
-		// 回転攻撃
-		SpinningAttack,
 
-		// 噴火は十字攻撃または回転攻撃の際に一定以上プレイヤーが近づいていたら噴火する
+		// 噴火は十字攻撃の際に一定以上プレイヤーが近づいていたら噴火する
 
 		// 噴火(体力半分以上のとき)
 		EruptionAttack,
@@ -29,11 +28,9 @@ private:
 		// ・通常の噴火より攻撃力が高く、飛んでくる弾の数が2倍
 		LargeEruptionAttack,
 
-		// スタン
-		Stan,
-		// 疲れ
-		Exhaustion,
-		// チャージ
+		// ダウン
+		Down,
+		// チャージ(大噴火時)
 		Charge,
 
 		// 何もしない
@@ -56,10 +53,12 @@ public:
 	void Initialize();
 
 	// 更新
-	void Update(const class Player& player);
+	void Update(const class Player& player, const class Camera& camera);
 
 	// 描画
 	void Draw(const class Camera& camera);
+
+	void ParticleDraw();
 
 	// 調整
 	void Debug(const std::string& guiName);
@@ -120,4 +119,9 @@ private:
 
 	// プレイヤーへの方向ベクトル
 	Vector3 toPlayer_;
+
+	// 動いてるときのパーティクル
+	std::unique_ptr<Particle> particle_;
+
+	std::unique_ptr<Camera> particleCamera_;
 };

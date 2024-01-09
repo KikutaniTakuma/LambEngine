@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "Utils/Camera/Camera.h"
 #include "Input/Input.h"
 #include "Utils/EngineInfo/EngineInfo.h"
 #include "Math/Quaternion.h"
@@ -45,6 +44,13 @@ void Player::Initialize()
 	isReloadable_ = false;
 
 	CreateBullets();
+
+
+	particle_.reset(new Particle{});
+	particle_->LoadSettingDirectory("PlayerParticle");
+
+	particleCamera_.reset(new Camera{});
+	particleCamera_->Update();
 }
 
 void Player::Move()
@@ -67,7 +73,7 @@ void Player::Move()
 	{
 		offset_.z += offsetSpeed_ * Lamb::DeltaTime();
 	}
-	if (key->GetKey(DIK_S) || key->GetKey(DIK_DOWN) ||
+	else if (key->GetKey(DIK_S) || key->GetKey(DIK_DOWN) ||
 		gamepad->GetButton(Gamepad::Button::DOWN) || stick.y < 0.0f
 		)
 	{
@@ -119,7 +125,7 @@ void Player::Move()
 	}
 }
 
-void Player::Update() {
+void Player::Update(const Camera& camera) {
 	rotate_ += speed_ * Lamb::DeltaTime() * speedScale_;
 
 	model_->pos = offset_ * Quaternion::MakeRotateYAxis(rotate_);
@@ -138,6 +144,9 @@ void Player::Update() {
 			isCollisioned_ = false;
 		}
 	}
+
+	particle_->emitterPos = model_->pos * camera.GetViewProjectionVp() * Mat4x4::MakeInverse(particleCamera_->GetViewOthographicsVp());
+	particle_->Update();
 }
 
 void Player::Draw(const Camera& camera)
@@ -147,6 +156,12 @@ void Player::Draw(const Camera& camera)
 	for (auto& i : bullets_) {
 		i->Draw(camera);
 	}
+
+}
+
+void Player::ParticleDraw()
+{
+	particle_->Draw(Vector3::kZero, particleCamera_->GetViewOthographics());
 }
 
 void Player::Debug([[maybe_unused]]const std::string& guiName)
@@ -162,9 +177,12 @@ void Player::Debug([[maybe_unused]]const std::string& guiName)
 		ImGui::DragFloat("速度", &speed_);
 		ImGui::DragFloat("攻撃", &attack_);
 		ImGui::DragFloat3("オフセット", &offset_.x);
+		ImGui::DragFloat3("エミッターポジション", &particle_->emitterPos.x);
 		ImGui::TreePop();
 	}
 	ImGui::End();
+
+	particle_->Debug("playerParticle");
 #endif // _DEBUG
 }
 

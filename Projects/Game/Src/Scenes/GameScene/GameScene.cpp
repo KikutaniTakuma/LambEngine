@@ -31,6 +31,8 @@ void GameScene::Initialize() {
 
 	enemy_.reset(new Enemy{});
 	enemy_->Initialize();
+
+	camera_->Update(player_->GetPos());
 }
 
 void GameScene::Finalize() {
@@ -46,11 +48,11 @@ void GameScene::Update() {
 
 	player_->Move();
 	player_->Debug("player");
-	player_->Update();
+	player_->Update(*camera_);
 
 
 	enemy_->Debug("Boss");
-	enemy_->Update(*player_);
+	enemy_->Update(*player_, *camera_);
 
 
 	player_->Attack(*enemy_);
@@ -71,4 +73,6 @@ void GameScene::Draw() {
 	enemy_->Draw(*camera_);
 
 	meshManager_->Draw();
+
+	//enemy_->ParticleDraw();
 }

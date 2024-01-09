@@ -222,6 +222,11 @@ public:
 	void ParticleStart(const Vector3& pos);
 
 	/// <summary>
+	/// パーティクル停止関数
+	/// </summary>
+	void ParticleStop();
+
+	/// <summary>
 	/// 更新処理
 	/// </summary>
 	void Update();
@@ -229,7 +234,7 @@ public:
 	/// <summary>
 	/// 描画関数
 	/// </summary>
-	/// <param name="viewProjection">カメラの行列/param>
+	/// <param name="viewProjection">カメラの行列</param>
 	/// <param name="blend">ブレンドモード</param>
 	void Draw(
 		const Vector3& cameraRotate,

@@ -1,6 +1,8 @@
 #pragma once
 #include "Drawers/Model/Model.h"
 #include "../Bullet/Bullet.h"
+#include "Drawers/Particle/Particle.h"
+#include "Utils/Camera/Camera.h"
 #include <memory>
 #include <list>
 
@@ -22,11 +24,12 @@ public:
 	void Move();
 
 	// 更新
-	void Update();
+	void Update(const class Camera& camera);
 
 	// 描画
 	void Draw(const class Camera& camera);
 
+	void ParticleDraw();
 	// 調整
 	void Debug(const std::string& guiName);
 
@@ -109,4 +112,10 @@ private:
 
 	// 体力
 	float hp_;
+
+
+	// 動いてるときのパーティクル
+	std::unique_ptr<Particle> particle_;
+
+	std::unique_ptr<Camera> particleCamera_;
 };
