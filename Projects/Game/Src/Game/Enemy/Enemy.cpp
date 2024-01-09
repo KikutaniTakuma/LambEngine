@@ -33,6 +33,8 @@ void Enemy::Initialize()
 
 	particleCamera_.reset(new Camera{});
 	particleCamera_->Update();
+
+	toPlayerLength_ = 0.0f;
 }
 
 void Enemy::Update(const Player& player, const Camera& camera)
@@ -44,7 +46,9 @@ void Enemy::Update(const Player& player, const Camera& camera)
 
 	model_->Update();
 
+	playerPos_ = player.GetPos();
 	toPlayer_ = player.GetPos() - model_->pos;
+	toPlayerLength_ = toPlayer_.Length();
 	toPlayer_.Normalize();
 
 	SettingBehavior();
@@ -82,6 +86,7 @@ void Enemy::Debug([[maybe_unused]]const std::string& guiName)
 	model_->Debug(guiName);
 	ImGui::DragFloat("radius", &radius_);
 	ImGui::Text("hp : %.0f", hp_);
+	ImGui::Text("toPlayerLength_ : %.2f", toPlayerLength_);
 	ImGui::End();
 #endif // _DEBUG
 }
@@ -109,7 +114,7 @@ void Enemy::CreateBehaviors() {
 				Vector3{ model_->pos.x,model_->pos.y,model_->pos.z },
 				toPlayer_,
 				15.0f,
-				5.0f,
+				20.0f,
 				Vector4ToUint({0.8f, 0.2f, 0.2f, 1.0f})
 			);
 			currentBullet_->get()->Enable();
@@ -119,7 +124,19 @@ void Enemy::CreateBehaviors() {
 		else if (behaviorFinishTime_[currentBehavior_] < behaviorTime_) {
 			if (3 < oneShoeCount_) {
 				oneShoeCount_ = 0;
-				nextBehavior_ = Behavior::CrossAttack;
+				if (toPlayerLength_ < 33.0f) {
+					if (hp_ < 500.0f) {
+						nextBehavior_ = Behavior::EruptionAttack;
+						return;
+					}
+					else {
+						nextBehavior_ = Behavior::EruptionAttack;
+						return;
+					}
+				}
+				else {
+					nextBehavior_ = Behavior::CrossAttack;
+				}
 				return;
 			}
 			else {
@@ -137,7 +154,7 @@ void Enemy::CreateBehaviors() {
 					Vector3{ model_->pos.x,model_->pos.y + radius_,model_->pos.z },
 					(toPlayer_ * Quaternion::MakeRotateAxisAngle(Vector3::kYIndentity, static_cast<float>(i) * 90.0f * Lamb::Math::toRadian<float>)).Normalize(),
 					15.0f,
-					5.0f,
+					20.0f,
 					Vector4ToUint({ 0.8f, 0.2f, 0.2f, 1.0f })
 				);
 				currentBullet_->get()->Enable();
@@ -146,15 +163,53 @@ void Enemy::CreateBehaviors() {
 			}
 		}
 		if (behaviorFinishTime_[currentBehavior_] < behaviorTime_) {
-			nextBehavior_ = Behavior::None;
+			nextBehavior_ = Behavior::OneShot;
 		}
 		else {
 			nextBehavior_ = std::nullopt;
 		}
-		};
+	};
 
-	behavior_[Behavior::EruptionAttack] = [this]() {};
-	behavior_[Behavior::LargeEruptionAttack] = [this]() {};
+	behavior_[Behavior::EruptionAttack] = [this]() {
+		if (static_cast<int32_t>(std::floor(behaviorTime_ * 100.0f)) % 10 == 0) {
+			currentBullet_->get()->SetStatus(
+				Vector3{ playerPos_.x,playerPos_.y + model_->pos.y,playerPos_.z },
+				-Vector3::kYIndentity,
+				10.0f,
+				20.0f,
+				Vector4ToUint({ 0.8f, 0.2f, 0.2f, 1.0f })
+			);
+			currentBullet_->get()->Enable();
+
+			NextBullet();
+		}
+		if (behaviorFinishTime_[currentBehavior_] < behaviorTime_) {
+			nextBehavior_ = Behavior::OneShot;
+		}
+		else {
+			nextBehavior_ = std::nullopt;
+		}
+	};
+	behavior_[Behavior::LargeEruptionAttack] = [this]() {
+		if (static_cast<int32_t>(std::floor(behaviorTime_ * 100.0f)) % 5 == 0) {
+			currentBullet_->get()->SetStatus(
+				Vector3{ playerPos_.x,playerPos_.y + model_->pos.y,playerPos_.z },
+				-Vector3::kYIndentity,
+				30.0f,
+				20.0f,
+				Vector4ToUint({ 0.8f, 0.2f, 0.2f, 1.0f })
+			);
+			currentBullet_->get()->Enable();
+
+			NextBullet();
+		}
+		if (behaviorFinishTime_[currentBehavior_] < behaviorTime_) {
+			nextBehavior_ = Behavior::OneShot;
+		}
+		else {
+			nextBehavior_ = std::nullopt;
+		}
+	};
 
 	// 途中行動
 	behavior_[Behavior::Down] = [this]() {};
@@ -166,8 +221,8 @@ void Enemy::CreateBehaviors() {
 
 	behaviorFinishTime_[Behavior::OneShot] = 1.0f;
 	behaviorFinishTime_[Behavior::CrossAttack] = 1.0f;
-	behaviorFinishTime_[Behavior::EruptionAttack] = 0.0f;
-	behaviorFinishTime_[Behavior::LargeEruptionAttack] = 0.0f;
+	behaviorFinishTime_[Behavior::EruptionAttack] = 5.0f;
+	behaviorFinishTime_[Behavior::LargeEruptionAttack] = 10.0f;
 
 	// 途中行動
 	behaviorFinishTime_[Behavior::Down] = 0.0f;

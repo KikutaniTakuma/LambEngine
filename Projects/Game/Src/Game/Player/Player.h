@@ -43,7 +43,7 @@ private:
 
 public:
 	inline const Vector3& GetPos() const {
-		return model_->pos;
+		return noUpDownPos_;
 	}
 
 	inline float GetRotate() const {
@@ -117,8 +117,16 @@ private:
 
 	// 動いてるときのパーティクル
 	std::unique_ptr<Particle> particle_;
-
+	//パーティクル用カメラ
 	std::unique_ptr<Camera> particleCamera_;
-
+	// パーティクルを行ったか
 	bool isParticled_;
+
+	// モデルをゆらゆらさせる
+	float modelUpDown_;
+	// モデルをゆらゆらさせる速度
+	float modelUpDownSpeed_;
+
+	//ゆらゆらさせてないポジション
+	Vector3 noUpDownPos_;
 };

@@ -119,6 +119,8 @@ private:
 
 	// プレイヤーへの方向ベクトル
 	Vector3 toPlayer_;
+	float toPlayerLength_;
+	Vector3 playerPos_;
 
 	// 動いてるときのパーティクル
 	std::unique_ptr<Particle> particle_;

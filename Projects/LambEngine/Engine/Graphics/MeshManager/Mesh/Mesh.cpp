@@ -505,9 +505,6 @@ void Mesh::Draw() {
 			commandList->DrawInstanced(i.second.vertNum, drawCount_, 0, 0);
 		}
 	}
-	else {
-		ResetBufferSize();
-	}
 }
 
 void Mesh::ChangeTexture(const std::string& useMtlName, const std::string& texName) {

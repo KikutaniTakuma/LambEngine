@@ -39,7 +39,7 @@ void Player::Initialize()
 	isCollisionedTime_ = 0.0f;
 
 
-	hp_ = 1.0f;
+	hp_ = 100.0f;
 
 	isReloadable_ = false;
 
@@ -53,6 +53,10 @@ void Player::Initialize()
 	particleCamera_->Update();
 
 	isParticled_ = false;
+
+
+	modelUpDown_ = 0.0f;
+	modelUpDownSpeed_ = std::numbers::pi_v<float>;
 }
 
 void Player::Move()
@@ -136,7 +140,12 @@ void Player::Update(const Camera& camera) {
 	rotate_ += speed_ * Lamb::DeltaTime() * speedScale_;
 
 	model_->pos = offset_ * Quaternion::MakeRotateYAxis(rotate_);
+	noUpDownPos_ = model_->pos;
 	model_->rotate.y = rotate_;
+
+	modelUpDown_ += modelUpDownSpeed_ * Lamb::DeltaTime() * (1.0f + (speed_ / (maxSpeed_ * speedScale_)) * 0.1f);
+	
+	model_->pos.y += std::cos(modelUpDown_) * 0.1f;
 
 	model_->Update();
 
