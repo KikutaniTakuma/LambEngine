@@ -10,11 +10,7 @@ void World::Initialize() {
 		.windowName = "LambEngine_demo",
 		.windowSize = {1280.0f, 720.0f},
 		.maxFps = 60.0f,
-#ifdef _DEBUG
 		.isFullesceen = false
-#else
-		.isFullesceen = true
-#endif // _DEBUG
 	};
 
 	Framework::Initialize();
