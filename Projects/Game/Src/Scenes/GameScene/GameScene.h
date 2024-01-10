@@ -30,11 +30,4 @@ public:
 
 public:
 	class Water* water_;
-	std::unique_ptr<class Player> player_;
-	std::unique_ptr<class Enemy> enemy_;
-	std::unique_ptr<Camera> uiCamera_;
-
-
-	std::unique_ptr<Texture2D> startMessage_;
-	float messageAlpah_;
 };

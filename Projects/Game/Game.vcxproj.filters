@@ -47,18 +47,6 @@
     <ClCompile Include="Src\Game\Water\Water.cpp">
       <Filter>Game\Water</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Game\Player\Player.cpp">
-      <Filter>Game\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\Enemy\Enemy.cpp">
-      <Filter>Game\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\Bullet\Bullet.cpp">
-      <Filter>Game\Bullet</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Scenes\TitleScene\TitleScene.cpp">
-      <Filter>Scenes\TitleScene</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -115,18 +103,6 @@
     <Filter Include="Game\Water">
       <UniqueIdentifier>{db170fba-cd99-4b05-a820-35cea969012a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Player">
-      <UniqueIdentifier>{34d776fc-3e70-492f-8e97-83cc2a829b76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Enemy">
-      <UniqueIdentifier>{eee8e756-334a-410c-8327-6f12665c5511}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Bullet">
-      <UniqueIdentifier>{18a051cf-6b57-499a-9d1b-7ec0fe462e18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scenes\TitleScene">
-      <UniqueIdentifier>{dbea924b-1ee0-4086-9471-d1d69b21d744}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -173,18 +149,6 @@
     </ClInclude>
     <ClInclude Include="Src\Game\Water\Water.h">
       <Filter>Game\Water</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\Player\Player.h">
-      <Filter>Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\Enemy\Enemy.h">
-      <Filter>Game\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\Bullet\Bullet.h">
-      <Filter>Game\Bullet</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Scenes\TitleScene\TitleScene.h">
-      <Filter>Scenes\TitleScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

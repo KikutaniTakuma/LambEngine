@@ -7,7 +7,7 @@
 void World::Initialize() {
 	// ウィンドウ初期化オプション
 	initDesc_ = Framework::InitDesc{
-		.windowName = "LE2A_06_キクタニ_タクマ_水面",
+		.windowName = "LambEngine_demo",
 		.windowSize = {1280.0f, 720.0f},
 		.maxFps = 60.0f,
 #ifdef _DEBUG
@@ -22,13 +22,10 @@ void World::Initialize() {
 	Water::Initialize();
 	sceneManager_ = SceneManager::GetInstance();
 
-	sceneManager_->Initialize(BaseScene::ID::Title, BaseScene::ID::Title);
+	sceneManager_->Initialize(BaseScene::ID::Game, BaseScene::ID::Game);
 
 	ParticleEditor::Initialize();
 	particleEditor_ = ParticleEditor::GetInstance();
-
-	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/mincho_size_32.spritefont");
-
 }
 
 void World::Finalize() {
