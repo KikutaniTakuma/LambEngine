@@ -2,7 +2,7 @@
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
-#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
+#include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 
 #include "Math/Vector3.h"
 #include "Math/Mat4x4.h"
@@ -12,6 +12,7 @@
 #include "Utils/Flg/Flg.h"
 
 #include <array>
+#include <memory>
 
 /// <summary>
 /// 板ポリ描画
@@ -20,6 +21,7 @@ class Texture2D {
 public:
 	struct MatrixData {
 		Mat4x4 wvpMat;
+		Mat4x4 uvTransform;
 	};
 
 	struct VertexData {
@@ -51,6 +53,8 @@ public:
 
 	static void Finalize();
 
+	static void AllDraw();
+
 private:
 	static void LoadShader(const std::string& vsFileName, const std::string& psFileName);
 
@@ -69,6 +73,16 @@ private:
 	static D3D12_INDEX_BUFFER_VIEW indexView_;
 	static Lamb::LambPtr<ID3D12Resource> indexResource_;
 
+
+	static D3D12_VERTEX_BUFFER_VIEW vertexView_;
+	static Lamb::LambPtr<ID3D12Resource> vertexResource_;
+
+	static std::unique_ptr<StructuredBuffer<MatrixData>> wvpMat_;
+	static std::unique_ptr<StructuredBuffer<Vector4>> colorBuf_;
+	static std::unique_ptr<StructuredBuffer<int32_t>> textureNumbers_;
+
+	static uint32_t drawCount_;
+	static constexpr uint32_t kMaxDrawCount = 32768u;
 
 public:
 	void LoadTexture(const std::string& fileName);
@@ -151,12 +165,6 @@ public:
 	float texScalar;
 
 private:
-	D3D12_VERTEX_BUFFER_VIEW vertexView_;
-	Lamb::LambPtr<ID3D12Resource> vertexResource_;
-
-	ConstBuffer<Mat4x4> wvpMat_;
-	ConstBuffer<Vector4> colorBuf_;
-
 	Texture* tex_;
 	bool isLoad_;
 

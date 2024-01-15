@@ -21,6 +21,16 @@ Shader Texture2D::shader_ = {};
 D3D12_INDEX_BUFFER_VIEW Texture2D::indexView_ = {};
 Lamb::LambPtr<ID3D12Resource> Texture2D::indexResource_ = nullptr;
 
+D3D12_VERTEX_BUFFER_VIEW Texture2D::vertexView_ = {};
+Lamb::LambPtr<ID3D12Resource> Texture2D::vertexResource_ = nullptr;
+
+std::unique_ptr<StructuredBuffer<Texture2D::MatrixData>> Texture2D::wvpMat_;
+std::unique_ptr<StructuredBuffer<Vector4>> Texture2D::colorBuf_;
+std::unique_ptr<StructuredBuffer<int32_t>> Texture2D::textureNumbers_;
+
+
+uint32_t Texture2D::drawCount_ = 0u;
+
 Texture2D::Texture2D() :
 	scale(Vector2::identity),
 	rotate(),
@@ -30,8 +40,6 @@ Texture2D::Texture2D() :
 	tex_(nullptr),
 	isLoad_(false),
 	color(std::numeric_limits<uint32_t>::max()),
-	wvpMat_(),
-	colorBuf_(),
 	aniStartTime_(),
 	aniCount_(0.0f),
 	uvPibotSpd_(0.0f),
@@ -39,25 +47,11 @@ Texture2D::Texture2D() :
 	isSameTexSize(),
 	texScalar(1.0f)
 {
-	*wvpMat_ = Mat4x4::kIdentity;
-	*colorBuf_ = Vector4::kIdentity;
-
-	vertexResource_ =DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(VertexData) * 4);
-
-	vertexView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
-	vertexView_.SizeInBytes = sizeof(VertexData) * 4;
-	vertexView_.StrideInBytes = sizeof(VertexData);
-
 	tex_ = TextureManager::GetInstance()->GetWhiteTex();
 
 	if (tex_ && !isLoad_) {
 		isLoad_ = true;
 	}
-
-	auto srvHeap = CbvSrvUavHeap::GetInstance();
-	srvHeap->BookingHeapPos(2u);
-	srvHeap->CreateView(wvpMat_);
-	srvHeap->CreateView(colorBuf_);
 }
 
 Texture2D::Texture2D(const std::string& fileName):
@@ -138,13 +132,16 @@ Texture2D& Texture2D::operator=(Texture2D&& right) noexcept {
 }
 
 Texture2D::~Texture2D() {
-	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
-	descriptorHeap->ReleaseView(wvpMat_.GetHandleUINT());
-	descriptorHeap->ReleaseView(colorBuf_.GetHandleUINT());
+	
 }
 
 void Texture2D::Initialize(const std::string& vsFileName, const std::string& psFileName) {
+	// シェーダロード
 	LoadShader(vsFileName, psFileName);
+	// パイプライン生成
+	CreateGraphicsPipeline();
+
+	/// インデックス生成
 
 	uint16_t indices[] = {
 			0,1,3, 1,2,3
@@ -160,11 +157,56 @@ void Texture2D::Initialize(const std::string& vsFileName, const std::string& psF
 	}
 	indexResource_->Unmap(0, nullptr);
 
-	CreateGraphicsPipeline();
+
+	/// 頂点リソース生成
+
+	vertexResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(VertexData) * 4);
+
+	vertexView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+	vertexView_.SizeInBytes = sizeof(VertexData) * 4;
+	vertexView_.StrideInBytes = sizeof(VertexData);
+
+	const Vector2& uv0 = { 0.0f, 1.0f }; const Vector2& uv1 = Vector2::identity;
+	const Vector2& uv2 = { 1.0f, 0.0f }; const Vector2& uv3 = Vector2::zero;
+
+	std::array<VertexData, 4> pv = {
+		Vector3{ -0.5f,  0.5f, 0.0f }, uv3,
+		Vector3{  0.5f,  0.5f, 0.0f }, uv2,
+		Vector3{  0.5f, -0.5f, 0.0f }, uv1,
+		Vector3{ -0.5f, -0.5f, 0.0f }, uv0
+	};
+
+	VertexData* mappedData = nullptr;
+	vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&mappedData));
+	std::copy(pv.begin(), pv.end(), mappedData);
+	vertexResource_->Unmap(0, nullptr);
+
+	
+	// 各種ストラクチャバッファ生成
+	wvpMat_.reset(new StructuredBuffer<Texture2D::MatrixData>{ kMaxDrawCount });
+	colorBuf_.reset(new StructuredBuffer<Vector4>{ kMaxDrawCount });
+	textureNumbers_.reset(new StructuredBuffer<int32_t>{ kMaxDrawCount });
+
+	auto srvHeap = CbvSrvUavHeap::GetInstance();
+	srvHeap->BookingHeapPos(3u);
+	srvHeap->CreateView(*wvpMat_);
+	srvHeap->CreateView(*colorBuf_);
+	srvHeap->CreateView(*textureNumbers_);
 }
 
 void Texture2D::Finalize() {
 	indexResource_.Reset();
+
+	vertexResource_.Reset();
+
+	auto srvHeap = CbvSrvUavHeap::GetInstance();
+	srvHeap->ReleaseView(wvpMat_->GetHandleUINT());
+	srvHeap->ReleaseView(colorBuf_->GetHandleUINT());
+	srvHeap->ReleaseView(textureNumbers_->GetHandleUINT());
+
+	wvpMat_.reset();
+	colorBuf_.reset();
+	textureNumbers_.reset();
 }
 
 void Texture2D::LoadShader(const std::string& vsFileName, const std::string& psFileName) {
@@ -294,8 +336,6 @@ void Texture2D::Update() {
 		for (auto& i : worldPos) {
 			i *= worldMat;
 		}
-
-		*colorBuf_ = UintToVector4(color);
 	}
 }
 
@@ -313,7 +353,7 @@ void Texture2D::Draw(
 			worldPos[0], uv3,
 			worldPos[1], uv2,
 			worldPos[2], uv1,
-			worldPos[3], uv0,
+			worldPos[3], uv0
 		};
 
 		VertexData* mappedData = nullptr;
@@ -321,7 +361,18 @@ void Texture2D::Draw(
 		std::copy(pv.begin(), pv.end(), mappedData);
 		vertexResource_->Unmap(0, nullptr);
 
-		*wvpMat_ = viewProjection;
+		(*wvpMat_)[drawCount_].wvpMat = Mat4x4::MakeAffin(
+			Vector3(scale.x, scale.y, 1.0f),
+			rotate,
+			pos
+		) * viewProjection;
+
+		(*wvpMat_)[drawCount_].uvTransform =
+			(*wvpMat_)[drawCount_].wvpMat = Mat4x4::MakeAffin(
+				Vector3(uvSize.x, uvSize.y, 1.0f),
+				Vector3::kZero,
+				uvPibot
+			);
 
 		auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 
@@ -350,7 +401,6 @@ void Texture2D::Draw(
 
 void Texture2D::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
-	*colorBuf_ = UintToVector4(color);
 	ImGui::Begin(guiName.c_str());
 	ImGui::Checkbox("is same scale and Texture", isSameTexSize.Data());
 	if (isSameTexSize) {
@@ -361,8 +411,9 @@ void Texture2D::Debug([[maybe_unused]]const std::string& guiName) {
 	ImGui::DragFloat3("pos", &pos.x, 1.0f);
 	ImGui::DragFloat2("uvPibot", &uvPibot.x, 0.01f);
 	ImGui::DragFloat2("uvSize", &uvSize.x, 0.01f);
-	ImGui::ColorEdit4("SphereColor", &colorBuf_->color.r);
-	color = Vector4ToUint(*colorBuf_);
+	Vector4 colorTmp = color;
+	ImGui::ColorEdit4("SphereColor", colorTmp.m.data());
+	color = Vector4ToUint(colorTmp);
 
 	if (ImGui::TreeNode("tex load")) {
 		if (isLoad_) {
