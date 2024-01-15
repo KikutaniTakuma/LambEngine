@@ -29,5 +29,7 @@ public:
 	void Draw() override;
 
 public:
-	class Water* water_;
+	//class Water* water_;
+
+	std::unique_ptr<Model> model_;
 };
