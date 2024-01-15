@@ -4,6 +4,7 @@
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
+#include "Engine/Graphics/TextureManager/Texture/Texture.h"
 #include <cassert>
 #include <cmath>
 #include <algorithm>
@@ -14,8 +15,8 @@
 
 CbvSrvUavHeap* CbvSrvUavHeap::instance_ = nullptr;
 
-void CbvSrvUavHeap::Initialize(UINT heapSize) {
-	instance_ = new CbvSrvUavHeap{ heapSize };
+void CbvSrvUavHeap::Initialize(UINT heapSize, UINT maxTexture) {
+	instance_ = new CbvSrvUavHeap{ heapSize, maxTexture };
 }
 
 void CbvSrvUavHeap::Finalize() {
@@ -26,8 +27,11 @@ CbvSrvUavHeap* const CbvSrvUavHeap::GetInstance() {
 	return instance_;
 }
 
-CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor) :
-	DescriptorHeap{}
+CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor, UINT maxTexture) :
+	DescriptorHeap{},
+	currentTextureHeapIndex_{0u},
+	releaseTextureHeapIndex_{},
+	kMaxTextureHadle_{maxTexture}
 {
 	CreateDescriptorHeap(numDescriptor);
 
@@ -35,7 +39,9 @@ CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor) :
 
 	bookingHandle_.clear();
 
-	Lamb::AddLog("Initialize CbvSrvUavHeap succeeded : heap size is " + std::to_string(heapSize_));
+	currentHandleIndex_ += kMaxTextureHadle_;
+
+	Lamb::AddLog("Initialize CbvSrvUavHeap succeeded : heap size is " + std::to_string(heapSize_) + " : Max Texture heap range is " + std::to_string(kMaxTextureHadle_));
 }
 
 void CbvSrvUavHeap::CreateDescriptorHeap(uint32_t heapSize) {
@@ -59,7 +65,7 @@ void CbvSrvUavHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
 
 uint32_t CbvSrvUavHeap::CreateView(Descriptor& buffer) {
 	if (currentHandleIndex_ >= heapSize_) {
-		throw Lamb::Error::Code<CbvSrvUavHeap>("Over HeapSize", __func__);
+		throw Lamb::Error::Code<CbvSrvUavHeap>("Over Heap Size", __func__);
 	}
 
 	if (bookingHandle_.empty()) {
@@ -75,4 +81,44 @@ uint32_t CbvSrvUavHeap::CreateView(Descriptor& buffer) {
 		bookingHandle_.pop_front();
 		return nowCreateViewHandle;
 	}
+}
+
+uint32_t CbvSrvUavHeap::CreateView(Texture& tex)
+{
+	if (kMaxTextureHadle_ <= currentTextureHeapIndex_) {
+		throw Lamb::Error::Code<CbvSrvUavHeap>("Over Heap Size", __func__);
+	}
+
+	if (releaseTextureHeapIndex_.empty()) {
+		tex.CreateView(heapHandles_[currentTextureHeapIndex_].first, heapHandles_[currentTextureHeapIndex_].second, currentTextureHeapIndex_);
+		currentTextureHeapIndex_++;
+		return currentTextureHeapIndex_ - 1u;
+	}
+	else {
+		uint32_t nowCreateViewHandle = releaseTextureHeapIndex_.front();
+		tex.CreateView(heapHandles_[nowCreateViewHandle].first, heapHandles_[nowCreateViewHandle].second, nowCreateViewHandle);
+		releaseTextureHeapIndex_.pop_front();
+		return nowCreateViewHandle;
+	}
+}
+
+void CbvSrvUavHeap::ReleaseView(Texture& tex)
+{
+	// すでにコンテナに追加してのか
+	auto isExist = std::find(releaseTextureHeapIndex_.begin(), releaseTextureHeapIndex_.end(), tex.GetHandleUINT());
+
+	// 追加してない
+	if (isExist == releaseTextureHeapIndex_.end()) {
+		releaseTextureHeapIndex_.push_back(tex.GetHandleUINT());
+	}
+}
+
+void CbvSrvUavHeap::ReleaseView(UINT viewHandle)
+{
+	DescriptorHeap::ReleaseView(viewHandle);
+}
+
+uint32_t CbvSrvUavHeap::GetMaxTexture() const
+{
+	return kMaxTextureHadle_;
 }
