@@ -297,8 +297,12 @@ Quaternion Quaternion::MakeRotateZAxis(float eulerAngle) {
 	return Quaternion{ 0.0f, 0.0f, std::sin(eulerAngle * 0.5f),std::cos(eulerAngle * 0.5f) };
 }
 
-Quaternion Quaternion::Slerp(const Quaternion& start, const Quaternion& end, float t) {
+Quaternion Quaternion::Slerp(Quaternion start, const Quaternion& end, float t) {
 	float dot = start.Dot(end);
+	if (dot < 0.0f) {
+		start = -start;
+		dot = -dot;
+	}
 	float theata = std::acos(dot);
 	float sinTheata = 1.0f / std::sin(theata);
 
@@ -307,12 +311,8 @@ Quaternion Quaternion::Slerp(const Quaternion& start, const Quaternion& end, flo
 	Quaternion result;
 
 	// sinθが0.0fになる場合またはそれに近くなる場合
-	if (dot <= -1.0f + kEpsilon || 1.0f - kEpsilon <= dot || sinTheata == 0.0f) {
+	if (1.0f - kEpsilon <= dot) {
 		result = (1.0f - t) * start + t * end;
-	}
-	// 近いほうで補完する
-	else if (dot < 0.0f) {
-		result = (std::sin(theata * (1.0f - t)) * sinTheata) * start + (std::sin(theata * t) * sinTheata) * -end;
 	}
 	else {
 		result = (std::sin(theata * (1.0f - t)) * sinTheata) * start + (std::sin(theata * t) * sinTheata) * end;

@@ -131,7 +131,7 @@ public:
 	/// <param name="end">終わりの回転</param>
 	/// <param name="t">0.0f～1.0f</param>
 	/// <returns>補完されたクォータニオン</returns>
-	static Quaternion Slerp(const Quaternion& start, const Quaternion& end, float t);
+	static Quaternion Slerp(Quaternion start, const Quaternion& end, float t);
 
 
 /// <summary>
