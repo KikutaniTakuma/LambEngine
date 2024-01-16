@@ -1,13 +1,8 @@
 #pragma once
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
-#include <dxgi1_6.h>
-#pragma comment(lib, "dxgi.lib")
-#include <dxgidebug.h>
-#pragma comment(lib, "dxguid.lib")
-#include <dxcapi.h>
-#pragma comment(lib, "dxcompiler.lib")
-#include <wrl.h>
+
+#include "EngineUtils/LambPtr/LambPtr.h"
 
 #include <string>
 #include <memory>
@@ -26,7 +21,7 @@ private:
 	Engine() = default;
 	Engine(const Engine&) = delete;
 	Engine(Engine&&) = default;
-	~Engine();
+	~Engine() = default;
 
 	Engine& operator=(const Engine&) = delete;
 	Engine& operator=(Engine&&) = delete;
@@ -37,7 +32,14 @@ public:
 	/// </summary>
 	/// <param name="windowName">Windowの名前</param>
 	/// <param name="windowSize">ウィンドウの大きさ(バックバッファの大きさも同じになる)</param>
-	static bool Initialize(const std::string& windowName, const Vector2& windowSize);
+	/// <param name="fpsLimit">最大fps設定デフォルトで60</param>
+	/// <param name="isFullscreen">フルスクリーンモードか否か</param>
+	static void Initialize(
+		const std::string& windowName, 
+		const Vector2& windowSize, 
+		float fpsLimit = 60.0f, 
+		bool isFullscreen = false
+	);
 
 	static void Finalize();
 
@@ -47,33 +49,22 @@ private:
 	/// <summary>
 	/// シングルトンインスタンス
 	/// </summary>
-	static Engine* engine;
+	static Engine* instance_;
 
 private:
-	bool isFinalize;
+	bool isFinalize_ = false;
 
 public:
-	static inline Engine* GetInstance() {
-		return engine;
+	static inline Engine* const GetInstance() {
+		return instance_;
 	}
 
-	static inline ID3D12DescriptorHeap* GetDSVHeap() {
-		return engine->dsvHeap.Get();
-	}
+	static D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle();
 
-	static inline D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle() {
-		return engine->dsvHeap->GetCPUDescriptorHandleForHeapStart();
-	}
+private:
+	std::string GetCpuName() const;
 
-
-	///
-	/// Window生成用
-	/// 
-public:
-	int32_t clientWidth = 0;
-	int32_t clientHeight = 0;
-
-
+	void HardwareLog() const;
 
 #ifdef _DEBUG
 	///
@@ -89,10 +80,10 @@ private:
 		void InitializeDebugLayer();
 
 	private:
-		Microsoft::WRL::ComPtr<ID3D12Debug1> debugController;
+		Lamb::LambPtr<ID3D12Debug1> debugController_;
 	};
 
-	static Debug debugLayer;
+	static Debug debugLayer_;
 #endif
 
 
@@ -107,16 +98,24 @@ private:
 private:
 	class DirectXDevice* directXDevice_ = nullptr;
 
-
-
 	/// 
-	/// DirectXCommon
+	/// DirectXCommand
 	/// 
 private:
-	void InitializeDirectXCommon();
+	void InitializeDirectXCommand();
 
 private:
-	class DirectXCommon* directXCommon_ = nullptr;
+	class DirectXCommand* directXCommand_ = nullptr;
+
+/// 
+/// DirectXCommand
+/// 
+private:
+	void InitializeDirectXSwapChain();
+
+private:
+	class DirectXSwapChain* directXSwapChain_ = nullptr;
+
 	
 /// <summary>
 /// DirectXTK
@@ -132,18 +131,15 @@ private:
 	/// 描画関係
 	/// 
 private:
-	bool InitializeDraw();
+	void InitializeDraw();
 
 private:
-	Microsoft::WRL::ComPtr<ID3D12Resource> depthStencilResource;
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
+	std::unique_ptr<class DepthBuffer> depthStencil_;
 
 	///
 	/// MainLoop
 	/// 
 public:
-	static bool WindowMassage();
-
 	static void FrameStart();
 
 	static void FrameEnd();

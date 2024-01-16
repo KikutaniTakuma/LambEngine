@@ -19,30 +19,31 @@ private:
 	struct LoadStatus {
 		std::string fileName_;
 		bool loopFlg_;
-		Audio** audio_;
+		Audio**const audio_;
 	};
 
 private:
 	AudioManager();
 	AudioManager(const AudioManager&) = delete;
 	AudioManager(AudioManager&&) noexcept = delete;
-	~AudioManager();
 	AudioManager& operator=(const AudioManager&) = delete;
 	AudioManager& operator=(AudioManager&&) noexcept = delete;
+public:
+	~AudioManager();
 
 public:
 	static void Inititalize();
 	static void Finalize();
-	static inline AudioManager* GetInstance() {
-		return instance;
+	static inline AudioManager* const GetInstance() {
+		return instance_;
 	}
 
 private:
-	static AudioManager* instance;
+	static AudioManager* instance_;
 
 public:
-	Audio* LoadWav(const std::string& fileName, bool loopFlg);
-	void LoadWav(const std::string& fileName, bool loopFlg,Audio** audio);
+	Audio* const LoadWav(const std::string& fileName, bool loopFlg);
+	void LoadWav(const std::string& fileName, bool loopFlg,Audio** const audio);
 
 public:
 	void ThreadLoad();

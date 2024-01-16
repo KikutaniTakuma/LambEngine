@@ -3,13 +3,16 @@
 #include <climits>
 #include "Utils/ConvertString/ConvertString.h"
 #include "Utils/UtilsLib/UtilsLib.h"
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
-#include "../externals/imgui/imgui.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
-#include "Engine/PipelineManager/PipelineManager.h"
-#include "MeshManager/MeshManager.h"
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "imgui.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
+#include "Engine/Graphics/MeshManager/MeshManager.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #undef max
 #undef min
+
+#include "Error/Error.h"
 
 Shader Model::shader_ = {};
 
@@ -35,15 +38,16 @@ void Model::LoadShader(
 	const std::string& hull,
 	const std::string& domain
 ) {
+	static ShaderManager* const shaderManager = ShaderManager::GetInstance();
 	if (!loadShaderFlg_) {
-		shader_.vertex_ = ShaderManager::LoadVertexShader(vertex);
-		shader_.pixel_ = ShaderManager::LoadPixelShader(pixel);
+		shader_.vertex = shaderManager->LoadVertexShader(vertex);
+		shader_.pixel = shaderManager->LoadPixelShader(pixel);
 		if (geometory.size() != 0LLU) {
-			shader_.geometory_ = ShaderManager::LoadGeometoryShader(geometory);
+			shader_.geometory = shaderManager->LoadGeometoryShader(geometory);
 		}
 		if (hull.size() != 0LLU && geometory.size() != 0LLU) {
-			shader_.hull_ = ShaderManager::LoadHullShader(hull);
-			shader_.domain_ = ShaderManager::LoadHullShader(domain);
+			shader_.hull = shaderManager->LoadHullShader(hull);
+			shader_.domain = shaderManager->LoadHullShader(domain);
 		}
 		loadShaderFlg_ = true;
 	}
@@ -82,7 +86,7 @@ void Model::CreateGraphicsPipeline() {
 		PipelineManager::SetVertexInput("NORMAL", 0u, DXGI_FORMAT_R32G32B32_FLOAT);
 		PipelineManager::SetVertexInput("TEXCOORD", 0u, DXGI_FORMAT_R32G32_FLOAT);
 
-		PipelineManager::SetState(Pipeline::Blend::None, Pipeline::SolidState::Solid);
+		PipelineManager::SetState(Pipeline::Blend::Normal, Pipeline::SolidState::Solid);
 
 		pipeline_ = PipelineManager::Create();
 
@@ -93,10 +97,10 @@ void Model::CreateGraphicsPipeline() {
 }
 
 Model::Model() :
-	pos_(),
-	rotate_(),
-	scale_(Vector3::identity),
-	color_(std::numeric_limits<uint32_t>::max()),
+	pos(),
+	rotate(),
+	scale(Vector3::kIdentity),
+	color(std::numeric_limits<uint32_t>::max()),
 	parent_(nullptr),
 	mesh_(nullptr),
 	data_(),
@@ -107,29 +111,29 @@ Model::Model() :
 {
 
 	wvpData_.shaderRegister_ = 0;
-	wvpData_->worldMat = Mat4x4::kIdentity_;
-	wvpData_->viewProjectoionMat = Mat4x4::kIdentity_;
+	wvpData_->worldMat = Mat4x4::kIdentity;
+	wvpData_->viewProjectoionMat = Mat4x4::kIdentity;
 
 
 	dirLig_.shaderRegister_ = 1;
-	light_.ligDirection = { 1.0f,-1.0f,-1.0f };
-	light_.ligDirection = light_.ligDirection.Normalize();
-	light_.ligColor = UintToVector4(0xffffadff).GetVector3();
+	light.ligDirection = { 1.0f,-1.0f,-1.0f };
+	light.ligDirection = light.ligDirection.Normalize();
+	light.ligColor = UintToVector4(0xffffadff).GetVector3();
 
-	light_.ptPos = Vector3::zero;
-	light_.ptColor = Vector3::zero;
-	light_.ptRange = std::numeric_limits<float>::max();
+	light.ptPos = Vector3::kZero;
+	light.ptColor = Vector3::kZero;
+	light.ptRange = std::numeric_limits<float>::max();
 
-	*dirLig_ = light_;
+	*dirLig_ = light;
 
 	colorBuf_.shaderRegister_ = 2;
-	*colorBuf_ = UintToVector4(color_);
+	*colorBuf_ = UintToVector4(color);
 
-	auto descriptorHeap = DescriptorHeap::GetInstance();
+	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
 	descriptorHeap->BookingHeapPos(3u);
-	descriptorHeap->CreateConstBufferView(wvpData_);
-	descriptorHeap->CreateConstBufferView(dirLig_);
-	descriptorHeap->CreateConstBufferView(colorBuf_);
+	descriptorHeap->CreateView(wvpData_);
+	descriptorHeap->CreateView(dirLig_);
+	descriptorHeap->CreateView(colorBuf_);
 }
 
 Model::Model(const std::string& fileName) :
@@ -150,10 +154,10 @@ Model::Model(Model&& right) noexcept :
 }
 
 Model& Model::operator=(const Model& right) {
-	pos_ = right.pos_;
-	rotate_ = right.rotate_;
-	scale_ = right.scale_;
-	color_ = right.color_;
+	pos = right.pos;
+	rotate = right.rotate;
+	scale = right.scale;
+	color = right.color;
 	parent_ = right.parent_;
 
 	// 自身がロード済みだったらResourceを解放する
@@ -165,17 +169,13 @@ Model& Model::operator=(const Model& right) {
 	if (right.isLoadObj_) {
 		mesh_ = right.mesh_;
 
-		if (!mesh_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("operator=() : right mesh is nullptr", "Model");
-			return *this;
+		if (mesh_) {
+			data_ = mesh_->CopyBuffer();
 		}
-
-		data_ = mesh_->CopyBuffer();
-
-		isLoadObj_ = true;
+		isLoadObj_ = !!mesh_;
 	}
 
-	light_ = right.light_;
+	light = right.light;
 
 	// 定数バッファの値をコピー
 	*wvpData_ = *right.wvpData_;
@@ -186,10 +186,10 @@ Model& Model::operator=(const Model& right) {
 }
 
 Model& Model::operator=(Model&& right) noexcept {
-	pos_ = std::move(right.pos_);
-	rotate_ = std::move(right.rotate_);
-	scale_ = std::move(right.scale_);
-	color_ = std::move(right.color_);
+	pos = std::move(right.pos);
+	rotate = std::move(right.rotate);
+	scale = std::move(right.scale);
+	color = std::move(right.color);
 	parent_ = std::move(right.parent_);
 
 	// 自身がロード済みだったらResourceを解放する
@@ -201,17 +201,13 @@ Model& Model::operator=(Model&& right) noexcept {
 	if (right.isLoadObj_) {
 		mesh_ = right.mesh_;
 
-		if (!mesh_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("operator=() : right mesh is nullptr", "Model");
-			return *this;
+		if (mesh_) {
+			data_ = mesh_->CopyBuffer();
 		}
-
-		data_ = mesh_->CopyBuffer();
-
-		isLoadObj_ = true;
+		isLoadObj_ = !!mesh_;
 	}
 
-	light_ = std::move(right.light_);
+	light = std::move(right.light);
 
 	// 定数バッファの値をコピー
 	*wvpData_ = *right.wvpData_;
@@ -226,8 +222,7 @@ void Model::LoadObj(const std::string& fileName) {
 		mesh_ = MeshManager::GetInstance()->LoadObj(fileName);
 
 		if (!mesh_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("LoadObj : mesh is nullptr", "Model");
-			return;
+			throw Lamb::Error::Code<Model>("mesh is nullptr", __func__);
 		}
 
 		isLoadObj_ = true;
@@ -241,12 +236,20 @@ void Model::ThreadLoadObj(const std::string& fileName) {
 }
 
 void Model::ChangeTexture(const std::string& useMtlName, const std::string& texName) {
+	assert(mesh_);
+	if (data_.empty()) {
+		data_ = mesh_->CopyBuffer();
+	}
 	data_[useMtlName].tex = TextureManager::GetInstance()->LoadTexture(texName);
 	assert(data_[useMtlName].tex->GetFileName() == texName);
 }
 
 void Model::ChangeTexture(const std::string& useMtlName, Texture* tex) {
 	assert(tex != nullptr);
+	assert(mesh_);
+	if (data_.empty()) {
+		data_ = mesh_->CopyBuffer();
+	}
 	data_[useMtlName].tex = tex;
 }
 
@@ -260,7 +263,11 @@ void Model::MeshChangeTexture(const std::string& useMtlName, Texture* tex) {
 }
 
 void Model::Update() {
-	*dirLig_ = light_;
+	*dirLig_ = light;
+	wvpData_->worldMat.Affin(scale, rotate, pos);
+	if (parent_) {
+		wvpData_->worldMat *= parent_->wvpData_->worldMat;
+	}
 
 	if (!isLoadObj_ && mesh_ && mesh_->GetIsLoad()) {
 		isLoadObj_ = true;
@@ -274,29 +281,24 @@ void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 			data_ = mesh_->CopyBuffer();
 		}
 
-		wvpData_->worldMat.Affin(scale_, rotate_, pos_);
-		if (parent_) {
-			wvpData_->worldMat *= parent_->wvpData_->worldMat;
-		}
 		wvpData_->viewProjectoionMat = viewProjectionMat;
 
-		*colorBuf_ = UintToVector4(color_);
+		*colorBuf_ = UintToVector4(color);
 
-		light_.eyePos = cameraPos;
+		light.eyePos = cameraPos;
 		dirLig_->eyePos = cameraPos;
 
-		auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+		auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 
 		if (!pipeline_) {
-			ErrorCheck::GetInstance()->ErrorTextBox("pipeline is nullptr", "Model");
-			return;
+			throw Lamb::Error::Code<Model>("pipeline is nullptr", __func__);
 		}
 
 		for (auto& i : data_) {
 			pipeline_->Use();
 			i.second.tex->Use(0);
 
-			commandlist->SetGraphicsRootDescriptorTable(1, wvpData_.GetViewHandle());
+			commandlist->SetGraphicsRootDescriptorTable(1, wvpData_.GetHandleGPU());
 
 			commandlist->IASetVertexBuffers(0, 1, &i.second.view);
 			commandlist->DrawInstanced(i.second.vertNum, 1, 0, 0);
@@ -306,13 +308,13 @@ void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 
 void Model::InstancingDraw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 	if (isLoadObj_) {
-		light_.eyePos = cameraPos;
+		light.eyePos = cameraPos;
 
 		mesh_->Use(
-			MakeMatrixAffin(scale_, rotate_, pos_),
+			Mat4x4::MakeAffin(scale, rotate, pos),
 			viewProjectionMat,
-			light_,
-			UintToVector4(color_)
+			light,
+			UintToVector4(color)
 			);
 	}
 }
@@ -320,9 +322,9 @@ void Model::InstancingDraw(const Mat4x4& viewProjectionMat, const Vector3& camer
 void Model::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	ImGui::DragFloat3("pos", &pos_.x, 0.01f);
-	ImGui::DragFloat3("rotate", &rotate_.x, 0.01f);
-	ImGui::DragFloat3("scale", &scale_.x, 0.01f);
+	ImGui::DragFloat3("pos", &pos.x, 0.01f);
+	ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+	ImGui::DragFloat3("scale", &scale.x, 0.01f);
 	ImGui::ColorEdit4("SphereColor", &colorBuf_->color.r);
 	ImGui::DragFloat3("ligDirection", &dirLig_->ligDirection.x, 0.01f);
 	dirLig_->ligDirection = dirLig_->ligDirection.Normalize();
@@ -333,7 +335,7 @@ void Model::Debug([[maybe_unused]]const std::string& guiName) {
 
 
 	if (ImGui::TreeNode("LoadObj")) {
-		auto filePathes = UtilsLib::GetFilePathFormDir("./Resources/", ".obj");
+		auto filePathes = Lamb::GetFilePathFormDir("./Resources/", ".obj");
 
 		for (auto& path : filePathes) {
 			if (ImGui::Button(path.string().c_str())) {
@@ -352,5 +354,8 @@ void Model::Debug([[maybe_unused]]const std::string& guiName) {
 }
 
 Model::~Model() {
-	
+	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
+	descriptorHeap->ReleaseView(wvpData_.GetHandleUINT());
+	descriptorHeap->ReleaseView(dirLig_.GetHandleUINT());
+	descriptorHeap->ReleaseView(colorBuf_.GetHandleUINT());
 }

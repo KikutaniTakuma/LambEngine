@@ -1,8 +1,9 @@
 #include <fstream>
 #include <filesystem>
 #include "AudioManager/AudioManager.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
-#include "../externals/imgui/imgui.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "imgui.h"
+#include "Error/Error.h"
 
 Audio::Audio():
 	wfet_(),
@@ -25,20 +26,20 @@ Audio::~Audio() {
 }
 
 void Audio::Load(const std::string& fileName, bool loopFlg) {
-	if (std::filesystem::path{fileName}.extension() != ".wav") {
-		ErrorCheck::GetInstance()->ErrorTextBox(("Load() : This file is not wav -> " + fileName), "Audio");
-		return;
-	}
-
 	if (!std::filesystem::exists(std::filesystem::path{ fileName })) {
-		ErrorCheck::GetInstance()->ErrorTextBox(("Load() : This file is not found -> " + fileName), "Audio");
-		return;
+		throw Lamb::Error::Code<Audio>(("This file is not found -> " + fileName), __func__);
+	}
+	if (std::filesystem::path{fileName}.extension() != ".wav") {
+		throw Lamb::Error::Code<Audio>(("This file is not wav -> " + fileName), __func__);
 	}
 
-	std::ifstream file(fileName, std::ios::binary);
-	if (file.fail()) {
-		ErrorCheck::GetInstance()->ErrorTextBox(("Load() : File open failed -> " + fileName), "Audio");
-		return;
+
+	std::ifstream file;
+	try {
+		file.open(fileName, std::ios::binary);
+	}
+	catch (const std::exception& err) {
+		throw Lamb::Error::Code<Audio>(err.what(), __func__);
 	}
 
 	fileName_ = fileName;
@@ -48,12 +49,10 @@ void Audio::Load(const std::string& fileName, bool loopFlg) {
 	file.read((char*)&riff, sizeof(riff));
 
 	if (strncmp(riff.chunk_.id_.data(), "RIFF", 4) != 0) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Load() : Not found RIFF", "Audio");
-		return;
+		throw Lamb::Error::Code<Audio>("Not found RIFF", "Load()");
 	}
 	if (strncmp(riff.type_.data(), "WAVE", 4) != 0) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Load() : Not found WAVE", "Audio");
-		return;
+		throw Lamb::Error::Code<Audio>("Not found WAVE", "Load()");
 	}
 
 	FormatChunk format{};
@@ -62,19 +61,14 @@ void Audio::Load(const std::string& fileName, bool loopFlg) {
 	while (strncmp(format.chunk_.id_.data(), "fmt ", 4) != 0) {
 		file.seekg(nowRead, std::ios_base::beg);
 		if (file.eof()) {
-			ErrorCheck::GetInstance()->ErrorTextBox("Load() : Not found fmt", "Audio");
-			return;
+			throw Lamb::Error::Code<Audio>("Not found fmt", "Load()");
 		}
 		nowRead++;
 		file.read((char*)&format, sizeof(ChunkHeader));
 	}
 
 	if (format.chunk_.size_ > sizeof(format.fmt_)) {
-		ErrorCheck::GetInstance()->ErrorTextBox(
-			"Load() : format chunk size is too big ->" + std::to_string(format.chunk_.size_) + " byte (max is " + std::to_string(sizeof(format.fmt_)) + " byte)", 
-			"Audio"
-		);
-		return;
+		throw Lamb::Error::Code<Audio>("format chunk size is too big ->" + std::to_string(format.chunk_.size_) + " byte (max is " + std::to_string(sizeof(format.fmt_)) + " byte)", "Load()");
 	}
 	file.read((char*)&format.fmt_, format.chunk_.size_);
 
@@ -89,8 +83,7 @@ void Audio::Load(const std::string& fileName, bool loopFlg) {
 	while (strncmp(data.id_.data(), "data", 4) != 0) {
 		file.seekg(data.size_, std::ios_base::cur);
 		if (file.eof()) {
-			ErrorCheck::GetInstance()->ErrorTextBox("Load() : Not found data", "Audio");
-			return;
+			throw Lamb::Error::Code<Audio>("Not found data", "Load()");
 		}
 		file.read((char*)&data, sizeof(data));
 	}
@@ -106,7 +99,7 @@ void Audio::Load(const std::string& fileName, bool loopFlg) {
 
 	HRESULT hr = AudioManager::GetInstance()->xAudio2_->CreateSourceVoice(&pSourceVoice_, &wfet_);
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Load() : CreateSourceVoice() failed", "Audio");
+		throw Lamb::Error::Code<Audio>("CreateSourceVoice() failed", "Load()");
 	}
 
 	XAUDIO2_BUFFER buf{};
@@ -139,15 +132,13 @@ void Audio::Start(float volume) {
 		buf.LoopCount = loopFlg_ ? XAUDIO2_LOOP_INFINITE : 0;
 
 		if (!SUCCEEDED(hr)) {
-			ErrorCheck::GetInstance()->ErrorTextBox("Start() : SubmitSourceBuffer() failed", "Audio");
-			return;
+			throw Lamb::Error::Code<Audio>("SubmitSourceBuffer() failed", __func__);
 		}
 		hr = pSourceVoice_->SubmitSourceBuffer(&buf);
 	}
 	hr = pSourceVoice_->Start();
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Start() : Start() failed", "Audio");
-		return;
+		throw Lamb::Error::Code<Audio>("function is something error", __func__);
 	}
 	pSourceVoice_->SetVolume(volume_);
 

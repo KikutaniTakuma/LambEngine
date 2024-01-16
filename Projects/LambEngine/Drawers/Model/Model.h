@@ -1,11 +1,11 @@
 #pragma once
 #include <string>
-#include "Engine/ConstBuffer/ConstBuffer.h"
-#include "Engine/RootSignature/RootSignature.h"
-#include "TextureManager/TextureManager.h"
-#include "Engine/ShaderManager/ShaderManager.h"
+#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
+#include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
 #include <unordered_map>
-#include "MeshManager/Mesh/Mesh.h"
+#include "Engine/Graphics/MeshManager/MeshManager.h"
 
 class Pipeline;
 
@@ -77,17 +77,35 @@ public:
 	void MeshChangeTexture(const std::string& useMtlName, const std::string& texName);
 	void MeshChangeTexture(const std::string& useMtlName, Texture* tex);
 
+	void ChangeMesh(Mesh* mesh) {
+		mesh_ = mesh;
+		isLoadObj_ = !!mesh_;
+	}
+
+	const std::string GetObjFileName() const {
+		if (mesh_) {
+			return mesh_->GetFileName();
+		}
+		else {
+			return std::string{};
+		}
+	}
+
+	const Mat4x4& GetWorldMatrix() const {
+		return wvpData_->worldMat;
+	}
+
 public:
-	Vector3 pos_;
-	Vector3 rotate_;
-	Vector3 scale_;
+	Vector3 pos;
+	Vector3 rotate;
+	Vector3 scale;
 
-	uint32_t color_;
-	Model* parent_;
+	uint32_t color;
 
-	Mesh::DirectionLight light_;
+	Mesh::Light light;
 
 private:
+	Model* parent_;
 	Mesh* mesh_;
 
 	std::unordered_map<std::string, Mesh::CopyData> data_;
@@ -96,7 +114,7 @@ private:
 
 	ConstBuffer<Mesh::MatrixData> wvpData_;
 
-	ConstBuffer<Mesh::DirectionLight> dirLig_;
+	ConstBuffer<Mesh::Light> dirLig_;
 
 	ConstBuffer<Vector4> colorBuf_;
 };

@@ -1,19 +1,17 @@
 #include "AudioManager.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
-#include "Engine/Engine.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/EngineInfo/EngineInfo.h"
 #include <cassert>
 #include <filesystem>
+#include "Error/Error.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
-AudioManager* AudioManager::instance = nullptr;
+AudioManager* AudioManager::instance_ = nullptr;
 void AudioManager::Inititalize() {
-	instance = new AudioManager();
-	if (instance == nullptr) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Inititalize() : Instance failed", "AudioManager");
-	}
+	instance_ = new AudioManager{};
 }
 void AudioManager::Finalize() {
-	delete instance;
-	instance = nullptr;
+	Lamb::SafeDelete(instance_);
 }
 
 AudioManager::AudioManager() :
@@ -28,14 +26,16 @@ AudioManager::AudioManager() :
 	HRESULT hr = XAudio2Create(xAudio2_.GetAddressOf(), 0u, XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Constructor : XAudio2Create() failed", "AudioManager");
+		throw Lamb::Error::Code<AudioManager>("XAudio2Create()", "Constructor");
 	}
 
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Constructor : CreateMasteringVoicey() failed", "AudioManager");
+		throw Lamb::Error::Code<AudioManager>("CreateMasteringVoicey()", "Constructor");
 	}
+
+	Lamb::AddLog("Initialize AudioManager succeeded");
 }
 AudioManager::~AudioManager() {
 	xAudio2_.Reset();
@@ -44,30 +44,24 @@ AudioManager::~AudioManager() {
 	}
 }
 
-Audio* AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
+Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 	if (!std::filesystem::exists(std::filesystem::path(fileName))) {
-		ErrorCheck::GetInstance()->ErrorTextBox("LoadWav() Fialed : There is not this file -> " + fileName, "AudioManager");
+		throw Lamb::Error::Code<AudioManager>("There is not this file -> " + fileName, __func__);
 	}
 
-	if (audios_.empty()) {
+
+	auto itr = audios_.find(fileName);
+
+	if (itr == audios_.end()) {
 		auto audio = std::make_unique<Audio>();
 		audio->Load(fileName, loopFlg);
 		audios_.insert({ fileName, std::move(audio) });
-	}
-	else {
-		auto itr = audios_.find(fileName);
-
-		if (itr == audios_.end()) {
-			auto audio = std::make_unique<Audio>();
-			audio->Load(fileName, loopFlg);
-			audios_.insert({ fileName, std::move(audio) });
-		}
 	}
 
 	return audios_[fileName].get();
 }
 
-void AudioManager::LoadWav(const std::string& fileName, bool loopFlg, class Audio** audio) {
+void AudioManager::LoadWav(const std::string& fileName, bool loopFlg, class Audio** const audio) {
 	// コンテナに追加
 	threadAudioBuff_.push({fileName, loopFlg, audio});
 }
@@ -77,7 +71,7 @@ void AudioManager::ThreadLoad() {
 		auto loadProc = [this]() {
 			std::lock_guard<std::mutex> lock(mtx_);
 			while (!threadAudioBuff_.empty()) {
-				if (Engine::IsFinalize()) {
+				if (Lamb::IsEngineFianlize()) {
 					break;
 				}
 

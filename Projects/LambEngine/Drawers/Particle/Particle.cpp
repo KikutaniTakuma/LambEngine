@@ -1,8 +1,13 @@
 #include "Particle.h"
-#include "../externals/imgui/imgui.h"
-#include "Engine/FrameInfo/FrameInfo.h"
-#include "Engine/WinApp/WinApp.h"
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
+#include "imgui.h"
+#include "Utils/EngineInfo/EngineInfo.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
+
+#include "Utils/UtilsLib/UtilsLib.h"
+#include "Utils/Random/Random.h"
+#include "Error/Error.h"
 
 #include "../externals/nlohmann/json.hpp"
 #include <cassert>
@@ -17,15 +22,9 @@ std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> Particle::graphicsP
 Shader Particle::shader_ = {};
 
 D3D12_INDEX_BUFFER_VIEW Particle::indexView_ = {};
-Microsoft::WRL::ComPtr<ID3D12Resource> Particle::indexResource_ = nullptr;
+Lamb::LambPtr<ID3D12Resource> Particle::indexResource_ = nullptr;
 
 void Particle::Initialize(const std::string& vsFileName, const std::string& psFileName) {
-	if (indexResource_) {
-		indexResource_->Release();
-		indexResource_.Reset();
-		indexResource_ = nullptr;
-	}
-
 	LoadShader(vsFileName, psFileName);
 
 	uint16_t indices[] = {
@@ -46,18 +45,15 @@ void Particle::Initialize(const std::string& vsFileName, const std::string& psFi
 }
 
 void Particle::Finalize() {
-	if (indexResource_) {
-		indexResource_->Release();
-		indexResource_.Reset();
-		indexResource_ = nullptr;
-	}
+	indexResource_.Reset();
 }
 
 void Particle::LoadShader(const std::string& vsFileName, const std::string& psFileName) {
-	shader_.vertex_ = ShaderManager::LoadVertexShader(vsFileName);
-	assert(shader_.vertex_);
-	shader_.pixel_ = ShaderManager::LoadPixelShader(psFileName);
-	assert(shader_.pixel_);
+	static ShaderManager* const shaderManager = shaderManager->GetInstance();
+	shader_.vertex = shaderManager->LoadVertexShader(vsFileName);
+	assert(shader_.vertex);
+	shader_.pixel = shaderManager->LoadPixelShader(psFileName);
+	assert(shader_.pixel);
 }
 
 void Particle::CreateGraphicsPipeline() {
@@ -99,17 +95,16 @@ void Particle::CreateGraphicsPipeline() {
 
 	for (auto& i : graphicsPipelineState_) {
 		if (!i) {
-			ErrorCheck::GetInstance()->ErrorTextBox("pipeline is nullptr", "Particle");
-			return;
+			throw Lamb::Error::Code<Particle>("pipeline is nullptr", __func__);
 		}
 	}
 }
 
 Particle::Particle() :
 	wtfs_(),
-	uvPibot_(),
-	uvSize_(Vector2::identity),
-	tex_(nullptr),
+	uvPibot(),
+	uvSize(Vector2::identity),
+	tex_(TextureManager::GetInstance()->GetWhiteTex()),
 	isLoad_(false),
 	isBillboard_(true),
 	isYBillboard_(false),
@@ -122,24 +117,19 @@ Particle::Particle() :
 	settings_(),
 	currentSettingIndex_(0u),
 	currentParticleIndex_(0u),
-	srvHeap_(nullptr)
+	srvHeap_(nullptr),
+	isClose_{false}
 {
-	srvHeap_ = DescriptorHeap::GetInstance();
+	srvHeap_ = CbvSrvUavHeap::GetInstance();
 	srvHeap_->BookingHeapPos(2u);
-	srvHeap_->CreateStructuredBufferView<Mat4x4>(wvpMat_);
-	srvHeap_->CreateStructuredBufferView<Vector4>(colorBuf_);
+	srvHeap_->CreateView(wvpMat_);
+	srvHeap_->CreateView(colorBuf_);
 	for (uint32_t i = 0; i < wvpMat_.Size(); i++) {
-		wvpMat_[i] = Mat4x4::kIdentity_;
+		wvpMat_[i] = Mat4x4::kIdentity;
 	}
 
 	for (uint32_t i = 0; i < colorBuf_.Size(); i++) {
-		colorBuf_[i] = Vector4::identity;
-	}
-
-	if (vertexResource_) { 
-		vertexResource_->Release(); 
-		vertexResource_.Reset();
-		vertexResource_ = nullptr;
+		colorBuf_[i] = Vector4::kIdentity;
 	}
 
 	vertexResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(VertexData) * 4);
@@ -181,9 +171,9 @@ Particle::Particle() :
 
 Particle::Particle(uint32_t indexNum) :
 	wtfs_(),
-	uvPibot_(),
-	uvSize_(Vector2::identity),
-	tex_(nullptr),
+	uvPibot(),
+	uvSize(Vector2::identity),
+	tex_(TextureManager::GetInstance()->GetWhiteTex()),
 	isLoad_(false),
 	isBillboard_(true),
 	isYBillboard_(false),
@@ -196,19 +186,20 @@ Particle::Particle(uint32_t indexNum) :
 	settings_(),
 	currentSettingIndex_(0u),
 	currentParticleIndex_(0u),
-	srvHeap_(nullptr)
+	srvHeap_(nullptr),
+	isClose_{false}
 {
-	srvHeap_ = DescriptorHeap::GetInstance();
+	srvHeap_ = CbvSrvUavHeap::GetInstance();
 	srvHeap_->BookingHeapPos(2u);
-	srvHeap_->CreateStructuredBufferView<Mat4x4>(wvpMat_);
-	srvHeap_->CreateStructuredBufferView<Vector4>(colorBuf_);
+	srvHeap_->CreateView(wvpMat_);
+	srvHeap_->CreateView(colorBuf_);
 
 	for (uint32_t i = 0; i < wvpMat_.Size();i++) {
-		wvpMat_[i] = Mat4x4::kIdentity_;
+		wvpMat_[i] = Mat4x4::kIdentity;
 	}
 	
 	for (uint32_t i = 0; i < colorBuf_.Size(); i++) {
-		colorBuf_[i] = Vector4::identity;
+		colorBuf_[i] = Vector4::kIdentity;
 	}
 
 	if (vertexResource_) {
@@ -269,8 +260,8 @@ Particle& Particle::operator=(const Particle& right) {
 
 	wtfs_ = right.wtfs_;
 
-	uvPibot_ = right.uvPibot_;
-	uvSize_ = right.uvSize_;
+	uvPibot = right.uvPibot;
+	uvSize = right.uvSize;
 
 	tex_ = right.tex_;
 	isLoad_ = right.isLoad_;
@@ -288,7 +279,7 @@ Particle& Particle::operator=(const Particle& right) {
 	isAnimation_ = right.isAnimation_;
 	uvPibotSpd_ = right.uvPibotSpd_;
 
-	emitterPos_ = right.emitterPos_;
+	emitterPos = right.emitterPos;
 
 	datas_ = right.datas_;
 	dataDirectoryName_ = right.dataDirectoryName_;
@@ -306,8 +297,8 @@ Particle& Particle::operator=(const Particle& right) {
 Particle& Particle::operator=(Particle&& right) noexcept {
 	wtfs_ = std::move(right.wtfs_);
 
-	uvPibot_ = std::move(right.uvPibot_);
-	uvSize_ = std::move(right.uvSize_);
+	uvPibot = std::move(right.uvPibot);
+	uvSize = std::move(right.uvSize);
 
 	tex_ = std::move(right.tex_);
 	isLoad_ = std::move(right.isLoad_);
@@ -325,7 +316,7 @@ Particle& Particle::operator=(Particle&& right) noexcept {
 	uvPibotSpd_ = std::move(right.uvPibotSpd_);
 
 
-	emitterPos_ = std::move(right.emitterPos_);
+	emitterPos = std::move(right.emitterPos);
 
 	datas_ = std::move(right.datas_);
 	dataDirectoryName_ = std::move(right.dataDirectoryName_);
@@ -342,9 +333,7 @@ Particle& Particle::operator=(Particle&& right) noexcept {
 
 void Particle::Resize(uint32_t index) {
 	wvpMat_.Resize(index);
-	srvHeap_->CreateStructuredBufferView<Mat4x4>(wvpMat_, wvpMat_.GetViewHandleUINT());
 	colorBuf_.Resize(index);
-	srvHeap_->CreateStructuredBufferView<Vector4>(colorBuf_, colorBuf_.GetViewHandleUINT());
 	wtfs_.resize(index);
 }
 
@@ -409,14 +398,8 @@ Particle::~Particle() {
 //	}
 //#endif // _DEBUG
 
-	srvHeap_->ReleaseView(wvpMat_.GetViewHandleUINT());
-	srvHeap_->ReleaseView(colorBuf_.GetViewHandleUINT());
-
-	if (vertexResource_) {
-		vertexResource_->Release();
-		vertexResource_.Reset();
-		vertexResource_ = nullptr;
-	}
+	srvHeap_->ReleaseView(wvpMat_.GetHandleUINT());
+	srvHeap_->ReleaseView(colorBuf_.GetHandleUINT());
 }
 
 
@@ -442,6 +425,9 @@ void Particle::ThreadLoadTexture(const std::string& fileName) {
 
 
 void Particle::LoadSettingDirectory(const std::string& directoryName) {
+	settings_.clear();
+	datas_.clear();
+
 	const std::filesystem::path kDirectoryPath = "./Resources/Datas/Particles/" + directoryName + "/";
 	dataDirectoryName_ = kDirectoryPath.string();
 
@@ -499,6 +485,8 @@ void Particle::LoadSettingDirectory(const std::string& directoryName) {
 
 		file.close();
 	}
+
+	isClose_ = false;
 }
 
 void Particle::LopadSettingFile(const std::string& jsonName) {
@@ -574,7 +562,7 @@ void Particle::LopadSettingFile(const std::string& jsonName) {
 	setting.sizeSecond_.first = std::get<Vector2>(datas_[groupName.string()]["Particle_sizeSecond1"]);
 	setting.sizeSecond_.second = std::get<Vector2>(datas_[groupName.string()]["Particle_sizeSecond2"]);
 	setting.sizeEaseType_ = static_cast<int32_t>(std::get<uint32_t>(datas_[groupName.string()]["Particle_sizeEase"]));
-	setting.sizeEase_ = Easeing::GetFunction(setting.sizeEaseType_);
+	setting.sizeEase_ = Easing::GetFunction(setting.sizeEaseType_);
 
 	setting.velocity_.first = std::get<Vector3>(datas_[groupName.string()]["Particle_velocity1"]);
 	setting.velocity_.second = std::get<Vector3>(datas_[groupName.string()]["Particle_velocity2"]);
@@ -588,7 +576,7 @@ void Particle::LopadSettingFile(const std::string& jsonName) {
 	setting.rotateSecond_.first = std::get<Vector3>(datas_[groupName.string()]["Particle_rotateSecond1"]);
 	setting.rotateSecond_.second = std::get<Vector3>(datas_[groupName.string()]["Particle_rotateSecond2"]);
 	setting.rotateEaseType_ = static_cast<int32_t>(std::get<uint32_t>(datas_[groupName.string()]["Particle_rotateEase"]));
-	setting.rotateEase_ = Easeing::GetFunction(setting.rotateEaseType_);
+	setting.rotateEase_ = Easing::GetFunction(setting.rotateEaseType_);
 
 	setting.particleNum_.first = std::get<uint32_t>(datas_[groupName.string()]["Particle_particleNumFirst"]);
 	setting.particleNum_.second = std::get<uint32_t>(datas_[groupName.string()]["Particle_particleNumSecond"]);
@@ -599,10 +587,10 @@ void Particle::LopadSettingFile(const std::string& jsonName) {
 	setting.color_.first = std::get<uint32_t>(datas_[groupName.string()]["Particle_colorFirst"]);
 	setting.color_.second = std::get<uint32_t>(datas_[groupName.string()]["Particle_colorSecond"]);
 	setting.colorEaseType_ = static_cast<int32_t>(std::get<uint32_t>(datas_[groupName.string()]["Particle_colorEase"]));
-	setting.colorEase_ = Easeing::GetFunction(setting.colorEaseType_);
+	setting.colorEase_ = Easing::GetFunction(setting.colorEaseType_);
 
 	setting.moveEaseType = static_cast<int32_t>(std::get<uint32_t>(datas_[groupName.string()]["Particle_ease"]));
-	setting.moveEase_ = Easeing::GetFunction(setting.moveEaseType);
+	setting.moveEase_ = Easing::GetFunction(setting.moveEaseType);
 }
 
 void Particle::SaveSettingFile(const std::string& groupName) {
@@ -730,21 +718,26 @@ void Particle::BackUpSettingFile(const std::string& groupName) {
 void Particle::ParticleStart() {
 	if (!settings_.empty()) {
 		currentParticleIndex_ = 0;
-		emitterPos_ = settings_[currentParticleIndex_].emitter_.pos_;
+		emitterPos = settings_[currentParticleIndex_].emitter_.pos_;
 		settings_[currentSettingIndex_].isValid_ = false;
 		settings_[currentSettingIndex_].isValid_.Update();
 		settings_[currentParticleIndex_].isValid_ = true;
 	}
 }
 
-void Particle::ParticleStart(const Vector3& emitterPos) {
+void Particle::ParticleStart(const Vector3& pos) {
 	if (!settings_.empty()) {
 		currentParticleIndex_ = 0;
-		emitterPos_ = emitterPos;
+		emitterPos = pos;
 		settings_[currentSettingIndex_].isValid_ = false;
 		settings_[currentSettingIndex_].isValid_.Update();
 		settings_[currentParticleIndex_].isValid_ = true;
 	}
+}
+
+void Particle::ParticleStop()
+{
+	settings_[currentSettingIndex_].isValid_ = false;
 }
 
 
@@ -762,7 +755,7 @@ void Particle::Update() {
 	auto nowTime = std::chrono::steady_clock::now();
 
 	if (settings_[currentSettingIndex_].isValid_) {
-		settings_[currentSettingIndex_].emitter_.pos_ = emitterPos_;
+		settings_[currentSettingIndex_].emitter_.pos_ = emitterPos;
 	}
 
 	// 有効になった瞬間始めた瞬間を保存
@@ -778,14 +771,14 @@ void Particle::Update() {
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(nowTime - settings_[currentSettingIndex_].durationTime_);
 
 		// 出す頻度ランダム
-		auto freq = UtilsLib::Random(settings_[currentSettingIndex_].freq_.first, settings_[currentSettingIndex_].freq_.second);
+		auto freq = Lamb::Random(settings_[currentSettingIndex_].freq_.first, settings_[currentSettingIndex_].freq_.second);
 
 		// 頻度時間を超えてたら
 		if (duration > decltype(duration)(freq)) {
 			settings_[currentSettingIndex_].durationTime_ = nowTime;
 
 			// パーティクルを出す数ランダム
-			auto particleNum = UtilsLib::Random(settings_[currentSettingIndex_].particleNum_.first, settings_[currentSettingIndex_].particleNum_.second);
+			auto particleNum = Lamb::Random(settings_[currentSettingIndex_].particleNum_.first, settings_[currentSettingIndex_].particleNum_.second);
 
 			// パーティクルの設定
 			for (uint32_t i = currentParticleIndex_; i < currentParticleIndex_ + particleNum; i++) {
@@ -805,43 +798,43 @@ void Particle::Update() {
 				{
 				case Particle::EmitterType::Cube:
 				default:
-					pos = UtilsLib::Random(minPos, maxPos);
+					pos = Lamb::Random(minPos, maxPos);
 					break;
 
 				case Particle::EmitterType::Circle:
 					maxPos.x += settings_[currentSettingIndex_].emitter_.circleSize_;
-					pos = UtilsLib::Random(settings_[currentSettingIndex_].emitter_.pos_, maxPos);
-					posRotate = UtilsLib::Random(settings_[currentSettingIndex_].emitter_.rotate_.first, settings_[currentSettingIndex_].emitter_.rotate_.second);
-					pos *= MakeMatrixAffin(Vector3::identity, posRotate, Vector3::zero);
+					pos = Lamb::Random(settings_[currentSettingIndex_].emitter_.pos_, maxPos);
+					posRotate = Lamb::Random(settings_[currentSettingIndex_].emitter_.rotate_.first, settings_[currentSettingIndex_].emitter_.rotate_.second);
+					pos *= Mat4x4::MakeAffin(Vector3::kIdentity, posRotate, Vector3::kZero);
 					break;
 				}
 
 				// 大きさランダム
-				Vector2 size = UtilsLib::Random(settings_[currentSettingIndex_].size_.first, settings_[currentSettingIndex_].size_.second);
+				Vector2 size = Lamb::Random(settings_[currentSettingIndex_].size_.first, settings_[currentSettingIndex_].size_.second);
 				if (settings_[currentSettingIndex_].isSameHW_) {
 					size.y = size.x;
 				}
-				Vector2 sizeSecond = UtilsLib::Random(settings_[currentSettingIndex_].sizeSecond_.first, settings_[currentSettingIndex_].sizeSecond_.second);
+				Vector2 sizeSecond = Lamb::Random(settings_[currentSettingIndex_].sizeSecond_.first, settings_[currentSettingIndex_].sizeSecond_.second);
 				if (settings_[currentSettingIndex_].isSameHW_) {
 					sizeSecond.y = sizeSecond.x;
 				}
 
 				// 速度ランダム
-				Vector3 velocity = UtilsLib::Random(settings_[currentSettingIndex_].velocity_.first, settings_[currentSettingIndex_].velocity_.second);
-				Vector3 velocitySecond = UtilsLib::Random(settings_[currentSettingIndex_].velocitySecond_.first, settings_[currentSettingIndex_].velocitySecond_.second);
+				Vector3 velocity = Lamb::Random(settings_[currentSettingIndex_].velocity_.first, settings_[currentSettingIndex_].velocity_.second);
+				Vector3 velocitySecond = Lamb::Random(settings_[currentSettingIndex_].velocitySecond_.first, settings_[currentSettingIndex_].velocitySecond_.second);
 
 				// 移動方向ランダム
-				Vector3 moveRotate = UtilsLib::Random(settings_[currentSettingIndex_].moveRotate_.first, settings_[currentSettingIndex_].moveRotate_.second);
+				Vector3 moveRotate = Lamb::Random(settings_[currentSettingIndex_].moveRotate_.first, settings_[currentSettingIndex_].moveRotate_.second);
 
 				// 速度回転
-				velocity *= MakeMatrixAffin(Vector3::identity, moveRotate, Vector3::zero);
+				velocity *= Mat4x4::MakeAffin(Vector3::kIdentity, moveRotate, Vector3::kZero);
 
 				// 回転
-				Vector3 rotate = UtilsLib::Random(settings_[currentSettingIndex_].rotate_.first, settings_[currentSettingIndex_].rotate_.second);
-				Vector3 rotateSecond = UtilsLib::Random(settings_[currentSettingIndex_].rotateSecond_.first, settings_[currentSettingIndex_].rotateSecond_.second);
+				Vector3 rotate = Lamb::Random(settings_[currentSettingIndex_].rotate_.first, settings_[currentSettingIndex_].rotate_.second);
+				Vector3 rotateSecond = Lamb::Random(settings_[currentSettingIndex_].rotateSecond_.first, settings_[currentSettingIndex_].rotateSecond_.second);
 
 				// 死ぬ時間ランダム
-				uint32_t deathTime = UtilsLib::Random(settings_[currentSettingIndex_].death_.first, settings_[currentSettingIndex_].death_.second);
+				uint32_t deathTime = Lamb::Random(settings_[currentSettingIndex_].death_.first, settings_[currentSettingIndex_].death_.second);
 
 				// カラー
 				uint32_t color = settings_[currentSettingIndex_].color_.first;
@@ -880,7 +873,7 @@ void Particle::Update() {
 			else {
 				float wtfT =static_cast<float>(duration.count()) / static_cast<float>(wtf.deathTime_.count());
 				Vector3 moveVec = Vector3::Lerp(wtf.movePos_, wtf.movePosSecond_, settings_[currentSettingIndex_].moveEase_(wtfT));
-				wtf.pos_ += moveVec * FrameInfo::GetInstance()->GetDelta();
+				wtf.pos_ += moveVec * Lamb::DeltaTime();
 				wtf.color_ = ColorLerp(settings_[currentSettingIndex_].color_.first, settings_[currentSettingIndex_].color_.second, settings_[currentSettingIndex_].colorEase_(wtfT));
 			
 				wtf.scale_ = Vector2::Lerp(wtf.scaleStart_, wtf.scaleSecond_, settings_[currentSettingIndex_].sizeEase_(wtfT));
@@ -891,7 +884,7 @@ void Particle::Update() {
 
 	}
 
-	settings_[currentSettingIndex_].isValid_.Update();
+	//settings_[currentSettingIndex_].isValid_.Update();
 
 	// もし今の設定の有効時間を過ぎていたら終了
 	if (settings_[currentSettingIndex_].isValid_ && 
@@ -918,8 +911,8 @@ void Particle::Draw(
 	Pipeline::Blend blend
 ) {
 	if (tex_ && isLoad_ && !settings_.empty()) {
-		const Vector2& uv0 = { uvPibot_.x, uvPibot_.y + uvSize_.y }; const Vector2& uv1 = uvSize_ + uvPibot_;
-		const Vector2& uv2 = { uvPibot_.x + uvSize_.x, uvPibot_.y }; const Vector2& uv3 = uvPibot_;
+		const Vector2& uv0 = { uvPibot.x, uvPibot.y + uvSize.y }; const Vector2& uv1 = uvSize + uvPibot;
+		const Vector2& uv2 = { uvPibot.x + uvSize.x, uvPibot.y }; const Vector2& uv3 = uvPibot;
 
 		std::array<VertexData, 4> pv = {
 			Vector3{ -0.5f,  0.5f, 0.1f }, uv3,
@@ -938,19 +931,19 @@ void Particle::Draw(
 		Mat4x4 billboardMat;
 		if (isBillboard_) {
 			if (isYBillboard_) {
-				billboardMat = MakeMatrixRotateY(cameraRotate.y);
+				billboardMat = Mat4x4::MakeRotateY(cameraRotate.y);
 			}
 			else {
-				billboardMat = MakeMatrixRotate(cameraRotate);
+				billboardMat = Mat4x4::MakeRotate(cameraRotate);
 			}
 		}
 		else {
-			billboardMat = Mat4x4::kIdentity_;
+			billboardMat = Mat4x4::kIdentity;
 		}
 
 		for (uint32_t i = 0; i < wvpMat_.Size();i++) {
 			if (wtfs_[i].isActive_) {
-				wvpMat_[drawCount] = MakeMatrixAffin(wtfs_[i].scale_, wtfs_[i].rotate_, wtfs_[i].pos_) * billboardMat * viewProjection;
+				wvpMat_[drawCount] = Mat4x4::MakeAffin(wtfs_[i].scale_, wtfs_[i].rotate_, wtfs_[i].pos_) * billboardMat * viewProjection;
 				colorBuf_[drawCount] = UintToVector4(wtfs_[i].color_);
 				drawCount++;
 			}
@@ -958,11 +951,11 @@ void Particle::Draw(
 
 
 		if (0 < drawCount) {
-			auto commandlist = DirectXCommon::GetInstance()->GetCommandList();
+			auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 			// 各種描画コマンドを積む
 			graphicsPipelineState_[blend]->Use();
 			tex_->Use(0);
-			srvHeap_->Use(wvpMat_.GetViewHandleUINT(), 1);
+			srvHeap_->Use(wvpMat_.GetHandleUINT(), 1);
 			commandlist->IASetVertexBuffers(0, 1, &vertexView_);
 			commandlist->IASetIndexBuffer(&indexView_);
 			commandlist->DrawIndexedInstanced(6, drawCount, 0, 0, 0);
@@ -971,6 +964,10 @@ void Particle::Draw(
 }
 
 void Particle::Debug(const std::string& guiName) {
+	if (isClose_) {
+		return;
+	}
+
 	if (!ImGui::Begin(guiName.c_str(), nullptr, ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();
 		return;
@@ -989,17 +986,15 @@ void Particle::Debug(const std::string& guiName) {
 			for (const auto& entry : dirItr) {
 				if (ImGui::Button(entry.path().string().c_str())) {
 					int32_t id = MessageBoxA(
-						WinApp::GetInstance()->GetHwnd(),
+						WindowFactory::GetInstance()->GetHwnd(),
 						"Are you sure you wanna load this setting?", "Particle",
 						MB_OKCANCEL | MB_ICONINFORMATION
 					);
 
 					if (id == IDOK) {
-						settings_.clear();
-						datas_.clear();
 						LoadSettingDirectory(entry.path().stem().string());
 						MessageBoxA(
-							WinApp::GetInstance()->GetHwnd(),
+							WindowFactory::GetInstance()->GetHwnd(),
 							"Load success", "Particle",
 							MB_OK | MB_ICONINFORMATION
 						);
@@ -1022,7 +1017,7 @@ void Particle::Debug(const std::string& guiName) {
 		// エミッターの設定
 		if (ImGui::TreeNode("Emitter")) {
 			ImGui::DragFloat3("pos", &settings_[i].emitter_.pos_.x, 0.01f);
-			emitterPos_ = settings_[i].emitter_.pos_;
+			emitterPos = settings_[i].emitter_.pos_;
 			ImGui::DragFloat3("size", &settings_[i].emitter_.size_.x, 0.01f);
 			int32_t type = static_cast<int32_t>(settings_[i].emitter_.type_);
 			ImGui::SliderInt("type", &type, 0, 1);
@@ -1061,7 +1056,7 @@ void Particle::Debug(const std::string& guiName) {
 					ImGui::DragFloat2("sizeSecond max", &settings_[i].sizeSecond_.second.x, 0.01f);
 				}
 				ImGui::SliderInt("easeType", &settings_[i].sizeEaseType_, 0, 30);
-				settings_[i].sizeEase_ = Easeing::GetFunction(settings_[i].sizeEaseType_);
+				settings_[i].sizeEase_ = Easing::GetFunction(settings_[i].sizeEaseType_);
 
 				ImGui::TreePop();
 			}
@@ -1072,7 +1067,7 @@ void Particle::Debug(const std::string& guiName) {
 				ImGui::DragFloat3("velocitySecond max", &settings_[i].velocitySecond_.second.x, 0.01f);
 
 				ImGui::SliderInt("easeType", &settings_[i].moveEaseType, 0, 30);
-				settings_[i].moveEase_ = Easeing::GetFunction(settings_[i].moveEaseType);
+				settings_[i].moveEase_ = Easing::GetFunction(settings_[i].moveEaseType);
 
 				ImGui::DragFloat3("rotate min", &settings_[i].moveRotate_.first.x, 0.01f);
 				ImGui::DragFloat3("rotate max", &settings_[i].moveRotate_.second.x, 0.01f);
@@ -1084,7 +1079,7 @@ void Particle::Debug(const std::string& guiName) {
 				ImGui::DragFloat3("rotateSecond min", &settings_[i].rotateSecond_.first.x, 0.01f);
 				ImGui::DragFloat3("rotateSecond max", &settings_[i].rotateSecond_.second.x, 0.01f);
 				ImGui::SliderInt("easeType", &settings_[i].rotateEaseType_, 0, 30);
-				settings_[i].moveEase_ = Easeing::GetFunction(settings_[i].rotateEaseType_);
+				settings_[i].moveEase_ = Easing::GetFunction(settings_[i].rotateEaseType_);
 				ImGui::TreePop();
 			}
 
@@ -1114,7 +1109,7 @@ void Particle::Debug(const std::string& guiName) {
 
 			if (ImGui::TreeNode("Color")) {
 				ImGui::SliderInt("easeType", &settings_[i].colorEaseType_, 0, 30);
-				settings_[i].colorEase_ = Easeing::GetFunction(settings_[i].colorEaseType_);
+				settings_[i].colorEase_ = Easing::GetFunction(settings_[i].colorEaseType_);
 
 				Vector4 colorFirst = UintToVector4(settings_[i].color_.first);
 				Vector4 colorSecond = UintToVector4(settings_[i].color_.second);
@@ -1187,7 +1182,7 @@ void Particle::Debug(const std::string& guiName) {
 		if (ImGui::Button("this setting save")) {
 			SaveSettingFile(("setting" + std::to_string(i)).c_str());
 			MessageBoxA(
-				WinApp::GetInstance()->GetHwnd(),
+				WindowFactory::GetInstance()->GetHwnd(),
 				"save success", "Particle",
 				MB_OK | MB_ICONINFORMATION
 			);
@@ -1195,7 +1190,7 @@ void Particle::Debug(const std::string& guiName) {
 
 		if (ImGui::Button("this setting delete")) {
 			int32_t id =  MessageBoxA(
-				WinApp::GetInstance()->GetHwnd(),
+				WindowFactory::GetInstance()->GetHwnd(),
 				"Are you sure you wanna delete this setting?", "Particle",
 				MB_OKCANCEL | MB_ICONINFORMATION
 			);
@@ -1208,7 +1203,7 @@ void Particle::Debug(const std::string& guiName) {
 				ImGui::EndMenu();
 
 				MessageBoxA(
-					WinApp::GetInstance()->GetHwnd(),
+					WindowFactory::GetInstance()->GetHwnd(),
 					"delete success", "Particle",
 					MB_OK | MB_ICONINFORMATION
 				);
@@ -1283,14 +1278,14 @@ void Particle::Debug(const std::string& guiName) {
 				<< isYBillboard_;
 			file.close();
 			MessageBoxA(
-				WinApp::GetInstance()->GetHwnd(),
+				WindowFactory::GetInstance()->GetHwnd(),
 				"save success", "Particle",
 				MB_OK | MB_ICONINFORMATION
 			);
 		}
 	}
 
-	auto fileNames = UtilsLib::GetFilePathFormDir("./Resources", ".png");
+	auto fileNames = Lamb::GetFilePathFormDir("./Resources", ".png");
 
 	if (isLoad_) {
 		if (ImGui::TreeNode("png files Load")) {
@@ -1304,6 +1299,10 @@ void Particle::Debug(const std::string& guiName) {
 		}
 	}
 
+	if (ImGui::Button("close")) {
+		isClose_ = !isClose_;
+	}
+
 	ImGui::End();
 }
 
@@ -1312,7 +1311,7 @@ void Particle::AnimationStart(float aniUvPibot) {
 		aniStartTime_ = std::chrono::steady_clock::now();
 		isAnimation_ = true;
 		aniCount_ = 0.0f;
-		uvPibot_.x = aniUvPibot;
+		uvPibot.x = aniUvPibot;
 	}
 }
 
@@ -1341,8 +1340,8 @@ void Particle::Animation(size_t aniSpd, bool isLoop, float aniUvStart, float ani
 				}
 			}
 
-			uvPibot_.x = aniUvStart;
-			uvPibot_.x += uvPibotSpd_ * aniCount_;
+			uvPibot.x = aniUvStart;
+			uvPibot.x += uvPibotSpd_ * aniCount_;
 		}
 	}
 }

@@ -1,12 +1,12 @@
 #pragma once
-#include "TextureManager/TextureManager.h"
-#include "Engine/PipelineManager/PipelineManager.h"
-#include "Engine/StructuredBuffer/StructuredBuffer.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
+#include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 
-#include "Utils/Math/Mat4x4.h"
+#include "Math/Mat4x4.h"
 
-#include "Utils/UtilsLib/UtilsLib.h"
-#include "Utils/Easeing/Easeing.h"
+#include "Utils/Flg/Flg.h"
+#include "Utils/Easing/Easing.h"
 
 #include <array>
 #include <variant>
@@ -21,12 +21,12 @@ public:
 
 public:
 	struct MatrixData {
-		Mat4x4 wvpMat_;
+		Mat4x4 wvpMat;
 	};
 
 	struct VertexData {
-		Vector3 position_;
-		Vector2 uv_;
+		Vector3 position;
+		Vector2 uv;
 	};
 
 private:
@@ -139,11 +139,11 @@ private:
 		std::chrono::steady_clock::time_point durationTime_;
 
 		// 今有効か
-		UtilsLib::Flg isValid_;
+		Lamb::Flg isValid_;
 
 
 		// 縦横の大きさを同じにするか
-		UtilsLib::Flg isSameHW_;
+		Lamb::Flg isSameHW_;
 	};
 
 public:
@@ -190,7 +190,7 @@ private:
 	static Shader shader_;
 
 	static D3D12_INDEX_BUFFER_VIEW indexView_;
-	static Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
+	static Lamb::LambPtr<ID3D12Resource> indexResource_;
 
 public:
 	void LoadSettingDirectory(const std::string& directoryName);
@@ -219,7 +219,12 @@ public:
 	/// パーティクルスタート関数
 	/// </summary>
 	/// <param name="emitterPos">Emitterの位置</param>
-	void ParticleStart(const Vector3& emitterPos);
+	void ParticleStart(const Vector3& pos);
+
+	/// <summary>
+	/// パーティクル停止関数
+	/// </summary>
+	void ParticleStop();
 
 	/// <summary>
 	/// 更新処理
@@ -229,7 +234,7 @@ public:
 	/// <summary>
 	/// 描画関数
 	/// </summary>
-	/// <param name="viewProjection">カメラの行列/param>
+	/// <param name="viewProjection">カメラの行列</param>
 	/// <param name="blend">ブレンドモード</param>
 	void Draw(
 		const Vector3& cameraRotate,
@@ -295,37 +300,41 @@ public:
 	/// <param name="index">particleのインデックス</param>
 	void Resize(uint32_t index);
 
-	const UtilsLib::Flg& GetIsParticleStart() const {
+	const Lamb::Flg& GetIsParticleStart() const {
 		if (settings_.empty()) {
-			static UtilsLib::Flg result{false};
+			static Lamb::Flg result{false};
 			return result;
 		}
 
 		return settings_.front().isValid_;
 	}
 
-public:
-	Vector2 uvPibot_;
-	Vector2 uvSize_;
+	bool GetIsClose() const {
+		return isClose_;
+	}
 
-	Vector3 emitterPos_;
+public:
+	Vector2 uvPibot;
+	Vector2 uvSize;
+
+	Vector3 emitterPos;
 
 private:
 	std::deque<Setting> settings_;
 
 	// ループするか
-	UtilsLib::Flg isLoop_;
+	Lamb::Flg isLoop_;
 
 	uint32_t currentSettingIndex_;
 	uint32_t currentParticleIndex_;
 
 	std::vector<WorldTransForm> wtfs_;
 
-	class DescriptorHeap* srvHeap_;
+	class CbvSrvUavHeap* srvHeap_;
 
 
 	D3D12_VERTEX_BUFFER_VIEW vertexView_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
+	Lamb::LambPtr<ID3D12Resource> vertexResource_;
 
 	StructuredBuffer<Mat4x4> wvpMat_;
 	StructuredBuffer<Vector4> colorBuf_;
@@ -340,6 +349,8 @@ private:
 	std::chrono::steady_clock::time_point aniStartTime_;
 	float aniCount_;
 	bool isAnimation_;
+
+	bool isClose_;
 public:
 	float uvPibotSpd_;
 };

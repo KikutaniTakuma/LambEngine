@@ -1,8 +1,7 @@
 #pragma once
 #include <string>
-#include "Utils/Math/Vector2.h"
-#include "Utils/Math/Quaternion.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Math/Vector2.h"
+#include "Math/Quaternion.h"
 #include <concepts>
 
 /// <summary>
@@ -11,15 +10,15 @@
 class StringOut {
 public:
 	StringOut();
-	StringOut(const StringOut& right);
-	StringOut(StringOut&& right) noexcept;
+	StringOut(const StringOut&) = default;
+	StringOut(StringOut&&) noexcept = default;
 	StringOut(const std::string& formatName);
 	StringOut(const std::wstring& formatName);
 	~StringOut() = default;
 
 public:
-	StringOut& operator=(const StringOut& right);
-	StringOut& operator=(StringOut&& right) noexcept;
+	StringOut& operator=(const StringOut&)  =default;
+	StringOut& operator=(StringOut&&) noexcept = default;
 	StringOut& operator=(const std::string& right);
 	StringOut& operator=(const std::wstring& right);
 
@@ -48,8 +47,8 @@ public:
 	StringOut& operator<<(const Vector4& right);
 	StringOut& operator<<(const Quaternion& right);
 
-	const StringOut& operator>>(std::string& right) const;
-	const StringOut& operator>>(std::wstring& right) const;
+	StringOut& operator>>(std::string& right);
+	StringOut& operator>>(std::wstring& right);
 
 public:
 	void Draw();
@@ -69,17 +68,13 @@ private:
 
 
 public:
-	Vector2 pos_;
-	float rotation_;
-	Vector2 scale_;
-	uint32_t color_;
-	bool isHorizontal_;
+	Vector2 pos;
+	float rotation;
+	Vector2 scale;
+	uint32_t color;
+	bool isHorizontal;
 
 public:
-	inline void SetFormat(const std::string& formatName) {
-		format_ = formatName;
-	}
-	inline void SetFormat(const std::wstring& formatName) {
-		format_ = ConvertString(formatName);
-	}
+	void SetFormat(const std::string& formatName);
+	void SetFormat(const std::wstring& formatName);
 };

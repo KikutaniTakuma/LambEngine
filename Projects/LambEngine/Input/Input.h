@@ -1,7 +1,4 @@
 #pragma once
-#include <wrl.h>
-#include <dinput.h>
-#pragma comment(lib, "dinput8.lib")
 #include "Input/Gamepad/Gamepad.h"
 #include "Input/KeyInput/KeyInput.h"
 #include "Input/Mouse/Mouse.h"
@@ -36,7 +33,7 @@ public:
 	void InputStart();
 
 private:
-	Microsoft::WRL::ComPtr<IDirectInput8> directInput_;
+	Lamb::LambPtr<IDirectInput8> directInput_;
 
 	Gamepad* gamepad_;
 	KeyInput* key_;

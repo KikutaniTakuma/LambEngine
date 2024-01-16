@@ -1,14 +1,15 @@
 #pragma once
-#include "TextureManager/TextureManager.h"
-#include "Engine/DescriptorHeap/DescriptorHeap.h"
-#include "Engine/PipelineManager/PipelineManager.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
+#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
 
-#include "Utils/Math/Vector3.h"
-#include "Utils/Math/Mat4x4.h"
-#include "Utils/Math/Vector2.h"
-#include "Utils/Math/Vector4.h"
+#include "Math/Vector3.h"
+#include "Math/Mat4x4.h"
+#include "Math/Vector2.h"
+#include "Math/Vector4.h"
 
-#include "Utils/UtilsLib/UtilsLib.h"
+#include "Utils/Flg/Flg.h"
 
 #include <array>
 
@@ -59,11 +60,14 @@ private:
 /// 静的メンバ変数
 /// </summary>
 private:
-	static std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum) * 2> graphicsPipelineState_;
+	static std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> graphicsPipelineState_;
+	static std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> graphicsPipelineStateNoDepth_;
+	static std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> graphicsPipelineStateNoWrap_;
+	static std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> graphicsPipelineStateNoWrapNoDepth_;
 	static Shader shader_;
 
 	static D3D12_INDEX_BUFFER_VIEW indexView_;
-	static Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
+	static Lamb::LambPtr<ID3D12Resource> indexResource_;
 
 
 public:
@@ -76,7 +80,8 @@ public:
 	void Draw(
 		const Mat4x4& viewProjection,
 		Pipeline::Blend blend = Pipeline::Blend::Normal,
-		bool isDepth = true
+		bool isDepth = true,
+		bool isWrap = true
 	);
 
 	void Debug(const std::string& guiName);
@@ -92,6 +97,8 @@ public:
 			return Vector2::zero;
 		}
 	}
+
+	void ChangeTexture(Texture* tex);
 
 	/// <summary>
 	/// アニメーションスタート関数
@@ -127,25 +134,25 @@ public:
 	}
 
 public:
-	Vector2 scale_;
-	Vector3 rotate_;
-	Vector3 pos_;
+	Vector2 scale;
+	Vector3 rotate;
+	Vector3 pos;
 
-	Vector2 uvPibot_;
-	Vector2 uvSize_;
+	Vector2 uvPibot;
+	Vector2 uvSize;
 
-	std::array<Vector3, 4> worldPos_;
+	std::array<Vector3, 4> worldPos;
 
-	uint32_t color_;
+	uint32_t color;
 
-	UtilsLib::Flg isSameTexSize_;
+	Lamb::Flg isSameTexSize;
 
 	// テクスチャと同じスケールにしたときのスケール倍率
-	float texScalar_;
+	float texScalar;
 
 private:
 	D3D12_VERTEX_BUFFER_VIEW vertexView_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource_;
+	Lamb::LambPtr<ID3D12Resource> vertexResource_;
 
 	ConstBuffer<Mat4x4> wvpMat_;
 	ConstBuffer<Vector4> colorBuf_;

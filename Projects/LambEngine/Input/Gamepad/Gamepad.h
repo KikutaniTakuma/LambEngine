@@ -3,9 +3,10 @@
 #include <Windows.h>
 #undef max
 #undef min
+#define DIRECTINPUT_VERSION 0x0800
 #include <Xinput.h>
 #pragma comment (lib, "xinput.lib")
-#include <stdint.h>
+#include <cstdint>
 
 // Xボックスコントローラーでやったのでコメントアウトの説明はそれ
 // ほかのコントローラーは分からないので検証必須
@@ -57,8 +58,8 @@ private:
 	Gamepad& operator=(Gamepad&&) = delete;
 
 private:
-	WORD preButton;
-	XINPUT_STATE state;
+	WORD preButton_;
+	XINPUT_STATE state_;
 	XINPUT_VIBRATION vibration_;
 
 public:
@@ -70,6 +71,8 @@ public:
 	/// 入力処理
 	/// </summary>
 	void Input();
+
+	void InputReset();
 
 public:
 	/// <summary>

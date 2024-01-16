@@ -1,10 +1,12 @@
 #pragma once
 #include <array>
-#include <wrl.h>
+#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
 #pragma comment(lib, "dinput8.lib")
 #pragma comment(lib, "dxguid.lib")
+
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 /// <summary>
 /// キーボードの入力
@@ -23,17 +25,19 @@ private:
 public:
 	void Input();
 
+	void InputReset();
+
 	bool GetKey(uint8_t keyType) {
-		return (instance->key[keyType] & 0x80);
+		return (instance_->key_[keyType] & 0x80);
 	}
 
 	bool GetPreKey(uint8_t keyType) {
-		return (instance->preKey[keyType] & 0x80);
+		return (instance_->preKey_[keyType] & 0x80);
 	}
 
 	bool Pushed(uint8_t keyType);
 	bool LongPush(uint8_t keyType);
-	bool Releaed(uint8_t keyType);
+	bool Released(uint8_t keyType);
 
 	/// <summary>
 	/// 何かしらのキーが押された
@@ -46,20 +50,20 @@ public:
 	static void Finalize();
 
 private:
-	static KeyInput* instance;
+	static KeyInput* instance_;
 
 public:
 	static KeyInput* const GetInstance() {
-		return instance;
+		return instance_;
 	}
 
 
 private:
-	Microsoft::WRL::ComPtr<IDirectInputDevice8> keyBoard;
+	Lamb::LambPtr<IDirectInputDevice8> keyBoard_;
 
 	// キー入力バッファー
-	std::array<BYTE, 0x100> key;
-	std::array<BYTE, 0x100> preKey;
+	std::array<BYTE, 0x100> key_;
+	std::array<BYTE, 0x100> preKey_;
 
-	bool initalizeSucceeded;
+	bool initalizeSucceeded_;
 };

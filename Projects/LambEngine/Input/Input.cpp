@@ -1,9 +1,7 @@
 #include "Input.h"
-#include "Engine/WinApp/WinApp.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
-#include "Input/Gamepad/Gamepad.h"
-#include "Input/KeyInput/KeyInput.h"
-#include "Input/Mouse/Mouse.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Error/Error.h"
 
 Input* Input::instance_ = nullptr;
 
@@ -20,12 +18,19 @@ Input::Input():
 	key_(nullptr),
 	mouse_(nullptr)
 {
-	HRESULT hr = DirectInput8Create(WinApp::GetInstance()->getWNDCLASSEX().hInstance, DIRECTINPUT_VERSION, IID_IDirectInput8,
-		reinterpret_cast<void**>(directInput_.GetAddressOf()), nullptr);
+	HRESULT hr = DirectInput8Create(
+		WindowFactory::GetInstance()->GetWNDCLASSEX().hInstance, 
+		DIRECTINPUT_VERSION,
+		IID_IDirectInput8,
+		reinterpret_cast<void**>(directInput_.GetAddressOf()),
+		nullptr
+	);
 	assert(SUCCEEDED(hr));
-	if (hr != S_OK) {
-		ErrorCheck::GetInstance()->ErrorTextBox("InitializeInput() : DirectInput8Create() Failed", "Engine");
-		return;
+	if (SUCCEEDED(hr)) {
+		Lamb::AddLog("DirectInput8Create succeeded");
+	}
+	else {
+		throw Lamb::Error::Code<Input>("DirectInput8Create() Failed", "InitializeInput");
 	}
 
 	KeyInput::Initialize(directInput_.Get());
@@ -34,6 +39,8 @@ Input::Input():
 	gamepad_ = Gamepad::GetInstance();
 	key_ = KeyInput::GetInstance();
 	mouse_ = Mouse::GetInstance();
+
+	Lamb::AddLog("Initialize AllInput succeeded");
 }
 
 Input::~Input() {
@@ -43,7 +50,14 @@ Input::~Input() {
 }
 
 void Input::InputStart() {
-	gamepad_->Input();
-	key_->Input();
-	mouse_->Input();
+	if (WindowFactory::GetInstance()->IsThisWindowaActive()) {
+		gamepad_->Input();
+		key_->Input();
+		mouse_->Input();
+	}
+	else {
+		gamepad_->InputReset();
+		key_->InputReset();
+		mouse_->InputReset();
+	}
 }

@@ -1,8 +1,8 @@
 #pragma once
-#include "Utils/Math/Vector3.h"
-#include "Utils/Math/Mat4x4.h"
-#include "Utils/Math/Vector2.h"
-#include "Utils/Math/Vector4.h"
+#include "Math/Vector3.h"
+#include "Math/Mat4x4.h"
+#include "Math/Vector2.h"
+#include "Math/Vector4.h"
 #include <string>
 
 /// <summary>
@@ -52,7 +52,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	const Mat4x4& GetView() const {
-		return view;
+		return view_;
 	}
 
 	/// <summary>
@@ -60,7 +60,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	const Mat4x4& GetProjection() const {
-		return projection;
+		return projection_;
 	}
 
 	/// <summary>
@@ -68,23 +68,23 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	const Mat4x4& GetOthographics() const {
-		return othograohics;
+		return othograohics_;
 	}
 
 	/// <summary>
-	/// 透視投影行列を取得(TypeがOthographicの場合ゼロ行列が返る)
+	/// 透視投影行列を取得
 	/// </summary>
 	/// <returns>透視投影行列</returns>
 	inline const Mat4x4& GetViewProjection() const noexcept {
-		return viewProjecction;
+		return viewProjecction_;
 	}
 	
 	/// <summary>
-	/// 平衡投影行列を取得(TypeがProjecctionの場合ゼロ行列が返る)
+	/// 平衡投影行列を取得
 	/// </summary>
 	/// <returns></returns>
 	inline const Mat4x4& GetViewOthographics() const noexcept {
-		return viewOthograohics;
+		return viewOthograohics_;
 	}
 
 	/// <summary>
@@ -92,22 +92,22 @@ public:
 	/// </summary>
 	/// <returns>カメラのポジション</returns>
 	const Vector3& GetPos() const {
-		return worldPos;
+		return worldPos_;
 	}
 
 	/// <summary>
-	/// 透視投影行列にビューポートをかけたものを取得(TypeがProjecctionの場合ゼロ行列が返る)
+	/// 透視投影行列にビューポートをかけたものを取得
 	/// </summary>
 	/// <returns></returns>
 	inline const Mat4x4& GetViewProjectionVp() const noexcept {
-		return viewProjecctionVp;
+		return viewProjecctionVp_;
 	}
 	/// <summary>
-	/// 平衡投影行列ビューポートをかけたものを取得(TypeがProjecctionの場合ゼロ行列が返る)
+	/// 平衡投影行列ビューポートをかけたものを取得
 	/// </summary>
 	/// <returns></returns>
 	inline const Mat4x4& GetViewOthographicsVp() const noexcept {
-		return viewOthograohicsVp;
+		return viewOthograohicsVp_;
 	}
 
 	void Debug(const std::string& guiName);
@@ -121,26 +121,28 @@ public:
 	Vector3 scale;
 	Vector3 rotate;
 
+	Vector3 offset;
+
 	float drawScale;
 
 protected:
-	Vector3 worldPos;
+	Vector3 worldPos_;
 
 protected:
-	static constexpr float kNearClip = 0.01f;
+	static constexpr float kNearClip_ = 0.01f;
 
 public:
 	float farClip;
 	float fov;
 
 protected:
-	Mat4x4 view;
-	Mat4x4 projection;
-	Mat4x4 othograohics;
+	Mat4x4 view_;
+	Mat4x4 projection_;
+	Mat4x4 othograohics_;
 
-	Mat4x4 viewProjecction;
-	Mat4x4 viewOthograohics;
+	Mat4x4 viewProjecction_;
+	Mat4x4 viewOthograohics_;
 
-	Mat4x4 viewProjecctionVp;
-	Mat4x4 viewOthograohicsVp;
+	Mat4x4 viewProjecctionVp_;
+	Mat4x4 viewOthograohicsVp_;
 };

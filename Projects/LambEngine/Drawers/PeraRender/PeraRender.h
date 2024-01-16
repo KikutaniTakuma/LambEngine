@@ -2,14 +2,11 @@
 #include <string>
 #include <array>
 
-#include "Engine/ConstBuffer/ConstBuffer.h"
-#include "Engine/RenderTarget/RenderTarget.h"
-#include "Engine/ShaderManager/ShaderManager.h"
-#include "Engine/PipelineManager/PipelineManager.h"
+#include "Engine/Graphics/PipelineObject/PeraPipeline/PeraPipeline.h"
 
-#include "Utils/Math/Vector3.h"
-#include "Utils/Math/Vector2.h"
-#include "Utils/Math/Mat4x4.h"
+#include "Math/Vector3.h"
+#include "Math/Vector2.h"
+#include "Math/Mat4x4.h"
 
 /// <summary>
 /// ポストエフェクトの描画
@@ -17,13 +14,8 @@
 class PeraRender {
 public:
 	struct PeraVertexData {
-		Vector3 position_;
-		Vector2 uv_;
-	};
-
-	struct Wipe {
-		Vector2 center_;
-		float wipeSize_;
+		Vector3 position;
+		Vector2 uv;
 	};
 
 public:
@@ -37,58 +29,55 @@ public:
 	PeraRender& operator=(PeraRender&&) = delete;
 
 public:
-	void Initialize(const std::string& vsFileName, const std::string& psFileName);
-
-private:
-	void CreateShader(const std::string& vsFileName, const std::string& psFileName);
-
-	void CreateGraphicsPipeline();
+	void Initialize(const std::string& psFileName);
+	void Initialize(PeraPipeline* pipelineObject);
 
 public:
 	void Update();
 
 	void PreDraw();
 
-	void Draw(const Mat4x4& viewProjection, Pipeline::Blend blend, PeraRender* pera = nullptr);
+	void Draw(
+		const Mat4x4& viewProjection, 
+		Pipeline::Blend blend, 
+		PeraRender* pera = nullptr,
+		bool isDepth = false
+	);
 
 	Texture* GetTex() const {
-		return render_.GetTex();
+		return peraPipelineObject_->GetRender().GetTex();
 	}
 
 	void ChangeResourceState() {
-		render_.ChangeResourceState();
+		peraPipelineObject_->GetRender().ChangeResourceState();
 	}
 
 	void SetMainRenderTarget() {
-		render_.SetMainRenderTarget();
+		peraPipelineObject_->GetRender().SetMainRenderTarget();
 	}
 
+	void Debug(const std::string& guiName);
+
+	void ResetPipelineObject(PeraPipeline* pipelineObject);
+
 public:
-	Vector3 pos_;
-	Vector3 rotate_;
-	Vector3 scale_;
+	Vector3 pos;
+	Vector3 rotate;
+	Vector3 scale;
 
-	Vector2 uvPibot_;
-	Vector2 uvSize_;
+	Vector2 uvPibot;
+	Vector2 uvSize;
 
-	std::array<Vector3, 4> worldPos_;
-
-	uint32_t color_;
+	uint32_t color;
 
 private:
-	RenderTarget render_;
-
-	ConstBuffer<Mat4x4> wvpMat_;
-	ConstBuffer<Vector4> colorBuf_;
+	std::unique_ptr<PeraPipeline> peraPipelineObject_;
 
 	bool isPreDraw_;
 
 	D3D12_VERTEX_BUFFER_VIEW peraVertexView_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> peraVertexResource_ = nullptr;
-	Shader shader_;
+	Lamb::LambPtr<ID3D12Resource> peraVertexResource_ = nullptr;
 
 	D3D12_INDEX_BUFFER_VIEW indexView_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource_;
-
-	std::array<class Pipeline*, Pipeline::Blend::BlendTypeNum> piplines_;
+	Lamb::LambPtr<ID3D12Resource> indexResource_;
 };

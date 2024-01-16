@@ -1,88 +1,91 @@
 #include "Mouse.h"
-#include "Engine/WinApp/WinApp.h"
-#include "../externals/imgui/imgui.h"
-#include "Engine/ErrorCheck/ErrorCheck.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
+#include "imgui.h"
+#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Error/Error.h"
 
 
-Mouse* Mouse::instance = nullptr;
+Mouse* Mouse::instance_ = nullptr;
 
 void Mouse::Initialize(IDirectInput8* input) {
-	instance = new Mouse(input);
-	assert(instance);
-	if (!instance) {
-		ErrorCheck::GetInstance()->ErrorTextBox("Initialize() : instance failed", "Mouse");
-		return;
+	instance_ = new Mouse(input);
+	if (!instance_) {
+		throw Lamb::Error::Code<Mouse>("instance failed", __func__);
 	}
 }
 
 
 void Mouse::Finalize() {
-	delete instance;
-	instance = nullptr;
+	delete instance_;
+	instance_ = nullptr;
 }
 
 Mouse::Mouse(IDirectInput8* input) :
-	mouse(),
-	mosueState(),
-	preMosueState(),
-	wheel(0),
-	initalizeSucceeded(false)
+	mouse_(),
+	mosueState_(),
+	preMosueState_(),
+	wheel_(0),
+	initalizeSucceeded_(false)
 {
 	assert(input);
-	HRESULT hr = input->CreateDevice(GUID_SysMouse, mouse.GetAddressOf(), NULL);
+	HRESULT hr = input->CreateDevice(GUID_SysMouse, mouse_.GetAddressOf(), NULL);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("CreateDevice failed", "Mouse");
-		return;
+		throw Lamb::Error::Code<Mouse>("CreateDevice failed", "Constructor");
 	}
 
-	hr = mouse->SetDataFormat(&c_dfDIMouse2);
+	hr = mouse_->SetDataFormat(&c_dfDIMouse2);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("SetDataFormat", "Mouse");
-		return;
+		throw Lamb::Error::Code<Mouse>("SetDataFormat failed", "Constructor");
 	}
 
-	hr = mouse->SetCooperativeLevel(WinApp::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+	hr = mouse_->SetCooperativeLevel(WindowFactory::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		ErrorCheck::GetInstance()->ErrorTextBox("SetCooperativeLevel", "Mouse");
-		return;
+		throw Lamb::Error::Code<Mouse>("SetCooperativeLevel failed", "Constructor");
 	}
 
-	initalizeSucceeded = true;
+	initalizeSucceeded_ = true;
+
+	Lamb::AddLog("Initialize Mouse succeeded");
 }
 
 Mouse::~Mouse() {
-	if (mouse) {
-		mouse->Unacquire();
+	if (mouse_) {
+		mouse_->Unacquire();
 	}
 }
 
 
 
 void Mouse::Input() {
-	if (!initalizeSucceeded) {
+	if (!initalizeSucceeded_) {
 		return;
 	}
 
-	preMosueState = mosueState;
+	preMosueState_ = mosueState_;
 
-	mouse->Acquire();
+	mouse_->Acquire();
 
-	mosueState = {};
-	mouse->GetDeviceState(sizeof(DIMOUSESTATE2), &mosueState);
+	mosueState_ = {};
+	mouse_->GetDeviceState(sizeof(DIMOUSESTATE2), &mosueState_);
 
-	wheel += static_cast<size_t>(mosueState.lZ);
+	wheel_ += static_cast<size_t>(mosueState_.lZ);
+}
+
+void Mouse::InputReset() {
+	mosueState_ = {};
+	preMosueState_ = {};
 }
 
 bool Mouse::Pushed(Mouse::Button button) {
-	if (!initalizeSucceeded) {
+	if (!initalizeSucceeded_) {
 		return false;
 	}
 
-	if ((mosueState.rgbButtons[uint8_t(button)] & 0x80) &&
-		!(preMosueState.rgbButtons[uint8_t(button)] & 0x80))
+	if ((mosueState_.rgbButtons[uint8_t(button)] & 0x80) &&
+		!(preMosueState_.rgbButtons[uint8_t(button)] & 0x80))
 	{
 		return true;
 	}
@@ -91,12 +94,12 @@ bool Mouse::Pushed(Mouse::Button button) {
 }
 
 bool Mouse::LongPush(Mouse::Button button) {
-	if (!initalizeSucceeded) {
+	if (!initalizeSucceeded_) {
 		return false;
 	}
 
-	if ((mosueState.rgbButtons[uint8_t(button)] & 0x80) &&
-		(preMosueState.rgbButtons[uint8_t(button)] & 0x80))
+	if ((mosueState_.rgbButtons[uint8_t(button)] & 0x80) &&
+		(preMosueState_.rgbButtons[uint8_t(button)] & 0x80))
 	{
 		return true;
 	}
@@ -105,12 +108,12 @@ bool Mouse::LongPush(Mouse::Button button) {
 }
 
 bool Mouse::Releaed(Mouse::Button button) {
-	if (!initalizeSucceeded) {
+	if (!initalizeSucceeded_) {
 		return false;
 	}
 
-	if (!(mosueState.rgbButtons[uint8_t(button)] & 0x80) &&
-		(preMosueState.rgbButtons[uint8_t(button)] & 0x80))
+	if (!(mosueState_.rgbButtons[uint8_t(button)] & 0x80) &&
+		(preMosueState_.rgbButtons[uint8_t(button)] & 0x80))
 	{
 		return true;
 	}
@@ -120,15 +123,15 @@ bool Mouse::Releaed(Mouse::Button button) {
 
 bool Mouse::PushAnyKey() {
 	for (size_t i = 0; i < 8; i++) {
-		if (mosueState.rgbButtons[i] != preMosueState.rgbButtons[i]) {
+		if (mosueState_.rgbButtons[i] != preMosueState_.rgbButtons[i]) {
 			return true;
 		}
 	}
 
 	if (
-		mosueState.lX != preMosueState.lX
-		|| mosueState.lY != preMosueState.lY
-		|| mosueState.lZ != preMosueState.lZ
+		mosueState_.lX != preMosueState_.lX
+		|| mosueState_.lY != preMosueState_.lY
+		|| mosueState_.lZ != preMosueState_.lZ
 		) {
 		return true;
 	}
@@ -137,34 +140,34 @@ bool Mouse::PushAnyKey() {
 }
 
 Vector2 Mouse::GetVelocity() {
-	if (!initalizeSucceeded) {
+	if (!initalizeSucceeded_) {
 		return Vector2::zero;
 	}
-	return { static_cast<float>(mosueState.lX), -static_cast<float>(mosueState.lY) };
+	return { static_cast<float>(mosueState_.lX), -static_cast<float>(mosueState_.lY) };
 }
 
 float Mouse::GetWheel() {
-	if (!initalizeSucceeded) {
+	if (!initalizeSucceeded_) {
 		return 0.0f;
 	}
-	return static_cast<float>(wheel);
+	return static_cast<float>(wheel_);
 }
 
 float Mouse::GetWheelVelocity() {
-	if (!initalizeSucceeded) {
+	if (!initalizeSucceeded_) {
 		return 0.0f;
 	}
-	return static_cast<float>(mosueState.lZ);
+	return static_cast<float>(mosueState_.lZ);
 }
 
 Vector2 Mouse::GetPos() {
-	if (!initalizeSucceeded) {
+	if (!initalizeSucceeded_) {
 		return Vector2();
 	}
 
 	POINT p{};
 	GetCursorPos(&p);
-	ScreenToClient(FindWindowW(WinApp::GetInstance()->GetWindowClassName().c_str(), nullptr), &p);
+	ScreenToClient(FindWindowW(WindowFactory::GetInstance()->GetWindowClassName().c_str(), nullptr), &p);
 
 	Vector2 pos{ static_cast<float>(p.x),static_cast<float>(p.y) };
 
@@ -176,6 +179,7 @@ void Mouse::Show(bool flg) {
 }
 
 void Mouse::Debug() {
+#ifdef _DEBUG
 	ImGui::Begin("Mouse Debug");
 	ImGui::Text("Left          : %d", LongPush(Mouse::Button::Left));
 	ImGui::Text("Midle         : %d", LongPush(Mouse::Button::Middle));
@@ -190,4 +194,5 @@ void Mouse::Debug() {
 	ImGui::Text("Wheel         : %.0f", GetWheel());
 	ImGui::Text("WheelVelocity : %.0f", GetWheelVelocity());
 	ImGui::End();
+#endif // _DEBUG
 }
