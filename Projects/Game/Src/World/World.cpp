@@ -15,7 +15,7 @@ void World::Initialize() {
 
 	Framework::Initialize();
 
-	Water::Initialize();
+	//Water::Initialize();
 	sceneManager_ = SceneManager::GetInstance();
 
 	sceneManager_->Initialize(BaseScene::ID::Game, BaseScene::ID::Game);
@@ -25,7 +25,7 @@ void World::Initialize() {
 }
 
 void World::Finalize() {
-	Water::Finalize();
+	//Water::Finalize();
 
 	if (sceneManager_) {
 		sceneManager_->Finalize();
