@@ -86,6 +86,8 @@ void Framework::Execution() {
 
 			Line::AllDraw();
 
+			Texture2D::AllDraw();
+
 			// フレーム終了処理
 			Engine::FrameEnd();
 		}
