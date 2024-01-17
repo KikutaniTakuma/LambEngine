@@ -39,7 +39,7 @@ void WaterPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
 }
 
 void WaterPipeline::Init(
-	const std::string& vsShader, 
+	const std::string& vsShader,
 	const std::string& psShader,
 	const std::string& gsFileName,
 	const std::string& hsFileName,
@@ -115,9 +115,9 @@ void WaterPipeline::Init(
 	PipelineManager::StateReset();
 
 
-	static auto srvHeap = CbvSrvUavHeap::GetInstance();
+	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
 	caustics_ = TextureManager::GetInstance()->LoadTexture("./Resources/Water/caustics_01.bmp");
-	
+
 	srvHeap->BookingHeapPos(6u);
 	srvHeap->CreateView(*render_);
 	srvHeap->CreateView(wvpMat_);
