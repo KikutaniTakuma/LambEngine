@@ -26,7 +26,7 @@ Lamb::LambPtr<ID3D12Resource> Texture2D::vertexResource_ = nullptr;
 
 std::unique_ptr<StructuredBuffer<Texture2D::MatrixData>> Texture2D::wvpMat_;
 std::unique_ptr<StructuredBuffer<Vector4>> Texture2D::colorBuf_;
-std::unique_ptr<StructuredBuffer<int32_t>> Texture2D::textureNumbers_;
+std::unique_ptr<StructuredBuffer<uint32_t>> Texture2D::textureNumbers_;
 
 
 uint32_t Texture2D::drawCount_ = 0u;
@@ -185,7 +185,7 @@ void Texture2D::Initialize(const std::string& vsFileName, const std::string& psF
 	// 各種ストラクチャバッファ生成
 	wvpMat_.reset(new StructuredBuffer<Texture2D::MatrixData>{ kMaxDrawCount });
 	colorBuf_.reset(new StructuredBuffer<Vector4>{ kMaxDrawCount });
-	textureNumbers_.reset(new StructuredBuffer<int32_t>{ kMaxDrawCount });
+	textureNumbers_.reset(new StructuredBuffer<uint32_t>{ kMaxDrawCount });
 
 	auto srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->BookingHeapPos(3u);
@@ -200,13 +200,47 @@ void Texture2D::Finalize() {
 	vertexResource_.Reset();
 
 	auto srvHeap = CbvSrvUavHeap::GetInstance();
-	srvHeap->ReleaseView(wvpMat_->GetHandleUINT());
-	srvHeap->ReleaseView(colorBuf_->GetHandleUINT());
-	srvHeap->ReleaseView(textureNumbers_->GetHandleUINT());
+	if (wvpMat_) {
+		srvHeap->ReleaseView(wvpMat_->GetHandleUINT());
+	}
+	if(colorBuf_){
+		srvHeap->ReleaseView(colorBuf_->GetHandleUINT());
+	}
+	if (textureNumbers_) {
+		srvHeap->ReleaseView(textureNumbers_->GetHandleUINT());
+	}
 
 	wvpMat_.reset();
 	colorBuf_.reset();
 	textureNumbers_.reset();
+}
+
+void Texture2D::AllDraw()
+{
+	if (kMaxDrawCount <= drawCount_) {
+		throw Lamb::Error::Code<Texture2D>("over draw limt : draw count is " + std::to_string(drawCount_), __func__);
+	}
+
+	if (drawCount_ == 0u) {
+		return;
+	}
+
+	// ディスクリプタヒープ
+	auto srvHeap = CbvSrvUavHeap::GetInstance();
+
+	// コマンドリスト
+	ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetInstance()->GetCommandList();
+
+	// パイプライン設定
+	graphicsPipelineState_[Pipeline::Normal]->Use();
+
+	commandlist->SetGraphicsRootDescriptorTable(0, wvpMat_->GetHandleGPU());
+	commandlist->SetGraphicsRootDescriptorTable(1, srvHeap->GetGpuHeapHandle(0));
+	commandlist->IASetVertexBuffers(0, 1, &vertexView_);
+	commandlist->IASetIndexBuffer(&indexView_);
+	commandlist->DrawIndexedInstanced(6, drawCount_, 0, 0, 0);
+
+	drawCount_ = 0u;
 }
 
 void Texture2D::LoadShader(const std::string& vsFileName, const std::string& psFileName) {
@@ -218,28 +252,32 @@ void Texture2D::LoadShader(const std::string& vsFileName, const std::string& psF
 }
 
 void Texture2D::CreateGraphicsPipeline() {
+	auto srvHeap = CbvSrvUavHeap::GetInstance();
+
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
+	cbvRange[0].NumDescriptors = 3;
+	cbvRange[0].BaseShaderRegister = 0;
+	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
+	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> texRange = {};
-	texRange[0].NumDescriptors = 1;
-	texRange[0].BaseShaderRegister = 0;
+	texRange[0].NumDescriptors = srvHeap->GetMaxTexture();
+	texRange[0].BaseShaderRegister = 3;
 	texRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
 	texRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
-	cbvRange[0].NumDescriptors = 2;
-	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
-	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 
 	std::array<D3D12_ROOT_PARAMETER, 2> rootPrams{};
 	rootPrams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootPrams[0].DescriptorTable.NumDescriptorRanges = UINT(texRange.size());
-	rootPrams[0].DescriptorTable.pDescriptorRanges = texRange.data();
+	rootPrams[0].DescriptorTable.NumDescriptorRanges = UINT(cbvRange.size());
+	rootPrams[0].DescriptorTable.pDescriptorRanges = cbvRange.data();
 	rootPrams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootPrams[1].DescriptorTable.NumDescriptorRanges = UINT(cbvRange.size());
-	rootPrams[1].DescriptorTable.pDescriptorRanges = cbvRange.data();
+	rootPrams[1].DescriptorTable.NumDescriptorRanges = UINT(texRange.size());
+	rootPrams[1].DescriptorTable.pDescriptorRanges = texRange.data();
 	rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
 
 
 	PipelineManager::CreateRootSgnature(rootPrams.data(), rootPrams.size(), true, false);
@@ -341,12 +379,12 @@ void Texture2D::Update() {
 
 void Texture2D::Draw(
 	const Mat4x4& viewProjection,
-	Pipeline::Blend blend,
-	bool isDepth,
-	bool isWrap
+	[[maybe_unused]]Pipeline::Blend blend,
+	[[maybe_unused]]bool isDepth,
+	[[maybe_unused]]bool isWrap
 ) {
 	if (tex_ && isLoad_) {
-		const Vector2& uv0 = { uvPibot.x, uvPibot.y + uvSize.y }; const Vector2& uv1 = uvSize + uvPibot;
+		/*const Vector2& uv0 = { uvPibot.x, uvPibot.y + uvSize.y }; const Vector2& uv1 = uvSize + uvPibot;
 		const Vector2& uv2 = { uvPibot.x + uvSize.x, uvPibot.y }; const Vector2& uv3 = uvPibot;
 
 		std::array<VertexData, 4> pv = {
@@ -359,7 +397,7 @@ void Texture2D::Draw(
 		VertexData* mappedData = nullptr;
 		vertexResource_->Map(0, nullptr, reinterpret_cast<void**>(&mappedData));
 		std::copy(pv.begin(), pv.end(), mappedData);
-		vertexResource_->Unmap(0, nullptr);
+		vertexResource_->Unmap(0, nullptr);*/
 
 		(*wvpMat_)[drawCount_].wvpMat = Mat4x4::MakeAffin(
 			Vector3(scale.x, scale.y, 1.0f),
@@ -367,35 +405,40 @@ void Texture2D::Draw(
 			pos
 		) * viewProjection;
 
-		(*wvpMat_)[drawCount_].uvTransform =
-			(*wvpMat_)[drawCount_].wvpMat = Mat4x4::MakeAffin(
-				Vector3(uvSize.x, uvSize.y, 1.0f),
-				Vector3::kZero,
-				uvPibot
-			);
+		(*wvpMat_)[drawCount_].uvTransform = Mat4x4::MakeAffin(
+			Vector3(uvSize.x, uvSize.y, 1.0f),
+			Vector3::kZero,
+			uvPibot
+		);
 
-		auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
+		(*colorBuf_)[drawCount_] = color;
+
+		(*textureNumbers_)[drawCount_] = tex_->GetHandleUINT();
+
+		drawCount_++;
+
+		//auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 
 
-		// 各種描画コマンドを積む
-		if (!isDepth && isWrap) {
-			graphicsPipelineStateNoDepth_[blend]->Use();
-		}
-		else if (isDepth && !isWrap) {
-			graphicsPipelineStateNoWrap_[blend]->Use();
-		}
-		else if (!isDepth && !isWrap) {
-			graphicsPipelineStateNoWrapNoDepth_[blend]->Use();
-		}
-		else {
-			graphicsPipelineState_[blend]->Use();
-		}
-		
-		tex_->Use(0);
-		commandlist->SetGraphicsRootDescriptorTable(1, wvpMat_.GetHandleGPU());
-		commandlist->IASetVertexBuffers(0, 1, &vertexView_);
-		commandlist->IASetIndexBuffer(&indexView_);
-		commandlist->DrawIndexedInstanced(6, 1, 0, 0, 0);
+		//// 各種描画コマンドを積む
+		//if (!isDepth && isWrap) {
+		//	graphicsPipelineStateNoDepth_[blend]->Use();
+		//}
+		//else if (isDepth && !isWrap) {
+		//	graphicsPipelineStateNoWrap_[blend]->Use();
+		//}
+		//else if (!isDepth && !isWrap) {
+		//	graphicsPipelineStateNoWrapNoDepth_[blend]->Use();
+		//}
+		//else {
+		//	graphicsPipelineState_[blend]->Use();
+		//}
+		//
+		//tex_->Use(0);
+		//commandlist->SetGraphicsRootDescriptorTable(1, wvpMat_.GetHandleGPU());
+		//commandlist->IASetVertexBuffers(0, 1, &vertexView_);
+		//commandlist->IASetIndexBuffer(&indexView_);
+		//commandlist->DrawIndexedInstanced(6, 1, 0, 0, 0);
 	}
 }
 

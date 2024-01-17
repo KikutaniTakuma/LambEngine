@@ -79,7 +79,7 @@ private:
 
 	static std::unique_ptr<StructuredBuffer<MatrixData>> wvpMat_;
 	static std::unique_ptr<StructuredBuffer<Vector4>> colorBuf_;
-	static std::unique_ptr<StructuredBuffer<int32_t>> textureNumbers_;
+	static std::unique_ptr<StructuredBuffer<uint32_t>> textureNumbers_;
 
 	static uint32_t drawCount_;
 	static constexpr uint32_t kMaxDrawCount = 32768u;
