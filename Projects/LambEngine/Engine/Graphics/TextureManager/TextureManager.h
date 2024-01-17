@@ -53,7 +53,7 @@ public:
 	void ReleaseIntermediateResource();
 
 	bool IsNowThreadLoading() const {
-		return isNowThreadLoading_ && !isCloaseCommandList_;
+		return isNowThreadLoading_ && !isCloseCommandList_;
 	}
 
 	inline ID3D12GraphicsCommandList* const GetCommandList() const {
@@ -71,7 +71,7 @@ private:
 	Lamb::LambPtr<ID3D12CommandQueue> commandQueue_;
 	Lamb::LambPtr<ID3D12CommandAllocator> commandAllocator_;
 	Lamb::LambPtr<ID3D12GraphicsCommandList> commandList_;
-	bool isCloaseCommandList_;
+	bool isCloseCommandList_;
 
 	Lamb::LambPtr<ID3D12Fence> fence_;
 	uint64_t fenceVal_;
