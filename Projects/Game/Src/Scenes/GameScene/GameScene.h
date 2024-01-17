@@ -31,5 +31,5 @@ public:
 public:
 	//class Water* water_;
 
-	std::unique_ptr<Model> model_;
+	std::array<std::unique_ptr<Texture2D>,3> tex_;
 };

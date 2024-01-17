@@ -16,14 +16,19 @@ GameScene::GameScene() :
 void GameScene::Initialize() {
 	camera_->farClip = 3000.0f;
 	camera_->pos.z = -5.0f;
-	camera_->rotate.x = 0.04f;
+	//camera_->rotate.x = 0.04f;
 	camera_->offset.z = -10.0f;
-	camera_->offset.y = 8.0f;
+	//camera_->offset.y = 8.0f;
 
 	//water_ = Water::GetInstance();
 	
 
-	model_.reset(new Model{});
+	//model_.reset(new Model{});
+
+	for (auto& i : tex_) {
+		i.reset(new Texture2D{ });
+		i->isSameTexSize = true;
+	}
 }
 
 void GameScene::Finalize() {
@@ -36,16 +41,25 @@ void GameScene::Update() {
 	//water_->Debug("water");
 	//water_->Update();
 
-	model_->Debug("model");
-	model_->Update();
+	/*model_->Debug("model");
+	model_->Update();*/
+
+	for (size_t i = 0; i < tex_.size(); i++) {
+		tex_[i]->Debug("tex_" + std::to_string(i));
+		tex_[i]->Update();
+	}
 }
 
 void GameScene::Draw() {
 	meshManager_->ResetDrawCount();
 
-	camera_->Update(Vector3::kZero);
+	camera_->Update(/*Vector3::kZero*/);
 
-	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+	/*model_->Draw(camera_->GetViewProjection(), camera_->GetPos());*/
 
 	//water_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+
+	for (auto& i:tex_) {
+		i->Draw(camera_->GetViewOthographics());
+	}
 }
