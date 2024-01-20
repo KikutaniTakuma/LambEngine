@@ -55,6 +55,7 @@ void PeraRender::Initialize(const std::string& psFileName) {
 			0,1,3, 1,2,3
 	};
 	indexResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(indices));
+	indexResource_.SetName<PeraRender>();
 	indexView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 	indexView_.SizeInBytes = sizeof(indices);
 	indexView_.Format = DXGI_FORMAT_R16_UINT;
@@ -73,6 +74,7 @@ void PeraRender::Initialize(const std::string& psFileName) {
 	};
 
 	peraVertexResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(pv));
+	peraVertexResource_.SetName<PeraRender>();
 
 	peraVertexView_.BufferLocation = peraVertexResource_->GetGPUVirtualAddress();
 	peraVertexView_.SizeInBytes = sizeof(pv);
@@ -91,6 +93,7 @@ void PeraRender::Initialize(PeraPipeline* pipelineObject) {
 			0,1,3, 1,2,3
 	};
 	indexResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(indices));
+	indexResource_.SetName<PeraRender>();
 	indexView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 	indexView_.SizeInBytes = sizeof(indices);
 	indexView_.Format = DXGI_FORMAT_R16_UINT;
@@ -109,6 +112,7 @@ void PeraRender::Initialize(PeraPipeline* pipelineObject) {
 	};
 
 	peraVertexResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(pv));
+	peraVertexResource_.SetName<PeraRender>();
 
 	peraVertexView_.BufferLocation = peraVertexResource_->GetGPUVirtualAddress();
 	peraVertexView_.SizeInBytes = sizeof(pv);

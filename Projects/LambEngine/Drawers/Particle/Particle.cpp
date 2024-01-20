@@ -31,6 +31,7 @@ void Particle::Initialize(const std::string& vsFileName, const std::string& psFi
 			0,1,3, 1,2,3
 	};
 	indexResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(indices));
+	indexResource_.SetName<Particle>();
 	indexView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 	indexView_.SizeInBytes = sizeof(indices);
 	indexView_.Format = DXGI_FORMAT_R16_UINT;
@@ -133,6 +134,7 @@ Particle::Particle() :
 	}
 
 	vertexResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(VertexData) * 4);
+	vertexResource_.SetName<Particle>();
 
 	vertexView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	vertexView_.SizeInBytes = sizeof(VertexData) * 4;
@@ -203,12 +205,12 @@ Particle::Particle(uint32_t indexNum) :
 	}
 
 	if (vertexResource_) {
-		vertexResource_->Release();
 		vertexResource_.Reset();
 		vertexResource_ = nullptr;
 	}
 
 	vertexResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(VertexData) * 4);
+	vertexResource_.SetName<Particle>();
 
 	vertexView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	vertexView_.SizeInBytes = sizeof(VertexData) * 4;

@@ -43,6 +43,7 @@ Texture2D::Texture2D() :
 	*colorBuf_ = Vector4::kIdentity;
 
 	vertexResource_ =DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(VertexData) * 4);
+	vertexResource_.SetName<Texture2D>();
 
 	vertexView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 	vertexView_.SizeInBytes = sizeof(VertexData) * 4;
@@ -150,6 +151,8 @@ void Texture2D::Initialize(const std::string& vsFileName, const std::string& psF
 			0,1,3, 1,2,3
 	};
 	indexResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(indices));
+	indexResource_.SetName<Texture2D>();
+
 	indexView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
 	indexView_.SizeInBytes = sizeof(indices);
 	indexView_.Format = DXGI_FORMAT_R16_UINT;

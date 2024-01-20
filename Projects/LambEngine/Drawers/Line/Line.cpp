@@ -56,6 +56,8 @@ void Line::Initialize() {
 	vertexMap[0] = Vector4::kZero + Vector4::kWIndentity;
 	vertexMap[1] = Vector4::kXIndentity + Vector4::kWIndentity;
 	vertexBuffer_->Unmap(0, nullptr);
+
+	vertexBuffer_.SetName<Line>();
 }
 
 void Line::Finalize() {

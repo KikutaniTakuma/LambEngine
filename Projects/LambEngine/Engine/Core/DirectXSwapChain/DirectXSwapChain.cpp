@@ -52,11 +52,17 @@ DirectXSwapChain::DirectXSwapChain():
 		throw Lamb::Error::Code<DirectXSwapChain>("something error", "CreateSwapChainForHwnd");
 	}
 
+	swapChain_.SetName<DirectXSwapChain>();
+
 	dxgiFactory->MakeWindowAssociation(
 		WindowFactory::GetInstance()->GetHwnd(), DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
 
 	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
 	rtvHeap->CreateBackBuffer(swapChainResource_, swapChain_.Get());
+
+	for (auto& i : swapChainResource_) {
+		i.SetName<DirectXSwapChain>();
+	}
 
 	Lamb::AddLog("Initialize DirectXSwapChain succeeded");
 }

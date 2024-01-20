@@ -48,7 +48,6 @@ void DirectXCommand::CloseCommandlist() {
 	// コマンドリストを確定させる
 	HRESULT hr = commandList_->Close();
 	isCommandListClose_ = true;
-	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("commandList_->Close() failed", __func__);
 	}
@@ -62,12 +61,10 @@ void DirectXCommand::ExecuteCommandLists() {
 void DirectXCommand::ResetCommandlist() {
 	// 次フレーム用のコマンドリストを準備
 	HRESULT hr = commandAllocator_->Reset();
-	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("commandAllocator_->Reset() faield", __func__);
 	}
 	hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
-	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("commandList_->Reset() faield", __func__);
 	}
@@ -97,13 +94,14 @@ void DirectXCommand::CreateCommandQueue() {
 	commandQueue_ = nullptr;
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
 	HRESULT hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(commandQueue_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
 	}
 	else {
 		Lamb::AddLog(std::string{__func__} + " succeeded");
 	}
+
+	commandQueue_.SetName<DirectXCommand>();
 }
 
 void DirectXCommand::CreateCommandAllocator() {
@@ -112,13 +110,13 @@ void DirectXCommand::CreateCommandAllocator() {
 	// コマンドアロケータを生成する
 	commandAllocator_ = nullptr;
 	HRESULT hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
 	}
 	else {
 		Lamb::AddLog(std::string{ __func__ } + " succeeded");
 	}
+	commandAllocator_.SetName<DirectXCommand>();
 }
 
 void DirectXCommand::CreateGraphicsCommandList() {
@@ -127,13 +125,14 @@ void DirectXCommand::CreateGraphicsCommandList() {
 	// コマンドリストを作成する
 	commandList_ = nullptr;
 	HRESULT hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(commandList_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
+	
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
 	}
 	else {
 		Lamb::AddLog(std::string{ __func__ } + " succeeded");
 	}
+	commandList_.SetName<DirectXCommand>();
 }
 
 void DirectXCommand::CrateFence() {
@@ -143,7 +142,8 @@ void DirectXCommand::CrateFence() {
 	fence_ = nullptr;
 	fenceVal_ = 0llu;
 	HRESULT hr = device->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
+	fence_.SetName<DirectXCommand>();
+	
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
 	}
@@ -151,7 +151,6 @@ void DirectXCommand::CrateFence() {
 	// FenceのSignalを持つためのイベントを作成する
 	fenceEvent_ = nullptr;
 	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
-	assert(fenceEvent_ != nullptr);
 	if (!(fenceEvent_ != nullptr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
 	}

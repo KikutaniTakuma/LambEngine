@@ -36,6 +36,7 @@ DsvHeap::DsvHeap(uint32_t heapSize) :
 void DsvHeap::CreateDescriptorHeap(uint32_t heapSize) {
 	heapSize_ = std::clamp(heapSize, DirectXSwapChain::kBackBufferNumber_, 0xffu);
 	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, heapSize_, false);
+	heap_.SetName<DsvHeap>();
 }
 
 void DsvHeap::CreateHeapHandles() {

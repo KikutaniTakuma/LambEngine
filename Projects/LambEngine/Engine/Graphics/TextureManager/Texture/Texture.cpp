@@ -47,6 +47,7 @@ void Texture::Load(const std::string& filePath) {
 		const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 		size_ = { static_cast<float>(metadata.width),static_cast<float>(metadata.height) };
 		textureResouce_ = CreateTextureResource(metadata);
+		textureResouce_.SetName<Texture>();
 
 		if (textureResouce_ && !DirectXCommand::GetInstance()->GetIsCloseCommandList()) {
 			intermediateResource_ = UploadTextureData(textureResouce_.Get(), mipImages);
@@ -73,6 +74,7 @@ void Texture::Load(const std::string& filePath, ID3D12GraphicsCommandList* comma
 		const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 		size_ = { static_cast<float>(metadata.width),static_cast<float>(metadata.height) };
 		textureResouce_ = CreateTextureResource(metadata);
+		textureResouce_.SetName<Texture>();
 
 		if (textureResouce_) {
 			intermediateResource_ = UploadTextureData(textureResouce_.Get(), mipImages, commandList);

@@ -413,6 +413,7 @@ void Mesh::CreateResource() {
 		resource_[mesh.first];
 		// resource生成
 		resource_[mesh.first].resource.first = DirectXDevice::GetInstance()->CreateBufferResuorce(mesh.second.sizeInBytes);
+		resource_[mesh.first].resource.first.SetName<Mesh>();
 		// view情報追加
 		resource_[mesh.first].resource.second.BufferLocation = resource_[mesh.first].resource.first->GetGPUVirtualAddress();
 		resource_[mesh.first].resource.second.SizeInBytes = mesh.second.sizeInBytes;

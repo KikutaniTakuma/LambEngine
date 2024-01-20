@@ -6,7 +6,6 @@
 #endif // _DEBUG
 
 
-
 struct IUnknown;
 struct ID3D12Object;
 
