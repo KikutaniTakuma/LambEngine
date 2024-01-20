@@ -19,7 +19,8 @@ cbuffer NormalVector : register(b2)
 
 struct Output{
     float4 svPos : SV_POSITION;
-    float2 uv : TEXCOORD;
+    float2 uv : TEXCOORD0;
+    float2 causticsUv : TEXCOORD1;
     float4 worldPos : POSITION;
     float3x3 tangentBasis : YANGENT_BASIS;
 };

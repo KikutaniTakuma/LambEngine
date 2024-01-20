@@ -53,7 +53,7 @@ public:
 	void ReleaseIntermediateResource();
 
 	bool IsNowThreadLoading() const {
-		return isNowThreadLoading_ && !isCloaseCommandList_;
+		return isNowThreadLoading_ && !isCloseCommandList_;
 	}
 
 	inline ID3D12GraphicsCommandList* const GetCommandList() const {
@@ -68,12 +68,12 @@ public:
 private:
 	class CbvSrvUavHeap* srvHeap_;
 
-	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue_;
-	Microsoft::WRL::ComPtr<ID3D12CommandAllocator> commandAllocator_;
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> commandList_;
-	bool isCloaseCommandList_;
+	Lamb::LambPtr<ID3D12CommandQueue> commandQueue_;
+	Lamb::LambPtr<ID3D12CommandAllocator> commandAllocator_;
+	Lamb::LambPtr<ID3D12GraphicsCommandList> commandList_;
+	bool isCloseCommandList_;
 
-	Microsoft::WRL::ComPtr<ID3D12Fence> fence_;
+	Lamb::LambPtr<ID3D12Fence> fence_;
 	uint64_t fenceVal_;
 	HANDLE fenceEvent_;
 

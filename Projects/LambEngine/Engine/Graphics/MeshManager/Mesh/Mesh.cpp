@@ -19,7 +19,7 @@ Mesh::Mesh() :
 	texs_{},
 	isLoad_(false),
 	isObjLoad_(false),
-	wvpMats_{1u},
+	wvpMats_{256u},
 	dirLig_{},
 	color_{},
 	drawCount_{0u}
@@ -504,9 +504,6 @@ void Mesh::Draw() {
 			commandList->IASetVertexBuffers(0, 1, &i.second.resource.second);
 			commandList->DrawInstanced(i.second.vertNum, drawCount_, 0, 0);
 		}
-	}
-	else {
-		ResetBufferSize();
 	}
 }
 

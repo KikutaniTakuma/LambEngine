@@ -1,10 +1,7 @@
 #include "Camera.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
-#include "Input/KeyInput/KeyInput.h"
-#include "Input/Mouse/Mouse.h"
-#include "Input/Gamepad/Gamepad.h"
+#include "Input/Input.h"
 #include "imgui.h"
-#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include <algorithm>
 #include <numbers>
 #include <cmath>
@@ -18,7 +15,8 @@ Camera::Camera() noexcept :
 	fov(0.45f),
 	view_(),
 	projection_(),
-	othograohics_()
+	othograohics_(),
+	offset{ Vector3::kZIndentity * -10.0f }
 {}
 
 Camera::Camera(const Camera& right) noexcept
@@ -59,11 +57,7 @@ void Camera::Update() {
 }
 
 void Camera::Update(const Vector3& gazePoint) {
-	Vector3 offset = Vector3::kZIndentity * -10.0f;
-
-	offset *= Mat4x4::MakeRotate(rotate);
-
-	pos = gazePoint + offset;
+	pos = gazePoint + (offset * Mat4x4::MakeRotate(rotate));
 
 	Update();
 }
@@ -101,6 +95,7 @@ void Camera::Debug([[maybe_unused]] const std::string& guiName) {
 	ImGui::DragFloat3("pos", &pos.x, 0.01f);
 	ImGui::DragFloat3("scale", &scale.x, 0.01f);
 	ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+	ImGui::DragFloat3("offset", &offset.x);
 	ImGui::End();
 #endif // _DEBUG
 }

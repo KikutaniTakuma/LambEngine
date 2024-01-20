@@ -24,6 +24,9 @@ public:
 		instanceNum_(1u)
 	{
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(T) * 1u);
+#ifdef _DEBUG
+		bufferResource_.SetName();
+#endif // _DEBUG
 		srvDesc_ = {};
 		srvDesc_.Format = DXGI_FORMAT_UNKNOWN;
 		srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
@@ -62,6 +65,9 @@ public:
 		instanceNum_(instanceNum)
 	{
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(T) * instanceNum);
+#ifdef _DEBUG
+		bufferResource_.SetName<StructuredBuffer>();
+#endif // _DEBUG
 		srvDesc_ = {};
 		srvDesc_.Format = DXGI_FORMAT_UNKNOWN;
 		srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;

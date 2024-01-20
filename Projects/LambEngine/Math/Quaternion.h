@@ -116,21 +116,21 @@ public:
 	/// <summary>
 	/// x軸回転クォータニオン
 	/// </summary>
-	/// <param name="eulerAngle">オイラー角</param>
+	/// <param name="angle">オイラー角</param>
 	/// <returns>x軸回転を適用したクォータニオン</returns>
-	static Quaternion MakeRotateXAxis(float eulerAngle);
+	static Quaternion MakeRotateXAxis(float angle);
 	// <summary>
 	/// y軸回転クォータニオン
 	/// </summary>
-	/// <param name="eulerAngle">オイラー角</param>
+	/// <param name="angle">オイラー角</param>
 	/// <returns>y軸回転を適用したクォータニオン</returns>
-	static Quaternion MakeRotateYAxis(float eulerAngle);
+	static Quaternion MakeRotateYAxis(float angle);
 	// <summary>
 	/// z軸回転クォータニオン
 	/// </summary>
-	/// <param name="eulerAngle">オイラー角</param>
+	/// <param name="angle">オイラー角</param>
 	/// <returns>z軸回転を適用したクォータニオン</returns>
-	static Quaternion MakeRotateZAxis(float eulerAngle);
+	static Quaternion MakeRotateZAxis(float angle);
 
 	/// <summary>
 	/// クォータニオン線形補完関数(近いものの方向に回転する)
@@ -139,7 +139,7 @@ public:
 	/// <param name="end">終わりの回転</param>
 	/// <param name="t">0.0f～1.0f</param>
 	/// <returns>補完されたクォータニオン</returns>
-	static Quaternion Slerp(const Quaternion& start, const Quaternion& end, float t);
+	static Quaternion Slerp(Quaternion start, const Quaternion& end, float t);
 
 
 /// <summary>

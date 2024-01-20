@@ -7,6 +7,7 @@ Output main(float4 pos : POSITION, float2 uv : TEXCOORD){
     output.worldPos = mul(pos, worldmat);
     output.svPos = mul(output.worldPos, viewProjectionMatrix);
     output.uv = uv;
+    output.causticsUv = uv * 10.0f;
     
     float3 N = normalize(mul(kNormal, (float3x3) worldmat));
     float3 T = normalize(mul(kTangent, (float3x3) worldmat));

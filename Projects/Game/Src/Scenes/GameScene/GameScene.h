@@ -7,6 +7,7 @@
 #include "Drawers/StringOut/StringOut.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Game/CollisionManager/Collider/Collider.h"
+#include "Utils/Easing/Easing.h"
 
 class GameScene : public BaseScene {
 public:
@@ -28,15 +29,5 @@ public:
 	void Draw() override;
 
 public:
-	PeraRender pera_;
-	PeraRender luminate_;
-	PeraRender bloom_;
-
-	std::unique_ptr<Model> model_;
-
-	std::unique_ptr<Texture2D> tex_;
-
-	Camera staticCamera_;
-
-	class WaterPipeline* waterPipelineObject_ = nullptr;
+	class Water* water_;
 };

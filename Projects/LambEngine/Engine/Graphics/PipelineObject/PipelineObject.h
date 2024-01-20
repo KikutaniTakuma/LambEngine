@@ -25,7 +25,7 @@ protected:
 	);
 
 public:
-	virtual void Use(Pipeline::Blend blendType) = 0;
+	virtual void Use(Pipeline::Blend blendType, bool isDepth) = 0;
 
 	virtual void Init(
 		const std::string& vsFileName, 
@@ -39,4 +39,5 @@ protected:
 	Shader shader_;
 
 	std::unordered_map<Pipeline::Blend, Pipeline*> pipelines_;
+	std::unordered_map<Pipeline::Blend, Pipeline*> pipelinesNoDepth_;
 };

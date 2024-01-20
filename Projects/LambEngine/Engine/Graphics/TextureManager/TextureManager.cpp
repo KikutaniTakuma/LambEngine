@@ -36,7 +36,7 @@ TextureManager::TextureManager() :
 	fenceVal_(0),
 	fenceEvent_(nullptr),
 	srvHeap_(nullptr),
-	isCloaseCommandList_(false),
+	isCloseCommandList_(false),
 	isNowThreadLoading_(false)
 {
 	ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
@@ -216,7 +216,7 @@ void TextureManager::ReleaseIntermediateResource() {
 
 void TextureManager::ResetCommandList() {
 	if (isThreadFinish_) {
-		isCloaseCommandList_ = true;
+		isCloseCommandList_ = true;
 		commandList_->Close();
 		ID3D12CommandList* commandLists[] = { commandList_.Get() };
 		commandQueue_->ExecuteCommandLists(_countof(commandLists), commandLists);
@@ -251,7 +251,7 @@ void TextureManager::ResetCommandList() {
 		}
 
 		isThreadFinish_ = false;
-		isCloaseCommandList_ = false;
+		isCloseCommandList_ = false;
 	}
 }
 

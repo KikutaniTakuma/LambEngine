@@ -3,7 +3,7 @@
 #include "World/World.h"
 
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
-	auto game = std::make_unique<World>();
+	std::unique_ptr<Framework> game = std::make_unique<World>();
 
 	game->Execution();
 

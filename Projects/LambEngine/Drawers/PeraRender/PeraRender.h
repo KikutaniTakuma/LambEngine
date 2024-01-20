@@ -37,7 +37,12 @@ public:
 
 	void PreDraw();
 
-	void Draw(const Mat4x4& viewProjection, Pipeline::Blend blend, PeraRender* pera = nullptr);
+	void Draw(
+		const Mat4x4& viewProjection, 
+		Pipeline::Blend blend, 
+		PeraRender* pera = nullptr,
+		bool isDepth = false
+	);
 
 	Texture* GetTex() const {
 		return peraPipelineObject_->GetRender().GetTex();

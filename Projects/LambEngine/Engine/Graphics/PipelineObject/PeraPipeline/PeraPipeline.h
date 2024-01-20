@@ -23,7 +23,7 @@ public:
 	PeraPipeline& operator=(PeraPipeline&&) = delete;
 
 public:
-	virtual void Use(Pipeline::Blend blendType) override;
+	virtual void Use(Pipeline::Blend blendType, bool isDepth = false) override;
 
 	virtual void Init(
 		const std::string& vsShader,

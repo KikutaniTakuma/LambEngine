@@ -1,7 +1,14 @@
 #pragma once
 #include <type_traits>
+#ifdef _DEBUG
+#include "Utils/ConvertString/ConvertString.h"
+#include <typeinfo>
+#endif // _DEBUG
+
+
 
 struct IUnknown;
+struct ID3D12Object;
 
 namespace Lamb {
 	/// <summary>
@@ -263,6 +270,20 @@ namespace Lamb {
 			ptr_ = nullptr;
 
 			return tmp;
+		}
+
+		template<class ClassName>
+		void SetName() {
+#ifdef _DEBUG
+			if constexpr (std::is_base_of_v<ID3D12Object, T>) {
+				if (ptr_) {
+					std::wstring resourceName = ConvertString(
+						std::string{ typeid(ClassName).name() } + " : " + std::string{ typeid(T).name() }
+					);
+					ptr_->SetName(resourceName.c_str());
+				}
+			}
+#endif // _DEBUG
 		}
 
 

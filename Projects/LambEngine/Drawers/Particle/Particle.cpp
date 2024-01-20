@@ -104,7 +104,7 @@ Particle::Particle() :
 	wtfs_(),
 	uvPibot(),
 	uvSize(Vector2::identity),
-	tex_(nullptr),
+	tex_(TextureManager::GetInstance()->GetWhiteTex()),
 	isLoad_(false),
 	isBillboard_(true),
 	isYBillboard_(false),
@@ -173,7 +173,7 @@ Particle::Particle(uint32_t indexNum) :
 	wtfs_(),
 	uvPibot(),
 	uvSize(Vector2::identity),
-	tex_(nullptr),
+	tex_(TextureManager::GetInstance()->GetWhiteTex()),
 	isLoad_(false),
 	isBillboard_(true),
 	isYBillboard_(false),
@@ -425,6 +425,9 @@ void Particle::ThreadLoadTexture(const std::string& fileName) {
 
 
 void Particle::LoadSettingDirectory(const std::string& directoryName) {
+	settings_.clear();
+	datas_.clear();
+
 	const std::filesystem::path kDirectoryPath = "./Resources/Datas/Particles/" + directoryName + "/";
 	dataDirectoryName_ = kDirectoryPath.string();
 
@@ -732,6 +735,11 @@ void Particle::ParticleStart(const Vector3& pos) {
 	}
 }
 
+void Particle::ParticleStop()
+{
+	settings_[currentSettingIndex_].isValid_ = false;
+}
+
 
 void Particle::Update() {
 	assert(wtfs_.size() == wvpMat_.Size());
@@ -984,8 +992,6 @@ void Particle::Debug(const std::string& guiName) {
 					);
 
 					if (id == IDOK) {
-						settings_.clear();
-						datas_.clear();
 						LoadSettingDirectory(entry.path().stem().string());
 						MessageBoxA(
 							WindowFactory::GetInstance()->GetHwnd(),
