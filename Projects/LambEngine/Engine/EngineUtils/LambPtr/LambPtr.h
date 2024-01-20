@@ -61,7 +61,7 @@ namespace Lamb {
 		LambPtr(LambPtr<U>&& right) :
 			LambPtr{}
 		{
-			*this = right;
+			*this = std::move(right);
 		}
 
 	/// <summary>
