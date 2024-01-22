@@ -60,11 +60,20 @@ public:
 	/// </summary>
 	void ThreadLoadTexture();
 
+public:
 	/// <summary>
-	/// ただの白いテクスチャを取得
+	/// アンロードする
 	/// </summary>
-	/// <returns></returns>
-	Texture* const GetWhiteTex();
+	/// <param name="fileName">アンロードするファイル名</param>
+	void Unload(const std::string& fileName);
+
+public:
+	/// <summary>
+	/// textureを設定する
+	/// </summary>
+	/// <param name="texIndex">テクスチャのディスクリプタヒープのハンドル</param>
+	/// <param name="rootParam">ルートパラメータの</param>
+	void Use(uint32_t texIndex, UINT rootParam);
 
 	/// <summary>
 	/// CPU側のリソースを解放する
@@ -88,11 +97,11 @@ public:
 	}
 
 	/// <summary>
-	/// textureを設定する
+	/// ただの白いテクスチャを取得
 	/// </summary>
-	/// <param name="texIndex">テクスチャのディスクリプタヒープのハンドル</param>
-	/// <param name="rootParam">ルートパラメータの</param>
-	void Use(uint32_t texIndex, UINT rootParam);
+	/// <returns></returns>
+	Texture* const GetWhiteTex();
+
 
 private:
 	/// <summary>

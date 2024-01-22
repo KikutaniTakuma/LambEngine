@@ -45,42 +45,37 @@ TextureManager::TextureManager() :
 	commandQueue_ = nullptr;
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
 	HRESULT hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(commandQueue_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<TextureManager>("CreateCommandQueue() Failed", "Constructor");
+		throw Lamb::Error::Code<TextureManager>("CreateCommandQueue() Failed", __func__);
 	}
 
 	// コマンドアロケータを生成する
 	commandAllocator_ = nullptr;
 	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<TextureManager>("CreateCommandAllocator() Failed", "Constructor");
+		throw Lamb::Error::Code<TextureManager>("CreateCommandAllocator() Failed", __func__);
 	}
 
 	// コマンドリストを作成する
 	commandList_ = nullptr;
 	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(commandList_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<TextureManager>("CreateCommandList() Failed", "Constructor");
+		throw Lamb::Error::Code<TextureManager>("CreateCommandList() Failed", __func__);
 	}
 
 	// 初期値0でFenceを作る
 	fence_ = nullptr;
 	fenceVal_ = 0;
 	hr = device->CreateFence(fenceVal_, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(fence_.GetAddressOf()));
-	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<TextureManager>("CreateFence() Failed", "Constructor");
+		throw Lamb::Error::Code<TextureManager>("CreateFence() Failed", __func__);
 	}
 
 	// FenceのSignalを持つためのイベントを作成する
 	fenceEvent_ = nullptr;
 	fenceEvent_ = CreateEvent(NULL, FALSE, FALSE, NULL);
-	assert(fenceEvent_ != nullptr);
-	if (!(fenceEvent_ != nullptr)) {
-		throw Lamb::Error::Code<TextureManager>("CreateEvent() Failed", "Constructor");
+	if (fenceEvent_ == nullptr) {
+		throw Lamb::Error::Code<TextureManager>("CreateEvent() Failed", __func__);
 	}
 
 	srvHeap_ = CbvSrvUavHeap::GetInstance();
@@ -183,6 +178,18 @@ void TextureManager::ThreadLoadTexture() {
 		ResetCommandList();
 
 		isThreadFinish_ = false;
+	}
+}
+
+void TextureManager::Unload(const std::string& fileName)
+{
+	auto isExist = textures_.find(fileName);
+	if (isExist != textures_.end()) {
+		if (textures_[fileName]) {
+			textures_[fileName]->Unload();
+			textures_[fileName].reset();
+		}
+		textures_.erase(fileName);
 	}
 }
 
