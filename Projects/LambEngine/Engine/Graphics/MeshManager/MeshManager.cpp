@@ -1,6 +1,7 @@
 #include "MeshManager.h"
 #include "Utils/EngineInfo/EngineInfo.h"
 #include "Utils/SafeDelete/SafeDelete.h"
+#include "../ResourceManager/ResourceManager.h"
 
 MeshManager* MeshManager::instance_ = nullptr;
 
@@ -41,6 +42,8 @@ Mesh* MeshManager::LoadObj(const std::string& objFileName) {
 		meshs_[objFileName];
 		meshs_[objFileName] = std::make_unique<Mesh>();
 		meshs_[objFileName]->LoadObj(objFileName);
+		
+		ResourceManager::GetInstance()->SetModelResource(objFileName);
 	}
 
 	return meshs_[objFileName].get();
@@ -94,6 +97,7 @@ void MeshManager::ThreadLoad() {
 				if (mesh == meshs_.end()) {
 					meshs_[front.first] = std::make_unique<Mesh>();
 					meshs_[front.first]->ThreadLoadObj(front.first);
+					ResourceManager::GetInstance()->SetTextureResource(front.first);
 					if (Lamb::IsEngineFianlize()) {
 						break;
 					}
