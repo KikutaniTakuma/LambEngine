@@ -50,6 +50,17 @@ void MeshManager::LoadObj(const std::string& objFileName, Mesh**const mesh) {
 	threadMeshBuff_.push(std::make_pair(objFileName, mesh));
 }
 
+void MeshManager::Unload(const std::string& objFileName)
+{
+	auto isExist = meshs_.find(objFileName);
+	if (isExist != meshs_.end()) {
+		if (meshs_[objFileName]) {
+			meshs_[objFileName].reset();
+		}
+		meshs_.erase(objFileName);
+	}
+}
+
 void MeshManager::ResetDrawCount() {
 	for (auto& i : meshs_) {
 		i.second->ResetDrawCount();

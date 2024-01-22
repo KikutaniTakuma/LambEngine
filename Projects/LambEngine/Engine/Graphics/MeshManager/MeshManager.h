@@ -30,12 +30,32 @@ private:
 	static MeshManager* instance_;
 
 public:
+	/// <summary>
+	/// Objファイル読み込み
+	/// </summary>
+	/// <param name="objFileName">ファイルの名前</param>
+	/// <returns>読み込んだメッシュ</returns>
 	Mesh* LoadObj(const std::string& objFileName);
-	void LoadObj(const std::string& objFileName, Mesh**const mesh_);
 
+	/// <summary>
+	/// 非同期読み込み(この関数単体では非同期で読み込まない)
+	/// </summary>
+	/// <param name="objFileName">ファイルの名前</param>
+	/// <param name="mesh">読み込むMeshのダブルポインタ</param>
+	void LoadObj(const std::string& objFileName, Mesh**const mesh);
+
+public:
+	/// <summary>
+	/// アンロードする
+	/// </summary>
+	/// <param name="objFileName">ファイルの名前</param>
+	void Unload(const std::string& objFileName);
+
+public:
 	void ResetDrawCount();
 
 	void Draw();
+
 
 
 public:
