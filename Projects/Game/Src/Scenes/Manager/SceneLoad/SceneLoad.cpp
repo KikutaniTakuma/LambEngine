@@ -3,20 +3,20 @@
 #include "Utils/Camera/Camera.h"
 #include "Utils/EngineInfo/EngineInfo.h"
 
-SceneLoad::SceneLoad():
+SceneLoad::Desc SceneLoad::setting = {};
 	loadDrawThread_{},
 	mtx_{},
 	condtion_{},
 	loadProc_{},
 	loadTex_{},
-	exit_{false},
-	isLoad_{false}
+	exit_{ false },
+	isLoad_{ false }
 {
-	loadTex_.reset(new Texture2D{ "./Resources/Load.png" });
+	loadTex_.reset(new Texture2D{ setting.fileName });
 
 	loadTex_->scale = Lamb::ClientSize();
-	loadTex_->uvSize.x = 0.25f;
-	loadTex_->uvPibotSpd = 0.25f;
+	loadTex_->uvSize.x = 1.0f / static_cast<float>(setting.animationNumber);
+	loadTex_->uvPibotSpd = 1.0f / static_cast<float>(setting.animationNumber);
 
 	loadProc_ = [this]() {
 		std::unique_lock<std::mutex> uniqueLock(mtx_);
@@ -27,7 +27,12 @@ SceneLoad::SceneLoad():
 		while (!exit_) {
 			Engine::FrameStart();
 
-			loadTex_->Animation(500, true, 0.0f, 4.0f);
+			loadTex_->Animation(
+				static_cast<size_t>(setting.animationSpeed),
+				true,
+				0.0f,
+				static_cast<float>(setting.animationNumber)
+			);
 
 			loadTex_->Update();
 

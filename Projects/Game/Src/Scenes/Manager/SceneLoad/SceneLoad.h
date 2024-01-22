@@ -10,6 +10,15 @@
 // ロード中の描画クラス
 class SceneLoad {
 public:
+	struct Desc {
+		std::string fileName = "./Resources/Load.png";
+		uint32_t animationNumber = 4;
+		uint32_t animationSpeed = 500;
+	};
+public:
+	static Desc setting;
+
+public:
 	SceneLoad();
 	SceneLoad(const SceneLoad&) = delete;
 	SceneLoad(SceneLoad&&) = delete;
@@ -31,8 +40,6 @@ private:
 	std::thread loadDrawThread_;
 	// ロック用
 	std::mutex mtx_;
-	// threadのコントロール
-	std::condition_variable condtion_;
 
 	// ロード中に実行する関数
 	std::function<void(void)> loadProc_;
