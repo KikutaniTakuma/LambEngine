@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <thread>
+#include <mutex>
 #include <queue>
 #include "Mesh/Mesh.h"
 #include "Utils/UtilsLib/UtilsLib.h"
@@ -51,6 +52,7 @@ private:
 
 	std::queue<std::pair<std::string, Mesh** const>> threadMeshBuff_;
 	std::thread load_;
+	std::mutex mtx_;
 	bool isThreadFinish_;
 	bool isNowThreadLoading_;
 };

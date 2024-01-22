@@ -182,6 +182,8 @@ void TextureManager::LoadTexture(const std::string& fileName, Texture** const te
 void TextureManager::ThreadLoadTexture() {
 	if (!load_.joinable() && !threadTextureBuff_.empty()) {
 		auto loadProc = [this]() {
+			std::unique_lock<std::mutex> uniqueLock(mtx_);
+
 			isNowThreadLoading_ = true;
 			while (!threadTextureBuff_.empty()) {
 				if (Lamb::IsEngineFianlize()) {

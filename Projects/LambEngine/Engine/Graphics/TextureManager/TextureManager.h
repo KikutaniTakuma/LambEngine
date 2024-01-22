@@ -6,6 +6,7 @@
 #include <memory>
 #include <queue>
 #include <thread>
+#include <mutex>
 
 /// <summary>
 /// テクスチャの管理
@@ -85,6 +86,7 @@ private:
 
 	std::queue<std::pair<std::string, Texture** const>> threadTextureBuff_;
 	std::thread load_;
+	std::mutex mtx_;
 	bool isThreadFinish_;
 	bool isNowThreadLoading_;
 };

@@ -66,6 +66,8 @@ void MeshManager::ThreadLoad() {
 	// 読み込み予定の物があるかつ今読み込み中ではない
 	if (!threadMeshBuff_.empty() && !load_.joinable()) {
 		auto loadProc = [this]() {
+			std::unique_lock<std::mutex> uniqueLock(mtx_);
+
 			isNowThreadLoading_ = true;
 			while (!threadMeshBuff_.empty()) {
 				if (Lamb::IsEngineFianlize()) {

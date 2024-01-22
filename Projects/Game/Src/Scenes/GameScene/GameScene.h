@@ -30,4 +30,6 @@ public:
 
 public:
 	class Water* water_;
+
+	std::unique_ptr<Texture2D> tex_;
 };
