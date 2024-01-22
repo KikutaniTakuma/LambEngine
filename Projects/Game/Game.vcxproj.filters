@@ -41,9 +41,6 @@
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp">
       <Filter>Editor\ParticleEditor</Filter>
     </ClCompile>
-    <ClCompile Include="Src\ResoureceManager\ResoureceManager.cpp">
-      <Filter>ResoureceManager</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Game\Water\Water.cpp">
       <Filter>Game\Water</Filter>
     </ClCompile>
@@ -103,9 +100,6 @@
     <Filter Include="Game\CollisionManager\Plane">
       <UniqueIdentifier>{268eefac-748b-4452-b6c2-10e06349215c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ResoureceManager">
-      <UniqueIdentifier>{c6379256-68ba-4ce2-b92a-437563ffcfcb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Water">
       <UniqueIdentifier>{db170fba-cd99-4b05-a820-35cea969012a}</UniqueIdentifier>
     </Filter>
@@ -155,9 +149,6 @@
     </ClInclude>
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h">
       <Filter>Editor\ParticleEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\ResoureceManager\ResoureceManager.h">
-      <Filter>ResoureceManager</Filter>
     </ClInclude>
     <ClInclude Include="Src\Game\Water\Water.h">
       <Filter>Game\Water</Filter>
