@@ -5,6 +5,7 @@
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Utils/SafeDelete/SafeDelete.h"
+#include "../ResourceManager/ResourceManager.h"
 #include <cassert>
 #include <filesystem>
 
@@ -114,6 +115,8 @@ Texture* const TextureManager::LoadTexture(const std::string& fileName) {
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 
 		thisFrameLoadFlg_ = true;
+
+		ResourceManager::GetInstance()->SetTextureResource(fileName);
 	}
 
 	return textures_[fileName].get();
@@ -136,6 +139,9 @@ Texture* const TextureManager::LoadTexture(const std::string& fileName, ID3D12Gr
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 
 		thisFrameLoadFlg_ = true;
+
+
+		ResourceManager::GetInstance()->SetTextureResource(fileName);
 	}
 
 	return textures_[fileName].get();
