@@ -8,6 +8,7 @@
 #include "Input/Input.h"
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "SceneFactory/SceneFactory.h"
+#include "Engine/Graphics/ResourceManager/ResourceManager.h"
 
 SceneManager* const SceneManager::GetInstance() {
 	static SceneManager instance;
@@ -32,6 +33,8 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 	finishID_ = finishID;
 
 	load_.reset(new SceneLoad{});
+
+	ResourceManager::GetInstance()->Enable();
 }
 
 void SceneManager::SceneChange(std::optional<BaseScene::ID> next) {
@@ -62,6 +65,9 @@ void SceneManager::Update() {
 	}
 
 	if (fade_->OutEnd()) {
+		// ロード中の描画を開始
+		load_->Start();
+
 #pragma region シーン切り替え
 		// シーン終わり処理
 		scene_->Finalize();
@@ -69,11 +75,11 @@ void SceneManager::Update() {
 		scene_.reset(next_.release());
 		// 次のシーンを格納するものユニークポインタをリセット
 		next_.reset();
+
+		ResourceManager::GetInstance()->Unload();
 #pragma endregion
 
 #pragma region ロード中
-		// ロード中の描画を開始
-		load_->Start();
 		// シーンの初期化
 		scene_->Initialize();
 		// ロード中の描画を終了
@@ -129,4 +135,6 @@ void SceneManager::Finalize() {
 		next_->Finalize();
 	}
 	next_.reset();
+
+	ResourceManager::GetInstance()->Unenable();
 }
