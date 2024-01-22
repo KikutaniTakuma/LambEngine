@@ -34,9 +34,17 @@ private:
 
 
 public:
+	/// <summary>
+	/// テクスチャ読み込み用
+	/// </summary>
+	/// <param name="fileName">ファイルの名前</param>
+	/// <returns>Textureのポインタ(勝手にdeleteしてはいけない)</returns>
 	Texture* const LoadTexture(const std::string& fileName);
 
 private:
+	/// <summary>
+	/// 非同期読み込み用
+	/// </summary>
 	Texture* const LoadTexture(const std::string& fileName, ID3D12GraphicsCommandList* const commandList_);
 
 public:
@@ -47,23 +55,56 @@ public:
 	/// <param name="texPtr"></param>
 	void LoadTexture(const std::string& fileName, Texture** const texPtr);
 
+	/// <summary>
+	/// 非同期で画像を読み込む
+	/// </summary>
 	void ThreadLoadTexture();
 
+	/// <summary>
+	/// ただの白いテクスチャを取得
+	/// </summary>
+	/// <returns></returns>
 	Texture* const GetWhiteTex();
 
+	/// <summary>
+	/// CPU側のリソースを解放する
+	/// </summary>
 	void ReleaseIntermediateResource();
 
+	/// <summary>
+	/// 今現在非同期で読み込まれているか
+	/// </summary>
+	/// <returns>読み込まれていたらtrue</returns>
 	bool IsNowThreadLoading() const {
 		return isNowThreadLoading_ && !isCloseCommandList_;
 	}
 
+	/// <summary>
+	/// コマンドリストを取得する
+	/// </summary>
+	/// <returns>コマンドリスト</returns>
 	inline ID3D12GraphicsCommandList* const GetCommandList() const {
 		return commandList_.Get();
 	}
 
+	/// <summary>
+	/// textureを設定する
+	/// </summary>
+	/// <param name="texIndex">テクスチャのディスクリプタヒープのハンドル</param>
+	/// <param name="rootParam">ルートパラメータの</param>
+	void Use(uint32_t texIndex, UINT rootParam);
+
+private:
+	/// <summary>
+	/// コマンドリストを実行
+	/// </summary>
+	void ExecuteCommandList();
+
+	/// <summary>
+	/// コマンドリストをリセットする
+	/// </summary>
 	void ResetCommandList();
 
-	void Use(uint32_t texIndex, UINT rootParam);
 
 
 private:
@@ -79,7 +120,7 @@ private:
 	HANDLE fenceEvent_;
 
 	/// <summary>
-	/// Textureのコンテナ(キー値: ファイルネーム  コンテナデータ型: Texture*)
+	/// Textureのコンテナ(キー値: ファイルネーム)
 	/// </summary>
 	std::unordered_map<std::string, std::unique_ptr<Texture>> textures_;
 	bool thisFrameLoadFlg_;

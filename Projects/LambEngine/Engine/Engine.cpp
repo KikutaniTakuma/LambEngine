@@ -418,7 +418,6 @@ void Engine::FrameEnd() {
 	// テクスチャの非同期読み込み
 	auto textureManager = TextureManager::GetInstance();
 	textureManager->ThreadLoadTexture();
-	textureManager->ResetCommandList();
 
 	// このフレームで画像読み込みが発生していたら開放する
 	// またUnloadされていたらそれをコンテナから削除する
