@@ -4,9 +4,10 @@
 #include "Utils/EngineInfo/EngineInfo.h"
 
 SceneLoad::Desc SceneLoad::setting = {};
+
+SceneLoad::SceneLoad() :
 	loadDrawThread_{},
 	mtx_{},
-	condtion_{},
 	loadProc_{},
 	loadTex_{},
 	exit_{ false },
@@ -18,11 +19,13 @@ SceneLoad::Desc SceneLoad::setting = {};
 	loadTex_->uvSize.x = 1.0f / static_cast<float>(setting.animationNumber);
 	loadTex_->uvPibotSpd = 1.0f / static_cast<float>(setting.animationNumber);
 
-	loadProc_ = [this]() {
+	std::unique_ptr<Camera> camera{ new Camera{} };
+	camera->Update();
+	cameraMatrix_ = camera->GetViewOthographics();
+
+		loadProc_ = [this]() {
 		std::unique_lock<std::mutex> uniqueLock(mtx_);
 
-		std::unique_ptr<Camera> camera{ new Camera{} };
-		camera->Update();
 
 		while (!exit_) {
 			Engine::FrameStart();
@@ -36,13 +39,13 @@ SceneLoad::Desc SceneLoad::setting = {};
 
 			loadTex_->Update();
 
-			loadTex_->Draw(camera->GetViewOthographics());
+			loadTex_->Draw(cameraMatrix_);
 
 			Engine::FrameEnd();
 		}
 
 		Engine::FrameStart();
-	};
+		};
 }
 
 SceneLoad::~SceneLoad()
@@ -58,6 +61,9 @@ void SceneLoad::Start()
 	if (!isLoad_) {
 		loadTex_->AnimationStart();
 		isLoad_ = true;
+
+		loadTex_->Update();
+		loadTex_->Draw(cameraMatrix_);
 		Engine::FrameEnd();
 		CreateLoad();
 	}

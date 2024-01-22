@@ -5,6 +5,7 @@
 #include <functional>
 #include <memory>
 #include "Drawers/Texture2D/Texture2D.h"
+#include "Math/Mat4x4.h"
 
 
 // ロード中の描画クラス
@@ -48,4 +49,6 @@ private:
 	bool exit_;
 
 	bool isLoad_;
+
+	Mat4x4 cameraMatrix_;
 };
