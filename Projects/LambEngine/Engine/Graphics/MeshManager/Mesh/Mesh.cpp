@@ -32,7 +32,10 @@ Mesh::Mesh() :
 }
 
 Mesh::~Mesh() {
-	//ReleaseResource();
+	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
+	descriptorHeap->ReleaseView(wvpMats_.GetHandleUINT());
+	descriptorHeap->ReleaseView(dirLig_.GetHandleUINT());
+	descriptorHeap->ReleaseView(color_.GetHandleUINT());
 }
 
 void Mesh::LoadObj(const std::string& objFileName) {
