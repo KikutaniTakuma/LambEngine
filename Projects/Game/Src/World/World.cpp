@@ -13,6 +13,13 @@ void World::Initialize() {
 		.isFullesceen = false
 	};
 
+	// ロードのステータス
+	SceneLoad::setting = SceneLoad::Desc{
+		.fileName = "./Resources/Load.png",
+		.animationNumber = 4,
+		.animationSpeed = 500
+	};
+
 	Framework::Initialize();
 
 	Water::Initialize();
