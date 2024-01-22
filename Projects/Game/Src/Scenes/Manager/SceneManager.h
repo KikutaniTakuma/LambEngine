@@ -49,7 +49,7 @@ private:
 
 	Camera fadeCamera_;
 
-	FrameInfo* frameInfo_ = nullptr;
+	class FrameInfo* frameInfo_ = nullptr;
 	Input* input_ = nullptr;
 
 	bool isPad_ = false;
