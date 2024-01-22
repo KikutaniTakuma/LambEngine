@@ -8,6 +8,7 @@
 #include "Fade/Fade.h"
 #include "Input/Input.h"
 #include "BaseScene/BaseScene.h"
+#include "SceneLoad/SceneLoad.h"
 
 class SceneManager final {
 private:
@@ -54,4 +55,6 @@ private:
 	bool isPad_ = false;
 
 	std::optional<BaseScene::ID> finishID_;
+
+	std::unique_ptr<SceneLoad> load_;
 };

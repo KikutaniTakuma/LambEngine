@@ -34,7 +34,7 @@ Texture2D::Texture2D() :
 	colorBuf_(),
 	aniStartTime_(),
 	aniCount_(0.0f),
-	uvPibotSpd_(0.0f),
+	uvPibotSpd(0.0f),
 	isAnimation_(0.0f),
 	isSameTexSize(),
 	texScalar(1.0f)
@@ -100,7 +100,7 @@ Texture2D& Texture2D::operator=(const Texture2D& right) {
 	aniStartTime_ = right.aniStartTime_;
 	aniCount_ = right.aniCount_;
 	isAnimation_ = right.isAnimation_;
-	uvPibotSpd_ = right.uvPibotSpd_;
+	uvPibotSpd = right.uvPibotSpd;
 
 	isSameTexSize = right.isSameTexSize;
 
@@ -130,7 +130,7 @@ Texture2D& Texture2D::operator=(Texture2D&& right) noexcept {
 	aniStartTime_ = std::move(right.aniStartTime_);
 	aniCount_ = std::move(right.aniCount_);
 	isAnimation_ = std::move(right.isAnimation_);
-	uvPibotSpd_ = std::move(right.uvPibotSpd_);
+	uvPibotSpd = std::move(right.uvPibotSpd);
 
 	isSameTexSize = std::move(right.isSameTexSize);
 	texScalar = std::move(right.texScalar);
@@ -527,7 +527,7 @@ void Texture2D::Animation(size_t aniSpd, bool isLoop, float aniUvStart, float an
 			}
 
 			uvPibot.x = aniUvStart;
-			uvPibot.x += uvPibotSpd_ * aniCount_;
+			uvPibot.x += uvPibotSpd * aniCount_;
 		}
 	}
 }

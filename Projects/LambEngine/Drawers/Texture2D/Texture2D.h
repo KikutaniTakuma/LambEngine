@@ -165,5 +165,5 @@ private:
 	float aniCount_;
 	bool isAnimation_;
 public:
-	float uvPibotSpd_;
+	float uvPibotSpd;
 };

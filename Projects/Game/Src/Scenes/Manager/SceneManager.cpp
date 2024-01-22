@@ -30,6 +30,8 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/default.spritefont");
 
 	finishID_ = finishID;
+
+	load_.reset(new SceneLoad{});
 }
 
 void SceneManager::SceneChange(std::optional<BaseScene::ID> next) {
@@ -60,13 +62,34 @@ void SceneManager::Update() {
 	}
 
 	if (fade_->OutEnd()) {
-		fade_->InStart();
+#pragma region シーン切り替え
+		// シーン終わり処理
 		scene_->Finalize();
+		// 次のシーンへ
 		scene_.reset(next_.release());
+		// 次のシーンを格納するものユニークポインタをリセット
 		next_.reset();
+#pragma endregion
+
+#pragma region ロード中
+		// ロード中の描画を開始
+		load_->Start();
+		// シーンの初期化
 		scene_->Initialize();
+		// ロード中の描画を終了
+		load_->Stop();
+#pragma endregion
+
+#pragma region その後の処理
+		// フェードスタート
+		fade_->InStart();
+
+		// シーンの更新処理
 		scene_->Update();
+
+		// フェードの更新処理
 		fade_->Update();
+#pragma endregion
 	}
 	else if (fade_->InEnd()) {
 		fade_->Update();
@@ -92,6 +115,11 @@ bool SceneManager::IsEnd() const {
 }
 
 void SceneManager::Finalize() {
+	if (load_) {
+		load_.reset();
+	}
+
+
 	fade_.reset();
 	if (scene_) {
 		scene_->Finalize();

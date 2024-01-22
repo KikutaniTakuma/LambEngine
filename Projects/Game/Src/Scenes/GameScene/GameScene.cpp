@@ -25,9 +25,15 @@ void GameScene::Update() {
 	
 	tex_->Debug("tex");
 	tex_->Update();
+
+	if (input_->GetKey()->Pushed(DIK_SPACE)) {
+		sceneManager_->SceneChange(BaseScene::ID::Title);
+	}
 }
 
 void GameScene::Draw() {
 	camera_->Update();
 	tex_->Draw(camera_->GetViewOthographics());
+
+	Lamb::screenout << "Game Scnene" << Lamb::endline;
 }

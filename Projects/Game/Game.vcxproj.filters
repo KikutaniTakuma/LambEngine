@@ -47,6 +47,12 @@
     <ClCompile Include="Src\Game\Water\Water.cpp">
       <Filter>Game\Water</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Scenes\Manager\SceneLoad\SceneLoad.cpp">
+      <Filter>Scenes\Manager\ScceneLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scenes\TitleScene\TitleScene.cpp">
+      <Filter>Scenes\TitleScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -103,6 +109,12 @@
     <Filter Include="Game\Water">
       <UniqueIdentifier>{db170fba-cd99-4b05-a820-35cea969012a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scenes\Manager\ScceneLoad">
+      <UniqueIdentifier>{a02d4342-6cbd-4359-83a6-e378d8c3ef88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\TitleScene">
+      <UniqueIdentifier>{33349c28-9ac6-4102-a517-2aca4afde131}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -149,6 +161,12 @@
     </ClInclude>
     <ClInclude Include="Src\Game\Water\Water.h">
       <Filter>Game\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scenes\Manager\SceneLoad\SceneLoad.h">
+      <Filter>Scenes\Manager\ScceneLoad</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scenes\TitleScene\TitleScene.h">
+      <Filter>Scenes\TitleScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
