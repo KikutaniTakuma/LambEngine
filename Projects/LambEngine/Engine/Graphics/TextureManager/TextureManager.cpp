@@ -255,6 +255,50 @@ void TextureManager::ResetCommandList() {
 	}
 }
 
+void TextureManager::CreateThread()
+{
+	auto loadProc = [this]() {
+		std::unique_lock<std::mutex> uniqueLock(mtx_);
+		while (!exit_) {
+			condition_.wait(uniqueLock, [this]() { return exit_; });
+
+			if (exit_) {
+				break;
+			}
+
+			isNowThreadLoading_ = true;
+			while (!threadTextureBuff_.empty()) {
+				if (Lamb::IsEngineFianlize()) {
+					break;
+				}
+				auto& front = threadTextureBuff_.front();
+				*front.second = LoadTexture(front.first, commandList_.Get());
+				threadTextureBuff_.pop();
+			}
+
+			isThreadFinish_ = true;
+			isNowThreadLoading_ = false;
+		}
+	};
+
+	load_ = std::thread(loadProc);
+}
+
+void TextureManager::StartThread()
+{
+	if (!isThreadLoad_) {
+		condition_.notify_all();
+		isThreadLoad_ = true;
+	}
+}
+
+void TextureManager::StopThread()
+{
+	if (isThreadLoad_) {
+		isThreadLoad_ = false;
+	}
+}
+
 void TextureManager::Use(uint32_t texIndex, UINT rootParam) {
 	auto* const mainComlist = DirectXCommand::GetInstance()->GetCommandList();
 	mainComlist->SetGraphicsRootDescriptorTable(

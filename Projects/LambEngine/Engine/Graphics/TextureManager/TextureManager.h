@@ -7,6 +7,7 @@
 #include <queue>
 #include <thread>
 #include <mutex>
+#include <condition_variable>
 
 /// <summary>
 /// テクスチャの管理
@@ -114,7 +115,11 @@ private:
 	/// </summary>
 	void ResetCommandList();
 
+	void CreateThread();
 
+	void StartThread();
+
+	void StopThread();
 
 private:
 	class CbvSrvUavHeap* srvHeap_;
@@ -137,6 +142,9 @@ private:
 	std::queue<std::pair<std::string, Texture** const>> threadTextureBuff_;
 	std::thread load_;
 	std::mutex mtx_;
+	std::condition_variable condition_;
+	bool exit_;
+	bool isThreadLoad_;
 	bool isThreadFinish_;
 	bool isNowThreadLoading_;
 };
