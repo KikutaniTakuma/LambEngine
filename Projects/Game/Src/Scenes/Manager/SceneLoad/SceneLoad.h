@@ -42,6 +42,8 @@ private:
 	// ロック用
 	std::mutex mtx_;
 
+	std::condition_variable condition_;
+
 	// ロード中に実行する関数
 	std::function<void(void)> loadProc_;
 	std::unique_ptr<Texture2D> loadTex_;
@@ -49,6 +51,8 @@ private:
 	bool exit_;
 
 	bool isLoad_;
+
+	bool isWait_;
 
 	Mat4x4 cameraMatrix_;
 };
