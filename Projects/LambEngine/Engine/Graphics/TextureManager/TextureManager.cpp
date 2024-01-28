@@ -38,7 +38,9 @@ TextureManager::TextureManager() :
 	fenceEvent_(nullptr),
 	srvHeap_(nullptr),
 	isCloseCommandList_(false),
-	isNowThreadLoading_(false)
+	isNowThreadLoading_(false),
+	exit_(false),
+	isThreadLoad_(false)
 {
 	ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
 
