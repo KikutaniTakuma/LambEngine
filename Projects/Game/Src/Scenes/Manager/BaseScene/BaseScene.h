@@ -7,10 +7,11 @@ class BaseScene {
 
 public:
 	enum class ID {
-		Game,
 		Result,
 		Title,
 		StageSelect,
+		Customize,
+		Game,
 	};
 
 public:
@@ -34,6 +35,8 @@ public:
 	inline BaseScene::ID GetID() const {
 		return sceneID_;
 	}
+
+	const class Camera& GetCamera() const;
 
 protected:
 	class SceneManager* sceneManager_;

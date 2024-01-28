@@ -43,6 +43,11 @@ bool Fade::InStay() const {
 	return isInStart_.OnStay();
 }
 
+bool Fade::IsActive() const
+{
+	return isInStart_ || isOutStart_;
+}
+
 void Fade::Update() {
 	if (isInStart_) {
 		tex_.color = ColorLerp(0xff, 0x00, ease_.GetT());

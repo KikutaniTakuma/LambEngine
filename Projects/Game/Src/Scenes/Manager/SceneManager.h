@@ -40,6 +40,15 @@ public:
 
 	bool IsEnd() const;
 
+	const class Camera& GetCurrentSceneCamera() const;
+
+	BaseScene::ID GetCurrentSceneID() const;
+	BaseScene::ID GetPreSceneID() const;
+
+
+private:
+	void Debug();
+
 
 private:
 	std::unique_ptr<BaseScene> scene_;
@@ -55,6 +64,12 @@ private:
 	bool isPad_ = false;
 
 	std::optional<BaseScene::ID> finishID_;
+	std::optional<BaseScene::ID> preSceneID_;
 
 	std::unique_ptr<SceneLoad> load_;
+
+#ifdef _DEBUG
+	std::unordered_map<BaseScene::ID, std::string> sceneName_;
+#endif // _DEBUG
+	std::unordered_map<BaseScene::ID, uint8_t> sceneNum_;
 };

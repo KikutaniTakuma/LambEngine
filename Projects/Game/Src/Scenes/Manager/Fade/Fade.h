@@ -49,6 +49,12 @@ public:
 	bool InStay() const;
 
 	/// <summary>
+	/// フェード中か
+	/// </summary>
+	/// <returns></returns>
+	bool IsActive() const;
+
+	/// <summary>
 	/// 更新関数
 	/// </summary>
 	void Update();
