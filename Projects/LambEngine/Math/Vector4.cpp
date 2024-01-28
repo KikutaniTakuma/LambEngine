@@ -199,28 +199,33 @@ Vector2 Vector4::GetVector2() const noexcept {
 	return Vector2(vec.x, vec.y);
 }
 
+uint32_t Vector4::GetColorRGBA() const
+{
+	uint32_t result = 0u;
+
+	result += static_cast<uint32_t>(color.r * 255.0f) << 24;
+	result += static_cast<uint32_t>(color.g * 255.0f) << 16;
+	result += static_cast<uint32_t>(color.b * 255.0f) << 8;
+	result += static_cast<uint32_t>(color.a * 255.0f);
+
+	return result;
+}
+
 Vector4 UintToVector4(uint32_t color) {
 	static constexpr float normal = 1.0f / static_cast<float>(std::numeric_limits<uint8_t>::max());
 	Vector4 result;
 
 	result.color = {
 		static_cast<float>((color & 0xff000000) >> 24) * normal,
-		static_cast<float>((color & 0xff0000  ) >> 16) * normal,
-		static_cast<float>((color & 0xff00    ) >>  8) * normal,
-		static_cast<float>( color & 0xff             ) * normal
+		static_cast<float>((color & 0x00ff0000) >> 16) * normal,
+		static_cast<float>((color & 0x0000ff00) >>  8) * normal,
+		static_cast<float>( color & 0x000000ff       ) * normal
 	};
 	return result;
 }
 
 uint32_t Vector4ToUint(const Vector4& color) {
-	uint32_t result = 0u;
-
-	result += static_cast<decltype(result)>(color.color.r * 255.0f) << 24;
-	result += static_cast<decltype(result)>(color.color.g * 255.0f) << 16;
-	result += static_cast<decltype(result)>(color.color.b * 255.0f) << 8;
-	result += static_cast<decltype(result)>(color.color.a * 255.0f);
-
-	return result;
+	return color.GetColorRGBA();
 }
 
 Vector4 ColorLerp(const Vector4& start, const Vector4& end, float t) {

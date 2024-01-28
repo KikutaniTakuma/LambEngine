@@ -71,6 +71,9 @@ public:
 	class Vector3 GetVector3() const noexcept;
 	class Vector2 GetVector2() const noexcept;
 
+
+	uint32_t GetColorRGBA() const;
+
 /// <summary>
 /// 静的定数
 /// </summary>
