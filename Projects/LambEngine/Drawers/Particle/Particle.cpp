@@ -930,22 +930,25 @@ void Particle::Draw(
 
 		UINT drawCount = 0;
 		assert(wtfs_.size() == wvpMat_.Size());
-		Mat4x4 billboardMat;
+		Vector3 billboardRotate;
 		if (isBillboard_) {
 			if (isYBillboard_) {
-				billboardMat = Mat4x4::MakeRotateY(cameraRotate.y);
+				billboardRotate.y = cameraRotate.y;
 			}
 			else {
-				billboardMat = Mat4x4::MakeRotate(cameraRotate);
+				billboardRotate = cameraRotate;
 			}
 		}
 		else {
-			billboardMat = Mat4x4::kIdentity;
+			billboardRotate = Vector3::kZero;
 		}
 
 		for (uint32_t i = 0; i < wvpMat_.Size();i++) {
 			if (wtfs_[i].isActive_) {
-				wvpMat_[drawCount] = Mat4x4::MakeAffin(wtfs_[i].scale_, wtfs_[i].rotate_, wtfs_[i].pos_) * billboardMat * viewProjection;
+				wvpMat_[drawCount] = Mat4x4::MakeAffin(
+					wtfs_[i].scale_, 
+					wtfs_[i].rotate_ + billboardRotate, 
+					wtfs_[i].pos_) * viewProjection;
 				colorBuf_[drawCount] = UintToVector4(wtfs_[i].color_);
 				drawCount++;
 			}
