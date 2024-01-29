@@ -26,13 +26,13 @@ void TitleScene::Initialize()
 	player_->scale *= 2.0f;
 
 	str_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
-	str_ << "水面";
+	str_ << "水面2";
 	str_.scale *= 14.8f * 0.5f;
 	str_.pos = { 52.0f, 136.0f };
 	str_.color = 0xff;
 
 	startMessage_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
-	startMessage_ << "Ａボタン押してちょんまげ";
+	startMessage_ << "Ａボタン押してちょんまげの味噌茶漬け";
 	startMessage_.pos = { 144.0f, 539.0f };
 
 	cloud_ = Cloud::GetInstance();
