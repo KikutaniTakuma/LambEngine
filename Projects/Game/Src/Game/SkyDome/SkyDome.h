@@ -2,6 +2,7 @@
 #include <memory>
 #include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
 #include "Engine/Graphics/MeshManager/MeshManager.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include <unordered_map>
 
 class SkyDome final {
