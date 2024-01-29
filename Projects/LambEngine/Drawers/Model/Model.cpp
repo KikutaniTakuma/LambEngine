@@ -16,7 +16,7 @@
 
 Shader Model::shader_ = {};
 
-Pipeline* Model::pipeline_ = {};
+Pipeline* Model::defaultPipeline_ = {};
 bool Model::loadShaderFlg_ = false;
 bool Model::createGPFlg_ = false;
 
@@ -88,7 +88,7 @@ void Model::CreateGraphicsPipeline() {
 
 		PipelineManager::SetState(Pipeline::Blend::Normal, Pipeline::SolidState::Solid);
 
-		pipeline_ = PipelineManager::Create();
+		defaultPipeline_ = PipelineManager::Create();
 
 		PipelineManager::StateReset();
 
@@ -107,7 +107,8 @@ Model::Model() :
 	isLoadObj_(false),
 	wvpData_(),
 	dirLig_(),
-	colorBuf_()
+	colorBuf_(),
+	pipeline_(nullptr)
 {
 
 	wvpData_.shaderRegister_ = 0;
@@ -186,6 +187,8 @@ Model& Model::operator=(const Model& right) {
 	*dirLig_ = *right.dirLig_;
 	*colorBuf_ = *right.colorBuf_;
 
+	pipeline_ = right.pipeline_;
+
 	return *this;
 }
 
@@ -217,6 +220,9 @@ Model& Model::operator=(Model&& right) noexcept {
 	*wvpData_ = *right.wvpData_;
 	*dirLig_ = *right.dirLig_;
 	*colorBuf_ = *right.colorBuf_;
+
+
+	pipeline_ = std::move(right.pipeline_);
 
 	return *this;
 }
@@ -266,6 +272,11 @@ void Model::MeshChangeTexture(const std::string& useMtlName, Texture* tex) {
 	mesh_->ChangeTexture(useMtlName, tex);
 }
 
+void Model::SetPipeline(Pipeline* const pipeline)
+{
+	pipeline_ = pipeline;
+}
+
 void Model::Update() {
 	*dirLig_ = light;
 	wvpData_->worldMat.Affin(scale, rotate, pos);
@@ -294,12 +305,17 @@ void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 
 		auto commandlist = DirectXCommand::GetInstance()->GetCommandList();
 
-		if (!pipeline_) {
+		if (!defaultPipeline_) {
 			throw Lamb::Error::Code<Model>("pipeline is nullptr", __func__);
 		}
 
 		for (auto& i : data_) {
-			pipeline_->Use();
+			if (pipeline_) {
+				pipeline_->Use();
+			}
+			else {
+				defaultPipeline_->Use();
+			}
 			i.second.tex->Use(0);
 
 			commandlist->SetGraphicsRootDescriptorTable(1, wvpData_.GetHandleGPU());

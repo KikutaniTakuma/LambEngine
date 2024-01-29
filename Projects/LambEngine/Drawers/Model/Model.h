@@ -52,7 +52,7 @@ private:
 private:
 	static Shader shader_;
 
-	static Pipeline* pipeline_;
+	static Pipeline* defaultPipeline_;
 	static bool loadShaderFlg_;
 	static bool createGPFlg_;
 
@@ -99,6 +99,8 @@ public:
 		*isLighting_ = static_cast<uint32_t>(isLighting);
 	}
 
+	void SetPipeline(Pipeline* const pipeline);
+
 public:
 	Vector3 pos;
 	Vector3 rotate;
@@ -111,6 +113,8 @@ public:
 private:
 	Model* parent_;
 	Mesh* mesh_;
+
+	Pipeline* pipeline_;
 
 	std::unordered_map<std::string, Mesh::CopyData> data_;
 
