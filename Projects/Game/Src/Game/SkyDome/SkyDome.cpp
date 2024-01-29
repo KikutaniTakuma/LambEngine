@@ -116,8 +116,8 @@ Shader SkyDome::LoadShader()
 
 	Shader result;
 
-	result.vertex = shaderManager->LoadVertexShader("");
-	result.pixel = shaderManager->LoadPixelShader("");
+	result.vertex = shaderManager->LoadVertexShader("./Resources/Shaders/SkyDomeShader/SkyDome.VS.hlsl");
+	result.pixel = shaderManager->LoadPixelShader("./Resources/Shaders/SkyDomeShader/SkyDome.PS.hlsl");
 
 	return result;
 }
