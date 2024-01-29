@@ -126,10 +126,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp" />
+    <ClCompile Include="Src\Game\Bullet\Bullet.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Collider\Collider.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Obb\Obb.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Plane\Plane.cpp" />
+    <ClCompile Include="Src\Game\Enemy\Enemy.cpp" />
+    <ClCompile Include="Src\Game\Player\Player.cpp" />
     <ClCompile Include="Src\Game\Water\Water.cpp" />
     <ClCompile Include="Src\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Src\main.cpp" />
@@ -145,10 +148,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h" />
+    <ClInclude Include="Src\Game\Bullet\Bullet.h" />
     <ClInclude Include="Src\Game\CollisionManager\Collider\Collider.h" />
     <ClInclude Include="Src\Game\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Src\Game\CollisionManager\Obb\Obb.h" />
     <ClInclude Include="Src\Game\CollisionManager\Plane\Plane.h" />
+    <ClInclude Include="Src\Game\Enemy\Enemy.h" />
+    <ClInclude Include="Src\Game\Player\Player.h" />
     <ClInclude Include="Src\Game\Water\Water.h" />
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h" />
     <ClInclude Include="Src\Scenes\GameScene\GameScene.h" />

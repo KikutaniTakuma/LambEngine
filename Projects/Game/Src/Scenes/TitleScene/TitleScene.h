@@ -30,6 +30,10 @@ public:
 
 public:
 	class Water* water_;
+	StringOut str_;
+	std::unique_ptr<Camera> uiCamera_;
+	std::unique_ptr<Model> player_;
 
-	std::unique_ptr<Model> model_;
+	StringOut startMessage_;
+	float messageAlpah_;
 };

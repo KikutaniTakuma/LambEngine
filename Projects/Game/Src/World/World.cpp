@@ -23,9 +23,14 @@ void World::Initialize() {
 	Framework::Initialize();
 
 	Water::Initialize();
+
+	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/mincho_size_32.spritefont");
+
+
+
 	sceneManager_ = SceneManager::GetInstance();
 
-	sceneManager_->Initialize(BaseScene::ID::Game, BaseScene::ID::Game);
+	sceneManager_->Initialize(BaseScene::ID::Title, BaseScene::ID::Title);
 
 	ParticleEditor::Initialize();
 	particleEditor_ = ParticleEditor::GetInstance();

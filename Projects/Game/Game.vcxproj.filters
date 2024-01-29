@@ -50,6 +50,15 @@
     <ClCompile Include="Src\Scenes\TitleScene\TitleScene.cpp">
       <Filter>Scenes\TitleScene</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\Player\Player.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Enemy\Enemy.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Bullet\Bullet.cpp">
+      <Filter>Game\Bullet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -109,6 +118,15 @@
     <Filter Include="Scenes\TitleScene">
       <UniqueIdentifier>{33349c28-9ac6-4102-a517-2aca4afde131}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{9cad61b8-97ce-4a49-b13b-36fee3af6d66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy">
+      <UniqueIdentifier>{91d2b09a-977b-4f2d-ac37-8c147b755ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Bullet">
+      <UniqueIdentifier>{6f88d733-18c5-4805-b30d-36fa93cca88b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -158,6 +176,15 @@
     </ClInclude>
     <ClInclude Include="Src\Scenes\TitleScene\TitleScene.h">
       <Filter>Scenes\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Player\Player.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Enemy\Enemy.h">
+      <Filter>Game\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Bullet\Bullet.h">
+      <Filter>Game\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
