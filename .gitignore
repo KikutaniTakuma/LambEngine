@@ -360,5 +360,5 @@ MigrationBackup/
 FodyWeavers.xsd
 
 fxc.exe
-imgui.ini
 Projects/externals/DirectXTex/Shaders/Compiled/
+Projects\Game\imgui.ini
