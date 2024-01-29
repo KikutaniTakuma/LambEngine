@@ -3,6 +3,7 @@
 #include "Editor/ParticleEditor/ParticleEditor.h"
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "../Game/Water/Water.h"
+#include "../Game/Cloud/Cloud.h"
 
 void World::Initialize() {
 	// ウィンドウ初期化オプション
@@ -24,6 +25,8 @@ void World::Initialize() {
 
 	Water::Initialize();
 
+	Cloud::Initialize();
+
 	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/mincho_size_32.spritefont");
 
 
@@ -37,6 +40,7 @@ void World::Initialize() {
 }
 
 void World::Finalize() {
+	Cloud::Finalize();
 	Water::Finalize();
 
 	if (sceneManager_) {

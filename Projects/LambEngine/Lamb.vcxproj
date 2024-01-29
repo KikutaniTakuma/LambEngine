@@ -146,6 +146,7 @@
     <ClCompile Include="Engine\Graphics\MeshManager\Mesh\Mesh.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.cpp" />
+    <ClCompile Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\PipelineObject.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Engine\Graphics\MeshManager\Mesh\Mesh.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.h" />
+    <ClInclude Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\PipelineObject.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.h" />
