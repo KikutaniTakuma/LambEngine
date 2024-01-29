@@ -1,4 +1,4 @@
-#include "WaterPipeline.h"
+#include "CloudPipeline.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "Utils/Random/Random.h"
@@ -12,12 +12,47 @@
 #include "imgui.h"
 #endif // _DEBUG
 
+#include <fstream>
+#include <filesystem>
 
-void WaterPipeline::Update() {
+#include "Engine/Core/WindowFactory/WindowFactory.h"
+
+void CloudPipeline::Update() {
 #ifdef _DEBUG
-	ImGui::Begin("Water");
-	ImGui::DragFloat("densityScale", &(*densityScale_), 0.01f);
-	ImGui::DragFloat2("ゆらゆらの速度", &speed_.x, 0.001f);
+	ImGui::Begin("Cloud");
+	ImGui::DragFloat("雲の細やかさ", &(cloudData_->density), 0.01f);
+	ImGui::DragFloat("雲の多さ", &(cloudData_->exponent), 0.01f);
+	ImGui::DragFloat("雲の色の強さ", &(cloudData_->colorTime), 0.01f);
+	ImGui::ColorEdit4("空の色", skyColor_->m.data());
+	ImGui::DragFloat2("雲の移動速度", &speed_.x, 0.001f);
+	ImGui::Text("randomVec : %f, %f", randomVec_->x, randomVec_->y);
+	if (ImGui::Button("保存")) {
+		if (!std::filesystem::exists("./Resources/Datas/Cloud/")) {
+			std::filesystem::create_directories("./Resources/Datas/Cloud/");
+		}
+
+		std::ofstream file{ "./Resources/Datas/Cloud/CloudData.txt" };
+
+		if (file.is_open()) {
+			file << cloudData_->density << std::endl
+				<< cloudData_->exponent << std::endl
+				<< cloudData_->colorTime << std::endl
+				<< Vector4ToUint(*skyColor_) << std::endl
+				<< speed_.x << std::endl
+				<< speed_.y << std::endl;
+			file.close();
+
+			MessageBoxA(
+				WindowFactory::GetInstance()->GetHwnd(),
+				"save succeeded", "Cloud",
+				MB_OK | MB_ICONINFORMATION
+			);
+		}
+		else {
+			throw Lamb::Error::Code<decltype(*this)>("something Error", __func__);
+		}
+	}
+
 	ImGui::End();
 #endif // _DEBUG
 
@@ -29,15 +64,9 @@ void WaterPipeline::Update() {
 
 	wvpMat_->worldMat = worldMat;
 	wvpMat_->viewProjection = viewProjection;
-
-	normalVector_->normal = Vector3{ 0.0f,1.0f,0.0f };
-	normalVector_->tangent = Vector3{ 0.0f,0.0f,1.0f };
-
-	light_->ligColor = Vector3::kIdentity * 15.0f;
-	light_->ligDirection = Vector3{ 1.0f,-1.0f,0.0f }.Normalize();
 }
 
-void WaterPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
+void CloudPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
 	if (isDepth) {
 		pipelines_[blendType]->Use();
 	}
@@ -47,11 +76,10 @@ void WaterPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
 	auto* const commandList = DirectXCommand::GetInstance()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
-	caustics_->Use(1);
-	commandList->SetGraphicsRootDescriptorTable(2, wvpMat_.GetHandleGPU());
+	commandList->SetGraphicsRootDescriptorTable(1, wvpMat_.GetHandleGPU());
 }
 
-void WaterPipeline::Init(
+void CloudPipeline::Init(
 	const std::string& vsShader,
 	const std::string& psShader,
 	const std::string& gsFileName,
@@ -80,32 +108,22 @@ void WaterPipeline::Init(
 	renderRange[0].NumDescriptors = 1;
 	renderRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> causticsRange = {};
-	causticsRange[0].BaseShaderRegister = 1;
-	causticsRange[0].NumDescriptors = 1;
-	causticsRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	causticsRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 6;
+	cbvRange[0].NumDescriptors = 5;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 3> roootParamater = {};
+	std::array<D3D12_ROOT_PARAMETER, 2> roootParamater = {};
 	roootParamater[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	roootParamater[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	roootParamater[0].DescriptorTable.pDescriptorRanges = renderRange.data();
 	roootParamater[0].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(renderRange.size());
 
 	roootParamater[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	roootParamater[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	roootParamater[1].DescriptorTable.pDescriptorRanges = causticsRange.data();
-	roootParamater[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(causticsRange.size());
-
-	roootParamater[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	roootParamater[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	roootParamater[2].DescriptorTable.pDescriptorRanges = cbvRange.data();
-	roootParamater[2].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
+	roootParamater[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	roootParamater[1].DescriptorTable.pDescriptorRanges = cbvRange.data();
+	roootParamater[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
 
 	PipelineManager::CreateRootSgnature(roootParamater.data(), roootParamater.size(), true);
 
@@ -129,38 +147,60 @@ void WaterPipeline::Init(
 
 
 	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
-	caustics_ = TextureManager::GetInstance()->LoadTexture("./Resources/Water/caustics_01.bmp");
 
-	srvHeap->BookingHeapPos(7u);
+	srvHeap->BookingHeapPos(6u);
 	srvHeap->CreateView(*render_);
 	srvHeap->CreateView(wvpMat_);
 	srvHeap->CreateView(colorBuf_);
-	srvHeap->CreateView(normalVector_);
 	srvHeap->CreateView(randomVec_);
-	srvHeap->CreateView(light_);
-	srvHeap->CreateView(densityScale_);
-
-	*densityScale_ = 1.0f;
+	srvHeap->CreateView(cloudData_);
+	srvHeap->CreateView(skyColor_);
 
 	randomVec_->x = Lamb::Random(0.0f, 1.0f);
 	randomVec_->y = Lamb::Random(0.0f, 1.0f);
 
-	speed_ = { 0.006f, 0.006f };
+	speed_ = { 0.02f, 0.0f };
+	cloudData_->density = 40.18f;
+	cloudData_->exponent = 8.57f;
+	cloudData_->colorTime = 45.0f;
+
+	*skyColor_ = 0x5FE7FFFF;
+
+
+
+	if (std::filesystem::exists("./Resources/Datas/Cloud/CloudData.txt")) {
+		std::ifstream file{ "./Resources/Datas/Cloud/CloudData.txt" };
+
+		if (file.is_open()) {
+			std::string lineBuf;
+			std::getline(file, lineBuf);
+			cloudData_->density = static_cast<float>(std::atof(lineBuf.c_str()));
+			std::getline(file, lineBuf);
+			cloudData_->exponent = static_cast<float>(std::atof(lineBuf.c_str()));
+			std::getline(file, lineBuf);
+			cloudData_->colorTime = static_cast<float>(std::atof(lineBuf.c_str()));
+
+			std::getline(file, lineBuf);
+			*skyColor_ = static_cast<uint32_t>(std::atoll(lineBuf.c_str()));
+
+			std::getline(file, lineBuf);
+			speed_.x = static_cast<float>(std::atof(lineBuf.c_str()));
+			std::getline(file, lineBuf);
+			speed_.y = static_cast<float>(std::atof(lineBuf.c_str()));
+		}
+	}
+
 }
 
-WaterPipeline::~WaterPipeline() {
+CloudPipeline::~CloudPipeline() {
 	if (render_) {
 		auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 		srvHeap->ReleaseView(render_->GetHandleUINT());
 		srvHeap->ReleaseView(wvpMat_.GetHandleUINT());
 		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
 		srvHeap->ReleaseView(randomVec_.GetHandleUINT());
-		srvHeap->ReleaseView(normalVector_.GetHandleUINT());
-		srvHeap->ReleaseView(light_.GetHandleUINT());
-		srvHeap->ReleaseView(densityScale_.GetHandleUINT());
-		if (caustics_) {
-			caustics_->Unload();
-		}
+		srvHeap->ReleaseView(cloudData_.GetHandleUINT());
+		srvHeap->ReleaseView(skyColor_.GetHandleUINT());
 	}
 
 	render_.reset();

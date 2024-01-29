@@ -54,7 +54,6 @@ void GameScene::Update() {
 		sceneManager_->SceneChange(BaseScene::ID::Game);
 	}
 	//water_->Debug("water");
-	water_->Update();
 
 
 	player_->Move();
@@ -70,6 +69,11 @@ void GameScene::Update() {
 
 	player_->Collision(*enemy_);
 	enemy_->Collision(*player_);
+
+
+	camera_->rotate.y = player_->GetRotate();
+	camera_->Update(player_->GetPos());
+	water_->Update(camera_->GetPos());
 
 	//startMessage_->Debug("startMessage_");
 	if (0.0f < messageAlpah_) {
@@ -98,10 +102,8 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	meshManager_->ResetDrawCount();
 
-	camera_->rotate.y = player_->GetRotate();
-	camera_->Update(player_->GetPos());
 
-	water_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+	water_->Draw(camera_->GetViewProjection());
 
 	player_->Draw(*camera_);
 

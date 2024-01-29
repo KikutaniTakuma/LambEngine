@@ -26,9 +26,9 @@ private:
 public:
 	void Init();
 
-	void Update();
+	void Update(const Vector3& cameraPos);
 
-	void Draw(const Mat4x4& cameraMat, const Vector3& cameraPos);
+	void Draw(const Mat4x4& cameraMat);
 
 	void Debug(const std::string& guiName);
 

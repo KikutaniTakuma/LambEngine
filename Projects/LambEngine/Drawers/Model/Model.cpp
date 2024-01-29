@@ -62,7 +62,7 @@ void Model::CreateGraphicsPipeline() {
 		range[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 
 		std::array<D3D12_DESCRIPTOR_RANGE, 1> rangeCBV = {};
-		rangeCBV[0].NumDescriptors = 3;
+		rangeCBV[0].NumDescriptors = 4;
 		rangeCBV[0].BaseShaderRegister = 0;
 		rangeCBV[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 		rangeCBV[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
@@ -129,11 +129,15 @@ Model::Model() :
 	colorBuf_.shaderRegister_ = 2;
 	*colorBuf_ = UintToVector4(color);
 
+	*isLighting_ = 1u;
+
 	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
-	descriptorHeap->BookingHeapPos(3u);
+	descriptorHeap->BookingHeapPos(4u);
 	descriptorHeap->CreateView(wvpData_);
 	descriptorHeap->CreateView(dirLig_);
 	descriptorHeap->CreateView(colorBuf_);
+	descriptorHeap->CreateView(isLighting_);
+
 }
 
 Model::Model(const std::string& fileName) :
@@ -358,4 +362,5 @@ Model::~Model() {
 	descriptorHeap->ReleaseView(wvpData_.GetHandleUINT());
 	descriptorHeap->ReleaseView(dirLig_.GetHandleUINT());
 	descriptorHeap->ReleaseView(colorBuf_.GetHandleUINT());
+	descriptorHeap->ReleaseView(isLighting_.GetHandleUINT());
 }

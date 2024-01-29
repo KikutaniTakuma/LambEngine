@@ -42,6 +42,9 @@ private:
 	ConstBuffer<Normals> normalVector_;
 	ConstBuffer<Vector2> randomVec_;
 	ConstBuffer<Mesh::Light> light_;
+	ConstBuffer<float> densityScale_;
 
 	class Texture* caustics_;
+
+	Vector2 speed_;
 };

@@ -42,11 +42,12 @@ void TitleScene::Finalize()
 void TitleScene::Update()
 {
 	camera_->Debug("camera");
+	camera_->Update();
 
 	player_->Debug("player");
 	player_->Update();
 
-	water_->Update();
+	water_->Update(camera_->GetPos());
 
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
 		sceneManager_->SceneChange(BaseScene::ID::Game);
@@ -58,10 +59,9 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	camera_->Update();
 
 
-	water_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+	water_->Draw(camera_->GetViewProjection());
 	player_->Draw(camera_->GetViewProjection(), camera_->GetPos());
 
 	str_.Draw();

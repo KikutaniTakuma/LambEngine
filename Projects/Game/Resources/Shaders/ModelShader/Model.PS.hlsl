@@ -81,7 +81,10 @@ PixelShaderOutPut main(VertexShaderOutput input)
 	lig.x += 0.2f;
 	lig.y += 0.2f;
 	lig.z += 0.2f;
-	output.color.xyz *= lig;
+    if (isLighting == 1)
+    {
+        output.color.xyz *= lig;
+    }
 
 	return output;
 }

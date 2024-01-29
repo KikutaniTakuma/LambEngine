@@ -32,11 +32,13 @@ void Water::Init() {
 		delete waterPipelineObject_;
 		throw err;
 	}
-	pera_ = std::make_unique<PeraRender>();
+	int32_t waterScale = 1;
+	pera_ = std::make_unique<PeraRender>(1280 * waterScale,1280 * waterScale);
 	pera_->Initialize(waterPipelineObject_);
 	pos.y = -0.1f;
-	scale.x = 150.0f;
-	scale.y = 150.0f;
+	pos.z = 0.0f;
+	scale.x = 200.0f;
+	scale.y = 200.0f;
 	rotate.x = 1.57f;
 
 	staticCamera_ = std::make_unique<Camera>();
@@ -55,7 +57,9 @@ void Water::Init() {
 	bloom_->Initialize("./Resources/Shaders/PostShader/PostAveraging.PS.hlsl");
 }
 
-void Water::Update() {
+void Water::Update(const Vector3& cameraPos) {
+	waterPipelineObject_->SetCameraPos(cameraPos);
+	
 	pera_->pos = pos;
 	pera_->scale = scale;
 	pera_->rotate = rotate;
@@ -68,14 +72,11 @@ void Water::Update() {
 	bloom_->Update();
 }
 
-void Water::Draw(const Mat4x4& cameraMat, const Vector3& cameraPos) {
-	waterPipelineObject_->SetCameraPos(cameraPos);
+void Water::Draw(const Mat4x4& cameraMat) {
 
 	pera_->PreDraw();
 	waterSurface_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, false);
 	pera_->Draw(cameraMat, Pipeline::None, nullptr, true);
-
-	pera_->Update();
 
 	pera_->PreDraw();
 	waterSurface_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, false);
@@ -89,9 +90,12 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
 	waterSurface_->Debug(guiName.c_str());
-	ImGui::DragFloat3("pos", &pos.x, 0.01f);
-	ImGui::DragFloat3("scale", &scale.x, 0.01f);
-	ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+	if (ImGui::TreeNode("WaterSRT")) {
+		ImGui::DragFloat3("pos", &pos.x, 0.01f);
+		ImGui::DragFloat3("scale", &scale.x, 0.01f);
+		ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+		ImGui::TreePop();
+	}
 	ImGui::End();
 #endif // _DEBUG
 }

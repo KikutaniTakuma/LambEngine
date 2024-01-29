@@ -95,6 +95,10 @@ public:
 		return wvpData_->worldMat;
 	}
 
+	void SetIsLighting(bool isLighting) {
+		*isLighting_ = static_cast<uint32_t>(isLighting);
+	}
+
 public:
 	Vector3 pos;
 	Vector3 rotate;
@@ -117,4 +121,5 @@ private:
 	ConstBuffer<Mesh::Light> dirLig_;
 
 	ConstBuffer<Vector4> colorBuf_;
+	ConstBuffer<uint32_t> isLighting_;
 };
