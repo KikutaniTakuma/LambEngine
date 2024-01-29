@@ -11,6 +11,7 @@
 #include "Game/Water/Water.h"
 #include "Game/Player/Player.h"
 #include "Game/Enemy/Enemy.h"
+#include "Game/Cloud/Cloud.h"
 
 GameScene::GameScene() :
 	BaseScene(BaseScene::ID::Game)
@@ -41,6 +42,13 @@ void GameScene::Initialize() {
 	startMessage_->texScalar = 0.63f;
 
 	messageAlpah_ = 1.0f;
+
+
+	cloud_ = Cloud::GetInstance();
+
+	skydome_.reset(new SkyDome);
+	skydome_->Initialize();
+	skydome_->SetTexture(cloud_->GetTex());
 }
 
 void GameScene::Finalize() {
@@ -75,6 +83,9 @@ void GameScene::Update() {
 	camera_->Update(player_->GetPos());
 	water_->Update(camera_->GetPos());
 
+	cloud_->Update();
+	skydome_->Upadate();
+
 	//startMessage_->Debug("startMessage_");
 	if (0.0f < messageAlpah_) {
 		messageAlpah_ -= 0.2f * Lamb::DeltaTime();
@@ -102,6 +113,8 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	meshManager_->ResetDrawCount();
 
+	cloud_->Draw();
+	skydome_->Draw(*camera_);
 
 	water_->Draw(camera_->GetViewProjection());
 

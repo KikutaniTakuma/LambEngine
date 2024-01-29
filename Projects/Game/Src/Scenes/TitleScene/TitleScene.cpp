@@ -3,6 +3,7 @@
 #include <cmath>
 #include <numbers>
 #include "Utils/EngineInfo/EngineInfo.h"
+#include "Game/Cloud/Cloud.h"
 
 TitleScene::TitleScene():
 	BaseScene{BaseScene::ID::Title}
@@ -33,6 +34,12 @@ void TitleScene::Initialize()
 	startMessage_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
 	startMessage_ << "Ａボタン押してちょんまげ";
 	startMessage_.pos = { 144.0f, 539.0f };
+
+	cloud_ = Cloud::GetInstance();
+
+	skydome_.reset(new SkyDome);
+	skydome_->Initialize();
+	skydome_->SetTexture(cloud_->GetTex());
 }
 
 void TitleScene::Finalize()
@@ -41,11 +48,15 @@ void TitleScene::Finalize()
 
 void TitleScene::Update()
 {
+	cloud_->Update();
+	skydome_->Upadate();
+
 	camera_->Debug("camera");
 	camera_->Update();
 
 	player_->Debug("player");
 	player_->Update();
+
 
 	water_->Update(camera_->GetPos());
 
@@ -59,7 +70,8 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-
+	cloud_->Draw();
+	skydome_->Draw(*camera_);
 
 	water_->Draw(camera_->GetViewProjection());
 	player_->Draw(camera_->GetViewProjection(), camera_->GetPos());

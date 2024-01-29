@@ -62,6 +62,9 @@
     <ClCompile Include="Src\Game\Cloud\Cloud.cpp">
       <Filter>Game\Cloud</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\SkyDome\SkyDome.cpp">
+      <Filter>Game\Skydome</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -133,6 +136,9 @@
     <Filter Include="Game\Cloud">
       <UniqueIdentifier>{b9dbfc0b-e0eb-4bb3-b034-5e2f0dd99092}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Skydome">
+      <UniqueIdentifier>{3a7d72dd-98b1-426d-8ded-365ff6fff89b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -194,6 +200,9 @@
     </ClInclude>
     <ClInclude Include="Src\Game\Cloud\Cloud.h">
       <Filter>Game\Cloud</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\SkyDome\SkyDome.h">
+      <Filter>Game\Skydome</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

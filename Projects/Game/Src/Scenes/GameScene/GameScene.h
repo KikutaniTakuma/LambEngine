@@ -8,6 +8,7 @@
 #include "GlobalVariables/GlobalVariables.h"
 #include "Game/CollisionManager/Collider/Collider.h"
 #include "Utils/Easing/Easing.h"
+#include "Game/SkyDome/SkyDome.h"
 
 class GameScene : public BaseScene {
 public:
@@ -33,6 +34,9 @@ public:
 	std::unique_ptr<class Player> player_;
 	std::unique_ptr<class Enemy> enemy_;
 	std::unique_ptr<Camera> uiCamera_;
+
+	std::unique_ptr<SkyDome> skydome_;
+	class Cloud* cloud_;
 
 
 	std::unique_ptr<Texture2D> startMessage_;
