@@ -41,4 +41,16 @@ public:
 
 	std::unique_ptr<Texture2D> startMessage_;
 	float messageAlpah_;
+
+#ifdef _DEBUG
+	bool isDebugCamera_ = false;
+#endif // _DEBUG
+
+
+	class Audio* waterSE_;
+	class Audio* clearSE_;
+	class Audio* playerDamageSE_;
+	class Audio* enemyDamageSE_;
+	class Audio* bossBattleBGM_;
+
 };

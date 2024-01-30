@@ -12,6 +12,7 @@
 #include "Game/Player/Player.h"
 #include "Game/Enemy/Enemy.h"
 #include "Game/Cloud/Cloud.h"
+#include "AudioManager/AudioManager.h"
 
 GameScene::GameScene() :
 	BaseScene(BaseScene::ID::Game)
@@ -49,10 +50,22 @@ void GameScene::Initialize() {
 	skydome_.reset(new SkyDome);
 	skydome_->Initialize();
 	skydome_->SetTexture(cloud_->GetTex());
+
+	waterSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Water.wav", true);
+	waterSE_->Start(0.5f);
+
+	clearSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Clear.wav", false);
+	playerDamageSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Player_Damage.wav", false);
+	enemyDamageSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Enemy_Damage.wav", false);
+	bossBattleBGM_ = audioManager_->LoadWav("./Resources/Sound/BGM_BossBattle.wav", true);
 }
 
 void GameScene::Finalize() {
-
+	waterSE_->Stop();
+	clearSE_->Stop();
+	playerDamageSE_->Stop();
+	enemyDamageSE_->Stop();
+	bossBattleBGM_->Stop();
 }
 
 void GameScene::Update() {
@@ -63,24 +76,50 @@ void GameScene::Update() {
 	}
 	//water_->Debug("water");
 
+#ifdef _DEBUG
+	if (!isDebugCamera_) {
+#endif // _DEBUG
 
-	player_->Move();
-	//player_->Debug("player");
-	player_->Update(*camera_);
+		player_->Move();
+		//player_->Debug("player");
+		player_->Update(*camera_);
 
 
-	enemy_->Debug("Boss");
-	enemy_->Update(*player_, *camera_);
+		enemy_->Debug("Boss");
+		enemy_->Update(*player_, *camera_);
 
 
-	player_->Attack(*enemy_);
+		player_->Attack(*enemy_);
 
-	player_->Collision(*enemy_);
-	enemy_->Collision(*player_);
+		if (player_->Collision(*enemy_)) {
+			playerDamageSE_->Start(1.0f);
+		}
+		if (enemy_->Collision(*player_)) {
+			enemyDamageSE_->Start(1.0f);
+		}
+
+#ifdef _DEBUG
+	}
+#endif // _DEBUG
 
 
 	camera_->rotate.y = player_->GetRotate();
+
+#ifdef _DEBUG
+	if(input_->GetInstance()->GetKey()->Pushed(DIK_TAB)){
+		isDebugCamera_ = !isDebugCamera_;
+	}
+
+	if (!isDebugCamera_) {
+		camera_->Update(player_->GetPos());
+	}
+	else {
+		camera_->Update();
+	}
+#else
 	camera_->Update(player_->GetPos());
+#endif // _DEBUG
+
 	water_->Update(camera_->GetPos());
 
 	cloud_->Update();
@@ -89,6 +128,9 @@ void GameScene::Update() {
 	//startMessage_->Debug("startMessage_");
 	if (0.0f < messageAlpah_) {
 		messageAlpah_ -= 0.2f * Lamb::DeltaTime();
+		if (messageAlpah_ < 0.0f) {
+			bossBattleBGM_->Start(0.3f);
+		}
 	}
 	else {
 		messageAlpah_ = 0.0f;
@@ -106,6 +148,8 @@ void GameScene::Update() {
 
 	if (enemy_->IsGameClear()) {
 		sceneManager_->SceneChange(BaseScene::ID::Title);
+		bossBattleBGM_->Stop();
+		clearSE_->Start(1.0f);
 	}
 
 }
