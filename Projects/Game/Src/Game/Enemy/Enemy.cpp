@@ -48,6 +48,10 @@ void Enemy::Initialize()
 	uiHp_->color = Vector4ToUint({ 0.8f,0.1f,0.1f,1.0f });
 	uiHp_->pos = { 357.0f, 278.0f };
 	uiHp_->scale = { 450.0f, 52.0f };
+
+
+	hitColorCountBasis_ = 0.1f;
+	hitColorCount_ = 0.0f;
 }
 
 void Enemy::Update(const Player& player, const Camera& camera)
@@ -55,7 +59,9 @@ void Enemy::Update(const Player& player, const Camera& camera)
 	model_->Update();
 
 	playerPos_ = player.GetPos();
-	toPlayer_ = player.GetPos() - model_->pos;
+	Vector3 posTmp = model_->pos;
+	posTmp.y += radius_;
+	toPlayer_ = player.GetPos() - posTmp;
 	toPlayerLength_ = toPlayer_.Length();
 	toPlayer_.Normalize();
 
@@ -128,8 +134,18 @@ bool Enemy::Collision(const Player& player)
 				hp_ -= i->GetAttack();
 				i->Unenable();
 				isClollsion = true;
+				model_->color = 0xff0000ff;
 			}
 		}
+	}
+
+	if (!isClollsion && hitColorCountBasis_ < hitColorCount_) {
+		model_->color = 0xffffffff;
+		hitColorCount_ = 0.0f;
+	}
+
+	if (model_->color == 0xff0000ff) {
+		hitColorCount_ += Lamb::DeltaTime();
 	}
 
 	return isClollsion;
@@ -149,7 +165,7 @@ void Enemy::CreateBehaviors() {
 	behavior_[Behavior::OneShot] = [this]() {
 		if (behaviorTime_ == 0.0f) {
 			currentBullet_->get()->SetStatus(
-				Vector3{ model_->pos.x,model_->pos.y,model_->pos.z },
+				Vector3{ model_->pos.x,model_->pos.y + radius_,model_->pos.z },
 				toPlayer_,
 				15.0f,
 				20.0f,
@@ -187,14 +203,18 @@ void Enemy::CreateBehaviors() {
 	};
 	behavior_[Behavior::CrossAttack] = [this]() {
 		if (static_cast<int32_t>(std::floor(behaviorTime_ * 100.0f)) % 20 == 0) {
+			float rotateCount = 0.0f;
 			for (int32_t i = 0; i < 4; i++) {
 				currentBullet_->get()->SetStatus(
 					Vector3{ model_->pos.x,model_->pos.y + radius_,model_->pos.z },
-					(toPlayer_ * Quaternion::MakeRotateAxisAngle(Vector3::kYIndentity, static_cast<float>(i) * 90.0f * Lamb::Math::toRadian<float>)).Normalize(),
+					(toPlayer_ * Quaternion::MakeRotateAxisAngle(Vector3::kYIndentity, rotateCount)).Normalize(),
 					15.0f,
 					20.0f,
 					Vector4ToUint({ 0.8f, 0.2f, 0.2f, 1.0f })
 				);
+
+				rotateCount += std::numbers::pi_v<float> * 0.5f;
+
 				currentBullet_->get()->Enable();
 
 				NextBullet();

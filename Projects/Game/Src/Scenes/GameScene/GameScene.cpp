@@ -98,12 +98,12 @@ void GameScene::Update() {
 			enemyDamageSE_->Start(1.0f);
 		}
 
+		camera_->rotate.y = player_->GetRotate();
 #ifdef _DEBUG
 	}
 #endif // _DEBUG
 
 
-	camera_->rotate.y = player_->GetRotate();
 
 #ifdef _DEBUG
 	if(input_->GetInstance()->GetKey()->Pushed(DIK_TAB)){

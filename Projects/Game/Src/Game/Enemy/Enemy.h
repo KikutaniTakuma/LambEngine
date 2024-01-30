@@ -135,4 +135,7 @@ private:
 	std::unique_ptr<Camera> uiCamera_;
 	std::unique_ptr<Texture2D> uiFrame_;
 	std::unique_ptr<Texture2D> uiHp_;
+
+	float hitColorCount_;
+	float hitColorCountBasis_;
 };
