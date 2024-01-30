@@ -5,7 +5,7 @@
 #include "Utils/Camera/Camera.h"
 #include "Drawers/Texture2D/Texture2D.h"
 #include <memory>
-#include <list>
+#include <array>
 
 class Player {
 public:
@@ -60,7 +60,7 @@ public:
 		return hp_;
 	}
 
-	inline const std::list<std::unique_ptr<Bullet>>& GetBullets() const {
+	inline const std::array<std::unique_ptr<Bullet>,6>& GetBullets() const {
 		return bullets_;
 	}
 
@@ -101,10 +101,12 @@ private:
 	float attack_;
 
 	// 弾(6発)
-	std::list<std::unique_ptr<Bullet>> bullets_;
+	std::array<std::unique_ptr<Bullet>,6> bullets_;
+	std::array<bool, 6> isDrawbulletsUI_;
 	bool isReloadable_;
 
-	decltype(bullets_)::iterator currentBullet_;
+
+	size_t currentBullet_;
 
 	// 当たり判定で使う
 	float radius_;

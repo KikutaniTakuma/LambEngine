@@ -242,13 +242,11 @@ void Player::AfterDraw()
 	uiHp_->Draw(uiCamera_->GetViewOthographics(), Pipeline::Normal, false, false);
 
 	uiBulletFrame_->Draw(uiCamera_->GetViewOthographics(), Pipeline::Normal, false);
-	auto bullet = bullets_.begin();
 
 	for (size_t i = 0; i < uiBullet_.size(); i++) {
-		if (!(*bullet)->GetIsActive()) {
+		if (isDrawbulletsUI_[i]) {
 			uiBullet_[i]->Draw(uiCamera_->GetViewOthographics(), Pipeline::Normal, false, false);
 		}
-		bullet++;
 	}
 }
 
@@ -311,9 +309,12 @@ void Player::Attack(const Enemy& enemy) {
 	static KeyInput* const key = Input::GetInstance()->GetKey();
 	static Gamepad* const gamepad = Input::GetInstance()->GetGamepad();
 
-	if (currentBullet_ == bullets_.end()) {
+	if (currentBullet_ == bullets_.size()) {
 		if (!bullets_.rbegin()->get()->GetIsActive()) {
-			currentBullet_ = bullets_.begin();
+			currentBullet_ = 0llu;
+			for (auto& i : isDrawbulletsUI_) {
+				i = true;
+			}  
 		}
 		else {
 			return;
@@ -321,10 +322,10 @@ void Player::Attack(const Enemy& enemy) {
 	}
 
 	if (key->Pushed(DIK_SPACE) || gamepad->Pushed(Gamepad::Button::A)) {
-		float bulletIndex = static_cast<float>(std::distance(bullets_.begin(), currentBullet_));
+		float bulletIndex = static_cast<float>(currentBullet_);
 		float bulletStateScale = 20.0f * (1.0f - (bulletIndex * 0.07f));
 
-		currentBullet_->get()->SetStatus(
+		bullets_[currentBullet_]->SetStatus(
 			model_->pos,
 			(enemy.GetPos() - model_->pos).Normalize(),
 			bulletStateScale,
@@ -332,19 +333,23 @@ void Player::Attack(const Enemy& enemy) {
 			0x808080ff,
 			0.5f
 		);
-		currentBullet_->get()->Enable();
+		bullets_[currentBullet_]->Enable();
+
+		isDrawbulletsUI_[currentBullet_] = false;
+
 		currentBullet_++;
 	}
 }
 
 void Player::CreateBullets() {
-	bullets_.resize(6u);
-
 	for (auto& i : bullets_) {
 		i.reset(new Bullet{});
 
 		i->Initialize();
 	}
+	for (auto& i : isDrawbulletsUI_) {
+		i = true;
+	}
 
-	currentBullet_ = bullets_.begin();
+	currentBullet_ = 0llu;
 }
