@@ -17,8 +17,8 @@ void World::Initialize() {
 	// ロードのステータス
 	SceneLoad::setting = SceneLoad::Desc{
 		.fileName = "./Resources/Load.png",
-		.animationNumber = 4,
-		.animationSpeed = 500
+		.animationNumber = 6,
+		.animationSpeed = 100
 	};
 
 	Framework::Initialize();
