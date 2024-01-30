@@ -30,6 +30,7 @@ void SkyDome::Initialize()
 	// 屈折率
 	rayleighScattering_->air.refractiveIndex = 1.000277f;
 	rayleighScattering_->air.moleculesNum = 2.688f;
+	// ほんとは25乗だがあまりにも大きいので6乗で妥協
 	rayleighScattering_->air.scaleFilter = std::powf(10.0f, 6.0f);
 	rayleighScattering_->air.wavelength = 475.0f * std::powf(10.0f, -9.0f);
 
