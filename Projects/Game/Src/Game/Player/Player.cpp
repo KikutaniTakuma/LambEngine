@@ -13,7 +13,7 @@ void Player::Initialize()
 	model_.reset(new Model{"./Resources/Player/Player.obj"});
 	model_->scale *= 5.0f;
 
-	attack_ = 4.0f;
+	attack_ = 6.0f;
 
 	maxSpeed_ = std::numbers::pi_v<float> / 8.0f;
 	speed_ = 0.0f;
