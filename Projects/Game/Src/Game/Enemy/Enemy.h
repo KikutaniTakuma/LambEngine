@@ -59,7 +59,7 @@ public:
 	// 描画
 	void Draw(const class Camera& camera);
 
-	void AfterDraw();
+	void AfterDraw(const Camera& camera);
 
 	// 調整
 	void Debug(const std::string& guiName);

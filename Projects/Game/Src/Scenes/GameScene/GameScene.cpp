@@ -170,7 +170,7 @@ void GameScene::Draw() {
 
 	player_->AfterDraw();
 
-	enemy_->AfterDraw();
+	enemy_->AfterDraw(*camera_);
 
 	startMessage_->Draw(uiCamera_->GetViewOthographics());
 }

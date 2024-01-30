@@ -100,9 +100,10 @@ void Enemy::Draw(const Camera& camera)
 	for (auto& i : bullets_) {
 		i->Draw(camera);
 	}
+
 }
 
-void Enemy::AfterDraw()
+void Enemy::AfterDraw([[maybe_unused]] const Camera& camera)
 {
 	particle_->Draw(Vector3::kZero, particleCamera_->GetViewOthographics());
 
