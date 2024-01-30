@@ -21,6 +21,18 @@ void SkyDome::Initialize()
 	cbvSrvUavHeap->CreateView(rayleighScattering_);
 
 	tex_ = TextureManager::GetInstance()->GetWhiteTex();
+
+	rayleighScattering_->light.color = Vector4::kIdentity;
+	rayleighScattering_->light.direction = -Vector3::kYIndentity;
+	rayleighScattering_->light.pos = Vector3::kYIndentity * 1000.0f;
+	rayleighScattering_->light.intensity = 3.0f;
+
+	// 屈折率
+	rayleighScattering_->air.refractiveIndex = 1.000277f;
+	rayleighScattering_->air.moleculesNum = 2.688f;
+	rayleighScattering_->air.scaleFilter = std::powf(10.0f, 6.0f);
+	rayleighScattering_->air.wavelength = 475.0f * std::powf(10.0f, -9.0f);
+
 }
 
 void SkyDome::Finalize()
@@ -37,6 +49,9 @@ void SkyDome::Upadate()
 
 void SkyDome::Draw(const Camera& camera)
 {
+	rayleighScattering_->cameraPos = camera.GetPos();
+	rayleighScattering_->viewDirection = Vector3::kZIndentity * Mat4x4::MakeRotate(camera.rotate);
+
 	if (data_.empty()) {
 		data_ = mesh_->CopyBuffer();
 	}

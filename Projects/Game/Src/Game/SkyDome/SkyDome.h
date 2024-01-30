@@ -30,12 +30,17 @@ private:
 
 		// スケールフィルター
 		float scaleFilter;
+
+		float wavelength;
+
 	};
 
 public:
 	struct RayleighScatteringStatus {
 		IncidentLight light;
 		AirStatus air;
+		Vector3 viewDirection;
+		Vector3 cameraPos;
 	};
 
 public:
