@@ -4,6 +4,7 @@
 #include <numbers>
 #include "Utils/EngineInfo/EngineInfo.h"
 #include "Game/Cloud/Cloud.h"
+#include "AudioManager/AudioManager.h"
 
 TitleScene::TitleScene():
 	BaseScene{BaseScene::ID::Title}
@@ -40,10 +41,17 @@ void TitleScene::Initialize()
 	skydome_.reset(new SkyDome);
 	skydome_->Initialize();
 	skydome_->SetTexture(cloud_->GetTex());
+
+	waterSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Water.wav", true);
+	waterSE_->Start(0.5f);
+
+	inGameSE_ = audioManager_->LoadWav("./Resources/Sound/SE_InGame.wav", false);
 }
 
 void TitleScene::Finalize()
 {
+	waterSE_->Stop();
+	inGameSE_->Stop();
 }
 
 void TitleScene::Update()
@@ -62,6 +70,7 @@ void TitleScene::Update()
 
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
 		sceneManager_->SceneChange(BaseScene::ID::Game);
+		inGameSE_->Start(0.8f);
 	}
 
 	messageAlpah_ += std::numbers::pi_v<float> *0.5f * Lamb::DeltaTime();

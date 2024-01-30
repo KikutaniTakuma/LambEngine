@@ -40,4 +40,7 @@ public:
 
 	StringOut startMessage_;
 	float messageAlpah_;
+
+	class Audio* waterSE_;
+	class Audio* inGameSE_;
 };
