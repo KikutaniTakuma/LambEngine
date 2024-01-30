@@ -47,6 +47,11 @@ void ParticleEditor::Editor() {
 		ImGui::End();
 	}
 	else {
+		ImGui::Begin("ParticleEditor");
+		ImGui::Checkbox("is3DCamera", &is3DCamera_);
+		ImGui::Checkbox("isLocalCamera", &isLocalCamera_);
+
+		ImGui::End();
 		particle_.Debug(currentLoadString_);
 		if (particle_.GetIsClose()) {
 			isOpen_ = false;
@@ -57,8 +62,25 @@ void ParticleEditor::Editor() {
 #endif // _DEBUG
 }
 
-void ParticleEditor::Draw() {
+void ParticleEditor::Draw(const Camera& camera) {
 #ifdef _DEBUG
-	particle_.Draw(camera_.rotate, camera_.GetViewOthographics());
+	if (isOpen_) {
+		if(isLocalCamera_){
+			if (is3DCamera_) {
+				particle_.Draw(camera_.rotate, camera_.GetViewProjection());
+			}
+			else {
+				particle_.Draw(camera_.rotate, camera_.GetViewOthographics());
+			}
+		}
+		else {
+			if (is3DCamera_) {
+				particle_.Draw(camera.rotate, camera.GetViewProjection());
+			}
+			else {
+				particle_.Draw(camera.rotate, camera.GetViewOthographics());
+			}
+		}
+	}
 #endif // _DEBUG
 }

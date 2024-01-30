@@ -25,7 +25,7 @@ private:
 public:
 	void Editor();
 
-	void Draw();
+	void Draw(const Camera& camera);
 
 private:
 	std::string inputLoadString_;
@@ -35,4 +35,7 @@ private:
 	bool isOpen_ = false;
 
 	Camera camera_;
+
+	bool is3DCamera_ = false;
+	bool isLocalCamera_ = true;
 };
