@@ -62,7 +62,7 @@ void ParticleEditor::Editor() {
 #endif // _DEBUG
 }
 
-void ParticleEditor::Draw(const Camera& camera) {
+void ParticleEditor::Draw([[maybe_unused]]const Camera& camera) {
 #ifdef _DEBUG
 	if (isOpen_) {
 		if(isLocalCamera_){
