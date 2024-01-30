@@ -95,7 +95,7 @@ void GameScene::Update() {
 			playerDamageSE_->Start(1.0f);
 		}
 		if (enemy_->Collision(*player_)) {
-			enemyDamageSE_->Start(1.0f);
+			enemyDamageSE_->Start(0.5f);
 		}
 
 		camera_->rotate.y = player_->GetRotate();
