@@ -275,13 +275,13 @@ void Player::Debug([[maybe_unused]]const std::string& guiName)
 #endif // _DEBUG
 }
 
-void Player::Collision(const Enemy& enemy)
+bool Player::Collision(const Enemy& enemy)
 {
 	const auto& enemyBullets = enemy.GetBullets();
 
 	// もし無敵だったら
 	if (isCollisioned_) {
-		return;
+		return false;
 	}
 
 	bool isCollision = false;
@@ -295,10 +295,12 @@ void Player::Collision(const Enemy& enemy)
 				hp_ -= i->GetAttack();
 
 				i->Unenable();
-				break;
+				return true;
 			}
 		}
 	}
+
+	return false;
 }
 
 void Player::Attack(const Enemy& enemy) {

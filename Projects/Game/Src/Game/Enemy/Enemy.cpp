@@ -116,18 +116,23 @@ void Enemy::Debug([[maybe_unused]]const std::string& guiName)
 #endif // _DEBUG
 }
 
-void Enemy::Collision(const Player& player)
+bool Enemy::Collision(const Player& player)
 {
 	const auto& playerBullets = player.GetBullets();
+
+	bool isClollsion = false;
 
 	for (const auto& i : playerBullets) {
 		if (i->GetIsActive()) {
 			if (i->CollisionBullet(model_->pos, radius_)) {
 				hp_ -= i->GetAttack();
 				i->Unenable();
+				isClollsion = true;
 			}
 		}
 	}
+
+	return isClollsion;
 }
 
 void Enemy::StartAttack()

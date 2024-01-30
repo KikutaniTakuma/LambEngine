@@ -64,7 +64,7 @@ public:
 	// 調整
 	void Debug(const std::string& guiName);
 
-	void Collision(const class Player& player);
+	bool Collision(const class Player& player);
 
 	void StartAttack();
 
