@@ -58,6 +58,18 @@ void GameScene::Initialize() {
 	playerDamageSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Player_Damage.wav", false);
 	enemyDamageSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Enemy_Damage.wav", false);
 	bossBattleBGM_ = audioManager_->LoadWav("./Resources/Sound/BGM_BossBattle.wav", true);
+
+	clearMessage_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
+	clearMessage_ << "クリア！！";
+	clearMessage_.scale *= 5.0f;
+	clearMessage_.pos = { 134.0f, 196.0f };
+	clearMessage_.color = 0xff;
+
+	hudMessage_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
+	hudMessage_ << " A ボタンを押してタイトルへ戻る";
+	hudMessage_.scale *= 1.0f;
+	hudMessage_.pos = { 288.0f, 500.0f };
+	hudMessage_.color = 0xff;
 }
 
 void GameScene::Finalize() {
@@ -70,6 +82,8 @@ void GameScene::Finalize() {
 
 void GameScene::Update() {
 	camera_->Debug("camera");
+	clearMessage_.Debug("clearMessage_");
+	hudMessage_.Debug("hudMessage_");
 
 	if (player_->IsGameOver()) {
 		sceneManager_->SceneChange(BaseScene::ID::Game);
@@ -80,25 +94,28 @@ void GameScene::Update() {
 	if (!isDebugCamera_) {
 #endif // _DEBUG
 
-		player_->Move();
-		//player_->Debug("player");
-		player_->Update(*camera_);
+		if (!isGameClear_) {
+			player_->Move();
+			//player_->Debug("player");
+			player_->Update(*camera_);
 
 
-		enemy_->Debug("Boss");
-		enemy_->Update(*player_, *camera_);
+			enemy_->Debug("Boss");
+			enemy_->Update(*player_, *camera_);
 
 
-		player_->Attack(*enemy_);
+			player_->Attack(*enemy_);
 
-		if (player_->Collision(*enemy_)) {
-			playerDamageSE_->Start(1.0f);
+			if (player_->Collision(*enemy_)) {
+				playerDamageSE_->Start(1.0f);
+			}
+			if (enemy_->Collision(*player_)) {
+				enemyDamageSE_->Start(0.5f);
+			}
+
+			camera_->rotate.y = player_->GetRotate();
+
 		}
-		if (enemy_->Collision(*player_)) {
-			enemyDamageSE_->Start(0.5f);
-		}
-
-		camera_->rotate.y = player_->GetRotate();
 #ifdef _DEBUG
 	}
 #endif // _DEBUG
@@ -147,9 +164,18 @@ void GameScene::Update() {
 	}
 
 	if (enemy_->IsGameClear()) {
-		sceneManager_->SceneChange(BaseScene::ID::Title);
 		bossBattleBGM_->Stop();
-		clearSE_->Start(1.0f);
+		if (!isGameClear_) {
+			clearSE_->Start(1.0f);
+		}
+		isGameClear_ = true;
+
+		hudMessage_.color = static_cast<uint32_t>(std::abs(std::cos(messageAlpha_) * 255.0f));
+		messageAlpha_ += std::numbers::pi_v<float> * 0.5f * Lamb::DeltaTime();
+	}
+
+	if (isGameClear_ && input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
+		sceneManager_->SceneChange(BaseScene::ID::Title);
 	}
 
 }
@@ -164,13 +190,21 @@ void GameScene::Draw() {
 
 	player_->Draw(*camera_);
 
-	enemy_->Draw(*camera_);
+	if (!isGameClear_) {
+		enemy_->Draw(*camera_);
 
-	meshManager_->Draw();
+		meshManager_->Draw();
 
-	player_->AfterDraw();
+		player_->AfterDraw();
 
-	enemy_->AfterDraw(*camera_);
+		enemy_->AfterDraw(*camera_);
 
-	startMessage_->Draw(uiCamera_->GetViewOthographics());
+		startMessage_->Draw(uiCamera_->GetViewOthographics());
+	}
+
+
+	if (isGameClear_) {
+		clearMessage_.Draw();
+		hudMessage_.Draw();
+	}
 }

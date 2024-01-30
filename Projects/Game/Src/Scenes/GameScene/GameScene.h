@@ -53,4 +53,10 @@ public:
 	class Audio* enemyDamageSE_;
 	class Audio* bossBattleBGM_;
 
+
+	StringOut clearMessage_;
+	StringOut hudMessage_;
+	float messageAlpha_;
+
+	bool isGameClear_ = false;
 };

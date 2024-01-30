@@ -117,7 +117,7 @@ void Enemy::Debug([[maybe_unused]]const std::string& guiName)
 	ImGui::Begin(guiName.c_str());
 	model_->Debug(guiName);
 	ImGui::DragFloat("radius", &radius_);
-	ImGui::Text("hp : %.0f", hp_);
+	ImGui::DragFloat("hp", &hp_);
 	ImGui::Text("toPlayerLength_ : %.2f", toPlayerLength_);
 	ImGui::End();
 #endif // _DEBUG
