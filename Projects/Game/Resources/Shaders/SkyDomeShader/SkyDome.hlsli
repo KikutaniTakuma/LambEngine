@@ -4,36 +4,27 @@ cbuffer WorldViewProjection : register(b0){
 }
 
 struct IncidentLight {
-	// 光の色
-	float4 color;
-
-	// 方向
-	float3 direction;
-
-	// ポジション
-	float3 pos;
-
-	// 光の強さ
-	float intensity;
+	float32_t4 color;
+	float32_t3 direction;
+	float32_t3 pos;
+	float32_t intensity;
 };
 
 struct AirStatus {
-	// 屈折率
-	float refractiveIndex;
-
-	// 単位体積当たりの分子数(余りにも値が大きいのでスケールフィルターと分ける)
-	float moleculesNum;
-
-	// スケールフィルター
-	float scaleFilter;
+	float32_t refractiveIndex;
+	float32_t moleculesNum;
+	float32_t scaleFilter;
+	float32_t wavelength;
 };
 
 struct RayleighScatteringStatus {
 	IncidentLight light;
 	AirStatus air;
+	float32_t3 viewDirection;
+	float32_t3 cameraPos;
 };
 
-ConstantBuffer<RayleighScatteringStatus> rayleighScatteringStatus : register(b1);
+ConstantBuffer<RayleighScatteringStatus> kRayleighScattering : register(b1);
 
 struct VertexShaderOutput{
     float32_t4 position : SV_POSITION;
