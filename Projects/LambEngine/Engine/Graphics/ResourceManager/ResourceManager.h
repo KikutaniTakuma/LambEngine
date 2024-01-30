@@ -28,6 +28,7 @@ private:
 public:
 	void SetTextureResource(const std::string& fileName);
 	void SetModelResource(const std::string& fileName);
+	void SetAudioResource(const std::string& fileName);
 
 public:
 	void Unload();
@@ -43,6 +44,7 @@ public:
 private:
 	std::stack<std::string> resourcesTexture_;
 	std::stack<std::string> resourcesModel_;
+	std::stack<std::string> resourcesAudio_;
 
 	bool isEnable_ = false;
 };
