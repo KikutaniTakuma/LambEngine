@@ -33,7 +33,7 @@ void TitleScene::Initialize()
 	str_.color = 0xff;
 
 	startMessage_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
-	startMessage_ << "Ａボタン押してちょんまげの味噌茶漬け";
+	startMessage_ << "Ａボタン押してください";
 	startMessage_.pos = { 144.0f, 539.0f };
 
 	cloud_ = Cloud::GetInstance();
