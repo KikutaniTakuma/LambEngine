@@ -30,17 +30,5 @@ public:
 	void Draw() override;
 
 public:
-	class Water* water_;
-	StringOut str_;
-	std::unique_ptr<Camera> uiCamera_;
-	std::unique_ptr<Model> player_;
-
-	std::unique_ptr<SkyDome> skydome_;
-	class Cloud* cloud_;
-
-	StringOut startMessage_;
-	float messageAlpah_;
-
-	class Audio* waterSE_;
-	class Audio* inGameSE_;
+	std::unique_ptr<Model> model_;
 };
