@@ -1,5 +1,4 @@
 #include "World.h"
-#include "Scenes/Manager/SceneManager.h"
 #include "Editor/ParticleEditor/ParticleEditor.h"
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "../Game/Water/Water.h"
@@ -30,10 +29,10 @@ void World::Initialize() {
 	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/mincho_size_32.spritefont");
 
 
+	// シーンマネージャー初期化
+	sceneManager_ = std::make_unique<SceneManager>();
 
-	sceneManager_ = SceneManager::GetInstance();
-
-	sceneManager_->Initialize(BaseScene::ID::Title, BaseScene::ID::Title);
+	sceneManager_->Initialize(BaseScene::ID::Game, BaseScene::ID::Game);
 
 	ParticleEditor::Initialize();
 	particleEditor_ = ParticleEditor::GetInstance();
@@ -46,6 +45,8 @@ void World::Finalize() {
 	if (sceneManager_) {
 		sceneManager_->Finalize();
 	}
+
+	sceneManager_.reset();
 
 	ParticleEditor::Finalize();
 

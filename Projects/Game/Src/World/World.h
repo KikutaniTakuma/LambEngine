@@ -1,5 +1,6 @@
 #pragma once
 #include "Framework/Framework.h"
+#include "Scenes/Manager/SceneManager.h"
 
 class World final : public Framework {
 public:
@@ -21,7 +22,7 @@ private:
 	void Draw()override;
 
 private:
-	class SceneManager* sceneManager_ = nullptr;
+	std::unique_ptr<SceneManager> sceneManager_;
 
 	class ParticleEditor* particleEditor_ = nullptr;
 };
