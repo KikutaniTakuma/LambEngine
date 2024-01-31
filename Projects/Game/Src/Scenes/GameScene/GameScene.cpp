@@ -27,184 +27,35 @@ void GameScene::Initialize() {
 
 	water_ = Water::GetInstance();
 
-	player_.reset(new Player{});
-	player_->Initialize();
-
-	enemy_.reset(new Enemy{});
-	enemy_->Initialize();
-
-	camera_->Update(player_->GetPos());
-
-	uiCamera_.reset(new Camera{});
-	uiCamera_->Update();
-
-	startMessage_.reset(new Texture2D{ "./Resources/Message/StartMessage.png" });
-	startMessage_->isSameTexSize = true;
-	startMessage_->texScalar = 0.63f;
-
-	messageAlpah_ = 1.0f;
-
-
 	cloud_ = Cloud::GetInstance();
 
 	skydome_.reset(new SkyDome);
 	skydome_->Initialize();
 	skydome_->SetTexture(cloud_->GetTex());
-
-	waterSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Water.wav", true);
-	waterSE_->Start(0.5f);
-
-	clearSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Clear.wav", false);
-	playerDamageSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Player_Damage.wav", false);
-	enemyDamageSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Enemy_Damage.wav", false);
-	bossBattleBGM_ = audioManager_->LoadWav("./Resources/Sound/BGM_BossBattle.wav", true);
-
-	clearMessage_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
-	clearMessage_ << "クリア！！";
-	clearMessage_.scale *= 5.0f;
-	clearMessage_.pos = { 134.0f, 196.0f };
-	clearMessage_.color = 0xff;
-
-	hudMessage_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
-	hudMessage_ << " A ボタンを押してタイトルへ戻る";
-	hudMessage_.scale *= 1.0f;
-	hudMessage_.pos = { 288.0f, 500.0f };
-	hudMessage_.color = 0xff;
 }
 
 void GameScene::Finalize() {
-	waterSE_->Stop();
-	clearSE_->Stop();
-	playerDamageSE_->Stop();
-	enemyDamageSE_->Stop();
-	bossBattleBGM_->Stop();
+	
 }
 
 void GameScene::Update() {
 	camera_->Debug("camera");
-	clearMessage_.Debug("clearMessage_");
-	hudMessage_.Debug("hudMessage_");
-
-	if (player_->IsGameOver()) {
-		sceneManager_->SceneChange(BaseScene::ID::Game);
-	}
-	//water_->Debug("water");
-
-#ifdef _DEBUG
-	if (!isDebugCamera_) {
-#endif // _DEBUG
-
-		if (!isGameClear_) {
-			player_->Move();
-			//player_->Debug("player");
-			player_->Update(*camera_);
-
-
-			enemy_->Debug("Boss");
-			enemy_->Update(*player_, *camera_);
-
-
-			player_->Attack(*enemy_);
-
-			if (player_->Collision(*enemy_)) {
-				playerDamageSE_->Start(1.0f);
-			}
-			if (enemy_->Collision(*player_)) {
-				enemyDamageSE_->Start(0.5f);
-			}
-
-			camera_->rotate.y = player_->GetRotate();
-
-		}
-#ifdef _DEBUG
-	}
-#endif // _DEBUG
-
-
-
-#ifdef _DEBUG
-	if(input_->GetInstance()->GetKey()->Pushed(DIK_TAB)){
-		isDebugCamera_ = !isDebugCamera_;
-	}
-
-	if (!isDebugCamera_) {
-		camera_->Update(player_->GetPos());
-	}
-	else {
-		camera_->Update();
-	}
-#else
-	camera_->Update(player_->GetPos());
-#endif // _DEBUG
+	
+	camera_->Update();
 
 	water_->Update(camera_->GetPos());
 
 	cloud_->Update();
 	skydome_->Upadate();
 
-	//startMessage_->Debug("startMessage_");
-	if (0.0f < messageAlpah_) {
-		messageAlpah_ -= 0.2f * Lamb::DeltaTime();
-		if (messageAlpah_ < 0.0f) {
-			bossBattleBGM_->Start(0.3f);
-		}
-	}
-	else {
-		messageAlpah_ = 0.0f;
-	}
-	startMessage_->color = Vector4ToUint({1.0f,1.0f,1.0f,std::max(messageAlpah_,0.0f )});
-	startMessage_->Update();
-
-	if (messageAlpah_ == 0.0f) {
-		enemy_->StartAttack();
-	}
-
 	if (input_->GetKey()->Pushed(DIK_ESCAPE) || input_->GetGamepad()->Pushed(Gamepad::Button::START)) {
 		sceneManager_->SceneChange(BaseScene::ID::Title);
 	}
-
-	if (enemy_->IsGameClear()) {
-		bossBattleBGM_->Stop();
-		if (!isGameClear_) {
-			clearSE_->Start(1.0f);
-		}
-		isGameClear_ = true;
-
-		hudMessage_.color = static_cast<uint32_t>(std::abs(std::cos(messageAlpha_) * 255.0f));
-		messageAlpha_ += std::numbers::pi_v<float> * 0.5f * Lamb::DeltaTime();
-	}
-
-	if (isGameClear_ && input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
-		sceneManager_->SceneChange(BaseScene::ID::Title);
-	}
-
 }
 
 void GameScene::Draw() {
-	meshManager_->ResetDrawCount();
-
 	cloud_->Draw();
 	skydome_->Draw(*camera_);
 
 	water_->Draw(camera_->GetViewProjection());
-
-	player_->Draw(*camera_);
-
-	if (!isGameClear_) {
-		enemy_->Draw(*camera_);
-
-		meshManager_->Draw();
-
-		player_->AfterDraw();
-
-		enemy_->AfterDraw(*camera_);
-
-		startMessage_->Draw(uiCamera_->GetViewOthographics());
-	}
-
-
-	if (isGameClear_) {
-		clearMessage_.Draw();
-		hudMessage_.Draw();
-	}
 }
