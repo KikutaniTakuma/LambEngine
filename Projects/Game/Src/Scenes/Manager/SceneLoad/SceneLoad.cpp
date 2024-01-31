@@ -1,6 +1,6 @@
 #include "SceneLoad.h"
 #include "Engine/Engine.h"
-#include "Utils/Camera/Camera.h"
+#include "./Camera/Camera.h"
 #include "Utils/EngineInfo/EngineInfo.h"
 
 SceneLoad::Desc SceneLoad::setting = {};

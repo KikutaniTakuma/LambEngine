@@ -1,5 +1,5 @@
 #include "SkyDome.h"
-#include "Utils/Camera/Camera.h"
+#include "./Camera/Camera.h"
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"

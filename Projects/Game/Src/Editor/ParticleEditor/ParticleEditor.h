@@ -1,6 +1,6 @@
 #pragma once
 #include "Drawers/Particle/Particle.h"
-#include "Utils/Camera/Camera.h"
+#include "./Camera/Camera.h"
 
 class ParticleEditor {
 private:

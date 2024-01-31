@@ -1,6 +1,6 @@
 #pragma once
 #include "Utils/Flg/Flg.h"
-#include "Utils/Camera/Camera.h"
+#include "./Camera/Camera.h"
 #include <memory>
 
 class SubMenu {

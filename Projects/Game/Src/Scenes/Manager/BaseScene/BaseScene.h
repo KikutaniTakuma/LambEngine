@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/Camera/Camera.h"
+#include "Camera/Camera.h"
 #include <memory>
 
 class BaseScene {

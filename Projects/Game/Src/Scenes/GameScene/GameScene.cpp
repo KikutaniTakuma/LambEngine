@@ -9,8 +9,6 @@
 #include <format>
 #include "Engine/Graphics/PipelineObject/WaterPipeline/WaterPipeline.h"
 #include "Game/Water/Water.h"
-#include "Game/Player/Player.h"
-#include "Game/Enemy/Enemy.h"
 #include "Game/Cloud/Cloud.h"
 #include "AudioManager/AudioManager.h"
 
