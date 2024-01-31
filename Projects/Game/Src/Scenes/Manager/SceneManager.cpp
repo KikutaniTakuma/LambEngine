@@ -14,11 +14,6 @@
 #include <fstream>
 #include <format>
 
-SceneManager* const SceneManager::GetInstance() {
-	static SceneManager instance;
-	return &instance;
-}
-
 void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID) {
 	finishID_ = finishID;
 	preSceneID_ = firstScene.value();

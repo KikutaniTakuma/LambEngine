@@ -11,7 +11,7 @@
 #include "SceneLoad/SceneLoad.h"
 
 class SceneManager final {
-private:
+public:
 	SceneManager() = default;
 	SceneManager(const SceneManager&) = delete;
 	SceneManager(SceneManager&&) = delete;
@@ -19,9 +19,6 @@ private:
 
 	SceneManager& operator=(const SceneManager&) = delete;
 	SceneManager& operator=(SceneManager&&) = delete;
-
-public:
-	static SceneManager* const GetInstance();
 
 public:
 	void Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID);
