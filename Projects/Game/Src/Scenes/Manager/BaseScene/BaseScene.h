@@ -10,7 +10,6 @@ public:
 		Result,
 		Title,
 		StageSelect,
-		Customize,
 		Game,
 	};
 
