@@ -14,14 +14,16 @@ TitleScene::TitleScene():
 
 void TitleScene::Initialize()
 {
+	camera_->pos.y = 2.85f;
 	camera_->pos.z = -10.0f;
+	camera_->rotate.x = 0.21f;
 
-	model_.reset(new Model{ "./Resources/Enemy/Enemy.obj" });
+	model_.reset(new Model{ "./Resources/Ball.obj" });
 
-	model_->light.ptRange = 10.0f;
+	model_->light.ptRange = 5.0f;
 	model_->light.ptPos = model_->pos;
-	model_->light.ptPos.y = 5.0f;
-	model_->light.ptColor = Vector3::kIdentity;
+	model_->light.ptPos.y = 3.8f;
+	model_->light.ptColor = Vector3::kIdentity * 15.0f;
 }
 
 void TitleScene::Finalize()
