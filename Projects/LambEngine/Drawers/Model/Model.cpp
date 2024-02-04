@@ -342,16 +342,23 @@ void Model::InstancingDraw(const Mat4x4& viewProjectionMat, const Vector3& camer
 void Model::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	ImGui::DragFloat3("pos", &pos.x, 0.01f);
-	ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
-	ImGui::DragFloat3("scale", &scale.x, 0.01f);
-	ImGui::ColorEdit4("SphereColor", &colorBuf_->color.r);
-	ImGui::DragFloat3("ligDirection", &dirLig_->ligDirection.x, 0.01f);
-	dirLig_->ligDirection = dirLig_->ligDirection.Normalize();
-	ImGui::DragFloat3("ligColor", &dirLig_->ligColor.x, 0.01f);
-	ImGui::DragFloat3("ptPos", &dirLig_->ptPos.x, 0.01f);
-	ImGui::DragFloat3("ptColor", &dirLig_->ptColor.x, 0.01f);
-	ImGui::DragFloat("ptRange", &dirLig_->ptRange);
+
+	ImGui::ColorEdit4("モデル本体の色", &colorBuf_->color.r);
+	if (ImGui::TreeNode("モデルSRT")) {
+		ImGui::DragFloat3("pos", &pos.x, 0.01f);
+		ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+		ImGui::DragFloat3("scale", &scale.x, 0.01f);
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("ライト")) {
+		ImGui::DragFloat3("ligDirection", &light.ligDirection.x, 0.01f);
+		light.ligDirection = light.ligDirection.Normalize();
+		ImGui::DragFloat3("ligColor", &light.ligColor.x, 0.01f);
+		ImGui::DragFloat3("ptPos", &light.ptPos.x, 0.01f);
+		ImGui::DragFloat3("ptColor", &light.ptColor.x, 0.01f);
+		ImGui::DragFloat("ptRange", &light.ptRange);
+		ImGui::TreePop();
+	}
 
 
 	if (ImGui::TreeNode("LoadObj")) {
