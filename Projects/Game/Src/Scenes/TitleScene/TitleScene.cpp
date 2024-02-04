@@ -5,6 +5,7 @@
 #include "Utils/EngineInfo/EngineInfo.h"
 #include "Game/Cloud/Cloud.h"
 #include "AudioManager/AudioManager.h"
+#include "Utils/ScreenOut/ScreenOut.h"
 
 TitleScene::TitleScene():
 	BaseScene{BaseScene::ID::Title}
@@ -15,7 +16,12 @@ void TitleScene::Initialize()
 {
 	camera_->pos.z = -10.0f;
 
-	model_.reset(new Model{ "./Resources/Hololive/Watame/Watame.obj" });
+	model_.reset(new Model{ "./Resources/Enemy/Enemy.obj" });
+
+	model_->light.ptRange = 10.0f;
+	model_->light.ptPos = model_->pos;
+	model_->light.ptPos.y = 5.0f;
+	model_->light.ptColor = Vector3::kIdentity;
 }
 
 void TitleScene::Finalize()
@@ -25,10 +31,10 @@ void TitleScene::Finalize()
 
 void TitleScene::Update()
 {
-	camera_->Debug("camera");
+	camera_->Debug("カメラ");
 	camera_->Update();
 
-	model_->Debug("player");
+	model_->Debug("テスト用モデル");
 	model_->Update();
 
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
@@ -39,4 +45,7 @@ void TitleScene::Update()
 void TitleScene::Draw()
 {
 	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+
+	Lamb::screenout << "Model scene" << Lamb::endline
+		<< "Press space to change ""Water and cloud scene""";
 }
