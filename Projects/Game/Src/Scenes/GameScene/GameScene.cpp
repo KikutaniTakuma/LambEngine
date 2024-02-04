@@ -11,6 +11,7 @@
 #include "Game/Water/Water.h"
 #include "Game/Cloud/Cloud.h"
 #include "AudioManager/AudioManager.h"
+#include "Utils/ScreenOut/ScreenOut.h"
 
 GameScene::GameScene() :
 	BaseScene(BaseScene::ID::Game)
@@ -18,8 +19,9 @@ GameScene::GameScene() :
 
 void GameScene::Initialize() {
 	camera_->farClip = 3000.0f;
+	camera_->pos.y = 15.0f;
 	camera_->pos.z = -5.0f;
-	camera_->rotate.x = 0.04f;
+	camera_->rotate.x = 0.25f;
 	camera_->offset.z = -60.0f;
 	camera_->offset.y = 8.0f;
 
@@ -37,8 +39,7 @@ void GameScene::Finalize() {
 }
 
 void GameScene::Update() {
-	camera_->Debug("camera");
-	
+	camera_->Debug("カメラ");
 	camera_->Update();
 
 	water_->Update(camera_->GetPos());
@@ -46,7 +47,7 @@ void GameScene::Update() {
 	cloud_->Update();
 	skydome_->Upadate();
 
-	if (input_->GetKey()->Pushed(DIK_ESCAPE) || input_->GetGamepad()->Pushed(Gamepad::Button::START)) {
+	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::START)) {
 		sceneManager_->SceneChange(BaseScene::ID::Title);
 	}
 }
@@ -56,4 +57,7 @@ void GameScene::Draw() {
 	skydome_->Draw(*camera_);
 
 	water_->Draw(camera_->GetViewProjection());
+
+	Lamb::screenout << "Water and cloud scene" << Lamb::endline
+		<< "Press space to change ""Model scene""";
 }
