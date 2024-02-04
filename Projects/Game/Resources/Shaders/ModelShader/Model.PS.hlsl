@@ -25,7 +25,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
 
 	// メタリックすぎるので削除
 	// ディレクションライト鏡面反射光
-	/*float3 refVec = reflect(ligDirection, input.normal.xyz);
+	float3 refVec = reflect(ligDirection, input.normal.xyz);
 
 	float3 toEye = eyePos - input.worldPosition.xyz;
 	toEye = normalize(toEye);
@@ -34,7 +34,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
 	t = (t + abs(t)) * 0.5f;
 
 	t = pow(t, 5.0f);
-	float3 specDirection =  ligColor * t;*/
+	float3 specDirection =  ligColor * t;
 
 
 	float3 ligDir = input.worldPosition.xyz - ptPos;
@@ -49,9 +49,9 @@ PixelShaderOutPut main(VertexShaderOutput input)
 	float3 diffPoint = ptColor * t;
 
 	// ポイントライト鏡面反射光
-	float3 refVec = reflect(ligDir, input.normal);
+	refVec = reflect(ligDir, input.normal);
 
-	float3 toEye = eyePos - input.worldPosition.xyz;
+	toEye = eyePos - input.worldPosition.xyz;
 	toEye = normalize(toEye);
 
 	t  = dot(refVec,  toEye);
@@ -71,7 +71,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
 	specpoint *= affect;
 
 	float3 diffuseLig = diffPoint + diffDirection;
-	float3 specularLig = specpoint;// + specDirection;
+	float3 specularLig = specpoint + specDirection;
 
 	float3 lig = diffuseLig + specularLig;
 
