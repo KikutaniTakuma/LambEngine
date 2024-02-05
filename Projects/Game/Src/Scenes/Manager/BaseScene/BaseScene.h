@@ -8,9 +8,10 @@ class BaseScene {
 public:
 	enum class ID {
 		Result,
-		Title,
+		Drawer,
 		StageSelect,
 		Game,
+		Primitive
 	};
 
 public:

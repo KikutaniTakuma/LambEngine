@@ -9,7 +9,7 @@ Sphere::Sphere() :
 	loaclVec(radius,0.0f,0.0f),
 	scale(1.0f,1.0f,1.0f),
 	rotate(0.0f,0.0f,0.0f),
-	translation(0.0f,0.0f,10.0f),
+	translation(0.0f,0.0f,0.0f),
 	worldMat(),
 	kDivision(10),
 	spherePosList(std::make_unique<std::vector<std::vector<Vector3>>>(0))

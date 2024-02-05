@@ -39,12 +39,14 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 	ResourceManager::GetInstance()->Enable();
 
 #ifdef _DEBUG
-	sceneName_[BaseScene::ID::Title] = "Title";
 	sceneName_[BaseScene::ID::Game] = "Game";
+	sceneName_[BaseScene::ID::Drawer] = "Drawer";
+	sceneName_[BaseScene::ID::Primitive] = "Primitive";
 #endif // _DEBUG
 	sceneNum_;
-	sceneNum_[BaseScene::ID::Title] = DIK_1;
-	sceneNum_[BaseScene::ID::Game] = DIK_2;
+	sceneNum_[BaseScene::ID::Game] = DIK_1;
+	sceneNum_[BaseScene::ID::Drawer] = DIK_2;
+	sceneNum_[BaseScene::ID::Primitive] = DIK_3;
 }
 
 void SceneManager::SceneChange(std::optional<BaseScene::ID> next) {

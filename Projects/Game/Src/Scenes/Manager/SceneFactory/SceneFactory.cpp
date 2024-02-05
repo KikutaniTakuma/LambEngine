@@ -1,6 +1,7 @@
 #include "SceneFactory.h"
 #include "Scenes/GameScene/GameScene.h"
-#include "Scenes/TitleScene/TitleScene.h"
+#include "Scenes/DrawerScene/DrawerScene.h"
+#include "Scenes/PrimitiveScene/PrimitiveScene.h"
 
 SceneFactory::SceneFactory():
 	createScene_{}
@@ -22,9 +23,13 @@ void SceneFactory::CreateFunctions() {
 		[]()->BaseScene* {
 		return new GameScene{};
 		};
-	createScene_[BaseScene::ID::Title] =
+	createScene_[BaseScene::ID::Drawer] =
 		[]()->BaseScene* {
-		return new TitleScene{};
+		return new DrawerScene{};
+		};
+	createScene_[BaseScene::ID::Primitive] =
+		[]()->BaseScene* {
+		return new PrimitiveScene{};
 		};
 	createScene_[BaseScene::ID::Result] =
 		[]()->BaseScene* {

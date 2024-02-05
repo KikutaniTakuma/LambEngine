@@ -9,17 +9,16 @@
 #include "Game/CollisionManager/Collider/Collider.h"
 #include "Utils/Easing/Easing.h"
 #include "Game/SkyDome/SkyDome.h"
-#include "Game/CollisionManager/Sphere/Sphere.h"
 
-class TitleScene : public BaseScene {
+class DrawerScene : public BaseScene {
 public:
-	TitleScene();
-	TitleScene(const TitleScene&) = delete;
-	TitleScene(TitleScene&&) = delete;
-	~TitleScene() = default;
+	DrawerScene();
+	DrawerScene(const DrawerScene&) = delete;
+	DrawerScene(DrawerScene&&) = delete;
+	~DrawerScene() = default;
 
-	TitleScene& operator=(const TitleScene&) = delete;
-	TitleScene& operator=(TitleScene&&) = delete;
+	DrawerScene& operator=(const DrawerScene&) = delete;
+	DrawerScene& operator=(DrawerScene&&) = delete;
 
 public:
 	void Initialize() override;
@@ -31,6 +30,9 @@ public:
 	void Draw() override;
 
 public:
+	std::unique_ptr<Camera> camera2D_;
+
 	std::unique_ptr<Model> model_;
-	std::unique_ptr<Sphere> sphere_;
+	std::unique_ptr<Texture2D> tex2D_;
+	std::unique_ptr<Particle> particle_;
 };

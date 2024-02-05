@@ -47,9 +47,6 @@
     <ClCompile Include="Src\Scenes\Manager\SceneLoad\SceneLoad.cpp">
       <Filter>Scenes\Manager\ScceneLoad</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Scenes\TitleScene\TitleScene.cpp">
-      <Filter>Scenes\TitleScene</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Game\Cloud\Cloud.cpp">
       <Filter>Game\Cloud</Filter>
     </ClCompile>
@@ -61,6 +58,12 @@
     </ClCompile>
     <ClCompile Include="Src\Game\CollisionManager\Sphere\Sphere.cpp">
       <Filter>Game\CollisionManager\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scenes\PrimitiveScene\PrimitiveScene.cpp">
+      <Filter>Scenes\PrimitiveScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scenes\DrawerScene\DrawerScene.cpp">
+      <Filter>Scenes\DrawerScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,9 +121,6 @@
     <Filter Include="Scenes\Manager\ScceneLoad">
       <UniqueIdentifier>{a02d4342-6cbd-4359-83a6-e378d8c3ef88}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\TitleScene">
-      <UniqueIdentifier>{33349c28-9ac6-4102-a517-2aca4afde131}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Cloud">
       <UniqueIdentifier>{b9dbfc0b-e0eb-4bb3-b034-5e2f0dd99092}</UniqueIdentifier>
     </Filter>
@@ -132,6 +132,12 @@
     </Filter>
     <Filter Include="Game\CollisionManager\Sphere">
       <UniqueIdentifier>{03d14d68-3998-48a1-950b-d7aa4dec5fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\PrimitiveScene">
+      <UniqueIdentifier>{d5dca03b-3023-4c1c-bfb5-de2266c15105}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\DrawerScene">
+      <UniqueIdentifier>{33349c28-9ac6-4102-a517-2aca4afde131}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -180,9 +186,6 @@
     <ClInclude Include="Src\Scenes\Manager\SceneLoad\SceneLoad.h">
       <Filter>Scenes\Manager\ScceneLoad</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Scenes\TitleScene\TitleScene.h">
-      <Filter>Scenes\TitleScene</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Game\Cloud\Cloud.h">
       <Filter>Game\Cloud</Filter>
     </ClInclude>
@@ -194,6 +197,12 @@
     </ClInclude>
     <ClInclude Include="Src\Game\CollisionManager\Sphere\Sphere.h">
       <Filter>Game\CollisionManager\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scenes\PrimitiveScene\PrimitiveScene.h">
+      <Filter>Scenes\PrimitiveScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scenes\DrawerScene\DrawerScene.h">
+      <Filter>Scenes\DrawerScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

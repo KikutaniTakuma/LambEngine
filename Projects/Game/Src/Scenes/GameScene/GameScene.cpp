@@ -48,7 +48,7 @@ void GameScene::Update() {
 	skydome_->Upadate();
 
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::START)) {
-		sceneManager_->SceneChange(BaseScene::ID::Title);
+		sceneManager_->SceneChange(BaseScene::ID::Drawer);
 	}
 }
 
