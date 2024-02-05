@@ -166,9 +166,6 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.cpp">
       <Filter>Engine\Graphics\PipelineObject\PeraPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="Drawers\BaseDrawer.cpp">
-      <Filter>Drawers</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\ResourceManager\ResourceManager.cpp">
       <Filter>Engine\Graphics\ResourceManager</Filter>
     </ClCompile>
@@ -553,9 +550,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.h">
       <Filter>Engine\Graphics\PipelineObject\PeraPipeline</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawers\BaseDrawer.h">
-      <Filter>Drawers</Filter>
     </ClInclude>
     <ClInclude Include="Math\MathCommon.h">
       <Filter>Math</Filter>
