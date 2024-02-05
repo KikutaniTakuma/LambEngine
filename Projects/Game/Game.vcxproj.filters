@@ -59,6 +59,9 @@
     <ClCompile Include="Src\Camera\Camera.cpp">
       <Filter>Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\CollisionManager\Sphere\Sphere.cpp">
+      <Filter>Game\CollisionManager\Sphere</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -127,6 +130,9 @@
     <Filter Include="Camera">
       <UniqueIdentifier>{31e5ecf8-6bc1-4f5a-97ce-394f3988c342}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\CollisionManager\Sphere">
+      <UniqueIdentifier>{03d14d68-3998-48a1-950b-d7aa4dec5fed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -185,6 +191,9 @@
     </ClInclude>
     <ClInclude Include="Src\Camera\Camera.h">
       <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\CollisionManager\Sphere\Sphere.h">
+      <Filter>Game\CollisionManager\Sphere</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
