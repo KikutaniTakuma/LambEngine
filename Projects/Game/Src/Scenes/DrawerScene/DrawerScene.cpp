@@ -30,7 +30,7 @@ void DrawerScene::Initialize()
 	particle_.reset(new Particle{});
 	particle_->LoadSettingDirectory("demo");
 	particle_->ParticleStart();
-	particle_->emitterPos.x = 400.0f;
+	particle_->emitterPos.x = -400.0f;
 
 	camera2D_.reset(new Camera{});
 	camera2D_->Update();
