@@ -54,6 +54,8 @@ void GameScene::Update() {
 		sceneManager_->SceneChange(BaseScene::ID::Drawer);
 	}
 
+	seaAudio_->Debug("海の音");
+
 	input_->GetGamepad()->Debug();
 }
 
