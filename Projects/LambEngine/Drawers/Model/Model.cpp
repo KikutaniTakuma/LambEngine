@@ -340,7 +340,7 @@ void Model::InstancingDraw(const Mat4x4& viewProjectionMat, const Vector3& camer
 }
 
 void Model::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin(guiName.c_str());
 
 	ImGui::ColorEdit4("モデル本体の色", &colorBuf_->color.r);
@@ -377,7 +377,7 @@ void Model::Debug([[maybe_unused]]const std::string& guiName) {
 		ImGui::TreePop();
 	}
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 Model::~Model() {

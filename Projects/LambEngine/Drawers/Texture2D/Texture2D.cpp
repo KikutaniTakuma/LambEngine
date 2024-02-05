@@ -352,7 +352,7 @@ void Texture2D::Draw(
 }
 
 void Texture2D::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	*colorBuf_ = UintToVector4(color);
 	ImGui::Begin(guiName.c_str());
 	ImGui::Checkbox("is same scale and Texture", isSameTexSize.Data());
@@ -383,7 +383,7 @@ void Texture2D::Debug([[maybe_unused]]const std::string& guiName) {
 	}
 
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 bool Texture2D::Collision(const Vector2& pos2D) const {

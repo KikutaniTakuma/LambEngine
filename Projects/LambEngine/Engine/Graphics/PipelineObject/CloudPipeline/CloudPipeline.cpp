@@ -8,9 +8,9 @@
 
 #include "Utils/EngineInfo/EngineInfo.h"
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 #include <fstream>
 #include <filesystem>
@@ -18,7 +18,7 @@
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 
 void CloudPipeline::Update() {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin("Cloud");
 	ImGui::DragFloat("雲の細やかさ", &(cloudData_->density), 0.01f);
 	ImGui::DragFloat("雲の多さ", &(cloudData_->exponent), 0.01f);
@@ -54,7 +54,7 @@ void CloudPipeline::Update() {
 	}
 
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 	randomVec_->x += speed_.x * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);

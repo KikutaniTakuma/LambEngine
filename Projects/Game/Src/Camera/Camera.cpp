@@ -90,12 +90,12 @@ void Camera::Update(const Mat4x4& worldMat) {
 }
 
 void Camera::Debug([[maybe_unused]] const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin(guiName.c_str());
 	ImGui::DragFloat3("pos", &pos.x, 0.01f);
 	ImGui::DragFloat3("scale", &scale.x, 0.01f);
 	ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
 	ImGui::DragFloat3("offset", &offset.x);
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }

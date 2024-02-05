@@ -38,11 +38,11 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 
 	ResourceManager::GetInstance()->Enable();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	sceneName_[BaseScene::ID::Game] = "Game";
 	sceneName_[BaseScene::ID::Drawer] = "Drawer";
 	sceneName_[BaseScene::ID::Primitive] = "Primitive";
-#endif // _DEBUG
+#endif // USE_IMGUI
 	sceneNum_;
 	sceneNum_[BaseScene::ID::Game] = DIK_1;
 	sceneNum_[BaseScene::ID::Drawer] = DIK_2;
@@ -163,7 +163,7 @@ void SceneManager::Debug()
 			}
 		}
 	}
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin("SceneManager");
 	if (ImGui::TreeNode("シーン変更")) {
 		for (auto& i : sceneName_) {
@@ -178,7 +178,7 @@ void SceneManager::Debug()
 	ImGui::Text((std::string("currentScene : ") + sceneName_[scene_->GetID()]).c_str());
 	ImGui::Text((std::string("preScene : ") + sceneName_[preSceneID_.value()]).c_str());
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void SceneManager::Finalize() {

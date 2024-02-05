@@ -234,14 +234,14 @@ void Collider::DebugDraw(const Mat4x4& viewProjection) {
 }
 
 void Collider::Debug([[maybe_unused]] const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin(guiName.c_str());
 
 	ImGui::DragFloat3("pos", &collisionPos_.x, 0.01f);
 	ImGui::DragFloat3("scale", &scale_.x, 0.01f, 0.001f, std::numeric_limits<float>::max());
 
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void Collider::SetType(uint32_t type) {

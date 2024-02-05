@@ -200,7 +200,7 @@ void PeraRender::ResetPipelineObject(PeraPipeline* pipelineObject) {
 }
 
 void PeraRender::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin(guiName.c_str());
 	ImGui::DragFloat3("pos", &pos.x, 0.01f);
 	ImGui::DragFloat3("scale", &scale.x, 0.01f);
@@ -209,5 +209,5 @@ void PeraRender::Debug([[maybe_unused]]const std::string& guiName) {
 
 	color = Vector4ToUint(peraPipelineObject_->color);
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }

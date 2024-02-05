@@ -22,7 +22,7 @@ ParticleEditor* ParticleEditor::GetInstance() {
 }
 
 void ParticleEditor::Editor() {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (!isOpen_) {
 		inputLoadString_.resize(128);
 		ImGui::Begin("ParticleEditor");
@@ -59,11 +59,11 @@ void ParticleEditor::Editor() {
 		particle_.Update();
 	}
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void ParticleEditor::Draw([[maybe_unused]]const Camera& camera) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (isOpen_) {
 		if(isLocalCamera_){
 			if (is3DCamera_) {
@@ -82,5 +82,5 @@ void ParticleEditor::Draw([[maybe_unused]]const Camera& camera) {
 			}
 		}
 	}
-#endif // _DEBUG
+#endif // USE_IMGUI
 }

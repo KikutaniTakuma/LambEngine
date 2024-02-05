@@ -340,7 +340,7 @@ void Particle::Resize(uint32_t index) {
 }
 
 Particle::~Particle() {
-//#ifdef _DEBUG
+//#ifdef USE_IMGUI
 //
 //
 //	for (auto i = 0llu; i < settings.size(); i++) {
@@ -398,7 +398,7 @@ Particle::~Particle() {
 //		file << static_cast<bool>(isLoop_) << std::endl
 //			<< tex->GetFileName();
 //	}
-//#endif // _DEBUG
+//#endif // USE_IMGUI
 
 	srvHeap_->ReleaseView(wvpMat_.GetHandleUINT());
 	srvHeap_->ReleaseView(colorBuf_.GetHandleUINT());

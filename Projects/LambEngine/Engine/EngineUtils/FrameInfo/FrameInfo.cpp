@@ -1,8 +1,8 @@
 #include "FrameInfo.h"
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
@@ -21,11 +21,11 @@
 
 FrameInfo::FrameInfo() :
 	kMaxMonitorFps_(GetMainMonitorFramerate()),
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	isDebugStopGame_(false),
 	isOneFrameActive_(false),
 	isFixedDeltaTime_(false),
-#endif // _DEBUG
+#endif // USE_IMGUI
 	frameStartTime_(),
 	deltaTime_(0.0),
 	fps_(0.0),
@@ -189,7 +189,7 @@ void FrameInfo::SetFpsLimit(double fpsLimit) {
 void FrameInfo::Debug() {
 	this->SwitchDarwFlg();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	static float fpsLimit = static_cast<float>(fpsLimit_);
 	fpsLimit = static_cast<float>(fpsLimit_);
 
@@ -225,7 +225,7 @@ void FrameInfo::Debug() {
 		ImGui::TreePop();
 	}
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void FrameInfo::SetGameSpeedScale(float gameSpeedSccale) {
