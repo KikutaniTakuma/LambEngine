@@ -33,7 +33,7 @@ void GameScene::Initialize() {
 	skydome_->Initialize();
 	skydome_->SetTexture(cloud_->GetTex());
 
-	seaAudio_ = audioManager_->LoadWav("", true);
+	seaAudio_ = audioManager_->LoadWav("./Resources/Sound/SE_Water.wav", true);
 	seaAudio_->Start(0.5f);
 }
 
