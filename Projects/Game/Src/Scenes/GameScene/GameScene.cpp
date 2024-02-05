@@ -32,10 +32,13 @@ void GameScene::Initialize() {
 	skydome_.reset(new SkyDome);
 	skydome_->Initialize();
 	skydome_->SetTexture(cloud_->GetTex());
+
+	seaAudio_ = audioManager_->LoadWav("", true);
+	seaAudio_->Start(0.5f);
 }
 
 void GameScene::Finalize() {
-	
+	seaAudio_->Stop();
 }
 
 void GameScene::Update() {

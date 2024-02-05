@@ -34,4 +34,6 @@ public:
 
 	std::unique_ptr<SkyDome> skydome_;
 	class Cloud* cloud_;
+
+	class Audio* seaAudio_;
 };
