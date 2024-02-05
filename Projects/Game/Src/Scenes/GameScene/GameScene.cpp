@@ -53,6 +53,8 @@ void GameScene::Update() {
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::START)) {
 		sceneManager_->SceneChange(BaseScene::ID::Drawer);
 	}
+
+	input_->GetGamepad()->Debug();
 }
 
 void GameScene::Draw() {
