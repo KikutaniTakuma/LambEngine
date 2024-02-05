@@ -83,15 +83,15 @@ public:
 	/// <summary>
 	/// x = 1.0f, y = 0.0f, z = 0.0f
 	/// </summary>
-	static const Vector3 kXIndentity;
+	static const Vector3 kXIdentity;
 	/// <summary>
 	/// x = 0.0f, y = 1.0f, z = 0.0f
 	/// </summary>
-	static const Vector3 kYIndentity;
+	static const Vector3 kYIdentity;
 	/// <summary>
 	/// x = 0.0f, y = 0.0f, z = 1.0f
 	/// </summary>
-	static const Vector3 kZIndentity;
+	static const Vector3 kZIdentity;
 
 /// <summary>
 /// メンバ変数

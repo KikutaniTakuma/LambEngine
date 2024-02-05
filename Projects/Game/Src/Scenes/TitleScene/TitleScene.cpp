@@ -34,7 +34,7 @@ void TitleScene::Finalize()
 void TitleScene::Update()
 {
 	camera_->Debug("カメラ");
-	camera_->Update();
+	camera_->Update(Vector3::kZero);
 
 	model_->Debug("テスト用モデル");
 	model_->Update();

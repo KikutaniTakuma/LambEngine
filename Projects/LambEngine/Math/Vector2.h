@@ -74,18 +74,18 @@ public:
 	/// <summary>
 	/// x = 1.0f, y = 1.0f
 	/// </summary>
-	static const Vector2 identity;
+	static const Vector2 kIdentity;
 	/// <summary>
 	/// x = 0.0f, y = 0.0f
 	/// </summary>
-	static const Vector2 zero;
+	static const Vector2 kZero;
 	/// <summary>
 	/// x = 1.0f, y = 0.0f
 	/// </summary>
-	static const Vector2 xIdy;
+	static const Vector2 kXIdentity;
 	/// <summary>
 	/// x = 0.0f, y = 1.0f
 	/// </summary>
-	static const Vector2 yIdy;
+	static const Vector2 kYIdentity;
 
 };

@@ -11,9 +11,9 @@ Obb::Obb():
 	worldMatrix_(),
 	color_(std::numeric_limits<uint32_t>::max()),
 	orientations_{
-		Vector3::kXIndentity,
-		Vector3::kYIndentity,
-		Vector3::kZIndentity
+		Vector3::kXIdentity,
+		Vector3::kYIdentity,
+		Vector3::kZIdentity
 	},
 	lines_{},
 	orientationLines_{}

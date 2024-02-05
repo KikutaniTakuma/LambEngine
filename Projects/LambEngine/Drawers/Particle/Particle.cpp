@@ -104,7 +104,7 @@ void Particle::CreateGraphicsPipeline() {
 Particle::Particle() :
 	wtfs_(),
 	uvPibot(),
-	uvSize(Vector2::identity),
+	uvSize(Vector2::kIdentity),
 	tex_(TextureManager::GetInstance()->GetWhiteTex()),
 	isLoad_(false),
 	isBillboard_(true),
@@ -143,7 +143,7 @@ Particle::Particle() :
 	wtfs_.resize(1);
 
 	for (size_t i = 0; i < wtfs_.size(); i++) {
-		wtfs_[i].scale_ = Vector2::identity * 512.0f;
+		wtfs_[i].scale_ = Vector2::kIdentity * 512.0f;
 		wtfs_[i].pos_.x = 10.0f * i;
 		wtfs_[i].pos_.y = 10.0f * i;
 		wtfs_[i].pos_.z += 0.3f;
@@ -174,7 +174,7 @@ Particle::Particle() :
 Particle::Particle(uint32_t indexNum) :
 	wtfs_(),
 	uvPibot(),
-	uvSize(Vector2::identity),
+	uvSize(Vector2::kIdentity),
 	tex_(TextureManager::GetInstance()->GetWhiteTex()),
 	isLoad_(false),
 	isBillboard_(true),
@@ -219,7 +219,7 @@ Particle::Particle(uint32_t indexNum) :
 	wtfs_.resize(indexNum);
 
 	for (size_t i = 0; i < wtfs_.size();i++) {
-		wtfs_[i].scale_ = Vector2::identity * 512.0f;
+		wtfs_[i].scale_ = Vector2::kIdentity * 512.0f;
 		wtfs_[i].pos_.x = 10.0f * i;
 		wtfs_[i].pos_.y = 10.0f * i;
 		wtfs_[i].pos_.z += 0.3f;

@@ -94,7 +94,7 @@ public:
 			return tex_->getSize();
 		}
 		else {
-			return Vector2::zero;
+			return Vector2::kZero;
 		}
 	}
 

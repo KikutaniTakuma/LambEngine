@@ -483,7 +483,7 @@ Mat4x4 Mat4x4::DirectionToDirection(const Vector3& from, const Vector3& to) {
 				normal.z * normal.z * (1.0f - theataCos) + theataCos,
 				0.0f
 			},
-			Vector4::kWIndentity
+			Vector4::kWIdentity
 		}
 	};
 
@@ -515,7 +515,7 @@ Mat4x4 Mat4x4::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 				axis.z * axis.z * (1.0f - angleCos) + angleCos,
 				0.0f
 			},
-			Vector4::kWIndentity
+			Vector4::kWIdentity
 		}
 	};
 

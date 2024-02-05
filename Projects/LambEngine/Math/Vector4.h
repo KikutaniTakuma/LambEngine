@@ -79,29 +79,29 @@ public:
 /// </summary>
 public:
 	/// <summary>
-	/// x = 1.0f, y = 1.0f, z = 1.0f w = 1.0f
+	/// x = 1.0f, y = 1.0f, z = 1.0f, w = 1.0f
 	/// </summary>
 	static const Vector4 kIdentity;
 	/// <summary>
-	/// x = 0.0f, y = 0.0f, z = 0.0f w = 0.0f
+	/// x = 0.0f, y = 0.0f, z = 0.0f, w = 0.0f
 	/// </summary>
 	static const Vector4 kZero;
 	/// <summary>
-	/// x = 1.0f, y = 0.0f, z = 0.0f w = 0.0f
+	/// x = 1.0f, y = 0.0f, z = 0.0f, w = 0.0f
 	/// </summary>
-	static const Vector4 kXIndentity;
+	static const Vector4 kXIdentity;
 	/// <summary>
-	/// x = 0.0f, y = 1.0f, z = 0.0f w = 0.0f
+	/// x = 0.0f, y = 1.0f, z = 0.0f, w = 0.0f
 	/// </summary>
-	static const Vector4 kYIndentity;
+	static const Vector4 kYIdentity;
 	/// <summary>
-	/// x = 0.0f, y = 0.0f, z = 1.0f w = 0.0f
+	/// x = 0.0f, y = 0.0f, z = 1.0f, w = 0.0f
 	/// </summary>
-	static const Vector4 kZIndentity;
+	static const Vector4 kZIdentity;
 	/// <summary>
-	/// x = 0.0f, y = 0.0f, z = 0.0f w = 1.0f
+	/// x = 0.0f, y = 0.0f, z = 0.0f, w = 1.0f
 	/// </summary>
-	static const Vector4 kWIndentity;
+	static const Vector4 kWIdentity;
 
 
 	/// <summary>

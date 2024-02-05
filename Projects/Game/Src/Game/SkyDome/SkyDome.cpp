@@ -23,8 +23,8 @@ void SkyDome::Initialize()
 	tex_ = TextureManager::GetInstance()->GetWhiteTex();
 
 	rayleighScattering_->light.color = Vector4::kIdentity;
-	rayleighScattering_->light.direction = -Vector3::kYIndentity;
-	rayleighScattering_->light.pos = Vector3::kYIndentity * 1000.0f;
+	rayleighScattering_->light.direction = -Vector3::kYIdentity;
+	rayleighScattering_->light.pos = Vector3::kYIdentity * 1000.0f;
 	rayleighScattering_->light.intensity = 3.0f;
 
 	// 屈折率
@@ -51,7 +51,7 @@ void SkyDome::Upadate()
 void SkyDome::Draw(const Camera& camera)
 {
 	rayleighScattering_->cameraPos = camera.GetPos();
-	rayleighScattering_->viewDirection = Vector3::kZIndentity * Mat4x4::MakeRotate(camera.rotate);
+	rayleighScattering_->viewDirection = Vector3::kZIdentity * Mat4x4::MakeRotate(camera.rotate);
 
 	if (data_.empty()) {
 		data_ = mesh_->CopyBuffer();

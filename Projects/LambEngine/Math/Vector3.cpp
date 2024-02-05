@@ -36,9 +36,9 @@ Vector3::Vector3(Vector3&& right) noexcept
 
 const Vector3 Vector3::kIdentity = { 1.0f,1.0f,1.0f };
 const Vector3 Vector3::kZero = { 0.0f, 0.0f,0.0f };
-const Vector3 Vector3::kXIndentity = { 1.0f,0.0f,0.0f };
-const Vector3 Vector3::kYIndentity = { 0.0f,1.0f,0.0f };
-const Vector3 Vector3::kZIndentity = { 0.0f,0.0f,1.0f };
+const Vector3 Vector3::kXIdentity = { 1.0f,0.0f,0.0f };
+const Vector3 Vector3::kYIdentity = { 0.0f,1.0f,0.0f };
+const Vector3 Vector3::kZIdentity = { 0.0f,0.0f,1.0f };
 
 Vector3 Vector3::operator+() const noexcept {
 	return *this;

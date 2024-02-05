@@ -265,7 +265,7 @@ Mat4x4 Quaternion::GetMatrix() const {
 				std::pow(quaternion.w, 2.0f) - std::pow(quaternion.x, 2.0f) - std::pow(quaternion.y, 2.0f) + std::pow(quaternion.z, 2.0f),
 				0.0f
 			},
-			Vector4::kWIndentity
+			Vector4::kWIdentity
 		}
 	};
 

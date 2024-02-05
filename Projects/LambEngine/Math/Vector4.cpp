@@ -7,10 +7,10 @@
 
 const Vector4 Vector4::kIdentity = { 1.0f,1.0f,1.0f,1.0f };
 const Vector4 Vector4::kZero = { 0.0f, 0.0f, 0.0f, 0.0f };
-const Vector4 Vector4::kXIndentity= { 1.0f, 0.0f, 0.0f, 0.0f };
-const Vector4 Vector4::kYIndentity= { 0.0f, 1.0f, 0.0f, 0.0f };
-const Vector4 Vector4::kZIndentity= { 0.0f, 0.0f, 1.0f, 0.0f };
-const Vector4 Vector4::kWIndentity= { 0.0f, 0.0f, 0.0f, 1.0f };
+const Vector4 Vector4::kXIdentity= { 1.0f, 0.0f, 0.0f, 0.0f };
+const Vector4 Vector4::kYIdentity= { 0.0f, 1.0f, 0.0f, 0.0f };
+const Vector4 Vector4::kZIdentity= { 0.0f, 0.0f, 1.0f, 0.0f };
+const Vector4 Vector4::kWIdentity= { 0.0f, 0.0f, 0.0f, 1.0f };
 
 Vector4::Vector4() noexcept :
 	m{0.0f}

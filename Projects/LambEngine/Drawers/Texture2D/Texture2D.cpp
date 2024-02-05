@@ -22,11 +22,11 @@ D3D12_INDEX_BUFFER_VIEW Texture2D::indexView_ = {};
 Lamb::LambPtr<ID3D12Resource> Texture2D::indexResource_ = nullptr;
 
 Texture2D::Texture2D() :
-	scale(Vector2::identity),
+	scale(Vector2::kIdentity),
 	rotate(),
 	pos({ 0.0f,0.0f,0.01f }),
 	uvPibot(),
-	uvSize(Vector2::identity),
+	uvSize(Vector2::kIdentity),
 	tex_(nullptr),
 	isLoad_(false),
 	color(std::numeric_limits<uint32_t>::max()),

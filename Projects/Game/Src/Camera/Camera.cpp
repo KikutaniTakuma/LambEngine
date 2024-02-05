@@ -16,7 +16,7 @@ Camera::Camera() noexcept :
 	view_(),
 	projection_(),
 	othograohics_(),
-	offset{ Vector3::kZIndentity * -10.0f }
+	offset{ Vector3::kZIdentity * -10.0f }
 {}
 
 Camera::Camera(const Camera& right) noexcept
