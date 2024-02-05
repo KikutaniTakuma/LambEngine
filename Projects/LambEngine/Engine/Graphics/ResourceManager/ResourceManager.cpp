@@ -32,6 +32,9 @@ ResourceManager* const ResourceManager::GetInstance()
 void ResourceManager::SetTextureResource(const std::string& fileName)
 {
 	if (isEnable_) {
+		if (fileName == TextureManager::GetInstance()->GetWhiteTexPath()) {
+			return;
+		}
 		resourcesTexture_.push(fileName);
 	}
 }

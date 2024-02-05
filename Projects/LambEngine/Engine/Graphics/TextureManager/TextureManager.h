@@ -103,6 +103,13 @@ public:
 	/// <returns></returns>
 	Texture* const GetWhiteTex();
 
+	/// <summary>
+	/// 白いテクスチャのパスを取得
+	/// </summary>
+	/// <returns></returns>
+	const std::string& GetWhiteTexPath() const {
+		return white2x2Path_;
+	}
 
 private:
 	/// <summary>
@@ -147,4 +154,7 @@ private:
 	bool isThreadLoad_;
 	bool isThreadFinish_;
 	bool isNowThreadLoading_;
+
+
+	const std::string white2x2Path_;
 };

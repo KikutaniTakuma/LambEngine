@@ -19,8 +19,7 @@ TextureManager* const TextureManager::GetInstance() {
 
 void TextureManager::Initialize() {
 	instance_ = new TextureManager();
-	assert(instance_);
-	instance_->LoadTexture("./Resources/white2x2.png");
+	instance_->LoadTexture(instance_->white2x2Path_);
 }
 
 void TextureManager::Finalize() {
@@ -40,7 +39,8 @@ TextureManager::TextureManager() :
 	isCloseCommandList_(false),
 	isNowThreadLoading_(false),
 	exit_(false),
-	isThreadLoad_(false)
+	isThreadLoad_(false),
+	white2x2Path_("./Resources/white2x2.png")
 {
 	ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
 
@@ -202,7 +202,7 @@ void TextureManager::Unload(const std::string& fileName)
 }
 
 Texture* const TextureManager::GetWhiteTex() {
-	return instance_->textures_["./Resources/white2x2.png"].get();
+	return textures_[white2x2Path_].get();
 }
 
 void TextureManager::ReleaseIntermediateResource() {
