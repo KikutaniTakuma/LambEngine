@@ -24,6 +24,8 @@ void TitleScene::Initialize()
 	model_->light.ptPos = model_->pos;
 	model_->light.ptPos.y = 3.8f;
 	model_->light.ptColor = Vector3::kIdentity * 15.0f;
+
+	sphere_.reset(new Sphere);
 }
 
 void TitleScene::Finalize()
@@ -39,6 +41,9 @@ void TitleScene::Update()
 	model_->Debug("テスト用モデル");
 	model_->Update();
 
+	sphere_->Debug("Sphere");
+	sphere_->Update();
+
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
 		sceneManager_->SceneChange(BaseScene::ID::Game);
 	}
@@ -47,6 +52,8 @@ void TitleScene::Update()
 void TitleScene::Draw()
 {
 	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+
+	sphere_->Draw(camera_->GetViewProjection(), std::numeric_limits<uint32_t>::max());
 
 	Lamb::screenout << "Model scene" << Lamb::endline
 		<< "Press space to change ""Water and cloud scene""";
