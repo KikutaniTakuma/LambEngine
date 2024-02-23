@@ -569,5 +569,8 @@
     <ClInclude Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.h">
       <Filter>Engine\Graphics\PipelineObject\CloudPipeline</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Matrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
