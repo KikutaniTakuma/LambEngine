@@ -175,6 +175,9 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.cpp">
       <Filter>Engine\Graphics\PipelineObject\CloudPipeline</Filter>
     </ClCompile>
+    <ClCompile Include="Drawers\MeshShaderTest\MeshShaderTest.cpp">
+      <Filter>Drawers\MeshShaderTest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -365,6 +368,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\CloudPipeline">
       <UniqueIdentifier>{5a6f62f6-9b81-4403-a912-610eb20e5551}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawers\MeshShaderTest">
+      <UniqueIdentifier>{8c5b67a5-8f1c-4053-bfb3-d8d76729eb61}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -568,6 +574,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.h">
       <Filter>Engine\Graphics\PipelineObject\CloudPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawers\MeshShaderTest\MeshShaderTest.h">
+      <Filter>Drawers\MeshShaderTest</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
