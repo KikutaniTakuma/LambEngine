@@ -13,6 +13,8 @@
 #include "AudioManager/AudioManager.h"
 #include "Utils/ScreenOut/ScreenOut.h"
 
+#include "Math/Matrix.h"
+
 GameScene::GameScene() :
 	BaseScene(BaseScene::ID::Game)
 {}
@@ -25,13 +27,42 @@ void GameScene::Initialize() {
 	camera_->offset.z = -60.0f;
 	camera_->offset.y = 8.0f;
 
-	water_ = Water::GetInstance();
+	mat = decltype(mat)::vector_type{
+		3.2f,0.7f,9.6f,4.4f,
+		5.5f,1.3f,7.8f,2.1f,
+		6.9f,8.0f,2.6f,1.0f,
+		0.5f,7.2f,5.1f,3.3f
+	};
 
-	cloud_ = Cloud::GetInstance();
+	mat_2 = decltype(mat_2)::vector_type{
+		4.1f,6.5f,3.3f,2.2f,
+		8.8f,0.6f,9.9f,7.7f,
+		1.1f,5.5f,6.6f,0.0f,
+		3.3f,9.9f,8.8f,2.2f
+	};
 
-	skydome_.reset(new SkyDome);
-	skydome_->Initialize();
-	skydome_->SetTexture(cloud_->GetTex());
+	auto matResult = mat * mat_2;
+
+	for (size_t y = 0; y < matResult.height_size(); y++) {
+		for (size_t x = 0; x < matResult.width_size(); x++) {
+			result[y][x] = matResult[y][x];
+		}
+	}
+
+	mat4x4 = {
+		3.2f,0.7f,9.6f,4.4f,
+		5.5f,1.3f,7.8f,2.1f,
+		6.9f,8.0f,2.6f,1.0f,
+		0.5f,7.2f,5.1f,3.3f
+	};
+	mat4x4_2 = {
+		4.1f,6.5f,3.3f,2.2f,
+		8.8f,0.6f,9.9f,7.7f,
+		1.1f,5.5f,6.6f,0.0f,
+		3.3f,9.9f,8.8f,2.2f
+	};
+
+	result2 = mat4x4 * mat4x4_2;
 }
 
 void GameScene::Finalize() {
@@ -42,22 +73,12 @@ void GameScene::Update() {
 	camera_->Debug("カメラ");
 	camera_->Update();
 
-	water_->Update(camera_->GetPos());
-
-	cloud_->Update();
-	skydome_->Upadate();
-
-	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::START)) {
-		sceneManager_->SceneChange(BaseScene::ID::Title);
-	}
+	
 }
 
 void GameScene::Draw() {
-	cloud_->Draw();
-	skydome_->Draw(*camera_);
-
-	water_->Draw(camera_->GetViewProjection());
-
-	Lamb::screenout << "Water and cloud scene" << Lamb::endline
-		<< "Press space to change ""Model scene""";
+	Lamb::screenout << "new mat" << Lamb::endline
+		<< result.GetMatrixString() << Lamb::endline
+		<< "mat4x4" << Lamb::endline
+		<< result2.GetMatrixString();
 }

@@ -9,6 +9,7 @@
 #include "Game/CollisionManager/Collider/Collider.h"
 #include "Utils/Easing/Easing.h"
 #include "Game/SkyDome/SkyDome.h"
+#include "Math/Matrix.h"
 
 class GameScene : public BaseScene {
 public:
@@ -30,8 +31,12 @@ public:
 	void Draw() override;
 
 public:
-	class Water* water_;
+	Matrix<float, 4, 4> mat;
+	Matrix<float, 4, 4> mat_2;
 
-	std::unique_ptr<SkyDome> skydome_;
-	class Cloud* cloud_;
+	Mat4x4 result;
+	Mat4x4 result2;
+
+	Mat4x4 mat4x4;
+	Mat4x4 mat4x4_2;
 };
