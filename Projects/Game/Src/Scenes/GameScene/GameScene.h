@@ -29,7 +29,5 @@ public:
 	void Draw() override;
 
 public:
-	//class Water* water_;
-
-	std::array<std::unique_ptr<Texture2D>,3> tex_;
+	std::array<std::unique_ptr<Texture2D>,32 * 18> tex_;
 };
