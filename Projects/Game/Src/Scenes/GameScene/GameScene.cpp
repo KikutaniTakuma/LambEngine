@@ -28,33 +28,23 @@ void GameScene::Initialize() {
 	camera_->offset.y = 8.0f;
 
 	mat = decltype(mat)::VectorType{
-		/*3.2f,0.7f,9.6f,4.4f,
+		3.2f,0.7f,9.6f,4.4f,
 		5.5f,1.3f,7.8f,2.1f,
 		6.9f,8.0f,2.6f,1.0f,
-		0.5f,7.2f,5.1f,3.3f*/
-		1.0f, 2.0f, 0.0f, 1.0f,
-		0.0f, 3.0f, 0.0f, 1.0f,
-		4.0f, 1.0f, 1.0f, 0.0f,
+		0.5f,7.2f,5.1f,3.3f
 	};
 
-	mat_2 = decltype(mat_2)::VectorType{
-		/*4.1f,6.5f,3.3f,2.2f,
+	mat2 = decltype(mat2)::VectorType{
+		4.1f,6.5f,3.3f,2.2f,
 		8.8f,0.6f,9.9f,7.7f,
 		1.1f,5.5f,6.6f,0.0f,
-		3.3f,9.9f,8.8f,2.2f*/
-		1.0f,
-		2.0f,
-		3.0f,
-		0.0f
+		3.3f,9.9f,8.8f,2.2f
 	};
 
-	auto matResult = mat * mat_2;
+	inverse = mat.Inverse();
+	inverse2 = mat2.Inverse();
 
-	for (size_t y = 0; y < matResult.HeightSize(); y++) {
-		for (size_t x = 0; x < matResult.WidthSize(); x++) {
-			result[y][x] = matResult[y][x];
-		}
-	}
+	result = mat * mat2;
 
 	mat4x4 = {
 		3.2f,0.7f,9.6f,4.4f,
@@ -68,6 +58,9 @@ void GameScene::Initialize() {
 		1.1f,5.5f,6.6f,0.0f,
 		3.3f,9.9f,8.8f,2.2f
 	};
+
+	mat4x4inverse = Mat4x4::MakeInverse(mat4x4);
+	mat4x4inverse2 = Mat4x4::MakeInverse(mat4x4_2);
 
 	result2 = mat4x4 * mat4x4_2;
 }
@@ -85,7 +78,15 @@ void GameScene::Update() {
 
 void GameScene::Draw() {
 	Lamb::screenout << "new mat" << Lamb::endline
-		<< result.GetMatrixString() << Lamb::endline
+		<< result.GetString()
 		<< "mat4x4" << Lamb::endline
-		<< result2.GetMatrixString();
+		<< result2.GetMatrixString() << Lamb::endline
+		<< "new mat inverse" << Lamb::endline
+		<< inverse.GetString()
+		<< "new mat inverse2" << Lamb::endline
+		<< inverse2.GetString()
+		<< "mat4x4 invese" << Lamb::endline
+		<< mat4x4inverse.GetMatrixString() << Lamb::endline
+		<< "mat4x4_2 invese" << Lamb::endline
+		<< mat4x4inverse2.GetMatrixString() << Lamb::endline;
 }
