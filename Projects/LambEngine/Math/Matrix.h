@@ -2,33 +2,38 @@
 #include <array>
 #include <type_traits>
 
-template<std::floating_point floatingType, size_t height_, size_t width_>
+#include "Error/Error.h"
+
+template<std::floating_point floatingType, size_t height, size_t width = height>
 class Matrix {
 public:
-	using value_type = floatingType;
+	using ValueType = floatingType;
 
-	using width_type = std::array<value_type, width_>;
-	using height_type = std::array<width_type, height_>;
+	using WidthType = std::array<ValueType, width>;
+	using HeightType = std::array<WidthType, height>;
 
-	using vector_type = std::array<value_type, height_* width_>;
-	using matrix_type = height_type;
+	using VectorType = std::array<ValueType, height * width>;
+	using MatrixType = HeightType;
 
+	using iterator = MatrixType::iterator;
+	using const_iterator = MatrixType::const_iterator;
+
+	using reverse_iterator = MatrixType::reverse_iterator;
+	using const_reverse_iterator = MatrixType::const_reverse_iterator;
 
 public:
-	Matrix()noexcept :
-		data()
-	{}
+	constexpr Matrix() = default;
 
-	Matrix(const vector_type& num) noexcept {
-		for (size_t count = 0; width_type & line : data) {
-			for (value_type& i : line) {
+	constexpr Matrix(const VectorType& num) noexcept {
+		for (size_t count = 0; WidthType & line : matirx_) {
+			for (ValueType& i : line) {
 				i = num[count];
 				count++;
 			}
 		}
 	}
-	Matrix(const Matrix&) = default;
-	Matrix(Matrix&&) = default;
+	constexpr Matrix(const Matrix&) = default;
+	constexpr Matrix(Matrix&&) = default;
 	virtual ~Matrix() = default;
 
 public:
@@ -37,24 +42,31 @@ public:
 
 public:
 	template<std::integral T>
-	width_type& operator[](T index) noexcept {
-		return data[index];
+	[[nodiscard]] constexpr WidthType& operator[](T index) {
+		if (matirx_.size() <= index) {
+			throw Lamb::Error::Code<Matrix>("out of range", __func__);
+		}
+
+		return matirx_[index];
 	}
 
 	template<std::integral T>
-	const width_type& operator[](T index) const noexcept {
-		return data[index];
+	[[nodiscard]] constexpr const WidthType& operator[](T index) const {
+		if (matirx_.size() <= index) {
+			throw Lamb::Error::Code<Matrix>("out of range", __func__);
+		}
+		return matirx_[index];
 	}
 
 public:
 	template<size_t otherWidth>
-	Matrix<value_type, height_, otherWidth> operator*(const Matrix<value_type, width_, otherWidth>& right) const noexcept {
-		Matrix<value_type, height_, otherWidth> result;
+	Matrix<ValueType, height, otherWidth> operator*(const Matrix<ValueType, width, otherWidth>& right) const noexcept {
+		Matrix<ValueType, height, otherWidth> result;
 
-		for (size_t y = 0; y < height_; y++) {
+		for (size_t y = 0; y < height; y++) {
 			for (size_t x = 0; x < otherWidth; x++) {
-				for (size_t i = 0; i < width_; i++) {
-					result[y][x] += data[y][i] * right[i][x];
+				for (size_t i = 0; i < width; i++) {
+					result[y][x] += matirx_[y][i] * right[i][x];
 				}
 			}
 		}
@@ -62,7 +74,7 @@ public:
 		return result;
 	}
 	template<size_t otherWidth>
-	Matrix<value_type, height_, otherWidth>& operator*=(const Matrix<value_type, height_, otherWidth>& right)noexcept {
+	Matrix<ValueType, height, otherWidth>& operator*=(const Matrix<ValueType, height, otherWidth>& right)noexcept {
 		*this = *this * right;
 
 		return *this;
@@ -71,9 +83,9 @@ public:
 	Matrix operator+(const Matrix& right) const noexcept {
 		Matrix result;
 
-		for (size_t y = 0; y < height_; y++) {
-			for (size_t x = 0; x < width_; x++) {
-				result[y][x] = data[y][x] + right[y][x];
+		for (size_t y = 0; y < height; y++) {
+			for (size_t x = 0; x < width; x++) {
+				result[y][x] = matirx_[y][x] + right[y][x];
 			}
 		}
 
@@ -87,9 +99,9 @@ public:
 	Matrix operator-(const Matrix& right) const noexcept {
 		Matrix result;
 
-		for (size_t y = 0; y < height_; y++) {
-			for (size_t x = 0; x < width_; x++) {
-				result[y][x] = data[y][x] - right[y][x];
+		for (size_t y = 0; y < height; y++) {
+			for (size_t x = 0; x < width; x++) {
+				result[y][x] = matirx_[y][x] - right[y][x];
 			}
 		}
 
@@ -102,18 +114,107 @@ public:
 	}
 
 public:
-	constexpr size_t height_size() const noexcept {
-		return height_;
+	bool operator==(const Matrix& right) const {
+		return vector_ == right.vector_;
+	}
+	bool operator!=(const Matrix& right) const {
+		return vector_ != right.vector_;
 	}
 
-	constexpr size_t width_size() const noexcept {
-		return width_;
+public:
+	[[nodiscard]] constexpr size_t HeightSize() const noexcept {
+		return height;
 	}
 
-	value_type* data() const noexcept {
-		return reinterpret_cast<value_type*>(this);
+	[[nodiscard]] constexpr size_t WidthSize() const noexcept {
+		return width;
+	}
+
+	[[nodiscard]] constexpr size_t size() const noexcept {
+		return height * width;
+	}
+
+	[[nodiscard]] constexpr iterator begin() noexcept {
+		return matirx_.begin();
+	}
+	[[nodiscard]] constexpr const_iterator begin() const noexcept {
+		return matirx_.begin();
+	}
+
+	[[nodiscard]] constexpr iterator end() noexcept {
+		return matirx_.end();
+	}
+	[[nodiscard]] constexpr const_iterator end() const noexcept {
+		return matirx_.end();
+	}
+
+	[[nodiscard]] constexpr reverse_iterator rbegin() noexcept {
+		return matirx_.rbegin();
+	}
+	[[nodiscard]] constexpr const_reverse_iterator rbegin() const noexcept {
+		return matirx_.rbegin();
+	}
+
+	[[nodiscard]] constexpr reverse_iterator rend() noexcept {
+		return matirx_.rend();
+	}
+	[[nodiscard]] constexpr const_reverse_iterator rend() const noexcept {
+		return matirx_.rend();
+	}
+
+	[[nodiscard]] constexpr ValueType& at(size_t index) {
+		if (vector_.size() <= index) {
+			throw Lamb::Error::Code<Matrix>("out of range", __func__);
+		}
+
+		return vector_.at(index);
+	}
+
+	[[nodiscard]] constexpr const ValueType& at(size_t index) const {
+		if (vector_.size() <= index) {
+			throw Lamb::Error::Code<Matrix>("out of range", __func__);
+		}
+		return vector_.at(index);
+	}
+
+	[[nodiscard]] ValueType* data() noexcept {
+		return reinterpret_cast<ValueType*>(this);
+	}
+
+	[[nodiscard]] const ValueType* data() const noexcept {
+		return reinterpret_cast<const ValueType*>(this);
+	}
+
+	[[nodiscard]] constexpr VectorType& view() noexcept {
+		return vector_;
+	}
+	[[nodiscard]] constexpr const VectorType& view() const noexcept {
+		return vector_;
+	}
+
+	[[noreturn]] constexpr void swap(Matrix& right) {
+		vector_.swap(right.vector_);
+	}
+
+
+/// <summary>
+/// 正方行列のみ
+/// </summary>
+public:
+	static const Matrix& Identity() requires (height == width)
+	{
+		static Matrix identity;
+
+		for (size_t i = 0; i < height; i++) {
+			identity[i][i] = 1.0f;
+		}
+
+		return identity;
 	}
 
 protected:
-	matrix_type data;
+	union {
+		MatrixType matirx_;
+		VectorType vector_;
+	};
 };

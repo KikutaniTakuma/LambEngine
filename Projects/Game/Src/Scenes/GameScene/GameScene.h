@@ -31,8 +31,8 @@ public:
 	void Draw() override;
 
 public:
-	Matrix<float, 4, 4> mat;
-	Matrix<float, 4, 4> mat_2;
+	Matrix<float, 3, 4> mat;
+	Matrix<float, 4, 1> mat_2;
 
 	Mat4x4 result;
 	Mat4x4 result2;
