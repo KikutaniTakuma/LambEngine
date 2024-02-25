@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <type_traits>
+#include <string>
 
 #include "Error/Error.h"
 
@@ -22,16 +23,13 @@ public:
 	using const_reverse_iterator = MatrixType::const_reverse_iterator;
 
 public:
-	constexpr Matrix() = default;
+	constexpr Matrix() noexcept :
+		vector_{}
+	{}
 
-	constexpr Matrix(const VectorType& num) noexcept {
-		for (size_t count = 0; WidthType & line : matirx_) {
-			for (ValueType& i : line) {
-				i = num[count];
-				count++;
-			}
-		}
-	}
+	constexpr Matrix(const VectorType& num) noexcept : 
+		vector_(num)
+	{}
 	constexpr Matrix(const Matrix&) = default;
 	constexpr Matrix(Matrix&&) = default;
 	virtual ~Matrix() = default;
@@ -201,7 +199,7 @@ public:
 /// 正方行列のみ
 /// </summary>
 public:
-	static const Matrix& Identity() requires (height == width)
+	[[nodiscard]] static const Matrix& Identity() requires (height == width)
 	{
 		static Matrix identity;
 
@@ -211,6 +209,76 @@ public:
 
 		return identity;
 	}
+
+	[[nodiscard]] Matrix Inverse() const requires (height == width) {
+		Matrix tmp = *this;
+
+		Matrix identity = Identity();
+
+		ValueType toOne = tmp[0][0];
+
+		ValueType tmpNum = 0.0f;
+
+		for (int i = 0; i < height; i++) {
+			if (tmp.matirx_[i][i] == 0.0f && i < height) {
+				int pibIndex = i;
+				float pibot = fabsf(tmp.matirx_[i][i]);
+
+				for (int y = i + 1; y < height; y++) {
+					if (tmp.matirx_[y][i] != 0.0f && pibot < fabsf(tmp.matirx_[y][i])) {
+						pibot = fabsf(tmp.matirx_[y][i]);
+						pibIndex = y;
+					}
+				}
+
+				if (pibot == 0.0f) {
+					return Identity();
+				}
+
+				tmp.matirx_[i].swap(tmp.matirx_[pibIndex]);
+				identity.matirx_[i].swap(identity.matirx_[pibIndex]);
+			}
+
+			toOne = tmp.matirx_[i][i];
+			for (int x = 0; x < height; x++) {
+				tmp.matirx_[i][x] /= toOne;
+				identity.matirx_[i][x] /= toOne;
+			}
+
+			for (int y = 0; y < height; ++y) {
+				if (i == y) {
+					continue;
+				}
+
+				tmpNum = -tmp.matirx_[y][i];
+				for (int x = 0; x < width; x++) {
+					tmp.matirx_[y][x] += tmpNum * tmp.matirx_[i][x];
+					identity.matirx_[y][x] += tmpNum * identity.matirx_[i][x];
+				}
+			}
+		}
+
+		if (tmp != Identity()) {
+			return Identity();
+		}
+
+		return identity;
+	}
+
+public:
+	[[nodiscard]] std::string GetString() const {
+		std::string str;
+
+		for (auto& line : *this) {
+			for (auto& i : line) {
+				str += std::to_string(i) + ", ";
+			}
+			str += "\n";
+		}
+
+		return str;
+	}
+
 
 protected:
 	union {
