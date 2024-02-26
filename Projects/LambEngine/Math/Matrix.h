@@ -213,7 +213,8 @@ public:
 	[[nodiscard]] Matrix Inverse() const requires (height == width) {
 		Matrix tmp = *this;
 
-		Matrix identity = Identity();
+		const Matrix& kIdentity = Identity();
+		Matrix identity = kIdentity;
 
 		ValueType toOne = tmp[0][0];
 
@@ -232,7 +233,7 @@ public:
 				}
 
 				if (pibot == 0.0f) {
-					return Identity();
+					return kIdentity;
 				}
 
 				tmp.matirx_[i].swap(tmp.matirx_[pibIndex]);
@@ -258,8 +259,8 @@ public:
 			}
 		}
 
-		if (tmp != Identity()) {
-			return Identity();
+		if (tmp != kIdentity) {
+			return kIdentity;
 		}
 
 		return identity;
