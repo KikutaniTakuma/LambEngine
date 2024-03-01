@@ -45,4 +45,7 @@ public:
 
 	Mat4x4 mat4x4inverse;
 	Mat4x4 mat4x4inverse2;
+
+	std::unique_ptr<Model> model_;
+	std::unique_ptr<Texture2D> tex_;
 };

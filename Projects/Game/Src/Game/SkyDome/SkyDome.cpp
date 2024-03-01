@@ -45,7 +45,7 @@ void SkyDome::Finalize()
 
 void SkyDome::Upadate()
 {
-	wvpData_->worldMat.Affin(scale, rotate, pos);
+	wvpData_->worldMat = Mat4x4::MakeAffin(scale, rotate, pos);
 }
 
 void SkyDome::Draw(const Camera& camera)

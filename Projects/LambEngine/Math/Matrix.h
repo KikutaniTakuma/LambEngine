@@ -5,7 +5,7 @@
 
 #include "Error/Error.h"
 
-template<std::floating_point floatingType, size_t height, size_t width = height>
+template<std::floating_point floatingType, size_t height, size_t width>
 class Matrix {
 public:
 	using ValueType = floatingType;
@@ -32,7 +32,7 @@ public:
 	{}
 	constexpr Matrix(const Matrix&) = default;
 	constexpr Matrix(Matrix&&) = default;
-	virtual ~Matrix() = default;
+	~Matrix() = default;
 
 public:
 	Matrix& operator=(const Matrix&) = default;
@@ -41,19 +41,19 @@ public:
 public:
 	template<std::integral T>
 	[[nodiscard]] constexpr WidthType& operator[](T index) {
-		if (matirx_.size() <= index) {
+		if (matrix_.size() <= index) {
 			throw Lamb::Error::Code<Matrix>("out of range", __func__);
 		}
 
-		return matirx_[index];
+		return matrix_[index];
 	}
 
 	template<std::integral T>
 	[[nodiscard]] constexpr const WidthType& operator[](T index) const {
-		if (matirx_.size() <= index) {
+		if (matrix_.size() <= index) {
 			throw Lamb::Error::Code<Matrix>("out of range", __func__);
 		}
-		return matirx_[index];
+		return matrix_[index];
 	}
 
 public:
@@ -64,7 +64,7 @@ public:
 		for (size_t y = 0; y < height; y++) {
 			for (size_t x = 0; x < otherWidth; x++) {
 				for (size_t i = 0; i < width; i++) {
-					result[y][x] += matirx_[y][i] * right[i][x];
+					result[y][x] += matrix_[y][i] * right[i][x];
 				}
 			}
 		}
@@ -83,7 +83,7 @@ public:
 
 		for (size_t y = 0; y < height; y++) {
 			for (size_t x = 0; x < width; x++) {
-				result[y][x] = matirx_[y][x] + right[y][x];
+				result[y][x] = matrix_[y][x] + right[y][x];
 			}
 		}
 
@@ -99,7 +99,7 @@ public:
 
 		for (size_t y = 0; y < height; y++) {
 			for (size_t x = 0; x < width; x++) {
-				result[y][x] = matirx_[y][x] - right[y][x];
+				result[y][x] = matrix_[y][x] - right[y][x];
 			}
 		}
 
@@ -133,31 +133,31 @@ public:
 	}
 
 	[[nodiscard]] constexpr iterator begin() noexcept {
-		return matirx_.begin();
+		return matrix_.begin();
 	}
 	[[nodiscard]] constexpr const_iterator begin() const noexcept {
-		return matirx_.begin();
+		return matrix_.begin();
 	}
 
 	[[nodiscard]] constexpr iterator end() noexcept {
-		return matirx_.end();
+		return matrix_.end();
 	}
 	[[nodiscard]] constexpr const_iterator end() const noexcept {
-		return matirx_.end();
+		return matrix_.end();
 	}
 
 	[[nodiscard]] constexpr reverse_iterator rbegin() noexcept {
-		return matirx_.rbegin();
+		return matrix_.rbegin();
 	}
 	[[nodiscard]] constexpr const_reverse_iterator rbegin() const noexcept {
-		return matirx_.rbegin();
+		return matrix_.rbegin();
 	}
 
 	[[nodiscard]] constexpr reverse_iterator rend() noexcept {
-		return matirx_.rend();
+		return matrix_.rend();
 	}
 	[[nodiscard]] constexpr const_reverse_iterator rend() const noexcept {
-		return matirx_.rend();
+		return matrix_.rend();
 	}
 
 	[[nodiscard]] constexpr ValueType& at(size_t index) {
@@ -221,13 +221,13 @@ public:
 		ValueType tmpNum = 0.0f;
 
 		for (int i = 0; i < height; i++) {
-			if (tmp.matirx_[i][i] == 0.0f && i < height) {
+			if (tmp.matrix_[i][i] == 0.0f && i < height) {
 				int pibIndex = i;
-				float pibot = fabsf(tmp.matirx_[i][i]);
+				float pibot = fabsf(tmp.matrix_[i][i]);
 
 				for (int y = i + 1; y < height; y++) {
-					if (tmp.matirx_[y][i] != 0.0f && pibot < fabsf(tmp.matirx_[y][i])) {
-						pibot = fabsf(tmp.matirx_[y][i]);
+					if (tmp.matrix_[y][i] != 0.0f && pibot < fabsf(tmp.matrix_[y][i])) {
+						pibot = fabsf(tmp.matrix_[y][i]);
 						pibIndex = y;
 					}
 				}
@@ -236,14 +236,14 @@ public:
 					return kIdentity;
 				}
 
-				tmp.matirx_[i].swap(tmp.matirx_[pibIndex]);
-				identity.matirx_[i].swap(identity.matirx_[pibIndex]);
+				tmp.matrix_[i].swap(tmp.matrix_[pibIndex]);
+				identity.matrix_[i].swap(identity.matrix_[pibIndex]);
 			}
 
-			toOne = tmp.matirx_[i][i];
+			toOne = tmp.matrix_[i][i];
 			for (int x = 0; x < height; x++) {
-				tmp.matirx_[i][x] /= toOne;
-				identity.matirx_[i][x] /= toOne;
+				tmp.matrix_[i][x] /= toOne;
+				identity.matrix_[i][x] /= toOne;
 			}
 
 			for (int y = 0; y < height; ++y) {
@@ -251,10 +251,10 @@ public:
 					continue;
 				}
 
-				tmpNum = -tmp.matirx_[y][i];
+				tmpNum = -tmp.matrix_[y][i];
 				for (int x = 0; x < width; x++) {
-					tmp.matirx_[y][x] += tmpNum * tmp.matirx_[i][x];
-					identity.matirx_[y][x] += tmpNum * identity.matirx_[i][x];
+					tmp.matrix_[y][x] += tmpNum * tmp.matrix_[i][x];
+					identity.matrix_[y][x] += tmpNum * identity.matrix_[i][x];
 				}
 			}
 		}
@@ -264,6 +264,18 @@ public:
 		}
 
 		return identity;
+	}
+
+	[[nodiscard]] Matrix Transepose() const requires (height == width) {
+		Matrix result;
+
+		for (size_t y = 0; y < height; y ++) {
+			for (size_t x = 0; x < width; x++) {
+				result[y][x] = matrix_[x][y];
+			}
+		}
+
+		return result;
 	}
 
 public:
@@ -283,7 +295,7 @@ public:
 
 protected:
 	union {
-		MatrixType matirx_;
+		MatrixType matrix_;
 		VectorType vector_;
 	};
 };

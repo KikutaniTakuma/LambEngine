@@ -246,27 +246,22 @@ Quaternion Quaternion::Inverce() const {
 
 Mat4x4 Quaternion::GetMatrix() const {
 	Mat4x4 result = Mat4x4{
-		std::array<Vector4, 4>{
-			Vector4{
-				std::pow(quaternion.w, 2.0f) + std::pow(quaternion.x, 2.0f) - std::pow(quaternion.y, 2.0f) - std::pow(quaternion.z, 2.0f),
-				2.0f * (quaternion.x * quaternion.y + quaternion.w * quaternion.z),
-				2.0f * (quaternion.x * quaternion.z - quaternion.w * quaternion.y),
-				0.0f
-			},
-			Vector4{
-				2.0f * (quaternion.x * quaternion.y - quaternion.w * quaternion.z),
-				std::pow(quaternion.w, 2.0f) - std::pow(quaternion.x, 2.0f) + std::pow(quaternion.y, 2.0f) - std::pow(quaternion.z, 2.0f),
-				2.0f * (quaternion.y * quaternion.z + quaternion.w * quaternion.x),
-				0.0f
-			},
-			Vector4{
-				2.0f * (quaternion.x * quaternion.z + quaternion.w * quaternion.y),
-				2.0f * (quaternion.y * quaternion.z - quaternion.w * quaternion.x),
-				std::pow(quaternion.w, 2.0f) - std::pow(quaternion.x, 2.0f) - std::pow(quaternion.y, 2.0f) + std::pow(quaternion.z, 2.0f),
-				0.0f
-			},
-			Vector4::kWIdentity
-		}
+			std::pow(quaternion.w, 2.0f) + std::pow(quaternion.x, 2.0f) - std::pow(quaternion.y, 2.0f) - std::pow(quaternion.z, 2.0f),
+			2.0f * (quaternion.x * quaternion.y + quaternion.w * quaternion.z),
+			2.0f * (quaternion.x * quaternion.z - quaternion.w * quaternion.y),
+			0.0f,
+
+			2.0f * (quaternion.x * quaternion.y - quaternion.w * quaternion.z),
+			std::pow(quaternion.w, 2.0f) - std::pow(quaternion.x, 2.0f) + std::pow(quaternion.y, 2.0f) - std::pow(quaternion.z, 2.0f),
+			2.0f * (quaternion.y * quaternion.z + quaternion.w * quaternion.x),
+			0.0f,
+
+			2.0f * (quaternion.x * quaternion.z + quaternion.w * quaternion.y),
+			2.0f * (quaternion.y * quaternion.z - quaternion.w * quaternion.x),
+			std::pow(quaternion.w, 2.0f) - std::pow(quaternion.x, 2.0f) - std::pow(quaternion.y, 2.0f) + std::pow(quaternion.z, 2.0f),
+			0.0f,
+
+			0.0f,0.0f,0.0f,1.0f
 	};
 
 

@@ -279,7 +279,7 @@ void Model::SetPipeline(Pipeline* const pipeline)
 
 void Model::Update() {
 	*dirLig_ = light;
-	wvpData_->worldMat.Affin(scale, rotate, pos);
+	wvpData_->worldMat = Mat4x4::MakeAffin(scale, rotate, pos);
 	if (parent_) {
 		wvpData_->worldMat *= parent_->wvpData_->worldMat;
 	}

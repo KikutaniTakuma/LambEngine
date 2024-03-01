@@ -126,14 +126,19 @@ Vector3 Vector3::operator*(const Mat4x4& mat) const {
 
 Vector3 operator*(const Mat4x4& left, const Vector3& right) {
 	Vector3 result;
-	Vector4 vec = { right,1.0f };
+	Matrix<float, 4, 1> tmp = Matrix<float, 1, 4>::VectorType{ right.x,right.y, right.z, 1.0f };
+	Matrix<float, 4, 1> tmpResult;
 
-	result.x = left[0].Dot(vec);
-	result.y = left[1].Dot(vec);
-	result.z = left[2].Dot(vec);
-	float&& w = left[3].Dot(vec);
+	tmpResult = left * tmp;
+	
+	float& w = tmpResult.view().back();
+
 	if (w == 0.0f) {
 		throw Lamb::Error::Code<Vector3>("Matrix4x4 * Vector3 : w = 0.0f", __func__);
+	}
+
+	for (size_t i = 0; i < tmpResult.HeightSize() - 1; i++) {
+		result[i] = tmpResult[i][0];
 	}
 
 	w = 1.0f / w;

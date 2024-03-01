@@ -18,6 +18,7 @@ public:
 	Vector4(const class Vector3& vec3, float w) noexcept;
 	Vector4(const class Vector2& vec2, float z, float w) noexcept;
 	Vector4(uint32_t right) noexcept;
+	Vector4(const std::array<float, 4>& right) noexcept;
 public:
 	~Vector4() = default;
 

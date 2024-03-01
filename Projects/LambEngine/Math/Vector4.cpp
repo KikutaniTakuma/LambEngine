@@ -40,6 +40,11 @@ Vector4::Vector4(uint32_t right) noexcept {
 	*this = right;
 }
 
+Vector4::Vector4(const std::array<float, 4>& right) noexcept
+{
+	m = right;
+}
+
 Vector4& Vector4::operator=(const Vector4& right) noexcept {
 	std::copy(right.m.begin(), right.m.end(), m.begin());
 
@@ -141,8 +146,7 @@ Vector4& Vector4::operator/=(float scalar) noexcept {
 Vector4 Vector4::operator*(const Mat4x4& mat) const noexcept {
 	Vector4 result;
 
-	auto tmp = mat;
-	tmp.Transepose();
+	Mat4x4 tmp = mat.Transepose();
 
 	for (int32_t i = 0; i < m.size(); i++) {
 		result.m[i] = Dot(tmp[i]);
@@ -159,10 +163,9 @@ Vector4& Vector4::operator*=(const Mat4x4& mat) noexcept {
 
 Vector4 operator*(const Mat4x4& left, const Vector4& right) noexcept {
 	Vector4 result;
+	Matrix<float, 4, 1> tmp = right.m;
 
-	for (int32_t y = 0; y < 4; y++) {
-		result.m[y] = left[y].Dot(right);
-	}
+	result.m = (left * tmp).view();
 
 	return result;
 }

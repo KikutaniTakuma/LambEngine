@@ -21,11 +21,13 @@ GameScene::GameScene() :
 
 void GameScene::Initialize() {
 	camera_->farClip = 3000.0f;
-	camera_->pos.y = 15.0f;
+	//camera_->pos.y = 15.0f;
 	camera_->pos.z = -5.0f;
-	camera_->rotate.x = 0.25f;
-	camera_->offset.z = -60.0f;
-	camera_->offset.y = 8.0f;
+	//camera_->rotate.x = 0.25f;
+	//camera_->offset.z = -60.0f;
+	//camera_->offset.y = 8.0f;
+
+	model_.reset(new Model{  });
 
 	mat = decltype(mat)::VectorType{
 		3.2f,0.7f,9.6f,4.4f,
@@ -59,10 +61,13 @@ void GameScene::Initialize() {
 		3.3f,9.9f,8.8f,2.2f
 	};
 
-	mat4x4inverse = Mat4x4::MakeInverse(mat4x4);
-	mat4x4inverse2 = Mat4x4::MakeInverse(mat4x4_2);
+	mat4x4inverse = mat4x4.Inverse();
+	mat4x4inverse2 = mat4x4_2.Inverse();
 
 	result2 = mat4x4 * mat4x4_2;
+
+	tex_.reset(new Texture2D{});
+	tex_->scale *= 512.0f;
 }
 
 void GameScene::Finalize() {
@@ -73,20 +78,29 @@ void GameScene::Update() {
 	camera_->Debug("カメラ");
 	camera_->Update();
 
-	
+	model_->Debug("model_");
+	model_->Update();
+
+	tex_->Debug("hoge");
+
+	tex_->Update();
 }
 
 void GameScene::Draw() {
+	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+
+	tex_->Draw(camera_->GetViewOthographics());
+
 	Lamb::screenout << "new mat" << Lamb::endline
 		<< result.GetString()
 		<< "mat4x4" << Lamb::endline
-		<< result2.GetMatrixString() << Lamb::endline
+		<< result2.GetString()
 		<< "new mat inverse" << Lamb::endline
 		<< inverse.GetString()
 		<< "new mat inverse2" << Lamb::endline
 		<< inverse2.GetString()
 		<< "mat4x4 invese" << Lamb::endline
-		<< mat4x4inverse.GetMatrixString() << Lamb::endline
+		<< mat4x4inverse.GetString()
 		<< "mat4x4_2 invese" << Lamb::endline
-		<< mat4x4inverse2.GetMatrixString() << Lamb::endline;
+		<< mat4x4inverse2.GetString();
 }
