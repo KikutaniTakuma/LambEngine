@@ -24,7 +24,7 @@ public:
 
 public:
 	constexpr Matrix() noexcept :
-		vector_{}
+		vector_()
 	{}
 
 	constexpr Matrix(const VectorType& num) noexcept : 
@@ -58,7 +58,7 @@ public:
 
 public:
 	template<size_t otherWidth>
-	Matrix<ValueType, height, otherWidth> operator*(const Matrix<ValueType, width, otherWidth>& right) const noexcept {
+	[[nodiscard]] Matrix<ValueType, height, otherWidth> operator*(const Matrix<ValueType, width, otherWidth>& right) const noexcept {
 		Matrix<ValueType, height, otherWidth> result;
 
 		for (size_t y = 0; y < height; y++) {
@@ -78,7 +78,7 @@ public:
 		return *this;
 	}
 
-	Matrix operator+(const Matrix& right) const noexcept {
+	[[nodiscard]] Matrix operator+(const Matrix& right) const noexcept {
 		Matrix result;
 
 		for (size_t y = 0; y < height; y++) {
@@ -94,7 +94,7 @@ public:
 
 		return *this;
 	}
-	Matrix operator-(const Matrix& right) const noexcept {
+	[[nodiscard]] Matrix operator-(const Matrix& right) const noexcept {
 		Matrix result;
 
 		for (size_t y = 0; y < height; y++) {
@@ -112,10 +112,10 @@ public:
 	}
 
 public:
-	bool operator==(const Matrix& right) const {
+	[[nodiscard]] bool operator==(const Matrix& right) const {
 		return vector_ == right.vector_;
 	}
-	bool operator!=(const Matrix& right) const {
+	[[nodiscard]] bool operator!=(const Matrix& right) const {
 		return vector_ != right.vector_;
 	}
 
@@ -211,6 +211,10 @@ public:
 	}
 
 	[[nodiscard]] Matrix Inverse() const requires (height == width) {
+		if constexpr (height == 1) {
+			return *this;
+		}
+
 		Matrix tmp = *this;
 
 		const Matrix& kIdentity = Identity();

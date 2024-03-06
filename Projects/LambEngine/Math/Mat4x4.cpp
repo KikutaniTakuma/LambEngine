@@ -2,19 +2,9 @@
 #include "Vector3.h"
 #include <cmath>
 
-const Mat4x4 Mat4x4::kIdentity = BasedMatrix::VectorType{
-		1.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 1.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-};
+const Mat4x4 Mat4x4::kIdentity = BasedMatrix::Identity();
 
-const Mat4x4 Mat4x4::kZero = BasedMatrix::VectorType{
-		0.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f
-};
+const Mat4x4 Mat4x4::kZero = Mat4x4();
 
 Mat4x4::Mat4x4(const Mat4x4& right) {
 	*this = right;
