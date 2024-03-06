@@ -43,8 +43,18 @@ ImGuiManager::ImGuiManager() {
 	// ImGuiの初期化
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+
+	// ImGuiIO
+	auto& imguiIO = ImGui::GetIO();
+	// Docking有効化
+	imguiIO.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	// キーボードコントロール有効
+	imguiIO.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	// ゲームパッドコントロール有効
+	imguiIO.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
 	// 日本語フォント追加
-	ImGui::GetIO().Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\msgothic.ttc", 13.0f, NULL, ImGui::GetIO().Fonts->GetGlyphRangesJapanese());
+	imguiIO.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\msgothic.ttc", 13.0f, NULL, ImGui::GetIO().Fonts->GetGlyphRangesJapanese());
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(WindowFactory::GetInstance()->GetHwnd());
 	ImGui_ImplDX12_Init(
