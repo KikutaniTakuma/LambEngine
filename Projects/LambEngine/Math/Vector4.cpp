@@ -12,16 +12,8 @@ const Vector4 Vector4::kYIdentity= { 0.0f, 1.0f, 0.0f, 0.0f };
 const Vector4 Vector4::kZIdentity= { 0.0f, 0.0f, 1.0f, 0.0f };
 const Vector4 Vector4::kWIdentity= { 0.0f, 0.0f, 0.0f, 1.0f };
 
-Vector4::Vector4() noexcept :
+constexpr Vector4::Vector4() noexcept :
 	m{0.0f}
-{}
-
-Vector4::Vector4(const Vector4& right) noexcept 
-{
-	*this = right;
-}
-Vector4::Vector4(Vector4&& right)  noexcept :
-	m(std::move(right.m))
 {}
 
 Vector4::Vector4(float x, float y, float z, float w) noexcept :
@@ -45,10 +37,11 @@ Vector4::Vector4(const std::array<float, 4>& right) noexcept
 	m = right;
 }
 
-Vector4& Vector4::operator=(const Vector4& right) noexcept {
-	std::copy(right.m.begin(), right.m.end(), m.begin());
-
+Vector4 Vector4::operator+() noexcept {
 	return *this;
+}
+Vector4 Vector4::operator-() noexcept {
+	return { -m[0], -m[1], -m[2], -m[3] };
 }
 
 Vector4& Vector4::operator=(const Vector3& right) noexcept {
@@ -65,12 +58,6 @@ Vector4& Vector4::operator=(const Vector2& right) noexcept {
 	vec.y = right.y;
 	vec.z = 0.0f;
 	vec.w = 0.0f;
-
-	return *this;
-}
-
-Vector4& Vector4::operator=(Vector4&& right) noexcept {
-	m = std::move(right.m);
 
 	return *this;
 }
@@ -161,7 +148,7 @@ Vector4& Vector4::operator*=(const Mat4x4& mat) noexcept {
 	return *this;
 }
 
-Vector4 operator*(const Mat4x4& left, const Vector4& right) noexcept {
+[[nodiscard]] Vector4 operator*(const Mat4x4& left, const Vector4& right) noexcept {
 	Vector4 result;
 	Matrix<float, 4, 1> tmp = right.m;
 
