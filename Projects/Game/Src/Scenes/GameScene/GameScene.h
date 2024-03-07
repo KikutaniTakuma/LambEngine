@@ -31,21 +31,5 @@ public:
 	void Draw() override;
 
 public:
-	Matrix<float, 4, 4> mat;
-	Matrix<float, 4, 4> mat2;
-
-	Matrix<float, 4, 4> result;
-	Mat4x4 result2;
-
-	Matrix<float, 4, 4> inverse;
-	Matrix<float, 4, 4> inverse2;
-
-	Mat4x4 mat4x4;
-	Mat4x4 mat4x4_2;
-
-	Mat4x4 mat4x4inverse;
-	Mat4x4 mat4x4inverse2;
-
-	std::unique_ptr<Model> model_;
-	std::unique_ptr<Texture2D> tex_;
+	std::unique_ptr<SkyDome> skydome_;
 };

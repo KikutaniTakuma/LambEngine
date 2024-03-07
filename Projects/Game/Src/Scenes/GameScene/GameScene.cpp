@@ -27,80 +27,22 @@ void GameScene::Initialize() {
 	//camera_->offset.z = -60.0f;
 	//camera_->offset.y = 8.0f;
 
-	model_.reset(new Model{  });
+	skydome_.reset(new SkyDome());
 
-	mat = decltype(mat)::VectorType{
-		3.2f,0.7f,9.6f,4.4f,
-		5.5f,1.3f,7.8f,2.1f,
-		6.9f,8.0f,2.6f,1.0f,
-		0.5f,7.2f,5.1f,3.3f
-	};
-
-	mat2 = decltype(mat2)::VectorType{
-		4.1f,6.5f,3.3f,2.2f,
-		8.8f,0.6f,9.9f,7.7f,
-		1.1f,5.5f,6.6f,0.0f,
-		3.3f,9.9f,8.8f,2.2f
-	};
-
-	inverse = mat.Inverse();
-	inverse2 = mat2.Inverse();
-
-	result = mat * mat2;
-
-	mat4x4 = {
-		3.2f,0.7f,9.6f,4.4f,
-		5.5f,1.3f,7.8f,2.1f,
-		6.9f,8.0f,2.6f,1.0f,
-		0.5f,7.2f,5.1f,3.3f
-	};
-	mat4x4_2 = {
-		4.1f,6.5f,3.3f,2.2f,
-		8.8f,0.6f,9.9f,7.7f,
-		1.1f,5.5f,6.6f,0.0f,
-		3.3f,9.9f,8.8f,2.2f
-	};
-
-	mat4x4inverse = mat4x4.Inverse();
-	mat4x4inverse2 = mat4x4_2.Inverse();
-
-	result2 = mat4x4 * mat4x4_2;
-
-	tex_.reset(new Texture2D{});
-	tex_->scale *= 512.0f;
+	skydome_->Initialize();
 }
 
 void GameScene::Finalize() {
-	
+	skydome_->Finalize();
 }
 
 void GameScene::Update() {
 	camera_->Debug("カメラ");
-	camera_->Update();
+	camera_->Update(Vector3::kZero);
 
-	model_->Debug("model_");
-	model_->Update();
-
-	tex_->Debug("hoge");
-
-	tex_->Update();
+	skydome_->Upadate();
 }
 
 void GameScene::Draw() {
-	model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
-
-	tex_->Draw(camera_->GetViewOthographics());
-
-	Lamb::screenout << "new mat" << Lamb::endline
-		<< result.GetString()
-		<< "mat4x4" << Lamb::endline
-		<< result2.GetString()
-		<< "new mat inverse" << Lamb::endline
-		<< inverse.GetString()
-		<< "new mat inverse2" << Lamb::endline
-		<< inverse2.GetString()
-		<< "mat4x4 invese" << Lamb::endline
-		<< mat4x4inverse.GetString()
-		<< "mat4x4_2 invese" << Lamb::endline
-		<< mat4x4inverse2.GetString();
+	skydome_->Draw(*camera_);
 }
