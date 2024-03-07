@@ -8,11 +8,11 @@ class Vector3 final {
 /// コンストラクタ
 /// </summary>
 public:
-	Vector3() noexcept;
+	constexpr Vector3() noexcept;
 	Vector3(float x, float y, float z) noexcept;
-	Vector3(const Vector3& right) noexcept;
+	constexpr Vector3(const Vector3&) noexcept = default;
 	Vector3(const class Vector2& right) noexcept;
-	Vector3(Vector3&& right) noexcept;
+	constexpr Vector3(Vector3&&) noexcept = default;
 public:
 	~Vector3() = default;
 
@@ -22,51 +22,51 @@ public:
 public:
 	// 単項演算子
 
-	Vector3 operator+() const noexcept;
-	Vector3 operator-() const noexcept;
+	[[nodiscard]] Vector3 operator+() const noexcept;
+	[[nodiscard]] Vector3 operator-() const noexcept;
 
 
 	// 二項演算子
 
 	Vector3& operator=(const Vector3& right) noexcept;
 	Vector3& operator=(Vector3&& right) noexcept;
-	Vector3 operator+(const Vector3& right) const noexcept;
-	Vector3 operator-(const Vector3& right) const noexcept;
+	[[nodiscard]] Vector3 operator+(const Vector3& right) const noexcept;
+	[[nodiscard]] Vector3 operator-(const Vector3& right) const noexcept;
 	Vector3& operator+=(const Vector3& right) noexcept;
 	Vector3& operator-=(const Vector3& right) noexcept;
-	Vector3 operator*(float scalar) const noexcept;
+	[[nodiscard]] Vector3 operator*(float scalar) const noexcept;
 	Vector3& operator*=(float scalar) noexcept;
-	Vector3 operator/(float scalar) const noexcept;
+	[[nodiscard]] Vector3 operator/(float scalar) const noexcept;
 	Vector3& operator/=(float scalar) noexcept;
 
-	Vector3 operator*(const class Mat4x4& mat) const;
+	[[nodiscard]] Vector3 operator*(const class Mat4x4& mat) const;
 	Vector3& operator*=(const class Mat4x4& mat);
 	friend Vector3 operator*(const class Mat4x4& left, const Vector3& right);
 
 	Vector3& operator=(const class Vector2& right) noexcept;
 
-	Vector3 operator*(const class Quaternion& right) const;
+	[[nodiscard]] Vector3 operator*(const class Quaternion& right) const;
 	Vector3& operator*=(const class Quaternion& right);
 
 
 	// 等比演算子
 
-	bool operator==(const Vector3& right) const noexcept;
-	bool operator!=(const Vector3& right) const noexcept;
+	[[nodiscard]] bool operator==(const Vector3& right) const noexcept;
+	[[nodiscard]] bool operator!=(const Vector3& right) const noexcept;
 
 	// 
-	float& operator[](size_t index);
-	const float& operator[](size_t index) const;
+	[[nodiscard]] float& operator[](size_t index);
+	[[nodiscard]] const float& operator[](size_t index) const;
 
 
 /// <summary>
 /// メンバ関数
 /// </summary>
 public:
-	float Dot(const Vector3& right) const noexcept;
-	Vector3 Cross(const Vector3& right) const noexcept;
-	float Length() const noexcept;
-	Vector3 Normalize() const noexcept;
+	[[nodiscard]] float Dot(const Vector3& right) const noexcept;
+	[[nodiscard]] Vector3 Cross(const Vector3& right) const noexcept;
+	[[nodiscard]] float Length() const noexcept;
+	[[nodiscard]] Vector3 Normalize() const noexcept;
 
 /// <summary>
 /// 静的定数
@@ -106,7 +106,7 @@ public:
 /// 静的関数
 /// </summary>
 public:
-	static Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
+	[[nodiscard]] static Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
 };
 
 struct Ray {
@@ -119,6 +119,6 @@ struct Segment {
 	Vector3 diff;
 };
 
-Vector3 Project(const Vector3& vec1, const Vector3& vec2);
+[[nodiscard]] Vector3 Project(const Vector3& vec1, const Vector3& vec2);
 
-Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
+[[nodiscard]] Vector3 ClosestPoint(const Vector3& point, const Segment& segment);

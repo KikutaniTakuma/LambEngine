@@ -7,7 +7,7 @@
 
 #include "Error/Error.h"
 
-Vector3::Vector3() noexcept :
+constexpr Vector3::Vector3() noexcept :
 	x(0.0f),
 	y(0.0f),
 	z(0.0f)
@@ -19,19 +19,10 @@ Vector3::Vector3(float x, float y, float z) noexcept :
 	z(z)
 {}
 
-Vector3::Vector3(const Vector3& right) noexcept
-{
-	*this = right;
-}
 Vector3::Vector3(const Vector2& right) noexcept {
 	x = right.x;
 	y = right.y;
 	z = 0.0f;
-}
-
-Vector3::Vector3(Vector3&& right) noexcept
-{
-	*this = std::move(right);
 }
 
 const Vector3 Vector3::kIdentity = { 1.0f,1.0f,1.0f };
