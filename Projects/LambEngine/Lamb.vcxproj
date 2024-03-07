@@ -231,7 +231,6 @@
     <ClInclude Include="Math\MathCommon.h" />
     <ClInclude Include="Math\Mat4x4.h" />
     <ClInclude Include="Math\Matrix.h" />
-    <ClInclude Include="Math\MatrixSquare.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />

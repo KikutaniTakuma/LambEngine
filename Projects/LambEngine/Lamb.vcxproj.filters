@@ -572,8 +572,5 @@
     <ClInclude Include="Math\Matrix.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Math\MatrixSquare.h">
-      <Filter>Math</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
