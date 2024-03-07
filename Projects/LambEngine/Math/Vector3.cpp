@@ -38,22 +38,6 @@ Vector3 Vector3::operator-() const noexcept {
 	return Vector3(-x, -y, -z);
 }
 
-Vector3& Vector3::operator=(const Vector3& right) noexcept {
-	x = right.x;
-	y = right.y;
-	z = right.z;
-
-	return *this;
-}
-
-Vector3& Vector3::operator=(Vector3&& right) noexcept {
-	x = std::move(right.x);
-	y = std::move(right.y);
-	z = std::move(right.z);
-
-	return *this;
-}
-
 Vector3 Vector3::operator+(const Vector3& right) const noexcept {
 	Vector3 tmp(x + right.x, y + right.y, z + right.z);
 

@@ -28,8 +28,8 @@ public:
 
 	// 二項演算子
 
-	Vector3& operator=(const Vector3& right) noexcept;
-	Vector3& operator=(Vector3&& right) noexcept;
+	Vector3& operator=(const Vector3&) = default;
+	Vector3& operator=(Vector3&&) = default;
 	[[nodiscard]] Vector3 operator+(const Vector3& right) const noexcept;
 	[[nodiscard]] Vector3 operator-(const Vector3& right) const noexcept;
 	Vector3& operator+=(const Vector3& right) noexcept;
