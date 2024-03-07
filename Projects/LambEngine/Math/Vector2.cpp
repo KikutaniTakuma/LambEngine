@@ -3,22 +3,15 @@
 #include <cmath>
 #include <numbers>
 
-Vector2::Vector2() noexcept :
+constexpr Vector2::Vector2() noexcept :
 	x(0.0f),
 	y(0.0f)
 {}
 
-Vector2::Vector2(const Vector2& right) noexcept {
-	*this = right;
-}
 Vector2::Vector2(float x, float y) noexcept :
 	x(x),
 	y(y)
 {}
-
-Vector2::Vector2(Vector2&& right) noexcept {
-	*this = std::move(right);
-}
 
 const Vector2 Vector2::kIdentity = { 1.0f,1.0f };
 const Vector2 Vector2::kZero = {0.0f, 0.0f};
