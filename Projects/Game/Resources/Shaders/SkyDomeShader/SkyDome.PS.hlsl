@@ -15,7 +15,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
 	
 	output.color = tex.Sample(smp, input.uv);
 
-	/*float rayleighCoefficient = 8.0f * 
+	float rayleighCoefficient = 8.0f * 
 		pow(M_PI, 3.0f) * 
 		pow(pow(kRayleighScattering.air.refractiveIndex, 2.0f) - 1.0f, 2.0f) 
 		/ (3.0f * kRayleighScattering.air.moleculesNum * pow(kRayleighScattering.air.wavelength, 4.0f));
@@ -26,7 +26,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
 
 	float3 scatterColor = kRayleighScattering.light.color.xyz * kRayleighScattering.light.intensity * rayleighScatter;
 
-	output.color.xyz *= scatterColor;*/
+	output.color.xyz *= scatterColor;
 
 	return output;
 }
