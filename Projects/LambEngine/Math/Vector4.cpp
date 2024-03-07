@@ -37,10 +37,10 @@ Vector4::Vector4(const std::array<float, 4>& right) noexcept
 	m = right;
 }
 
-Vector4 Vector4::operator+() noexcept {
+Vector4 Vector4::operator+() const noexcept {
 	return *this;
 }
-Vector4 Vector4::operator-() noexcept {
+Vector4 Vector4::operator-() const noexcept {
 	return { -m[0], -m[1], -m[2], -m[3] };
 }
 

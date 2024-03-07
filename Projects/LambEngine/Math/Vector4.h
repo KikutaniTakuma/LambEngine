@@ -26,8 +26,8 @@ public:
 	/// 演算子のオーバーロード
 	/// </summary>
 public:
-	[[nodiscard]] Vector4 operator+()noexcept;
-	[[nodiscard]] Vector4 operator-()noexcept;
+	[[nodiscard]] Vector4 operator+() const noexcept;
+	[[nodiscard]] Vector4 operator-() const noexcept;
 
 	Vector4& operator=(const Vector4& right) noexcept = default;
 	Vector4& operator=(Vector4&& right) noexcept = default;

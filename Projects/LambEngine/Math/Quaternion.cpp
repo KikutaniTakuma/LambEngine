@@ -18,20 +18,9 @@ const Quaternion Quaternion::kZero = { 0.0f, 0.0f, 0.0f, 0.0f };
 /// コンストラクタ
 /// ========================================================================
 #pragma region Constructor
-Quaternion::Quaternion():
+constexpr Quaternion::Quaternion():
 	m{0.0f}
 {}
-
-Quaternion::Quaternion(const Quaternion& right):
-	Quaternion()
-{
-	*this = right;
-}
-Quaternion::Quaternion(Quaternion&& right) noexcept :
-	Quaternion()
-{
-	*this = right;
-}
 
 Quaternion::Quaternion(const Vector4& right):
 	Quaternion()
@@ -60,17 +49,6 @@ Quaternion::Quaternion(float x, float y, float z, float w) {
 /// コピー演算子
 /// ========================================================================
 #pragma region Copy operator
-Quaternion& Quaternion::operator=(const Quaternion& right) {
-	m = right.m;
-
-	return *this;
-}
-Quaternion& Quaternion::operator=(Quaternion&& right)noexcept {
-	m = std::move(right.m);
-
-	return *this;
-}
-
 Quaternion& Quaternion::operator=(const Vector4& right) {
 	m = right.m;
 
@@ -85,10 +63,10 @@ Quaternion& Quaternion::operator=(const Vector4& right) {
 /// 単項演算子
 /// ========================================================================
 #pragma region Unary operator
-Quaternion Quaternion::operator+() const {
+Quaternion Quaternion::operator+() const noexcept {
 	return *this;
 }
-Quaternion Quaternion::operator-() const {
+Quaternion Quaternion::operator-() const noexcept {
 	return Quaternion{ -m[0],-m[1],-m[2],-m[3] };
 }
 #pragma endregion
@@ -185,7 +163,7 @@ Quaternion& Quaternion::operator*=(float right) {
 Quaternion Quaternion::operator/(float right) const {
 	return *this * (1.0f / right);
 }
-Quaternion operator/(float right, const Quaternion& left) {
+[[nodiscard]] Quaternion operator/(float right, const Quaternion& left) {
 	return left / right;
 }
 Quaternion& Quaternion::operator/=(float right) {
