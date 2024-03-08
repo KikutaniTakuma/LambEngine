@@ -106,7 +106,7 @@ public:
 /// 静的関数
 /// </summary>
 public:
-	[[nodiscard]] static Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
+	static [[nodiscard]] Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
 };
 
 struct Ray {

@@ -43,28 +43,28 @@ public:
 public:
 	static [[nodiscard]] Mat4x4 MakeTranslate(const Vector3& vec);
 
-	static [[nodiscard]]  Mat4x4 MakeScalar(const Vector3& vec);
+	static [[nodiscard]] Mat4x4 MakeScalar(const Vector3& vec);
 
-	static [[nodiscard]]  Mat4x4 MakeRotateX(float rad);
+	static [[nodiscard]] Mat4x4 MakeRotateX(float rad);
 
-	static [[nodiscard]]  Mat4x4 MakeRotateY(float rad);
+	static [[nodiscard]] Mat4x4 MakeRotateY(float rad);
 
-	static [[nodiscard]]  Mat4x4 MakeRotateZ(float rad);
+	static [[nodiscard]] Mat4x4 MakeRotateZ(float rad);
 
-	static [[nodiscard]]  Mat4x4 MakeRotate(const Vector3& rad);
+	static [[nodiscard]] Mat4x4 MakeRotate(const Vector3& rad);
 
-	static [[nodiscard]]  Mat4x4 MakeAffin(const Vector3& scale, const Vector3& rad, const Vector3& translate);
+	static [[nodiscard]] Mat4x4 MakeAffin(const Vector3& scale, const Vector3& rad, const Vector3& translate);
 
-	static [[nodiscard]]  Mat4x4 MakeAffin(const Vector3& scale, const Vector3& from, const Vector3& to, const Vector3& translate);
+	static [[nodiscard]] Mat4x4 MakeAffin(const Vector3& scale, const Vector3& from, const Vector3& to, const Vector3& translate);
 
-	static [[nodiscard]]  Mat4x4 MakePerspectiveFov(float fovY, float aspectRatio, float nearClip, float farClip);
+	static [[nodiscard]] Mat4x4 MakePerspectiveFov(float fovY, float aspectRatio, float nearClip, float farClip);
 
-	static [[nodiscard]]  Mat4x4 MakeOrthographic(float left, float top, float right, float bottom, float nearClip, float farClip);
+	static [[nodiscard]] Mat4x4 MakeOrthographic(float left, float top, float right, float bottom, float nearClip, float farClip);
 
-	static [[nodiscard]]  Mat4x4 MakeViewPort(float left, float top, float width, float height, float minDepth, float maxDepth);
+	static [[nodiscard]] Mat4x4 MakeViewPort(float left, float top, float width, float height, float minDepth, float maxDepth);
 
 
-	static [[nodiscard]]  Mat4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
+	static [[nodiscard]] Mat4x4 DirectionToDirection(const Vector3& from, const Vector3& to);
 
 	static [[nodiscard]] Mat4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
 

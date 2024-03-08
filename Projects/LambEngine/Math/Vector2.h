@@ -65,7 +65,7 @@ public:
 /// 静的関数
 /// </summary>
 public:
-	[[nodiscard]] static Vector2 Lerp(const Vector2& start, const Vector2& end, float easeSpd);
+	static [[nodiscard]] Vector2 Lerp(const Vector2& start, const Vector2& end, float easeSpd);
 
 /// <summary>
 /// 静的定数

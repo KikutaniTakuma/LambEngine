@@ -199,7 +199,7 @@ public:
 /// 正方行列のみ
 /// </summary>
 public:
-	[[nodiscard]] static const Matrix& Identity() requires (height == width)
+	static [[nodiscard]] const Matrix& Identity() requires (height == width)
 	{
 		static Matrix identity;
 

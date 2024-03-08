@@ -104,7 +104,7 @@ public:
 	/// <param name="from">始点</param>
 	/// <param name="to">終点</param>
 	/// <returns>クォータニオン</returns>
-	[[nodiscard]] static Quaternion DirectionToDirection(const Vector3& from, const Vector3& to);
+	static [[nodiscard]]  Quaternion DirectionToDirection(const Vector3& from, const Vector3& to);
 
 	/// <summary>
 	/// 任意軸回転
@@ -112,25 +112,25 @@ public:
 	/// <param name="axis">任意軸の方向ベクトル(単位ベクトル)</param>
 	/// <param name="angle">任意軸での回転量</param>
 	/// <returns>任意軸回転を適用したクォータニオン</returns>
-	[[nodiscard]] static Quaternion MakeRotateAxisAngle(const Vector3& axis, float angle);
+	static [[nodiscard]]  Quaternion MakeRotateAxisAngle(const Vector3& axis, float angle);
 	/// <summary>
 	/// x軸回転クォータニオン
 	/// </summary>
 	/// <param name="angle">オイラー角</param>
 	/// <returns>x軸回転を適用したクォータニオン</returns>
-	[[nodiscard]] static Quaternion MakeRotateXAxis(float angle);
+	static [[nodiscard]]  Quaternion MakeRotateXAxis(float angle);
 	// <summary>
 	/// y軸回転クォータニオン
 	/// </summary>
 	/// <param name="angle">オイラー角</param>
 	/// <returns>y軸回転を適用したクォータニオン</returns>
-	[[nodiscard]] static Quaternion MakeRotateYAxis(float angle);
+	static [[nodiscard]]  Quaternion MakeRotateYAxis(float angle);
 	// <summary>
 	/// z軸回転クォータニオン
 	/// </summary>
 	/// <param name="angle">オイラー角</param>
 	/// <returns>z軸回転を適用したクォータニオン</returns>
-	[[nodiscard]] static Quaternion MakeRotateZAxis(float angle);
+	static [[nodiscard]]  Quaternion MakeRotateZAxis(float angle);
 
 	/// <summary>
 	/// クォータニオン線形補完関数(近いものの方向に回転する)
@@ -139,7 +139,7 @@ public:
 	/// <param name="end">終わりの回転</param>
 	/// <param name="t">0.0f～1.0f</param>
 	/// <returns>補完されたクォータニオン</returns>
-	[[nodiscard]] static Quaternion Slerp(Quaternion start, const Quaternion& end, float t);
+	static [[nodiscard]]  Quaternion Slerp(Quaternion start, const Quaternion& end, float t);
 
 
 /// <summary>
