@@ -14,6 +14,8 @@ private:
 		// 方向
 		Vector3 direction;
 
+		float pad;
+
 		// ポジション
 		Vector3 pos;
 
@@ -25,13 +27,12 @@ private:
 		// 屈折率
 		float refractiveIndex;
 
-		// 単位体積当たりの分子数(余りにも値が大きいのでスケールフィルターと分ける)
+		// 単位体積当たりの分子数
 		float moleculesNum;
 
-		// スケールフィルター
-		float scaleFilter;
-
-		float wavelength;
+		float wavelengthR;
+		float wavelengthG;
+		float wavelengthB;
 
 	};
 
@@ -56,6 +57,8 @@ public:
 	void Initialize();
 
 	void Finalize();
+
+	void Debug(const std::string& guiName);
 
 	void Upadate();
 
@@ -86,4 +89,7 @@ private:
 	ConstBuffer<Mesh::MatrixData> wvpData_;
 
 	ConstBuffer<RayleighScatteringStatus> rayleighScattering_;
+
+	Vector3 sunPos;
+	float hoge;
 };

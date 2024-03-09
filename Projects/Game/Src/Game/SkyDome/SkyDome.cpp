@@ -25,14 +25,16 @@ void SkyDome::Initialize()
 	rayleighScattering_->light.color = Vector4::kIdentity;
 	rayleighScattering_->light.direction = -Vector3::kYIdentity;
 	rayleighScattering_->light.pos = Vector3::kYIdentity * 1000.0f;
-	rayleighScattering_->light.intensity = 3.0f;
+	rayleighScattering_->light.intensity = 1.0f / static_cast<float>(1e-5);
 
 	// 屈折率
 	rayleighScattering_->air.refractiveIndex = 1.000277f;
-	rayleighScattering_->air.moleculesNum = 2.688f;
-	// ほんとは25乗だがあまりにも大きいので6乗で妥協
-	rayleighScattering_->air.scaleFilter = std::powf(10.0f, 6.0f);
-	rayleighScattering_->air.wavelength = 475.0f * std::powf(10.0f, -9.0f);
+	// 単位体積当たりの分子数
+	rayleighScattering_->air.moleculesNum = static_cast<float>(2.547e25);
+	// RGBの各波長
+	rayleighScattering_->air.wavelengthR = static_cast<float>(650e-9);
+	rayleighScattering_->air.wavelengthG = static_cast<float>(510e-9);
+	rayleighScattering_->air.wavelengthB = static_cast<float>(475e-9);
 
 }
 
@@ -41,6 +43,10 @@ void SkyDome::Finalize()
 	CbvSrvUavHeap* const cbvSrvUavHeap = CbvSrvUavHeap::GetInstance();
 	cbvSrvUavHeap->ReleaseView(rayleighScattering_.GetHandleUINT());
 	cbvSrvUavHeap->ReleaseView(wvpData_.GetHandleUINT());
+}
+
+void SkyDome::Debug([[maybe_unused]]const std::string& guiName){
+
 }
 
 void SkyDome::Upadate()

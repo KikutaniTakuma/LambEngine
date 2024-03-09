@@ -11,10 +11,12 @@ struct IncidentLight {
 };
 
 struct AirStatus {
-	float32_t refractiveIndex;
-	float32_t moleculesNum;
-	float32_t scaleFilter;
-	float32_t wavelength;
+	float refractiveIndex;
+	float moleculesNum;
+
+	float wavelengthR;
+	float wavelengthG;
+	float wavelengthB;
 };
 
 struct RayleighScatteringStatus {
