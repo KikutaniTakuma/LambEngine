@@ -91,5 +91,5 @@ private:
 	ConstBuffer<RayleighScatteringStatus> rayleighScattering_;
 
 	Vector3 sunPos;
-	float hoge;
+	float sunRotate;
 };

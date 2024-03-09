@@ -6,11 +6,19 @@
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 
+#ifdef _DEBUG
+#include <imgui.h>
+#endif // _DEBUG
+
+
 void SkyDome::Initialize()
 {
 	mesh_ = MeshManager::GetInstance()->LoadObj("./Resources/skydome/skydome.obj");
 
 	scale = Vector3::kIdentity * 300.0f;
+
+	sunPos = Vector3::kYIdentity * 1000.0f;
+	sunRotate = 0.f;
 
 	pipeline_ = CreatePipeline();
 
@@ -24,8 +32,8 @@ void SkyDome::Initialize()
 
 	rayleighScattering_->light.color = Vector4::kIdentity;
 	rayleighScattering_->light.direction = -Vector3::kYIdentity;
-	rayleighScattering_->light.pos = Vector3::kYIdentity * 1000.0f;
-	rayleighScattering_->light.intensity = 1.0f / static_cast<float>(1e-5);
+	rayleighScattering_->light.pos = sunPos;
+	rayleighScattering_->light.intensity = 1.0f;
 
 	// 屈折率
 	rayleighScattering_->air.refractiveIndex = 1.000277f;
@@ -46,18 +54,28 @@ void SkyDome::Finalize()
 }
 
 void SkyDome::Debug([[maybe_unused]]const std::string& guiName){
+#ifdef _DEBUG
+	ImGui::Begin(guiName.c_str());
+	ImGui::DragFloat("sun", &sunRotate, 0.01f);
+	ImGui::DragFloat3("sun pos", &rayleighScattering_->light.pos.x);
+	ImGui::DragFloat3("sun direction", &rayleighScattering_->light.direction.x);
+	ImGui::End();
+#endif // _DEBUG
 
 }
 
 void SkyDome::Upadate()
 {
 	wvpData_->worldMat = Mat4x4::MakeAffin(scale, rotate, pos);
+
+	rayleighScattering_->light.pos = sunPos * Mat4x4::MakeRotateX(sunRotate);
 }
 
 void SkyDome::Draw(const Camera& camera)
 {
 	rayleighScattering_->cameraPos = camera.GetPos();
 	rayleighScattering_->viewDirection = Vector3::kZIdentity * Mat4x4::MakeRotate(camera.rotate);
+	rayleighScattering_->light.direction = (camera.GetPos() - rayleighScattering_->light.pos).Normalize();
 
 	if (data_.empty()) {
 		data_ = mesh_->CopyBuffer();

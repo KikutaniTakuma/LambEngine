@@ -38,8 +38,9 @@ void GameScene::Finalize() {
 
 void GameScene::Update() {
 	camera_->Debug("カメラ");
-	camera_->Update(Vector3::kZero);
+	camera_->Update();
 
+	skydome_->Debug("skyDome");
 	skydome_->Upadate();
 }
 
