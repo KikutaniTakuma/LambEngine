@@ -205,6 +205,7 @@
     <ClInclude Include="Engine\EngineUtils\FrameInfo\FrameInfo.h" />
     <ClInclude Include="Engine\EngineUtils\LambPtr\LambPtr.h" />
     <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h" />
+    <ClInclude Include="Engine\Graphics\GraphicsStructs.h" />
     <ClInclude Include="Engine\Graphics\MeshManager\MeshManager.h" />
     <ClInclude Include="Engine\Graphics\MeshManager\Mesh\Mesh.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />

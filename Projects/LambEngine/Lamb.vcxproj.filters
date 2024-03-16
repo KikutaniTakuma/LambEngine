@@ -360,6 +360,9 @@
     <Filter Include="Engine\Graphics\PipelineObject\PeraPipeline">
       <UniqueIdentifier>{4fd0d217-6bd2-4ca7-8592-5b493248756a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\RenderContextManager">
+      <UniqueIdentifier>{8a28b82c-21de-47c0-ba38-a5b7a2c11e0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -559,6 +562,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Core\DescriptorHeap\Descriptor.h">
       <Filter>Engine\Core\DescriptorHeap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GraphicsStructs.h">
+      <Filter>Engine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
