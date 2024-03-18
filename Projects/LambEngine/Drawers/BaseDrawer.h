@@ -7,6 +7,8 @@
 #include "Math/Vector4.h"
 #include <string>
 
+#include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+
 class BaseDrawer {
 public:
 	BaseDrawer();
@@ -26,10 +28,11 @@ public:
 	virtual void Draw(const Camera* camera) = 0;
 
 public:
-	Mat4x4 worldMat;
-
 	Vector3 scale;
 	Vector3 rotate;
 	Vector3 translate;
+
+protected:
+	RenderContext<>* mesh;
 };
 

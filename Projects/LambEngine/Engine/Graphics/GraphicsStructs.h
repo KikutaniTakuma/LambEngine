@@ -46,8 +46,8 @@ struct Mesh {
     Lamb::LambPtr<ID3D12Resource> vertexResource;
     uint32_t vertexNumber;
 
-    D3D12_INDEX_BUFFER_VIEW indexView_;
-    Lamb::LambPtr<ID3D12Resource> indexResource_;
+    D3D12_INDEX_BUFFER_VIEW indexView;
+    Lamb::LambPtr<ID3D12Resource> indexResource;
 
     uint32_t indexNumber;
 };

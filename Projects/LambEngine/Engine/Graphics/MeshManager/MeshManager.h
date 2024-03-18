@@ -2,8 +2,9 @@
 #include <memory>
 #include <thread>
 #include <queue>
-#include "Mesh/Mesh.h"
+//#include "Mesh/Mesh.h"
 #include "Utils/UtilsLib/UtilsLib.h"
+#include "../GraphicsStructs.h"
 
 /// <summary>
 /// メッシュを管理
@@ -29,28 +30,8 @@ private:
 	static MeshManager* instance_;
 
 public:
-	Mesh* LoadObj(const std::string& objFileName);
-	void LoadObj(const std::string& objFileName, Mesh**const mesh_);
-
-	void ResetDrawCount();
-
-	void Draw();
-
-
-public:
-	void ThreadLoad();
-
-	void CheckLoadFinish();
-
-	void JoinThread();
-
-	bool IsNowThreadLoading() const;
+	[[nodiscard]] Mesh* LoadObj(const std::string& objFileName);
 
 private:
 	std::unordered_map<std::string, std::unique_ptr<Mesh>> meshs_;
-
-	std::queue<std::pair<std::string, Mesh** const>> threadMeshBuff_;
-	std::thread load_;
-	bool isThreadFinish_;
-	bool isNowThreadLoading_;
 };

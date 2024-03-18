@@ -142,6 +142,7 @@
     <ClCompile Include="Engine\EngineUtils\FlgManager\FlgManager.cpp" />
     <ClCompile Include="Engine\EngineUtils\FrameInfo\FrameInfo.cpp" />
     <ClCompile Include="Engine\Graphics\DepthBuffer\DepthBuffer.cpp" />
+    <ClCompile Include="Engine\Graphics\MeshLoader\MeshLoader.cpp" />
     <ClCompile Include="Engine\Graphics\MeshManager\MeshManager.cpp" />
     <ClCompile Include="Engine\Graphics\MeshManager\Mesh\Mesh.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\PipelineObject.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.cpp" />
+    <ClCompile Include="Engine\Graphics\RenderContextManager\RenderContextManager.cpp" />
     <ClCompile Include="Engine\Graphics\RenderTarget\RenderTarget.cpp" />
     <ClCompile Include="Engine\Graphics\RootSignature\RootSignature.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.cpp" />
@@ -206,6 +208,7 @@
     <ClInclude Include="Engine\EngineUtils\LambPtr\LambPtr.h" />
     <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h" />
     <ClInclude Include="Engine\Graphics\GraphicsStructs.h" />
+    <ClInclude Include="Engine\Graphics\MeshLoader\MeshLoader.h" />
     <ClInclude Include="Engine\Graphics\MeshManager\MeshManager.h" />
     <ClInclude Include="Engine\Graphics\MeshManager\Mesh\Mesh.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />
@@ -213,6 +216,7 @@
     <ClInclude Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\PipelineObject.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.h" />
+    <ClInclude Include="Engine\Graphics\RenderContextManager\RenderContextManager.h" />
     <ClInclude Include="Engine\Graphics\RenderTarget\RenderTarget.h" />
     <ClInclude Include="Engine\Graphics\RootSignature\RootSignature.h" />
     <ClInclude Include="Engine\Graphics\Shader\Shader.h" />

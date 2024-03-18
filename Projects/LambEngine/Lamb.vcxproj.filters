@@ -172,6 +172,12 @@
     <ClCompile Include="Drawers\BaseDrawer.cpp">
       <Filter>Drawers</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\RenderContextManager\RenderContextManager.cpp">
+      <Filter>Engine\Graphics\RenderContextManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\MeshLoader\MeshLoader.cpp">
+      <Filter>Engine\Graphics\MeshLoader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -362,6 +368,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\RenderContextManager">
       <UniqueIdentifier>{8a28b82c-21de-47c0-ba38-a5b7a2c11e0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\MeshLoader">
+      <UniqueIdentifier>{cde4235d-86b5-4e9d-941a-d920e34c5cd3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -565,6 +574,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\GraphicsStructs.h">
       <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\RenderContextManager\RenderContextManager.h">
+      <Filter>Engine\Graphics\RenderContextManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\MeshLoader\MeshLoader.h">
+      <Filter>Engine\Graphics\MeshLoader</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
