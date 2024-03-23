@@ -32,4 +32,7 @@ public:
 
 public:
 	std::unique_ptr<SkyDome> skydome_;
+
+	std::unique_ptr<Texture2D> sun_;
+	std::unique_ptr<Model> earth_;
 };

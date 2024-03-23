@@ -13,12 +13,15 @@
 
 void SkyDome::Initialize()
 {
+	const float earthRadius = 6360.0f * 1000.0f;
+	const float atmosphericRadius = earthRadius + 100.0f * 1000.0f;
+
 	mesh_ = MeshManager::GetInstance()->LoadObj("./Resources/skydome/skydome.obj");
 
-	scale = Vector3::kIdentity * 300.0f;
+	scale = Vector3::kIdentity * atmosphericRadius;
 
-	sunPos = Vector3::kYIdentity * 1000.0f;
-	sunRotate = 0.f;
+	sunPos = Vector3::kYIdentity * atmosphericRadius;
+	sunRotate = 0.0f;
 
 	pipeline_ = CreatePipeline();
 
@@ -31,9 +34,9 @@ void SkyDome::Initialize()
 	tex_ = TextureManager::GetInstance()->GetWhiteTex();
 
 	rayleighScattering_->light.color = Vector4::kIdentity;
-	rayleighScattering_->light.direction = -Vector3::kYIdentity;
+	rayleighScattering_->light.direction = Vector3::kYIdentity;
 	rayleighScattering_->light.pos = sunPos;
-	rayleighScattering_->light.intensity = 1.0f;
+	rayleighScattering_->light.intensity = 0.00000001f;
 
 	// 屈折率
 	rayleighScattering_->air.refractiveIndex = 1.000277f;
@@ -56,9 +59,10 @@ void SkyDome::Finalize()
 void SkyDome::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	ImGui::DragFloat("sun", &sunRotate, 0.01f);
-	ImGui::DragFloat3("sun pos", &rayleighScattering_->light.pos.x);
-	ImGui::DragFloat3("sun direction", &rayleighScattering_->light.direction.x);
+	ImGui::DragFloat("sun", &sunRotate, 0.001f);
+	ImGui::DragFloat("lightIntensity", &rayleighScattering_->light.intensity, 1.0f, 0.0f, std::numeric_limits<float>::max());
+	//ImGui::DragFloat3("sun pos", &sunPos.x, 1.0f, 0.0f, std::numeric_limits<float>::max());
+	//ImGui::DragFloat3("sun direction", &rayleighScattering_->light.direction.x);
 	ImGui::End();
 #endif // _DEBUG
 
@@ -75,7 +79,7 @@ void SkyDome::Draw(const Camera& camera)
 {
 	rayleighScattering_->cameraPos = camera.GetPos();
 	rayleighScattering_->viewDirection = Vector3::kZIdentity * Mat4x4::MakeRotate(camera.rotate);
-	rayleighScattering_->light.direction = (camera.GetPos() - rayleighScattering_->light.pos).Normalize();
+	rayleighScattering_->light.direction = (rayleighScattering_->light.pos - camera.GetPos()).Normalize();
 
 	if (data_.empty()) {
 		data_ = mesh_->CopyBuffer();
@@ -96,6 +100,11 @@ void SkyDome::Draw(const Camera& camera)
 		commandlist->IASetVertexBuffers(0, 1, &i.second.view);
 		commandlist->DrawInstanced(i.second.vertNum, 1, 0, 0);
 	}
+}
+
+const Vector3& SkyDome::GetSunPos() const
+{
+	return rayleighScattering_->light.pos;
 }
 
 void SkyDome::SetTexture(Texture* const tex)

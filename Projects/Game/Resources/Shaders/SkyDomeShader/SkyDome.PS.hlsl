@@ -8,28 +8,21 @@ struct PixelShaderOutPut {
 Texture2D<float4> tex : register(t0);
 SamplerState smp : register(s0);
 
-float CalculateOpticalPathLength(float startHeight, float endHeight, float stepSize) {
-    const float scaleHeight = 8500.0;
-    
-    float opticalPathLength = 0.0;
-    float currentHeight = startHeight;
+float Molecules(float pascal, float kelvin){
+	float N = pascal / (8.314 * kelvin) * 6.022f * pow(10.0f, 23.0f);
 
-    while (currentHeight < endHeight) {
-        float density = exp(-currentHeight / scaleHeight);
-        opticalPathLength += density * stepSize;
-        currentHeight += stepSize;
-    }
-
-    return opticalPathLength;
+	return N;
 }
 
-float ScatteringCoefficient(float wavelength, float lightLength){
+
+
+float ScatteringCoefficient(float wavelength){
 	float result;
 	const float n = kRayleighScattering.air.refractiveIndex;
-	const float N = kRayleighScattering.air.moleculesNum;
-	result = (8.0 * pow(M_PI,3.0) * (pow(n * n - 1.0, 2.0)));
-	result /= (3.0 * N * pow(wavelength, 4.0) * pow(n * n + 2.0, 2.0));
-	result *= lightLength * 0.05;
+	const float N = Molecules(101325.0f, 298.0f);
+	result = (8.0f * pow(M_PI,3.0f) * (pow(n * n - 1.0f, 2.0f)));
+	result /= (3.0f * N * pow(wavelength, 4.0f) * pow(n * n + 2.0f, 2.0f));
+	//result *= lightLength * 0.05f;
 
 	return result;
 }
@@ -41,10 +34,25 @@ float3 CalculateMieScattering(float3 lightDir, float3 viewDir, float3 particleAl
     return scatteredLight;
 }*/
 
+float3 CalculateLayryScattering(float R, float theta) {
+	float3 light = kRayleighScattering.light.color.xyz * kRayleighScattering.light.intensity;
+	float particleParam = 30e-9;
+	float n = kRayleighScattering.air.refractiveIndex;
+	float3 scatter = float3(kRayleighScattering.air.wavelengthR,kRayleighScattering.air.wavelengthG,kRayleighScattering.air.wavelengthB);
+
+	float3 result;
+
+	result = (light * pow(M_PI, 4.0f) /** pow(particleParam, 6.0f)*/) / (8.0f * pow(R, 2.0f) * pow(scatter, 4.0f));
+	result *= (pow(n, 2.0f) - 1) / (pow(n, 2.0f) + 1);
+	result *= 1+pow(theta, 2.0f);
+
+	return result;
+}
+
 PixelShaderOutPut main(VertexShaderOutput input)
 {
-	const float earthRadius = 6360.0f * 1000.0f;
-	const float atmosphericRadius = earthRadius + 100.0f * 1000.0f;
+	//const float earthRadius = 6360.0f * 1000.0f;
+	//const float atmosphericRadius = earthRadius + 100.0f * 1000.0f;
 
 
 
@@ -53,27 +61,55 @@ PixelShaderOutPut main(VertexShaderOutput input)
 	
 	output.color = tex.Sample(smp, input.uv);
 
-	float3 atmosphericPos = normalize(input.worldPosition.xyz);
-	atmosphericPos *= atmosphericRadius;
+	float3 lightDir = normalize(kRayleighScattering.light.pos - input.worldPosition.xyz);
+	float3 viewDir = normalize(kRayleighScattering.cameraPos - input.worldPosition.xyz);
+	float theta = dot(lightDir, viewDir);
 
-	float3 earthPos = normalize(kRayleighScattering.cameraPos);
-	earthPos *= earthRadius;
+	float lightLength = length(input.worldPosition.xyz - kRayleighScattering.cameraPos);
+	output.color.xyz = CalculateLayryScattering(lightLength, theta);
 
-	float lightLength = length(atmosphericPos - earthPos);
-
+/*
+	float lightLength = length(input.worldPosition.xyz - kRayleighScattering.cameraPos);
 
 	float3 rayleighCoefficient;
-	rayleighCoefficient.r = ScatteringCoefficient(kRayleighScattering.air.wavelengthR,lightLength);
-	rayleighCoefficient.g = ScatteringCoefficient(kRayleighScattering.air.wavelengthG,lightLength);
-	rayleighCoefficient.b = ScatteringCoefficient(kRayleighScattering.air.wavelengthB,lightLength);
+	rayleighCoefficient.r = ScatteringCoefficient(kRayleighScattering.air.wavelengthR);
+	rayleighCoefficient.g = ScatteringCoefficient(kRayleighScattering.air.wavelengthG);
+	rayleighCoefficient.b = ScatteringCoefficient(kRayleighScattering.air.wavelengthB);
 
 	float theta = dot(kRayleighScattering.light.direction, kRayleighScattering.viewDirection);
 
-	float3 rayleighScatter = rayleighCoefficient * (1.0f + pow(theta, 2.0f));
+	float3 rayleighScatter = rayleighCoefficient * ((1.0f + pow(theta, 2.0f)) / pow(lightLength, 2.0f));
+	rayleighScatter.r /= pow(kRayleighScattering.air.wavelengthR, 4.0f);
+	rayleighScatter.g /= pow(kRayleighScattering.air.wavelengthG, 4.0f);
+	rayleighScatter.b /= pow(kRayleighScattering.air.wavelengthB, 4.0f);
 
 	float3 scatterColor = kRayleighScattering.light.color.xyz * kRayleighScattering.light.intensity * rayleighScatter;
 
-	output.color.xyz *= scatterColor;
+	output.color.xyz = scatterColor;
+	*/
+	
+/*
+	float3 light = kRayleighScattering.light.color.xyz * kRayleighScattering.light.intensity;
+
+
+	float3 lightDir = normalize(kRayleighScattering.light.pos - input.worldPosition.xyz);
+	float3 viewDir = normalize(kRayleighScattering.cameraPos - input.worldPosition.xyz);
+	float theta = dot(lightDir, viewDir);
+	float incidentLightAngle = (1.0f + pow((theta), 2.0f));
+
+	float3 scattering = float3(kRayleighScattering.air.wavelengthR,kRayleighScattering.air.wavelengthG,kRayleighScattering.air.wavelengthB);
+	float3 scatteringProc = pow((2.0f * M_PI) / scattering, 4.0f);
+
+	float lightLength = length(input.worldPosition.xyz - kRayleighScattering.cameraPos);
+	float particleParam = 30e-9;
+	float particleProcParam = pow(particleParam, 6.0f) / pow(lightLength, 2.0f);
+
+
+	const float n = kRayleighScattering.air.refractiveIndex;
+	float refractiveIndex = pow(((n * n) - 1.0f) / ((n * n) + 2.0f), 2.0f);
+
+	output.color.xyz = light * incidentLightAngle * scatteringProc * particleProcParam * refractiveIndex;
+*/
 
 	return output;
 }

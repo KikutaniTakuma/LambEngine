@@ -64,6 +64,8 @@ public:
 
 	void Draw(const class Camera& camera);
 
+	const Vector3& GetSunPos() const;
+
 public:
 	void SetTexture(Texture* const tex);
 
