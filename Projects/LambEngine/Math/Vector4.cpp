@@ -4,6 +4,7 @@
 #include "Vector2.h"
 #include <cmath>
 #include <limits>
+#include <algorithm>
 
 const Vector4 Vector4::kIdentity = { 1.0f,1.0f,1.0f,1.0f };
 const Vector4 Vector4::kZero = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -102,9 +103,11 @@ Vector4& Vector4::operator-=(const Vector4& right) noexcept {
 Vector4 Vector4::operator*(float scalar) const noexcept {
 	Vector4 result;
 
-	for (size_t i = 0; i < result.m.size(); i++) {
-		result.m[i] = m[i] * scalar;
-	}
+	std::ranges::transform(
+		m, 
+		result.m.begin(),
+		[&scalar](float n)->float {return n * scalar; }
+	);
 
 	return result;
 }
@@ -115,12 +118,10 @@ Vector4& Vector4::operator*=(float scalar) noexcept {
 }
 
 Vector4 Vector4::operator/(float scalar) const noexcept {
-	Vector4 result;
+	Vector4 result = *this;
 	scalar = 1.0f / scalar;
 
-	for (size_t i = 0; i < result.m.size(); i++) {
-		result.m[i] = m[i] * scalar;
-	}
+	result *= scalar;
 
 	return result;
 }
@@ -133,7 +134,7 @@ Vector4& Vector4::operator/=(float scalar) noexcept {
 Vector4 Vector4::operator*(const Mat4x4& mat) const noexcept {
 	Vector4 result;
 
-	Mat4x4 tmp = mat.Transepose();
+	Mat4x4&& tmp = mat.Transepose();
 
 	for (int32_t i = 0; i < m.size(); i++) {
 		result.m[i] = Dot(tmp[i]);

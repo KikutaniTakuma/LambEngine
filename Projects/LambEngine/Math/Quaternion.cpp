@@ -213,30 +213,59 @@ Quaternion Quaternion::Normalize() const {
 		return *this;
 	}
 
-	float nor = 1.0f / this->Length();
-
-	return Quaternion{ *this } *nor;
+	return Quaternion{ *this } / this->Length();
 }
 
 Quaternion Quaternion::Inverce() const {
 	return Conjugate() / std::pow(Length(), 2.0f);
 }
 
+Vector3 Quaternion::GetDirectionX() const {
+	return Vector3(
+		std::pow(quaternion.w, 2.0f) + std::pow(quaternion.x, 2.0f) - std::pow(quaternion.y, 2.0f) - std::pow(quaternion.z, 2.0f),
+		2.0f * (quaternion.x * quaternion.y + quaternion.w * quaternion.z),
+		2.0f * (quaternion.x * quaternion.z - quaternion.w * quaternion.y)
+	);
+}
+
+Vector3 Quaternion::GetDirectionY() const
+{
+	return Vector3(
+		2.0f * (quaternion.x * quaternion.y - quaternion.w * quaternion.z),
+		std::pow(quaternion.w, 2.0f) - std::pow(quaternion.x, 2.0f) + std::pow(quaternion.y, 2.0f) - std::pow(quaternion.z, 2.0f),
+		2.0f * (quaternion.y * quaternion.z + quaternion.w * quaternion.x)
+	);
+}
+
+Vector3 Quaternion::GetDirectionZ() const
+{
+	return Vector3(
+		2.0f * (quaternion.x * quaternion.z + quaternion.w * quaternion.y),
+		2.0f * (quaternion.y * quaternion.z - quaternion.w * quaternion.x),
+		std::pow(quaternion.w, 2.0f) - std::pow(quaternion.x, 2.0f) - std::pow(quaternion.y, 2.0f) + std::pow(quaternion.z, 2.0f)
+	);
+}
+
 Mat4x4 Quaternion::GetMatrix() const {
+	Vector3&& directionX = GetDirectionX();
+	Vector3&& directionY = GetDirectionY();
+	Vector3&& directionZ = GetDirectionZ();
+
+
 	Mat4x4 result = Mat4x4{
-			std::pow(quaternion.w, 2.0f) + std::pow(quaternion.x, 2.0f) - std::pow(quaternion.y, 2.0f) - std::pow(quaternion.z, 2.0f),
-			2.0f * (quaternion.x * quaternion.y + quaternion.w * quaternion.z),
-			2.0f * (quaternion.x * quaternion.z - quaternion.w * quaternion.y),
+			directionX.x,
+			directionX.y,
+			directionX.z,
 			0.0f,
 
-			2.0f * (quaternion.x * quaternion.y - quaternion.w * quaternion.z),
-			std::pow(quaternion.w, 2.0f) - std::pow(quaternion.x, 2.0f) + std::pow(quaternion.y, 2.0f) - std::pow(quaternion.z, 2.0f),
-			2.0f * (quaternion.y * quaternion.z + quaternion.w * quaternion.x),
+			directionY.x,
+			directionY.y,
+			directionY.z,
 			0.0f,
 
-			2.0f * (quaternion.x * quaternion.z + quaternion.w * quaternion.y),
-			2.0f * (quaternion.y * quaternion.z - quaternion.w * quaternion.x),
-			std::pow(quaternion.w, 2.0f) - std::pow(quaternion.x, 2.0f) - std::pow(quaternion.y, 2.0f) + std::pow(quaternion.z, 2.0f),
+			directionZ.x,
+			directionZ.y,
+			directionZ.z,
 			0.0f,
 
 			0.0f,0.0f,0.0f,1.0f

@@ -87,11 +87,19 @@ public:
 	/// <returns>逆クォータニオン</returns>
 	[[nodiscard]] Quaternion Inverce() const;
 
+	[[nodiscard]] Vector3 GetDirectionX() const;
+
+	[[nodiscard]] Vector3 GetDirectionY() const;
+
+	[[nodiscard]] Vector3 GetDirectionZ() const;
+
+
 	/// <summary>
 	/// 回転行列を取得
 	/// </summary>
 	/// <returns>クォータニオンからの回転行列</returns>
 	[[nodiscard]] class Mat4x4 GetMatrix() const;
+
 
 
 /// <summary>
