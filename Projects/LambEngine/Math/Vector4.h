@@ -79,6 +79,44 @@ public:
 	[[nodiscard]] uint32_t GetColorRGBA() const;
 
 /// <summary>
+/// 配列関係の関数
+/// </summary>
+public:
+	[[nodiscard]] float* data() noexcept {
+		return m.data();
+	}
+
+	[[nodiscard]] const float* data() const noexcept {
+		return m.data();
+	}
+
+	[[nodiscard]] std::array<float, 4>::iterator begin() noexcept {
+		return m.begin();
+	}
+	[[nodiscard]] std::array<float, 4>::iterator end() noexcept {
+		return m.end();
+	}
+	[[nodiscard]] std::array<float, 4>::const_iterator cbegin() const noexcept {
+		return m.cbegin();
+	}
+	[[nodiscard]] std::array<float, 4>::const_iterator cend() const noexcept {
+		return m.cend();
+	}
+	[[nodiscard]] std::array<float, 4>::reverse_iterator rbegin() noexcept {
+		return m.rbegin();
+	}
+	[[nodiscard]] std::array<float, 4>::reverse_iterator rend() noexcept {
+		return m.rend();
+	}
+	[[nodiscard]] std::array<float, 4>::const_reverse_iterator crbegin() const noexcept {
+		return m.crbegin();
+	}
+	[[nodiscard]] std::array<float, 4>::const_reverse_iterator crend() const noexcept {
+		return m.crend();
+	}
+
+
+/// <summary>
 /// 静的定数
 /// </summary>
 public:

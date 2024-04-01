@@ -1,4 +1,5 @@
 #pragma once
+#include <iterator>
 
 /// <summary>
 /// 三次元配列
@@ -67,6 +68,37 @@ public:
 	[[nodiscard]] Vector3 Cross(const Vector3& right) const noexcept;
 	[[nodiscard]] float Length() const noexcept;
 	[[nodiscard]] Vector3 Normalize() const noexcept;
+	[[nodiscard]] float* data() noexcept {
+		return &x;
+	}
+	[[nodiscard]] const float* data() const noexcept {
+		return &x;
+	}
+	[[nodiscard]] auto begin() noexcept {
+		return std::data(*this);
+	}
+	[[nodiscard]] auto end() noexcept {
+		return std::data(*this) + 3;
+	}
+	[[nodiscard]] auto cbegin() const noexcept {
+		return std::data(*this);
+	}
+	[[nodiscard]] auto cend() const noexcept {
+		return std::data(*this) + 3;
+	}
+	[[nodiscard]] auto rbegin() noexcept {
+		return std::make_reverse_iterator(end());
+	}
+	[[nodiscard]] auto rend() noexcept {
+		return std::make_reverse_iterator(begin());
+	}
+	[[nodiscard]] auto crbegin() const noexcept {
+		return std::make_reverse_iterator(cend());
+	}
+	[[nodiscard]] auto crend() const noexcept {
+		return std::make_reverse_iterator(cbegin());
+	}
+
 
 /// <summary>
 /// 静的定数
