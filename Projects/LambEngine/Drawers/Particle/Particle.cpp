@@ -1047,7 +1047,7 @@ void Particle::Debug(const std::string& guiName) {
 		// パーティクルの設定
 		if (ImGui::TreeNode("Particle")) {
 			if (ImGui::TreeNode("size")) {
-				ImGui::Checkbox("Same height and width", settings_[i].isSameHW_.Data());
+				ImGui::Checkbox("Same height and width", settings_[i].isSameHW_.data());
 				if (settings_[i].isSameHW_) {
 					ImGui::DragFloat("size min", &settings_[i].size_.first.x, 0.01f);
 					ImGui::DragFloat("size max", &settings_[i].size_.second.x, 0.01f);
@@ -1223,7 +1223,7 @@ void Particle::Debug(const std::string& guiName) {
 
 	ImGui::Checkbox("isBillboard", &isBillboard_);
 	ImGui::Checkbox("isYBillboard", &isYBillboard_);
-	ImGui::Checkbox("isLoop", isLoop_.Data());
+	ImGui::Checkbox("isLoop", isLoop_.data());
 	if (ImGui::Button("all setting save")) {
 		for (auto i = 0llu; i < settings_.size(); i++) {
 			const auto groupName = ("setting" + std::to_string(i));

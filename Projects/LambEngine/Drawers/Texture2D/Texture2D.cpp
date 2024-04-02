@@ -355,7 +355,7 @@ void Texture2D::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	*colorBuf_ = UintToVector4(color);
 	ImGui::Begin(guiName.c_str());
-	ImGui::Checkbox("is same scale and Texture", isSameTexSize.Data());
+	ImGui::Checkbox("is same scale and Texture", isSameTexSize.data());
 	if (isSameTexSize) {
 		ImGui::DragFloat("tex scalar", &texScalar, 0.01f);
 	}
