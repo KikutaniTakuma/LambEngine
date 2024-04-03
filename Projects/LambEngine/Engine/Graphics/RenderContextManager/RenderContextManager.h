@@ -3,7 +3,8 @@
 #include <string>
 #include <memory>
 
-#include "../GraphicsStructs.h"
+#include "RenderContext/RenderContext.h"
+#include "../MeshLoader/MeshLoader.h"
 
 class RenderContextManager final {
 public:
@@ -49,16 +50,41 @@ private:
 
 
 public:
-	[[noreturn]] void Load(const LoadFileNames& fileNames);
+	template<IsBasedRenderContext RenderContextType = RenderContext<>>
+	[[noreturn]] void Load(const LoadFileNames& fileNames) {
+		auto isExist = renderData_.find(fileNames);
 
-	[[nodiscard]] RenderContext<>* const Get(const LoadFileNames& fileNames);
+		if (isExist == renderData_.end()) {
+			return;
+		}
+
+		renderData_.insert(std::make_pair(fileNames, std::make_unique<RenderSet>()));
+
+		RenderSet& currentRenderSet = *renderData_[fileNames];
+
+		Shader shader = LoadShader(fileNames.shaderName);
+
+		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader);
+
+		Mesh&& mesh = MeshLoader::LoadObj(fileNames.reourceFileName);
+
+		for (uint32_t i = 0; i < BlendType::kNum; i++) {
+			RenderContextType* renderContext = new RenderContextType();
+
+			renderContext->SetMesh(mesh);
+			renderContext->SetPipeline(pipelines[i]);
+			currentRenderSet.Set(renderContext, BlendType(i));
+		}
+	}
+
+	[[nodiscard]] RenderSet* const Get(const LoadFileNames& fileNames);
 
 private:
 	[[nodiscard]] Shader LoadShader(const ShaderFileNames& shaderName);
 
-	[[nodiscard]] RenderSetting CreateGraphicsPipelines(Shader shader);
+	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateGraphicsPipelines(Shader shader);
 
 
 private:
-	std::unordered_map<Key, std::unique_ptr<RenderContext<>>> renderData_;
+	std::unordered_map<Key, std::unique_ptr<RenderSet>> renderData_;
 };
