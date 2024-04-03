@@ -52,26 +52,21 @@ struct Mesh {
     uint32_t indexNumber;
 };
 
-struct RenderSetting {
-    enum Type {
-        kNone = Pipeline::Blend::None,
-        kNormal = Pipeline::Blend::Normal,
-        kAdd = Pipeline::Blend::Add,
-        kSub = Pipeline::Blend::Sub,
-        kMul = Pipeline::Blend::Mul,
+enum BlendType {
+    kNone = Pipeline::Blend::None,
+    
+    kNormal = Pipeline::Blend::Normal,
+    kAdd = Pipeline::Blend::Add,
+    kSub = Pipeline::Blend::Sub,
+    kMul = Pipeline::Blend::Mul,
 
-        kUnenableDepthNone = (kNone + Pipeline::Blend::BlendTypeNum),
-        kNormal,
-        kAdd,
-        kSub,
-        kMul,
+    kUnenableDepthNone = (kNone + Pipeline::Blend::BlendTypeNum),
+    kNormal,
+    kAdd,
+    kSub,
+    kMul,
 
-        kNum
-    };
-
-    std::unordered_map<Type, size_t> drawCount;
-
-    std::array<Pipeline*, size_t(Type::kNum)> pieplines;
+    kNum
 };
 
 struct Light {
@@ -87,11 +82,10 @@ struct Light {
     float ptRange;
 };
 
-template<class T = int, class LightClass = Light>
-struct RenderContext {
-    Mesh mesh;
-    RenderSetting pipeline;
-    StructuredBuffer<T> shaderStruct;
-    StructuredBuffer<WVPMatrix> wvpMatrix;
-    ConstBuffer<LightClass> light;
+template<class T, uint32_t bufferSize>
+struct ShaderData {
+    ConstBuffer<Light> light;
+    StructuredBuffer<WVPMatrix, bufferSize> wvpMatrix;
+    StructuredBuffer<Vector4, bufferSize> color;
+    StructuredBuffer<T, bufferSize> shaderStruct;
 };
