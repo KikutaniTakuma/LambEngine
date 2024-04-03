@@ -11,7 +11,7 @@ void Model::Load(const std::string& fileName) {
 	RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
 
 	renderContextManager->Load(
-		RenderContextManager::LoadFileNames{
+		LoadFileNames{
 			.reourceFileName = fileName,
 			.shaderName{
 				.vsFileName = "./Resources/Shaders/ModelShader/Model.VS.hlsl",
