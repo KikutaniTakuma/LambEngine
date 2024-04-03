@@ -178,6 +178,9 @@
     <ClCompile Include="Engine\Graphics\MeshLoader\MeshLoader.cpp">
       <Filter>Engine\Graphics\MeshLoader</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\RenderContextManager\RenderContext\RenderContext.cpp">
+      <Filter>Engine\Graphics\RenderContextManager\RenderContext</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -371,6 +374,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\MeshLoader">
       <UniqueIdentifier>{cde4235d-86b5-4e9d-941a-d920e34c5cd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\RenderContextManager\RenderContext">
+      <UniqueIdentifier>{ed16a241-2fda-436b-96b6-6136375891f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -580,6 +586,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\MeshLoader\MeshLoader.h">
       <Filter>Engine\Graphics\MeshLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\RenderContextManager\RenderContext\RenderContext.h">
+      <Filter>Engine\Graphics\RenderContextManager\RenderContext</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
