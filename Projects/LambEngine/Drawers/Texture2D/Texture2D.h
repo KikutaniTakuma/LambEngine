@@ -64,6 +64,8 @@ private:
 /// 静的メンバ変数
 /// </summary>
 private:
+	static constexpr uint32_t kMaxDrawCount = 32768u;
+
 	static std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> graphicsPipelineState_;
 	static std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> graphicsPipelineStateNoDepth_;
 	static std::array<Pipeline*, size_t(Pipeline::Blend::BlendTypeNum)> graphicsPipelineStateNoWrap_;
@@ -77,12 +79,11 @@ private:
 	static D3D12_VERTEX_BUFFER_VIEW vertexView_;
 	static Lamb::LambPtr<ID3D12Resource> vertexResource_;
 
-	static std::unique_ptr<StructuredBuffer<MatrixData>> wvpMat_;
-	static std::unique_ptr<StructuredBuffer<Vector4>> colorBuf_;
-	static std::unique_ptr<StructuredBuffer<uint32_t>> textureNumbers_;
+	static std::unique_ptr<StructuredBuffer<MatrixData, kMaxDrawCount>> wvpMat_;
+	static std::unique_ptr<StructuredBuffer<Vector4, kMaxDrawCount>> colorBuf_;
+	static std::unique_ptr<StructuredBuffer<uint32_t, kMaxDrawCount>> textureNumbers_;
 
 	static uint32_t drawCount_;
-	static constexpr uint32_t kMaxDrawCount = 32768u;
 
 public:
 	void LoadTexture(const std::string& fileName);

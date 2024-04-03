@@ -24,9 +24,9 @@ Lamb::LambPtr<ID3D12Resource> Texture2D::indexResource_ = nullptr;
 D3D12_VERTEX_BUFFER_VIEW Texture2D::vertexView_ = {};
 Lamb::LambPtr<ID3D12Resource> Texture2D::vertexResource_ = nullptr;
 
-std::unique_ptr<StructuredBuffer<Texture2D::MatrixData>> Texture2D::wvpMat_;
-std::unique_ptr<StructuredBuffer<Vector4>> Texture2D::colorBuf_;
-std::unique_ptr<StructuredBuffer<uint32_t>> Texture2D::textureNumbers_;
+std::unique_ptr<StructuredBuffer<Texture2D::MatrixData, Texture2D::kMaxDrawCount>> Texture2D::wvpMat_;
+std::unique_ptr<StructuredBuffer<Vector4, Texture2D::kMaxDrawCount>> Texture2D::colorBuf_;
+std::unique_ptr<StructuredBuffer<uint32_t, Texture2D::kMaxDrawCount>> Texture2D::textureNumbers_;
 
 
 uint32_t Texture2D::drawCount_ = 0u;
@@ -183,9 +183,9 @@ void Texture2D::Initialize(const std::string& vsFileName, const std::string& psF
 
 	
 	// 各種ストラクチャバッファ生成
-	wvpMat_.reset(new StructuredBuffer<Texture2D::MatrixData>{ kMaxDrawCount });
-	colorBuf_.reset(new StructuredBuffer<Vector4>{ kMaxDrawCount });
-	textureNumbers_.reset(new StructuredBuffer<uint32_t>{ kMaxDrawCount });
+	wvpMat_.reset(new StructuredBuffer<Texture2D::MatrixData, kMaxDrawCount>());
+	colorBuf_.reset(new StructuredBuffer<Vector4, kMaxDrawCount>());
+	textureNumbers_.reset(new StructuredBuffer<uint32_t, kMaxDrawCount>());
 
 	auto srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->BookingHeapPos(3u);
