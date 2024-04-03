@@ -7,8 +7,6 @@
 #include "Math/Vector4.h"
 #include <string>
 
-#include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
-
 class BaseDrawer {
 public:
 	BaseDrawer();
@@ -22,17 +20,17 @@ public:
 
 public:
 	virtual void Load(const std::string& fileName) = 0;
-	
-	virtual void Update() = 0;
 
-	virtual void Draw(const Camera* camera) = 0;
+	virtual void Draw(const Camera* camera, BlendType blend);
 
 public:
 	Vector3 scale;
 	Vector3 rotate;
 	Vector3 translate;
+	
+	uint32_t color;
 
 protected:
-	RenderContext<>* mesh;
+	class RenderSet* renderSet;
 };
 
