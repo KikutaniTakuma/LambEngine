@@ -178,9 +178,6 @@
     <ClCompile Include="Engine\Graphics\MeshLoader\MeshLoader.cpp">
       <Filter>Engine\Graphics\MeshLoader</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\RenderContextManager\RenderContext\RenderContext.cpp">
-      <Filter>Engine\Graphics\RenderContextManager\RenderContext</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

@@ -151,7 +151,6 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\PipelineObject.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.cpp" />
     <ClCompile Include="Engine\Graphics\RenderContextManager\RenderContextManager.cpp" />
-    <ClCompile Include="Engine\Graphics\RenderContextManager\RenderContext\RenderContext.cpp" />
     <ClCompile Include="Engine\Graphics\RenderTarget\RenderTarget.cpp" />
     <ClCompile Include="Engine\Graphics\RootSignature\RootSignature.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.cpp" />
