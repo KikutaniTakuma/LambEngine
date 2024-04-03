@@ -115,7 +115,7 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 
 
 
-	std::unordered_map<IndexData, size_t> indexTmp;
+	std::unordered_map<IndexData, uint32_t> indexTmp;
 	size_t count = 0;
 
 	for (auto& i : indexDatas) {
@@ -141,7 +141,7 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 		vertData[i.second].texIndex = i.first.textureHandle;
 	}
 
-	std::vector<uint32_t> indeces;
+	std::vector<uint16_t> indeces;
 	size_t indecesCount = 0;
 
 	for (auto& i : indexDatas) {
@@ -153,7 +153,7 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 
 	for (auto& i : indexDatas) {
 		for (auto& j : i.second) {
-			indeces.push_back(indexTmp[j]);
+			indeces.push_back(static_cast<uint16_t>(indexTmp[j]));
 		}
 	}
 

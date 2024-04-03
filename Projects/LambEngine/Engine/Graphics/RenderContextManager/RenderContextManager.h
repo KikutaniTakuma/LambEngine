@@ -6,25 +6,29 @@
 #include "RenderContext/RenderContext.h"
 #include "../MeshLoader/MeshLoader.h"
 
+namespace std {
+	template<>
+	struct hash<LoadFileNames> {
+	public:
+		size_t operator()(const LoadFileNames& data)const {
+			size_t result{};
+
+			result = std::hash<std::string>{}(
+				data.reourceFileName +
+				data.shaderName.vsFileName +
+				data.shaderName.psFileName +
+				data.shaderName.gsFileName +
+				data.shaderName.dsFileName +
+				data.shaderName.hsFileName
+				);
+
+			return result;
+		}
+
+	};
+}
+
 class RenderContextManager final {
-public:
-	struct ShaderFileNames {
-		std::string vsFileName;
-		std::string psFileName;
-		std::string gsFileName;
-		std::string dsFileName;
-		std::string hsFileName;
-
-		[[nodiscard]] bool operator==(const ShaderFileNames&) const = default;
-	};
-
-	struct LoadFileNames {
-		std::string reourceFileName;
-		ShaderFileNames shaderName;
-
-		[[nodiscard]] bool operator==(const LoadFileNames&) const = default;
-	};
-
 private:
 	using Key = LoadFileNames;
 
@@ -41,9 +45,9 @@ public:
 public:
 	static [[nodiscard]] RenderContextManager* const GetInstance();
 
-	static [[noreturn]] void Initialize();
+	static void Initialize();
 
-	static [[noreturn]] void Finalize();
+	static void Finalize();
 
 private:
 	static RenderContextManager* instance_;
@@ -51,7 +55,7 @@ private:
 
 public:
 	template<IsBasedRenderContext RenderContextType = RenderContext<>>
-	[[noreturn]] void Load(const LoadFileNames& fileNames) {
+	void Load(const LoadFileNames& fileNames) {
 		auto isExist = renderData_.find(fileNames);
 
 		if (isExist == renderData_.end()) {

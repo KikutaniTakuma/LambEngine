@@ -76,7 +76,7 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-	meshManager_->ResetDrawCount();
+	//meshManager_->ResetDrawCount();
 
 	camera_->Update(/*Vector3::kZero*/);
 

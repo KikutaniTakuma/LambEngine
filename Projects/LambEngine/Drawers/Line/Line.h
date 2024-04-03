@@ -40,7 +40,7 @@ private:
 	// 頂点バッファビュー
 	static D3D12_VERTEX_BUFFER_VIEW vertexView_;
 
-	static std::unique_ptr<StructuredBuffer<VertxData>> vertData_;
+	static std::unique_ptr<StructuredBuffer<VertxData, kDrawMaxNumber_>> vertData_;
 
 public:
 	Line();

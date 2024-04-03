@@ -2,7 +2,7 @@
 #include "../GraphicsStructs.h"
 
 class MeshLoader final {
-private:
+public:
 	struct IndexData {
 		uint32_t vertNum;
 		uint32_t uvNum;
@@ -34,4 +34,23 @@ public:
 	/// <param name="fileName">mtlファイルパス</param>
 	/// <returns>テクスチャハンドル</returns>
 	static std::unordered_map<std::string, uint32_t> LoadMtl(const std::string& fileName);
+};
+
+namespace std {
+	template<>
+	struct hash<MeshLoader::IndexData> {
+	public:
+		size_t operator()(const MeshLoader::IndexData& data)const {
+			size_t result{};
+
+			result = std::hash<std::string>{}(
+				std::to_string(data.normalNum)+
+				std::to_string(data.textureHandle) + 
+				std::to_string(data.uvNum) + 
+				std::to_string(data.vertNum)
+				);
+
+			return result;
+		}
+	};
 };

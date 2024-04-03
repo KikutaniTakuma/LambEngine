@@ -23,5 +23,5 @@ private:
 private:
 	class SceneManager* sceneManager_ = nullptr;
 
-	class ParticleEditor* particleEditor_ = nullptr;
+	//class ParticleEditor* particleEditor_ = nullptr;
 };

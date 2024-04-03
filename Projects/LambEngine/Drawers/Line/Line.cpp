@@ -14,7 +14,7 @@ Lamb::LambPtr<ID3D12Resource> Line::vertexBuffer_;
 // 頂点バッファビュー
 D3D12_VERTEX_BUFFER_VIEW Line::vertexView_;
 
-std::unique_ptr<StructuredBuffer<Line::VertxData>> Line::vertData_;
+std::unique_ptr<StructuredBuffer<Line::VertxData, Line::kDrawMaxNumber_>> Line::vertData_;
 
 void Line::Initialize() {
 	ShaderManager* const shaderManager = ShaderManager::GetInstance();
@@ -40,7 +40,7 @@ void Line::Initialize() {
 	pipline_ = PipelineManager::Create();
 	PipelineManager::StateReset();
 
-	vertData_ = std::make_unique<StructuredBuffer<VertxData>>(kDrawMaxNumber_);
+	vertData_ = std::make_unique<StructuredBuffer<VertxData, kDrawMaxNumber_>>();
 
 	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
 	heap->BookingHeapPos(1);

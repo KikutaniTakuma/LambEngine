@@ -8,7 +8,7 @@
 
 BaseScene::BaseScene(BaseScene::ID sceneID) :
 	sceneManager_(nullptr),
-	meshManager_(nullptr),
+	//meshManager_(nullptr),
 	audioManager_(nullptr),
 	textureManager_(nullptr),
 	frameInfo_(nullptr),
@@ -21,7 +21,7 @@ BaseScene::BaseScene(BaseScene::ID sceneID) :
 void BaseScene::SceneInitialize(SceneManager* sceneManager) {
 	sceneManager_ = sceneManager;
 
-	meshManager_ = MeshManager::GetInstance();
+	//meshManager_ = MeshManager::GetInstance();
 
 	audioManager_ = AudioManager::GetInstance();
 

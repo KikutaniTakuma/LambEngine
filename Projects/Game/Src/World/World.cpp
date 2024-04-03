@@ -20,8 +20,8 @@ void World::Initialize() {
 
 	sceneManager_->Initialize(BaseScene::ID::Game, BaseScene::ID::Game);
 
-	ParticleEditor::Initialize();
-	particleEditor_ = ParticleEditor::GetInstance();
+	//ParticleEditor::Initialize();
+	//particleEditor_ = ParticleEditor::GetInstance();
 }
 
 void World::Finalize() {
@@ -31,7 +31,7 @@ void World::Finalize() {
 		sceneManager_->Finalize();
 	}
 
-	ParticleEditor::Finalize();
+	//ParticleEditor::Finalize();
 
 	Framework::Finalize();
 }
@@ -39,7 +39,7 @@ void World::Finalize() {
 void World::Update() {
 	if (sceneManager_) {
 		sceneManager_->Update();
-		particleEditor_->Editor();
+		//particleEditor_->Editor();
 		isEnd_ = sceneManager_->IsEnd();
 	}
 	else {
@@ -50,7 +50,7 @@ void World::Update() {
 void World::Draw() {
 	if (sceneManager_) {
 		sceneManager_->Draw();
-		particleEditor_->Draw();
+		//particleEditor_->Draw();
 	}
 	else {
 		isEnd_ = true;

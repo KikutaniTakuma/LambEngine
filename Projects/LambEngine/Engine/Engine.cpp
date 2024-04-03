@@ -25,7 +25,7 @@
 
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
-#include "Engine/Graphics/MeshManager/MeshManager.h"
+#include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include "Graphics/PipelineManager/PipelineManager.h"
 
 #include "EngineUtils/FrameInfo/FrameInfo.h"
@@ -140,14 +140,14 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	TextureManager::Initialize();
 	AudioManager::Inititalize();
 	PipelineManager::Initialize();
-	MeshManager::Initialize();
+	RenderContextManager::Initialize();
 }
 
 void Engine::Finalize() {
 	instance_->isFinalize_ = true;
 
 	// 各種マネージャー解放
-	MeshManager::Finalize();
+	RenderContextManager::Finalize();
 	PipelineManager::Finalize();
 	AudioManager::Finalize();
 	TextureManager::Finalize();
@@ -424,11 +424,11 @@ void Engine::FrameEnd() {
 	// またUnloadされていたらそれをコンテナから削除する
 	textureManager->ReleaseIntermediateResource();
 
-	// メッシュの非同期読み込み
-	auto meshManager = MeshManager::GetInstance();
-	meshManager->ThreadLoad();
-	meshManager->JoinThread();
-	meshManager->CheckLoadFinish();
+	//// メッシュの非同期読み込み
+	//auto meshManager = MeshManager::GetInstance();
+	//meshManager->ThreadLoad();
+	//meshManager->JoinThread();
+	//meshManager->CheckLoadFinish();
 
 	// 音の非同期読み込み
 	auto audioManager = AudioManager::GetInstance();

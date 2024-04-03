@@ -38,14 +38,8 @@
     <ClCompile Include="Src\Scenes\SubMenu\SubMenu.cpp">
       <Filter>Scenes\SubMenu</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp">
-      <Filter>Editor\ParticleEditor</Filter>
-    </ClCompile>
     <ClCompile Include="Src\ResoureceManager\ResoureceManager.cpp">
       <Filter>ResoureceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\Water\Water.cpp">
-      <Filter>Game\Water</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,17 +85,11 @@
     <Filter Include="Editor">
       <UniqueIdentifier>{38830fbd-b2f4-43bb-85ce-ccfa08c65319}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\ParticleEditor">
-      <UniqueIdentifier>{4b7de689-4b28-45f6-bb48-00506bfb839d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\CollisionManager\Plane">
       <UniqueIdentifier>{268eefac-748b-4452-b6c2-10e06349215c}</UniqueIdentifier>
     </Filter>
     <Filter Include="ResoureceManager">
       <UniqueIdentifier>{c6379256-68ba-4ce2-b92a-437563ffcfcb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Water">
-      <UniqueIdentifier>{db170fba-cd99-4b05-a820-35cea969012a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -141,14 +129,8 @@
     <ClInclude Include="Src\Scenes\SubMenu\SubMenu.h">
       <Filter>Scenes\SubMenu</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h">
-      <Filter>Editor\ParticleEditor</Filter>
-    </ClInclude>
     <ClInclude Include="Src\ResoureceManager\ResoureceManager.h">
       <Filter>ResoureceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\Water\Water.h">
-      <Filter>Game\Water</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

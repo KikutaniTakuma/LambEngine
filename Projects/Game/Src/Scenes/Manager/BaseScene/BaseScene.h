@@ -38,7 +38,7 @@ public:
 protected:
 	class SceneManager* sceneManager_;
 
-	class MeshManager* meshManager_;
+	//class MeshManager* meshManager_;
 
 	class AudioManager* audioManager_;
 

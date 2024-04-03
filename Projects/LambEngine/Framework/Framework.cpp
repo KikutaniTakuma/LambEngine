@@ -23,16 +23,12 @@ void Framework::Initialize() {
 
 	// 各種パイプライン生成
 	Texture2D::Initialize();
-	Mesh::Initialize();
-	Model::Initialize();
 	Line::Initialize();
-	Particle::Initialize();
 }
 
 void Framework::Finalize() {
 	// インデックスリソース解放
 	Line::Finalize();
-	Particle::Finalize();
 	Texture2D::Finalize();
 
 	// 入力関連解放

@@ -60,11 +60,11 @@ enum BlendType {
     kSub = Pipeline::Blend::Sub,
     kMul = Pipeline::Blend::Mul,
 
-    kUnenableDepthNone = (kNone + Pipeline::Blend::BlendTypeNum),
-    kNormal,
-    kAdd,
-    kSub,
-    kMul,
+    kUnenableDepthNone = (Pipeline::Blend::BlendTypeNum),
+    kUnenableDepthNormal,
+    kUnenableDepthAdd,
+    kUnenableDepthSub,
+    kUnenableDepthMul,
 
     kNum
 };
@@ -88,4 +88,30 @@ struct ShaderData {
     StructuredBuffer<WVPMatrix, bufferSize> wvpMatrix;
     StructuredBuffer<Vector4, bufferSize> color;
     StructuredBuffer<T, bufferSize> shaderStruct;
+};
+
+struct ShaderFileNames {
+    std::string vsFileName;
+    std::string psFileName;
+    std::string gsFileName;
+    std::string dsFileName;
+    std::string hsFileName;
+
+    [[nodiscard]] bool operator==(const ShaderFileNames& right) const {
+        return vsFileName == right.vsFileName &&
+            psFileName == right.psFileName &&
+            gsFileName == right.gsFileName &&
+            dsFileName == right.dsFileName &&
+            hsFileName == right.hsFileName;
+    }
+};
+
+struct LoadFileNames {
+    std::string reourceFileName;
+    ShaderFileNames shaderName;
+
+    [[nodiscard]] bool operator==(const LoadFileNames& right) const {
+        return reourceFileName == right.reourceFileName &&
+            shaderName == right.shaderName;
+    }
 };

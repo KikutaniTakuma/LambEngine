@@ -6,6 +6,7 @@
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"
 #include <string>
+#include "Engine/Graphics/GraphicsStructs.h"
 
 class BaseDrawer {
 public:

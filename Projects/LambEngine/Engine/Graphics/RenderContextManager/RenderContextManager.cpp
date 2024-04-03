@@ -60,8 +60,6 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 
 	auto srvHeap = CbvSrvUavHeap::GetInstance();
 
-	auto descriptorHeap = CbvSrvUavHeap::GetInstance();
-
 
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].NumDescriptors = 1;
