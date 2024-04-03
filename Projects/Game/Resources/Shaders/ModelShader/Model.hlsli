@@ -1,25 +1,38 @@
-cbuffer WorldViewProjection : register(b0){
+struct WVPMatrix {
 	float32_t4x4 worldMat;
-	float32_t4x4 viewProjectionMat;
-}
+	float32_t4x4 cameraMat;
+};
 
-cbuffer DirectionLight : register(b1) {
-	float3 ligDirection;
-	float3 ligColor;
-	float3 eyePos;
+struct DirectionLight {
+	float32_t3 ligDirection;
+	float32_t3 ligColor;
+	float32_t3 eyePos;
 
-	float3 ptPos;
-	float3 ptColor;
-	float ptRange;
-}
+	float32_t3 ptPos;
+	float32_t3 ptColor;
+	float32_t ptRange;
+};
 
-cbuffer Color : register(b2){
-	float4 color;
-}
+struct Color {
+	float32_t4 color;
+};
+
+struct ShaderStruct {
+	float32_t num;
+};
+
+ConstantBuffer<DirectionLight> kLight : register(b0);
+StructuredBuffer<WVPMatrix> kWvpMat : register(t0);
+StructuredBuffer<Color> kColor : register(t1);
+StructuredBuffer<ShaderStruct> kNumbers : register(t2);
+Texture2D<float4> textures[] : register(t3);
+SamplerState smp : register(s0);
 
 struct VertexShaderOutput{
     float32_t4 position : SV_POSITION;
     float32_t3 normal : NORMAL;
     float32_t4 worldPosition : POSITION1;
     float32_t2 uv : TEXCOORD;
+	uint32_t textureID : BLENDINDICES0;
+	uint32_t instanceID : BLENDINDICES1;
 };

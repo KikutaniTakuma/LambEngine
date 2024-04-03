@@ -1,18 +1,18 @@
 #include "Model.hlsli"
 
-struct Material {
-	float32_t4 color;
-};
 struct PixelShaderOutPut {
 	float32_t4 color : SV_TARGET0;
 };
 
-Texture2D<float4> tex : register(t0);
-SamplerState smp : register(s0);
-
 PixelShaderOutPut main(VertexShaderOutput input)
 {
 	PixelShaderOutPut output;
+	
+	flaot32_t4 textureColor = textures[input.textureID].Sample(smp, input.uv);
+
+	output.color = textureColor * kColor[instanceID];
+
+	/*
 	input.normal = normalize(input.normal);
 
 	// ディレクションライト拡散反射光
@@ -22,6 +22,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
 	t = (t + abs(t)) * 0.5f;
 
 	float3 diffDirection = ligColor * t;
+	*/
 
 	// メタリックすぎるので削除
 	// ディレクションライト鏡面反射光
@@ -36,7 +37,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
 	t = pow(t, 5.0f);
 	float3 specDirection =  ligColor * t;*/
 
-
+/*
 	float3 ligDir = input.worldPosition.xyz - ptPos;
 	ligDir = normalize(ligDir);
 
@@ -82,6 +83,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
 	lig.y += 0.2f;
 	lig.z += 0.2f;
 	output.color.xyz *= lig;
+	*/
 
 	return output;
 }
