@@ -7,6 +7,8 @@
 
 #include "../PipelineManager/PipelineManager.h"
 
+RenderContextManager* RenderContextManager::instance_ = nullptr;
+
 RenderContextManager::~RenderContextManager()
 {
 }

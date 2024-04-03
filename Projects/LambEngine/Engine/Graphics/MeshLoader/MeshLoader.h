@@ -9,13 +9,13 @@ public:
 		uint32_t normalNum;
 		uint32_t textureHandle;
 
-		inline bool operator==(const IndexData& right) {
+		inline bool operator==(const IndexData& right) const {
 			return vertNum == right.vertNum
 				&& uvNum == right.uvNum
 				&& normalNum == right.normalNum
 				&& textureHandle == right.textureHandle;
 		}
-		inline bool operator!=(const IndexData& right) {
+		inline bool operator!=(const IndexData& right) const {
 			return !(*this == right);
 		}
 	};
@@ -36,21 +36,21 @@ public:
 	static std::unordered_map<std::string, uint32_t> LoadMtl(const std::string& fileName);
 };
 
-namespace std {
-	template<>
-	struct hash<MeshLoader::IndexData> {
-	public:
-		size_t operator()(const MeshLoader::IndexData& data)const {
-			size_t result{};
-
-			result = std::hash<std::string>{}(
-				std::to_string(data.normalNum)+
-				std::to_string(data.textureHandle) + 
-				std::to_string(data.uvNum) + 
-				std::to_string(data.vertNum)
-				);
-
-			return result;
-		}
-	};
-};
+//namespace std {
+//	template<>
+//	struct hash<MeshLoader::IndexData> {
+//	public:
+//		size_t operator()(const MeshLoader::IndexData& data)const {
+//			size_t result{};
+//
+//			result = std::hash<std::string>{}(
+//				std::to_string(data.normalNum)+
+//				std::to_string(data.textureHandle) + 
+//				std::to_string(data.uvNum) + 
+//				std::to_string(data.vertNum)
+//				);
+//
+//			return result;
+//		}
+//	};
+//};

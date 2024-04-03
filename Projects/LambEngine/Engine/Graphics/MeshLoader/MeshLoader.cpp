@@ -115,17 +115,21 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 
 
 
-	std::unordered_map<IndexData, uint32_t> indexTmp;
-	size_t count = 0;
+	std::vector<std::pair<IndexData, uint16_t>> indexTmp;
+	uint16_t count = 0;
 
 	for (auto& i : indexDatas) {
 		for (auto& index : i.second) {
 			index.textureHandle = texHandles[i.first];
 
-			auto isExist = indexTmp.find(index);
+			auto isExist = std::find_if(indexTmp.begin(), indexTmp.end(), 
+				[&index](const std::pair<IndexData, uint16_t>& data)->bool {
+					return index == data.first;
+				}
+				);
 
 			if (isExist == indexTmp.end()) {
-				indexTmp.emplace(std::make_pair(i.second, count));
+				indexTmp.push_back(std::make_pair(index, count));
 				count++;
 			}
 		}
@@ -153,7 +157,17 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 
 	for (auto& i : indexDatas) {
 		for (auto& j : i.second) {
-			indeces.push_back(static_cast<uint16_t>(indexTmp[j]));
+			auto indexTmpItr = std::find_if(indexTmp.begin(), indexTmp.end(),
+				[&j](const std::pair<IndexData, uint16_t>& data)->bool {
+					return j == data.first;
+				}
+			);
+
+			if (indexTmpItr == indexTmp.end()) {
+				throw Lamb::Error::Code<MeshLoader>("cannot find index", __func__);
+			}
+
+			indeces.push_back(indexTmpItr->second);
 		}
 	}
 
