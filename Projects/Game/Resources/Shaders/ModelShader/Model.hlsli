@@ -6,25 +6,20 @@ struct WVPMatrix {
 struct DirectionLight {
 	float32_t3 ligDirection;
 	float32_t3 ligColor;
-	float32_t3 eyePos;
-
-	float32_t3 ptPos;
-	float32_t3 ptColor;
-	float32_t ptRange;
 };
 
 struct Color {
 	float32_t4 color;
 };
 
-struct ShaderStruct {
-	uint32_t num;
+struct IsLighting {
+	uint32_t isLighting;
 };
 
 ConstantBuffer<DirectionLight> kLight : register(b0);
 StructuredBuffer<WVPMatrix> kWvpMat : register(t0);
 StructuredBuffer<Color> kColor : register(t1);
-StructuredBuffer<ShaderStruct> kNumbers : register(t2);
+StructuredBuffer<IsLighting> kIsLighting : register(t2);
 Texture2D<float4> textures[] : register(t3);
 SamplerState smp : register(s0);
 

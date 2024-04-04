@@ -204,6 +204,7 @@ public:
     // ごり押し
     // やばい
     // マジでヤバイ
+    // 使うときは気を付けて(一応エラーは出る)
     template<IsBasedRenderContext ClassName>
     inline ClassName* GetRenderContextDowncast(BlendType blend) {
         if (typeid(ClassName).name() != renderDatas_[blend]->GetID()) {
@@ -211,6 +212,39 @@ public:
         }
 
         return dynamic_cast<ClassName*>(renderDatas_[blend].get());
+    }
+
+public:
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::iterator begin() {
+        return renderDatas_.begin();
+    }
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::iterator end() {
+        return renderDatas_.end();
+    }
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_iterator cbegin() const {
+        return renderDatas_.cbegin();
+    }
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_iterator cend() const {
+        return renderDatas_.cend();
+    }
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::reverse_iterator rbegin() {
+        return renderDatas_.rbegin();
+    }
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::reverse_iterator rend() {
+        return renderDatas_.rend();
+    }
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_reverse_iterator crbegin() const {
+        return renderDatas_.crbegin();
+    }
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_reverse_iterator crend() const {
+        return renderDatas_.crend();
+    }
+
+    std::unique_ptr<RenderData>* const data() {
+        return renderDatas_.data();
+    }
+    const std::unique_ptr<RenderData>* const data() const {
+        return renderDatas_.data();
     }
 
 private:

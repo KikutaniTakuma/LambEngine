@@ -29,4 +29,21 @@ void Model::Load(const std::string& fileName) {
 			}
 		}
 	);
+
+	for (auto& i : *renderSet) {
+		i->SetLight(
+			Light{
+				.ligDirection{-Vector3::kYIndentity},
+				.pad0{},
+				.ligColor{ Vector3::kIdentity },
+			}
+		);
+	}
+}
+
+void Model::Draw(const Camera* camera, BlendType blend, bool isLighting) {
+	RenderContext<>* renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
+	renderContext->SetSahderStruct(static_cast<int32_t>(isLighting));
+
+	BaseDrawer::Draw(camera, blend);
 }

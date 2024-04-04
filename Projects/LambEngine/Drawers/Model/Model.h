@@ -18,4 +18,5 @@ public:
 public:
 	void Load(const std::string& fileName) override;
 
+	void Draw(const Camera* camera, BlendType blend, bool isLighting);
 };

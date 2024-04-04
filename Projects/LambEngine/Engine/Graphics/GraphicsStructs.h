@@ -26,9 +26,6 @@ struct Vertex {
     // 法線
     Vector3 normal;
 
-    // パディング
-    //float pad0 = 0.0f;
-
     // uv座標
     Vector2 uv;
 
@@ -106,16 +103,15 @@ enum BlendType {
 };
 
 struct Light {
-    Vector3 ligDirection;
+    Vector3 ligDirection = -Vector3::kYIndentity;
     float pad0;
-    Vector3 ligColor;
-    float pad1;
-    Vector3 eyePos;
+    Vector3 ligColor = Vector3::kIdentity;
+    /*Vector3 eyePos;
     float pad2;
     Vector3 ptPos;
     float pad3;
     Vector3 ptColor;
-    float ptRange;
+    float ptRange;*/
 };
 
 template<class T, uint32_t bufferSize>

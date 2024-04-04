@@ -34,5 +34,5 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-	model_->Draw(camera_.get(), BlendType::kNone);
+	model_->Draw(camera_.get(), BlendType::kNone, true);
 }
