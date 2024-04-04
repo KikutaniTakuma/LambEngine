@@ -15,7 +15,12 @@ public:
 
 
 public:
-    BaseRenderContext() = default;
+    BaseRenderContext():
+        mesh_(nullptr),
+        pipeline_(nullptr),
+        drawCount_(0),
+        typeID_()
+    {}
     virtual ~BaseRenderContext() = default;
 
     virtual void Draw() = 0;
@@ -204,7 +209,7 @@ public:
     // ごり押し
     // やばい
     // マジでヤバイ
-    // 使うときは気を付けて(一応エラーは出る)
+    // 使うときは気を付けて(一応型が違ったらエラーは出る)
     template<IsBasedRenderContext ClassName>
     inline ClassName* GetRenderContextDowncast(BlendType blend) {
         if (typeid(ClassName).name() != renderDatas_[blend]->GetID()) {
