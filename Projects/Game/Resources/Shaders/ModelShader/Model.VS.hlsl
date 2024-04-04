@@ -12,11 +12,11 @@ VertexShaderOutput main(VertexShaderInput input,uint32_t instanceID : SV_Instanc
 {
 	VertexShaderOutput output;
 	
-	input.position = mul(input.position, kWvpMat[instanceId].worldMat);
+	input.position = mul(input.position, kWvpMat[instanceID].worldMat);
 	output.worldPosition = input.position;
-	output.position = mul(input.position, kWvpMat[instanceId].cameraMat);
+	output.position = mul(input.position, kWvpMat[instanceID].cameraMat);
 	input.normal = normalize(input.normal);
-	output.normal = mul(input.normal, (float32_t3x3)kWvpMat[instanceId].worldMat);
+	output.normal = mul(input.normal, (float32_t3x3)kWvpMat[instanceID].worldMat);
 	output.uv = input.uv;
 	output.instanceID = instanceID;
 	output.textureID = input.textureID;

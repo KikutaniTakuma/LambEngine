@@ -19,20 +19,32 @@ public:
     virtual ~BaseRenderContext() = default;
 
     virtual void Draw() = 0;
-    virtual bool IsDraw() const = 0;
 
     const std::string& GetID() const {
         return typeID_;
     }
 
-    virtual void SetMesh(const Mesh& mesh) = 0;
+    virtual void SetMesh(const Mesh* const mesh) = 0;
     virtual void SetPipeline(Pipeline* const pipeline) = 0;
     virtual void SetWVPMatrix(const WVPMatrix& matrix) = 0;
     virtual void SetColor(const Vector4& color) = 0;
     virtual void SetLight(const Light& light) = 0;
 
+public:
+    void AddDrawCount() {
+        drawCount_++;
+    }
+
+    void ResetDrawCount() {
+        drawCount_ = 0u;
+    }
+
+    bool IsDraw() const {
+        return drawCount_ != 0u;
+    }
+
 protected:
-    Mesh mesh_;
+    const Mesh* mesh_;
 
     Pipeline* pipeline_;
     uint32_t drawCount_;
@@ -80,19 +92,6 @@ public:
     RenderContext& operator=(RenderContext&&) = delete;
 
 public:
-    void AddDrawCount() {
-        drawCount_++;
-    }
-
-    void ResetDrawCount() {
-        drawCount_ = 0u;
-    }
-
-    bool IsDraw() const override {
-        return drawCount_ != 0u;
-    }
-
-public:
     [[noreturn]] void Draw() override {
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
@@ -104,29 +103,28 @@ public:
 
         // ライト構造体
         commandlist->SetGraphicsRootDescriptorTable(0, shaderData_.light.GetHandleGPU());
-        // ワールドとカメラマトリックス
+        // ワールドとカメラマトリックス, 色, 各シェーダーの構造体
         commandlist->SetGraphicsRootDescriptorTable(1, shaderData_.wvpMatrix.GetHandleGPU());
-        // 色
-        commandlist->SetGraphicsRootDescriptorTable(2, shaderData_.color.GetHandleGPU());
-        // 各シェーダーの構造体
-        commandlist->SetGraphicsRootDescriptorTable(3, shaderData_.shaderStruct.GetHandleGPU());
         // テクスチャ
-        commandlist->SetGraphicsRootDescriptorTable(4, descriptorHeap->GetGpuHeapHandle(0));
+        commandlist->SetGraphicsRootDescriptorTable(2, descriptorHeap->GetGpuHeapHandle(0));
 
         // 頂点バッファセット
-        commandlist->IASetVertexBuffers(0, 1, &mesh_.vertexView);
+        commandlist->IASetVertexBuffers(0, 1, &mesh_->vertexView);
         // インデックスバッファセット
-        commandlist->IASetIndexBuffer(&mesh_.indexView);
+        commandlist->IASetIndexBuffer(&mesh_->indexView);
         // ドローコール
-        commandlist->DrawIndexedInstanced(mesh_.indexNumber, drawCount_, 0, 0, 0);
+        commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, 0);
     }
     
 public:
-    inline void SetMesh(const Mesh& mesh) override {
+    inline void SetMesh(const Mesh* const mesh) override {
+        if (!mesh) {
+            throw Lamb::Error::Code<RenderContext>("mesh is nullptr", __func__);
+        }
         mesh_ = mesh;
     }
     inline void SetPipeline(Pipeline* const pipeline) override {
-        if (not pipeline_) {
+        if (!pipeline) {
             throw Lamb::Error::Code<RenderContext>("pipeline is nullptr", __func__);
         }
         pipeline_ = pipeline;
@@ -189,6 +187,12 @@ public:
             if (i->IsDraw()) {
                 i->Draw();
             }
+        }
+    }
+
+    inline void ResetDrawCount() {
+        for (auto& i : renderDatas_) {
+            i->ResetDrawCount();
         }
     }
 

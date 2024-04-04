@@ -40,6 +40,18 @@ RenderSet* const RenderContextManager::Get(const LoadFileNames& fileNames)
 	return renderData_[fileNames].get();
 }
 
+void RenderContextManager::Draw() {
+	for (auto& i : renderData_) {
+		i.second->Draw();
+	}
+}
+
+void RenderContextManager::ResetDrawCount() {
+	for (auto& i : renderData_) {
+		i.second->ResetDrawCount();
+	}
+}
+
 Shader RenderContextManager::LoadShader(const ShaderFileNames& shaderName)
 {
 	Shader result;
@@ -58,7 +70,7 @@ Shader RenderContextManager::LoadShader(const ShaderFileNames& shaderName)
 
 std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipelines(Shader shader)
 {
-	std::array<Pipeline*, BlendType::kNum> result;
+	std::array<Pipeline*, BlendType::kNum> result = {nullptr};
 
 	auto srvHeap = CbvSrvUavHeap::GetInstance();
 

@@ -22,14 +22,14 @@ public:
 		range_(),
 		roootParamater_()
 	{
-		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(T) * 1u);
+		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(T) * size());
 		srvDesc_ = {};
 		srvDesc_.Format = DXGI_FORMAT_UNKNOWN;
 		srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_BUFFER;
 		srvDesc_.Buffer.FirstElement = 0;
 		srvDesc_.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
-		srvDesc_.Buffer.NumElements = bufferSize;
+		srvDesc_.Buffer.NumElements = size();
 		srvDesc_.Buffer.StructureByteStride = sizeof(T);
 
 		if (isWright_) {
@@ -58,8 +58,6 @@ public:
 		*this = right;
 	}
 
-	template<Lamb::IsContainsType<T> Container>
-	inline StructuredBuffer(const Container& right) = delete;
 	inline StructuredBuffer(StructuredBuffer&&) = delete;
 
 	inline StructuredBuffer& operator=(const StructuredBuffer& right) {
@@ -98,7 +96,7 @@ public:
 		return data_[index];
 	}
 
-	constexpr uint32_t Size() const {
+	constexpr uint32_t size() const {
 		return bufferSize;
 	}
 

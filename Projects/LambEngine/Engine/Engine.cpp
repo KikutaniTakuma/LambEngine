@@ -26,6 +26,7 @@
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+#include "Engine/Graphics/MeshManager/MeshManager.h"
 #include "Graphics/PipelineManager/PipelineManager.h"
 
 #include "EngineUtils/FrameInfo/FrameInfo.h"
@@ -140,6 +141,7 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	TextureManager::Initialize();
 	AudioManager::Inititalize();
 	PipelineManager::Initialize();
+	MeshManager::Initialize();
 	RenderContextManager::Initialize();
 }
 
@@ -148,6 +150,7 @@ void Engine::Finalize() {
 
 	// 各種マネージャー解放
 	RenderContextManager::Finalize();
+	MeshManager::Finalize();
 	PipelineManager::Finalize();
 	AudioManager::Finalize();
 	TextureManager::Finalize();
@@ -384,15 +387,18 @@ void Engine::FrameStart() {
 }
 
 void Engine::FrameEnd() {
+	// エラーチェック
 	static auto err = ErrorCheck::GetInstance();
 	if (err->GetError()) {
 		return;
 	}
 	FlgManager::GetInstance()->AllFlgUpdate();
 
+	RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
+	renderContextManager->Draw();
+
 	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	frameInfo->DrawFps();
-
 	Lamb::screenout.Draw();
 
 	ImGuiManager::GetInstance()->End();
@@ -434,6 +440,8 @@ void Engine::FrameEnd() {
 	auto audioManager = AudioManager::GetInstance();
 	audioManager->ThreadLoad();
 	audioManager->CheckThreadLoadFinish();
+
+	renderContextManager->ResetDrawCount();
 
 	frameInfo->End();
 }

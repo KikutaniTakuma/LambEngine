@@ -10,7 +10,7 @@ public:
 	Model(const std::string& fileName);
 	Model(const Model&) = default;
 	Model(Model&& right) noexcept = default;
-	~Model();
+	~Model() = default;
 
 	Model& operator=(const Model& right) = default;
 	Model& operator=(Model&& right) noexcept = default;

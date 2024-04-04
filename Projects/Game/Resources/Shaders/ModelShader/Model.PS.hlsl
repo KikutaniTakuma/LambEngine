@@ -8,9 +8,9 @@ PixelShaderOutPut main(VertexShaderOutput input)
 {
 	PixelShaderOutPut output;
 	
-	flaot32_t4 textureColor = textures[input.textureID].Sample(smp, input.uv);
+	float32_t4 textureColor = textures[input.textureID].Sample(smp, input.uv);
 
-	output.color = textureColor * kColor[instanceID];
+	output.color = textureColor * kColor[input.instanceID].color;
 
 	/*
 	input.normal = normalize(input.normal);

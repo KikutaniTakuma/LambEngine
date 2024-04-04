@@ -24,6 +24,8 @@ public:
 
 	virtual void Draw(const Camera* camera, BlendType blend);
 
+	virtual void Debug(const std::string& guiName);
+
 public:
 	Vector3 scale;
 	Vector3 rotate;

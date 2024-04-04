@@ -139,9 +139,6 @@
     <ClCompile Include="Engine\Graphics\MeshManager\MeshManager.cpp">
       <Filter>Engine\Graphics\MeshManager</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\MeshManager\Mesh\Mesh.cpp">
-      <Filter>Engine\Graphics\MeshManager\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Math\Mat4x4.cpp">
       <Filter>Math</Filter>
     </ClCompile>
@@ -333,9 +330,6 @@
     <Filter Include="Engine\Graphics\MeshManager">
       <UniqueIdentifier>{e3b837b9-c45b-439a-98d3-36af6cb3ea8e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\MeshManager\Mesh">
-      <UniqueIdentifier>{32d082aa-0e85-4ef4-b2d9-1c07a678fc69}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\TextureManager">
       <UniqueIdentifier>{1336c590-e855-4d4f-92b9-fa2698582835}</UniqueIdentifier>
     </Filter>
@@ -520,9 +514,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\MeshManager\MeshManager.h">
       <Filter>Engine\Graphics\MeshManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\MeshManager\Mesh\Mesh.h">
-      <Filter>Engine\Graphics\MeshManager\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Math\Mat4x4.h">
       <Filter>Math</Filter>

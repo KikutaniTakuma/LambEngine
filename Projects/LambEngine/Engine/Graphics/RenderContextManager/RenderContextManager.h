@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "RenderContext/RenderContext.h"
-#include "../MeshLoader/MeshLoader.h"
+#include "../MeshManager/MeshManager.h"
 
 namespace std {
 	template<>
@@ -58,7 +58,7 @@ public:
 	void Load(const LoadFileNames& fileNames) {
 		auto isExist = renderData_.find(fileNames);
 
-		if (isExist == renderData_.end()) {
+		if (isExist != renderData_.end()) {
 			return;
 		}
 
@@ -70,18 +70,22 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader);
 
-		Mesh&& mesh = MeshLoader::LoadObj(fileNames.reourceFileName);
+		Mesh* mesh = MeshManager::GetInstance()->LoadObj(fileNames.reourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
-			RenderContextType* renderContext = new RenderContextType();
+			std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();
 
 			renderContext->SetMesh(mesh);
 			renderContext->SetPipeline(pipelines[i]);
-			currentRenderSet.Set(renderContext, BlendType(i));
+			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
 	}
 
 	[[nodiscard]] RenderSet* const Get(const LoadFileNames& fileNames);
+
+public:
+	void Draw();
+	void ResetDrawCount();
 
 private:
 	[[nodiscard]] Shader LoadShader(const ShaderFileNames& shaderName);

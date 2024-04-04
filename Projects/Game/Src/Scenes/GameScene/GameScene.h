@@ -29,5 +29,5 @@ public:
 	void Draw() override;
 
 public:
-	std::array<std::unique_ptr<Texture2D>,32 * 18> tex_;
+	std::unique_ptr<Model> model_;
 };
