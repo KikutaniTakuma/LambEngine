@@ -78,7 +78,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
       <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\;$(SolutionDir)Projects\externals\assimp\lib\$(Configuration)\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DirectXTex.lib;DirectXTK12.lib;imgui.lib;assimp-vc143-mtd.lib</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mtd.lib</AdditionalDependencies>
       <AdditionalOptions>/ignore:4049 /ignore:4098 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
@@ -118,7 +118,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
       <AdditionalLibraryDirectories>$(SolutionDir)Projects\externals\assimp\lib\$(Configuration)\;$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>DirectXTex.lib;DirectXTK12.lib;imgui.lib;assimp-vc143-mt.lib</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mt.lib</AdditionalDependencies>
       <AdditionalOptions>/ignore:4049 /ignore:4098 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
