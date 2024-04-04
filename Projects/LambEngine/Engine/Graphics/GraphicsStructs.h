@@ -27,14 +27,50 @@ struct Vertex {
     Vector3 normal;
 
     // パディング
-    float pad0;
+    //float pad0 = 0.0f;
 
     // uv座標
     Vector2 uv;
 
     // テクスチャのインデックス
-    uint32_t texIndex;
+    uint32_t texIndex = 0u;
+
+    bool operator==(const Vertex& right)const {
+        return pos == right.pos and
+            normal == right.normal and
+            uv == right.uv and
+            texIndex == right.texIndex;
+    }
+    bool operator!=(const Vertex& right)const {
+        return not (*this == right);
+    }
 };
+
+namespace std {
+    template<>
+    struct hash<Vertex> {
+    public:
+        size_t operator()(const Vertex& data)const {
+            size_t result{};
+
+            result = std::hash<std::string>{}(
+                std::to_string(data.pos.m[0]) + 
+                std::to_string(data.pos.m[1]) + 
+                std::to_string(data.pos.m[2]) + 
+                std::to_string(data.pos.m[3]) + 
+                std::to_string(data.normal.x) + 
+                std::to_string(data.normal.y) + 
+                std::to_string(data.normal.z) + 
+                std::to_string(data.uv.x) + 
+                std::to_string(data.uv.y) + 
+                std::to_string(data.texIndex) 
+                );
+
+            return result;
+        }
+
+    };
+}
 
 struct WVPMatrix {
     Mat4x4 worldMat;
@@ -115,3 +151,25 @@ struct LoadFileNames {
             shaderName == right.shaderName;
     }
 };
+
+namespace std {
+    template<>
+    struct hash<LoadFileNames> {
+    public:
+        size_t operator()(const LoadFileNames& data)const {
+            size_t result{};
+
+            result = std::hash<std::string>{}(
+                data.reourceFileName +
+                data.shaderName.vsFileName +
+                data.shaderName.psFileName +
+                data.shaderName.gsFileName +
+                data.shaderName.dsFileName +
+                data.shaderName.hsFileName
+                );
+
+            return result;
+        }
+
+    };
+}

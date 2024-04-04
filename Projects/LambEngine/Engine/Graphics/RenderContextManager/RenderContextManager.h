@@ -6,28 +6,6 @@
 #include "RenderContext/RenderContext.h"
 #include "../MeshManager/MeshManager.h"
 
-namespace std {
-	template<>
-	struct hash<LoadFileNames> {
-	public:
-		size_t operator()(const LoadFileNames& data)const {
-			size_t result{};
-
-			result = std::hash<std::string>{}(
-				data.reourceFileName +
-				data.shaderName.vsFileName +
-				data.shaderName.psFileName +
-				data.shaderName.gsFileName +
-				data.shaderName.dsFileName +
-				data.shaderName.hsFileName
-				);
-
-			return result;
-		}
-
-	};
-}
-
 class RenderContextManager final {
 private:
 	using Key = LoadFileNames;

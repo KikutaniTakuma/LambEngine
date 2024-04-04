@@ -19,8 +19,7 @@ void GameScene::Initialize() {
 	//camera_->offset.z = -10.0f;
 
 	model_ = std::make_unique<Model>();
-	model_->Load("./Resources/Cube.obj");
-	model_->scale *= 10.0f;
+	model_->Load("./Resources/Hololive/Watame/Watame.obj");
 }
 
 void GameScene::Finalize() {

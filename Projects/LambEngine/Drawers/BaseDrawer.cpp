@@ -33,9 +33,9 @@ void BaseDrawer::Debug([[maybe_unused]]const std::string& guiName)
 {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	ImGui::DragFloat3("スケール", &scale.x);
-	ImGui::DragFloat3("回転", &rotate.x);
-	ImGui::DragFloat3("ポジション", &translate.x);
+	ImGui::DragFloat3("スケール", &scale.x,0.01f);
+	ImGui::DragFloat3("回転", &rotate.x,0.01f);
+	ImGui::DragFloat3("ポジション", &translate.x,0.01f);
 	ImGui::End();
 #endif // _DEBUG
 

@@ -18,7 +18,7 @@ struct Color {
 };
 
 struct ShaderStruct {
-	float32_t num;
+	uint32_t num;
 };
 
 ConstantBuffer<DirectionLight> kLight : register(b0);

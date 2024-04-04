@@ -1,193 +1,137 @@
 #include "MeshLoader.h"
-#include <fstream>
-#include <filesystem>
-#include <vector>
-#include <unordered_map>
-
+#include "Error/Error.h"
 #include "../TextureManager/TextureManager.h"
 #include "../../Core/DirectXDevice/DirectXDevice.h"
 
+#include <filesystem>
+#include <unordered_map>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 Mesh MeshLoader::LoadObj(const std::string& fileName)
 {
-	std::ifstream file{ fileName };
-	if (file.fail()) {
-		if (!std::filesystem::exists(fileName)) {
-			throw Lamb::Error::Code<Mesh>("this file is not exist -> " + fileName, __func__);
-		}
-		else {
-			throw Lamb::Error::Code<Mesh>("something error -> " + fileName, __func__);
+	if (not std::filesystem::exists(fileName.c_str())) {
+		throw Lamb::Error::Code<MeshLoader>("this file does not find -> " + fileName, __func__);
+	}
+
+	std::unordered_map<Vertex, size_t> vertices;
+	size_t vertexCount = 0llu;
+	std::vector<uint32_t> indices;
+	uint32_t indexCount = 0;
+
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(fileName.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
+	if (not scene->HasMeshes()) {
+		throw Lamb::Error::Code<MeshLoader>("this file does not have meshes -> " + fileName, __func__);
+	}
+
+	std::string directorypath = std::filesystem::path(fileName).parent_path().string();
+	std::vector<std::string> textureFileNames;
+
+	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
+		aiMaterial* material = scene->mMaterials[materialIndex];
+		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
+			aiString textureFilePath;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
+			textureFileNames.push_back(directorypath + "/" + textureFilePath.C_Str());
 		}
 	}
 
-	std::vector<Vector4> posDatas(0);
+	std::vector<Texture*> textures;
+	TextureManager* const textureMaanger = TextureManager::GetInstance();
 
-	std::vector<Vector3> normalDatas(0);
+	for (const auto& i : textureFileNames) {
+		textures.push_back(textureMaanger->LoadTexture(i));
+	}
 
-	std::vector<Vector2> uvDatas(0);
-
-	std::unordered_map<std::string, std::vector<IndexData>> indexDatas(0);
-	std::unordered_map<std::string, std::vector<IndexData>>::iterator indicesItr;
-
-	std::unordered_map<std::string, uint32_t> texHandles;
-
-	std::string lineBuf;
-
-	while (std::getline(file, lineBuf)) {
-		std::string identifier;
-		std::istringstream line(lineBuf);
-		line >> identifier;
-		if (identifier == "v") {
-			Vector4 buf;
-			line >> buf.vec.x >> buf.vec.y >> buf.vec.z;
-			buf.vec.x *= -1.0f;
-			buf.vec.w = 1.0f;
-
-			posDatas.push_back(buf);
+	// mesh解析
+	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
+		aiMesh* mesh = scene->mMeshes[meshIndex];
+		if (not mesh->HasNormals()) {
+			throw Lamb::Error::Code<MeshLoader>("this file does not have normal -> " + fileName, __func__);
 		}
-		else if (identifier == "vn") {
-			Vector3 buf;
-			line >> buf.x >> buf.y >> buf.z;
-			buf.x *= -1.0f;
-			normalDatas.push_back(buf);
+		if (not mesh->HasTextureCoords(0)) {
+			throw Lamb::Error::Code<MeshLoader>("this file does not have texcoord -> " + fileName, __func__);
 		}
-		else if (identifier == "vt") {
-			Vector2 buf;
-			line >> buf.x >> buf.y;
-			buf.y = 1.0f - buf.y;
-			uvDatas.push_back(buf);
-		}
-		else if (identifier == "f") {
-			std::string buf;
-			std::vector<float> posBuf(0);
-			std::array<IndexData, 3> indcoes;
-			auto idnexItr = indcoes.rbegin();
-			while (std::getline(line, buf, ' '))
-			{
-				/// 0:vertexNumber 1:textureCoordinate 2:NormalNumber
-				std::string num[3];
-				int32_t count = 0;
-				if (std::any_of(buf.cbegin(), buf.cend(), isdigit)) {
-					for (auto& ch : buf) {
-						if (ch == '/') {
-							count++;
-						}
-						else { num[count] += ch; }
+
+		// face解析
+		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
+			aiFace& face = mesh->mFaces[faceIndex];
+			if (face.mNumIndices != 3) {
+				throw Lamb::Error::Code<MeshLoader>("this file does not surport -> " + fileName, __func__);
+			}
+
+			for (uint32_t element = 0; element < face.mNumIndices; ++element) {
+				uint32_t vertexIndex = face.mIndices[element];
+				aiVector3D& position = mesh->mVertices[vertexIndex];
+				aiVector3D& normal = mesh->mNormals[vertexIndex];
+				aiVector3D& texcoord = mesh->mTextureCoords[0][vertexIndex];
+				Vertex vertex;
+				vertex.pos = Vector4{ -position.x, position.y, position.z, 1.0f };
+				vertex.normal = Vector3{ -normal.x, normal.y, normal.z };
+				vertex.uv = Vector2{ texcoord.x, texcoord.y };
+
+				uint32_t materialIndex = mesh->mMaterialIndex - 1;
+
+				vertex.texIndex = textures.empty() ? 0 : textures[materialIndex]->GetHandleUINT();
+
+				// 頂点コンテナが空
+				if (vertices.empty()) {
+					// 追加
+					vertices.insert(std::make_pair(vertex, vertexCount));
+					vertexCount++;
+
+					// インデックス追加
+					indices.emplace_back(indexCount);
+					indexCount++;
+				}
+				// それ以外
+				else {
+					// そもそも同じ頂点が追加されているか
+					auto isExist = vertices.find(vertex);
+
+					// 追加されてない
+					if (isExist == vertices.end()) {
+						vertices.insert(std::make_pair(vertex, vertexCount));
+						vertexCount++;
+
+						// インデックス追加
+						indices.emplace_back(indexCount);
+						indexCount++;
+					}
+					// 追加してた
+					else {
+						// インデックス追加
+						indices.emplace_back(static_cast<uint32_t>(vertices[vertex]));
 					}
 				}
-
-				// エラーチェック
-				if (idnexItr == indcoes.rend()) {
-					throw Lamb::Error::Code<Mesh>("Not supported for rectangles or more", __func__);
-				}
-
-				if (count == 2) {
-					idnexItr->vertNum = static_cast<uint32_t>(std::stoi(num[0]) - 1);
-					idnexItr->uvNum = static_cast<uint32_t>(std::stoi(num[1]) - 1);
-					idnexItr->normalNum = static_cast<uint32_t>(std::stoi(num[2]) - 1);
-					idnexItr++;
-				}
-				else if (count == 1) {
-					idnexItr->vertNum = static_cast<uint32_t>(std::stoi(num[0]) - 1);
-					idnexItr->normalNum = static_cast<uint32_t>(std::stoi(num[1]) - 1);
-					idnexItr++;
-				}
-			}
-			for (auto& i : indcoes) {
-				indicesItr->second.push_back(i);
-			}
-		}
-		else if (identifier == "usemtl") {
-			std::string useMtlName;
-			line >> useMtlName;
-			indexDatas.insert({ useMtlName,std::vector<IndexData>(0) });
-			indicesItr = indexDatas.find(useMtlName);
-		}
-		else if (identifier == "mtllib") {
-			std::string mtlFileName;
-			std::filesystem::path path = fileName;
-
-			line >> mtlFileName;
-
-			texHandles = LoadMtl(path.parent_path().string() + "/" + mtlFileName);
-		}
-	}
-	file.close();
-
-
-
-	std::vector<std::pair<IndexData, uint16_t>> indexTmp;
-	uint16_t count = 0;
-
-	for (auto& i : indexDatas) {
-		for (auto& index : i.second) {
-			index.textureHandle = texHandles[i.first];
-
-			auto isExist = std::find_if(indexTmp.begin(), indexTmp.end(), 
-				[&index](const std::pair<IndexData, uint16_t>& data)->bool {
-					return index == data.first;
-				}
-				);
-
-			if (isExist == indexTmp.end()) {
-				indexTmp.push_back(std::make_pair(index, count));
-				count++;
 			}
 		}
 	}
 
-	std::vector<Vertex> vertData;
-	vertData.resize(count);
-
-	for (auto& i : indexTmp) {
-		vertData[i.second].pos = posDatas[i.first.vertNum];
-		vertData[i.second].normal = normalDatas[i.first.normalNum];
-		vertData[i.second].uv = uvDatas[i.first.uvNum];
-		vertData[i.second].texIndex = i.first.textureHandle;
+	std::vector<Vertex> verticesTmp;
+	verticesTmp.resize(vertices.size());
+	for (const auto& i : vertices) {
+		verticesTmp[i.second] = i.first;
 	}
 
-	std::vector<uint16_t> indeces;
-	size_t indecesCount = 0;
-
-	for (auto& i : indexDatas) {
-		indecesCount +=i.second.size();
-	}
-
-	indeces.reserve(indecesCount);
-
-
-	for (auto& i : indexDatas) {
-		for (auto& j : i.second) {
-			auto indexTmpItr = std::find_if(indexTmp.begin(), indexTmp.end(),
-				[&j](const std::pair<IndexData, uint16_t>& data)->bool {
-					return j == data.first;
-				}
-			);
-
-			if (indexTmpItr == indexTmp.end()) {
-				throw Lamb::Error::Code<MeshLoader>("cannot find index", __func__);
-			}
-
-			indeces.push_back(indexTmpItr->second);
-		}
-	}
 
 	Mesh result;
-	uint32_t indexSizeInBytes = static_cast<uint32_t>(sizeof(uint16_t) * indeces.size());
-	uint32_t vertexSizeInBytes = static_cast<uint32_t>(sizeof(Vertex) * vertData.size());
+	uint32_t indexSizeInBytes = static_cast<uint32_t>(sizeof(uint32_t) * indices.size());
+	uint32_t vertexSizeInBytes = static_cast<uint32_t>(sizeof(Vertex) * verticesTmp.size());
 
 	result.indexResource = DirectXDevice::GetInstance()->CreateBufferResuorce(indexSizeInBytes);
 
-	uint16_t* indexMap = nullptr;
+	uint32_t* indexMap = nullptr;
 	result.indexResource->Map(0, nullptr, reinterpret_cast<void**>(&indexMap));
-	for (size_t i = 0; auto& index : indeces) {
-		indexMap[i] = index;
-		i++;
-	}
+	std::copy(indices.begin(), indices.end(), indexMap);
 	result.indexResource->Unmap(0, nullptr);
 
-	result.indexNumber = static_cast<uint32_t>(indeces.size());
+	result.indexNumber = static_cast<uint32_t>(indices.size());
 	result.indexView.SizeInBytes = indexSizeInBytes;
-	result.indexView.Format = DXGI_FORMAT_R16_UINT;
+	result.indexView.Format = DXGI_FORMAT_R32_UINT;
 	result.indexView.BufferLocation = result.indexResource->GetGPUVirtualAddress();
 
 
@@ -195,13 +139,10 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 	
 	Vertex* vertMap = nullptr;
 	result.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertMap));
-	for (size_t i = 0; auto& vertex : vertData) {
-		vertMap[i] = vertex;
-		i++;
-	}
+	std::copy(verticesTmp.begin(), verticesTmp.end(), vertMap);
 	result.vertexResource->Unmap(0, nullptr);
 
-	result.vertexNumber = static_cast<uint32_t>(vertData.size());
+	result.vertexNumber = static_cast<uint32_t>(verticesTmp.size());
 	result.vertexView.SizeInBytes = vertexSizeInBytes;
 	result.vertexView.StrideInBytes = static_cast<uint32_t>(sizeof(Vertex));
 	result.vertexView.BufferLocation = result.vertexResource->GetGPUVirtualAddress();
@@ -209,24 +150,24 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 	return result;
 }
 
-std::unordered_map<std::string, uint32_t> MeshLoader::LoadMtl(const std::string& fileName)
+std::unordered_map<std::string, uint32_t> MeshLoader::LoadMtl([[maybe_unused]]const std::string& fileName)
 {
 
-	std::ifstream file{ fileName };
-	if (file.fail()) {
-		if (!std::filesystem::exists(fileName)) {
-			throw Lamb::Error::Code<Mesh>("this file is not exist -> " + fileName, __func__);
-		}
-		else {
-			throw Lamb::Error::Code<Mesh>("something error -> " + fileName, __func__);
-		}
-	}
+	//std::ifstream file{ fileName };
+	//if (file.fail()) {
+	//	if (!std::filesystem::exists(fileName)) {
+	//		throw Lamb::Error::Code<Mesh>("this file is not exist -> " + fileName, __func__);
+	//	}
+	//	else {
+	//		throw Lamb::Error::Code<Mesh>("something error -> " + fileName, __func__);
+	//	}
+	//}
 
-	TextureManager* const textureManager = TextureManager::GetInstance();
+	//TextureManager* const textureManager = TextureManager::GetInstance();
 
 	std::unordered_map<std::string, uint32_t> result;
 
-	std::string lineBuf;
+	/*std::string lineBuf;
 	std::unordered_map<std::string, uint32_t>::iterator texItr;
 
 	std::string useMtlName;
@@ -254,7 +195,7 @@ std::unordered_map<std::string, uint32_t> MeshLoader::LoadMtl(const std::string&
 			result[useMtlName];
 			texItr = result.find(useMtlName);
 		}
-	}
+	}*/
 
 	return result;
 }
