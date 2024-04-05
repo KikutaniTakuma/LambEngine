@@ -35,32 +35,10 @@ private:
 public:
 	Texture* const LoadTexture(const std::string& fileName);
 
-private:
-	Texture* const LoadTexture(const std::string& fileName, ID3D12GraphicsCommandList* const commandList_);
-
 public:
-	/// <summary>
-	/// スレッドを分けてロードする用
-	/// </summary>
-	/// <param name="fileName"></param>
-	/// <param name="texPtr"></param>
-	void LoadTexture(const std::string& fileName, Texture** const texPtr);
-
-	void ThreadLoadTexture();
-
 	Texture* const GetWhiteTex();
 
 	void ReleaseIntermediateResource();
-
-	bool IsNowThreadLoading() const {
-		return isNowThreadLoading_ && !isCloseCommandList_;
-	}
-
-	inline ID3D12GraphicsCommandList* const GetCommandList() const {
-		return commandList_.Get();
-	}
-
-	void ResetCommandList();
 
 	void Use(uint32_t texIndex, UINT rootParam);
 
@@ -68,23 +46,9 @@ public:
 private:
 	class CbvSrvUavHeap* srvHeap_;
 
-	Lamb::LambPtr<ID3D12CommandQueue> commandQueue_;
-	Lamb::LambPtr<ID3D12CommandAllocator> commandAllocator_;
-	Lamb::LambPtr<ID3D12GraphicsCommandList> commandList_;
-	bool isCloseCommandList_;
-
-	Lamb::LambPtr<ID3D12Fence> fence_;
-	uint64_t fenceVal_;
-	HANDLE fenceEvent_;
-
 	/// <summary>
 	/// Textureのコンテナ(キー値: ファイルネーム  コンテナデータ型: Texture*)
 	/// </summary>
 	std::unordered_map<std::string, std::unique_ptr<Texture>> textures_;
 	bool thisFrameLoadFlg_;
-
-	std::queue<std::pair<std::string, Texture** const>> threadTextureBuff_;
-	std::thread load_;
-	bool isThreadFinish_;
-	bool isNowThreadLoading_;
 };
