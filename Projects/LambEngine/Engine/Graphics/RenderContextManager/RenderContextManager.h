@@ -48,7 +48,7 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader);
 
-		Mesh* mesh = MeshManager::GetInstance()->LoadObj(fileNames.reourceFileName);
+		Mesh* mesh = MeshManager::GetInstance()->LoadObj(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();

@@ -2,6 +2,7 @@
 #include "Drawers/Texture2D/Texture2D.h"
 #include "Utils/UtilsLib/UtilsLib.h"
 #include "Utils/Easing/Easing.h"
+#include "Math/Mat4x4.h"
 
 class Fade {
 public:
@@ -70,7 +71,7 @@ private:
 	/// </summary>
 	Lamb::Flg isOutStart_;
 
-	Texture2D tex_;
+	//Texture2D tex_;
 
 	Easing ease_;
 	/// <summary>

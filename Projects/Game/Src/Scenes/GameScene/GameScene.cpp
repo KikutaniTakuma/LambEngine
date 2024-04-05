@@ -7,7 +7,7 @@
 #include "Utils/ScreenOut/ScreenOut.h"
 #include <numbers>
 #include <format>
-#include "Game/Water/Water.h"
+//#include "Game/Water/Water.h"
 
 GameScene::GameScene() :
 	BaseScene(BaseScene::ID::Game)
@@ -18,8 +18,11 @@ void GameScene::Initialize() {
 	camera_->pos.z = -5.0f;
 	//camera_->offset.z = -10.0f;
 
-	model_ = std::make_unique<Model>();
-	model_->Load("./Resources/Hololive/Watame/Watame.obj");
+	//model_ = std::make_unique<Model>();
+	//model_->Load("./Resources/Hololive/Watame/Watame.obj");
+
+	tex2D_ = std::make_unique<Texture2D>();
+	tex2D_->Load("./Resources/white2x2.png");
 }
 
 void GameScene::Finalize() {
@@ -30,9 +33,12 @@ void GameScene::Update() {
 	camera_->Debug("camera");
 	camera_->Update();
 
-	model_->Debug("model");
+	//model_->Debug("model");
+	tex2D_->Debug("tex2D_");
 }
 
 void GameScene::Draw() {
-	model_->Draw(camera_.get(), BlendType::kNone, true);
+	//model_->Draw(camera_.get(), BlendType::kNone, true);
+
+	tex2D_->Draw(camera_.get(), BlendType::kNone);
 }

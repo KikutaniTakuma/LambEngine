@@ -60,7 +60,7 @@ protected:
 using RenderData = BaseRenderContext;
 
 
-template<class T = int, uint32_t bufferSize = RenderData::kMaxDrawInstance>
+template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
 class RenderContext : public BaseRenderContext {
 public:
     RenderContext():
@@ -78,7 +78,7 @@ public:
         descriptorHeap->CreateView(shaderData_.color);
         descriptorHeap->CreateView(shaderData_.shaderStruct);
 
-        typeID_ = (typeid(RenderContext<>).name());
+        typeID_ = (typeid(RenderContext<T, bufferSize>).name());
     }
     ~RenderContext() {
         // ディスクリプタヒープ

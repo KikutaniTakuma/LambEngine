@@ -139,11 +139,11 @@ struct ShaderFileNames {
 };
 
 struct LoadFileNames {
-    std::string reourceFileName;
+    std::string resourceFileName;
     ShaderFileNames shaderName;
 
     [[nodiscard]] bool operator==(const LoadFileNames& right) const {
-        return reourceFileName == right.reourceFileName &&
+        return resourceFileName == right.resourceFileName &&
             shaderName == right.shaderName;
     }
 };
@@ -156,7 +156,7 @@ namespace std {
             size_t result{};
 
             result = std::hash<std::string>{}(
-                data.reourceFileName +
+                data.resourceFileName +
                 data.shaderName.vsFileName +
                 data.shaderName.psFileName +
                 data.shaderName.gsFileName +

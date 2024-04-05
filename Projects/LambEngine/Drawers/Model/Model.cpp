@@ -12,7 +12,7 @@ void Model::Load(const std::string& fileName) {
 
 	renderContextManager->Load(
 		LoadFileNames{
-			.reourceFileName = fileName,
+			.resourceFileName = fileName,
 			.shaderName{
 				.vsFileName = "./Resources/Shaders/ModelShader/Model.VS.hlsl",
 				.psFileName = "./Resources/Shaders/ModelShader/Model.PS.hlsl",
@@ -22,7 +22,7 @@ void Model::Load(const std::string& fileName) {
 
 	renderSet = renderContextManager->Get(
 		LoadFileNames{
-			.reourceFileName = fileName,
+			.resourceFileName = fileName,
 			.shaderName{
 				.vsFileName = "./Resources/Shaders/ModelShader/Model.VS.hlsl",
 				.psFileName = "./Resources/Shaders/ModelShader/Model.PS.hlsl",

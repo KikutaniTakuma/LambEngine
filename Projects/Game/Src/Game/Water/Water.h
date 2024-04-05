@@ -41,7 +41,7 @@ private:
 	std::unique_ptr<PeraRender> pera_;
 	std::unique_ptr<PeraRender> luminate_;
 	std::unique_ptr<PeraRender> bloom_;
-	std::unique_ptr<Texture2D> waterSurface_;
+	//std::unique_ptr<Texture2D> waterSurface_;
 
 	class WaterPipeline* waterPipelineObject_ = nullptr;
 

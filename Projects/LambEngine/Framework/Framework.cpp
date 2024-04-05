@@ -7,12 +7,7 @@
 
 #include "Input/Input.h"
 
-#include "Drawers/Texture2D/Texture2D.h"
-#include "Drawers/Model/Model.h"
 #include "Drawers/Line/Line.h"
-#include "Drawers/Particle/Particle.h"
-
-#include "Math/Vector2.h"
 
 void Framework::Initialize() {
 	// ライブラリ初期化
@@ -21,15 +16,12 @@ void Framework::Initialize() {
 	// 入力処理初期化
 	Input::Initialize();
 
-	// 各種パイプライン生成
-	Texture2D::Initialize();
 	Line::Initialize();
 }
 
 void Framework::Finalize() {
 	// インデックスリソース解放
 	Line::Finalize();
-	Texture2D::Finalize();
 
 	// 入力関連解放
 	Input::Finalize();
@@ -81,8 +73,6 @@ void Framework::Execution() {
 			this->Draw();
 
 			Line::AllDraw();
-
-			Texture2D::AllDraw();
 
 			// フレーム終了処理
 			Engine::FrameEnd();
