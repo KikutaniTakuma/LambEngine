@@ -1,19 +1,19 @@
 #include "Texture2D.hlsli"
 
-struct Matrix{
-    float4x4 worldMat;
-    float4x4 uvMat;
-};
+VertexShaderOutput main(VertexShaderInput input,uint32_t instanceID : SV_InstanceID)
+{
+    VertexShaderOutput output;
 
-StructuredBuffer<Matrix> mat : register(t0);
+    input.position = mul(input.position, kWvpMat[instanceID].worldMat);
+	output.worldPosition = input.position;
+	output.position = mul(input.position, kWvpMat[instanceID].cameraMat);
+	input.normal = normalize(input.normal);
+	output.normal = mul(input.normal, (float32_t3x3)kWvpMat[instanceID].worldMat);
 
-Output main(float4 pos : POSITION, float2 uv : TEXCOORD, uint32_t instanceId : SV_InstanceID){
-    Output output;
-
-    output.svPos = mul(pos, mat[instanceId].worldMat);
-    float4 uvTmp = float4(uv,0.0f,1.0f);
-    output.uv = mul(uvTmp, mat[instanceId].uvMat).xy;
-    output.instanceId = instanceId;
+	float32_t4 uv = float32_t4(input.uv, 0.0f, 1.0f);
+	output.uv = mul(uv, kTexture2DData[instanceID].uvTransform).xy;
+	output.instanceID = instanceID;
+	output.textureID = input.textureID;
 
     return output;
 }

@@ -1,11 +1,8 @@
-SamplerState smp : register(s0);
+#include "../Lamb.hlsli"
 
-StructuredBuffer<float4> color : register(t1);
-StructuredBuffer<uint32_t> textureIndex : register(t2);
-Texture2D<float4> tex[] : register(t3);
-
-struct Output{
-    float4 svPos : SV_POSITION;
-    float2 uv : TEXCOORD;
-    uint32_t instanceId : BLENDINDICES;
+struct Texture2DData {
+    float32_t4x4 uvTransform;
+    uint32_t textureID;
 };
+
+StructuredBuffer<Texture2DData> kTexture2DData : register(t2);
