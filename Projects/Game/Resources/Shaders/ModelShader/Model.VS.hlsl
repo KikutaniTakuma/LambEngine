@@ -1,13 +1,5 @@
 #include "Model.hlsli"
 
-struct VertexShaderInput {
-	float32_t4 position : POSITION0;
-	float32_t3 normal : NORMAL0;
-	float32_t2 uv : TEXCOORD;
-	uint32_t textureID : BLENDINDICES;
-};
-
-
 VertexShaderOutput main(VertexShaderInput input,uint32_t instanceID : SV_InstanceID)
 {
 	VertexShaderOutput output;
