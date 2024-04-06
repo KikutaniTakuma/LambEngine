@@ -2,6 +2,7 @@
 
 struct Texture2DData {
     float32_t4x4 uvTransform;
+    float32_t3 pad;
     uint32_t textureID;
 };
 

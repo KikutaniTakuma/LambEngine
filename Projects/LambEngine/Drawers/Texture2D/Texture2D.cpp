@@ -55,6 +55,7 @@ void Texture2D::Draw(const Camera* camera, BlendType blend) {
 				uvRotate,
 				uvTranslation
 			),
+			.pad = Vector3::kZero,
 			.textureID = textureID_
 		}
 	);

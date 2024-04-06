@@ -21,8 +21,10 @@ void GameScene::Initialize() {
 	//model_ = std::make_unique<Model>();
 	//model_->Load("./Resources/Hololive/Watame/Watame.obj");
 
-	tex2D_ = std::make_unique<Texture2D>();
-	tex2D_->Load("./Resources/white2x2.png");
+	for (auto& i : tex2D_) {
+		i = std::make_unique<Texture2D>();
+		i->Load("./Resources/uvChecker.png");
+	}
 }
 
 void GameScene::Finalize() {
@@ -34,11 +36,16 @@ void GameScene::Update() {
 	camera_->Update();
 
 	//model_->Debug("model");
-	tex2D_->Debug("tex2D_");
+	for (size_t index = 0; auto & i : tex2D_) {
+		i->Debug("tex2D_" + std::to_string(index));
+		index++;
+	}
 }
 
 void GameScene::Draw() {
 	//model_->Draw(camera_.get(), BlendType::kNone, true);
 
-	tex2D_->Draw(camera_.get(), BlendType::kNone);
+	for (auto& i : tex2D_) {
+		i->Draw(camera_.get(), BlendType::kNone);
+	}
 }
