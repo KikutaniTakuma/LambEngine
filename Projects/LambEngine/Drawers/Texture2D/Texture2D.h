@@ -12,7 +12,7 @@ public:
 private:
 	struct ShaderData{
 		Mat4x4 uvTransform;
-		Vector3 pad;
+		Vector3 pad; // <- huh?
 		uint32_t textureID = 0u;
 	};
 
