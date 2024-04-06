@@ -16,10 +16,11 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 		throw Lamb::Error::Code<MeshLoader>("this file does not find -> " + fileName, __func__);
 	}
 
-	std::unordered_map<Vertex, size_t> vertices;
-	size_t vertexCount = 0llu;
-	std::vector<uint32_t> indices;
-	uint32_t indexCount = 0;
+	std::vector<Vertex> vertices;
+	//std::unordered_map<Vertex, size_t> vertices;
+	//size_t vertexCount = 0llu;
+	/*std::vector<uint32_t> indices;
+	uint32_t indexCount = 0;*/
 
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(fileName.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
@@ -43,6 +44,9 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 			throw Lamb::Error::Code<MeshLoader>("this file does not have texcoord -> " + fileName, __func__);
 		}
 
+		// 要素数追加
+		vertices.reserve(vertices.size() + mesh->mNumVertices);
+
 		// face解析
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
 			aiFace& face = mesh->mFaces[faceIndex];
@@ -64,41 +68,58 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 
 				vertex.texIndex = textures.empty() ? 0 : textures[materialIndex]->GetHandleUINT();
 
-				// 頂点コンテナが空
-				if (vertices.empty()) {
-					// 追加
-					vertices.insert(std::make_pair(vertex, vertexCount));
-					vertexCount++;
+				vertices.push_back(vertex);
 
-					// インデックス追加
-					indices.emplace_back(indexCount);
-					indexCount++;
-				}
-				// それ以外
-				else {
-					// そもそも同じ頂点が追加されているか
-					auto isExist = vertices.find(vertex);
+				//// 頂点コンテナが空
+				//if (vertices.empty()) {
+				//	// 追加
+				//	vertices.insert(std::make_pair(vertex, vertexCount));
+				//	vertexCount++;
 
-					// 追加されてない
-					if (isExist == vertices.end()) {
-						vertices.insert(std::make_pair(vertex, vertexCount));
-						vertexCount++;
+				//	// インデックス追加
+				//	indices.emplace_back(indexCount);
+				//	indexCount++;
+				//}
+				//// それ以外
+				//else {
+				//	// そもそも同じ頂点が追加されているか
+				//	auto isExist = vertices.find(vertex);
 
-						// インデックス追加
-						indices.emplace_back(indexCount);
-						indexCount++;
-					}
-					// 追加してた
-					else {
-						// インデックス追加
-						indices.emplace_back(static_cast<uint32_t>(vertices[vertex]));
-					}
-				}
+				//	// 追加されてない
+				//	if (isExist == vertices.end()) {
+				//		vertices.insert(std::make_pair(vertex, vertexCount));
+				//		vertexCount++;
+
+				//		// インデックス追加
+				//		indices.emplace_back(indexCount);
+				//		indexCount++;
+				//	}
+				//	// 追加してた
+				//	else {
+				//		// インデックス追加
+				//		indices.emplace_back(static_cast<uint32_t>(vertices[vertex]));
+				//	}
+				//}
 			}
 		}
 	}
 
-	std::vector<Vertex> verticesTmp;
+	Mesh result;
+	uint32_t vertexSizeInBytes = static_cast<uint32_t>(sizeof(Vertex) * vertices.size());
+
+	result.vertexResource = DirectXDevice::GetInstance()->CreateBufferResuorce(vertexSizeInBytes);
+
+	Vertex* vertMap = nullptr;
+	result.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertMap));
+	std::copy(vertices.begin(), vertices.end(), vertMap);
+	result.vertexResource->Unmap(0, nullptr);
+
+	result.vertexNumber = static_cast<uint32_t>(vertices.size());
+	result.vertexView.SizeInBytes = vertexSizeInBytes;
+	result.vertexView.StrideInBytes = static_cast<uint32_t>(sizeof(Vertex));
+	result.vertexView.BufferLocation = result.vertexResource->GetGPUVirtualAddress();
+
+	/*std::vector<Vertex> verticesTmp;
 	verticesTmp.resize(vertices.size());
 	for (const auto& i : vertices) {
 		verticesTmp[i.second] = i.first;
@@ -132,7 +153,7 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 	result.vertexNumber = static_cast<uint32_t>(verticesTmp.size());
 	result.vertexView.SizeInBytes = vertexSizeInBytes;
 	result.vertexView.StrideInBytes = static_cast<uint32_t>(sizeof(Vertex));
-	result.vertexView.BufferLocation = result.vertexResource->GetGPUVirtualAddress();
+	result.vertexView.BufferLocation = result.vertexResource->GetGPUVirtualAddress();*/
 
 	return result;
 }
