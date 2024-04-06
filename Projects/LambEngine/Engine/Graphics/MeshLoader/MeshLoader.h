@@ -28,29 +28,6 @@ public:
 	/// <returns>頂点とインデックス情報</returns>
 	static Mesh LoadObj(const std::string& fileName);
 
-	/// <summary>
-	/// mtlファイルのロード
-	/// </summary>
-	/// <param name="fileName">mtlファイルパス</param>
-	/// <returns>テクスチャハンドル</returns>
-	static std::unordered_map<std::string, uint32_t> LoadMtl(const std::string& fileName);
+private:
+	static void LoadMtl(const struct aiScene* scene, const std::string& directorypath, std::vector<class Texture*>& result);
 };
-
-//namespace std {
-//	template<>
-//	struct hash<MeshLoader::IndexData> {
-//	public:
-//		size_t operator()(const MeshLoader::IndexData& data)const {
-//			size_t result{};
-//
-//			result = std::hash<std::string>{}(
-//				std::to_string(data.normalNum)+
-//				std::to_string(data.textureHandle) + 
-//				std::to_string(data.uvNum) + 
-//				std::to_string(data.vertNum)
-//				);
-//
-//			return result;
-//		}
-//	};
-//};

@@ -28,23 +28,10 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 	}
 
 	std::string directorypath = std::filesystem::path(fileName).parent_path().string();
-	std::vector<std::string> textureFileNames;
-
-	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
-		aiMaterial* material = scene->mMaterials[materialIndex];
-		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
-			aiString textureFilePath;
-			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			textureFileNames.push_back(directorypath + "/" + textureFilePath.C_Str());
-		}
-	}
-
 	std::vector<Texture*> textures;
-	TextureManager* const textureMaanger = TextureManager::GetInstance();
 
-	for (const auto& i : textureFileNames) {
-		textures.push_back(textureMaanger->LoadTexture(i));
-	}
+	LoadMtl(scene, directorypath, textures);
+	
 
 	// mesh解析
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
@@ -150,52 +137,23 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 	return result;
 }
 
-std::unordered_map<std::string, uint32_t> MeshLoader::LoadMtl([[maybe_unused]]const std::string& fileName)
+void MeshLoader::LoadMtl(const aiScene* scene, const std::string& directorypath, std::vector<class Texture*>& result)
 {
+	std::vector<std::string> textureFileNames;
 
-	//std::ifstream file{ fileName };
-	//if (file.fail()) {
-	//	if (!std::filesystem::exists(fileName)) {
-	//		throw Lamb::Error::Code<Mesh>("this file is not exist -> " + fileName, __func__);
-	//	}
-	//	else {
-	//		throw Lamb::Error::Code<Mesh>("something error -> " + fileName, __func__);
-	//	}
-	//}
-
-	//TextureManager* const textureManager = TextureManager::GetInstance();
-
-	std::unordered_map<std::string, uint32_t> result;
-
-	/*std::string lineBuf;
-	std::unordered_map<std::string, uint32_t>::iterator texItr;
-
-	std::string useMtlName;
-	while (std::getline(file, lineBuf)) {
-		std::string identifier;
-		std::istringstream line(lineBuf);
-
-		line >> identifier;
-		if (identifier == "map_Kd") {
-			std::string texName;
-			std::filesystem::path path = fileName;
-
-			line >> texName;
-
-			Texture* tex = textureManager->LoadTexture(path.parent_path().string() + "/" + texName);
-			if (tex == nullptr || !(*tex)) {
-				texItr->second = textureManager->GetWhiteTex()->GetHandleUINT();
-			}
-			else {
-				texItr->second = tex->GetHandleUINT();
-			}
+	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
+		aiMaterial* material = scene->mMaterials[materialIndex];
+		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
+			aiString textureFilePath;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
+			textureFileNames.push_back(directorypath + "/" + textureFilePath.C_Str());
 		}
-		else if (identifier == "newmtl") {
-			line >> useMtlName;
-			result[useMtlName];
-			texItr = result.find(useMtlName);
-		}
-	}*/
+	}
 
-	return result;
+	TextureManager* const textureMaanger = TextureManager::GetInstance();
+
+	for (const auto& i : textureFileNames) {
+		result.push_back(textureMaanger->LoadTexture(i));
+	}
 }
+
