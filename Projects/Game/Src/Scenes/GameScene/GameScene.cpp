@@ -18,13 +18,13 @@ void GameScene::Initialize() {
 	camera_->pos.z = -5.0f;
 	//camera_->offset.z = -10.0f;
 
-	//model_ = std::make_unique<Model>();
-	//model_->Load("./Resources/Hololive/Watame/Watame.obj");
+	model_ = std::make_unique<Model>();
+	model_->Load("./Resources/Hololive/Watame/Watame.obj");
 
-	for (auto& i : tex2D_) {
-		i = std::make_unique<Texture2D>();
-		i->Load("./Resources/uvChecker.png");
-	}
+	//for (auto& i : tex2D_) {
+	//	i = std::make_unique<Texture2D>();
+	//	i->Load("./Resources/uvChecker.png");
+	//}
 }
 
 void GameScene::Finalize() {
@@ -35,17 +35,17 @@ void GameScene::Update() {
 	camera_->Debug("camera");
 	camera_->Update();
 
-	//model_->Debug("model");
-	for (size_t index = 0; auto & i : tex2D_) {
-		i->Debug("tex2D_" + std::to_string(index));
-		index++;
-	}
+	model_->Debug("model");
+	//for (size_t index = 0; auto & i : tex2D_) {
+	//	i->Debug("tex2D_" + std::to_string(index));
+	//	index++;
+	//}
 }
 
 void GameScene::Draw() {
-	//model_->Draw(camera_.get(), BlendType::kNone, true);
+	model_->Draw(camera_.get(), BlendType::kNone, true);
 
-	for (auto& i : tex2D_) {
-		i->Draw(camera_.get(), BlendType::kNone);
-	}
+	//for (auto& i : tex2D_) {
+	//	i->Draw(camera_.get(), BlendType::kNone);
+	//}
 }
