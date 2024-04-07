@@ -33,7 +33,7 @@ Mesh* MeshManager::LoadObj(const std::string& objFileName) {
 	if (mesh == meshs_.end()) {
 		meshs_[objFileName];
 		meshs_[objFileName] = std::make_unique<Mesh>();
-		*meshs_[objFileName] = MeshLoader::LoadObj(objFileName);
+		*meshs_[objFileName] = MeshLoader::LoadModel(objFileName);
 	}
 
 	return meshs_[objFileName].get();

@@ -10,11 +10,21 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-Mesh MeshLoader::LoadObj(const std::string& fileName)
+Mesh MeshLoader::LoadModel(const std::string& fileName)
 {
-	if (not std::filesystem::exists(fileName.c_str())) {
+	std::filesystem::path path = fileName;
+	
+	// ファイル見つかんない
+	if (not std::filesystem::exists(path)) {
 		throw Lamb::Error::Code<MeshLoader>("this file does not find -> " + fileName, __func__);
 	}
+	// objかgltfではない
+	if (not (path.extension() == ".obj" or path.extension() == ".gltf")) {
+		throw Lamb::Error::Code<MeshLoader>("this file does not support -> " + fileName, __func__);
+	}
+
+	bool isGltf = path.extension() == ".gltf";
+
 
 	std::vector<Vertex> vertices;
 	//std::unordered_map<Vertex, size_t> vertices;
@@ -28,7 +38,7 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 		throw Lamb::Error::Code<MeshLoader>("this file does not have meshes -> " + fileName, __func__);
 	}
 
-	std::string directorypath = std::filesystem::path(fileName).parent_path().string();
+	std::string&& directorypath = path.parent_path().string();
 	std::vector<Texture*> textures;
 
 	LoadMtl(scene, directorypath, textures);
@@ -51,7 +61,7 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; ++faceIndex) {
 			aiFace& face = mesh->mFaces[faceIndex];
 			if (face.mNumIndices != 3) {
-				throw Lamb::Error::Code<MeshLoader>("this file does not surport -> " + fileName, __func__);
+				throw Lamb::Error::Code<MeshLoader>("this file does not support -> " + fileName, __func__);
 			}
 
 			for (uint32_t element = 0; element < face.mNumIndices; ++element) {
@@ -64,7 +74,7 @@ Mesh MeshLoader::LoadObj(const std::string& fileName)
 				vertex.normal = Vector3{ -normal.x, normal.y, normal.z };
 				vertex.uv = Vector2{ texcoord.x, texcoord.y };
 
-				uint32_t materialIndex = mesh->mMaterialIndex - 1;
+				uint32_t materialIndex = mesh->mMaterialIndex - isGltf ? 0 : 1;
 
 				vertex.texIndex = textures.empty() ? 0 : textures[materialIndex]->GetHandleUINT();
 

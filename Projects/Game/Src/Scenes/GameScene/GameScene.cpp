@@ -19,7 +19,7 @@ void GameScene::Initialize() {
 	//camera_->offset.z = -10.0f;
 
 	model_ = std::make_unique<Model>();
-	model_->Load("./Resources/Hololive/Watame/Watame.obj");
+	model_->Load("./Resources/plane.gltf");
 
 	//for (auto& i : tex2D_) {
 	//	i = std::make_unique<Texture2D>();

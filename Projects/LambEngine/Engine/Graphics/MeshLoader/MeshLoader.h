@@ -26,7 +26,7 @@ public:
 	/// </summary>
 	/// <param name="fileName">Objファイルパス</param>
 	/// <returns>頂点とインデックス情報</returns>
-	static Mesh LoadObj(const std::string& fileName);
+	static Mesh LoadModel(const std::string& fileName);
 
 private:
 	static void LoadMtl(const struct aiScene* scene, const std::string& directorypath, std::vector<class Texture*>& result);
