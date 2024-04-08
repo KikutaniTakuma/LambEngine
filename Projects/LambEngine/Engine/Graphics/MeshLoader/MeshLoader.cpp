@@ -12,7 +12,8 @@
 
 Mesh MeshLoader::LoadModel(const std::string& fileName)
 {
-	const aiScene* scene = ReadFile(fileName);
+	Assimp::Importer importer;
+	const aiScene* scene = ReadFile(importer, fileName);
 	if (not scene->HasMeshes()) {
 		throw Lamb::Error::Code<MeshLoader>("this file does not have meshes -> " + fileName, __func__);
 	}
@@ -162,7 +163,8 @@ Mesh MeshLoader::LoadModel(const std::string& fileName)
 Animations MeshLoader::LoadAnimation(const std::string& fileName)
 {
 	Animations result;
-	const aiScene* scene = ReadFile(fileName);
+	Assimp::Importer importer;
+	const aiScene* scene = ReadFile(importer, fileName);
 	if (not (scene->mNumAnimations != 0)) {
 		throw Lamb::Error::Code<MeshLoader>("this file does not have meshes -> " + fileName, __func__);
 	}
@@ -211,7 +213,7 @@ Animations MeshLoader::LoadAnimation(const std::string& fileName)
 	return result;
 }
 
-const aiScene* MeshLoader::ReadFile(const std::string& fileName)
+const aiScene* MeshLoader::ReadFile(Assimp::Importer& importer, const std::string& fileName)
 {
 	std::filesystem::path path = fileName;
 
@@ -224,7 +226,6 @@ const aiScene* MeshLoader::ReadFile(const std::string& fileName)
 		throw Lamb::Error::Code<MeshLoader>("this file does not support -> " + fileName, __func__);
 	}
 
-	Assimp::Importer importer;
 	return importer.ReadFile(fileName.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 }
 

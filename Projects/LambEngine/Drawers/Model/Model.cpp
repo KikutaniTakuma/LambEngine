@@ -43,7 +43,7 @@ void Model::Load(const std::string& fileName) {
 
 void Model::Draw(const Camera* camera, BlendType blend, bool isLighting) {
 	RenderContext<>* renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
-	renderContext->SetSahderStruct(static_cast<int32_t>(isLighting));
+	renderContext->SetSahderStruct(static_cast<uint32_t>(isLighting));
 
 	BaseDrawer::Draw(camera, blend);
 }

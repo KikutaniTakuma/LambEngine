@@ -10,13 +10,13 @@ public:
 	Model(const std::string& fileName);
 	Model(const Model&) = default;
 	Model(Model&& right) noexcept = default;
-	~Model() = default;
+	virtual ~Model() = default;
 
 	Model& operator=(const Model& right) = default;
 	Model& operator=(Model&& right) noexcept = default;
 
 public:
-	void Load(const std::string& fileName) override;
+	virtual void Load(const std::string& fileName) override;
 
-	void Draw(const Camera* camera, BlendType blend, bool isLighting);
+	virtual void Draw(const Camera* camera, BlendType blend, bool isLighting);
 };

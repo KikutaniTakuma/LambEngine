@@ -6,7 +6,7 @@
 
 class AnimationManager {
 private:
-	AnimationManager();
+	AnimationManager() = default;
 	
 	AnimationManager(const AnimationManager&);
 	AnimationManager(AnimationManager&&);

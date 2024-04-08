@@ -48,6 +48,14 @@ public:
         return drawCount_ != 0u;
     }
 
+    const std::string& GetRootName() const {
+        return mesh_->node.name;
+    }
+
+    const Mesh* const GetMesh() const {
+        return mesh_;
+    }
+
 protected:
     const Mesh* mesh_;
 
@@ -219,6 +227,14 @@ public:
         }
 
         return dynamic_cast<ClassName*>(renderDatas_[blend].get());
+    }
+
+    const std::string& GetRootNodeName() const {
+        return renderDatas_.front()->GetRootName();
+    }
+
+    const Mesh* const GetMesh() const {
+        return renderDatas_.front()->GetMesh();
     }
 
 public:

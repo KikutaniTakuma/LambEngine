@@ -1,5 +1,8 @@
 #pragma once
 #include "../GraphicsStructs.h"
+namespace Assimp {
+	class Importer;
+};
 
 class MeshLoader final {
 public:
@@ -36,7 +39,7 @@ public:
 	static Animations LoadAnimation(const std::string& fileName);
 
 private:
-	static const struct aiScene* ReadFile(const std::string& fileName);
+	static const struct aiScene* ReadFile(Assimp::Importer& importer, const std::string& fileName);
 
 	/// <summary>
 	/// Node読み込み

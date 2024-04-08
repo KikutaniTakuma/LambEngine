@@ -167,6 +167,8 @@ public:
 	static Mat4x4 MakeRotate(const Vector3& rad);
 
 	static Mat4x4 MakeAffin(const Vector3& scale, const Vector3& rad, const Vector3& translate);
+	
+	static Mat4x4 MakeAffin(const Vector3& scale, const class Quaternion& rad, const Vector3& translate);
 
 	static Mat4x4 MakeAffin(const Vector3& scale, const Vector3& from, const Vector3& to, const Vector3& translate);
 

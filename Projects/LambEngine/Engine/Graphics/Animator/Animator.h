@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "Math/Mat4x4.h"
+#include "Engine/Graphics/GraphicsStructs.h"
 
 class Animator {
 public:
@@ -15,7 +16,7 @@ public:
 public:
 	void Load(const std::string& fileName);
 
-	void Update();
+	void Update(const Mesh* const mesh);
 
 public:
 	// 最初からスタート
@@ -38,7 +39,7 @@ public:
 	/// アニメーションのマトリックスを取得
 	/// </summary>
 	/// <returns></returns>
-	[[nodiscard]] const Mat4x4& GetMat4x4() const;
+	[[nodiscard]] const Mat4x4& GetLocalMat4x4() const;
 
 	/// <summary>
 	/// アニメーションを全て再生するか
@@ -59,6 +60,10 @@ public:
 	/// </summary>
 	/// <param name="isLoop"></param>
 	void SetLoopAnimation(bool isLoop);
+
+private:
+	Vector3 CalaclateValue(const AnimationCurve<Vector3>& animationCurve, float time);
+	Quaternion CalaclateValue(const AnimationCurve<Quaternion>& keyFrames, float time);
 
 private:
 	float animationTime_;

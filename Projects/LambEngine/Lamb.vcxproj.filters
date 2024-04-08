@@ -178,6 +178,9 @@
     <ClCompile Include="Engine\Graphics\Animator\Animator.cpp">
       <Filter>Engine\Graphics\Animator</Filter>
     </ClCompile>
+    <ClCompile Include="Drawers\AnimationModel\AnimationModel.cpp">
+      <Filter>Drawers\AnimationModel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -374,6 +377,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\Animator">
       <UniqueIdentifier>{0359fcab-3674-4f23-a03c-3ef946b211c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawers\AnimationModel">
+      <UniqueIdentifier>{ce9b2a74-162e-42e2-9e98-2f278ed2aa76}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -586,6 +592,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Animator\Animator.h">
       <Filter>Engine\Graphics\Animator</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawers\AnimationModel\AnimationModel.h">
+      <Filter>Drawers\AnimationModel</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

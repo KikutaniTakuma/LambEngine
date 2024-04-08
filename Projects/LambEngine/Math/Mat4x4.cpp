@@ -1,5 +1,6 @@
 #include "Mat4x4.h"
 #include "Vector3.h"
+#include "Quaternion.h"
 #include <cmath>
 #include <cassert>
 #include <algorithm>
@@ -408,6 +409,15 @@ Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Vector3& rad, const Vector3
 	Mat4x4 result;
 
 	result.Affin(scale, rad, translate);
+
+	return result;
+}
+
+Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Quaternion& rad, const Vector3& translate)
+{
+	Mat4x4 result;
+
+	result = Mat4x4::MakeScalar(scale) * rad.GetMatrix() * Mat4x4::MakeTranslate(translate);
 
 	return result;
 }

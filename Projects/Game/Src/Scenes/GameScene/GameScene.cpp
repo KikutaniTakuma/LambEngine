@@ -18,8 +18,11 @@ void GameScene::Initialize() {
 	camera_->pos.z = -5.0f;
 	//camera_->offset.z = -10.0f;
 
-	model_ = std::make_unique<Model>();
-	model_->Load("./Resources/plane.gltf");
+	model_ = std::make_unique<AnimationModel>();
+	model_->Load("./Resources/gltf_test_model/AnimatedCube.gltf");
+	model_->animator.Start();
+	model_->animator.SetLoopAnimation(true);
+
 
 	//for (auto& i : tex2D_) {
 	//	i = std::make_unique<Texture2D>();
@@ -36,6 +39,7 @@ void GameScene::Update() {
 	camera_->Update();
 
 	model_->Debug("model");
+	model_->Update();
 	//for (size_t index = 0; auto & i : tex2D_) {
 	//	i->Debug("tex2D_" + std::to_string(index));
 	//	index++;
