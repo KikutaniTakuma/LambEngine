@@ -116,10 +116,10 @@ public:
         // 頂点バッファセット
         commandlist->IASetVertexBuffers(0, 1, &mesh_->vertexView);
         // インデックスバッファセット
-        //commandlist->IASetIndexBuffer(&mesh_->indexView);
+        commandlist->IASetIndexBuffer(&mesh_->indexView);
         // ドローコール
-        //commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, 0);
-        commandlist->DrawInstanced(mesh_->vertexNumber, drawCount_, 0, 0);
+        commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, 0);
+        //commandlist->DrawInstanced(mesh_->vertexNumber, drawCount_, 0, 0);
     }
     
 public:
@@ -140,7 +140,8 @@ public:
             throw Lamb::Error::Code<RenderContext>("drawCount is over 256", __func__);
         }
 
-        shaderData_.wvpMatrix[drawCount_] = matrix;
+        shaderData_.wvpMatrix[drawCount_].worldMat = mesh_->node.loacalMatrix * matrix.worldMat;
+        shaderData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
         if (kMaxDrawInstance <= drawCount_) {

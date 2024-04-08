@@ -43,31 +43,16 @@ struct Vertex {
     }
 };
 
-namespace std {
-    template<>
-    struct hash<Vertex> {
-    public:
-        size_t operator()(const Vertex& data)const {
-            size_t result{};
+struct Node {
+    Mat4x4 loacalMatrix = Mat4x4::kIdentity;
+    std::string name;
+    std::vector<Node> children;
+};
 
-            result = std::hash<std::string>{}(
-                std::to_string(data.pos.m[0]) + 
-                std::to_string(data.pos.m[1]) + 
-                std::to_string(data.pos.m[2]) + 
-                std::to_string(data.pos.m[3]) + 
-                std::to_string(data.normal.x) + 
-                std::to_string(data.normal.y) + 
-                std::to_string(data.normal.z) + 
-                std::to_string(data.uv.x) + 
-                std::to_string(data.uv.y) + 
-                std::to_string(data.texIndex) 
-                );
-
-            return result;
-        }
-
-    };
-}
+struct ModelData {
+    std::vector<Vertex> vertices;
+    Node rootNode;
+};
 
 struct WVPMatrix {
     Mat4x4 worldMat;
@@ -83,6 +68,7 @@ struct Mesh {
     Lamb::LambPtr<ID3D12Resource> indexResource;
 
     uint32_t indexNumber;
+    Node node;
 };
 
 enum BlendType {
@@ -147,6 +133,32 @@ struct LoadFileNames {
             shaderName == right.shaderName;
     }
 };
+
+namespace std {
+    template<>
+    struct hash<Vertex> {
+    public:
+        size_t operator()(const Vertex& data)const {
+            size_t result{};
+
+            result = std::hash<std::string>{}(
+                std::to_string(data.pos.m[0]) + 
+                std::to_string(data.pos.m[1]) + 
+                std::to_string(data.pos.m[2]) + 
+                std::to_string(data.pos.m[3]) + 
+                std::to_string(data.normal.x) + 
+                std::to_string(data.normal.y) + 
+                std::to_string(data.normal.z) + 
+                std::to_string(data.uv.x) + 
+                std::to_string(data.uv.y) + 
+                std::to_string(data.texIndex) 
+                );
+
+            return result;
+        }
+
+    };
+}
 
 namespace std {
     template<>

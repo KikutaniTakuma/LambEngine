@@ -22,11 +22,13 @@ public:
 
 public:
 	/// <summary>
-	/// Objファイルのロード
+	/// obj, gltfファイルのロード
 	/// </summary>
-	/// <param name="fileName">Objファイルパス</param>
+	/// <param name="fileName">obj, gltfファイルパス</param>
 	/// <returns>頂点とインデックス情報</returns>
 	static Mesh LoadModel(const std::string& fileName);
+
+	static Node ReadNode(struct aiNode* node);
 
 private:
 	static void LoadMtl(const struct aiScene* scene, const std::string& directorypath, std::vector<class Texture*>& result);
