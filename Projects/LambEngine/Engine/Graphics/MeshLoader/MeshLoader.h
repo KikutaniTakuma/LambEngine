@@ -28,6 +28,21 @@ public:
 	/// <returns>頂点とインデックス情報</returns>
 	static Mesh LoadModel(const std::string& fileName);
 
+	/// <summary>
+	/// gltfアニメーションロード
+	/// </summary>
+	/// <param name="fileName">gltfファイルのロード</param>
+	/// <returns></returns>
+	static Animations LoadAnimation(const std::string& fileName);
+
+private:
+	static const struct aiScene* ReadFile(const std::string& fileName);
+
+	/// <summary>
+	/// Node読み込み
+	/// </summary>
+	/// <param name="node"></param>
+	/// <returns></returns>
 	static Node ReadNode(struct aiNode* node);
 
 private:

@@ -26,8 +26,9 @@
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+#include "Engine/Graphics/AnimationManager/AnimationManager.h"
 #include "Engine/Graphics/MeshManager/MeshManager.h"
-#include "Graphics/PipelineManager/PipelineManager.h"
+#include "Engine/Graphics/PipelineManager/PipelineManager.h"
 
 #include "EngineUtils/FrameInfo/FrameInfo.h"
 #include "EngineUtils/FlgManager/FlgManager.h"
@@ -37,7 +38,7 @@
 
 #include "Math/Vector2.h"
 
-#include "Graphics/DepthBuffer/DepthBuffer.h"
+#include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
 #include "Utils/ScreenOut/ScreenOut.h"
 
 #include "Error/Error.h"
@@ -143,12 +144,14 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	PipelineManager::Initialize();
 	MeshManager::Initialize();
 	RenderContextManager::Initialize();
+	AnimationManager::Initialize();
 }
 
 void Engine::Finalize() {
 	instance_->isFinalize_ = true;
 
 	// 各種マネージャー解放
+	AnimationManager::Finalize();
 	RenderContextManager::Finalize();
 	MeshManager::Finalize();
 	PipelineManager::Finalize();

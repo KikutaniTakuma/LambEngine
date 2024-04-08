@@ -12,19 +12,13 @@
 
 Mesh MeshLoader::LoadModel(const std::string& fileName)
 {
+	const aiScene* scene = ReadFile(fileName);
+	if (not scene->HasMeshes()) {
+		throw Lamb::Error::Code<MeshLoader>("this file does not have meshes -> " + fileName, __func__);
+	}
+
 	std::filesystem::path path = fileName;
-	
-	// ファイル見つかんない
-	if (not std::filesystem::exists(path)) {
-		throw Lamb::Error::Code<MeshLoader>("this file does not find -> " + fileName, __func__);
-	}
-	// objかgltfではない
-	if (not (path.extension() == ".obj" or path.extension() == ".gltf")) {
-		throw Lamb::Error::Code<MeshLoader>("this file does not support -> " + fileName, __func__);
-	}
-
-	bool isGltf = path.extension() == ".gltf";
-
+	bool isGltf = (path.extension() == ".gltf");
 
 	//std::vector<Vertex> vertices;
 	std::unordered_map<Vertex, size_t> vertices;
@@ -32,11 +26,6 @@ Mesh MeshLoader::LoadModel(const std::string& fileName)
 	std::vector<uint32_t> indices;
 	uint32_t indexCount = 0;
 
-	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(fileName.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
-	if (not scene->HasMeshes()) {
-		throw Lamb::Error::Code<MeshLoader>("this file does not have meshes -> " + fileName, __func__);
-	}
 
 	std::string&& directorypath = path.parent_path().string();
 	std::vector<Texture*> textures;
@@ -168,6 +157,75 @@ Mesh MeshLoader::LoadModel(const std::string& fileName)
 	result.vertexView.BufferLocation = result.vertexResource->GetGPUVirtualAddress();
 
 	return result;
+}
+
+Animations MeshLoader::LoadAnimation(const std::string& fileName)
+{
+	Animations result;
+	const aiScene* scene = ReadFile(fileName);
+	if (not (scene->mNumAnimations != 0)) {
+		throw Lamb::Error::Code<MeshLoader>("this file does not have meshes -> " + fileName, __func__);
+	}
+
+	result.data.resize(scene->mNumAnimations);
+
+	for (uint32_t animtionIndex = 0; animtionIndex < scene->mNumAnimations; animtionIndex++) {
+		aiAnimation* animationAssimp = scene->mAnimations[animtionIndex];
+		Animation& animation = result.data[animtionIndex];
+		animation.duration = static_cast<float>(animationAssimp->mDuration / animationAssimp->mTicksPerSecond);
+		
+		for (uint32_t channelIndex = 0; channelIndex < animationAssimp->mNumChannels; channelIndex++) {
+			aiNodeAnim* nodeAnimationAssimp = animationAssimp->mChannels[channelIndex];
+			NodeAnimation& nodeAnimation = animation.nodeAnimations[nodeAnimationAssimp->mNodeName.C_Str()];
+
+			// Translation
+			for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumPositionKeys; keyIndex++) {
+				aiVectorKey& translation = nodeAnimationAssimp->mPositionKeys[keyIndex];
+				KeyFrameVector3 keyFrame;
+
+				keyFrame.time = static_cast<float>(translation.mTime / animationAssimp->mTicksPerSecond);
+				keyFrame.value = { -translation.mValue.x, translation.mValue.y, translation.mValue.z };
+				nodeAnimation.translation.keyFrames.push_back(keyFrame);
+			}
+			// rotation
+			for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumRotationKeys; keyIndex++) {
+				aiQuatKey& rotate = nodeAnimationAssimp->mRotationKeys[keyIndex];
+				KeyFrameQuaternion keyFrame;
+
+				keyFrame.time = static_cast<float>(rotate.mTime / animationAssimp->mTicksPerSecond);
+				keyFrame.value = { rotate.mValue.x, -rotate.mValue.y, -rotate.mValue.z,  rotate.mValue.w };
+				nodeAnimation.rotate.keyFrames.push_back(keyFrame);
+			}
+			// scale
+			for (uint32_t keyIndex = 0; keyIndex < nodeAnimationAssimp->mNumScalingKeys; keyIndex++) {
+				aiVectorKey& scale = nodeAnimationAssimp->mScalingKeys[keyIndex];
+				KeyFrameVector3 keyFrame;
+
+				keyFrame.time = static_cast<float>(scale.mTime / animationAssimp->mTicksPerSecond);
+				keyFrame.value = { scale.mValue.x, scale.mValue.y, scale.mValue.z };
+				nodeAnimation.sacle.keyFrames.push_back(keyFrame);
+			}
+		}
+	}
+
+	return result;
+}
+
+const aiScene* MeshLoader::ReadFile(const std::string& fileName)
+{
+	std::filesystem::path path = fileName;
+
+	// ファイル見つかんない
+	if (not std::filesystem::exists(path)) {
+		throw Lamb::Error::Code<MeshLoader>("this file does not find -> " + fileName, __func__);
+	}
+	// objかgltfではない
+	if (not (path.extension() == ".obj" or path.extension() == ".gltf")) {
+		throw Lamb::Error::Code<MeshLoader>("this file does not support -> " + fileName, __func__);
+	}
+
+	Assimp::Importer importer;
+	return importer.ReadFile(fileName.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 }
 
 Node MeshLoader::ReadNode(aiNode* node)

@@ -172,6 +172,12 @@
     <ClCompile Include="Engine\Graphics\MeshLoader\MeshLoader.cpp">
       <Filter>Engine\Graphics\MeshLoader</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\AnimationManager\AnimationManager.cpp">
+      <Filter>Engine\Graphics\AnimationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Animator\Animator.cpp">
+      <Filter>Engine\Graphics\Animator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -362,6 +368,12 @@
     </Filter>
     <Filter Include="Engine\Graphics\RenderContextManager\RenderContext">
       <UniqueIdentifier>{ed16a241-2fda-436b-96b6-6136375891f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\AnimationManager">
+      <UniqueIdentifier>{add96670-dfee-46cd-bd03-5f72b25dbe9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Animator">
+      <UniqueIdentifier>{0359fcab-3674-4f23-a03c-3ef946b211c0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -568,6 +580,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\RenderContextManager\RenderContext\RenderContext.h">
       <Filter>Engine\Graphics\RenderContextManager\RenderContext</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\AnimationManager\AnimationManager.h">
+      <Filter>Engine\Graphics\AnimationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Animator\Animator.h">
+      <Filter>Engine\Graphics\Animator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

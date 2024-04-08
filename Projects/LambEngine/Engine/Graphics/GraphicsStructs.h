@@ -1,11 +1,13 @@
 #pragma once
 
 #include <unordered_map>
+#include <vector>
 
 #include "Math/Vector4.h"
 #include "Math/Vector3.h"
 #include "Math/Vector2.h"
 #include "Math/Mat4x4.h"
+#include "Math/Quaternion.h"
 
 #include "PipelineManager/Pipeline/Pipeline.h"
 #include "../EngineUtils/LambPtr/LambPtr.h"
@@ -43,6 +45,11 @@ struct Vertex {
     }
 };
 
+struct WVPMatrix {
+    Mat4x4 worldMat;
+    Mat4x4 cameraMat;
+};
+
 struct Node {
     Mat4x4 loacalMatrix = Mat4x4::kIdentity;
     std::string name;
@@ -52,11 +59,6 @@ struct Node {
 struct ModelData {
     std::vector<Vertex> vertices;
     Node rootNode;
-};
-
-struct WVPMatrix {
-    Mat4x4 worldMat;
-    Mat4x4 cameraMat;
 };
 
 struct Mesh {
@@ -181,3 +183,34 @@ namespace std {
 
     };
 }
+
+
+template<class tValue>
+struct KeyFrame{
+    float time;
+    tValue value;
+};
+
+
+using KeyFrameVector3 = KeyFrame<Vector3>;
+using KeyFrameQuaternion = KeyFrame<Quaternion>;
+
+template<class tValue>
+struct AnimationCurve {
+    std::vector<KeyFrame<tValue>> keyFrames;
+};
+
+struct NodeAnimation{
+    AnimationCurve<Vector3> translation;
+    AnimationCurve<Quaternion> rotate;
+    AnimationCurve<Vector3> sacle;
+};
+
+struct Animation {
+    float duration;
+    std::unordered_map<std::string, NodeAnimation> nodeAnimations;
+};
+
+struct Animations {
+    std::vector<Animation> data;
+};
