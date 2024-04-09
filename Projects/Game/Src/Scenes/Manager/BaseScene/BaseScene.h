@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/Camera/Camera.h"
+#include "Camera/Camera.h"
 #include <memory>
 
 class BaseScene {
@@ -7,10 +7,10 @@ class BaseScene {
 
 public:
 	enum class ID {
-		Game,
 		Result,
 		Title,
 		StageSelect,
+		Game,
 	};
 
 public:
@@ -34,6 +34,8 @@ public:
 	inline BaseScene::ID GetID() const {
 		return sceneID_;
 	}
+
+	const class Camera& GetCamera() const;
 
 protected:
 	class SceneManager* sceneManager_;

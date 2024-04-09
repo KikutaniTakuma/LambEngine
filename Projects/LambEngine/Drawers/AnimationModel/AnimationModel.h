@@ -18,10 +18,10 @@ public:
 
 	virtual void Update();
 
-	virtual void Draw(const Camera* camera, BlendType blend, bool isLighting) override;
+	virtual void Draw(const Mat4x4& camera, BlendType blend, bool isLighting) override;
 
 private:
-	void Draw(const Camera* camera, BlendType blend) override;
+	void Draw(const Mat4x4& camera, BlendType blend) override;
 
 public:
 	Animator animator;

@@ -8,9 +8,22 @@
 
 #include "Utils/EngineInfo/EngineInfo.h"
 
+#ifdef _DEBUG
+#include "imgui.h"
+#endif // _DEBUG
+
+
 void WaterPipeline::Update() {
-	randomVec_->x += 0.009f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
-	randomVec_->y += 0.009f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+#ifdef _DEBUG
+	ImGui::Begin("Water");
+	ImGui::DragFloat("densityScale", &(*densityScale_), 0.01f);
+	ImGui::DragFloat2("ゆらゆらの速度", &speed_.x, 0.001f);
+	ImGui::End();
+#endif // _DEBUG
+
+
+	randomVec_->x += speed_.x * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+	randomVec_->y += speed_.y * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 
 	*colorBuf_ = color;
 
@@ -74,7 +87,7 @@ void WaterPipeline::Init(
 	causticsRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 5;
+	cbvRange[0].NumDescriptors = 6;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
@@ -118,16 +131,21 @@ void WaterPipeline::Init(
 	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
 	caustics_ = TextureManager::GetInstance()->LoadTexture("./Resources/Water/caustics_01.bmp");
 
-	srvHeap->BookingHeapPos(6u);
+	srvHeap->BookingHeapPos(7u);
 	srvHeap->CreateView(*render_);
 	srvHeap->CreateView(wvpMat_);
 	srvHeap->CreateView(colorBuf_);
 	srvHeap->CreateView(normalVector_);
 	srvHeap->CreateView(randomVec_);
 	srvHeap->CreateView(light_);
+	srvHeap->CreateView(densityScale_);
+
+	*densityScale_ = 1.0f;
 
 	randomVec_->x = Lamb::Random(0.0f, 1.0f);
 	randomVec_->y = Lamb::Random(0.0f, 1.0f);
+
+	speed_ = { 0.006f, 0.006f };
 }
 
 WaterPipeline::~WaterPipeline() {
@@ -139,6 +157,7 @@ WaterPipeline::~WaterPipeline() {
 		srvHeap->ReleaseView(randomVec_.GetHandleUINT());
 		srvHeap->ReleaseView(normalVector_.GetHandleUINT());
 		srvHeap->ReleaseView(light_.GetHandleUINT());
+		srvHeap->ReleaseView(densityScale_.GetHandleUINT());
 		if (caustics_) {
 			caustics_->Unload();
 		}

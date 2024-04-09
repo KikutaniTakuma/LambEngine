@@ -141,7 +141,7 @@ bool Mouse::PushAnyKey() {
 
 Vector2 Mouse::GetVelocity() {
 	if (!initalizeSucceeded_) {
-		return Vector2::zero;
+		return Vector2::kZero;
 	}
 	return { static_cast<float>(mosueState_.lX), -static_cast<float>(mosueState_.lY) };
 }

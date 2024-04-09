@@ -33,7 +33,7 @@ public:
 public:
 	void Load(const std::string& fileName) override;
 
-	void Draw(const Camera* camera, BlendType blend) override;
+	void Draw(const Mat4x4& camera, BlendType blend) override;
 
 	void Debug(const std::string& guiName) override;
 

@@ -91,7 +91,7 @@ enum BlendType {
 };
 
 struct Light {
-    Vector3 ligDirection = -Vector3::kYIndentity;
+    Vector3 ligDirection = -Vector3::kYIdentity;
     float pad0;
     Vector3 ligColor = Vector3::kIdentity;
     /*Vector3 eyePos;

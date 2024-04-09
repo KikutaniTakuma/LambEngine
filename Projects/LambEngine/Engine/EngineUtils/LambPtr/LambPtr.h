@@ -1,7 +1,13 @@
 #pragma once
 #include <type_traits>
+#ifdef _DEBUG
+#include "Utils/ConvertString/ConvertString.h"
+#include <typeinfo>
+#endif // _DEBUG
+
 
 struct IUnknown;
+struct ID3D12Object;
 
 namespace Lamb {
 	/// <summary>
@@ -17,8 +23,6 @@ namespace Lamb {
 	/// </summary>
 	template<IsIUnknownBased T>
 	class LambPtr {
-		template<IsIUnknownBased U> friend class LambPtr;
-
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -43,25 +47,6 @@ namespace Lamb {
 			LambPtr{}
 		{
 			*this = std::move(right);
-		}
-
-		template<IsIUnknownBased U>
-		LambPtr(U* ptr) :
-			LambPtr{}
-		{
-			*this = ptr;
-		}
-		template<IsIUnknownBased U>
-		LambPtr(const LambPtr<U>& right) :
-			LambPtr{}
-		{
-			*this = right;
-		}
-		template<IsIUnknownBased U>
-		LambPtr(LambPtr<U>&& right) :
-			LambPtr{}
-		{
-			*this = right;
 		}
 
 	/// <summary>
@@ -104,38 +89,6 @@ namespace Lamb {
 			return *this;
 		}
 		LambPtr<T>& operator=(std::nullptr_t right) {
-			this->Delete();
-
-			this->ptr_ = right;
-
-			return *this;
-		}
-
-
-		template<IsIUnknownBased U>
-		LambPtr<T>& operator=(const LambPtr<U>& right) {
-			this->Delete();
-
-			this->ptr_ = right.ptr_;
-
-			this->AddRef();
-
-			return *this;
-		}
-		template<IsIUnknownBased U>
-		LambPtr<T>& operator=(LambPtr<U>&& right) noexcept {
-			this->Delete();
-
-			this->ptr_ = right.ptr_;
-
-			this->AddRef();
-
-			right.Delete();
-
-			return *this;
-		}
-		template<IsIUnknownBased U>
-		LambPtr<T>& operator=(U* right) {
 			this->Delete();
 
 			this->ptr_ = right;
@@ -263,6 +216,20 @@ namespace Lamb {
 			ptr_ = nullptr;
 
 			return tmp;
+		}
+
+		template<class ClassName>
+		void SetName() {
+#ifdef _DEBUG
+			if constexpr (std::is_base_of_v<ID3D12Object, T>) {
+				if (ptr_) {
+					std::wstring resourceName = ConvertString(
+						std::string{ typeid(ClassName).name() } + " : " + std::string{ typeid(T).name() }
+					);
+					ptr_->SetName(resourceName.c_str());
+				}
+			}
+#endif // _DEBUG
 		}
 
 

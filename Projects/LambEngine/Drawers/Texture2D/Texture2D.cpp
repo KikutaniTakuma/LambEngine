@@ -45,7 +45,7 @@ void Texture2D::Load(const std::string& fileName)
 	renderSet = renderContext->Get(kFileNames_);
 }
 
-void Texture2D::Draw(const Camera* camera, BlendType blend) {
+void Texture2D::Draw(const Mat4x4& camera, BlendType blend) {
 	Texture2DRenderContext* renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
 
 	renderContext->SetSahderStruct(

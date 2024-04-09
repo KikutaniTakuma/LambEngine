@@ -1,5 +1,4 @@
 #pragma once
-#include "Utils/Camera/Camera.h"
 #include "Math/Mat4x4.h"
 #include "Math/Quaternion.h"
 #include "Math/Vector2.h"
@@ -22,7 +21,7 @@ public:
 public:
 	virtual void Load(const std::string& fileName) = 0;
 
-	virtual void Draw(const Camera* camera, BlendType blend);
+	virtual void Draw(const Mat4x4& camera, BlendType blend);
 
 	virtual void Debug(const std::string& guiName);
 

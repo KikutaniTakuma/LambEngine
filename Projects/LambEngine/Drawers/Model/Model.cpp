@@ -33,7 +33,7 @@ void Model::Load(const std::string& fileName) {
 	for (auto& i : *renderSet) {
 		i->SetLight(
 			Light{
-				.ligDirection{-Vector3::kYIndentity},
+				.ligDirection{-Vector3::kYIdentity},
 				.pad0{},
 				.ligColor{ Vector3::kIdentity },
 			}
@@ -41,7 +41,7 @@ void Model::Load(const std::string& fileName) {
 	}
 }
 
-void Model::Draw(const Camera* camera, BlendType blend, bool isLighting) {
+void Model::Draw(const Mat4x4& camera, BlendType blend, bool isLighting) {
 	RenderContext<>* renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
 	renderContext->SetSahderStruct(static_cast<uint32_t>(isLighting));
 

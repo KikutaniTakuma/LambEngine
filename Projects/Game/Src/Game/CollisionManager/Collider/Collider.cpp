@@ -28,7 +28,7 @@ bool Collider::IsCollision(const Vector3& pos) {
 	if (min_.x <= pos.x && pos.x <= max_.x) {
 		if (min_.y <= pos.y && pos.y <= max_.y) {
 			if (min_.z <= pos.z && pos.z <= max_.z) {
-				color_ = Vector4ToUint(Vector4::kXIndentity);
+				color_ = Vector4ToUint(Vector4::kXIdentity);
 				return true;
 			}
 		}
@@ -89,7 +89,7 @@ bool Collider::CollisionExtrusion(Collider& other) {
 
 				flg_ = true;
 				other.flg_ = true;
-				color_ = Vector4ToUint(Vector4::kXIndentity);
+				color_ = Vector4ToUint(Vector4::kXIdentity);
 				other.color_ = color_;
 				return static_cast<bool>(flg_);
 			}
@@ -155,7 +155,7 @@ bool Collider::CollisionExtrusion(Collider& other) {
 
 			flg_ = true;
 			other.flg_ = true;
-			color_ = Vector4ToUint(Vector4::kXIndentity);
+			color_ = Vector4ToUint(Vector4::kXIdentity);
 			other.color_ = color_;
 			return static_cast<bool>(flg_);
 		}

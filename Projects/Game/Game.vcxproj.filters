@@ -38,8 +38,29 @@
     <ClCompile Include="Src\Scenes\SubMenu\SubMenu.cpp">
       <Filter>Scenes\SubMenu</Filter>
     </ClCompile>
-    <ClCompile Include="Src\ResoureceManager\ResoureceManager.cpp">
-      <Filter>ResoureceManager</Filter>
+    <ClCompile Include="Src\Game\Water\Water.cpp">
+      <Filter>Game\Water</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scenes\Manager\SceneLoad\SceneLoad.cpp">
+      <Filter>Scenes\Manager\ScceneLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scenes\TitleScene\TitleScene.cpp">
+      <Filter>Scenes\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Cloud\Cloud.cpp">
+      <Filter>Game\Cloud</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\SkyDome\SkyDome.cpp">
+      <Filter>Game\Skydome</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Camera\Camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\CollisionManager\Sphere\Sphere.cpp">
+      <Filter>Game\CollisionManager\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp">
+      <Filter>Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -88,8 +109,26 @@
     <Filter Include="Game\CollisionManager\Plane">
       <UniqueIdentifier>{268eefac-748b-4452-b6c2-10e06349215c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ResoureceManager">
-      <UniqueIdentifier>{c6379256-68ba-4ce2-b92a-437563ffcfcb}</UniqueIdentifier>
+    <Filter Include="Game\Water">
+      <UniqueIdentifier>{db170fba-cd99-4b05-a820-35cea969012a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\Manager\ScceneLoad">
+      <UniqueIdentifier>{a02d4342-6cbd-4359-83a6-e378d8c3ef88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\TitleScene">
+      <UniqueIdentifier>{33349c28-9ac6-4102-a517-2aca4afde131}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Cloud">
+      <UniqueIdentifier>{b9dbfc0b-e0eb-4bb3-b034-5e2f0dd99092}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Skydome">
+      <UniqueIdentifier>{3a7d72dd-98b1-426d-8ded-365ff6fff89b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{31e5ecf8-6bc1-4f5a-97ce-394f3988c342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\CollisionManager\Sphere">
+      <UniqueIdentifier>{03d14d68-3998-48a1-950b-d7aa4dec5fed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -129,8 +168,29 @@
     <ClInclude Include="Src\Scenes\SubMenu\SubMenu.h">
       <Filter>Scenes\SubMenu</Filter>
     </ClInclude>
-    <ClInclude Include="Src\ResoureceManager\ResoureceManager.h">
-      <Filter>ResoureceManager</Filter>
+    <ClInclude Include="Src\Game\Water\Water.h">
+      <Filter>Game\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scenes\Manager\SceneLoad\SceneLoad.h">
+      <Filter>Scenes\Manager\ScceneLoad</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scenes\TitleScene\TitleScene.h">
+      <Filter>Scenes\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Cloud\Cloud.h">
+      <Filter>Game\Cloud</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\SkyDome\SkyDome.h">
+      <Filter>Game\Skydome</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Camera\Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\CollisionManager\Sphere\Sphere.h">
+      <Filter>Game\CollisionManager\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h">
+      <Filter>Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

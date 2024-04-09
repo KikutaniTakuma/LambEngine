@@ -48,6 +48,7 @@ void CbvSrvUavHeap::CreateDescriptorHeap(uint32_t heapSize) {
 	// 1～(10^6-1)でクランプ
 	heapSize_ = std::clamp(heapSize, 1u, static_cast<UINT>(std::pow(10u, 6u)) - 1u);
 	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, heapSize_, true);
+	heap_.SetName<CbvSrvUavHeap>();
 }
 
 void CbvSrvUavHeap::SetHeap() {

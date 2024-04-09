@@ -47,7 +47,7 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-	model_->Draw(camera_.get(), BlendType::kNone, true);
+	model_->Draw(camera_->GetViewProjection(), BlendType::kNone, true);
 
 	//for (auto& i : tex2D_) {
 	//	i->Draw(camera_.get(), BlendType::kNone);

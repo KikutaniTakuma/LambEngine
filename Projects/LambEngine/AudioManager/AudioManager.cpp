@@ -5,6 +5,7 @@
 #include <filesystem>
 #include "Error/Error.h"
 #include "Utils/SafeDelete/SafeDelete.h"
+#include "Engine/Graphics/ResourceManager/ResourceManager.h"
 
 AudioManager* AudioManager::instance_ = nullptr;
 void AudioManager::Inititalize() {
@@ -56,6 +57,8 @@ Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 		auto audio = std::make_unique<Audio>();
 		audio->Load(fileName, loopFlg);
 		audios_.insert({ fileName, std::move(audio) });
+
+		ResourceManager::GetInstance()->SetAudioResource(fileName);
 	}
 
 	return audios_[fileName].get();
@@ -64,6 +67,28 @@ Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 void AudioManager::LoadWav(const std::string& fileName, bool loopFlg, class Audio** const audio) {
 	// コンテナに追加
 	threadAudioBuff_.push({fileName, loopFlg, audio});
+}
+
+void AudioManager::Unload(const std::string& fileName)
+{
+	auto isExisit = audios_.find(fileName);
+
+	if (isExisit != audios_.end()) {
+		audios_.erase(isExisit);
+	}
+}
+
+void AudioManager::Unload(Audio* audio)
+{
+	if (!audio) {
+		return;
+	}
+
+	auto isExisit = audios_.find(audio->fileName_);
+
+	if (isExisit != audios_.end()) {
+		audios_.erase(isExisit);
+	}
 }
 
 void AudioManager::ThreadLoad() {
@@ -82,6 +107,8 @@ void AudioManager::ThreadLoad() {
 					audios_.insert(std::make_pair(front.fileName_, std::make_unique<Audio>()));
 					audios_[front.fileName_]->Load(front.fileName_, front.loopFlg_);
 					*front.audio_ = audios_[front.fileName_].get();
+
+					ResourceManager::GetInstance()->SetAudioResource(front.fileName_);
 				}
 				else {
 					*front.audio_ = audio->second.get();

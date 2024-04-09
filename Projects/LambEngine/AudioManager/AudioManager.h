@@ -45,6 +45,10 @@ public:
 	Audio* const LoadWav(const std::string& fileName, bool loopFlg);
 	void LoadWav(const std::string& fileName, bool loopFlg,Audio** const audio);
 
+	void Unload(const std::string& fileName);
+
+	void Unload(Audio* audio);
+
 public:
 	void ThreadLoad();
 

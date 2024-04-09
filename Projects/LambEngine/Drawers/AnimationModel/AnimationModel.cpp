@@ -18,7 +18,7 @@ void AnimationModel::Update()
 	animator.Update(renderSet->GetMesh());
 }
 
-void AnimationModel::Draw(const Camera* camera, BlendType blend, bool isLighting)
+void AnimationModel::Draw(const Mat4x4& camera, BlendType blend, bool isLighting)
 {
 	RenderContext<>* renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
 	renderContext->SetSahderStruct(static_cast<uint32_t>(isLighting));
@@ -26,13 +26,13 @@ void AnimationModel::Draw(const Camera* camera, BlendType blend, bool isLighting
 	Draw(camera, blend);
 }
 
-void AnimationModel::Draw(const Camera* camera, BlendType blend)
+void AnimationModel::Draw(const Mat4x4& camera, BlendType blend)
 {
 	RenderData* render = renderSet->GetRenderContext(blend);
 
 	render->SetWVPMatrix({
 		animator.GetLocalMat4x4() * Mat4x4::MakeAffin(scale, rotate, translate),
-		camera->GetViewProjection()
+		camera
 		}
 	);
 

@@ -7,7 +7,7 @@
 
 #include "Error/Error.h"
 
-Vector3::Vector3() noexcept :
+constexpr Vector3::Vector3() noexcept :
 	x(0.0f),
 	y(0.0f),
 	z(0.0f)
@@ -19,48 +19,23 @@ Vector3::Vector3(float x, float y, float z) noexcept :
 	z(z)
 {}
 
-Vector3::Vector3(const Vector3& right) noexcept
-{
-	*this = right;
-}
 Vector3::Vector3(const Vector2& right) noexcept {
 	x = right.x;
 	y = right.y;
 	z = 0.0f;
 }
 
-Vector3::Vector3(Vector3&& right) noexcept
-{
-	*this = std::move(right);
-}
-
 const Vector3 Vector3::kIdentity = { 1.0f,1.0f,1.0f };
 const Vector3 Vector3::kZero = { 0.0f, 0.0f,0.0f };
-const Vector3 Vector3::kXIndentity = { 1.0f,0.0f,0.0f };
-const Vector3 Vector3::kYIndentity = { 0.0f,1.0f,0.0f };
-const Vector3 Vector3::kZIndentity = { 0.0f,0.0f,1.0f };
+const Vector3 Vector3::kXIdentity = { 1.0f,0.0f,0.0f };
+const Vector3 Vector3::kYIdentity = { 0.0f,1.0f,0.0f };
+const Vector3 Vector3::kZIdentity = { 0.0f,0.0f,1.0f };
 
 Vector3 Vector3::operator+() const noexcept {
 	return *this;
 }
 Vector3 Vector3::operator-() const noexcept {
 	return Vector3(-x, -y, -z);
-}
-
-Vector3& Vector3::operator=(const Vector3& right) noexcept {
-	x = right.x;
-	y = right.y;
-	z = right.z;
-
-	return *this;
-}
-
-Vector3& Vector3::operator=(Vector3&& right) noexcept {
-	x = std::move(right.x);
-	y = std::move(right.y);
-	z = std::move(right.z);
-
-	return *this;
 }
 
 Vector3 Vector3::operator+(const Vector3& right) const noexcept {
@@ -126,14 +101,19 @@ Vector3 Vector3::operator*(const Mat4x4& mat) const {
 
 Vector3 operator*(const Mat4x4& left, const Vector3& right) {
 	Vector3 result;
-	Vector4 vec = { right,1.0f };
+	Matrix<float, 4, 1> tmp = Matrix<float, 1, 4>::VectorType{ right.x,right.y, right.z, 1.0f };
+	Matrix<float, 4, 1> tmpResult;
 
-	result.x = left[0].Dot(vec);
-	result.y = left[1].Dot(vec);
-	result.z = left[2].Dot(vec);
-	float&& w = left[3].Dot(vec);
+	tmpResult = left * tmp;
+	
+	float& w = tmpResult.view().back();
+
 	if (w == 0.0f) {
 		throw Lamb::Error::Code<Vector3>("Matrix4x4 * Vector3 : w = 0.0f", __func__);
+	}
+
+	for (size_t i = 0; i < tmpResult.HeightSize() - 1; i++) {
+		result[i] = tmpResult[i][0];
 	}
 
 	w = 1.0f / w;

@@ -16,7 +16,7 @@ StringOut::StringOut():
 	str_(),
 	pos(),
 	rotation(0.0f),
-	scale(Vector2::identity),
+	scale(Vector2::kIdentity),
 	color(0xffffffff),
 	isHorizontal(false)
 {
@@ -28,7 +28,7 @@ StringOut::StringOut(const std::string& formatName) :
 	str_(),
 	pos(),
 	rotation(0.0f),
-	scale(Vector2::identity),
+	scale(Vector2::kIdentity),
 	color(0xffffffff),
 	isHorizontal(false)
 {
@@ -40,7 +40,7 @@ StringOut::StringOut(const std::wstring& formatName) :
 	str_(),
 	pos(),
 	rotation(0.0f),
-	scale(Vector2::identity),
+	scale(Vector2::kIdentity),
 	color(0xffffffff),
 	isHorizontal(false)
 {

@@ -1,8 +1,8 @@
 #include "World.h"
-#include "Scenes/Manager/SceneManager.h"
 #include "Editor/ParticleEditor/ParticleEditor.h"
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "../Game/Water/Water.h"
+#include "../Game/Cloud/Cloud.h"
 
 void World::Initialize() {
 	// ウィンドウ初期化オプション
@@ -13,10 +13,24 @@ void World::Initialize() {
 		.isFullesceen = false
 	};
 
+	// ロードのステータス
+	SceneLoad::setting = SceneLoad::Desc{
+		.fileName = "./Resources/Load.png",
+		.animationNumber = 6,
+		.animationSpeed = 100
+	};
+
 	Framework::Initialize();
 
 	//Water::Initialize();
-	sceneManager_ = SceneManager::GetInstance();
+
+	//Cloud::Initialize();
+
+	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/mincho_size_32.spritefont");
+
+
+	// シーンマネージャー初期化
+	sceneManager_ = std::make_unique<SceneManager>();
 
 	sceneManager_->Initialize(BaseScene::ID::Game, BaseScene::ID::Game);
 
@@ -25,11 +39,14 @@ void World::Initialize() {
 }
 
 void World::Finalize() {
+	//Cloud::Finalize();
 	//Water::Finalize();
 
 	if (sceneManager_) {
 		sceneManager_->Finalize();
 	}
+
+	sceneManager_.reset();
 
 	//ParticleEditor::Finalize();
 

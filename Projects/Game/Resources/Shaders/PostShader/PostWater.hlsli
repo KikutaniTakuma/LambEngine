@@ -17,6 +17,10 @@ cbuffer NormalVector : register(b2)
     float3 kTangent;
 }
 
+cbuffer DensityScale :register(b5) {
+    float kDensityScale;
+}
+
 struct Output{
     float4 svPos : SV_POSITION;
     float2 uv : TEXCOORD0;

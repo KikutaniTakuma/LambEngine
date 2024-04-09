@@ -8,9 +8,10 @@
 #include "Fade/Fade.h"
 #include "Input/Input.h"
 #include "BaseScene/BaseScene.h"
+#include "SceneLoad/SceneLoad.h"
 
 class SceneManager final {
-private:
+public:
 	SceneManager() = default;
 	SceneManager(const SceneManager&) = delete;
 	SceneManager(SceneManager&&) = delete;
@@ -18,9 +19,6 @@ private:
 
 	SceneManager& operator=(const SceneManager&) = delete;
 	SceneManager& operator=(SceneManager&&) = delete;
-
-public:
-	static SceneManager* const GetInstance();
 
 public:
 	void Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID);
@@ -39,6 +37,15 @@ public:
 
 	bool IsEnd() const;
 
+	const class Camera& GetCurrentSceneCamera() const;
+
+	BaseScene::ID GetCurrentSceneID() const;
+	BaseScene::ID GetPreSceneID() const;
+
+
+private:
+	void Debug();
+
 
 private:
 	std::unique_ptr<BaseScene> scene_;
@@ -48,10 +55,18 @@ private:
 
 	Camera fadeCamera_;
 
-	FrameInfo* frameInfo_ = nullptr;
+	class FrameInfo* frameInfo_ = nullptr;
 	Input* input_ = nullptr;
 
 	bool isPad_ = false;
 
 	std::optional<BaseScene::ID> finishID_;
+	std::optional<BaseScene::ID> preSceneID_;
+
+	std::unique_ptr<SceneLoad> load_;
+
+#ifdef _DEBUG
+	std::unordered_map<BaseScene::ID, std::string> sceneName_;
+#endif // _DEBUG
+	std::unordered_map<BaseScene::ID, uint8_t> sceneNum_;
 };

@@ -53,9 +53,11 @@ void Line::Initialize() {
 
 	Vector4* vertexMap = nullptr;
 	vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexMap));
-	vertexMap[0] = Vector4::kZero + Vector4::kWIndentity;
-	vertexMap[1] = Vector4::kXIndentity + Vector4::kWIndentity;
+	vertexMap[0] = Vector4::kZero + Vector4::kWIdentity;
+	vertexMap[1] = Vector4::kXIdentity + Vector4::kWIdentity;
 	vertexBuffer_->Unmap(0, nullptr);
+
+	vertexBuffer_.SetName<Line>();
 }
 
 void Line::Finalize() {
@@ -119,7 +121,7 @@ void Line::Draw(const Mat4x4& viewProjection) {
 	Vector3 to = (end - start).Normalize();
 	Vector3 translate = start;
 
-	(*vertData_)[indexCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIndentity, to, translate) * viewProjection;
+	(*vertData_)[indexCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
 	indexCount_++;
 }
@@ -139,7 +141,7 @@ void Line::Draw(const Vector3& start, const Vector3& end, const Mat4x4& viewProj
 	Vector3 to = (end - start).Normalize();
 	Vector3 translate = start;
 
-	(*vertData_)[indexCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIndentity, to, translate) * viewProjection;
+	(*vertData_)[indexCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
 	indexCount_++;
 }

@@ -23,6 +23,9 @@ public:
 		roootParamater_()
 	{
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(T) * size());
+#ifdef _DEBUG
+		bufferResource_.SetName<decltype(*this)>();
+#endif // _DEBUG
 		srvDesc_ = {};
 		srvDesc_.Format = DXGI_FORMAT_UNKNOWN;
 		srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;

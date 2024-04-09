@@ -40,6 +40,7 @@ RtvHeap::RtvHeap(uint32_t heapSize):
 void RtvHeap::CreateDescriptorHeap(uint32_t heapSize) {
 	heapSize_ = std::clamp(heapSize, DirectXSwapChain::kBackBufferNumber_, 0xffu);
 	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, heapSize_, false);
+	heap_.SetName<RtvHeap>();
 }
 
 void RtvHeap::CreateHeapHandles() {

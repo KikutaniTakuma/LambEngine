@@ -33,3 +33,8 @@ void BaseScene::SceneInitialize(SceneManager* sceneManager) {
 
 	input_ = Input::GetInstance();
 }
+
+const Camera& BaseScene::GetCamera() const
+{
+	return *camera_;
+}
