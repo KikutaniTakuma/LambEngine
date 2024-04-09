@@ -260,7 +260,8 @@ void MeshLoader::LoadMtl(const aiScene* scene, const std::string& directorypath,
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);
-			textureFileNames.push_back(directorypath + "/" + textureFilePath.C_Str());
+			std::filesystem::path tmpTextureFilePath = textureFilePath.C_Str();
+			textureFileNames.push_back(directorypath + "/" + tmpTextureFilePath.filename().string());
 		}
 	}
 

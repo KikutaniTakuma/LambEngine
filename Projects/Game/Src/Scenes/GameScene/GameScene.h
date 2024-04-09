@@ -31,5 +31,5 @@ public:
 
 public:
 	std::unique_ptr<AnimationModel> model_;
-	std::array<std::unique_ptr<Texture2D>, 3> tex2D_;
+	std::unique_ptr<Texture2D> tex2D_;
 };

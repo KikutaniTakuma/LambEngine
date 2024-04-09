@@ -24,10 +24,8 @@ void GameScene::Initialize() {
 	model_->animator.SetLoopAnimation(true);
 
 
-	//for (auto& i : tex2D_) {
-	//	i = std::make_unique<Texture2D>();
-	//	i->Load("./Resources/uvChecker.png");
-	//}
+	tex2D_ = std::make_unique<Texture2D>();
+	tex2D_->Load("./Resources/uvChecker.png");
 }
 
 void GameScene::Finalize() {
@@ -40,16 +38,11 @@ void GameScene::Update() {
 
 	model_->Debug("model");
 	model_->Update();
-	//for (size_t index = 0; auto & i : tex2D_) {
-	//	i->Debug("tex2D_" + std::to_string(index));
-	//	index++;
-	//}
+	tex2D_->Debug("tex2D_");
 }
 
 void GameScene::Draw() {
-	model_->Draw(camera_->GetViewProjection(), BlendType::kNone, true);
+	//model_->Draw(camera_->GetViewProjection(), BlendType::kNone, true);
 
-	//for (auto& i : tex2D_) {
-	//	i->Draw(camera_.get(), BlendType::kNone);
-	//}
+	tex2D_->Draw(camera_->GetViewProjection(), BlendType::kNone);
 }
