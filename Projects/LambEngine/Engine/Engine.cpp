@@ -411,6 +411,12 @@ void Engine::FrameEnd() {
 
 	ImGuiManager::GetInstance()->End();
 
+	auto textureManager = TextureManager::GetInstance();
+	// このフレームで画像読み込みが発生していたら開放する
+	// またUnloadされていたらそれをコンテナから削除する
+	textureManager->ReleaseIntermediateResource();
+
+
 	instance_->directXSwapChain_->ChangeBackBufferState();
 
 	// コマンドリストを確定させる
@@ -430,10 +436,6 @@ void Engine::FrameEnd() {
 	instance_->directXCommand_->ResetCommandlist();
 
 
-	auto textureManager = TextureManager::GetInstance();
-	// このフレームで画像読み込みが発生していたら開放する
-	// またUnloadされていたらそれをコンテナから削除する
-	textureManager->ReleaseIntermediateResource();
 
 	// 音の非同期読み込み
 	auto audioManager = AudioManager::GetInstance();

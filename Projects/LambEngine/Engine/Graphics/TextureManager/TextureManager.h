@@ -1,5 +1,6 @@
 #pragma once
 #include "Texture/Texture.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
 #include <unordered_map>
 #include <string>
@@ -56,4 +57,6 @@ private:
 	/// </summary>
 	std::unordered_map<std::string, std::unique_ptr<Texture>> textures_;
 	bool thisFrameLoadFlg_;
+
+	std::unique_ptr<DirectXCommand> directXCommand_;
 };

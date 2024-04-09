@@ -31,6 +31,8 @@ TextureManager::TextureManager() :
 {
 	srvHeap_ = CbvSrvUavHeap::GetInstance();
 
+	directXCommand_ = std::make_unique<DirectXCommand>();
+
 	Lamb::AddLog("Initialize TextureManager succeeded");
 }
 
@@ -46,9 +48,8 @@ uint32_t TextureManager::LoadTexture(const std::string& fileName) {
 
 	auto itr = textures_.find(fileName);
 	if (itr == textures_.end()) {
-		DirectXCommand* const directXCommand = DirectXCommand::GetMainCommandlist();
 		auto tex = std::make_unique<Texture>();
-		tex->Load(fileName, directXCommand->GetCommandList());
+		tex->Load(fileName, directXCommand_->GetCommandList());
 
 		if (!tex->isLoad_) {
 			return 0u;
@@ -74,6 +75,16 @@ uint32_t TextureManager::GetWhiteTex() {
 
 void TextureManager::ReleaseIntermediateResource() {
 	if (thisFrameLoadFlg_) {
+		// コマンドリストを確定させる
+		directXCommand_->CloseCommandlist();
+
+		// GPUにコマンドリストの実行を行わせる
+		directXCommand_->ExecuteCommandLists();
+
+		directXCommand_->WaitForFinishCommnadlist();
+
+		directXCommand_->ResetCommandlist();
+
 		for (auto& i : textures_) {
 			i.second->ReleaseIntermediateResource();
 		}
