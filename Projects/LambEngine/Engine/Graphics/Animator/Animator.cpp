@@ -33,28 +33,42 @@ void Animator::Update(const Mesh* const mesh) {
 
 	animationMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
 
-	if (isActive_) {
-		animationTime_ += Lamb::DeltaTime();
-	}
+	/// 以下ゴミコード
 
-	if (isFullAnimation_ and animations_->data.size() <= currentAnimationIndex_) {
-		if (isLoop_) {
-			currentAnimationIndex_ = 0;
+	// アクティブ時
+	if (isActive_) {
+		// アニメーション時間を加算
+		animationTime_ += Lamb::DeltaTime();
+
+		// アニメーション時間がアニメーション再生を超えたら
+		if (currentAnimation.duration < animationTime_) {
+			// ループ時はanimationTimeを最初から
+			if (isLoop_) {
+				animationTime_ = 0.0f;
+			}
+			// アニメーションをすべて再生するときは
+			// アニメーション時間をリセットしてアニメーションのインデックスを進める
+			else if (isFullAnimation_) {
+				animationTime_ = 0.0f;
+				currentAnimationIndex_++;
+			}
+			// 非アクティブ化
+			else {
+				Pause();
+			}
 		}
-		else {
-			Stop();
-		}
-	}
-	
-	if (currentAnimation.duration < animationTime_) {
-		if (isLoop_) {
-			animationTime_ = 0.0f;
-		}
-		else if (isFullAnimation_) {
-			currentAnimationIndex_++;
-		}
-		else {
-			Stop();
+
+		// アニメーションのインデックスを超えたとき
+		if (animations_->data.size() <= currentAnimationIndex_) {
+			// ループ時はインデックスを初期化
+			if (isLoop_) {
+				currentAnimationIndex_ = 0;
+			}
+			// ループしないときは非アクティブ化
+			else {
+				Pause();
+				currentAnimationIndex_ = animations_->data.size() - 1llu;
+			}
 		}
 	}
 }
