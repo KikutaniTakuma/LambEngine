@@ -21,8 +21,7 @@ void GameScene::Initialize() {
 	model_ = std::make_unique<AnimationModel>();
 	model_->Load("./Resources/gltf_test_model/AnimatedCube.gltf");
 	model_->animator.Start();
-	model_->animator.SetLoopAnimation(false);
-	//model_->animator.SetIsFullAnimation(false);
+	model_->animator.SetLoopAnimation(true);
 
 
 	//for (auto& i : tex2D_) {
