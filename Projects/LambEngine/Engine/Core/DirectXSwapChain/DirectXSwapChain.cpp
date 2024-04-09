@@ -31,7 +31,7 @@ DirectXSwapChain::DirectXSwapChain():
 	isRenderState_{false}
 {
 	IDXGIFactory7* const dxgiFactory = DirectXDevice::GetInstance()->GetDxgiFactory();
-	ID3D12CommandQueue* const commandQueue = DirectXCommand::GetInstance()->GetCommandQueue();
+	ID3D12CommandQueue* const commandQueue = DirectXCommand::GetMainCommandlist()->GetCommandQueue();
 
 	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
 
@@ -68,7 +68,7 @@ DirectXSwapChain::DirectXSwapChain():
 }
 
 void DirectXSwapChain::SetViewPort(uint32_t width, uint32_t height) {
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	// ビューポート
 	D3D12_VIEWPORT viewport{};
@@ -97,7 +97,7 @@ void DirectXSwapChain::SetMainRenderTarget() {
 }
 
 void DirectXSwapChain::ClearBackBuffer() {
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 
 	auto dsvH = Engine::GetDsvHandle();

@@ -152,7 +152,7 @@ void RenderTarget::SetMainRenderTarget() {
 }
 
 void RenderTarget::UseThisRenderTargetShaderResource() {
-	static auto mainComList = DirectXCommand::GetInstance()->GetCommandList();
+	static auto mainComList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	mainComList->SetGraphicsRootDescriptorTable(0, heapHandleGPU_);
 }
 

@@ -87,7 +87,7 @@ void ImGuiManager::Start() {
 
 void ImGuiManager::End() {
 #ifdef _DEBUG
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	// ImGui描画
 	ImGui::Render();
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), commandList);

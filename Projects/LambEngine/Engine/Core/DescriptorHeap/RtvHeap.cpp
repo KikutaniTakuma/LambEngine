@@ -88,7 +88,7 @@ void RtvHeap::CreateBackBuffer(
 
 void RtvHeap::SetMainRtv() {
 	IDXGISwapChain4* const swapChain = DirectXSwapChain::GetInstance()->GetSwapChain();
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
 	// 描画先をRTVを設定する
 	auto dsvH = Engine::GetDsvHandle();
@@ -96,7 +96,7 @@ void RtvHeap::SetMainRtv() {
 }
 
 void RtvHeap::SetRtv(uint32_t heapHandle, uint32_t renderTargetNum, bool isDrawDepth) {
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	// 描画先をRTVを設定する
 	auto dsvH = Engine::GetDsvHandle();
 	commandList->OMSetRenderTargets(renderTargetNum, &heapHandles_[heapHandle].first, false, isDrawDepth ? &dsvH : nullptr);
@@ -108,14 +108,14 @@ void RtvHeap::SetRtv(std::initializer_list<D3D12_CPU_DESCRIPTOR_HANDLE> heapHand
 		handles.push_back(i);
 	}
 
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	// 描画先をRTVを設定する
 	auto dsvH = Engine::GetDsvHandle();
 	commandList->OMSetRenderTargets(static_cast<uint32_t>(handles.size()), &handles[0], false, isDrawDepth ? &dsvH : nullptr);
 }
 
 void RtvHeap::ClearRenderTargetView(uint32_t handle, const Vector4& clearColor) {
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	commandList->ClearRenderTargetView(heapHandles_[handle].first, clearColor.m.data(), 0, nullptr);
 }
 

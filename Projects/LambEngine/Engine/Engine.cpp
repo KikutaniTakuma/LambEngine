@@ -42,6 +42,7 @@
 #include "Utils/ScreenOut/ScreenOut.h"
 
 #include "Error/Error.h"
+#include "Utils/SafeDelete/SafeDelete.h"
 
 
 
@@ -170,7 +171,7 @@ void Engine::Finalize() {
 	ImGuiManager::Finalize();
 
 	DirectXSwapChain::Finalize();
-	DirectXCommand::Finalize();
+	instance_->FinalizeDirectXCommand();
 	DirectXDevice::Finalize();
 
 	delete instance_;
@@ -321,8 +322,12 @@ void Engine::InitializeDirectXDevice() {
 /// 
 
 void Engine::InitializeDirectXCommand() {
-	DirectXCommand::Initialize();
-	directXCommand_ = DirectXCommand::GetInstance();
+	directXCommand_ = new DirectXCommand();
+}
+
+void Engine::FinalizeDirectXCommand()
+{
+	Lamb::SafeDelete(directXCommand_);
 }
 
 

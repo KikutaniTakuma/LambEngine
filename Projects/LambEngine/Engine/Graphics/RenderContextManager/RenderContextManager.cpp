@@ -31,13 +31,26 @@ void RenderContextManager::Finalize() {
 
 RenderSet* const RenderContextManager::Get(const LoadFileNames& fileNames)
 {
-	auto isExist = renderData_.find(fileNames);
+	std::unordered_map<Key, std::unique_ptr<RenderSet>>& currentRenderData = isNowThreading_ ? threadRenderData_ : renderData_;
+	auto isExist = currentRenderData.find(fileNames);
 
-	if (isExist == renderData_.end()) {
+	if (isExist == currentRenderData.end()) {
 		Load(fileNames);
 	}
 
-	return renderData_[fileNames].get();
+	return currentRenderData[fileNames].get();
+}
+
+void RenderContextManager::SetIsNowThreading(bool isNowThreading) {
+	isNowThreading_ = isNowThreading;
+
+	if (not isNowThreading_) {
+		for (auto& i : threadRenderData_) {
+			renderData_.insert(std::make_pair(i.first, i.second.release()));
+		}
+
+		threadRenderData_.clear();
+	}
 }
 
 void RenderContextManager::Draw() {

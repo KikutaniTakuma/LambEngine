@@ -93,7 +93,7 @@ void StringOutPutManager::LoadFont(const std::string& fontName) {
 
 	descriptorHeap->UseThisPosition(useHandle);
 
-	auto directXCommon = DirectXCommand::GetInstance();
+	auto directXCommon = DirectXCommand::GetMainCommandlist();
 	auto future = resUploadBach.End(directXCommon->GetCommandQueue());
 
 	directXCommon->WaitForFinishCommnadlist();
@@ -122,6 +122,6 @@ DirectX::SpriteBatch* const StringOutPutManager::GetBatch(const std::string& fon
 }
 
 void StringOutPutManager::GmemoryCommit() {
-	static auto directXCommon = DirectXCommand::GetInstance();
+	static auto directXCommon = DirectXCommand::GetMainCommandlist();
 	gmemory_->Commit(directXCommon->GetCommandQueue());
 }

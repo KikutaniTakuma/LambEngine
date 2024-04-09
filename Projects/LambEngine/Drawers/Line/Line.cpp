@@ -84,7 +84,7 @@ void Line::AllDraw() {
 	pipline_->Use();
 	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
 	heap->Use(vertData_->GetHandleUINT(), 0);
-	auto commandList = DirectXCommand::GetInstance()->GetCommandList();
+	auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	commandList->IASetVertexBuffers(0, 1, &vertexView_);
 	commandList->DrawInstanced(kVertexNum, indexCount_, 0, 0);
 

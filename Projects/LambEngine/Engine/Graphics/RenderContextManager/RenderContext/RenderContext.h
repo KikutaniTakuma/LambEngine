@@ -109,7 +109,7 @@ public:
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
         // コマンドリスト
-        ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetInstance()->GetCommandList();
+        ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
         // パイプライン設定
         pipeline_->Use();

@@ -2,6 +2,7 @@
 #include "Engine/Engine.h"
 #include "./Camera/Camera.h"
 #include "Utils/EngineInfo/EngineInfo.h"
+#include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 
 SceneLoad::Desc SceneLoad::setting = {};
 
@@ -10,10 +11,13 @@ SceneLoad::SceneLoad() :
 	mtx_{},
 	loadProc_{},
 	loadTex_{},
-	exit_{ false },
-	isLoad_{ false },
-	isWait_{false}
+	exit_(false),
+	isLoad_(false),
+	isWait_(false),
+	renderContextManager_(nullptr)
 {
+	renderContextManager_ = RenderContextManager::GetInstance();
+
 	loadTex_.reset(new Texture2D{ setting.fileName });
 
 	loadTex_->scale = Lamb::ClientSize();
@@ -75,7 +79,10 @@ void SceneLoad::Start()
 
 		//loadTex_->Update();
 		//loadTex_->Draw(cameraMatrix_);
+
 		Engine::FrameEnd();
+
+		renderContextManager_->SetIsNowThreading(isLoad_);
 
 		condition_.notify_all();
 	}
@@ -88,6 +95,8 @@ void SceneLoad::Stop()
 		while(!isWait_){
 
 		}
+
+		renderContextManager_->SetIsNowThreading(isLoad_);
 		Engine::FrameStart();
 	}
 }

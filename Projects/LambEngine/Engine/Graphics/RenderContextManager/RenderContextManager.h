@@ -42,7 +42,7 @@ public:
 
 		renderData_.insert(std::make_pair(fileNames, std::make_unique<RenderSet>()));
 
-		RenderSet& currentRenderSet = *renderData_[fileNames];
+		RenderSet& currentRenderSet = isNowThreading_ ? *threadRenderData_[fileNames] : *renderData_[fileNames];
 
 		Shader shader = LoadShader(fileNames.shaderName);
 
@@ -61,6 +61,7 @@ public:
 
 	[[nodiscard]] RenderSet* const Get(const LoadFileNames& fileNames);
 
+	void SetIsNowThreading(bool isNowThreading);
 public:
 	void Draw();
 	void ResetDrawCount();
@@ -73,4 +74,6 @@ private:
 
 private:
 	std::unordered_map<Key, std::unique_ptr<RenderSet>> renderData_;
+	std::unordered_map<Key, std::unique_ptr<RenderSet>> threadRenderData_;
+	bool isNowThreading_ = false;
 };

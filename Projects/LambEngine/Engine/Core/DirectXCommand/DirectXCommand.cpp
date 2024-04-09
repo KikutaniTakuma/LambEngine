@@ -3,21 +3,7 @@
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include <cassert>
 #include "Error/Error.h"
-#include "Utils/SafeDelete/SafeDelete.h"
-
-DirectXCommand* DirectXCommand::instance_ = nullptr;
-
-DirectXCommand* const DirectXCommand::GetInstance() {
-	return instance_;
-}
-
-void DirectXCommand::Initialize() {
-	assert(!instance_);
-	instance_ = new DirectXCommand;
-}
-void DirectXCommand::Finalize() {
-	Lamb::SafeDelete(instance_);
-}
+#include "Engine/Engine.h"
 
 
 DirectXCommand::DirectXCommand():
@@ -42,6 +28,11 @@ DirectXCommand::DirectXCommand():
 
 DirectXCommand::~DirectXCommand() {
 	CloseHandle(fenceEvent_);
+}
+
+DirectXCommand* const DirectXCommand::GetMainCommandlist()
+{
+	return Engine::GetInstance()->GetMainCommandlist();
 }
 
 void DirectXCommand::CloseCommandlist() {
@@ -159,7 +150,7 @@ void DirectXCommand::CrateFence() {
 }
 
 void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	// TransitionBarrierの設定
 	D3D12_RESOURCE_BARRIER barrier{};

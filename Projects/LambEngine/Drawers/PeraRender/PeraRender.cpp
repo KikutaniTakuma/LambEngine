@@ -182,7 +182,7 @@ void PeraRender::Draw(
 	peraPipelineObject_->Update();
 
 	// 各種描画コマンドを積む
-	ID3D12GraphicsCommandList* commandList = DirectXCommand::GetInstance()->GetCommandList();
+	ID3D12GraphicsCommandList* commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	peraPipelineObject_->Use(blend, isDepth);
 	commandList->IASetVertexBuffers(0, 1, &peraVertexView_);
