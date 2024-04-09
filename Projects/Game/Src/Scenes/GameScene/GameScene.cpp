@@ -22,7 +22,7 @@ void GameScene::Initialize() {
 	model_->Load("./Resources/gltf_test_model/AnimatedCube.gltf");
 	model_->animator.Start();
 	model_->animator.SetLoopAnimation(false);
-	model_->animator.SetIsFullAnimation(false);
+	//model_->animator.SetIsFullAnimation(false);
 
 
 	//for (auto& i : tex2D_) {
