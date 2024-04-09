@@ -9,6 +9,7 @@
 #include "Error/Error.h"
 
 TextureManager* TextureManager::instance_ = nullptr;
+const std::string TextureManager::kWhiteTexturePath = "./Resources/white2x2.png";
 
 TextureManager* const TextureManager::GetInstance() {
 	return instance_;
@@ -17,7 +18,7 @@ TextureManager* const TextureManager::GetInstance() {
 void TextureManager::Initialize() {
 	instance_ = new TextureManager();
 	assert(instance_);
-	instance_->LoadTexture("./Resources/white2x2.png");
+	instance_->LoadTexture(kWhiteTexturePath);
 }
 
 void TextureManager::Finalize() {
@@ -38,19 +39,19 @@ TextureManager::~TextureManager() {
 }
 
 
-Texture* const TextureManager::LoadTexture(const std::string& fileName) {
+uint32_t TextureManager::LoadTexture(const std::string& fileName) {
 	if (!std::filesystem::exists(fileName)) {
 		throw Lamb::Error::Code<TextureManager>("this file is not exist -> " + fileName, __func__);
 	}
 
 	auto itr = textures_.find(fileName);
 	if (itr == textures_.end()) {
-		DirectXCommand* const directXCommand = DirectXCommand::GetInstance();
+		DirectXCommand* const directXCommand = DirectXCommand::GetMainCommandlist();
 		auto tex = std::make_unique<Texture>();
 		tex->Load(fileName, directXCommand->GetCommandList());
 
 		if (!tex->isLoad_) {
-			return nullptr;
+			return 0u;
 		}
 
 		srvHeap_->CreateView(*tex);
@@ -60,11 +61,15 @@ Texture* const TextureManager::LoadTexture(const std::string& fileName) {
 		thisFrameLoadFlg_ = true;
 	}
 
+	return textures_[fileName]->GetHandleUINT();
+}
+
+const Texture* const TextureManager::GetTexture(const std::string& fileName) {
 	return textures_[fileName].get();
 }
 
-Texture* const TextureManager::GetWhiteTex() {
-	return instance_->textures_["./Resources/white2x2.png"].get();
+uint32_t TextureManager::GetWhiteTex() {
+	return instance_->textures_[kWhiteTexturePath]->GetHandleUINT();
 }
 
 void TextureManager::ReleaseIntermediateResource() {
@@ -78,7 +83,7 @@ void TextureManager::ReleaseIntermediateResource() {
 }
 
 void TextureManager::Use(uint32_t texIndex, UINT rootParam) {
-	auto* const mainComlist = DirectXCommand::GetInstance()->GetCommandList();
+	auto* const mainComlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	mainComlist->SetGraphicsRootDescriptorTable(
 		rootParam, srvHeap_->GetGpuHeapHandle(texIndex));
 }

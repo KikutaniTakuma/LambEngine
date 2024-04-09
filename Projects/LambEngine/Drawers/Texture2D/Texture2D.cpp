@@ -36,7 +36,7 @@ Texture2D::Texture2D(const std::string& fileName):
 
 void Texture2D::Load(const std::string& fileName)
 {
-	textureID_ = TextureManager::GetInstance()->LoadTexture(fileName)->GetHandleUINT();
+	textureID_ = TextureManager::GetInstance()->LoadTexture(fileName);
 
 	RenderContextManager* const renderContext = RenderContextManager::GetInstance();
 
@@ -81,7 +81,7 @@ void Texture2D::Debug([[maybe_unused]]const std::string& guiName) {
 
 		for (const auto& i : fileNames) {
 			if (ImGui::Button(("Load " + i.string()).c_str())) {
-				textureID_ = TextureManager::GetInstance()->LoadTexture(i.string())->GetHandleUINT();
+				textureID_ = TextureManager::GetInstance()->LoadTexture(i.string());
 				break;
 			}
 

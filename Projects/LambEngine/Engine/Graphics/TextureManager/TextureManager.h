@@ -11,6 +11,9 @@
 /// テクスチャの管理
 /// </summary>
 class TextureManager {
+public:
+	static const std::string kWhiteTexturePath;
+
 private:
 	TextureManager();
 	TextureManager(const TextureManager&) = delete;
@@ -33,10 +36,12 @@ private:
 
 
 public:
-	Texture* const LoadTexture(const std::string& fileName);
+	uint32_t LoadTexture(const std::string& fileName);
+
+	const Texture* const GetTexture(const std::string& fileName);
 
 public:
-	Texture* const GetWhiteTex();
+	uint32_t GetWhiteTex();
 
 	void ReleaseIntermediateResource();
 

@@ -29,7 +29,7 @@ Mesh MeshLoader::LoadModel(const std::string& fileName)
 
 
 	std::string&& directorypath = path.parent_path().string();
-	std::vector<Texture*> textures;
+	std::vector<uint32_t> textures;
 
 	LoadMtl(scene, directorypath, textures);
 	
@@ -66,7 +66,7 @@ Mesh MeshLoader::LoadModel(const std::string& fileName)
 
 				uint32_t materialIndex = mesh->mMaterialIndex - (isGltf ? 0 : 1);
 
-				vertex.texIndex = textures.empty() ? 0 : textures[materialIndex]->GetHandleUINT();
+				vertex.texIndex = textures.empty() ? 0 : textures[materialIndex];
 
 				//vertices.push_back(vertex);
 
@@ -251,7 +251,7 @@ Node MeshLoader::ReadNode(aiNode* node)
 	return result;
 }
 
-void MeshLoader::LoadMtl(const aiScene* scene, const std::string& directorypath, std::vector<class Texture*>& result)
+void MeshLoader::LoadMtl(const aiScene* scene, const std::string& directorypath, std::vector<uint32_t>& result)
 {
 	std::vector<std::string> textureFileNames;
 

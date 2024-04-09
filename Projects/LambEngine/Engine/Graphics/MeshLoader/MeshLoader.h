@@ -49,5 +49,5 @@ private:
 	static Node ReadNode(struct aiNode* node);
 
 private:
-	static void LoadMtl(const struct aiScene* scene, const std::string& directorypath, std::vector<class Texture*>& result);
+	static void LoadMtl(const struct aiScene* scene, const std::string& directorypath, std::vector<uint32_t>& result);
 };
