@@ -44,6 +44,8 @@ public:
 public:
 	uint32_t GetWhiteTex();
 
+	void UploadTextureData();
+
 	void ReleaseIntermediateResource();
 
 	void Use(uint32_t texIndex, UINT rootParam);

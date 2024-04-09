@@ -73,7 +73,8 @@ uint32_t TextureManager::GetWhiteTex() {
 	return instance_->textures_[kWhiteTexturePath]->GetHandleUINT();
 }
 
-void TextureManager::ReleaseIntermediateResource() {
+void TextureManager::UploadTextureData()
+{
 	if (thisFrameLoadFlg_) {
 		// コマンドリストを確定させる
 		directXCommand_->CloseCommandlist();
@@ -84,7 +85,11 @@ void TextureManager::ReleaseIntermediateResource() {
 		directXCommand_->WaitForFinishCommnadlist();
 
 		directXCommand_->ResetCommandlist();
+	}
+}
 
+void TextureManager::ReleaseIntermediateResource() {
+	if (thisFrameLoadFlg_) {
 		for (auto& i : textures_) {
 			i.second->ReleaseIntermediateResource();
 		}
