@@ -7,15 +7,15 @@ AnimationModel::AnimationModel(const std::string& fileName) :
 	Load(fileName);
 }
 
-void AnimationModel::Load(const std::string& fileName)
-{
+void AnimationModel::Load(const std::string& fileName) {
 	Model::Load(fileName);
-	animator.Load(fileName);
+	animator_.reset();
+	animator_ = std::make_unique<Animator>();
+	animator_->Load(fileName);
 }
 
-void AnimationModel::Update()
-{
-	animator.Update(renderSet->GetMesh());
+void AnimationModel::Update() {
+	animator_->Update(renderSet->GetMesh());
 }
 
 void AnimationModel::Draw(const Mat4x4& camera, BlendType blend, bool isLighting)
@@ -31,7 +31,7 @@ void AnimationModel::Draw(const Mat4x4& camera, BlendType blend)
 	RenderData* render = renderSet->GetRenderContext(blend);
 
 	render->SetWVPMatrix({
-		animator.GetLocalMat4x4() * Mat4x4::MakeAffin(scale, rotate, translate),
+		animator_->GetLocalMat4x4() * Mat4x4::MakeAffin(scale, rotate, translate),
 		camera
 		}
 	);

@@ -20,8 +20,8 @@ void GameScene::Initialize() {
 
 	model_ = std::make_unique<AnimationModel>();
 	model_->Load("./Resources/gltf_test_model/AnimatedCube.gltf");
-	model_->animator.Start();
-	model_->animator.SetLoopAnimation(true);
+	model_->GetAnimator().Start();
+	model_->GetAnimator().SetLoopAnimation(true);
 
 
 	tex2D_ = std::make_unique<Texture2D>();

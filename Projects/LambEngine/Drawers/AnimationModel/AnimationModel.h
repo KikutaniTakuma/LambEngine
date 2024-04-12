@@ -2,6 +2,8 @@
 #include "../Model/Model.h"
 #include "Engine/Graphics/Animator/Animator.h"
 
+#include <memory>
+
 class AnimationModel : public Model {
 public:
 	AnimationModel() = default;
@@ -20,9 +22,14 @@ public:
 
 	virtual void Draw(const Mat4x4& camera, BlendType blend, bool isLighting) override;
 
+public:
+	inline Animator& GetAnimator() {
+		return *animator_;
+	}
+
 private:
 	void Draw(const Mat4x4& camera, BlendType blend) override;
 
-public:
-	Animator animator;
+private:
+	std::unique_ptr<Animator> animator_;
 };
