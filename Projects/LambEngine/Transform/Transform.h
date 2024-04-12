@@ -1,6 +1,7 @@
 #pragma once
 #include "Math/Vector3.h"
 #include "Math/Quaternion.h"
+#include "Math/Mat4x4.h"
 
 struct Transform {
 	Vector3 scale;
@@ -8,6 +9,8 @@ struct Transform {
 	Vector3 translate;
 
 	Transform& operator=(const QuaternionTransform& transform);
+	Mat4x4 GetMatrix() const;
+	void Debug(const std::string& guiName);
 };
 
 struct QuaternionTransform {
@@ -16,20 +19,7 @@ struct QuaternionTransform {
 	Vector3 translate;
 
 	QuaternionTransform& operator=(const Transform& transform);
+
+	Mat4x4 GetMatrix() const;
+	void Debug(const std::string& guiName);
 };
-
-inline QuaternionTransform& QuaternionTransform::operator=(const Transform& transform) {
-	this->scale = transform.scale;
-	this->rotate = Quaternion::EulerToQuaternion(transform.rotate);
-	this->translate = transform.translate;
-
-	return *this;
-}
-
-inline Transform& Transform::operator=(const QuaternionTransform& transform) {
-	this->scale = transform.scale;
-	this->rotate = Vector3::QuaternionToEuler(transform.rotate);
-	this->translate = transform.translate;
-
-	return *this;
-}

@@ -172,6 +172,7 @@
     <ClCompile Include="Math\Vector2.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
+    <ClCompile Include="Transform\Transform.cpp" />
     <ClCompile Include="Utils\ConvertString\ConvertString.cpp" />
     <ClCompile Include="Utils\CsvLoad\CsvLoad.cpp" />
     <ClCompile Include="Utils\Easing\Easing.cpp" />

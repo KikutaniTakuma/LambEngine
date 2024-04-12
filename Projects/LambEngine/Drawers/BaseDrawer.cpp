@@ -38,5 +38,4 @@ void BaseDrawer::Debug([[maybe_unused]]const std::string& guiName)
 	ImGui::DragFloat3("ポジション", &translate.x,0.01f);
 	ImGui::End();
 #endif // _DEBUG
-
 }

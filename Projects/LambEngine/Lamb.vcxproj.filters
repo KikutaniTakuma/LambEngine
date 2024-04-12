@@ -184,6 +184,9 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.cpp">
       <Filter>Engine\Graphics\PipelineObject\CloudPipeline</Filter>
     </ClCompile>
+    <ClCompile Include="Transform\Transform.cpp">
+      <Filter>Transform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
