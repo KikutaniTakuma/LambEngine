@@ -180,6 +180,13 @@ public:
 	static [[nodiscard]] Quaternion MakeRotateZAxis(float angle);
 
 	/// <summary>
+	/// オイラー角からQuaternion
+	/// </summary>
+	/// <param name="euler">オイラー角</param>
+	/// <returns>Quaternion</returns>
+	static [[nodiscard]] Quaternion EulerToQuaternion(const Vector3& euler);
+
+	/// <summary>
 	/// クォータニオン線形補完関数(近いものの方向に回転する)
 	/// </summary>
 	/// <param name="start">スタート時の回転</param>

@@ -324,6 +324,24 @@ Quaternion Quaternion::MakeRotateZAxis(float angle) {
 	return Quaternion{ 0.0f, 0.0f, std::sin(angle * 0.5f),std::cos(angle * 0.5f) };
 }
 
+Quaternion Quaternion::EulerToQuaternion(const Vector3& euler)
+{
+	float cz = std::cos(euler.z * 0.5f);
+	float sz = std::sin(euler.z * 0.5f);
+	float cy = std::cos(euler.y * 0.5f);
+	float sy = std::sin(euler.y * 0.5f);
+	float cx = std::cos(euler.x * 0.5f);
+	float sx = std::sin(euler.x * 0.5f);
+
+	Quaternion result;
+	result.quaternion.w = cz * cy * cx + sz * sy * sx;
+	result.quaternion.x = cz * cy * sx - sz * sy * cx;
+	result.quaternion.y = sz * cy * sx + cz * sy * cx;
+	result.quaternion.z = sz * cy * cx - cz * sy * sx;
+
+	return result;
+}
+
 Quaternion Quaternion::Slerp(Quaternion start, const Quaternion& end, float t) {
 	float dot = start.Dot(end);
 	if (dot < 0.0f) {

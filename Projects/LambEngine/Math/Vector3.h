@@ -139,6 +139,8 @@ public:
 /// </summary>
 public:
 	static [[nodiscard]] Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
+	
+	static [[nodiscard]] class Vector3 QuaternionToEuler(const Quaternion& quaternion);
 };
 
 struct Ray {
