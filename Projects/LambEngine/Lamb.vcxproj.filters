@@ -387,6 +387,9 @@
     <Filter Include="Engine\Graphics\PipelineObject\CloudPipeline">
       <UniqueIdentifier>{5a6f62f6-9b81-4403-a912-610eb20e5551}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Transform">
+      <UniqueIdentifier>{aa982000-c4e2-4c12-a54a-f75fa2d1c84d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">

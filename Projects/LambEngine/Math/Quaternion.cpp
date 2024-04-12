@@ -347,6 +347,31 @@ Quaternion Quaternion::Slerp(Quaternion start, const Quaternion& end, float t) {
 
 	return result;
 }
+LogQuaternion Quaternion::Log(const Quaternion& quaternion)
+{
+	LogQuaternion result;
+	float theata = std::acos(quaternion.quaternion.w);
+	if (theata == 0.0f) {
+		return result;
+	}
+	Vector3&& u = quaternion.vector.vector3 / std::sin(theata);
+	result = u * theata;
+	
+	return result;
+}
+Quaternion Quaternion::Exp(const LogQuaternion& logQuaternion)
+{
+	Quaternion result;
+	float theata = logQuaternion.Length();
+	result.vector.w = std::cos(theata);
+	if (theata == 0.0f) {
+		return result;
+	}
+	Vector3&& u = logQuaternion / theata;
+	result.vector.vector3 = u * std::sin(theata);
+
+	return result;
+}
 #pragma endregion
 /// ========================================================================
 /// ========================================================================

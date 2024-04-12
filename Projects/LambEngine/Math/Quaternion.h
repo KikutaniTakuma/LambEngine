@@ -2,6 +2,8 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
+using LogQuaternion = Vector3;
+
 /// <summary>
 /// クォータニオンクラス
 /// </summary>
@@ -149,7 +151,7 @@ public:
 	/// <param name="from">始点</param>
 	/// <param name="to">終点</param>
 	/// <returns>クォータニオン</returns>
-	static [[nodiscard]]  Quaternion DirectionToDirection(const Vector3& from, const Vector3& to);
+	static [[nodiscard]] Quaternion DirectionToDirection(const Vector3& from, const Vector3& to);
 
 	/// <summary>
 	/// 任意軸回転
@@ -157,25 +159,25 @@ public:
 	/// <param name="axis">任意軸の方向ベクトル(単位ベクトル)</param>
 	/// <param name="angle">任意軸での回転量</param>
 	/// <returns>任意軸回転を適用したクォータニオン</returns>
-	static [[nodiscard]]  Quaternion MakeRotateAxisAngle(const Vector3& axis, float angle);
+	static [[nodiscard]] Quaternion MakeRotateAxisAngle(const Vector3& axis, float angle);
 	/// <summary>
 	/// x軸回転クォータニオン
 	/// </summary>
 	/// <param name="angle">オイラー角</param>
 	/// <returns>x軸回転を適用したクォータニオン</returns>
-	static [[nodiscard]]  Quaternion MakeRotateXAxis(float angle);
+	static [[nodiscard]] Quaternion MakeRotateXAxis(float angle);
 	// <summary>
 	/// y軸回転クォータニオン
 	/// </summary>
 	/// <param name="angle">オイラー角</param>
 	/// <returns>y軸回転を適用したクォータニオン</returns>
-	static [[nodiscard]]  Quaternion MakeRotateYAxis(float angle);
+	static [[nodiscard]] Quaternion MakeRotateYAxis(float angle);
 	// <summary>
 	/// z軸回転クォータニオン
 	/// </summary>
 	/// <param name="angle">オイラー角</param>
 	/// <returns>z軸回転を適用したクォータニオン</returns>
-	static [[nodiscard]]  Quaternion MakeRotateZAxis(float angle);
+	static [[nodiscard]] Quaternion MakeRotateZAxis(float angle);
 
 	/// <summary>
 	/// クォータニオン線形補完関数(近いものの方向に回転する)
@@ -184,7 +186,20 @@ public:
 	/// <param name="end">終わりの回転</param>
 	/// <param name="t">0.0f～1.0f</param>
 	/// <returns>補完されたクォータニオン</returns>
-	static [[nodiscard]]  Quaternion Slerp(Quaternion start, const Quaternion& end, float t);
+	static [[nodiscard]] Quaternion Slerp(Quaternion start, const Quaternion& end, float t);
+
+	/// <summary>
+	/// 対数Quaternionへの変換
+	/// </summary>
+	/// <param name="quaternion">変換するQuaternion</param>
+	/// <returns>対数Quaternion</returns>
+	static [[nodiscard]] LogQuaternion Log(const Quaternion& quaternion);
+	/// <summary>
+	/// 対数QuaternionからQuaternionへの変換
+	/// </summary>
+	/// <param name="logQuaternion">対数Quaternion</param>
+	/// <returns>Quaternion</returns>
+	static [[nodiscard]] Quaternion Exp(const LogQuaternion& logQuaternion);
 
 
 /// <summary>
