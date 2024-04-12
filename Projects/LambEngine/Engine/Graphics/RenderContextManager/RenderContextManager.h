@@ -40,9 +40,11 @@ public:
 			return;
 		}
 
-		renderData_.insert(std::make_pair(fileNames, std::make_unique<RenderSet>()));
+		auto& currentRenderData = (isNowThreading_ ? threadRenderData_ : renderData_);
 
-		RenderSet& currentRenderSet = isNowThreading_ ? *threadRenderData_[fileNames] : *renderData_[fileNames];
+		currentRenderData.insert(std::make_pair(fileNames, std::make_unique<RenderSet>()));
+
+		RenderSet& currentRenderSet = *currentRenderData[fileNames];
 
 		Shader shader = LoadShader(fileNames.shaderName);
 
