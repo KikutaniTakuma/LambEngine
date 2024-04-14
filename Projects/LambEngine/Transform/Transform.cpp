@@ -1,5 +1,9 @@
 #include "Transform.h"
 
+#ifdef _DEBUG
+#include "imgui.h"
+#endif // _DEBUG
+
 
 QuaternionTransform& QuaternionTransform::operator=(const Transform& transform) {
 	this->scale = transform.scale;
@@ -20,6 +24,16 @@ Transform& Transform::operator=(const QuaternionTransform& transform) {
 Mat4x4 Transform::GetMatrix() const
 {
 	return Mat4x4::MakeAffin(scale, rotate, translate);
+}
+
+void Transform::Debug([[maybe_unused]]const std::string& guiName) {
+#ifdef _DEBUG
+	ImGui::Begin(guiName.c_str());
+	ImGui::DragFloat3("スケール", &scale.x, 0.01f);
+	ImGui::DragFloat3("回転", &rotate.x, 0.01f);
+	ImGui::DragFloat3("ポジション", &translate.x, 0.01f);
+	ImGui::End();
+#endif // _DEBUG
 }
 
 Mat4x4 QuaternionTransform::GetMatrix() const

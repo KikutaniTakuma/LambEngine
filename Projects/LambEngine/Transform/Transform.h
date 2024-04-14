@@ -8,7 +8,10 @@ struct Transform {
 	Vector3 rotate;
 	Vector3 translate;
 
-	Transform& operator=(const QuaternionTransform& transform);
+	Transform& operator=(const Transform&) = default;
+	Transform& operator=(Transform&&) = default;
+
+	Transform& operator=(const struct QuaternionTransform& transform);
 	Mat4x4 GetMatrix() const;
 	void Debug(const std::string& guiName);
 };
@@ -19,7 +22,8 @@ struct QuaternionTransform {
 	Vector3 translate;
 
 	QuaternionTransform& operator=(const Transform& transform);
+	QuaternionTransform& operator=(const QuaternionTransform&) = default;
+	QuaternionTransform& operator=(QuaternionTransform&&) = default;
 
 	Mat4x4 GetMatrix() const;
-	void Debug(const std::string& guiName);
 };
