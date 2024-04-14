@@ -62,8 +62,25 @@ public:
 	void SetLoopAnimation(bool isLoop);
 
 private:
-	Vector3 CalaclateValue(const AnimationCurve<Vector3>& animationCurve, float time);
-	Quaternion CalaclateValue(const AnimationCurve<Quaternion>& keyFrames, float time);
+	template<class T>
+	T CalaclateValue(const AnimationCurve<T>& animationCurve, float time) {
+		if (animationCurve.keyFrames.empty()) {
+			throw Lamb::Error::Code<Animator>("keyFrams is empty", __func__);
+		}
+		if (animationCurve.keyFrames.size() == 1 or time < animationCurve.keyFrames.front().time) {
+			return animationCurve.keyFrames.front().value;
+		}
+
+		for (size_t index = 0; index < animationCurve.keyFrames.size() - 1; index++) {
+			size_t nextIndex = index + 1;
+			if (animationCurve.keyFrames[index].time <= time and time <= animationCurve.keyFrames[nextIndex].time) {
+				float t = (time - animationCurve.keyFrames[index].time) / (animationCurve.keyFrames[nextIndex].time - animationCurve.keyFrames[index].time);
+				return Vector3::Lerp(animationCurve.keyFrames[index].value, animationCurve.keyFrames[nextIndex].value, t);
+			}
+		}
+
+		return animationCurve.keyFrames.back().value;
+	}
 
 private:
 	float animationTime_;
