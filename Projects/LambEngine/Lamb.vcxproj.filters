@@ -187,6 +187,9 @@
     <ClCompile Include="Transform\Transform.cpp">
       <Filter>Transform</Filter>
     </ClCompile>
+    <ClCompile Include="Drawers\DrawerManager.cpp">
+      <Filter>Drawers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -616,6 +619,9 @@
     </ClInclude>
     <ClInclude Include="Transform\Transform.h">
       <Filter>Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawers\DrawerManager.h">
+      <Filter>Drawers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
