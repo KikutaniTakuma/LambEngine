@@ -38,11 +38,11 @@ void Texture2D::Load(const std::string& fileName)
 {
 	textureID_ = TextureManager::GetInstance()->LoadTexture(fileName);
 
-	RenderContextManager* const renderContext = RenderContextManager::GetInstance();
+	RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
 
-	renderContext->Load<Texture2DRenderContext>(kFileNames_);
+	renderContextManager->Load<Texture2DRenderContext>(kFileNames_);
 
-	renderSet = renderContext->Get(kFileNames_);
+	renderSet = renderContextManager->Get(kFileNames_);
 }
 
 void Texture2D::Draw(const Mat4x4& camera, BlendType blend) {
