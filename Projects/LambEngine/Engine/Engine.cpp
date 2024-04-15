@@ -44,6 +44,8 @@
 #include "Error/Error.h"
 #include "Utils/SafeDelete/SafeDelete.h"
 
+#include "Drawers/DrawerManager.h"
+
 
 
 #ifdef _DEBUG
@@ -146,12 +148,17 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	MeshManager::Initialize();
 	RenderContextManager::Initialize();
 	AnimationManager::Initialize();
+
+
+	DrawerManager::Initialize();
 }
 
 void Engine::Finalize() {
 	instance_->isFinalize_ = true;
 
 	// 各種マネージャー解放
+	DrawerManager::Finalize();
+
 	AnimationManager::Finalize();
 	RenderContextManager::Finalize();
 	MeshManager::Finalize();
