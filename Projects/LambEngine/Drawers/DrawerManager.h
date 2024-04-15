@@ -26,9 +26,12 @@ private:
 
 public:
 	Texture2D* const GetTexture2D() const;
+	uint32_t LoadTexture(const std::string& fileName);
 
 private:
 	std::unique_ptr<Texture2D> tex2D_;
+	class TextureManager* textureManager_;
+
 
 public:
 	void LoadModel(const std::string& fileName);

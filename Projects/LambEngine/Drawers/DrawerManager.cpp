@@ -5,8 +5,12 @@
 DrawerManager* DrawerManager::instance_ = nullptr;
 
 DrawerManager::DrawerManager():
-	tex2D_()
+	tex2D_(),
+	textureManager_(nullptr),
+	models_()
 {
+	textureManager_ = TextureManager::GetInstance();
+
 	tex2D_ = std::make_unique<Texture2D>();
 	tex2D_->Load();
 }
@@ -27,6 +31,11 @@ void DrawerManager::Finalize() {
 Texture2D* const DrawerManager::GetTexture2D() const
 {
 	return tex2D_.get();
+}
+
+uint32_t DrawerManager::LoadTexture(const std::string& fileName)
+{
+	return textureManager_->LoadTexture(fileName);
 }
 
 void DrawerManager::LoadModel(const std::string& fileName) {
