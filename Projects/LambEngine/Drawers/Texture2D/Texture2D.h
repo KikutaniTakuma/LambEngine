@@ -22,7 +22,6 @@ private:
 
 public:
 	Texture2D();
-	Texture2D(const std::string& fileName);
 	Texture2D(const Texture2D&) = default;
 	Texture2D(Texture2D&&) = default;
 	~Texture2D() = default;
@@ -31,16 +30,14 @@ public:
 	Texture2D& operator=(Texture2D&&) = default;
 
 public:
-	void Load(const std::string& fileName) override;
+	void Load();
 
-	void Draw(const Mat4x4& camera, BlendType blend) override;
-
-	void Debug(const std::string& guiName) override;
-
-public:
-	Vector3 uvScale;
-	Vector3 uvRotate;
-	Vector3 uvTranslation;
-private:
-	uint32_t textureID_;
+	void Draw(
+		const Mat4x4& worldMatrix, 
+		const Mat4x4& uvTransform, 
+		const Mat4x4& camera, 
+		uint32_t textureID, 
+		uint32_t color, 
+		BlendType blend
+	);
 };
