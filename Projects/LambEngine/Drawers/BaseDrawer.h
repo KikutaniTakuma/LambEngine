@@ -22,16 +22,7 @@ public:
 public:
 	virtual void Load(const std::string& fileName) = 0;
 
-	virtual void Draw(const Mat4x4& camera, BlendType blend);
-
-	virtual void Debug(const std::string& guiName);
-
-public:
-	Vector3 scale;
-	Vector3 rotate;
-	Vector3 translate;
-	
-	uint32_t color;
+	virtual void Draw(const Mat4x4& worldMatrix, const Mat4x4& camera, uint32_t color, BlendType blend);
 
 protected:
 	class RenderSet* renderSet;
