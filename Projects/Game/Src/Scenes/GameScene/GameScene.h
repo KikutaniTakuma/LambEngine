@@ -25,4 +25,5 @@ public:
 	Transform transform_;
 	Transform uvTransform_;
 	Texture2D* tex2D_;
+	Model* model_;
 };
