@@ -20,8 +20,6 @@ public:
 	BaseDrawer& operator=(BaseDrawer&&) = default;
 
 public:
-	virtual void Load(const std::string& fileName) = 0;
-
 	virtual void Draw(const Mat4x4& worldMatrix, const Mat4x4& camera, uint32_t color, BlendType blend);
 
 protected:

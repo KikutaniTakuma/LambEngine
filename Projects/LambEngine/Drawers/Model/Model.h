@@ -16,7 +16,7 @@ public:
 	Model& operator=(Model&& right) noexcept = default;
 
 public:
-	virtual void Load(const std::string& fileName) override;
+	virtual void Load(const std::string& fileName);
 
 	virtual void Draw(
 		const Mat4x4& worldMatrix,
