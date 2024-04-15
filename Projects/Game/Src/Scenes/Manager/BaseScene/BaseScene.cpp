@@ -1,5 +1,4 @@
 #include "BaseScene.h"
-#include "Engine/Graphics/MeshManager/MeshManager.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
@@ -7,8 +6,8 @@
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 
 BaseScene::BaseScene(BaseScene::ID sceneID) :
+	drawerManager_(nullptr),
 	sceneManager_(nullptr),
-	//meshManager_(nullptr),
 	audioManager_(nullptr),
 	textureManager_(nullptr),
 	frameInfo_(nullptr),
@@ -21,7 +20,7 @@ BaseScene::BaseScene(BaseScene::ID sceneID) :
 void BaseScene::SceneInitialize(SceneManager* sceneManager) {
 	sceneManager_ = sceneManager;
 
-	//meshManager_ = MeshManager::GetInstance();
+	drawerManager_ = DrawerManager::GetInstance();
 
 	audioManager_ = AudioManager::GetInstance();
 

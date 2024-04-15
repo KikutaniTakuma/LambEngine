@@ -1,4 +1,5 @@
 #pragma once
+#include "Drawers/DrawerManager.h"
 #include "Camera/Camera.h"
 #include <memory>
 
@@ -39,8 +40,8 @@ public:
 
 protected:
 	class SceneManager* sceneManager_;
-
-	//class MeshManager* meshManager_;
+	
+	DrawerManager* drawerManager_;
 
 	class AudioManager* audioManager_;
 

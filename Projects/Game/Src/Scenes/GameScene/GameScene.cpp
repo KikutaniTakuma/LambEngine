@@ -1,13 +1,4 @@
 #include "GameScene.h"
-#include "Engine/Graphics/MeshManager/MeshManager.h"
-#include "Engine/Graphics/TextureManager/TextureManager.h"
-#include "AudioManager/AudioManager.h"
-#include "Utils/EngineInfo/EngineInfo.h"
-#include "Math/Quaternion.h"
-#include "Utils/ScreenOut/ScreenOut.h"
-#include <numbers>
-#include <format>
-//#include "Game/Water/Water.h"
 
 GameScene::GameScene() :
 	BaseScene(BaseScene::ID::Game)
@@ -16,7 +7,12 @@ GameScene::GameScene() :
 void GameScene::Initialize() {
 	camera_->farClip = 3000.0f;
 	camera_->pos.z = -5.0f;
-	//camera_->offset.z = -10.0f;
+	
+
+	transform_.scale = Vector3::kIdentity * 500;
+	uvTransform_.scale = Vector3::kIdentity;
+
+	tex2D_ = drawerManager_->GetTexture2D();
 }
 
 void GameScene::Finalize() {
@@ -31,5 +27,12 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-	
+	tex2D_->Draw(
+		transform_.GetMatrix(),
+		uvTransform_.GetMatrix(),
+		camera_->GetViewOthographics(),
+		0u,
+		0xffffffff,
+		BlendType::kNone
+	);
 }
