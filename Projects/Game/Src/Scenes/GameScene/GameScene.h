@@ -1,7 +1,6 @@
 #pragma once
 #include "Scenes/Manager/SceneManager.h"
 #include "Drawers/Model/Model.h"
-#include "Drawers/AnimationModel/AnimationModel.h"
 #include "Drawers/Texture2D/Texture2D.h"
 #include "Drawers/PeraRender/PeraRender.h"
 #include "Drawers/Particle/Particle.h"
@@ -30,6 +29,5 @@ public:
 	void Draw() override;
 
 public:
-	std::unique_ptr<AnimationModel> model_;
-	std::unique_ptr<Texture2D> tex2D_;
+	
 };

@@ -18,8 +18,6 @@ void TitleScene::Initialize()
 	camera_->pos.z = -10.0f;
 	camera_->rotate.x = 0.21f;
 
-	model_.reset(new Model{ "./Resources/Ball.obj" });
-
 	/*model_->light.ptRange = 5.0f;
 	model_->light.ptPos = model_->pos;
 	model_->light.ptPos.y = 3.8f;
@@ -38,7 +36,6 @@ void TitleScene::Update()
 	camera_->Debug("カメラ");
 	camera_->Update(Vector3::kZero);
 
-	model_->Debug("テスト用モデル");
 	//model_->Update();
 
 	sphere_->Debug("Sphere");
@@ -51,8 +48,6 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	model_->Draw(camera_->GetViewProjection(), BlendType::kNone, true);
-
 	sphere_->Draw(camera_->GetViewProjection(), std::numeric_limits<uint32_t>::max());
 
 	Lamb::screenout << "Model scene" << Lamb::endline

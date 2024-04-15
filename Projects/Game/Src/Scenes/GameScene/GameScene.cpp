@@ -17,15 +17,6 @@ void GameScene::Initialize() {
 	camera_->farClip = 3000.0f;
 	camera_->pos.z = -5.0f;
 	//camera_->offset.z = -10.0f;
-
-	model_ = std::make_unique<AnimationModel>();
-	model_->Load("./Resources/gltf_test_model/AnimatedCube.gltf");
-	model_->GetAnimator().Start();
-	model_->GetAnimator().SetLoopAnimation(true);
-
-
-	tex2D_ = std::make_unique<Texture2D>();
-	tex2D_->Load("./Resources/uvChecker.png");
 }
 
 void GameScene::Finalize() {
@@ -36,13 +27,9 @@ void GameScene::Update() {
 	camera_->Debug("camera");
 	camera_->Update();
 
-	model_->Debug("model");
-	model_->Update();
-	tex2D_->Debug("tex2D_");
+
 }
 
 void GameScene::Draw() {
-	//model_->Draw(camera_->GetViewProjection(), BlendType::kNone, true);
-
-	tex2D_->Draw(camera_->GetViewProjection(), BlendType::kNone);
+	
 }

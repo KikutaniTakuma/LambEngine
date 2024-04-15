@@ -18,10 +18,10 @@ SceneLoad::SceneLoad() :
 {
 	renderContextManager_ = RenderContextManager::GetInstance();
 
-	loadTex_.reset(new Texture2D{ setting.fileName });
+	//loadTex_.reset(new Texture2D{ setting.fileName });
 
-	loadTex_->scale = Lamb::ClientSize();
-	loadTex_->uvRotate.x = 1.0f / static_cast<float>(setting.animationNumber);
+	//loadTex_->scale = Lamb::ClientSize();
+	//loadTex_->uvRotate.x = 1.0f / static_cast<float>(setting.animationNumber);
 	//loadTex_->uvPibotSpd = 1.0f / static_cast<float>(setting.animationNumber);
 
 	std::unique_ptr<Camera> camera{ new Camera{} };

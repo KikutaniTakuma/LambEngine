@@ -31,6 +31,5 @@ public:
 	void Draw() override;
 
 public:
-	std::unique_ptr<Model> model_;
 	std::unique_ptr<Sphere> sphere_;
 };
