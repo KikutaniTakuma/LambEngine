@@ -41,9 +41,15 @@ void Model::Load(const std::string& fileName) {
 	}
 }
 
-void Model::Draw(const Mat4x4& camera, BlendType blend, bool isLighting) {
+void Model::Draw(
+	const Mat4x4& worldMatrix,
+	const Mat4x4& camera, 
+	uint32_t color, 
+	BlendType blend, 
+	bool isLighting
+) {
 	RenderContext<>* renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
 	renderContext->SetSahderStruct(static_cast<uint32_t>(isLighting));
 
-	BaseDrawer::Draw(camera, blend);
+	BaseDrawer::Draw(worldMatrix, camera, color, blend);
 }

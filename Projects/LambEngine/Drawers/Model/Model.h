@@ -18,5 +18,11 @@ public:
 public:
 	virtual void Load(const std::string& fileName) override;
 
-	virtual void Draw(const Mat4x4& camera, BlendType blend, bool isLighting);
+	virtual void Draw(
+		const Mat4x4& worldMatrix,
+		const Mat4x4& camera,
+		uint32_t color,
+		BlendType blend,
+		bool isLighting
+	);
 };
