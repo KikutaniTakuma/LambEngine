@@ -150,15 +150,15 @@ void Audio::LoadMp3(const std::string& fileName) {
 			break;
 		}
 
-		IMFMediaBuffer* pMFMediaBuffer{ nullptr };
+		Lamb::SafePtr<IMFMediaBuffer> pMFMediaBuffer{ nullptr };
 		pMFSample->ConvertToContiguousBuffer(&pMFMediaBuffer);
 
-		BYTE* pBuffer = nullptr;
+		Lamb::SafePtr<BYTE> localBuffer = nullptr;
 		DWORD cbCurrentLength{ 0 };
-		pMFMediaBuffer->Lock(&pBuffer, nullptr, &cbCurrentLength);
+		pMFMediaBuffer->Lock(&localBuffer, nullptr, &cbCurrentLength);
 
 		mediaData.resize(mediaData.size() + cbCurrentLength);
-		memcpy(mediaData.data() + mediaData.size() - cbCurrentLength, pBuffer, cbCurrentLength);
+		std::memcpy(mediaData.data() + mediaData.size() - cbCurrentLength, localBuffer.get(), cbCurrentLength);
 
 		pMFMediaBuffer->Unlock();
 
