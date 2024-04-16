@@ -24,6 +24,10 @@ AudioManager::AudioManager() :
 	mtx_{},
 	isThreadLoadFinish_{false}
 {
+	// Media Foundationの初期化
+	MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
+
+
 	HRESULT hr = XAudio2Create(xAudio2_.GetAddressOf(), 0u, XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
@@ -40,12 +44,13 @@ AudioManager::AudioManager() :
 }
 AudioManager::~AudioManager() {
 	xAudio2_.Reset();
+	MFShutdown();
 	if (load_.joinable()) {
 		load_.join();
 	}
 }
 
-Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
+Audio* const AudioManager::LoadWav(const std::string& fileName) {
 	if (!std::filesystem::exists(std::filesystem::path(fileName))) {
 		throw Lamb::Error::Code<AudioManager>("There is not this file -> " + fileName, __func__);
 	}
@@ -55,7 +60,7 @@ Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 
 	if (itr == audios_.end()) {
 		auto audio = std::make_unique<Audio>();
-		audio->Load(fileName, loopFlg);
+		audio->Load(fileName);
 		audios_.insert({ fileName, std::move(audio) });
 
 		ResourceManager::GetInstance()->SetAudioResource(fileName);
@@ -64,9 +69,9 @@ Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 	return audios_[fileName].get();
 }
 
-void AudioManager::LoadWav(const std::string& fileName, bool loopFlg, class Audio** const audio) {
+void AudioManager::LoadWav(const std::string& fileName, class Audio** const audio) {
 	// コンテナに追加
-	threadAudioBuff_.push({fileName, loopFlg, audio});
+	threadAudioBuff_.push({fileName, audio});
 }
 
 void AudioManager::Unload(const std::string& fileName)
@@ -105,7 +110,7 @@ void AudioManager::ThreadLoad() {
 				auto audio = audios_.find(front.fileName_);
 				if (audio == audios_.end()) {;
 					audios_.insert(std::make_pair(front.fileName_, std::make_unique<Audio>()));
-					audios_[front.fileName_]->Load(front.fileName_, front.loopFlg_);
+					audios_[front.fileName_]->Load(front.fileName_);
 					*front.audio_ = audios_[front.fileName_].get();
 
 					ResourceManager::GetInstance()->SetAudioResource(front.fileName_);

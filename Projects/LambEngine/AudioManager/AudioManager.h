@@ -17,7 +17,6 @@ class AudioManager {
 private:
 	struct LoadStatus {
 		std::string fileName_;
-		bool loopFlg_;
 		Audio**const audio_;
 	};
 
@@ -41,8 +40,8 @@ private:
 	static Lamb::SafePtr<AudioManager> instance_;
 
 public:
-	Audio* const LoadWav(const std::string& fileName, bool loopFlg);
-	void LoadWav(const std::string& fileName, bool loopFlg,Audio** const audio);
+	Audio* const LoadWav(const std::string& fileName);
+	void LoadWav(const std::string& fileName, Audio** const audio);
 
 	void Unload(const std::string& fileName);
 
