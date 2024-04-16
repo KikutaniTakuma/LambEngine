@@ -4,7 +4,7 @@
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 
-#include "Error/Error.h"
+#include "Utils/SafePtr/SafePtr.h"
 
 #include <list>
 
@@ -31,7 +31,7 @@ public:
 	static CbvSrvUavHeap* const GetInstance();
 
 private:
-	static CbvSrvUavHeap* instance_;
+	static Lamb::SafePtr<CbvSrvUavHeap> instance_;
 
 private:
 	void CreateDescriptorHeap(uint32_t heapSize) override;

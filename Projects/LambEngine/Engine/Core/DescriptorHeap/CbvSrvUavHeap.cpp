@@ -13,18 +13,18 @@
 
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
 
-CbvSrvUavHeap* CbvSrvUavHeap::instance_ = nullptr;
+Lamb::SafePtr<CbvSrvUavHeap> CbvSrvUavHeap::instance_ = nullptr;
 
 void CbvSrvUavHeap::Initialize(UINT heapSize, UINT maxTexture) {
-	instance_ = new CbvSrvUavHeap{ heapSize, maxTexture };
+	instance_.reset(new CbvSrvUavHeap(heapSize, maxTexture));
 }
 
 void CbvSrvUavHeap::Finalize() {
-	Lamb::SafeDelete(instance_);
+	instance_.reset();
 }
 
 CbvSrvUavHeap* const CbvSrvUavHeap::GetInstance() {
-	return instance_;
+	return instance_.get();
 }
 
 CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor, UINT maxTexture) :

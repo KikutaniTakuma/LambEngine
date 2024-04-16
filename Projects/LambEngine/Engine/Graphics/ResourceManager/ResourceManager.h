@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <stack>
 #include <string>
+#include "Utils/SafePtr/SafePtr.h"
 
 class ResourceManager {
 private:
@@ -23,7 +24,7 @@ public:
 	static ResourceManager* const GetInstance();
 
 private:
-	static ResourceManager* instance_;
+	static Lamb::SafePtr<ResourceManager> instance_;
 
 public:
 	void SetTextureResource(const std::string& fileName);

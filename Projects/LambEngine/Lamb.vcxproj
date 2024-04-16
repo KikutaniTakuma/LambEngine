@@ -258,6 +258,7 @@
     <ClInclude Include="Utils\Flg\Flg.h" />
     <ClInclude Include="Utils\Random\Random.h" />
     <ClInclude Include="Utils\SafeDelete\SafeDelete.h" />
+    <ClInclude Include="Utils\SafePtr\SafePtr.h" />
     <ClInclude Include="Utils\ScreenOut\ScreenOut.h" />
     <ClInclude Include="Utils\UtilsLib\UtilsLib.h" />
   </ItemGroup>

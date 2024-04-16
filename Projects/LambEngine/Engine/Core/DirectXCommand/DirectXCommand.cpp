@@ -4,6 +4,7 @@
 #include <cassert>
 #include "Error/Error.h"
 #include "Engine/Engine.h"
+#include "Utils/SafePtr/SafePtr.h"
 
 
 DirectXCommand::DirectXCommand():
@@ -79,7 +80,7 @@ void DirectXCommand::WaitForFinishCommnadlist() {
 }
 
 void DirectXCommand::CreateCommandQueue() {
-	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	
 	// コマンドキューを作成
 	commandQueue_ = nullptr;
@@ -111,7 +112,7 @@ void DirectXCommand::CreateCommandAllocator() {
 }
 
 void DirectXCommand::CreateGraphicsCommandList() {
-	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	
 	// コマンドリストを作成する
 	commandList_ = nullptr;
@@ -127,7 +128,7 @@ void DirectXCommand::CreateGraphicsCommandList() {
 }
 
 void DirectXCommand::CrateFence() {
-	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	
 	// 初期値0でFenceを作る
 	fence_ = nullptr;
@@ -150,7 +151,7 @@ void DirectXCommand::CrateFence() {
 }
 
 void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	// TransitionBarrierの設定
 	D3D12_RESOURCE_BARRIER barrier{};

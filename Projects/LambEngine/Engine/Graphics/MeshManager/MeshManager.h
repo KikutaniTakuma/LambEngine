@@ -3,7 +3,7 @@
 #include <thread>
 #include <queue>
 
-#include "Utils/UtilsLib/UtilsLib.h"
+#include "Utils/SafePtr/SafePtr.h"
 #include "../GraphicsStructs.h"
 
 /// <summary>
@@ -27,7 +27,7 @@ public:
 	static void Finalize();
 
 private:
-	static MeshManager* instance_;
+	static Lamb::SafePtr<MeshManager> instance_;
 
 public:
 	[[nodiscard]] Mesh* LoadObj(const std::string& objFileName);

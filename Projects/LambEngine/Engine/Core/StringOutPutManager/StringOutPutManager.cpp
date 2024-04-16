@@ -12,20 +12,18 @@
 
 #include "Utils/SafeDelete/SafeDelete.h"
 
-StringOutPutManager* StringOutPutManager::instance_ = nullptr;
+Lamb::SafePtr<StringOutPutManager> StringOutPutManager::instance_ = nullptr;
 
 void StringOutPutManager::Initialize() {
-	assert(!instance_);
-	instance_ = new StringOutPutManager{};
-	assert(!!instance_);
+	instance_.reset(new StringOutPutManager());
 }
 
 void StringOutPutManager::Finalize() {
-	Lamb::SafeDelete(instance_);
+	instance_.reset();
 }
 
 StringOutPutManager* const StringOutPutManager::GetInstance() {
-	return instance_;
+	return instance_.get();
 }
 
 

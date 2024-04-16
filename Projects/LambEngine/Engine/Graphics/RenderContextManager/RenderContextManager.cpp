@@ -7,26 +7,22 @@
 
 #include "../PipelineManager/PipelineManager.h"
 
-RenderContextManager* RenderContextManager::instance_ = nullptr;
+Lamb::SafePtr<RenderContextManager> RenderContextManager::instance_ = nullptr;
 
 RenderContextManager::~RenderContextManager()
 {
 }
 
 RenderContextManager* const RenderContextManager::GetInstance() {
-	return instance_;
+	return instance_.get();
 }
 
 void RenderContextManager::Initialize() {
-	if (!instance_) {
-		instance_ = new RenderContextManager();
-	}
+	instance_.reset(new RenderContextManager());
 }
 
 void RenderContextManager::Finalize() {
-	if (instance_) {
-		Lamb::SafeDelete(instance_);
-	}
+	instance_.reset();
 }
 
 RenderSet* const RenderContextManager::Get(const LoadFileNames& fileNames)

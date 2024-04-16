@@ -7,12 +7,12 @@
 #include "Utils/SafeDelete/SafeDelete.h"
 #include "Engine/Graphics/ResourceManager/ResourceManager.h"
 
-AudioManager* AudioManager::instance_ = nullptr;
+Lamb::SafePtr<AudioManager> AudioManager::instance_ = nullptr;
 void AudioManager::Inititalize() {
-	instance_ = new AudioManager{};
+	instance_.reset(new AudioManager());
 }
 void AudioManager::Finalize() {
-	Lamb::SafeDelete(instance_);
+	instance_.reset();
 }
 
 AudioManager::AudioManager() :

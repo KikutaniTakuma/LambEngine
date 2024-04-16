@@ -28,7 +28,7 @@ public:
 	static void Finalize();
 
 private:
-	static RenderContextManager* instance_;
+	static Lamb::SafePtr<RenderContextManager> instance_;
 
 
 public:

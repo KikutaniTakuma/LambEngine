@@ -4,6 +4,9 @@
 #include "Math/Vector4.h"
 #include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
+
+#include "Utils/SafePtr/SafePtr.h"
+
 #include <memory>
 
 /// <summary>
@@ -34,7 +37,7 @@ private:
 private:
 	static Shader shader_;
 
-	static class Pipeline* pipline_;
+	static Lamb::SafePtr<class Pipeline> pipline_;
 
 	static Lamb::LambPtr<ID3D12Resource> vertexBuffer_;
 	// 頂点バッファビュー

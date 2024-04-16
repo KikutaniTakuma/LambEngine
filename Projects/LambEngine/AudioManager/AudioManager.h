@@ -8,6 +8,7 @@
 #include <thread>
 #include <mutex>
 #include "Audio/Audio.h"
+#include "Utils/SafePtr/SafePtr.h"
 
 /// <summary>
 /// Audioを管理
@@ -35,11 +36,11 @@ public:
 	static void Inititalize();
 	static void Finalize();
 	static inline AudioManager* const GetInstance() {
-		return instance_;
+		return instance_.get();
 	}
 
 private:
-	static AudioManager* instance_;
+	static Lamb::SafePtr<AudioManager> instance_;
 
 public:
 	Audio* const LoadWav(const std::string& fileName, bool loopFlg);

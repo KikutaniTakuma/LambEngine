@@ -11,18 +11,17 @@
 #include "Error/Error.h"
 #include "Utils/SafeDelete/SafeDelete.h"
 
-DirectXSwapChain* DirectXSwapChain::instance_ = nullptr;
+Lamb::SafePtr<DirectXSwapChain> DirectXSwapChain::instance_ = nullptr;
 
 DirectXSwapChain* const DirectXSwapChain::GetInstance() {
-	return instance_;
+	return instance_.get();
 }
 
 void DirectXSwapChain::Initialize() {
-	assert(!instance_);
-	instance_ = new DirectXSwapChain{};
+	instance_.reset(new DirectXSwapChain());
 }
 void DirectXSwapChain::Finalize() {
-	Lamb::SafeDelete(instance_);
+	instance_.reset();
 }
 
 DirectXSwapChain::DirectXSwapChain():

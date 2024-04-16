@@ -1,8 +1,6 @@
 #include "DrawerManager.h"
-#include "Utils/SafeDelete/SafeDelete.h"
-#include "Engine/Graphics/TextureManager/TextureManager.h"
 
-DrawerManager* DrawerManager::instance_ = nullptr;
+Lamb::SafePtr<DrawerManager> DrawerManager::instance_ = nullptr;
 
 DrawerManager::DrawerManager():
 	tex2D_(),
@@ -17,15 +15,15 @@ DrawerManager::DrawerManager():
 
 DrawerManager* DrawerManager::GetInstance()
 {
-	return instance_;
+	return instance_.get();
 }
 
 void DrawerManager::Initialize() {
-	instance_ = new DrawerManager();
+	instance_.reset(new DrawerManager());
 }
 
 void DrawerManager::Finalize() {
-	Lamb::SafeDelete(instance_);
+	instance_.reset();
 }
 
 Texture2D* const DrawerManager::GetTexture2D() const

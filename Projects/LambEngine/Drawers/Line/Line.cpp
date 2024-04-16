@@ -9,7 +9,7 @@
 
 uint32_t Line::indexCount_ = 0u;
 Shader Line::shader_ = {};
-Pipeline* Line::pipline_ = nullptr;
+Lamb::SafePtr<Pipeline> Line::pipline_ = nullptr;
 Lamb::LambPtr<ID3D12Resource> Line::vertexBuffer_;
 // 頂点バッファビュー
 D3D12_VERTEX_BUFFER_VIEW Line::vertexView_;
@@ -17,7 +17,7 @@ D3D12_VERTEX_BUFFER_VIEW Line::vertexView_;
 std::unique_ptr<StructuredBuffer<Line::VertxData, Line::kDrawMaxNumber_>> Line::vertData_;
 
 void Line::Initialize() {
-	ShaderManager* const shaderManager = ShaderManager::GetInstance();
+	Lamb::SafePtr shaderManager = ShaderManager::GetInstance();
 	shader_.vertex = shaderManager->LoadVertexShader("./Resources/Shaders/LineShader/Line.VS.hlsl");
 	shader_.pixel = shaderManager->LoadPixelShader("./Resources/Shaders/LineShader/Line.PS.hlsl");
 
@@ -42,7 +42,7 @@ void Line::Initialize() {
 
 	vertData_ = std::make_unique<StructuredBuffer<VertxData, kDrawMaxNumber_>>();
 
-	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
+	Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
 	heap->BookingHeapPos(1);
 	heap->CreateView(*vertData_);
 
@@ -51,7 +51,7 @@ void Line::Initialize() {
 	vertexView_.SizeInBytes = sizeof(Vector4) * kVertexNum;
 	vertexView_.StrideInBytes = sizeof(Vector4);
 
-	Vector4* vertexMap = nullptr;
+	Lamb::SafePtr<Vector4> vertexMap = nullptr;
 	vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexMap));
 	vertexMap[0] = Vector4::kZero + Vector4::kWIdentity;
 	vertexMap[1] = Vector4::kXIdentity + Vector4::kWIdentity;
@@ -82,7 +82,7 @@ void Line::AllDraw() {
 	}
 
 	pipline_->Use();
-	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
+	Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
 	heap->Use(vertData_->GetHandleUINT(), 0);
 	auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	commandList->IASetVertexBuffers(0, 1, &vertexView_);

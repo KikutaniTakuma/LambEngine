@@ -1,5 +1,6 @@
 #include "MeshLoader.h"
 #include "Error/Error.h"
+#include "Utils/SafePtr/SafePtr.h"
 #include "../TextureManager/TextureManager.h"
 #include "../../Core/DirectXDevice/DirectXDevice.h"
 
@@ -13,7 +14,7 @@
 Mesh MeshLoader::LoadModel(const std::string& fileName)
 {
 	Assimp::Importer importer;
-	const aiScene* scene = ReadFile(importer, fileName);
+	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
 	if (not scene->HasMeshes()) {
 		throw Lamb::Error::Code<MeshLoader>("this file does not have meshes -> " + fileName, __func__);
 	}
@@ -31,12 +32,12 @@ Mesh MeshLoader::LoadModel(const std::string& fileName)
 	std::string&& directorypath = path.parent_path().string();
 	std::vector<uint32_t> textures;
 
-	LoadMtl(scene, directorypath, textures);
+	LoadMtl(scene.get(), directorypath, textures);
 	
 
 	// mesh解析
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
-		aiMesh* mesh = scene->mMeshes[meshIndex];
+		Lamb::SafePtr<aiMesh> mesh = scene->mMeshes[meshIndex];
 		if (not mesh->HasNormals()) {
 			throw Lamb::Error::Code<MeshLoader>("this file does not have normal -> " + fileName, __func__);
 		}
@@ -134,7 +135,7 @@ Mesh MeshLoader::LoadModel(const std::string& fileName)
 
 	result.indexResource = DirectXDevice::GetInstance()->CreateBufferResuorce(indexSizeInBytes);
 
-	uint32_t* indexMap = nullptr;
+	Lamb::SafePtr<uint32_t> indexMap = nullptr;
 	result.indexResource->Map(0, nullptr, reinterpret_cast<void**>(&indexMap));
 	std::copy(indices.begin(), indices.end(), indexMap);
 	result.indexResource->Unmap(0, nullptr);
@@ -147,7 +148,7 @@ Mesh MeshLoader::LoadModel(const std::string& fileName)
 
 	result.vertexResource = DirectXDevice::GetInstance()->CreateBufferResuorce(vertexSizeInBytes);
 	
-	Vertex* vertMap = nullptr;
+	Lamb::SafePtr<Vertex> vertMap = nullptr;
 	result.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertMap));
 	std::copy(verticesTmp.begin(), verticesTmp.end(), vertMap);
 	result.vertexResource->Unmap(0, nullptr);
@@ -164,7 +165,7 @@ Animations MeshLoader::LoadAnimation(const std::string& fileName)
 {
 	Animations result;
 	Assimp::Importer importer;
-	const aiScene* scene = ReadFile(importer, fileName);
+	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
 	if (not (scene->mNumAnimations != 0)) {
 		throw Lamb::Error::Code<MeshLoader>("this file does not have meshes -> " + fileName, __func__);
 	}
@@ -172,12 +173,12 @@ Animations MeshLoader::LoadAnimation(const std::string& fileName)
 	result.data.resize(scene->mNumAnimations);
 
 	for (uint32_t animtionIndex = 0; animtionIndex < scene->mNumAnimations; animtionIndex++) {
-		aiAnimation* animationAssimp = scene->mAnimations[animtionIndex];
+		Lamb::SafePtr<aiAnimation> animationAssimp = scene->mAnimations[animtionIndex];
 		Animation& animation = result.data[animtionIndex];
 		animation.duration = static_cast<float>(animationAssimp->mDuration / animationAssimp->mTicksPerSecond);
 		
 		for (uint32_t channelIndex = 0; channelIndex < animationAssimp->mNumChannels; channelIndex++) {
-			aiNodeAnim* nodeAnimationAssimp = animationAssimp->mChannels[channelIndex];
+			Lamb::SafePtr<aiNodeAnim> nodeAnimationAssimp = animationAssimp->mChannels[channelIndex];
 			NodeAnimation& nodeAnimation = animation.nodeAnimations[nodeAnimationAssimp->mNodeName.C_Str()];
 
 			// Translation
@@ -256,7 +257,7 @@ void MeshLoader::LoadMtl(const aiScene* scene, const std::string& directorypath,
 	std::vector<std::string> textureFileNames;
 
 	for (uint32_t materialIndex = 0; materialIndex < scene->mNumMaterials; ++materialIndex) {
-		aiMaterial* material = scene->mMaterials[materialIndex];
+		Lamb::SafePtr<aiMaterial> material = scene->mMaterials[materialIndex];
 		if (material->GetTextureCount(aiTextureType_DIFFUSE) != 0) {
 			aiString textureFilePath;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &textureFilePath);

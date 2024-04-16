@@ -3,11 +3,10 @@
 #include "Utils/SafeDelete/SafeDelete.h"
 #include "../MeshLoader/MeshLoader.h"
 
-MeshManager* MeshManager::instance_ = nullptr;
+Lamb::SafePtr<MeshManager> MeshManager::instance_ = nullptr;
 
 MeshManager* const MeshManager::GetInstance() {
-	assert(instance_);
-	return instance_;
+	return instance_.get();
 }
 
 MeshManager::~MeshManager() {
@@ -15,7 +14,7 @@ MeshManager::~MeshManager() {
 }
 
 void MeshManager::Initialize() {
-	instance_ = new MeshManager{};
+	instance_.reset(new MeshManager());
 	if (instance_) {
 		Lamb::AddLog("Initialize MeshManager succeeded");
 	}
@@ -24,7 +23,7 @@ void MeshManager::Initialize() {
 	}
 }
 void MeshManager::Finalize() {
-	Lamb::SafeDelete(instance_);
+	instance_.reset();
 }
 
 Mesh* MeshManager::LoadObj(const std::string& objFileName) {

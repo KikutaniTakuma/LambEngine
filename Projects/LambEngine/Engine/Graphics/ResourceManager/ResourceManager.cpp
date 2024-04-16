@@ -5,12 +5,12 @@
 #include "Engine/Graphics/MeshManager/MeshManager.h"
 #include "AudioManager/AudioManager.h"
 
-ResourceManager* ResourceManager::instance_ = nullptr;
+Lamb::SafePtr<ResourceManager> ResourceManager::instance_ = nullptr;
 
 void ResourceManager::Initialize()
 {
 	if (!instance_) {
-		instance_ = new ResourceManager{};
+		instance_.reset(new ResourceManager());
 		if (!instance_) {
 			throw Lamb::Error::Code<ResourceManager>("new failed", __func__);
 		}
@@ -19,14 +19,12 @@ void ResourceManager::Initialize()
 
 void ResourceManager::Finalize()
 {
-	if (instance_) {
-		Lamb::SafeDelete(instance_);
-	}
+	instance_.reset();
 }
 
 ResourceManager* const ResourceManager::GetInstance()
 {
-	return instance_;
+	return instance_.get();
 }
 
 void ResourceManager::SetTextureResource(const std::string& fileName)

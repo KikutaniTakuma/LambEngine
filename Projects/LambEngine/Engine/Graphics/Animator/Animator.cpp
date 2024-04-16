@@ -18,7 +18,7 @@ Animator::Animator():
 #pragma warning(push)
 #pragma warning(disable:4702)
 void Animator::Load(const std::string& fileName) {
-	AnimationManager* const animationManager = AnimationManager::GetInstance();
+	Lamb::SafePtr animationManager = AnimationManager::GetInstance();
 	animationManager->LoadAniamtions(fileName);
 	animations_ = animationManager->GetAnimations(fileName);
 }

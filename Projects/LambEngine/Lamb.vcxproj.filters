@@ -396,6 +396,9 @@
     <Filter Include="Transform">
       <UniqueIdentifier>{aa982000-c4e2-4c12-a54a-f75fa2d1c84d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\SafePtr">
+      <UniqueIdentifier>{fcae1063-d491-4ffb-bc1c-4ab8f97d5d6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -622,6 +625,9 @@
     </ClInclude>
     <ClInclude Include="Drawers\DrawerManager.h">
       <Filter>Drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SafePtr\SafePtr.h">
+      <Filter>Utils\SafePtr</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

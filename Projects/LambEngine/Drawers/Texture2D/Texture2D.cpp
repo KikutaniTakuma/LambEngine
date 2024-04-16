@@ -1,6 +1,7 @@
 #include "Texture2D.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+#include "Utils/SafePtr/SafePtr.h"
 
 #ifdef _DEBUG
 #include "Utils/UtilsLib/UtilsLib.h"
@@ -24,7 +25,7 @@ Texture2D::Texture2D():
 
 void Texture2D::Load()
 {
-	RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
+	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
 	renderContextManager->Load<Texture2DRenderContext>(kFileNames_);
 
@@ -39,7 +40,7 @@ void Texture2D::Draw(
 	uint32_t color,
 	BlendType blend
 ) {
-	Texture2DRenderContext* renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
+	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
 
 	renderContext->SetSahderStruct(
 		ShaderData{

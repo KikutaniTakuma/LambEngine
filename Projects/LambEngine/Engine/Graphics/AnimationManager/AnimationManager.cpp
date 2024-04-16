@@ -4,23 +4,23 @@
 
 #include "../MeshLoader/MeshLoader.h"
 
-AnimationManager* AnimationManager::instance_ = nullptr;
+Lamb::SafePtr<AnimationManager> AnimationManager::instance_ = nullptr;
 
 void AnimationManager::Initialize() {
 	if (instance_) {
 		throw Lamb::Error::Code<AnimationManager>("Already created", __func__);
 	}
 
-	instance_ = new AnimationManager();
+	instance_.reset(new AnimationManager());
 }
 
 void AnimationManager::Finalize() {
-	Lamb::SafeDelete(instance_);
+	instance_.reset();
 }
 
 AnimationManager* const AnimationManager::GetInstance()
 {
-	return instance_;
+	return instance_.get();
 }
 
 void AnimationManager::LoadAniamtions(const std::string& fileName) {

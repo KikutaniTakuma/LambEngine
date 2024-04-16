@@ -3,6 +3,8 @@
 #include <memory>
 #include "Texture2D/Texture2D.h"
 #include "Model/Model.h"
+#include "Utils/SafePtr/SafePtr.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
 
 class DrawerManager {
 private:
@@ -22,7 +24,7 @@ public:
 	static void Finalize();
 
 private:
-	static DrawerManager* instance_;
+	static Lamb::SafePtr<DrawerManager> instance_;
 
 public:
 	Texture2D* const GetTexture2D() const;
@@ -30,7 +32,7 @@ public:
 
 private:
 	std::unique_ptr<Texture2D> tex2D_;
-	class TextureManager* textureManager_;
+	Lamb::SafePtr<TextureManager> textureManager_;
 
 
 public:

@@ -1,7 +1,7 @@
 #pragma once
 #include "Texture/Texture.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
-
+#include "Utils/SafePtr/SafePtr.h"
 #include <unordered_map>
 #include <string>
 #include <memory>
@@ -33,7 +33,7 @@ public:
 	static void Finalize();
 
 private:
-	static TextureManager* instance_;
+	static Lamb::SafePtr<TextureManager> instance_;
 
 
 public:

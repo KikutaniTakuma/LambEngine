@@ -1,4 +1,5 @@
 #include "BaseDrawer.h"
+#include "Utils/SafePtr/SafePtr.h"
 
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #ifdef _DEBUG
@@ -12,7 +13,7 @@ BaseDrawer::BaseDrawer() :
 
 void BaseDrawer::Draw(const Mat4x4& worldMatrix, const Mat4x4& camera, uint32_t color, BlendType blend)
 {
-	RenderData* render = renderSet->GetRenderContext(blend);
+	Lamb::SafePtr render = renderSet->GetRenderContext(blend);
 
 	render->SetWVPMatrix({
 		.worldMat = worldMatrix,

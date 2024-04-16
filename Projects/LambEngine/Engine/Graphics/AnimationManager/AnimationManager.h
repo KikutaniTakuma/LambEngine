@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <memory>
 
+#include "Utils/SafePtr/SafePtr.h"
+
 class AnimationManager {
 private:
 	AnimationManager() = default;
@@ -25,7 +27,7 @@ public:
  	static [[nodiscard]] AnimationManager* const GetInstance();
 
 private:
-	static AnimationManager* instance_;
+	static Lamb::SafePtr<AnimationManager> instance_;
 
 public:
 	[[noreturn]] void LoadAniamtions(const std::string& fileName);

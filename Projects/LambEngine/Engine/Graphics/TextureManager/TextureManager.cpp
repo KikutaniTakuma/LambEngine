@@ -8,21 +8,21 @@
 
 #include "Error/Error.h"
 
-TextureManager* TextureManager::instance_ = nullptr;
+Lamb::SafePtr<TextureManager> TextureManager::instance_ = nullptr;
 const std::string TextureManager::kWhiteTexturePath = "./Resources/white2x2.png";
 
 TextureManager* const TextureManager::GetInstance() {
-	return instance_;
+	return instance_.get();
 }
 
 void TextureManager::Initialize() {
-	instance_ = new TextureManager();
-	assert(instance_);
+	instance_.reset(new TextureManager());
+	instance_.NullPointerException<TextureManager>(__func__);
 	instance_->LoadTexture(kWhiteTexturePath);
 }
 
 void TextureManager::Finalize() {
-	Lamb::SafeDelete(instance_);
+	instance_.reset();
 }
 
 TextureManager::TextureManager() :
@@ -99,7 +99,7 @@ void TextureManager::ReleaseIntermediateResource() {
 }
 
 void TextureManager::Use(uint32_t texIndex, UINT rootParam) {
-	auto* const mainComlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
+	Lamb::SafePtr mainComlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	mainComlist->SetGraphicsRootDescriptorTable(
 		rootParam, srvHeap_->GetGpuHeapHandle(texIndex));
 }

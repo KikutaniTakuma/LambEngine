@@ -1,5 +1,6 @@
 #include "Model.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+#include "Utils/SafePtr/SafePtr.h"
 
 Model::Model(const std::string& fileName):
 	Model()
@@ -8,7 +9,7 @@ Model::Model(const std::string& fileName):
 }
 
 void Model::Load(const std::string& fileName) {
-	RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
+	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
 	renderContextManager->Load(
 		LoadFileNames{
@@ -48,7 +49,7 @@ void Model::Draw(
 	BlendType blend, 
 	bool isLighting
 ) {
-	RenderContext<>* renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
+	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
 	renderContext->SetSahderStruct(static_cast<uint32_t>(isLighting));
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);

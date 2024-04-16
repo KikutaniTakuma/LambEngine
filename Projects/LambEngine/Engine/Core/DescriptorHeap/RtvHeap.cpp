@@ -10,19 +10,18 @@
 
 #include "Utils/SafeDelete/SafeDelete.h"
 
-RtvHeap* RtvHeap::instance_ = nullptr;
+Lamb::SafePtr<RtvHeap> RtvHeap::instance_ = nullptr;
 
 void RtvHeap::Initialize(UINT heapSize) {
-	assert(!instance_);
-	instance_ = new RtvHeap{ heapSize };
+	instance_.reset(new RtvHeap(heapSize));
 }
 
 void RtvHeap::Finalize() {
-	Lamb::SafeDelete(instance_);
+	instance_.reset();
 }
 
 RtvHeap* const RtvHeap::GetInstance() {
-	return instance_;
+	return instance_.get();
 }
 
 RtvHeap::RtvHeap(uint32_t heapSize):
@@ -61,8 +60,7 @@ void RtvHeap::CreateBackBuffer(
 	std::array<Lamb::LambPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber_>& backBuffer,
 	IDXGISwapChain4* const swapChain
 ) {
-	assert(!!swapChain);
-	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 
 	// RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
@@ -72,7 +70,6 @@ void RtvHeap::CreateBackBuffer(
 	for (uint32_t i = 0u; i < DirectXSwapChain::kBackBufferNumber_; i++) {
 		HRESULT hr = swapChain->GetBuffer(i, IID_PPV_ARGS(backBuffer[i].GetAddressOf()));
 
-		assert(SUCCEEDED(hr));
 		if (!SUCCEEDED(hr)) {
 			throw Lamb::Error::Code<RtvHeap>("GetBuffer() Failed", __func__);
 		}
@@ -120,7 +117,6 @@ void RtvHeap::ClearRenderTargetView(uint32_t handle, const Vector4& clearColor) 
 }
 
 uint32_t RtvHeap::CreateView(class RenderTarget& peraRender) {
-	assert(currentHandleIndex_ < heapSize_);
 	if (currentHandleIndex_ >= heapSize_) {
 		throw Lamb::Error::Code<RtvHeap>("Over HeapSize", __func__);
 	}
