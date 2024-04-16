@@ -23,6 +23,6 @@ public:
 		const Mat4x4& camera,
 		uint32_t color,
 		BlendType blend,
-		bool isLighting
+		bool isLighting = true
 	);
 };
