@@ -23,7 +23,6 @@ public:
 
 public:
 	Transform transform_;
-	Transform uvTransform_;
-	Texture2D* tex2D_;
 	Model* model_;
+	uint32_t color_;
 };

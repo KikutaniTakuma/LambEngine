@@ -9,14 +9,13 @@ void GameScene::Initialize() {
 	camera_->pos.z = -5.0f;
 	
 
-	transform_.scale = Vector3::kIdentity/* * 500*/;
-	uvTransform_.scale = Vector3::kIdentity;
+	transform_.scale = Vector3::kIdentity;
 
-	tex2D_ = drawerManager_->GetTexture2D();
-
+	// モデルのロード
 	drawerManager_->LoadModel("./Resources/Cube.obj");
-
+	// ロードしたモデルの取得
 	model_ = drawerManager_->GetModel("./Resources/Cube.obj");
+	color_ = Vector4(0.8f,0.2f,0.2f,1.0f).GetColorRGBA();
 }
 
 void GameScene::Finalize() {
@@ -31,20 +30,11 @@ void GameScene::Update() {
 }
 
 void GameScene::Draw() {
-	/*tex2D_->Draw(
-		transform_.GetMatrix(),
-		uvTransform_.GetMatrix(),
-		camera_->GetViewOthographics(),
-		0u,
-		0xffffffff,
-		BlendType::kNone
-	);*/
-
 	model_->Draw(
-		transform_.GetMatrix(),
-		camera_->GetViewProjection(),
-		0xffffffff,
-		BlendType::kNone,
-		false
+		transform_.GetMatrix(),         // ワールドマトリックス
+		camera_->GetViewOthographics(), // カメラのマトリックス
+		color_,                         // 色
+		BlendType::kNone,               // ブレンドタイプ
+		false                           // ライティングあり・なし
 	);
 }
