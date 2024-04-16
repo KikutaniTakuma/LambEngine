@@ -46,7 +46,7 @@ Mat4x4 Mat4x4::MakeTranslate(const Vector3& vec) {
 	result[3][1] = vec.y;
 	result[3][2] = vec.z;
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::MakeScalar(const Vector3& vec) {
@@ -57,7 +57,7 @@ Mat4x4 Mat4x4::MakeScalar(const Vector3& vec) {
 	result[2][2] = vec.z;
 	result[3][3] = 1.0f;
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::MakeRotateX(float rad) {
@@ -71,7 +71,7 @@ Mat4x4 Mat4x4::MakeRotateX(float rad) {
 	result[2][1] = -std::sin(rad);
 	result[2][2] = std::cos(rad);
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::MakeRotateY(float rad) {
@@ -85,7 +85,7 @@ Mat4x4 Mat4x4::MakeRotateY(float rad) {
 	result[2][0] = std::sin(rad);
 	result[2][2] = std::cos(rad);
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::MakeRotateZ(float rad) {
@@ -99,7 +99,7 @@ Mat4x4 Mat4x4::MakeRotateZ(float rad) {
 	result[1][0] = std::sin(rad);
 	result[1][1] = std::cos(rad);
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::MakeRotate(const Vector3& rad) {
@@ -118,7 +118,7 @@ Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Vector3& rad, const Vector3
 		translate.x, translate.y, translate.z, 1.0f
 	};
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Quaternion& rad, const Vector3& translate)
@@ -127,7 +127,7 @@ Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Quaternion& rad, const Vect
 
 	result = Mat4x4::MakeScalar(scale) * rad.GetMatrix() * Mat4x4::MakeTranslate(translate);
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Vector3& from, const Vector3& to, const Vector3& translate) {
@@ -135,7 +135,7 @@ Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Vector3& from, const Vector
 
 	result = Mat4x4::MakeScalar(scale) * Mat4x4::DirectionToDirection(from, to) * Mat4x4::MakeTranslate(translate);
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::MakePerspectiveFov(float fovY, float aspectRatio, float nearClip, float farClip) {
@@ -147,7 +147,7 @@ Mat4x4 Mat4x4::MakePerspectiveFov(float fovY, float aspectRatio, float nearClip,
 	result[2][3] = 1.0f;
 	result[3][2] = (-nearClip * farClip) / (farClip - nearClip);
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::MakeOrthographic(float left, float top, float right, float bottom, float nearClip, float farClip) {
@@ -164,7 +164,7 @@ Mat4x4 Mat4x4::MakeOrthographic(float left, float top, float right, float bottom
 	result[3][1] = (top + bottom) / (bottom - top);
 	result[3][2] = nearClip / (nearClip - farClip);
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::MakeViewPort(float left, float top, float width, float height, float minDepth, float maxDepth) {
@@ -179,7 +179,7 @@ Mat4x4 Mat4x4::MakeViewPort(float left, float top, float width, float height, fl
 	result[3][1] = top + (height / 2.0f);
 	result[3][2] = minDepth;
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::DirectionToDirection(const Vector3& from, const Vector3& to) {
@@ -222,7 +222,7 @@ Mat4x4 Mat4x4::DirectionToDirection(const Vector3& from, const Vector3& to) {
 		};
 
 
-	return std::move(result);
+	return result;
 }
 
 Mat4x4 Mat4x4::MakeRotateAxisAngle(const Vector3& axis, float angle) {
@@ -249,5 +249,5 @@ Mat4x4 Mat4x4::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	};
 
 
-	return std::move(result);
+	return result;
 }
