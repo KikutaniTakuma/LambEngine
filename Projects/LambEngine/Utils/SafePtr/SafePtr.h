@@ -158,6 +158,11 @@ namespace Lamb {
 			ptr_ = ptr;
 		}
 
+		void reset(const Lamb::SafePtr<T>& ptr) {
+			reset();
+			*this = ptr;
+		}
+
 	public:
 		/// <summary>
 		/// ヌルの場合は例外をthrowする
