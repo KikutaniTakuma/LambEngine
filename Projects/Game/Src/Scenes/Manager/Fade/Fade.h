@@ -1,7 +1,7 @@
 #pragma once
 #include "Drawers/Texture2D/Texture2D.h"
 #include "Utils/UtilsLib/UtilsLib.h"
-#include "Utils/Easing/Easing.h"
+#include "Utils/Easeing/Easeing.h"
 #include "Math/Mat4x4.h"
 
 class Fade {
@@ -79,7 +79,7 @@ private:
 
 	//Texture2D tex_;
 
-	Easing ease_;
+	Easeing ease_;
 	/// <summary>
 	/// seconds
 	/// </summary>

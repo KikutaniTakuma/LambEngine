@@ -112,9 +112,6 @@
     <ClCompile Include="Engine\Core\ImGuiManager\ImGuiManager.cpp">
       <Filter>Engine\Core\ImGuiManager</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Easing\Easing.cpp">
-      <Filter>Utils\Easing</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\EngineInfo\EngineInfo.cpp">
       <Filter>Utils\EngineInfo</Filter>
     </ClCompile>
@@ -189,6 +186,9 @@
     </ClCompile>
     <ClCompile Include="Drawers\DrawerManager.cpp">
       <Filter>Drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Easeing\Easeing.cpp">
+      <Filter>Utils\Easeing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,9 +324,6 @@
     <Filter Include="Engine\Core\ImGuiManager">
       <UniqueIdentifier>{d6d93ca6-1ebb-4ead-ad68-07b252c618a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils\Easing">
-      <UniqueIdentifier>{1dc7052e-fce1-4542-b5fb-a5f223d204de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils\EngineInfo">
       <UniqueIdentifier>{43053c56-0360-4ba5-903a-08a26af29cde}</UniqueIdentifier>
     </Filter>
@@ -398,6 +395,9 @@
     </Filter>
     <Filter Include="Utils\SafePtr">
       <UniqueIdentifier>{fcae1063-d491-4ffb-bc1c-4ab8f97d5d6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Easeing">
+      <UniqueIdentifier>{13e71929-8314-444c-8528-b5cef5a1e71c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -524,9 +524,6 @@
     <ClInclude Include="Engine\Core\ImGuiManager\ImGuiManager.h">
       <Filter>Engine\Core\ImGuiManager</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\Easing\Easing.h">
-      <Filter>Utils\Easing</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\EngineInfo\EngineInfo.h">
       <Filter>Utils\EngineInfo</Filter>
     </ClInclude>
@@ -628,6 +625,9 @@
     </ClInclude>
     <ClInclude Include="Utils\SafePtr\SafePtr.h">
       <Filter>Utils\SafePtr</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Easeing\Easeing.h">
+      <Filter>Utils\Easeing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
