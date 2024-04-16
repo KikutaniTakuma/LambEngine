@@ -1,7 +1,4 @@
 #pragma once
-#include <xaudio2.h>
-#pragma comment(lib, "xaudio2.lib")
-#include <wrl.h>
 #include <memory>
 #include <unordered_map>
 #include <queue>
@@ -9,6 +6,7 @@
 #include <mutex>
 #include "Audio/Audio.h"
 #include "Utils/SafePtr/SafePtr.h"
+#include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 /// <summary>
 /// Audioを管理
@@ -50,6 +48,10 @@ public:
 
 	void Unload(Audio* audio);
 
+	IXAudio2MasteringVoice* GetMasterVoice() {
+		return masterVoice_.get();
+	}
+
 public:
 	void ThreadLoad();
 
@@ -58,8 +60,8 @@ private:
 	void JoinThread();
 
 private:
-	Microsoft::WRL::ComPtr<IXAudio2> xAudio2_;
-	IXAudio2MasteringVoice* masterVoice_;
+	Lamb::LambPtr<IXAudio2> xAudio2_;
+	Lamb::SafePtr<IXAudio2MasteringVoice> masterVoice_;
 
 	std::unordered_map<std::string, std::unique_ptr<Audio>> audios_;
 
