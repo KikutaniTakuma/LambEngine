@@ -4,7 +4,7 @@
 #include "Math/Mat4x4.h"
 
 struct Transform {
-	Vector3 scale;
+	Vector3 scale = Vector3::kIdentity;
 	Vector3 rotate;
 	Vector3 translate;
 
@@ -17,7 +17,7 @@ struct Transform {
 };
 
 struct QuaternionTransform {
-	Vector3 scale;
+	Vector3 scale = Vector3::kIdentity;
 	Quaternion rotate;
 	Vector3 translate;
 
