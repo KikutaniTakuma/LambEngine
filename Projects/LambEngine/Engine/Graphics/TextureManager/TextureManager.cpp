@@ -31,7 +31,7 @@ TextureManager::TextureManager() :
 {
 	srvHeap_ = CbvSrvUavHeap::GetInstance();
 
-	directXCommand_ = std::make_unique<DirectXCommand>();
+	directXCommand_ = std::make_unique<DirectXCommand>(D3D12_COMMAND_LIST_TYPE::D3D12_COMMAND_LIST_TYPE_DIRECT);
 
 	Lamb::AddLog("Initialize TextureManager succeeded");
 }
