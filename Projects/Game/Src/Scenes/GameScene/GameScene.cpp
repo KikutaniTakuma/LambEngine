@@ -17,10 +17,6 @@ void GameScene::Initialize() {
 	// ロードしたモデルの取得
 	model_ = drawerManager_->GetModel("./Resources/Cube.obj");
 	color_ = Vector4(0.8f,0.2f,0.2f,1.0f).GetColorRGBA();
-
-	Audio* audio = audioManager_->LoadWav("./Resources/Sound/audiostock_1291167.mp3");
-
-	audio->Start(1.0f, true);
 }
 
 void GameScene::Finalize() {
