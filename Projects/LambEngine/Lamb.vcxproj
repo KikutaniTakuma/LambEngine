@@ -129,6 +129,7 @@
     <ClCompile Include="Drawers\PeraRender\PeraRender.cpp" />
     <ClCompile Include="Drawers\StringOut\StringOut.cpp" />
     <ClCompile Include="Drawers\Texture2D\Texture2D.cpp" />
+    <ClCompile Include="Engine\Buffer\ComputeBuffer\ComputeBuffer.cpp" />
     <ClCompile Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.cpp" />
     <ClCompile Include="Engine\Core\DescriptorHeap\DescriptorHeap.cpp" />
     <ClCompile Include="Engine\Core\DescriptorHeap\DsvHeap.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Drawers\PeraRender\PeraRender.h" />
     <ClInclude Include="Drawers\StringOut\StringOut.h" />
     <ClInclude Include="Drawers\Texture2D\Texture2D.h" />
+    <ClInclude Include="Engine\Buffer\ComputeBuffer\ComputeBuffer.h" />
     <ClInclude Include="Engine\Buffer\ConstBuffer\ConstBuffer.h" />
     <ClInclude Include="Engine\Buffer\StructuredBuffer\StructuredBuffer.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.h" />

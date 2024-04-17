@@ -190,6 +190,9 @@
     <ClCompile Include="Utils\Easeing\Easeing.cpp">
       <Filter>Utils\Easeing</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Buffer\ComputeBuffer\ComputeBuffer.cpp">
+      <Filter>Engine\Buffer\ComputeBuffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -398,6 +401,9 @@
     </Filter>
     <Filter Include="Utils\Easeing">
       <UniqueIdentifier>{13e71929-8314-444c-8528-b5cef5a1e71c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Buffer\ComputeBuffer">
+      <UniqueIdentifier>{742398d6-6eb6-4d04-a8d3-7ea888e0c722}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -628,6 +634,9 @@
     </ClInclude>
     <ClInclude Include="Utils\Easeing\Easeing.h">
       <Filter>Utils\Easeing</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Buffer\ComputeBuffer\ComputeBuffer.h">
+      <Filter>Engine\Buffer\ComputeBuffer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
