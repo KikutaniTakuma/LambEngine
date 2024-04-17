@@ -5,6 +5,7 @@
 #include "Error/Error.h"
 #include <cassert>
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
+#include "Utils/SafePtr/SafePtr.h"
 
 /// <summary>
 /// ストラクチャードバッファ
@@ -116,7 +117,7 @@ public:
 		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
 		UINT heapHandle) noexcept
 	{
-		static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
+		Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 		device->CreateShaderResourceView(bufferResource_.Get(), &srvDesc_, heapHandleCPU);
 		heapHandleCPU_ = heapHandleCPU;
 		heapHandleGPU_ = heapHandleGPU;

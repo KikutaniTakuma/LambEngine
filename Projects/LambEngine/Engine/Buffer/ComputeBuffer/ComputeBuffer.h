@@ -5,6 +5,7 @@
 
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
 #include "Utils/SafePtr/SafePtr.h"
+#include "Utils/Cocepts/Cocepts.h"
 
 #include <array>
 
@@ -74,6 +75,33 @@ public:
 public:
 	~ComputeBuffer() = default;
 
+public:
+	void CreateView(
+		D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
+		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
+		UINT heapHandle) noexcept
+	{
+		heapHandleCPU_ = heapHandleCPU;
+		heapHandleGPU_ = heapHandleGPU;
+		heapHandle_ = heapHandle;
+
+		Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
+		device->CreateUnorderedAccessView(bufferResource_.Get(), nullptr, &uavDesc_, heapHandleCPU_);
+
+		isCreateView_ = true;
+	}
+
+public:
+	template<Lamb::IsInt IsInt>
+	T& operator[](IsInt index) {
+		return buffer_[index];
+	}
+
+	template<Lamb::IsInt IsInt>
+	const T& operator[](IsInt index) const {
+		return buffer_[index];
+	}
+
 
 public:
 	constexpr size_t size() const noexcept {
@@ -87,4 +115,6 @@ private:
 	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc_;
 
 	std::array<T, bufferSize> buffer_;
+
+	bool isCreateView_;
 };
