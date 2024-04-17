@@ -9,12 +9,14 @@
 
 class DirectXCommand {
 public:
-	DirectXCommand();
+	DirectXCommand(D3D12_COMMAND_LIST_TYPE type);
+	
+	DirectXCommand() = delete;
 	DirectXCommand(const DirectXCommand&) = delete;
 	DirectXCommand(DirectXCommand&&) = delete;
-
 	DirectXCommand& operator=(const DirectXCommand&) = delete;
 	DirectXCommand& operator=(DirectXCommand&&) = delete;
+
 public:
 	~DirectXCommand();
 
@@ -69,6 +71,7 @@ private:
 	Lamb::LambPtr<ID3D12CommandQueue> commandQueue_;
 	Lamb::LambPtr<ID3D12CommandAllocator> commandAllocator_;
 	Lamb::LambPtr<ID3D12GraphicsCommandList> commandList_;
+	D3D12_COMMAND_LIST_TYPE type_;
 	bool isCommandListClose_;
 
 	Lamb::LambPtr<ID3D12Fence> fence_;

@@ -7,14 +7,15 @@
 #include "Utils/SafePtr/SafePtr.h"
 
 
-DirectXCommand::DirectXCommand():
+DirectXCommand::DirectXCommand(D3D12_COMMAND_LIST_TYPE type):
 	commandQueue_{},
 	commandAllocator_{},
 	commandList_{},
-	isCommandListClose_{false},
+	type_(type),
+	isCommandListClose_(false),
 	fence_{},
-	fenceVal_{0llu},
-	fenceEvent_{nullptr}
+	fenceVal_(0llu),
+	fenceEvent_(nullptr)
 {
 	CreateCommandQueue();
 
@@ -85,7 +86,10 @@ void DirectXCommand::CreateCommandQueue() {
 	// コマンドキューを作成
 	commandQueue_ = nullptr;
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
-	HRESULT hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(commandQueue_.GetAddressOf()));
+	HRESULT hr = device->CreateCommandQueue(
+		&commandQueueDesc, 
+		IID_PPV_ARGS(commandQueue_.GetAddressOf())
+	);
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
 	}
@@ -101,7 +105,11 @@ void DirectXCommand::CreateCommandAllocator() {
 
 	// コマンドアロケータを生成する
 	commandAllocator_ = nullptr;
-	HRESULT hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_.GetAddressOf()));
+	HRESULT hr = device->CreateCommandAllocator(
+		type_,
+		IID_PPV_ARGS(commandAllocator_.GetAddressOf())
+	);
+
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
 	}
@@ -116,7 +124,13 @@ void DirectXCommand::CreateGraphicsCommandList() {
 	
 	// コマンドリストを作成する
 	commandList_ = nullptr;
-	HRESULT hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(commandList_.GetAddressOf()));
+	HRESULT hr = device->CreateCommandList(
+		0, 
+		type_,
+		commandAllocator_.Get(), 
+		nullptr, 
+		IID_PPV_ARGS(commandList_.GetAddressOf())
+	);
 	
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("device somethig error", __func__);
