@@ -3,6 +3,10 @@
 #pragma comment(lib, "d3d12.lib")
 
 #include "EngineUtils/LambPtr/LambPtr.h"
+#include "Utils/SafePtr/SafePtr.h"
+
+
+#include "Core/DirectXCommand/DirectXCommand.h"
 
 #include <string>
 #include <memory>
@@ -106,12 +110,16 @@ private:
 	void FinalizeDirectXCommand();
 
 public:
-	class DirectXCommand* const GetMainCommandlist() const {
-		return directXCommand_;
+	DirectXCommand* GetMainCommandlist() {
+		return graphicsCommand_.get();
+	}
+	DirectXCommand* GetComputeCommandlist() {
+		return computeCommand_.get();
 	}
 
 private:
-	class DirectXCommand* directXCommand_ = nullptr;
+	Lamb::SafePtr<DirectXCommand> graphicsCommand_;
+	Lamb::SafePtr<DirectXCommand> computeCommand_;
 
 /// 
 /// DirectXCommand

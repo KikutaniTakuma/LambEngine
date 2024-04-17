@@ -14,7 +14,6 @@
 
 #include "Core/WindowFactory/WindowFactory.h"
 #include "Core/DirectXDevice/DirectXDevice.h"
-#include "Core/DirectXCommand/DirectXCommand.h"
 #include "Core/DirectXSwapChain/DirectXSwapChain.h"
 #include "Core/StringOutPutManager/StringOutPutManager.h"
 #include "Core/ImGuiManager/ImGuiManager.h"
@@ -329,12 +328,14 @@ void Engine::InitializeDirectXDevice() {
 /// 
 
 void Engine::InitializeDirectXCommand() {
-	directXCommand_ = new DirectXCommand();
+	graphicsCommand_ = Lamb::MakeSafePtr<DirectXCommand>(D3D12_COMMAND_LIST_TYPE_DIRECT);
+	computeCommand_ = Lamb::MakeSafePtr<DirectXCommand>(D3D12_COMMAND_LIST_TYPE_COMPUTE);
 }
 
 void Engine::FinalizeDirectXCommand()
 {
-	Lamb::SafeDelete(directXCommand_);
+	computeCommand_.reset();
+	graphicsCommand_.reset();
 }
 
 
@@ -428,10 +429,10 @@ void Engine::FrameEnd() {
 	instance_->directXSwapChain_->ChangeBackBufferState();
 
 	// コマンドリストを確定させる
-	instance_->directXCommand_->CloseCommandlist();
+	instance_->graphicsCommand_->CloseCommandlist();
 
 	// GPUにコマンドリストの実行を行わせる
-	instance_->directXCommand_->ExecuteCommandLists();
+	instance_->graphicsCommand_->ExecuteCommandLists();
 
 
 	// GPUとOSに画面の交換を行うように通知する
@@ -439,9 +440,9 @@ void Engine::FrameEnd() {
 
 	instance_->stringOutPutManager_->GmemoryCommit();
 
-	instance_->directXCommand_->WaitForFinishCommnadlist();
+	instance_->graphicsCommand_->WaitForFinishCommnadlist();
 
-	instance_->directXCommand_->ResetCommandlist();
+	instance_->graphicsCommand_->ResetCommandlist();
 
 
 
