@@ -64,6 +64,8 @@ public:
 	void Debug(const std::string& guiName);
 
 private:
+	void Unload();
+
 	void Load(const std::string& fileName);
 
 	void LoadWav(const std::string& fileName);
@@ -72,12 +74,9 @@ private:
 
 private:
 	WAVEFORMATEX wfet_;
-	BYTE* pBuffer_;
+	Lamb::SafePtr<BYTE> pBuffer_;
 	uint32_t bufferSize_;
 	IXAudio2SourceVoice* pSourceVoice_;
-
-	Lamb::SafePtr<IMFSourceReader> pMFSourceReader_;
-	Lamb::SafePtr<IMFMediaType> pMFMediaType_;
 
 	bool isLoop_;
 	bool isStart_;

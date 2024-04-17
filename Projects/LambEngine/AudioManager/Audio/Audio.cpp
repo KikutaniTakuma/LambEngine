@@ -18,14 +18,12 @@ Audio::Audio():
 {}
 
 Audio::~Audio() {
-	delete[] pBuffer_;
+	Unload();
+}
 
-	if (pMFMediaType_) {
-		pMFMediaType_->Release();
-	}
-	if (pMFSourceReader_) {
-		pMFSourceReader_->Release();
-	}
+void Audio::Unload() {
+	delete[] pBuffer_.get();
+
 	pBuffer_ = nullptr;
 	bufferSize_ = 0;
 	wfet_ = {};
@@ -35,6 +33,11 @@ void Audio::Load(const std::string& fileName) {
 	if (!std::filesystem::exists(std::filesystem::path{ fileName })) {
 		throw Lamb::Error::Code<Audio>(("This file is not found -> " + fileName), __func__);
 	}
+	
+	if (isLoad_) {
+		Unload();
+	}
+
 	if (std::filesystem::path(fileName).extension() == ".wav") {
 		LoadWav(fileName);
 	}
@@ -119,23 +122,26 @@ void Audio::LoadWav(const std::string& fileName) {
 }
 
 void Audio::LoadMp3(const std::string& fileName) {
-	MFCreateSourceReaderFromURL(ConvertString(fileName).c_str(), NULL, &pMFSourceReader_);
+	Lamb::SafePtr<IMFSourceReader> pMFSourceReader;
+	Lamb::SafePtr<IMFMediaType> pMFMediaType;
+
+	MFCreateSourceReaderFromURL(ConvertString(fileName).c_str(), NULL, &pMFSourceReader);
 
 
-	MFCreateMediaType(&pMFMediaType_);
-	pMFMediaType_->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
-	pMFMediaType_->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
-	pMFSourceReader_->SetCurrentMediaType(
+	MFCreateMediaType(&pMFMediaType);
+	pMFMediaType->SetGUID(MF_MT_MAJOR_TYPE, MFMediaType_Audio);
+	pMFMediaType->SetGUID(MF_MT_SUBTYPE, MFAudioFormat_PCM);
+	pMFSourceReader->SetCurrentMediaType(
 		static_cast<DWORD>(MF_SOURCE_READER_FIRST_AUDIO_STREAM),
-		nullptr, pMFMediaType_.get()
+		nullptr, pMFMediaType.get()
 	);
 
-	pMFMediaType_->Release();
-	pMFMediaType_ = nullptr;
-	pMFSourceReader_->GetCurrentMediaType(static_cast<DWORD>(MF_SOURCE_READER_FIRST_AUDIO_STREAM), &pMFMediaType_);
+	pMFMediaType->Release();
+	pMFMediaType = nullptr;
+	pMFSourceReader->GetCurrentMediaType(static_cast<DWORD>(MF_SOURCE_READER_FIRST_AUDIO_STREAM), &pMFMediaType);
 
 	Lamb::SafePtr<WAVEFORMATEX> pWaveFormat = &wfet_;
-	MFCreateWaveFormatExFromMFMediaType(pMFMediaType_.get(), &pWaveFormat, nullptr);
+	MFCreateWaveFormatExFromMFMediaType(pMFMediaType.get(), &pWaveFormat, nullptr);
 	wfet_ = *pWaveFormat;
 
 	std::vector<BYTE> mediaData;
@@ -143,7 +149,7 @@ void Audio::LoadMp3(const std::string& fileName) {
 	{
 		Lamb::SafePtr<IMFSample> pMFSample{ nullptr };
 		DWORD dwStreamFlags{ 0 };
-		pMFSourceReader_->ReadSample(static_cast<DWORD>(MF_SOURCE_READER_FIRST_AUDIO_STREAM), 0, nullptr, &dwStreamFlags, nullptr, &pMFSample);
+		pMFSourceReader->ReadSample(static_cast<DWORD>(MF_SOURCE_READER_FIRST_AUDIO_STREAM), 0, nullptr, &dwStreamFlags, nullptr, &pMFSample);
 
 		if (dwStreamFlags & MF_SOURCE_READERF_ENDOFSTREAM)
 		{
@@ -167,9 +173,12 @@ void Audio::LoadMp3(const std::string& fileName) {
 	}
 
 	pBuffer_ = new BYTE[mediaData.size()];
-	std::memcpy(pBuffer_, mediaData.data(), mediaData.size());
+	std::memcpy(pBuffer_.get(), mediaData.data(), mediaData.size());
 
 	bufferSize_ = static_cast<uint32_t>(mediaData.size() * sizeof(BYTE));
+
+	pMFMediaType->Release();
+	pMFSourceReader->Release();
 }
 
 
@@ -187,7 +196,7 @@ void Audio::Start(float volume, bool isLoop) {
 
 		hr = AudioManager::GetInstance()->xAudio2_->CreateSourceVoice(&pSourceVoice_, &wfet_);
 		XAUDIO2_BUFFER buf{};
-		buf.pAudioData = pBuffer_;
+		buf.pAudioData = pBuffer_.get();
 		buf.AudioBytes = bufferSize_;
 		buf.Flags = XAUDIO2_END_OF_STREAM;
 		buf.LoopCount = isLoop_ ? XAUDIO2_LOOP_INFINITE : 0;
