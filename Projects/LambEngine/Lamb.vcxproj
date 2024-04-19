@@ -161,6 +161,7 @@
     <ClCompile Include="Engine\Graphics\RootSignature\RootSignature.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.cpp" />
+    <ClCompile Include="Engine\Graphics\Skeleton.cpp" />
     <ClCompile Include="Engine\Graphics\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Engine\Graphics\TextureManager\Texture\Texture.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="Engine\Graphics\Shader\Shader.h" />
     <ClInclude Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.h" />
     <ClInclude Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.h" />
+    <ClInclude Include="Engine\Graphics\Skeleton.h" />
     <ClInclude Include="Engine\Graphics\TextureManager\TextureManager.h" />
     <ClInclude Include="Engine\Graphics\TextureManager\Texture\Texture.h" />
     <ClInclude Include="Error\Error.h" />

@@ -233,14 +233,14 @@ const aiScene* MeshLoader::ReadFile(Assimp::Importer& importer, const std::strin
 Node MeshLoader::ReadNode(aiNode* node)
 {
 	Node result;
-	aiMatrix4x4 aiLocalMatrix = node->mTransformation;
-	aiLocalMatrix.Transpose();
-	
-	for (uint32_t y = 0; y < 4; y++) {
-		for (uint32_t x = 0; x < 4; x++) {
-			result.loacalMatrix[y][x] = aiLocalMatrix[y][x];
-		}
-	}
+	aiVector3D scale, translate;
+	aiQuaternion rotate;
+	node->mTransformation.Decompose(scale, rotate, translate);
+
+	result.transform.scale = { scale.x, rotate.y, rotate.z };
+	result.transform.rotate = { rotate.x,-rotate.y,-rotate.z,rotate.w };
+	result.transform.translate = { -translate.x, translate.y, translate.z };
+	result.loacalMatrix = result.transform.GetMatrix();
 
 	result.name = node->mName.C_Str();
 	result.children.resize(node->mNumChildren);

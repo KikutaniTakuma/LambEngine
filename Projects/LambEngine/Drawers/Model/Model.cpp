@@ -54,3 +54,8 @@ void Model::Draw(
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
 }
+
+const Node& Model::GetNode() const
+{
+	return renderSet->GetNode();
+}

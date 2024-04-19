@@ -73,6 +73,58 @@ void Animator::Update(const Mesh* const mesh) {
 	}
 }
 
+void Animator::Update(Skeleton& skeleton) {
+	Animation& currentAnimation = animations_->data[currentAnimationIndex_];
+
+	for (Joint& joint : skeleton.joints) {
+		if (auto itr = currentAnimation.nodeAnimations.find(joint.name); itr != currentAnimation.nodeAnimations.end()) {
+			const NodeAnimation& rootNodeAnimation = (*itr).second;
+			joint.transform.translate = CalaclateValue(rootNodeAnimation.translation, animationTime_);
+			joint.transform.rotate = CalaclateValue(rootNodeAnimation.rotate, animationTime_);
+			joint.transform.scale = CalaclateValue(rootNodeAnimation.sacle, animationTime_);
+		}
+	}
+
+	/// 以下ゴミコード
+
+	// アクティブ時
+	if (isActive_) {
+		// アニメーション時間を加算
+		animationTime_ += Lamb::DeltaTime();
+
+		// アニメーション時間がアニメーション再生を超えたら
+		if (currentAnimation.duration < animationTime_) {
+			// ループ時はanimationTimeを最初から
+			if (isLoop_) {
+				animationTime_ = 0.0f;
+			}
+			// アニメーションをすべて再生するときは
+			// アニメーション時間をリセットしてアニメーションのインデックスを進める
+			else if (isFullAnimation_) {
+				animationTime_ = 0.0f;
+				currentAnimationIndex_++;
+			}
+			// 非アクティブ化
+			else {
+				Pause();
+			}
+		}
+
+		// アニメーションのインデックスを超えたとき
+		if (animations_->data.size() <= currentAnimationIndex_) {
+			// ループ時はインデックスを初期化
+			if (isLoop_) {
+				currentAnimationIndex_ = 0;
+			}
+			// ループしないときは非アクティブ化
+			else {
+				Pause();
+				currentAnimationIndex_ = animations_->data.size() - 1llu;
+			}
+		}
+	}
+}
+
 void Animator::Start() {
 	Reset();
 	Restart();

@@ -56,6 +56,10 @@ public:
         return mesh_;
     }
 
+    const Node& GetNode() const {
+        return mesh_->node;
+    }
+
 protected:
     const Mesh* mesh_;
 
@@ -231,6 +235,10 @@ public:
 
     const std::string& GetRootNodeName() const {
         return renderDatas_.front()->GetRootName();
+    }
+
+    const Node& GetNode() const {
+        return renderDatas_.front()->GetNode();
     }
 
     const Mesh* const GetMesh() const {

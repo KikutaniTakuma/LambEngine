@@ -1,5 +1,4 @@
 #include "Mat4x4.h"
-#include "Vector3.h"
 #include "Quaternion.h"
 #include <cmath>
 
@@ -250,4 +249,16 @@ Mat4x4 Mat4x4::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 
 
 	return result;
+}
+
+Vector3 Mat4x4::GetTranslate()
+{
+	return Vector3((*this)[3][0], (*this)[3][1], (*this)[3][2]);
+}
+Vector3 Mat4x4::GetScale()
+{
+	return Vector3();
+}
+Quaternion Mat4x4::GetRotate() {
+	return Quaternion();
 }

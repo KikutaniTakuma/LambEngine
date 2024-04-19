@@ -6,7 +6,8 @@
 #include <initializer_list>
 #include "Matrix.h"
 
-class Vector3;
+#include "Vector3.h"
+#include "Quaternion.h"
 
 /// <summary>
 /// 4x4行列
@@ -36,6 +37,11 @@ public:
 
 	[[nodiscard]] bool operator==(const Mat4x4& right) const = default;
 	[[nodiscard]] bool operator!=(const Mat4x4& right) const = default;
+
+public:
+	Vector3 GetTranslate();
+	Vector3 GetScale();
+	Quaternion GetRotate();
 
 /// <summary>
 /// 静的メンバ関数

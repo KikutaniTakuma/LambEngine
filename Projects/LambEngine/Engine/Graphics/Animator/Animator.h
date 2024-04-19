@@ -2,6 +2,7 @@
 #include <string>
 #include "Math/Mat4x4.h"
 #include "Engine/Graphics/GraphicsStructs.h"
+#include "Engine/Graphics/Skeleton.h"
 
 class Animator {
 public:
@@ -17,6 +18,7 @@ public:
 	void Load(const std::string& fileName);
 
 	void Update(const Mesh* const mesh);
+	void Update(Skeleton& skeleton);
 
 public:
 	// 最初からスタート

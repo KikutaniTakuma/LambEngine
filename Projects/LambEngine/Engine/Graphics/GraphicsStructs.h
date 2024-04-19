@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "Transform/Transform.h"
+
 #include "Math/Vector4.h"
 #include "Math/Vector3.h"
 #include "Math/Vector2.h"
@@ -51,9 +53,12 @@ struct WVPMatrix {
 };
 
 struct Node {
+    QuaternionTransform transform;
     Mat4x4 loacalMatrix = Mat4x4::kIdentity;
     std::string name;
     std::vector<Node> children;
+
+    Node& operator=(const Node&) = default;
 };
 
 struct ModelData {
@@ -71,6 +76,8 @@ struct Mesh {
 
     uint32_t indexNumber;
     Node node;
+
+    Mesh& operator=(const Mesh&) = default;
 };
 
 enum BlendType {
