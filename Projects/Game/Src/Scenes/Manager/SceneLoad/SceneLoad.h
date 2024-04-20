@@ -5,7 +5,9 @@
 #include <functional>
 #include <memory>
 #include "Drawers/Texture2D/Texture2D.h"
+#include "Engine/Graphics/Tex2DAniamtor/Tex2DAniamtor.h"
 #include "Math/Mat4x4.h"
+#include "Utils/SafePtr/SafePtr.h"
 
 
 // ロード中の描画クラス
@@ -46,13 +48,16 @@ private:
 
 	// ロード中に実行する関数
 	std::function<void(void)> loadProc_;
-	std::unique_ptr<Texture2D> loadTex_;
 
 	bool exit_;
 
 	bool isLoad_;
 
 	bool isWait_;
+
+	std::unique_ptr<Tex2DAniamtor> tex2Danimator_;
+	Lamb::SafePtr<Texture2D> loadTex_;
+	uint32_t textureID_;
 
 	Mat4x4 cameraMatrix_;
 

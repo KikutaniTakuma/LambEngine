@@ -13,14 +13,10 @@ void GameScene::Initialize() {
 	transform_.scale = Vector3::kIdentity;
 
 	// モデルのロード
-	drawerManager_->LoadModel("./Resources/Cube.obj");
+	drawerManager_->LoadModel("./Resources/Hololive/Watame/Watame.obj");
 	// ロードしたモデルの取得
-	model_ = drawerManager_->GetModel("./Resources/Cube.obj");
-	color_ = Vector4(0.8f,0.2f,0.2f,1.0f).GetColorRGBA();
-
-	Audio* audio = audioManager_->LoadWav("./Resources/Sound/audiostock_1291167.mp3");
-
-	audio->Start(1.0f, true);
+	model_ = drawerManager_->GetModel("./Resources/Hololive/Watame/Watame.obj");
+	color_ = Vector4(1.f,1.f,1.f,1.0f).GetColorRGBA();
 }
 
 void GameScene::Finalize() {
@@ -37,7 +33,7 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	model_->Draw(
 		transform_.GetMatrix(),         // ワールドマトリックス
-		camera_->GetViewOthographics(), // カメラのマトリックス
+		camera_->GetViewProjection(), // カメラのマトリックス
 		color_,                         // 色
 		BlendType::kNone,               // ブレンドタイプ
 		false                           // ライティングあり・なし

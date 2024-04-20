@@ -32,4 +32,5 @@ public:
 
 public:
 	std::unique_ptr<Sphere> sphere_;
+	uint32_t textureID_;
 };

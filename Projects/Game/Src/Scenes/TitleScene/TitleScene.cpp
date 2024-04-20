@@ -14,14 +14,16 @@ TitleScene::TitleScene():
 
 void TitleScene::Initialize()
 {
-	camera_->pos.y = 2.85f;
+	//camera_->pos.y = 2.85f;
 	camera_->pos.z = -10.0f;
-	camera_->rotate.x = 0.21f;
+	//camera_->rotate.x = 0.21f;
 
 	/*model_->light.ptRange = 5.0f;
 	model_->light.ptPos = model_->pos;
 	model_->light.ptPos.y = 3.8f;
 	model_->light.ptColor = Vector3::kIdentity * 15.0f;*/
+
+	textureID_ = drawerManager_->LoadTexture("./Resources/Load.png");
 
 	sphere_.reset(new Sphere);
 }
@@ -34,7 +36,7 @@ void TitleScene::Finalize()
 void TitleScene::Update()
 {
 	camera_->Debug("カメラ");
-	camera_->Update(Vector3::kZero);
+	camera_->Update();
 
 	//model_->Update();
 
@@ -49,6 +51,15 @@ void TitleScene::Update()
 void TitleScene::Draw()
 {
 	sphere_->Draw(camera_->GetViewProjection(), std::numeric_limits<uint32_t>::max());
+
+	drawerManager_->GetTexture2D()->Draw(
+		Mat4x4::MakeAffin(Vector3::kIdentity * 500.0f, Vector3::kZero, Vector3::kZero),
+		Mat4x4::kIdentity,
+		camera_->GetViewOthographics(),
+		textureID_,
+		std::numeric_limits<uint32_t>::max(),
+		BlendType::kNormal
+	);
 
 	Lamb::screenout << "Model scene" << Lamb::endline
 		<< "Press space to change ""Water and cloud scene""";

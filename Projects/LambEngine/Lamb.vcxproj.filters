@@ -193,6 +193,9 @@
     <ClCompile Include="Engine\Graphics\Skeleton.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\Tex2DAniamtor\Tex2DAniamtor.cpp">
+      <Filter>Engine\Graphics\Tex2DAniamtor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -401,6 +404,9 @@
     </Filter>
     <Filter Include="Utils\Easeing">
       <UniqueIdentifier>{13e71929-8314-444c-8528-b5cef5a1e71c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Tex2DAniamtor">
+      <UniqueIdentifier>{d2bdf60c-0eca-4b04-af8b-a90657a2185f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -634,6 +640,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Skeleton.h">
       <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Tex2DAniamtor\Tex2DAniamtor.h">
+      <Filter>Engine\Graphics\Tex2DAniamtor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
