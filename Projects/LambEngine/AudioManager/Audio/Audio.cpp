@@ -40,7 +40,7 @@ void Audio::Load(const std::string& fileName) {
 
 	auto extension = std::filesystem::path(fileName).extension();
 
-	if (not (extension == ".wav" or extension == ".mp3")) {
+	if (extension != ".wav" and extension != ".mp3") {
 		throw Lamb::Error::Code<Audio>(("This file is not supported (only ""mp3"" or ""wav"" file) -> " + fileName), __func__);
 	}
 
