@@ -68,10 +68,6 @@ private:
 
 	void Load(const std::string& fileName);
 
-	void LoadWav(const std::string& fileName);
-
-	void LoadMp3(const std::string& fileName);
-
 private:
 	WAVEFORMATEX wfet_;
 	Lamb::SafePtr<BYTE> pBuffer_;

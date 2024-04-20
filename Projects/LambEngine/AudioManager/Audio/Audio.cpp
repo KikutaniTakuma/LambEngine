@@ -38,90 +38,12 @@ void Audio::Load(const std::string& fileName) {
 		Unload();
 	}
 
-	if (std::filesystem::path(fileName).extension() == ".wav") {
-		LoadWav(fileName);
-	}
-	else if (std::filesystem::path(fileName).extension() == ".mp3") {
-		LoadMp3(fileName);
-	}
-	else {
+	auto extension = std::filesystem::path(fileName).extension();
+
+	if (not (extension == ".wav" or extension == ".mp3")) {
 		throw Lamb::Error::Code<Audio>(("This file is not supported (only ""mp3"" or ""wav"" file) -> " + fileName), __func__);
 	}
 
-
-	HRESULT hr = AudioManager::GetInstance()->xAudio2_->CreateSourceVoice(&pSourceVoice_, &wfet_);
-	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<Audio>("CreateSourceVoice() failed", "Load()");
-	}
-
-	isLoad_ = true;
-}
-
-void Audio::LoadWav(const std::string& fileName) {
-	std::ifstream file;
-	try {
-		file.open(fileName, std::ios::binary);
-	}
-	catch (const std::exception& err) {
-		throw Lamb::Error::Code<Audio>(err.what(), __func__);
-	}
-
-	fileName_ = fileName;
-
-	RiffHeader riff;
-	file.read((char*)&riff, sizeof(riff));
-
-	if (strncmp(riff.chunk_.id_.data(), "RIFF", 4) != 0) {
-		throw Lamb::Error::Code<Audio>("Not found RIFF", "Load()");
-	}
-	if (strncmp(riff.type_.data(), "WAVE", 4) != 0) {
-		throw Lamb::Error::Code<Audio>("Not found WAVE", "Load()");
-	}
-
-	FormatChunk format{};
-	file.read((char*)&format, sizeof(ChunkHeader));
-	int32_t nowRead = 0;
-	while (strncmp(format.chunk_.id_.data(), "fmt ", 4) != 0) {
-		file.seekg(nowRead, std::ios_base::beg);
-		if (file.eof()) {
-			throw Lamb::Error::Code<Audio>("Not found fmt", "Load()");
-		}
-		nowRead++;
-		file.read((char*)&format, sizeof(ChunkHeader));
-	}
-
-	if (format.chunk_.size_ > sizeof(format.fmt_)) {
-		throw Lamb::Error::Code<Audio>("format chunk size is too big ->" + std::to_string(format.chunk_.size_) + " byte (max is " + std::to_string(sizeof(format.fmt_)) + " byte)", "Load()");
-	}
-	file.read((char*)&format.fmt_, format.chunk_.size_);
-
-	ChunkHeader data;
-	file.read((char*)&data, sizeof(data));
-
-	if (strncmp(data.id_.data(), "JUNK", 4) == 0) {
-		file.seekg(data.size_, std::ios_base::cur);
-		file.read((char*)&data, sizeof(data));
-	}
-
-	while (strncmp(data.id_.data(), "data", 4) != 0) {
-		file.seekg(data.size_, std::ios_base::cur);
-		if (file.eof()) {
-			throw Lamb::Error::Code<Audio>("Not found data", "Load()");
-		}
-		file.read((char*)&data, sizeof(data));
-	}
-
-	char* pBufferLocal = new char[data.size_];
-	file.read(pBufferLocal, data.size_);
-
-	file.close();
-
-	wfet_ = format.fmt_;
-	pBuffer_ = reinterpret_cast<BYTE*>(pBufferLocal);
-	bufferSize_ = data.size_;
-}
-
-void Audio::LoadMp3(const std::string& fileName) {
 	Lamb::SafePtr<IMFSourceReader> pMFSourceReader;
 	Lamb::SafePtr<IMFMediaType> pMFMediaType;
 
@@ -179,6 +101,14 @@ void Audio::LoadMp3(const std::string& fileName) {
 
 	pMFMediaType->Release();
 	pMFSourceReader->Release();
+
+
+	HRESULT hr = AudioManager::GetInstance()->xAudio2_->CreateSourceVoice(&pSourceVoice_, &wfet_);
+	if (!SUCCEEDED(hr)) {
+		throw Lamb::Error::Code<Audio>("CreateSourceVoice() failed", "Load()");
+	}
+
+	isLoad_ = true;
 }
 
 
