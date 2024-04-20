@@ -31,15 +31,13 @@ void Model::Load(const std::string& fileName) {
 		}
 	);
 
-	for (auto& i : *renderSet) {
-		i->SetLight(
-			Light{
-				.ligDirection{-Vector3::kYIdentity},
-				.pad0{},
-				.ligColor{ Vector3::kIdentity },
-			}
-		);
-	}
+	SetLight(
+		Light{
+			.ligDirection{-Vector3::kYIdentity},
+			.pad0{},
+			.ligColor{ Vector3::kIdentity },
+		}
+	);
 }
 
 void Model::Draw(
