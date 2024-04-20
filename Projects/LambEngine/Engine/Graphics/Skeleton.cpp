@@ -52,8 +52,8 @@ void Skeleton::Update() {
 void Skeleton::Draw([[maybe_unused]]const Mat4x4& camera) {
 #ifdef _DEBUG
     for (size_t i = 0; i < joints.size() - 1; i++) {
-        Vector3&& start = joints[i].skeletonSpaceMatrix.GetTranslate();
-        Vector3&& end = joints[i + 1].skeletonSpaceMatrix.GetTranslate();
+        //Vector3&& start = joints[i].skeletonSpaceMatrix.GetTranslate();
+        //Vector3&& end = joints[i + 1].skeletonSpaceMatrix.GetTranslate();
 
 
     }
