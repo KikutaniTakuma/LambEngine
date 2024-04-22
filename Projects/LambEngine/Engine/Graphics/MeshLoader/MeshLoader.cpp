@@ -237,7 +237,7 @@ Node MeshLoader::ReadNode(aiNode* node)
 	aiQuaternion rotate;
 	node->mTransformation.Decompose(scale, rotate, translate);
 
-	result.transform.scale = { scale.x, rotate.y, rotate.z };
+	result.transform.scale = { scale.x, scale.y, scale.z };
 	result.transform.rotate = { rotate.x,-rotate.y,-rotate.z,rotate.w };
 	result.transform.translate = { -translate.x, translate.y, translate.z };
 	result.loacalMatrix = result.transform.GetMatrix();
