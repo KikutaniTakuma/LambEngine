@@ -13,9 +13,9 @@ void GameScene::Initialize() {
 	transform_.scale = Vector3::kIdentity;
 
 	// モデルのロード
-	drawerManager_->LoadModel("./Resources/Hololive/Watame/Watame.obj");
+	drawerManager_->LoadModel("./Resources/Common/Hololive/Watame/Watame.obj");
 	// ロードしたモデルの取得
-	model_ = drawerManager_->GetModel("./Resources/Hololive/Watame/Watame.obj");
+	model_ = drawerManager_->GetModel("./Resources/Common/Hololive/Watame/Watame.obj");
 	color_ = Vector4(1.f,1.f,1.f,1.0f).GetColorRGBA();
 }
 
