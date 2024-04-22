@@ -6,7 +6,6 @@
 #include <memory>
 #include "Drawers/Texture2D/Texture2D.h"
 #include "Engine/Graphics/Tex2DAniamtor/Tex2DAniamtor.h"
-#include "Math/Mat4x4.h"
 #include "Utils/SafePtr/SafePtr.h"
 
 
@@ -16,7 +15,7 @@ public:
 	struct Desc {
 		std::string fileName = "./Resources/Load.png";
 		uint32_t animationNumber = 4;
-		uint32_t animationSpeed = 500;
+		float animationSpeed = 0.5f;
 	};
 public:
 	static Desc setting;

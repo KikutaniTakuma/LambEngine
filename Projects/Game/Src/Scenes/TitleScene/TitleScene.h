@@ -10,6 +10,8 @@
 #include "Utils/Easeing/Easeing.h"
 #include "Game/SkyDome/SkyDome.h"
 #include "Game/CollisionManager/Sphere/Sphere.h"
+#include "Engine/Graphics/Tex2DAniamtor/Tex2DAniamtor.h"
+#include "Utils/SafePtr/SafePtr.h"
 
 class TitleScene : public BaseScene {
 public:
@@ -32,5 +34,4 @@ public:
 
 public:
 	std::unique_ptr<Sphere> sphere_;
-	uint32_t textureID_;
 };

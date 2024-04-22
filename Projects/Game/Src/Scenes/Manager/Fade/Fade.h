@@ -1,8 +1,10 @@
 #pragma once
+#include "Utils/SafePtr/SafePtr.h"
+#include "Transform/Transform.h"
 #include "Drawers/Texture2D/Texture2D.h"
 #include "Utils/UtilsLib/UtilsLib.h"
 #include "Utils/Easeing/Easeing.h"
-#include "Math/Mat4x4.h"
+#include <memory>
 
 class Fade {
 public:
@@ -77,7 +79,9 @@ private:
 	/// </summary>
 	Lamb::Flg isOutStart_;
 
-	//Texture2D tex_;
+	Lamb::SafePtr<Texture2D> tex_;
+	std::unique_ptr<Transform> transform;
+	uint32_t color_;
 
 	Easeing ease_;
 	/// <summary>
