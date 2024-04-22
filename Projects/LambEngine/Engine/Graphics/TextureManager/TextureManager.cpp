@@ -9,7 +9,7 @@
 #include "Error/Error.h"
 
 Lamb::SafePtr<TextureManager> TextureManager::instance_ = nullptr;
-const std::string TextureManager::kWhiteTexturePath = "./Resources/white2x2.png";
+const std::string TextureManager::kWhiteTexturePath = "./Resources/EngineResources/white2x2.png";
 
 TextureManager* const TextureManager::GetInstance() {
 	return instance_.get();
