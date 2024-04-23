@@ -121,8 +121,8 @@ void Audio::Start(float volume, bool isLoop) {
 	volume_ = volume;
 
 	Stop();
+	isLoop_ = isLoop;
 	if (!pSourceVoice_) {
-		isLoop_ = isLoop;
 
 		hr = AudioManager::GetInstance()->xAudio2_->CreateSourceVoice(&pSourceVoice_, &wfet_);
 		XAUDIO2_BUFFER buf{};
