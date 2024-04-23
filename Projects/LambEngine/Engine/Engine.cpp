@@ -443,13 +443,7 @@ void Engine::FrameEnd() {
 
 	instance_->directXCommand_->ResetCommandlist();
 
-
-
-	// 音の非同期読み込み
-	auto audioManager = AudioManager::GetInstance();
-	audioManager->ThreadLoad();
-	audioManager->CheckThreadLoadFinish();
-
+	// ドローカウントリセット
 	renderContextManager->ResetDrawCount();
 
 	frameInfo->End();
