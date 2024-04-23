@@ -364,7 +364,7 @@ public:
 	}
 
 private:
-	void OutOfRange(const std::string& funcName) const throw() {
+	void OutOfRange(const std::string& funcName) const {
 		throw Lamb::Error::Code<Matrix>("out of range", funcName);
 	}
 
