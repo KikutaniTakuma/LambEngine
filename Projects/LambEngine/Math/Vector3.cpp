@@ -177,7 +177,10 @@ const float& Vector3::operator[](size_t index) const {
 }
 
 float Vector3::Length() const noexcept {
-	return std::sqrt(x*x + y*y + z*z);
+	return std::sqrt(Dot(*this));
+}
+float Vector3::LengthSQ() const noexcept {
+	return Dot(*this);
 }
 
 float Vector3::Dot(const Vector3& right) const noexcept {

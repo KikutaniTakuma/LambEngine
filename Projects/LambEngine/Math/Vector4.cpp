@@ -168,6 +168,9 @@ bool Vector4::operator!=(const Vector4& right) const noexcept {
 float Vector4::Length() const noexcept {
 	return std::sqrt(Dot(*this));
 }
+float Vector4::LengthSQ() const noexcept {
+	return Dot(*this);
+}
 
 Vector4 Vector4::Normalize() const noexcept {
 	if (*this == Vector4()) {

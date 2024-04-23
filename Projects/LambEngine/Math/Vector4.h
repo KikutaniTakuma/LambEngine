@@ -67,6 +67,7 @@ public:
 	/// </summary>
 public:
 	[[nodiscard]] float Length() const noexcept;
+	[[nodiscard]] float LengthSQ() const noexcept;
 
 	[[nodiscard]] Vector4 Normalize() const noexcept;
 

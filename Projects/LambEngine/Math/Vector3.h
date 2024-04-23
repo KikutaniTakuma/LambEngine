@@ -68,6 +68,7 @@ public:
 	[[nodiscard]] float Dot(const Vector3& right) const noexcept;
 	[[nodiscard]] Vector3 Cross(const Vector3& right) const noexcept;
 	[[nodiscard]] float Length() const noexcept;
+	[[nodiscard]] float LengthSQ() const noexcept;
 	[[nodiscard]] Vector3 Normalize() const noexcept;
 	[[nodiscard]] float* data() noexcept {
 		return &x;

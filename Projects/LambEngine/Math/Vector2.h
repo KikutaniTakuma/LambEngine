@@ -49,6 +49,7 @@ public:
 	[[nodiscard]] float Cross(const Vector2& right) const noexcept;
 	[[nodiscard]] float Dot(const Vector2& right) const noexcept;
 	[[nodiscard]] float Length() const noexcept;
+	[[nodiscard]] float LengthSQ() const noexcept;
 
 	[[nodiscard]] Vector2 Normalize() const noexcept;
 
