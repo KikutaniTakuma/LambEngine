@@ -6,8 +6,8 @@ GameScene::GameScene() :
 {}
 
 void GameScene::Initialize() {
-	camera_->farClip = 3000.0f;
-	camera_->pos.z = -5.0f;
+	currentCamera_->farClip = 3000.0f;
+	currentCamera_->pos.z = -5.0f;
 	
 
 	transform_.scale = Vector3::kIdentity;
@@ -24,8 +24,8 @@ void GameScene::Finalize() {
 }
 
 void GameScene::Update() {
-	camera_->Debug("camera");
-	camera_->Update();
+	currentCamera_->Debug("camera");
+	currentCamera_->Update();
 
 	transform_.Debug("model");
 }
@@ -33,7 +33,7 @@ void GameScene::Update() {
 void GameScene::Draw() {
 	model_->Draw(
 		transform_.GetMatrix(),         // ワールドマトリックス
-		camera_->GetViewProjection(), // カメラのマトリックス
+		currentCamera_->GetViewProjection(), // カメラのマトリックス
 		color_,                         // 色
 		BlendType::kNone,               // ブレンドタイプ
 		false                           // ライティングあり・なし

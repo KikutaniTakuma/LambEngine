@@ -1,6 +1,15 @@
 #pragma once
-#include "Drawers/DrawerManager.h"
 #include "Camera/Camera.h"
+#include "Camera/DebugCamera/DebugCamera.h"
+
+#include "Drawers/DrawerManager.h"
+#include "AudioManager/AudioManager.h"
+#include "Input/Input.h"
+#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
+#include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
+
+#include "Utils/SafePtr/SafePtr.h"
+
 #include <memory>
 
 class BaseScene {
@@ -32,6 +41,8 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
+	void ChangeCamera();
+
 	inline BaseScene::ID GetID() const {
 		return sceneID_;
 	}
@@ -43,18 +54,24 @@ protected:
 	
 	DrawerManager* drawerManager_;
 
-	class AudioManager* audioManager_;
+	AudioManager* audioManager_;
 
-	class TextureManager* textureManager_;
+	FrameInfo* frameInfo_;
 
-	class FrameInfo* frameInfo_;
+	Input* input_;
 
-	class Input* input_;
-
-	class StringOutPutManager* stringOutPutManager_;
+	StringOutPutManager* stringOutPutManager_;
 
 	BaseScene::ID sceneID_;
 
-protected:
+private:
 	std::unique_ptr<Camera> camera_;
+
+protected:
+	Lamb::SafePtr<Camera> currentCamera_;
+
+#ifdef _DEBUG
+	std::unique_ptr<DebugCamera> debugCamera_;
+	bool isDebug_;
+#endif // _DEBUG
 };
