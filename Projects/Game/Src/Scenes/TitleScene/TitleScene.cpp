@@ -14,9 +14,9 @@ TitleScene::TitleScene():
 
 void TitleScene::Initialize()
 {
-	//camera_->pos.y = 2.85f;
-	camera_->pos.z = -10.0f;
-	//camera_->rotate.x = 0.21f;
+	//currentCamera_->pos.y = 2.85f;
+	currentCamera_->pos.z = -10.0f;
+	//currentCamera_->rotate.x = 0.21f;
 
 	/*model_->light.ptRange = 5.0f;
 	model_->light.ptPos = model_->pos;
@@ -34,8 +34,8 @@ void TitleScene::Finalize()
 
 void TitleScene::Update()
 {
-	camera_->Debug("カメラ");
-	camera_->Update();
+	currentCamera_->Debug("カメラ");
+	currentCamera_->Update();
 
 	//model_->Update();
 
@@ -49,7 +49,7 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	sphere_->Draw(camera_->GetViewProjection(), std::numeric_limits<uint32_t>::max());
+	sphere_->Draw(currentCamera_->GetViewProjection(), std::numeric_limits<uint32_t>::max());
 
 	Lamb::screenout << "Model scene" << Lamb::endline
 		<< "Press space to change ""Water and cloud scene""";
