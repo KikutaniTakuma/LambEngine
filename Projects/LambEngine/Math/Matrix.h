@@ -49,6 +49,14 @@ public:
 	constexpr Matrix(const vector_type& num) noexcept : 
 		vector_(num)
 	{}
+	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
+	constexpr Matrix(const Matrix<othertype, otherHeight, otherWidth>& right) noexcept{
+		*this = right;
+	}
+	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
+	constexpr Matrix(const std::array<std::array<othertype, otherWidth>, otherHeight>& right) noexcept{
+		*this = right;
+	}
 	constexpr Matrix(const Matrix&) = default;
 	constexpr Matrix(Matrix&&) = default;
 	~Matrix() = default;
@@ -59,6 +67,16 @@ public:
 
 	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
 	Matrix& operator=(const Matrix<othertype, otherHeight, otherWidth>& right) {
+		for (size_t y = 0; y < height and y < otherHeight; y++) {
+			for (size_t x = 0; x < width and x < otherWidth; x++) {
+				this->matrix_[y][x] = value_cast(right[y][x]);
+			}
+		}
+
+		return *this;
+	}
+	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
+	Matrix& operator=(const std::array<std::array<othertype, otherWidth>, otherHeight>& right) {
 		for (size_t y = 0; y < height and y < otherHeight; y++) {
 			for (size_t x = 0; x < width and x < otherWidth; x++) {
 				this->matrix_[y][x] = value_cast(right[y][x]);

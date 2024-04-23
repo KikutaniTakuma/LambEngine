@@ -43,6 +43,8 @@ public:
 	Vector3 GetScale();
 	Quaternion GetRotate();
 
+	void Decompose(Vector3& scale, Quaternion& rotate, Vector3& translate);
+
 /// <summary>
 /// 静的メンバ関数
 /// </summary>
