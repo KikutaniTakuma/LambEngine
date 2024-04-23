@@ -18,7 +18,7 @@ Mat4x4::Mat4x4(const std::initializer_list<float>& right) {
 	std::copy(right.begin(), right.end(), vector_.begin());
 }
 
-Mat4x4::Mat4x4(const BasedMatrix::VectorType& right) {
+Mat4x4::Mat4x4(const BasedMatrix::vector_type& right) {
 	std::copy(right.begin(), right.end(), vector_.begin());
 }
 
@@ -201,7 +201,7 @@ Mat4x4 Mat4x4::DirectionToDirection(const Vector3& from, const Vector3& to) {
 	float theataSin = from.Cross(to).Length();
 
 	Mat4x4 result = 
-		BasedMatrix::VectorType{
+		BasedMatrix::vector_type{
 			normal.x * normal.x * (1.0f - theataCos) + theataCos,
 			normal.x * normal.y * (1.0f - theataCos) + normal.z * theataSin,
 			normal.x * normal.z * (1.0f - theataCos) - normal.y * theataSin,
@@ -228,7 +228,7 @@ Mat4x4 Mat4x4::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	float angleCos = std::cos(angle);
 	float angleSin = std::sin(angle);
 
-	Mat4x4 result = BasedMatrix::VectorType{
+	Mat4x4 result = BasedMatrix::vector_type{
 			axis.x * axis.x * (1.0f - angleCos) + angleCos,
 			axis.x * axis.y * (1.0f - angleCos) + axis.z * angleSin,
 			axis.x * axis.z * (1.0f - angleCos) - axis.y * angleSin,

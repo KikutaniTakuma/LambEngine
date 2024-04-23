@@ -24,7 +24,7 @@ public:
 	Mat4x4(const Mat4x4& right);
 	Mat4x4(Mat4x4&& right) noexcept;
 	Mat4x4(const std::initializer_list<float>& right);
-	Mat4x4(const BasedMatrix::VectorType& right);
+	Mat4x4(const BasedMatrix::vector_type& right);
 	Mat4x4(const BasedMatrix& right);
 
 public:
