@@ -62,7 +62,7 @@
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\23C\TD2-4\Projects\Game\Src\Camera\DebugCamera\DebugCamera.cpp">
+    <ClCompile Include="Src\Camera\DebugCamera\DebugCamera.cpp">
       <Filter>Camera\DebugCamera</Filter>
     </ClCompile>
   </ItemGroup>
@@ -198,7 +198,7 @@
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h">
       <Filter>Editor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\23C\TD2-4\Projects\Game\Src\Camera\DebugCamera\DebugCamera.h">
+    <ClInclude Include="Src\Camera\DebugCamera\DebugCamera.h">
       <Filter>Camera\DebugCamera</Filter>
     </ClInclude>
   </ItemGroup>
