@@ -62,7 +62,7 @@ void Audio::Load(const std::string& fileName) {
 	pMFMediaType = nullptr;
 	pMFSourceReader->GetCurrentMediaType(static_cast<DWORD>(MF_SOURCE_READER_FIRST_AUDIO_STREAM), &pMFMediaType);
 
-	Lamb::SafePtr<WAVEFORMATEX> pWaveFormat = &wfet_;
+	Lamb::SafePtr<WAVEFORMATEX> pWaveFormat;
 	MFCreateWaveFormatExFromMFMediaType(pMFMediaType.get(), &pWaveFormat, nullptr);
 	wfet_ = *pWaveFormat;
 
@@ -99,6 +99,8 @@ void Audio::Load(const std::string& fileName) {
 
 	bufferSize_ = static_cast<uint32_t>(mediaData.size() * sizeof(BYTE));
 
+	
+	CoTaskMemFree(pWaveFormat.get());
 	pMFMediaType->Release();
 	pMFSourceReader->Release();
 

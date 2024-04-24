@@ -31,7 +31,7 @@ private:
 	static Lamb::SafePtr<AudioManager> instance_;
 
 public:
-	Audio* const LoadWav(const std::string& fileName);
+	Audio* const Load(const std::string& fileName);
 
 	void Unload(const std::string& fileName);
 	void Unload(Audio* audio);

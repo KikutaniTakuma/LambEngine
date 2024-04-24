@@ -43,7 +43,7 @@ AudioManager::~AudioManager() {
 	MFShutdown();
 }
 
-Audio* const AudioManager::LoadWav(const std::string& fileName) {
+Audio* const AudioManager::Load(const std::string& fileName) {
 	if (!std::filesystem::exists(std::filesystem::path(fileName))) {
 		throw Lamb::Error::Code<AudioManager>("There is not this file -> " + fileName, __func__);
 	}
