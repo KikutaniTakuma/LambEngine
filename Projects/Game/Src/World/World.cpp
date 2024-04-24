@@ -27,15 +27,15 @@ void World::Initialize() {
 	//Cloud::Initialize();
 
 	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/mincho_size_32.spritefont");
-
+	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/default.spritefont");
 
 	// シーンマネージャー初期化
 	sceneManager_ = std::make_unique<SceneManager>();
 
 	sceneManager_->Initialize(BaseScene::ID::Title, BaseScene::ID::Game);
 
-	//ParticleEditor::Initialize();
-	//particleEditor_ = ParticleEditor::GetInstance();
+	ParticleEditor::Initialize();
+	particleEditor_ = ParticleEditor::GetInstance();
 }
 
 void World::Finalize() {
@@ -48,7 +48,7 @@ void World::Finalize() {
 
 	sceneManager_.reset();
 
-	//ParticleEditor::Finalize();
+	ParticleEditor::Finalize();
 
 	Framework::Finalize();
 }
@@ -56,7 +56,7 @@ void World::Finalize() {
 void World::Update() {
 	if (sceneManager_) {
 		sceneManager_->Update();
-		//particleEditor_->Editor();
+		particleEditor_->Editor();
 		isEnd_ = sceneManager_->IsEnd();
 	}
 	else {
@@ -67,7 +67,7 @@ void World::Update() {
 void World::Draw() {
 	if (sceneManager_) {
 		sceneManager_->Draw();
-		//particleEditor_->Draw();
+		particleEditor_->Draw(sceneManager_->GetCurrentSceneCamera());
 	}
 	else {
 		isEnd_ = true;

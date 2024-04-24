@@ -1,17 +1,10 @@
 #include "SceneManager.h"
-#include "Engine/Engine.h"
 #include "Input/Input.h"
 #include "SceneFactory/SceneFactory.h"
 
-#include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
-#include "Utils/UtilsLib/UtilsLib.h"
 
 #include "imgui.h"
-
-#include <filesystem>
-#include <fstream>
-#include <format>
 
 void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID) {
 	finishID_ = finishID;
@@ -29,8 +22,6 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 	scene_.reset(sceneFactory->CreateBaseScene(firstScene));
 	scene_->SceneInitialize(this);
 	scene_->Initialize();
-
-	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/default.spritefont");
 
 
 	load_.reset(new SceneLoad{});
