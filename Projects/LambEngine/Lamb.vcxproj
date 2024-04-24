@@ -125,6 +125,7 @@
     <ClCompile Include="Drawers\DrawerManager.cpp" />
     <ClCompile Include="Drawers\Line\Line.cpp" />
     <ClCompile Include="Drawers\Model\Model.cpp" />
+    <ClCompile Include="Drawers\Other\WaterTex2D\WaterTex2D.cpp" />
     <ClCompile Include="Drawers\Particle\Particle.cpp" />
     <ClCompile Include="Drawers\PeraRender\PeraRender.cpp" />
     <ClCompile Include="Drawers\StringOut\StringOut.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="Drawers\DrawerManager.h" />
     <ClInclude Include="Drawers\Line\Line.h" />
     <ClInclude Include="Drawers\Model\Model.h" />
+    <ClInclude Include="Drawers\Other\WaterTex2D\WaterTex2D.h" />
     <ClInclude Include="Drawers\Particle\Particle.h" />
     <ClInclude Include="Drawers\PeraRender\PeraRender.h" />
     <ClInclude Include="Drawers\StringOut\StringOut.h" />

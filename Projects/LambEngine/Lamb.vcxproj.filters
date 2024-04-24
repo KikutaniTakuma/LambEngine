@@ -199,6 +199,9 @@
     <ClCompile Include="Math\MathCommon.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="Drawers\Other\WaterTex2D\WaterTex2D.cpp">
+      <Filter>Drawers\Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -410,6 +413,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\Tex2DAniamtor">
       <UniqueIdentifier>{d2bdf60c-0eca-4b04-af8b-a90657a2185f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawers\Other">
+      <UniqueIdentifier>{5c308a47-9839-49cb-b2bf-2944c9b53af8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -646,6 +652,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Tex2DAniamtor\Tex2DAniamtor.h">
       <Filter>Engine\Graphics\Tex2DAniamtor</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawers\Other\WaterTex2D\WaterTex2D.h">
+      <Filter>Drawers\Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
