@@ -158,7 +158,6 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\PipelineObject.cpp" />
     <ClCompile Include="Engine\Graphics\RenderContextManager\RenderContextManager.cpp" />
     <ClCompile Include="Engine\Graphics\RenderTarget\RenderTarget.cpp" />
-    <ClCompile Include="Engine\Graphics\ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="Engine\Graphics\RootSignature\RootSignature.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.cpp" />
@@ -233,7 +232,6 @@
     <ClInclude Include="Engine\Graphics\RenderContextManager\RenderContextManager.h" />
     <ClInclude Include="Engine\Graphics\RenderContextManager\RenderContext\RenderContext.h" />
     <ClInclude Include="Engine\Graphics\RenderTarget\RenderTarget.h" />
-    <ClInclude Include="Engine\Graphics\ResourceManager\ResourceManager.h" />
     <ClInclude Include="Engine\Graphics\RootSignature\RootSignature.h" />
     <ClInclude Include="Engine\Graphics\Shader\Shader.h" />
     <ClInclude Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.h" />

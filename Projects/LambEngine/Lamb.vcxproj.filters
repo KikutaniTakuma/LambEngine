@@ -175,9 +175,6 @@
     <ClCompile Include="Drawers\AnimationModel\AnimationModel.cpp">
       <Filter>Drawers\AnimationModel</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\ResourceManager\ResourceManager.cpp">
-      <Filter>Engine\Graphics\ResourceManager</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.cpp">
       <Filter>Engine\Graphics\PipelineObject\CloudPipeline</Filter>
     </ClCompile>
@@ -395,9 +392,6 @@
     </Filter>
     <Filter Include="Drawers\AnimationModel">
       <UniqueIdentifier>{ce9b2a74-162e-42e2-9e98-2f278ed2aa76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\ResourceManager">
-      <UniqueIdentifier>{d8d8caf8-64d7-4a93-9916-e560c82ff737}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\CloudPipeline">
       <UniqueIdentifier>{5a6f62f6-9b81-4403-a912-610eb20e5551}</UniqueIdentifier>
@@ -625,9 +619,6 @@
     </ClInclude>
     <ClInclude Include="Drawers\AnimationModel\AnimationModel.h">
       <Filter>Drawers\AnimationModel</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\ResourceManager\ResourceManager.h">
-      <Filter>Engine\Graphics\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.h">
       <Filter>Engine\Graphics\PipelineObject\CloudPipeline</Filter>
