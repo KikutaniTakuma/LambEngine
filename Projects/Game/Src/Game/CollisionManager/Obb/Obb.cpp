@@ -159,9 +159,9 @@ void Obb::Draw(const Mat4x4& viewProjection) {
 void Obb::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	ImGui::DragFloat3("center", &center_.x, 0.01f);
-	ImGui::DragFloat3("size", &scale_.x, 0.01f);
-	ImGui::DragFloat3("rotate", &rotate_.x, 0.01f);
+	ImGui::DragFloat3("center", center_.data(), 0.01f);
+	ImGui::DragFloat3("size", scale_.data(), 0.01f);
+	ImGui::DragFloat3("rotate", rotate_.data(), 0.01f);
 	static Vector4 colorEdit;
 	colorEdit = UintToVector4(color_);
 	ImGui::ColorEdit4("color", colorEdit.m.data());

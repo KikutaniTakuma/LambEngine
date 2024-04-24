@@ -81,7 +81,7 @@ void Sphere::Debug([[maybe_unused]] const std::string guiName)
 {
 	ImGui::Begin(guiName.c_str());
 	ImGui::DragFloat("radius", &radius, 0.01f);
-	ImGui::DragFloat3("rotate", &worldRoate.x, 0.01f);
-	ImGui::DragFloat3("pos", &translation.x, 0.01f);
+	ImGui::DragFloat3("rotate", worldRoate.data(), 0.01f);
+	ImGui::DragFloat3("pos", translation.data(), 0.01f);
 	ImGui::End();
 }

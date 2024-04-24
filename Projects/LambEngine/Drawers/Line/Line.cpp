@@ -100,8 +100,8 @@ Line::Line():
 void Line::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	ImGui::DragFloat3("start", &start.x, 0.01f);
-	ImGui::DragFloat3("end", &end.x, 0.01f);
+	ImGui::DragFloat3("start", start.data(), 0.01f);
+	ImGui::DragFloat3("end", end.data(), 0.01f);
 	ImGui::End();
 #endif // _DEBUG
 }

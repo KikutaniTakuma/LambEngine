@@ -168,7 +168,7 @@ void Gamepad::Debug() {
 
 	if (ImGui::TreeNode("vibration")) {
 		static Vector2 vibration;
-		ImGui::DragFloat2("Vib", &vibration.x, 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat2("Vib", vibration.data(), 0.01f, 0.0f, 1.0f);
 		Gamepad::Vibration(vibration.x, vibration.y);
 		ImGui::TreePop();
 	}

@@ -237,8 +237,8 @@ void Collider::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
 
-	ImGui::DragFloat3("pos", &collisionPos_.x, 0.01f);
-	ImGui::DragFloat3("scale", &scale_.x, 0.01f, 0.001f, std::numeric_limits<float>::max());
+	ImGui::DragFloat3("pos", collisionPos_.data(), 0.01f);
+	ImGui::DragFloat3("scale", scale_.data(), 0.01f, 0.001f, std::numeric_limits<float>::max());
 
 	ImGui::End();
 #endif // _DEBUG

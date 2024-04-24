@@ -55,6 +55,29 @@ public:
 
 	[[nodiscard]] float GetRad() const noexcept;
 
+public:
+	[[nodiscard]] float* data() {
+		return &x;
+	}
+	[[nodiscard]] const float* data() const {
+		return &x;
+	}
+
+	[[nodiscard]] float& front() {
+		return x;
+	}
+	[[nodiscard]] const float& front() const {
+		return x;
+	}
+	[[nodiscard]] float& back() {
+		return y;
+	}
+	[[nodiscard]] const float& back() const {
+		return y;
+	}
+
+
+
 /// <summary>
 /// メンバ変数
 /// </summary>
