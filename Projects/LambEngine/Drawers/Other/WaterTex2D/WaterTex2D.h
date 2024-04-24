@@ -22,6 +22,8 @@ private:
 
 	static const LoadFileNames kFileNames_;
 
+	static uint32_t kCausticsTextureID_;
+
 public:
 	WaterTex2D();
 	WaterTex2D(const WaterTex2D&) = default;

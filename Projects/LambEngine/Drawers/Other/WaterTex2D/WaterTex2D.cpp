@@ -30,6 +30,8 @@ void WaterTex2D::Load()
 	renderContextManager->Load<WaterRenderContext>(kFileNames_);
 
 	renderSet = renderContextManager->Get(kFileNames_);
+
+	kCausticsTextureID_ = TextureManager::GetInstance()->LoadTexture("./Resources/Common/Water/caustics_01.bmp");
 }
 
 void WaterTex2D::Draw(
@@ -46,7 +48,7 @@ void WaterTex2D::Draw(
 		ShaderData{
 			.uvTransform = uvTransform,
 			.pad = Vector3::kZero,
-			.textureID = textureID
+			.textureID = kCausticsTextureID_
 		}
 	);
 
