@@ -38,7 +38,6 @@ void WaterTex2D::Draw(
 	const Mat4x4& worldMatrix,
 	const Mat4x4& uvTransform,
 	const Mat4x4& camera,
-	uint32_t textureID,
 	uint32_t color,
 	BlendType blend
 ) {
