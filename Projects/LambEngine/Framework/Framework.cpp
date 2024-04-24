@@ -2,7 +2,6 @@
 #include "Engine/Engine.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
-#include "Engine/Graphics/ResourceManager/ResourceManager.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Error/Error.h"
 
@@ -11,7 +10,6 @@
 #include "Drawers/Line/Line.h"
 
 void Framework::Initialize() {
-	ResourceManager::Initialize();
 	// ライブラリ初期化
 	Engine::Initialize(initDesc_.windowName, initDesc_.windowSize, initDesc_.maxFps, initDesc_.isFullesceen);
 
@@ -28,8 +26,6 @@ void Framework::Finalize() {
 
 	// 入力関連解放
 	Input::Finalize();
-
-	ResourceManager::Finalize();
 
 	// ライブラリ終了
 	Engine::Finalize();
