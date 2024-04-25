@@ -13,7 +13,7 @@ public:
 
 private:
 	struct ShaderData {
-		Mat4x4 uvTransform;
+		Vector2 randomVec;
 		Vector3 pad; // <- huh?
 		uint32_t textureID = 0u;
 	};
@@ -38,8 +38,8 @@ public:
 
 	void Draw(
 		const Mat4x4& worldMatrix,
-		const Mat4x4& uvTransform,
 		const Mat4x4& camera,
+		Vector2 randomVec, 
 		uint32_t color,
 		BlendType blend
 	);

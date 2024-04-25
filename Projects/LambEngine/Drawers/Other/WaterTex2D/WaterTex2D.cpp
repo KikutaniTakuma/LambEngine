@@ -14,8 +14,8 @@ const LoadFileNames WaterTex2D::kFileNames_ =
 LoadFileNames{
 	.resourceFileName{"./Resources/EngineResources/WaterTex2D/WaterTex2D.obj"},
 	.shaderName{
-		.vsFileName = "./Resources/Shaders/Texture2DShader/WaterTex2D.VS.hlsl",
-		.psFileName = "./Resources/Shaders/Texture2DShader/WaterTex2D.PS.hlsl"
+		.vsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.VS.hlsl",
+		.psFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl"
 	}
 };
 
@@ -36,8 +36,8 @@ void WaterTex2D::Load()
 
 void WaterTex2D::Draw(
 	const Mat4x4& worldMatrix,
-	const Mat4x4& uvTransform,
 	const Mat4x4& camera,
+	Vector2 randomVec,
 	uint32_t color,
 	BlendType blend
 ) {
@@ -45,7 +45,7 @@ void WaterTex2D::Draw(
 
 	renderContext->SetSahderStruct(
 		ShaderData{
-			.uvTransform = uvTransform,
+			.randomVec = randomVec,
 			.pad = Vector3::kZero,
 			.textureID = kCausticsTextureID_
 		}

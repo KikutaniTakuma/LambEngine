@@ -101,12 +101,12 @@ struct Light {
     Vector3 ligDirection = -Vector3::kYIdentity;
     float pad0;
     Vector3 ligColor = Vector3::kIdentity;
-    /*Vector3 eyePos;
+    Vector3 eyePos;
     float pad2;
     Vector3 ptPos;
     float pad3;
     Vector3 ptColor;
-    float ptRange;*/
+    float ptRange;
 };
 
 template<class T, uint32_t bufferSize>

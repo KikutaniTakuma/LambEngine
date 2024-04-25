@@ -36,6 +36,6 @@ void GameScene::Draw() {
 		currentCamera_->GetViewProjection(), // カメラのマトリックス
 		color_,                         // 色
 		BlendType::kNone,               // ブレンドタイプ
-		false                           // ライティングあり・なし
+		true                           // ライティングあり・なし
 	);
 }
