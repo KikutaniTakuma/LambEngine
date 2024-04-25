@@ -7,6 +7,8 @@
 
 template<std::floating_point floatingType, size_t height, size_t width>
 class Matrix {
+	static_assert(0llu != height or 0llu != width, 
+		"Height and width must be greater than ""0""");
 public:
 	using value_type = floatingType;
 	using pointer = value_type*;
@@ -192,6 +194,12 @@ public:
 	[[nodiscard]] constexpr size_t size() const noexcept {
 		return height * width;
 	}
+	[[nodiscard]] constexpr size_t max_size() const noexcept {
+		return height * width;
+	}
+	[[nodiscard]] constexpr bool empty() const noexcept {
+		return false;
+	}
 
 	[[nodiscard]] constexpr iterator begin() noexcept {
 		return matrix_.begin();
@@ -273,6 +281,10 @@ public:
 
 	[[noreturn]] constexpr void swap(Matrix& right) {
 		vector_.swap(right.vector_);
+	}
+
+	[[noreturn]] constexpr void fill(value_type value) {
+		vector_.fill(value);
 	}
 
 
