@@ -9,16 +9,12 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 
-/// <summary>
-/// 4x4行列
-/// </summary>
+// 4x4行列
 class Mat4x4 final : public Matrix<float, 4, 4> {
 public:
 	using BasedMatrix = Matrix<float, 4, 4>;
 
-/// <summary>
-/// コンストラクタ
-/// </summary>
+//コンストラクタ
 public:
 	Mat4x4() = default;
 	Mat4x4(const Mat4x4& right);
@@ -45,9 +41,7 @@ public:
 
 	void Decompose(Vector3& scale, Quaternion& rotate, Vector3& translate);
 
-/// <summary>
-/// 静的メンバ関数
-/// </summary>
+// 静的メンバ関数
 public:
 	static [[nodiscard]] Mat4x4 MakeTranslate(const Vector3& vec);
 
@@ -78,9 +72,7 @@ public:
 
 	static [[nodiscard]] Mat4x4 MakeRotateAxisAngle(const Vector3& axis, float angle);
 
-/// <summary>
-/// 静的定数
-/// </summary>
+// 静的定数
 public:
 	static const Mat4x4 kIdentity;
 	static const Mat4x4 kZero;

@@ -124,11 +124,11 @@ public:
 
 public:
 	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
-	[[nodiscard]] constexpr Matrix<value_type, height, otherWidth> operator*(const Matrix<othertype, otherHeight, otherWidth>& right) const noexcept requires(width == otherHeight) {
+	[[nodiscard]] constexpr Matrix<value_type, height, otherWidth> operator*(const Matrix<othertype, otherHeight, otherWidth>& right) const requires(width == otherHeight) {
 		Matrix<value_type, height, otherWidth> result;
 
-		for (size_t y = 0; y < height; y++) {
-			for (size_t x = 0; x < otherWidth; x++) {
+		for (size_t y = 0; y < result.HeightSize(); y++) {
+			for (size_t x = 0; x < result.WidthSize(); x++) {
 				for (size_t i = 0; i < width; i++) {
 					result[y][x] += matrix_[y][i] * value_cast(right[i][x]);
 				}
@@ -138,7 +138,7 @@ public:
 		return result;
 	}
 	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
-	constexpr Matrix& operator*=(const Matrix<othertype, otherHeight, otherWidth>& right) noexcept requires(otherHeight == otherWidth and width == otherHeight) {
+	constexpr Matrix& operator*=(const Matrix<othertype, otherHeight, otherWidth>& right) requires(otherHeight == otherWidth and width == otherHeight) {
 		*this = *this * right;
 
 		return *this;
