@@ -7,7 +7,7 @@
 
 template<std::floating_point floatingType, size_t height, size_t width>
 class Matrix {
-	static_assert(0llu != height or 0llu != width, 
+	static_assert(0llu != height and 0llu != width, 
 		"Height and width must be greater than ""0""");
 public:
 	using value_type = floatingType;
@@ -46,28 +46,30 @@ public:
 
 
 #define value_cast(num) static_cast<value_type>(num)
+#define requiresMust requires(0llu != height and 0llu != width)
+#define requiresSQ requires(height == width)
 
 public:
-	constexpr Matrix() noexcept :
+	constexpr Matrix() noexcept requiresMust :
 		vector_()
 	{}
 
-	constexpr Matrix(const vector_type& right) noexcept :
+	constexpr Matrix(const vector_type& right) noexcept requiresMust :
 		vector_(right)
 	{}
 	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
-	constexpr Matrix(const Matrix<othertype, otherHeight, otherWidth>& right) noexcept {
+	constexpr Matrix(const Matrix<othertype, otherHeight, otherWidth>& right) noexcept requiresMust {
 		*this = right;
 	}
 	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
-	constexpr Matrix(const std::array<std::array<othertype, otherWidth>, otherHeight>& right) noexcept {
+	constexpr Matrix(const std::array<std::array<othertype, otherWidth>, otherHeight>& right) noexcept requiresMust {
 		*this = right;
 	}
-	constexpr Matrix(const Matrix&) = default;
-	constexpr Matrix(Matrix&&) = default;
+	constexpr Matrix(const Matrix&) requiresMust = default;
+	constexpr Matrix(Matrix&&) requiresMust = default;
 
 private:
-	constexpr Matrix(const value_type identity) noexcept requires (height == width)
+	constexpr Matrix(const value_type identity) noexcept requiresSQ
 		: Matrix()
 	{
 		for (size_t i = 0; i < height; i++) {
@@ -294,14 +296,14 @@ public:
 	/// </summary>
 
 public:
-	static [[nodiscard]] constexpr const Matrix& Identity() requires (height == width) {
+	static [[nodiscard]] constexpr const Matrix& Identity() requiresSQ {
 		static const Matrix identity(1.0f);
 
 		return identity;
 	}
 
 public:
-	[[nodiscard]] Matrix Inverse() const requires (height == width) {
+	[[nodiscard]] Matrix Inverse() const requiresSQ {
 		if constexpr (height == 1) {
 			return *this;
 		}
@@ -315,13 +317,13 @@ public:
 
 		value_type tmpNum = value_cast(0.0);
 
-		for (int i = 0; i < height; i++) {
-			if (tmp.matrix_[i][i] == 0.0f && i < height) {
-				int pibIndex = i;
+		for (size_t i = 0; i < height; i++) {
+			if (tmp.matrix_[i][i] == 0.0f and i < height) {
+				size_t pibIndex = i;
 				float pibot = fabsf(tmp.matrix_[i][i]);
 
-				for (int y = i + 1; y < height; y++) {
-					if (tmp.matrix_[y][i] != 0.0f && pibot < fabsf(tmp.matrix_[y][i])) {
+				for (size_t y = i + 1; y < height; y++) {
+					if (tmp.matrix_[y][i] != 0.0f and pibot < fabsf(tmp.matrix_[y][i])) {
 						pibot = fabsf(tmp.matrix_[y][i]);
 						pibIndex = y;
 					}
@@ -336,18 +338,18 @@ public:
 			}
 
 			toOne = tmp.matrix_[i][i];
-			for (int x = 0; x < height; x++) {
+			for (size_t x = 0; x < height; x++) {
 				tmp.matrix_[i][x] /= toOne;
 				identity.matrix_[i][x] /= toOne;
 			}
 
-			for (int y = 0; y < height; ++y) {
+			for (size_t y = 0; y < height; ++y) {
 				if (i == y) {
 					continue;
 				}
 
 				tmpNum = -tmp.matrix_[y][i];
-				for (int x = 0; x < width; x++) {
+				for (size_t x = 0; x < width; x++) {
 					tmp.matrix_[y][x] += tmpNum * tmp.matrix_[i][x];
 					identity.matrix_[y][x] += tmpNum * identity.matrix_[i][x];
 				}
@@ -361,7 +363,7 @@ public:
 		return identity;
 	}
 
-	[[nodiscard]] Matrix Transepose() const requires (height == width) {
+	[[nodiscard]] Matrix Transepose() const requiresSQ {
 		Matrix result;
 
 		for (size_t y = 0; y < height; y++) {
