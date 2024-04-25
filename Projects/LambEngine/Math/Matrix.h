@@ -2,6 +2,7 @@
 #include <array>
 #include <type_traits>
 #include <string>
+#include <cmath>
 
 #include "Error/Error.h"
 
@@ -146,10 +147,8 @@ public:
 	[[nodiscard]] constexpr Matrix operator+(const Matrix& right) const noexcept {
 		Matrix result;
 
-		for (size_t y = 0; y < height; y++) {
-			for (size_t x = 0; x < width; x++) {
-				result[y][x] = matrix_[y][x] + right[y][x];
-			}
+		for (size_t i = 0; i < size(); i++) {
+			result.vector_[i] = this->vector_[i] + right.vector_[i];
 		}
 
 		return result;
@@ -162,10 +161,8 @@ public:
 	[[nodiscard]] constexpr Matrix operator-(const Matrix& right) const noexcept {
 		Matrix result;
 
-		for (size_t y = 0; y < height; y++) {
-			for (size_t x = 0; x < width; x++) {
-				result[y][x] = matrix_[y][x] - right[y][x];
-			}
+		for (size_t i = 0; i < size(); i++) {
+			result.vector_[i] = this->vector_[i] - right.vector_[i];
 		}
 
 		return result;
@@ -313,23 +310,26 @@ public:
 		const Matrix& kIdentity = Identity();
 		Matrix identity = kIdentity;
 
-		value_type toOne = tmp[0][0];
+		value_type toOne = tmp.front().front();
 
 		value_type tmpNum = value_cast(0.0);
 
 		for (size_t i = 0; i < height; i++) {
-			if (tmp.matrix_[i][i] == 0.0f and i < height) {
+			if (tmp.matrix_[i][i] == value_cast(0.0) and i < height) {
 				size_t pibIndex = i;
-				float pibot = fabsf(tmp.matrix_[i][i]);
+				float pibot = std::abs(tmp.matrix_[i][i]);
 
 				for (size_t y = i + 1; y < height; y++) {
-					if (tmp.matrix_[y][i] != 0.0f and pibot < fabsf(tmp.matrix_[y][i])) {
-						pibot = fabsf(tmp.matrix_[y][i]);
+					if (tmp.matrix_[y][i] != value_cast(0.0) 
+						and pibot < std::abs(tmp.matrix_[y][i])
+						) 
+					{
+						pibot = std::abs(tmp.matrix_[y][i]);
 						pibIndex = y;
 					}
 				}
 
-				if (pibot == 0.0f) {
+				if (pibot == value_cast(0.0)) {
 					return kIdentity;
 				}
 
