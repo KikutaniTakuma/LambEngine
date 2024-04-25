@@ -45,11 +45,18 @@ public:
 	using reverse_iterator = matrix_type::reverse_iterator;
 	using const_reverse_iterator = matrix_type::const_reverse_iterator;
 
-
+#ifndef value_cast
 #define value_cast(num) static_cast<value_type>(num)
+#endif // value_cast
+#ifndef requiresMust
 #define requiresMust requires(0llu != height and 0llu != width)
+#endif // requiresMust
+#ifndef requiresSQ
 #define requiresSQ requires(height == width)
+#endif // requiresSQ
 
+
+#ifdef requiresMust
 public:
 	constexpr Matrix() noexcept requiresMust :
 		vector_()
@@ -69,18 +76,23 @@ public:
 	constexpr Matrix(const Matrix&) requiresMust = default;
 	constexpr Matrix(Matrix&&) requiresMust = default;
 
+#ifdef requiresSQ
 private:
-	constexpr Matrix(const value_type identity) noexcept requiresSQ
+	constexpr Matrix(value_type identity) noexcept requiresSQ
 		: Matrix()
 	{
 		for (size_t i = 0; i < height; i++) {
 			matrix_[i][i] = identity;
 		}
 	}
+#endif // requiresSQ
+#endif // requiresMust
 
 public:
 	~Matrix() = default;
 
+
+#ifdef value_cast
 public:
 	constexpr Matrix& operator=(const Matrix&) = default;
 	constexpr Matrix& operator=(Matrix&&) = default;
@@ -172,6 +184,7 @@ public:
 
 		return *this;
 	}
+#endif // value_cast
 
 public:
 	[[nodiscard]] constexpr bool operator==(const Matrix& right) const {
@@ -288,13 +301,12 @@ public:
 
 
 
-	/// <summary>
-	/// 正方行列のみ
-	/// </summary>
-
+// 正方行列のみ
+#ifdef requiresSQ
+#ifdef value_cast
 public:
 	static [[nodiscard]] constexpr const Matrix& Identity() requiresSQ {
-		static const Matrix identity(1.0f);
+		static const Matrix identity(value_cast(1.0));
 
 		return identity;
 	}
@@ -374,6 +386,8 @@ public:
 
 		return result;
 	}
+#endif // value_cast
+#endif // requiresSQ
 
 	/// <summary>
 	/// メンバ関数
@@ -405,4 +419,15 @@ protected:
 		matrix_type matrix_;
 		vector_type vector_;
 	};
+
+private:
+#ifdef value_cast
+#undef value_cast
+#endif // value_cast
+#ifdef requiresMust
+#undef requiresMust
+#endif // requiresMust
+#ifdef requiresSQ
+#undef requiresSQ
+#endif // requiresSQ
 };
