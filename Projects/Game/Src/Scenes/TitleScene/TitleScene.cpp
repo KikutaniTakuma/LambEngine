@@ -5,10 +5,6 @@
 #include "Utils/EngineInfo/EngineInfo.h"
 #include "Game/Cloud/Cloud.h"
 #include "AudioManager/AudioManager.h"
-#include "Utils/ScreenOut/ScreenOut.h"
-
-#include "Utils/Random/Random.h"
-#include "imgui.h"
 
 TitleScene::TitleScene():
 	BaseScene{BaseScene::ID::Title}
@@ -17,72 +13,81 @@ TitleScene::TitleScene():
 
 void TitleScene::Initialize()
 {
-	//currentCamera_->pos.y = 2.85f;
-	currentCamera_->pos.z = -10.0f;
-	//currentCamera_->rotate.x = 0.21f;
+	currentCamera_->pos.y = 6.46f;
+	currentCamera_->rotate = { 0.18f, 0.17f, 0.0f };
 
-	/*model_->light.ptRange = 5.0f;
-	model_->light.ptPos = model_->pos;
-	model_->light.ptPos.y = 3.8f;
-	model_->light.ptColor = Vector3::kIdentity * 15.0f;*/
-	currentCamera_->Update();
+	water_ = Water::GetInstance();
 
-	watertsetUgoitekure_ = std::make_unique<WaterTex2D>();
-	watertsetUgoitekure_->Load();
-	watertsetUgoitekure_->SetLight(
-		Light{
-			.ligDirection = -Vector3::kYIdentity,
-			.ligColor = Vector3::kIdentity,
-			.eyePos = currentCamera_->GetPos(),
-			.ptPos = Vector3(0.0, 10.0f, 10.0f),
-			.ptColor = Vector3::kIdentity * 15.0f
-		}
-	);
+	uiCamera_.reset(new Camera{});
+	uiCamera_->Update();
 
-	random_ = Lamb::Random(Vector3::kZero, Vector3::kIdentity);
+	drawerManager_->LoadModel("./Resources/Player/Player.obj");
+	player_ = drawerManager_->GetModel("./Resources/Player/Player.obj");
+	playerTransform_.translate= { 4.38f, 3.22f, 10.590f };
+	playerTransform_.rotate.y = -0.42f;
+	playerTransform_.scale *= 2.0f;
 
-	sphere_.reset(new Sphere);
+	str_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
+	str_ << "水面2";
+	str_.scale *= 14.8f * 0.5f;
+	str_.pos = { 52.0f, 136.0f };
+	str_.color = 0xff;
+
+	startMessage_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
+	startMessage_ << "Ａボタン押してください";
+	startMessage_.pos = { 144.0f, 539.0f };
+
+	/*cloud_ = Cloud::GetInstance();
+
+	skydome_.reset(new SkyDome);
+	skydome_->Initialize();
+	skydome_->SetTexture(cloud_->GetTex());*/
+
+	waterSE_ = audioManager_->Load("./Resources/Sound/SE_Water.wav");
+	waterSE_->Start(0.5f, true);
+
+	inGameSE_ = audioManager_->Load("./Resources/Sound/SE_InGame.wav");
 }
 
 void TitleScene::Finalize()
 {
-	
+	waterSE_->Stop();
+	inGameSE_->Stop();
 }
 
 void TitleScene::Update()
 {
-	currentCamera_->Debug("カメラ");
+	/*cloud_->Update();
+	skydome_->Upadate();*/
+
+	currentCamera_->Debug("camera");
 	currentCamera_->Update();
 
-	//model_->Update();
 
-	sphere_->Debug("Sphere");
-	sphere_->Update();
+	water_->Update(currentCamera_->GetPos());
 
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
 		sceneManager_->SceneChange(BaseScene::ID::Game);
+		inGameSE_->Start(0.8f, false);
 	}
 
-#ifdef _DEBUG
-	ImGui::Begin("水の色");
-	ImGui::ColorEdit4("色", color_.m.data());
-	ImGui::End();
-#endif // _DEBUG
-
+	messageAlpah_ += std::numbers::pi_v<float> *0.5f * Lamb::DeltaTime();
+	startMessage_.color = static_cast<uint32_t>(255.0f * std::abs(std::cos(messageAlpah_)));
 }
 
 void TitleScene::Draw()
 {
-	sphere_->Draw(currentCamera_->GetViewProjection(), std::numeric_limits<uint32_t>::max());
+	/*cloud_->Draw();
+	skydome_->Draw(*currentCamera_);*/
 
-	watertsetUgoitekure_->Draw(
-		waterPos_.GetMatrix(),
+	water_->Draw(currentCamera_->GetViewProjection());
+	player_->Draw(
+		playerTransform_.GetMatrix(),
 		currentCamera_->GetViewProjection(),
-		{ random_.x, random_.y },
-		color_.GetColorRGBA(),
-		BlendType::kNone
+		std::numeric_limits<uint32_t>::max(),
+		BlendType::kNormal
 	);
 
-	Lamb::screenout << "Model scene" << Lamb::endline
-		<< "Press space to change ""Water and cloud scene""";
+	str_.Draw();
+	startMessage_.Draw();
 }

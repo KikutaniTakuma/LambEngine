@@ -65,6 +65,15 @@
     <ClCompile Include="Src\Camera\DebugCamera\DebugCamera.cpp">
       <Filter>Camera\DebugCamera</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\Player\Player.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Bullet\Bullet.cpp">
+      <Filter>Game\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Enemy\Enemy.cpp">
+      <Filter>Game\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -136,6 +145,15 @@
     <Filter Include="Camera\DebugCamera">
       <UniqueIdentifier>{ed4f98cb-62c8-411f-9815-e88decbfbcdc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{31fc137c-d91c-41b2-ab2a-ad34c2cfced3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Bullet">
+      <UniqueIdentifier>{668a6848-5f44-4fb3-8c61-b78613bfbf21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Enemy">
+      <UniqueIdentifier>{02726a12-098d-4d26-8c38-7714eacbb51c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -200,6 +218,15 @@
     </ClInclude>
     <ClInclude Include="Src\Camera\DebugCamera\DebugCamera.h">
       <Filter>Camera\DebugCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Player\Player.h">
+      <Filter>Game\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Bullet\Bullet.h">
+      <Filter>Game\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Enemy\Enemy.h">
+      <Filter>Game\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

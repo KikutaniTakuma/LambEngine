@@ -9,10 +9,7 @@
 #include "Game/CollisionManager/Collider/Collider.h"
 #include "Utils/Easeing/Easeing.h"
 #include "Game/SkyDome/SkyDome.h"
-#include "Game/CollisionManager/Sphere/Sphere.h"
-#include "Engine/Graphics/Tex2DAniamtor/Tex2DAniamtor.h"
 #include "Utils/SafePtr/SafePtr.h"
-#include "Drawers/Other/WaterTex2D/WaterTex2D.h"
 
 class TitleScene : public BaseScene {
 public:
@@ -34,9 +31,15 @@ public:
 	void Draw() override;
 
 public:
-	std::unique_ptr<Sphere> sphere_;
-	std::unique_ptr<WaterTex2D> watertsetUgoitekure_;
-	Transform waterPos_;
-	Vector3 random_;
-	Vector4 color_;
+	class Water* water_;
+	StringOut str_;
+	std::unique_ptr<Camera> uiCamera_;
+	Lamb::SafePtr<Model> player_;
+	Transform playerTransform_;
+
+	StringOut startMessage_;
+	float messageAlpah_;
+
+	class Audio* waterSE_;
+	class Audio* inGameSE_;
 };

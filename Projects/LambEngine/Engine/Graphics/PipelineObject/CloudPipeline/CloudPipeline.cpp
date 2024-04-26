@@ -73,7 +73,7 @@ void CloudPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
 	else {
 		pipelinesNoDepth_[blendType]->Use();
 	}
-	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+	auto* const commandList = DirectXCommand::GetInstance()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
 	commandList->SetGraphicsRootDescriptorTable(1, wvpMat_.GetHandleGPU());

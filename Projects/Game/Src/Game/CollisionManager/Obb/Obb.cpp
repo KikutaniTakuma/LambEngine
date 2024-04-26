@@ -11,9 +11,9 @@ Obb::Obb():
 	worldMatrix_(),
 	color_(std::numeric_limits<uint32_t>::max()),
 	orientations_{
-		Vector3::kXIdentity,
-		Vector3::kYIdentity,
-		Vector3::kZIdentity
+		Vector3::kXIndentity,
+		Vector3::kYIndentity,
+		Vector3::kZIndentity
 	},
 	lines_{},
 	orientationLines_{}
@@ -36,7 +36,7 @@ bool Obb::IsCollision(Vector3 pos, float radius) {
 		position *= Mat4x4::MakeScalar(scale_);
 	}
 
-	pos *= Mat4x4::MakeAffin(Vector3::kIdentity, rotate_, center_).Inverse();
+	pos *= Mat4x4::MakeInverse(Mat4x4::MakeAffin(Vector3::kIdentity, rotate_, center_));
 
 	//std::array<Plane, 6> planes = {
 	//	Plane{-orientations[1].Normalize(), (center_ - orientations[1]).Length()}, //底面
@@ -72,7 +72,7 @@ bool Obb::IsCollision(Vector3 pos, float radius) {
 }
 
 void Obb::Update() {
-	worldMatrix_ = Mat4x4::MakeAffin(scale_, rotate_, center_);
+	worldMatrix_.Affin(scale_, rotate_, center_);
 
 	size_ = scale_ * 0.5f;
 
@@ -159,9 +159,9 @@ void Obb::Draw(const Mat4x4& viewProjection) {
 void Obb::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	ImGui::DragFloat3("center", center_.data(), 0.01f);
-	ImGui::DragFloat3("size", scale_.data(), 0.01f);
-	ImGui::DragFloat3("rotate", rotate_.data(), 0.01f);
+	ImGui::DragFloat3("center", &center_.x, 0.01f);
+	ImGui::DragFloat3("size", &scale_.x, 0.01f);
+	ImGui::DragFloat3("rotate", &rotate_.x, 0.01f);
 	static Vector4 colorEdit;
 	colorEdit = UintToVector4(color_);
 	ImGui::ColorEdit4("color", colorEdit.m.data());

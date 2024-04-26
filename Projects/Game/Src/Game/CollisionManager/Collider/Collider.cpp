@@ -28,7 +28,7 @@ bool Collider::IsCollision(const Vector3& pos) {
 	if (min_.x <= pos.x && pos.x <= max_.x) {
 		if (min_.y <= pos.y && pos.y <= max_.y) {
 			if (min_.z <= pos.z && pos.z <= max_.z) {
-				color_ = Vector4ToUint(Vector4::kXIdentity);
+				color_ = Vector4ToUint(Vector4::kXIndentity);
 				return true;
 			}
 		}
@@ -89,7 +89,7 @@ bool Collider::CollisionExtrusion(Collider& other) {
 
 				flg_ = true;
 				other.flg_ = true;
-				color_ = Vector4ToUint(Vector4::kXIdentity);
+				color_ = Vector4ToUint(Vector4::kXIndentity);
 				other.color_ = color_;
 				return static_cast<bool>(flg_);
 			}
@@ -155,7 +155,7 @@ bool Collider::CollisionExtrusion(Collider& other) {
 
 			flg_ = true;
 			other.flg_ = true;
-			color_ = Vector4ToUint(Vector4::kXIdentity);
+			color_ = Vector4ToUint(Vector4::kXIndentity);
 			other.color_ = color_;
 			return static_cast<bool>(flg_);
 		}
@@ -237,8 +237,8 @@ void Collider::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
 
-	ImGui::DragFloat3("pos", collisionPos_.data(), 0.01f);
-	ImGui::DragFloat3("scale", scale_.data(), 0.01f, 0.001f, std::numeric_limits<float>::max());
+	ImGui::DragFloat3("pos", &collisionPos_.x, 0.01f);
+	ImGui::DragFloat3("scale", &scale_.x, 0.01f, 0.001f, std::numeric_limits<float>::max());
 
 	ImGui::End();
 #endif // _DEBUG

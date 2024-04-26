@@ -1,6 +1,14 @@
 #pragma once
 #include "Scenes/Manager/SceneManager.h"
-#include "Transform/Transform.h"
+#include "Drawers/Model/Model.h"
+#include "Drawers/Texture2D/Texture2D.h"
+#include "Drawers/PeraRender/PeraRender.h"
+#include "Drawers/Particle/Particle.h"
+#include "Drawers/StringOut/StringOut.h"
+#include "GlobalVariables/GlobalVariables.h"
+#include "Game/CollisionManager/Collider/Collider.h"
+#include "Utils/Easeing/Easeing.h"
+#include "Game/SkyDome/SkyDome.h"
 
 class GameScene : public BaseScene {
 public:
@@ -22,7 +30,33 @@ public:
 	void Draw() override;
 
 public:
-	Transform transform_;
-	Model* model_;
-	uint32_t color_;
+	class Water* water_;
+	std::unique_ptr<class Player> player_;
+	std::unique_ptr<class Enemy> enemy_;
+	std::unique_ptr<Camera> uiCamera_;
+
+	/*std::unique_ptr<SkyDome> skydome_;
+	class Cloud* cloud_;*/
+
+
+	//std::unique_ptr<Texture2D> startMessage_;
+	//float messageAlpah_;
+
+#ifdef _DEBUG
+	bool isDebugCamera_ = false;
+#endif // _DEBUG
+
+
+	class Audio* waterSE_;
+	class Audio* clearSE_;
+	class Audio* playerDamageSE_;
+	class Audio* enemyDamageSE_;
+	class Audio* bossBattleBGM_;
+
+
+	StringOut clearMessage_;
+	StringOut hudMessage_;
+	float messageAlpha_;
+
+	bool isGameClear_ = false;
 };
