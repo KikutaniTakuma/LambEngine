@@ -11,11 +11,11 @@ PixelShaderOutPut main(WaterTex2DVertexOutPut waterinput)
 
 // お水の処理
 	float32_t2 kRandomVec = kWaterData[input.instanceID].randomVec;
- 	float32_t noise = CreateNoise(input.uv, kRandomVec, 20.0f);
+ 	float32_t noise = CreateNoise(input.uv, kRandomVec, 1.0f);
     
-    float32_t4 causticsColor = textures[textureID].Sample(smp, input.uv + frac(CreateNoiseNoDdy(input.uv * 0.1f, kRandomVec, 20.0f)));
+    float32_t4 causticsColor = textures[textureID].Sample(smp, input.uv + frac(CreateNoiseNoDdy(input.uv * 0.1f, kRandomVec, 1.0f)));
     
-    float32_t3 normal = CreateNormal(input.uv, kRandomVec, 20.0f);
+    float32_t3 normal = CreateNormal(input.uv, kRandomVec, 1.0f);
     //normal = mul(normal, waterinput.tangentBasis);
     //normal = (normal.xyz + 1.0f) * 0.5f;
 
@@ -53,7 +53,8 @@ PixelShaderOutPut main(WaterTex2DVertexOutPut waterinput)
     
     //lig = pow(lig, 1.0f);
     //kColor[input.instanceID].color + 
-    output.color = causticsColor;
+    //output.color = causticsColor;
+    output.color = kColor[input.instanceID].color;
     //output.color.xyz *= lig;
 
     return output;
