@@ -16,7 +16,7 @@ public:
 public:
 	void Load(const std::string& fileName);
 
-	void Update(const Mesh* const mesh);
+	void Update(const std::string& nodename);
 
 public:
 	// 最初からスタート

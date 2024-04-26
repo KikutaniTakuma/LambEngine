@@ -24,9 +24,9 @@ void Animator::Load(const std::string& fileName) {
 }
 #pragma warning(pop)
 
-void Animator::Update(const Mesh* const mesh) {
+void Animator::Update(const std::string& nodename) {
 	Animation& currentAnimation = animations_->data[currentAnimationIndex_];
-	NodeAnimation& rootNodeAnimation = currentAnimation.nodeAnimations[mesh->node.name];
+	NodeAnimation& rootNodeAnimation = currentAnimation.nodeAnimations[nodename];
 	Vector3&& translate = CalaclateValue(rootNodeAnimation.translation, animationTime_);
 	Quaternion&& rotate = CalaclateValue(rootNodeAnimation.rotate, animationTime_);
 	Vector3&& scale = CalaclateValue(rootNodeAnimation.sacle, animationTime_);

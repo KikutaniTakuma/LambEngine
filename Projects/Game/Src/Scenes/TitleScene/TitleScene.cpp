@@ -42,10 +42,10 @@ void TitleScene::Initialize()
 	skydome_->Initialize();
 	skydome_->SetTexture(cloud_->GetTex());
 
-	waterSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Water.wav", true);
-	waterSE_->Start(0.5f);
+	waterSE_ = audioManager_->Load("./Resources/Sound/SE_Water.wav");
+	waterSE_->Start(0.5f, true);
 
-	inGameSE_ = audioManager_->LoadWav("./Resources/Sound/SE_InGame.wav", false);
+	inGameSE_ = audioManager_->Load("./Resources/Sound/SE_InGame.wav");
 }
 
 void TitleScene::Finalize()
@@ -70,7 +70,7 @@ void TitleScene::Update()
 
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
 		sceneManager_->SceneChange(BaseScene::ID::Game);
-		inGameSE_->Start(0.8f);
+		inGameSE_->Start(0.8f, false);
 	}
 
 	messageAlpah_ += std::numbers::pi_v<float> *0.5f * Lamb::DeltaTime();

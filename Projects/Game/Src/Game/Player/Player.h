@@ -4,6 +4,7 @@
 #include "Drawers/Particle/Particle.h"
 #include "Utils/Camera/Camera.h"
 #include "Drawers/Texture2D/Texture2D.h"
+#include "Engine/Graphics/Animator/Animator.h"
 #include <memory>
 #include <array>
 
@@ -144,4 +145,6 @@ private:
 	std::array<std::unique_ptr<Texture2D>, 6> uiBullet_;
 
 	float chikachika_;
+
+	std::unique_ptr<Animator> animator_;
 };

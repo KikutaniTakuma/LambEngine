@@ -41,6 +41,7 @@
 
 #include "Error/Error.h"
 
+#include "Graphics/AnimationManager/AnimationManager.h"
 
 
 #ifdef _DEBUG
@@ -141,10 +142,14 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	AudioManager::Inititalize();
 	PipelineManager::Initialize();
 	MeshManager::Initialize();
+
+	AnimationManager::Initialize();
 }
 
 void Engine::Finalize() {
 	instance_->isFinalize_ = true;
+
+	AnimationManager::Finalize();
 
 	// 各種マネージャー解放
 	MeshManager::Finalize();
@@ -422,11 +427,6 @@ void Engine::FrameEnd() {
 	// このフレームで画像読み込みが発生していたら開放する
 	// またUnloadされていたらそれをコンテナから削除する
 	textureManager->ReleaseIntermediateResource();
-
-	// 音の非同期読み込み
-	auto audioManager = AudioManager::GetInstance();
-	audioManager->ThreadLoad();
-	audioManager->CheckThreadLoadFinish();
 
 	frameInfo->End();
 }

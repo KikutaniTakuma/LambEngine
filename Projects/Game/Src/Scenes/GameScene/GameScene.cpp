@@ -51,13 +51,13 @@ void GameScene::Initialize() {
 	skydome_->Initialize();
 	skydome_->SetTexture(cloud_->GetTex());
 
-	waterSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Water.wav", true);
-	waterSE_->Start(0.5f);
+	waterSE_ = audioManager_->Load("./Resources/Sound/SE_Water.wav");
+	waterSE_->Start(0.5f, true);
 
-	clearSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Clear.wav", false);
-	playerDamageSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Player_Damage.wav", false);
-	enemyDamageSE_ = audioManager_->LoadWav("./Resources/Sound/SE_Enemy_Damage.wav", false);
-	bossBattleBGM_ = audioManager_->LoadWav("./Resources/Sound/BGM_BossBattle.wav", true);
+	clearSE_ = audioManager_->Load("./Resources/Sound/SE_Clear.wav");
+	playerDamageSE_ = audioManager_->Load("./Resources/Sound/SE_Player_Damage.wav");
+	enemyDamageSE_ = audioManager_->Load("./Resources/Sound/SE_Enemy_Damage.wav");
+	bossBattleBGM_ = audioManager_->Load("./Resources/Sound/BGM_BossBattle.wav");
 
 	clearMessage_.SetFormat("./Resources/Font/mincho_size_32.spritefont");
 	clearMessage_ << "クリア！！";
@@ -107,10 +107,10 @@ void GameScene::Update() {
 			player_->Attack(*enemy_);
 
 			if (player_->Collision(*enemy_)) {
-				playerDamageSE_->Start(1.0f);
+				playerDamageSE_->Start(1.0f, false);
 			}
 			if (enemy_->Collision(*player_)) {
-				enemyDamageSE_->Start(0.5f);
+				enemyDamageSE_->Start(0.5f,false);
 			}
 
 			camera_->rotate.y = player_->GetRotate();
@@ -146,7 +146,7 @@ void GameScene::Update() {
 	if (0.0f < messageAlpah_) {
 		messageAlpah_ -= 0.2f * Lamb::DeltaTime();
 		if (messageAlpah_ < 0.0f) {
-			bossBattleBGM_->Start(0.3f);
+			bossBattleBGM_->Start(0.3f, true);
 		}
 	}
 	else {
@@ -166,7 +166,7 @@ void GameScene::Update() {
 	if (enemy_->IsGameClear()) {
 		bossBattleBGM_->Stop();
 		if (!isGameClear_) {
-			clearSE_->Start(1.0f);
+			clearSE_->Start(1.0f, true);
 		}
 		isGameClear_ = true;
 

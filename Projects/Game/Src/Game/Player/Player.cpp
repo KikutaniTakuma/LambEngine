@@ -10,7 +10,7 @@
 
 void Player::Initialize()
 {
-	model_.reset(new Model{"./Resources/Player/Player.obj"});
+	model_.reset(new Model{"./Resources/Player/Player.gltf"});
 	model_->scale *= 5.0f;
 
 	attack_ = 6.0f;
@@ -85,6 +85,12 @@ void Player::Initialize()
 	uiBullet_[5]->color = Vector4ToUint({ 0.2f, 0.8f, 0.8f, 1.0f });
 
 	chikachika_ = 0.0f;
+
+	animator_ = std::make_unique<Animator>();
+	animator_->Load("./Resources/Player/Player.gltf");
+
+	animator_->SetLoopAnimation(true);
+	animator_->Start();
 }
 
 void Player::Move()
@@ -173,11 +179,11 @@ void Player::Update(const Camera& camera) {
 
 	model_->pos = offset_ * Quaternion::MakeRotateYAxis(rotate_);
 	noUpDownPos_ = model_->pos;
-	model_->rotate.y = rotate_;
+	model_->rotate.y = rotate_ + std::numbers::pi_v<float>;
 
-	modelUpDown_ += modelUpDownSpeed_ * Lamb::DeltaTime() * (1.0f + (speed_ / (maxSpeed_ * speedScale_)) * 0.1f);
+	/*modelUpDown_ += modelUpDownSpeed_ * Lamb::DeltaTime() * (1.0f + (speed_ / (maxSpeed_ * speedScale_)) * 0.1f);
 	
-	model_->pos.y += std::cos(modelUpDown_) * 0.1f;
+	model_->pos.y += std::cos(modelUpDown_) * 0.1f;*/
 
 	if (isCollisioned_) {
 		model_->color = Vector4ToUint({ 1.0f,1.0f,1.0f,std::abs(std::cos(chikachika_)) });
@@ -188,7 +194,8 @@ void Player::Update(const Camera& camera) {
 		chikachika_ = 0.0f;
 	}
 
-	model_->Update();
+	animator_->Update(model_->GetNodeName());
+	model_->Update(animator_->GetLocalMat4x4());
 
 	for (auto& i : bullets_) {
 		i->Update();

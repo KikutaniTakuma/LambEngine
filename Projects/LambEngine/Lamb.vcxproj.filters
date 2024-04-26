@@ -181,6 +181,12 @@
     <ClCompile Include="Math\Vector4.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\AnimationManager\AnimationManager.cpp">
+      <Filter>Engine\Graphics\AnimationManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\Animator\Animator.cpp">
+      <Filter>Engine\Graphics\Animator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -380,6 +386,12 @@
     </Filter>
     <Filter Include="Utils\SafePtr">
       <UniqueIdentifier>{7b1eda26-8db7-404b-b6f6-e941774d641b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\AnimationManager">
+      <UniqueIdentifier>{3468947c-b6ff-41ed-b2ee-3e3cb4e48a7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Animator">
+      <UniqueIdentifier>{77cc27e8-59c5-4029-9dcd-bf1fa5263f6d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -598,6 +610,12 @@
     </ClInclude>
     <ClInclude Include="Utils\SafePtr\SafePtr.h">
       <Filter>Utils\SafePtr</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\AnimationManager\AnimationManager.h">
+      <Filter>Engine\Graphics\AnimationManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Animator\Animator.h">
+      <Filter>Engine\Graphics\Animator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

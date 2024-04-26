@@ -283,6 +283,19 @@ void Model::Update() {
 	}
 }
 
+void Model::Update(const Mat4x4& aniamtionMat)
+{
+	*dirLig_ = light;
+	wvpData_->worldMat = /*mesh_->GetNode().loacalMatrix **/ aniamtionMat * Mat4x4::MakeAffin(scale, rotate, pos);
+	if (parent_) {
+		wvpData_->worldMat *= parent_->wvpData_->worldMat;
+	}
+
+	if (!isLoadObj_ && mesh_ && mesh_->GetIsLoad()) {
+		isLoadObj_ = true;
+	}
+}
+
 void Model::Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos) {
 	assert(createGPFlg_);
 	if (isLoadObj_) {

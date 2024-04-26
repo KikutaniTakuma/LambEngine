@@ -7,23 +7,23 @@
 #include "Utils/SafeDelete/SafeDelete.h"
 #include "Engine/Graphics/ResourceManager/ResourceManager.h"
 
-AudioManager* AudioManager::instance_ = nullptr;
+Lamb::SafePtr<AudioManager> AudioManager::instance_ = nullptr;
 void AudioManager::Inititalize() {
-	instance_ = new AudioManager{};
+	instance_.reset(new AudioManager());
 }
 void AudioManager::Finalize() {
-	Lamb::SafeDelete(instance_);
+	instance_.reset();
 }
 
 AudioManager::AudioManager() :
 	xAudio2_(),
 	masterVoice_(nullptr),
-	audios_{},
-	threadAudioBuff_{},
-	load_{},
-	mtx_{},
-	isThreadLoadFinish_{false}
+	audios_{}
 {
+	// Media Foundationの初期化
+	MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
+
+
 	HRESULT hr = XAudio2Create(xAudio2_.GetAddressOf(), 0u, XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
@@ -40,12 +40,10 @@ AudioManager::AudioManager() :
 }
 AudioManager::~AudioManager() {
 	xAudio2_.Reset();
-	if (load_.joinable()) {
-		load_.join();
-	}
+	MFShutdown();
 }
 
-Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
+Audio* const AudioManager::Load(const std::string& fileName) {
 	if (!std::filesystem::exists(std::filesystem::path(fileName))) {
 		throw Lamb::Error::Code<AudioManager>("There is not this file -> " + fileName, __func__);
 	}
@@ -55,18 +53,13 @@ Audio* const AudioManager::LoadWav(const std::string& fileName, bool loopFlg) {
 
 	if (itr == audios_.end()) {
 		auto audio = std::make_unique<Audio>();
-		audio->Load(fileName, loopFlg);
+		audio->Load(fileName);
 		audios_.insert({ fileName, std::move(audio) });
 
 		ResourceManager::GetInstance()->SetAudioResource(fileName);
 	}
 
 	return audios_[fileName].get();
-}
-
-void AudioManager::LoadWav(const std::string& fileName, bool loopFlg, class Audio** const audio) {
-	// コンテナに追加
-	threadAudioBuff_.push({fileName, loopFlg, audio});
 }
 
 void AudioManager::Unload(const std::string& fileName)
@@ -88,51 +81,5 @@ void AudioManager::Unload(Audio* audio)
 
 	if (isExisit != audios_.end()) {
 		audios_.erase(isExisit);
-	}
-}
-
-void AudioManager::ThreadLoad() {
-	if (!threadAudioBuff_.empty() && !load_.joinable()) {
-		auto loadProc = [this]() {
-			std::lock_guard<std::mutex> lock(mtx_);
-			while (!threadAudioBuff_.empty()) {
-				if (Lamb::IsEngineFianlize()) {
-					break;
-				}
-
-				auto& front = threadAudioBuff_.front();
-
-				auto audio = audios_.find(front.fileName_);
-				if (audio == audios_.end()) {;
-					audios_.insert(std::make_pair(front.fileName_, std::make_unique<Audio>()));
-					audios_[front.fileName_]->Load(front.fileName_, front.loopFlg_);
-					*front.audio_ = audios_[front.fileName_].get();
-
-					ResourceManager::GetInstance()->SetAudioResource(front.fileName_);
-				}
-				else {
-					*front.audio_ = audio->second.get();
-				}
-
-				threadAudioBuff_.pop();
-			}
-
-			isThreadLoadFinish_ = true;
-			};
-
-		load_ = std::thread{ loadProc };
-	}
-}
-
-void AudioManager::JoinThread() {
-	if (load_.joinable() && threadAudioBuff_.empty()) {
-		load_.join();
-	}
-}
-
-void AudioManager::CheckThreadLoadFinish() {
-	if (isThreadLoadFinish_ && threadAudioBuff_.empty()) {
-		JoinThread();
-		isThreadLoadFinish_ = false;
 	}
 }

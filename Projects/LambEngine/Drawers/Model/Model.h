@@ -57,6 +57,7 @@ private:
 
 public:
 	void Update();
+	void Update(const Mat4x4& aniamtionMat);
 
 	void Draw(const Mat4x4& viewProjectionMat, const Vector3& cameraPos);
 
@@ -98,6 +99,10 @@ public:
 	}
 
 	void SetPipeline(Pipeline* const pipeline);
+
+	const std::string& GetNodeName() const {
+		return mesh_->GetNode().name;
+	}
 
 public:
 	Vector3 pos;
