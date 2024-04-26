@@ -34,7 +34,7 @@ PixelShaderOutPut main(WaterTex2DVertexOutPut waterinput)
     float32_t3 diffDirection = kLight.ligColor * t * 1.0f;
     
     
-    float32_t3 toEye = kLight.eyePos - input.worldPos.xyz;
+    float32_t3 toEye = kLight.eyePos - input.worldPosition.xyz;
     toEye = mul(toEye, waterinput.tangentBasis);
     toEye = normalize(toEye);
     
@@ -52,9 +52,9 @@ PixelShaderOutPut main(WaterTex2DVertexOutPut waterinput)
     lig.xyz += 0.3f;
     
     //lig = pow(lig, 1.0f);
-    
-    output.color = kColor[input.instanceID].color + causticsColor;
-    output.color.xyz *= lig;
+    //kColor[input.instanceID].color + 
+    output.color = causticsColor;
+    //output.color.xyz *= lig;
 
     return output;
 }

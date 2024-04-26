@@ -80,7 +80,7 @@ void TitleScene::Draw()
 		currentCamera_->GetViewProjection(),
 		{ random_.x, random_.y },
 		color_.GetColorRGBA(),
-		BlendType::kNone
+		BlendType::kNormal
 	);
 
 	Lamb::screenout << "Model scene" << Lamb::endline

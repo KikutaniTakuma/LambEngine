@@ -14,13 +14,14 @@ WaterTex2DVertexOutPut main(VertexShaderInput input,uint32_t instanceID : SV_Ins
 	output.instanceID = instanceID;
 	output.textureID = input.textureID;
 
-	WaterTex2DVertexOutPut.outputData = output;
+	WaterTex2DVertexOutPut outputData;
+	outputData.outputData = output;
 
 	float32_t3 N = normalize(mul(kWaterData[instanceID].normal, (float32_t3x3) kWvpMat[instanceID].worldMat));
     float32_t3 T = normalize(mul(kWaterData[instanceID].tangent, (float32_t3x3) kWvpMat[instanceID].worldMat));
     float32_t3 B = normalize(cross(N, T));
     
-    output.tangentBasis = transpose(float32_t3x3(T, B, N));
+    outputData.tangentBasis = transpose(float32_t3x3(T, B, N));
 
-    return output;
+    return outputData;
 }

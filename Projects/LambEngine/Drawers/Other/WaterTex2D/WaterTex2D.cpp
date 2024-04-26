@@ -13,7 +13,7 @@ uint32_t WaterTex2D::kCausticsTextureID_ = 0u;
 
 const LoadFileNames WaterTex2D::kFileNames_ =
 LoadFileNames{
-	.resourceFileName{"./Resources/EngineResources/WaterTex2D/WaterTex2D.obj"},
+	.resourceFileName{"./Resources/EngineResources/Texture2D/Texture2D.obj"},
 	.shaderName{
 		.vsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.VS.hlsl",
 		.psFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl"
@@ -47,9 +47,9 @@ void WaterTex2D::Draw(
 	renderContext->SetSahderStruct(
 		ShaderData{
 			.randomVec = randomVec,
-			.normal  = Vector3(),
+			.normal  = Vector3(0.0f,0.0f,1.0f),
 			.pad = 0.0f,
-			.tangent = Vector3(),
+			.tangent = Vector3(0.0f,-1.0f,0.0f),
 			.textureID = kCausticsTextureID_
 		}
 	);
