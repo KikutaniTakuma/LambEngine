@@ -1,8 +1,10 @@
 #include "WaterTex2D.hlsli"
 #include "../PerlinNoise.hlsli"
 
-PixelShaderOutPut main(VertexShaderOutput input)
+PixelShaderOutPut main(WaterTex2DVertexOutPut waterinput)
 {
+    VertexShaderOutput input = waterinput.outputData;
+
 	PixelShaderOutPut output;
 
     uint32_t textureID = kWaterData[input.instanceID].textureID;
@@ -14,11 +16,11 @@ PixelShaderOutPut main(VertexShaderOutput input)
     float32_t4 causticsColor = textures[textureID].Sample(smp, input.uv + frac(CreateNoiseNoDdy(input.uv * 0.1f, kRandomVec, 20.0f)));
     
     float32_t3 normal = CreateNormal(input.uv, kRandomVec, 20.0f);
-    //normal = mul(normal, input.tangentBasis);
+    //normal = mul(normal, waterinput.tangentBasis);
     //normal = (normal.xyz + 1.0f) * 0.5f;
 
     float32_t3 ligDirection = kLight.ligDirection;
-    ligDirection = mul(ligDirection, input.tangentBasis);
+    ligDirection = mul(ligDirection, waterinput.tangentBasis);
     
     // ディレクションライト拡散反射光
     float32_t t = dot(normal, -ligDirection);
@@ -33,7 +35,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
     
     
     float32_t3 toEye = kLight.eyePos - input.worldPos.xyz;
-    toEye = mul(toEye, input.tangentBasis);
+    toEye = mul(toEye, waterinput.tangentBasis);
     toEye = normalize(toEye);
     
     float32_t3 refVec = -reflect(toEye, normal);
