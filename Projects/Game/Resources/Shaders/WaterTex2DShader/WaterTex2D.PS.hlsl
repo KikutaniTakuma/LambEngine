@@ -8,7 +8,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
     uint32_t textureID = kWaterData[input.instanceID].textureID;
 
 // お水の処理
-	float32_t2 kRandomVec = kWaterData[input.instanceID],randomVec;
+	float32_t2 kRandomVec = kWaterData[input.instanceID].randomVec;
  	float32_t noise = CreateNoise(input.uv, kRandomVec, 20.0f);
     
     float32_t4 causticsColor = textures[textureID].Sample(smp, input.uv + frac(CreateNoiseNoDdy(input.uv * 0.1f, kRandomVec, 20.0f)));

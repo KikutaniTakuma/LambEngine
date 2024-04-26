@@ -7,3 +7,8 @@ struct WaterData {
 };
 
 StructuredBuffer<WaterData> kWaterData : register(t2);
+
+struct WaterTex2DVertexOutPut{
+    VertexShaderOutput outputData;
+    
+}
