@@ -13,6 +13,7 @@
 
 #include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 #include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
+#include "../../GraphicsStructs.h"
 
 /// <summary>
 /// メッシュクラス。objファイルの読み込みやリソースを管理(基本的にポインタ型で使う)
@@ -25,6 +26,7 @@ public:
 		std::pair<Lamb::LambPtr<ID3D12Resource>, D3D12_VERTEX_BUFFER_VIEW> resource;
 		uint32_t vertNum;
 		Texture* tex;
+		Node node;
 	};
 
 	struct CopyData {
@@ -59,11 +61,14 @@ public:
 		float ptRange;
 	};
 
-private:
+public:
 	struct VertData {
 		Vector4 position;
 		Vector3 normal;
 		Vector2 uv;
+
+		bool operator==(const VertData&) const = default;
+		bool operator!=(const VertData&) const = default;
 	};
 	struct IndexData {
 		uint32_t vertNum;
@@ -119,30 +124,12 @@ public:
 		return objFileName_;
 	}
 
+	const Node& GetNode() const {
+		return resource_.begin()->second.node;
+	}
 private:
 	void LoadObj(const std::string& objFileName);
-	void LoadMtl(const std::string& fileName);
 
-	/// <summary>
-	/// 非同期読み込み用(この関数単体では非同期では読み込まない)
-	/// </summary>
-	/// <param name="objFileName"></param>
-	void ThreadLoadObj(const std::string& objFileName);
-	/// <summary>
-	/// 非同期読み込み用
-	/// </summary>
-	/// <param name="fileName"></param>
-	void ThreadLoadMtl(const std::string& fileName);
-
-	/// <summary>
-	/// テクスチャをロード出来ているかのチェック
-	/// </summary>
-	void CheckModelTextureLoadFinish();
-
-	/// <summary>
-	/// 頂点リソースを作成
-	/// </summary>
-	void CreateResource();
 
 	/// <summary>
 	/// 頂点リソースを解放
@@ -169,8 +156,6 @@ private:
 	void ResetBufferSize();
 
 private:
-	std::unordered_map<std::string, MeshData> meshs_;
-
 	std::unordered_map<std::string, Texture*> texs_;
 
 	bool isLoad_;

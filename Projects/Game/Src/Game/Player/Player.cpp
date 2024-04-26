@@ -23,9 +23,9 @@ void Player::Initialize()
 	float maxOffsetZ = 50.0f;
 	float minOffsetZ = 20.0f;
 
-	maxOffset_ = -Vector3::kZIndentity * minOffsetZ;
-	minOffset_ = -Vector3::kZIndentity * maxOffsetZ;
-	offset_ = -Vector3::kZIndentity * 35.0f;
+	maxOffset_ = -Vector3::kZIdentity * minOffsetZ;
+	minOffset_ = -Vector3::kZIdentity * maxOffsetZ;
+	offset_ = -Vector3::kZIdentity * 35.0f;
 	offsetSpeed_ = 5.0f;
 
 	basisSpeedScale_ = maxOffsetZ;
@@ -202,7 +202,7 @@ void Player::Update(const Camera& camera) {
 		}
 	}
 
-	particle_->emitterPos = model_->pos * camera.GetViewProjectionVp() * Mat4x4::MakeInverse(particleCamera_->GetViewOthographicsVp());
+	particle_->emitterPos = model_->pos * camera.GetViewProjectionVp() *particleCamera_->GetViewOthographicsVp().Inverse();
 	particle_->Update();
 
 	if (0.0f < hp_) {

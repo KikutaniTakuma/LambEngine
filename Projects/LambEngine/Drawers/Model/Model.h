@@ -28,8 +28,6 @@ public:
 public:
 	void LoadObj(const std::string& fileName);
 
-	void ThreadLoadObj(const std::string& fileName);
-
 public:
 	static void Initialize(
 		const std::string& vertex = "./Resources/Shaders/ModelShader/Model.VS.hlsl",

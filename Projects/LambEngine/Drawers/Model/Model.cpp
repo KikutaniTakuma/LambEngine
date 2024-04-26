@@ -239,12 +239,6 @@ void Model::LoadObj(const std::string& fileName) {
 	}
 }
 
-void Model::ThreadLoadObj(const std::string& fileName) {
-	if (!isLoadObj_) {
-		MeshManager::GetInstance()->LoadObj(fileName, &mesh_);
-	}
-}
-
 void Model::ChangeTexture(const std::string& useMtlName, const std::string& texName) {
 	assert(mesh_);
 	if (data_.empty()) {
@@ -279,7 +273,7 @@ void Model::SetPipeline(Pipeline* const pipeline)
 
 void Model::Update() {
 	*dirLig_ = light;
-	wvpData_->worldMat.Affin(scale, rotate, pos);
+	wvpData_->worldMat = mesh_->GetNode().loacalMatrix * Mat4x4::MakeAffin(scale, rotate, pos);
 	if (parent_) {
 		wvpData_->worldMat *= parent_->wvpData_->worldMat;
 	}
@@ -362,7 +356,7 @@ void Model::Debug([[maybe_unused]]const std::string& guiName) {
 				isLoadObj_ = false;
 				mesh_ = nullptr;
 				data_.clear();
-				ThreadLoadObj(path.string());
+				LoadObj(path.string());
 				break;
 			}
 		}

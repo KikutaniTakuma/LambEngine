@@ -11,15 +11,7 @@ MeshManager* const MeshManager::GetInstance() {
 }
 
 MeshManager::~MeshManager() {
-	if (load_.joinable()) {
-		load_.join();
-	}
-
 	meshs_.clear();
-
-	while (!threadMeshBuff_.empty()) {
-		threadMeshBuff_.pop();
-	}
 }
 
 void MeshManager::Initialize() {
@@ -49,10 +41,6 @@ Mesh* MeshManager::LoadObj(const std::string& objFileName) {
 	return meshs_[objFileName].get();
 }
 
-void MeshManager::LoadObj(const std::string& objFileName, Mesh**const mesh) {
-	threadMeshBuff_.push(std::make_pair(objFileName, mesh));
-}
-
 void MeshManager::Unload(const std::string& objFileName)
 {
 	auto isExist = meshs_.find(objFileName);
@@ -74,92 +62,4 @@ void MeshManager::Draw() {
 	for (auto& i : meshs_) {
 		i.second->Draw();
 	}
-}
-
-void MeshManager::ThreadLoad() {
-	// 読み込み予定の物があるかつ今読み込み中ではない
-	if (!threadMeshBuff_.empty() && !load_.joinable()) {
-		auto loadProc = [this]() {
-			std::unique_lock<std::mutex> uniqueLock(mtx_);
-
-			isNowThreadLoading_ = true;
-			while (!threadMeshBuff_.empty()) {
-				if (Lamb::IsEngineFianlize()) {
-					break;
-				}
-				// ロードするmeshを取得
-				auto& front = threadMeshBuff_.front();
-				
-				// ロード済みか判定
-				auto mesh = meshs_.find(front.first);
-
-				// ロード済みではなかったらロードして代入
-				if (mesh == meshs_.end()) {
-					meshs_[front.first] = std::make_unique<Mesh>();
-					meshs_[front.first]->ThreadLoadObj(front.first);
-					ResourceManager::GetInstance()->SetTextureResource(front.first);
-					if (Lamb::IsEngineFianlize()) {
-						break;
-					}
-					(*front.second) = meshs_[front.first].get();
-				}
-				// ロード済みだったらロード済みのmeshポインタを代入
-				else {
-					if (Lamb::IsEngineFianlize()) {
-						break;
-					}
-					(*front.second) = mesh->second.get();
-				}
-				threadMeshBuff_.pop();
-			}
-
-			// テクスチャの読み込みが終わるまでループ
-			bool isTextureLoadFinish = false;
-			while (!isTextureLoadFinish) {
-				if (Lamb::IsEngineFianlize()) {
-					break;
-				}
-
-				for (auto& i : meshs_) {
-					i.second->CheckModelTextureLoadFinish();
-				}
-				for (auto& i : meshs_) {
-					if (!i.second->isLoad_) {
-						isTextureLoadFinish = false;
-						break;
-					}
-					else {
-						isTextureLoadFinish = true;
-					}
-				}
-			}
-
-			isThreadFinish_ = true;
-			isNowThreadLoading_ = false;
-			};
-
-		// 非同期開始
-		load_ = std::thread(loadProc);
-	}
-}
-
-void MeshManager::CheckLoadFinish() {
-	if (isThreadFinish_) {
-		for (auto& i : meshs_) {
-			if (!i.second->isLoad_) {
-				return;
-			}
-		}
-
-		isThreadFinish_ = false;
-	}
-}
-void MeshManager::JoinThread() {
-	if (isThreadFinish_ && load_.joinable()) {
-		load_.join();
-	}
-}
-
-bool MeshManager::IsNowThreadLoading() const {
-	return isNowThreadLoading_;
 }

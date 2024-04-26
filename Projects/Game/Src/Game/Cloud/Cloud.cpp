@@ -31,7 +31,7 @@ void Cloud::Init()
 	pipeline_ = new CloudPipeline{};
 	pipeline_->Init();
 
-	Vector2 texSize_ = Vector2::identity * 1280.0f;
+	Vector2 texSize_ = Vector2::kIdentity * 1280.0f;
 
 	pera_.reset(new PeraRender{static_cast<uint32_t>(texSize_.x),static_cast<uint32_t>(texSize_.y) });
 	pera_->Initialize(pipeline_);

@@ -63,7 +63,7 @@ void Enemy::Update(const Player& player, const Camera& camera)
 	posTmp.y += radius_;
 	toPlayer_ = player.GetPos() - posTmp;
 	toPlayerLength_ = toPlayer_.Length();
-	toPlayer_.Normalize();
+	toPlayer_ = toPlayer_.Normalize();
 
 	SettingBehavior();
 
@@ -79,7 +79,7 @@ void Enemy::Update(const Player& player, const Camera& camera)
 		behaviorTime_ += Lamb::DeltaTime();
 	}
 
-	particle_->emitterPos = model_->pos * camera.GetViewProjectionVp() * Mat4x4::MakeInverse(particleCamera_->GetViewOthographicsVp());
+	particle_->emitterPos = model_->pos * camera.GetViewProjectionVp() * particleCamera_->GetViewOthographicsVp().Inverse();
 	particle_->Update();
 
 	if (0.0f < hp_) {
@@ -208,7 +208,7 @@ void Enemy::CreateBehaviors() {
 			for (int32_t i = 0; i < 4; i++) {
 				currentBullet_->get()->SetStatus(
 					Vector3{ model_->pos.x,model_->pos.y + radius_,model_->pos.z },
-					(toPlayer_ * Quaternion::MakeRotateAxisAngle(Vector3::kYIndentity, rotateCount)).Normalize(),
+					(toPlayer_ * Quaternion::MakeRotateAxisAngle(Vector3::kYIdentity, rotateCount)).Normalize(),
 					15.0f,
 					20.0f,
 					Vector4ToUint({ 0.8f, 0.2f, 0.2f, 1.0f })
@@ -233,7 +233,7 @@ void Enemy::CreateBehaviors() {
 		if (static_cast<int32_t>(std::floor(behaviorTime_ * 100.0f)) % 10 == 0) {
 			currentBullet_->get()->SetStatus(
 				Vector3{ playerPos_.x,playerPos_.y + model_->pos.y,playerPos_.z },
-				-Vector3::kYIndentity,
+				-Vector3::kYIdentity,
 				10.0f,
 				20.0f,
 				Vector4ToUint({ 0.8f, 0.2f, 0.2f, 1.0f })
@@ -253,7 +253,7 @@ void Enemy::CreateBehaviors() {
 		if (static_cast<int32_t>(std::floor(behaviorTime_ * 100.0f)) % 5 == 0) {
 			currentBullet_->get()->SetStatus(
 				Vector3{ playerPos_.x,playerPos_.y + model_->pos.y,playerPos_.z },
-				-Vector3::kYIndentity,
+				-Vector3::kYIdentity,
 				30.0f,
 				20.0f,
 				Vector4ToUint({ 0.8f, 0.2f, 0.2f, 1.0f })

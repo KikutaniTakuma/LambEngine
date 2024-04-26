@@ -20,7 +20,7 @@ PeraRender::PeraRender():
 	scale{Lamb::ClientSize()},
 	isPreDraw_(false),
 	uvPibot(),
-	uvSize(Vector2::identity),
+	uvSize(Vector2::kIdentity),
 	color(std::numeric_limits<uint32_t>::max())
 {
 	peraPipelineObject_.reset(new PeraPipeline{});
@@ -36,7 +36,7 @@ PeraRender::PeraRender(uint32_t width, uint32_t height):
 	scale{ Vector3::kIdentity },
 	isPreDraw_(false),
 	uvPibot(),
-	uvSize(Vector2::identity),
+	uvSize(Vector2::kIdentity),
 	color(std::numeric_limits<uint32_t>::max())
 {
 	peraPipelineObject_.reset(new PeraPipeline{});

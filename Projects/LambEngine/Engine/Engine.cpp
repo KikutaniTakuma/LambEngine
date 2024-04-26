@@ -423,12 +423,6 @@ void Engine::FrameEnd() {
 	// またUnloadされていたらそれをコンテナから削除する
 	textureManager->ReleaseIntermediateResource();
 
-	// メッシュの非同期読み込み
-	auto meshManager = MeshManager::GetInstance();
-	meshManager->ThreadLoad();
-	meshManager->JoinThread();
-	meshManager->CheckLoadFinish();
-
 	// 音の非同期読み込み
 	auto audioManager = AudioManager::GetInstance();
 	audioManager->ThreadLoad();

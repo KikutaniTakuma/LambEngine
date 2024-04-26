@@ -69,6 +69,7 @@
       <OmitFramePointers>false</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <WholeProgramOptimization>false</WholeProgramOptimization>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -101,6 +102,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,6 +144,7 @@
     <ClCompile Include="Engine\EngineUtils\FlgManager\FlgManager.cpp" />
     <ClCompile Include="Engine\EngineUtils\FrameInfo\FrameInfo.cpp" />
     <ClCompile Include="Engine\Graphics\DepthBuffer\DepthBuffer.cpp" />
+    <ClCompile Include="Engine\Graphics\MeshLoader\MeshLoader.cpp" />
     <ClCompile Include="Engine\Graphics\MeshManager\MeshManager.cpp" />
     <ClCompile Include="Engine\Graphics\MeshManager\Mesh\Mesh.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp" />
@@ -207,6 +210,8 @@
     <ClInclude Include="Engine\EngineUtils\FrameInfo\FrameInfo.h" />
     <ClInclude Include="Engine\EngineUtils\LambPtr\LambPtr.h" />
     <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h" />
+    <ClInclude Include="Engine\Graphics\GraphicsStructs.h" />
+    <ClInclude Include="Engine\Graphics\MeshLoader\MeshLoader.h" />
     <ClInclude Include="Engine\Graphics\MeshManager\MeshManager.h" />
     <ClInclude Include="Engine\Graphics\MeshManager\Mesh\Mesh.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />
@@ -229,8 +234,9 @@
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\KeyInput\KeyInput.h" />
     <ClInclude Include="Input\Mouse\Mouse.h" />
-    <ClInclude Include="Math\MathCommon.h" />
     <ClInclude Include="Math\Mat4x4.h" />
+    <ClInclude Include="Math\MathCommon.h" />
+    <ClInclude Include="Math\Matrix.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Vector3.h" />
@@ -245,8 +251,20 @@
     <ClInclude Include="Utils\Flg\Flg.h" />
     <ClInclude Include="Utils\Random\Random.h" />
     <ClInclude Include="Utils\SafeDelete\SafeDelete.h" />
+    <ClInclude Include="Utils\SafePtr\SafePtr.h" />
     <ClInclude Include="Utils\ScreenOut\ScreenOut.h" />
     <ClInclude Include="Utils\UtilsLib\UtilsLib.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
+      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\externals\DirectXTK12\DirectXTK_Desktop_2022_Win10.vcxproj">
+      <Project>{3e0e8608-cd9b-4c76-af33-29ca38f2c9f0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
+      <Project>{cce141c6-6223-414a-b5cd-00cab7e683a3}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

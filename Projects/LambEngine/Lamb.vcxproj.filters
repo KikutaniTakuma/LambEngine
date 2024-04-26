@@ -142,21 +142,6 @@
     <ClCompile Include="Engine\Graphics\MeshManager\Mesh\Mesh.cpp">
       <Filter>Engine\Graphics\MeshManager\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Math\Mat4x4.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Quaternion.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Vector2.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Vector3.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Math\Vector4.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Framework.cpp">
       <Filter>Framework</Filter>
     </ClCompile>
@@ -177,6 +162,24 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.cpp">
       <Filter>Engine\Graphics\PipelineObject\CloudPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\MeshLoader\MeshLoader.cpp">
+      <Filter>Engine\Graphics\MeshLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Mat4x4.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Quaternion.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Vector2.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Vector3.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Vector4.cpp">
+      <Filter>Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -372,6 +375,12 @@
     <Filter Include="Engine\Graphics\PipelineObject\CloudPipeline">
       <UniqueIdentifier>{5a6f62f6-9b81-4403-a912-610eb20e5551}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Graphics\MeshLoader">
+      <UniqueIdentifier>{04c56ac2-65fe-4fb3-9085-b84ea5508687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\SafePtr">
+      <UniqueIdentifier>{7b1eda26-8db7-404b-b6f6-e941774d641b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -527,21 +536,6 @@
     <ClInclude Include="Engine\Graphics\MeshManager\Mesh\Mesh.h">
       <Filter>Engine\Graphics\MeshManager\Mesh</Filter>
     </ClInclude>
-    <ClInclude Include="Math\Mat4x4.h">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Quaternion.h">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Vector2.h">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Vector3.h">
-      <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Vector4.h">
-      <Filter>Math</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Shader\Shader.h">
       <Filter>Engine\Graphics\Shader</Filter>
     </ClInclude>
@@ -566,9 +560,6 @@
     <ClInclude Include="Drawers\BaseDrawer.h">
       <Filter>Drawers</Filter>
     </ClInclude>
-    <ClInclude Include="Math\MathCommon.h">
-      <Filter>Math</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Core\DescriptorHeap\Descriptor.h">
       <Filter>Engine\Core\DescriptorHeap</Filter>
     </ClInclude>
@@ -577,6 +568,36 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.h">
       <Filter>Engine\Graphics\PipelineObject\CloudPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\MeshLoader\MeshLoader.h">
+      <Filter>Engine\Graphics\MeshLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\GraphicsStructs.h">
+      <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Mat4x4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\MathCommon.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Matrix.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Quaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector2.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Vector4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SafePtr\SafePtr.h">
+      <Filter>Utils\SafePtr</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

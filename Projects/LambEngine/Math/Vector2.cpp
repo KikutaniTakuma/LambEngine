@@ -3,27 +3,20 @@
 #include <cmath>
 #include <numbers>
 
-Vector2::Vector2() noexcept :
+constexpr Vector2::Vector2() noexcept :
 	x(0.0f),
 	y(0.0f)
 {}
 
-Vector2::Vector2(const Vector2& right) noexcept {
-	*this = right;
-}
 Vector2::Vector2(float x, float y) noexcept :
 	x(x),
 	y(y)
 {}
 
-Vector2::Vector2(Vector2&& right) noexcept {
-	*this = std::move(right);
-}
-
-const Vector2 Vector2::identity = { 1.0f,1.0f };
-const Vector2 Vector2::zero = {0.0f, 0.0f};
-const Vector2 Vector2::xIdy = { 1.0f,0.0f };
-const Vector2 Vector2::yIdy = { 0.0f,1.0f };
+const Vector2 Vector2::kIdentity = { 1.0f,1.0f };
+const Vector2 Vector2::kZero = {0.0f, 0.0f};
+const Vector2 Vector2::kXIdentity = { 1.0f,0.0f };
+const Vector2 Vector2::kYIdentity = { 0.0f,1.0f };
 
 
 Vector2 Vector2::operator+(const Vector2& right) const noexcept {
@@ -122,18 +115,22 @@ float Vector2::Dot(const Vector2& right) const noexcept {
 }
 
 float Vector2::Length() const noexcept {
-	return std::hypot(x, y);
+	return std::sqrtf(x*x + y*y);
+}
+
+float Vector2::LengthSQ() const noexcept {
+	return x*x + y*y;
 }
 
 Vector2 Vector2::Normalize() const noexcept {
-	if (*this == Vector2::zero) {
+	if (*this == Vector2::kZero) {
 		return *this;
 	}
 	return *this / Length();
 }
 
 float Vector2::GetRad() const noexcept {
-	if (*this == Vector2::zero) {
+	if (*this == Vector2::kZero) {
 		return 0.0f;
 	}
 
