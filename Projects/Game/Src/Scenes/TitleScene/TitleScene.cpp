@@ -7,6 +7,9 @@
 #include "AudioManager/AudioManager.h"
 #include "Utils/ScreenOut/ScreenOut.h"
 
+#include "Utils/Random/Random.h"
+#include "imgui.h"
+
 TitleScene::TitleScene():
 	BaseScene{BaseScene::ID::Title}
 {
@@ -22,7 +25,21 @@ void TitleScene::Initialize()
 	model_->light.ptPos = model_->pos;
 	model_->light.ptPos.y = 3.8f;
 	model_->light.ptColor = Vector3::kIdentity * 15.0f;*/
+	currentCamera_->Update();
 
+	watertsetUgoitekure_ = std::make_unique<WaterTex2D>();
+	watertsetUgoitekure_->Load();
+	watertsetUgoitekure_->SetLight(
+		Light{
+			.ligDirection = -Vector3::kYIdentity,
+			.ligColor = Vector3::kIdentity,
+			.eyePos = currentCamera_->GetPos(),
+			.ptPos = Vector3(0.0, 10.0f, 10.0f),
+			.ptColor = Vector3::kIdentity * 15.0f
+		}
+	);
+
+	random_ = Lamb::Random(Vector3::kZero, Vector3::kIdentity);
 
 	sphere_.reset(new Sphere);
 }
@@ -45,11 +62,26 @@ void TitleScene::Update()
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
 		sceneManager_->SceneChange(BaseScene::ID::Game);
 	}
+
+#ifdef _DEBUG
+	ImGui::Begin("水の色");
+	ImGui::ColorEdit4("色", color_.m.data());
+	ImGui::End();
+#endif // _DEBUG
+
 }
 
 void TitleScene::Draw()
 {
 	sphere_->Draw(currentCamera_->GetViewProjection(), std::numeric_limits<uint32_t>::max());
+
+	watertsetUgoitekure_->Draw(
+		waterPos_.GetMatrix(),
+		currentCamera_->GetViewProjection(),
+		{ random_.x, random_.y },
+		color_.GetColorRGBA(),
+		BlendType::kNone
+	);
 
 	Lamb::screenout << "Model scene" << Lamb::endline
 		<< "Press space to change ""Water and cloud scene""";

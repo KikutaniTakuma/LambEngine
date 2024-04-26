@@ -12,6 +12,7 @@
 #include "Game/CollisionManager/Sphere/Sphere.h"
 #include "Engine/Graphics/Tex2DAniamtor/Tex2DAniamtor.h"
 #include "Utils/SafePtr/SafePtr.h"
+#include "Drawers/Other/WaterTex2D/WaterTex2D.h"
 
 class TitleScene : public BaseScene {
 public:
@@ -34,4 +35,8 @@ public:
 
 public:
 	std::unique_ptr<Sphere> sphere_;
+	std::unique_ptr<WaterTex2D> watertsetUgoitekure_;
+	Transform waterPos_;
+	Vector3 random_;
+	Vector4 color_;
 };

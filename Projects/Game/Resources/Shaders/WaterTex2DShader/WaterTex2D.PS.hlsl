@@ -5,11 +5,54 @@ PixelShaderOutPut main(VertexShaderOutput input)
 {
 	PixelShaderOutPut output;
 
-    uint32_t textureID = kTexture2DData[input.instanceID].textureID;
-	
-	float32_t4 textureColor = textures[textureID].Sample(smp, input.uv);
+    uint32_t textureID = kWaterData[input.instanceID].textureID;
 
-	output.color = textureColor * kColor[input.instanceID].color;
+// お水の処理
+	float32_t2 kRandomVec = kWaterData[input.instanceID],randomVec;
+ 	float32_t noise = CreateNoise(input.uv, kRandomVec, 20.0f);
     
-	return output;
+    float32_t4 causticsColor = textures[textureID].Sample(smp, input.uv + frac(CreateNoiseNoDdy(input.uv * 0.1f, kRandomVec, 20.0f)));
+    
+    float32_t3 normal = CreateNormal(input.uv, kRandomVec, 20.0f);
+    //normal = mul(normal, input.tangentBasis);
+    //normal = (normal.xyz + 1.0f) * 0.5f;
+
+    float32_t3 ligDirection = kLight.ligDirection;
+    ligDirection = mul(ligDirection, input.tangentBasis);
+    
+    // ディレクションライト拡散反射光
+    float32_t t = dot(normal, -ligDirection);
+
+    //t *= -1.0f;
+    //t = (t + abs(t)) * 0.5f;
+    
+    t = saturate(t);
+    //t = pow(t, 2.0f);
+
+    float32_t3 diffDirection = kLight.ligColor * t * 1.0f;
+    
+    
+    float32_t3 toEye = kLight.eyePos - input.worldPos.xyz;
+    toEye = mul(toEye, input.tangentBasis);
+    toEye = normalize(toEye);
+    
+    float32_t3 refVec = -reflect(toEye, normal);
+    refVec = normalize(refVec);
+
+    t = dot(refVec, toEye);
+
+    t = pow(saturate(t), 25.0f);
+    float32_t3 specDirection = kLight.ligColor * t;
+    
+    float32_t3 lig = diffDirection + specDirection;
+    //float32_t3 lig = specPerlin;
+    
+    lig.xyz += 0.3f;
+    
+    //lig = pow(lig, 1.0f);
+    
+    output.color = kColor[input.instanceID].color + causticsColor;
+    output.color.xyz *= lig;
+
+    return output;
 }

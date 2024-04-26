@@ -9,6 +9,7 @@
 #include "imgui.h"
 #endif // _DEBUG
 
+uint32_t WaterTex2D::kCausticsTextureID_ = 0u;
 
 const LoadFileNames WaterTex2D::kFileNames_ =
 LoadFileNames{

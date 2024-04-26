@@ -10,8 +10,7 @@ VertexShaderOutput main(VertexShaderInput input,uint32_t instanceID : SV_Instanc
 	input.normal = normalize(input.normal);
 	output.normal = mul(input.normal, (float32_t3x3)kWvpMat[instanceID].worldMat);
 
-	float32_t4 uv = float32_t4(input.uv, 0.0f, 1.0f);
-	output.uv = mul(uv, kTexture2DData[instanceID].uvTransform).xy;
+	output.uv = input.uv;
 	output.instanceID = instanceID;
 	output.textureID = input.textureID;
 
