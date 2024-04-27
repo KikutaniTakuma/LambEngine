@@ -1,7 +1,6 @@
 #include "AudioManager.h"
 #include "Utils/ExecutionLog/ExecutionLog.h"
 #include "Utils/EngineInfo/EngineInfo.h"
-#include <cassert>
 #include <filesystem>
 #include "Error/Error.h"
 #include "Utils/SafeDelete/SafeDelete.h"
@@ -24,14 +23,12 @@ AudioManager::AudioManager() :
 
 
 	HRESULT hr = XAudio2Create(xAudio2_.GetAddressOf(), 0u, XAUDIO2_DEFAULT_PROCESSOR);
-	assert(SUCCEEDED(hr));
-	if (!SUCCEEDED(hr)) {
+	if (not SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<AudioManager>("XAudio2Create()", "Constructor");
 	}
 
 	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
-	assert(SUCCEEDED(hr));
-	if (!SUCCEEDED(hr)) {
+	if (not SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<AudioManager>("CreateMasteringVoicey()", "Constructor");
 	}
 
