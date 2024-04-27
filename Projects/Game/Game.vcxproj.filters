@@ -65,6 +65,9 @@
     <ClCompile Include="Src\Camera\DebugCamera\DebugCamera.cpp">
       <Filter>Camera\DebugCamera</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\SkyBlock\SkyBlock.cpp">
+      <Filter>Game\SkyBlock</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -136,6 +139,9 @@
     <Filter Include="Camera\DebugCamera">
       <UniqueIdentifier>{ed4f98cb-62c8-411f-9815-e88decbfbcdc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\SkyBlock">
+      <UniqueIdentifier>{ef39c624-d31b-4fc2-86a4-cc0366782860}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -200,6 +206,9 @@
     </ClInclude>
     <ClInclude Include="Src\Camera\DebugCamera\DebugCamera.h">
       <Filter>Camera\DebugCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\SkyBlock\SkyBlock.h">
+      <Filter>Game\SkyBlock</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
