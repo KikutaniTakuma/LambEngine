@@ -32,10 +32,10 @@ void GameScene::Update() {
 
 void GameScene::Draw() {
 	model_->Draw(
-		transform_.GetMatrix(),         // ワールドマトリックス
+		transform_.GetMatrix(),              // ワールドマトリックス
 		currentCamera_->GetViewProjection(), // カメラのマトリックス
-		color_,                         // 色
-		BlendType::kNone,               // ブレンドタイプ
-		true                           // ライティングあり・なし
+		color_,                              // 色
+		BlendType::kNone,                    // ブレンドタイプ
+		true                                 // ライティングあり・なし
 	);
 }

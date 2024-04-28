@@ -4,6 +4,7 @@
 #include "Drawers/Line/Line.h"
 #include "Utils/Flg/Flg.h"
 #include <array>
+#include <memory>
 
 /// <summary>
 /// 当たり判定(OBB)
@@ -36,8 +37,8 @@ public:
 
 private:
 	std::array<Vector3, 3> orientations_;
-	std::array<Line, 12> lines_;
-	std::array<Line, 3> orientationLines_;
+	std::array<std::unique_ptr<Line>, 12> lines_;
+	std::array<std::unique_ptr<Line>, 3> orientationLines_;
 	Vector3 size_;
 
 	Mat4x4 worldMatrix_;
