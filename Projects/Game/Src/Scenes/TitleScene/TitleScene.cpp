@@ -9,6 +9,7 @@
 
 #include "Utils/Random/Random.h"
 #include "imgui.h"
+#include "Game/Water/Water.h"
 
 TitleScene::TitleScene():
 	BaseScene{BaseScene::ID::Title}
@@ -42,6 +43,8 @@ void TitleScene::Initialize()
 	random_ = Lamb::Random(Vector3::kZero, Vector3::kIdentity);
 
 	sphere_.reset(new Sphere);
+
+	water_ = Water::GetInstance();
 }
 
 void TitleScene::Finalize()
@@ -69,10 +72,14 @@ void TitleScene::Update()
 	ImGui::End();
 #endif // _DEBUG
 
+
+	water_->Update(currentCamera_->GetPos());
 }
 
 void TitleScene::Draw()
 {
+	water_->Draw(currentCamera_->GetViewProjection());
+
 	sphere_->Draw(currentCamera_->GetViewProjection(), std::numeric_limits<uint32_t>::max());
 
 	watertsetUgoitekure_->Draw(

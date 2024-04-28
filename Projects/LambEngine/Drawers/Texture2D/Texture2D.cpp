@@ -52,3 +52,8 @@ void Texture2D::Draw(
 
 	BaseDrawer::Draw(worldMatrix, camera, color,  blend);
 }
+
+void Texture2D::AllDraw() {
+	renderSet->Draw();
+	renderSet->ResetDrawCount();
+}

@@ -65,7 +65,7 @@ uint32_t TextureManager::LoadTexture(const std::string& fileName) {
 	return textures_[fileName]->GetHandleUINT();
 }
 
-const Texture* const TextureManager::GetTexture(const std::string& fileName) {
+Texture* const TextureManager::GetTexture(const std::string& fileName) {
 	return textures_[fileName].get();
 }
 

@@ -26,5 +26,5 @@ struct Output{
     float2 uv : TEXCOORD0;
     float2 causticsUv : TEXCOORD1;
     float4 worldPos : POSITION;
-    float3x3 tangentBasis : TANGENT_BASIS;
+    float3x3 tangentBasis : YANGENT_BASIS;
 };

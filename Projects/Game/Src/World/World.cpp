@@ -22,7 +22,7 @@ void World::Initialize() {
 
 	Framework::Initialize();
 
-	//Water::Initialize();
+	Water::Initialize();
 
 	//Cloud::Initialize();
 
@@ -40,7 +40,7 @@ void World::Initialize() {
 
 void World::Finalize() {
 	//Cloud::Finalize();
-	//Water::Finalize();
+	Water::Finalize();
 
 	if (sceneManager_) {
 		sceneManager_->Finalize();

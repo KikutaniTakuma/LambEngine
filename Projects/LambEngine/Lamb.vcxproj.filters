@@ -199,6 +199,9 @@
     <ClCompile Include="Drawers\Other\WaterTex2D\WaterTex2D.cpp">
       <Filter>Drawers\Other</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.cpp">
+      <Filter>Engine\Graphics\PipelineObject\WaterPipeline</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -410,6 +413,9 @@
     </Filter>
     <Filter Include="Drawers\Other">
       <UniqueIdentifier>{5c308a47-9839-49cb-b2bf-2944c9b53af8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject\WaterPipeline">
+      <UniqueIdentifier>{fc36af07-3785-481d-b32c-b52965121ffe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -646,6 +652,9 @@
     </ClInclude>
     <ClInclude Include="Drawers\Other\WaterTex2D\WaterTex2D.h">
       <Filter>Drawers\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.h">
+      <Filter>Engine\Graphics\PipelineObject\WaterPipeline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

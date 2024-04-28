@@ -34,6 +34,7 @@ public:
 	void Draw() override;
 
 public:
+	class Water* water_;
 	std::unique_ptr<Sphere> sphere_;
 	std::unique_ptr<WaterTex2D> watertsetUgoitekure_;
 	Transform waterPos_;

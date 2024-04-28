@@ -39,7 +39,7 @@ private:
 public:
 	uint32_t LoadTexture(const std::string& fileName);
 
-	const Texture* const GetTexture(const std::string& fileName);
+	Texture* const GetTexture(const std::string& fileName);
 
 public:
 	uint32_t GetWhiteTex();
