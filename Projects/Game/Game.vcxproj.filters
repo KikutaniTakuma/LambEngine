@@ -68,6 +68,9 @@
     <ClCompile Include="Src\Game\SkyBlock\SkyBlock.cpp">
       <Filter>Game\SkyBlock</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\Player\Player.cpp">
+      <Filter>Game\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -142,6 +145,9 @@
     <Filter Include="Game\SkyBlock">
       <UniqueIdentifier>{ef39c624-d31b-4fc2-86a4-cc0366782860}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Player">
+      <UniqueIdentifier>{dc376baf-7d16-46b1-a3ef-b258172c0b20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -209,6 +215,9 @@
     </ClInclude>
     <ClInclude Include="Src\Game\SkyBlock\SkyBlock.h">
       <Filter>Game\SkyBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Player\Player.h">
+      <Filter>Game\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
