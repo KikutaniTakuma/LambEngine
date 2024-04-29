@@ -3,6 +3,7 @@
 #include "Math/Mat4x4.h"
 #include "Engine/Graphics/GraphicsStructs.h"
 #include "Engine/Graphics/Skeleton.h"
+#include "Utils/Flg/Flg.h"
 
 class Animator {
 public:
@@ -19,6 +20,7 @@ public:
 
 	void Update(const Mesh* const mesh);
 	void Update(Skeleton& skeleton);
+	void Update(const std::string& rootNodeName);
 
 public:
 	// 最初からスタート
@@ -35,6 +37,10 @@ public:
 
 	// 一時停止
 	void Pause();
+
+	const Lamb::Flg& GetIsActive() const {
+		return isActive_;
+	}
 
 public:
 	/// <summary>
@@ -73,7 +79,7 @@ private:
 	Mat4x4 animationMatrix_;
 	size_t currentAnimationIndex_;
 
-	bool isActive_;
+	Lamb::Flg isActive_;
 
 	bool isFullAnimation_;
 	bool isLoop_;

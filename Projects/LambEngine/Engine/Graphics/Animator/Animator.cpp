@@ -25,13 +25,20 @@ void Animator::Load(const std::string& fileName) {
 #pragma warning(pop)
 
 void Animator::Update(const Mesh* const mesh) {
-	Animation& currentAnimation = animations_->data[currentAnimationIndex_];
-	NodeAnimation& rootNodeAnimation = currentAnimation.nodeAnimations[mesh->node.name];
-	Vector3&& translate = CalaclateValue(rootNodeAnimation.translation, animationTime_);
-	Quaternion&& rotate = CalaclateValue(rootNodeAnimation.rotate, animationTime_);
-	Vector3&& scale = CalaclateValue(rootNodeAnimation.sacle, animationTime_);
+	Update(mesh->node.name);
+}
 
-	animationMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
+void Animator::Update(Skeleton& skeleton) {
+	Animation& currentAnimation = animations_->data[currentAnimationIndex_];
+
+	for (Joint& joint : skeleton.joints) {
+		if (auto itr = currentAnimation.nodeAnimations.find(joint.name); itr != currentAnimation.nodeAnimations.end()) {
+			const NodeAnimation& rootNodeAnimation = (*itr).second;
+			joint.transform.translate = CalaclateValue(rootNodeAnimation.translation, animationTime_);
+			joint.transform.rotate = CalaclateValue(rootNodeAnimation.rotate, animationTime_);
+			joint.transform.scale = CalaclateValue(rootNodeAnimation.sacle, animationTime_);
+		}
+	}
 
 	/// 以下ゴミコード
 
@@ -73,17 +80,15 @@ void Animator::Update(const Mesh* const mesh) {
 	}
 }
 
-void Animator::Update(Skeleton& skeleton) {
+void Animator::Update(const std::string& rootNodeName)
+{
 	Animation& currentAnimation = animations_->data[currentAnimationIndex_];
+	NodeAnimation& rootNodeAnimation = currentAnimation.nodeAnimations[rootNodeName];
+	Vector3&& translate = CalaclateValue(rootNodeAnimation.translation, animationTime_);
+	Quaternion&& rotate = CalaclateValue(rootNodeAnimation.rotate, animationTime_);
+	Vector3&& scale = CalaclateValue(rootNodeAnimation.sacle, animationTime_);
 
-	for (Joint& joint : skeleton.joints) {
-		if (auto itr = currentAnimation.nodeAnimations.find(joint.name); itr != currentAnimation.nodeAnimations.end()) {
-			const NodeAnimation& rootNodeAnimation = (*itr).second;
-			joint.transform.translate = CalaclateValue(rootNodeAnimation.translation, animationTime_);
-			joint.transform.rotate = CalaclateValue(rootNodeAnimation.rotate, animationTime_);
-			joint.transform.scale = CalaclateValue(rootNodeAnimation.sacle, animationTime_);
-		}
-	}
+	animationMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
 
 	/// 以下ゴミコード
 
