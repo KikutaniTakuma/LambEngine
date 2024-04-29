@@ -1,6 +1,7 @@
 #pragma once
 #include "Drawers/Model/Model.h"
 #include "Utils/SafePtr/SafePtr.h"
+#include "Utils/Flg/Flg.h"
 
 class SkyBlock {
 public:
@@ -19,12 +20,23 @@ public:
 
 	void Draw(const class Camera& camera);
 
+	void StartFall();
+
+	void Debug(const std::string& guiName);
+
+private:
+	void Falling();
+
 private:
 	// ブロックのモデル
 	Lamb::SafePtr<Model> model_;
 
-	// 浮いてるか
-	bool isFloating_;
+	// 落ちてるか
+	Lamb::Flg isFall_;
 
 	Transform transform_;
+
+	float gravity_;
+	float speed_;
+	float fallingTime_;
 };

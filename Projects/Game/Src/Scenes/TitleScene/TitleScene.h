@@ -13,6 +13,7 @@
 #include "Engine/Graphics/Tex2DAniamtor/Tex2DAniamtor.h"
 #include "Utils/SafePtr/SafePtr.h"
 #include "Drawers/Other/WaterTex2D/WaterTex2D.h"
+#include "Game/SkyBlock/SkyBlock.h"
 
 class TitleScene : public BaseScene {
 public:
@@ -37,6 +38,8 @@ public:
 	class Water* water_;
 	std::unique_ptr<Sphere> sphere_;
 	std::unique_ptr<WaterTex2D> watertsetUgoitekure_;
+	std::unique_ptr<SkyBlock> skyBlock_;
+
 	Transform waterPos_;
 	Vector3 random_;
 	Vector4 color_;

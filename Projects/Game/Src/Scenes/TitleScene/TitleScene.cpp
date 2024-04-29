@@ -45,6 +45,10 @@ void TitleScene::Initialize()
 	sphere_.reset(new Sphere);
 
 	water_ = Water::GetInstance();
+
+
+	skyBlock_ = std::make_unique<SkyBlock>();
+	skyBlock_->Init(Transform());
 }
 
 void TitleScene::Finalize()
@@ -61,6 +65,9 @@ void TitleScene::Update()
 
 	sphere_->Debug("Sphere");
 	sphere_->Update();
+
+	skyBlock_->Debug("tset");
+	skyBlock_->Update();
 
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
 		sceneManager_->SceneChange(BaseScene::ID::Game);
@@ -82,13 +89,17 @@ void TitleScene::Draw()
 
 	sphere_->Draw(currentCamera_->GetViewProjection(), std::numeric_limits<uint32_t>::max());
 
-	watertsetUgoitekure_->Draw(
+
+	/*watertsetUgoitekure_->Draw(
 		waterPos_.GetMatrix(),
 		currentCamera_->GetViewProjection(),
 		{ random_.x, random_.y },
 		color_.GetColorRGBA(),
 		BlendType::kNormal
-	);
+	);*/
+
+
+	skyBlock_->Draw(*currentCamera_);
 
 	Lamb::screenout << "Model scene" << Lamb::endline
 		<< "Press space to change ""Water and cloud scene""";
