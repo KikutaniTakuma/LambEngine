@@ -40,8 +40,7 @@ void DebugCamera::Update() {
 
 	float isSigned = mouse->GetWheelVelocity();
 	if (not (isSigned == 0.0f) && not isOnImGui) {
-		scale.z += scaleSpeed_ * isSigned;
-		scale.z = std::max(0.1f, scale.z);
+		pos += (Vector3::kZIdentity * isSigned) * Quaternion::EulerToQuaternion(rotate) * Lamb::DeltaTime();
 	}
 #endif // _DEBUG
 	Camera::Update();
