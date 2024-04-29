@@ -38,9 +38,10 @@ void AnimationModel::Draw(
 	BlendType blend
 ) {
 	RenderData* render = renderSet->GetRenderContext(blend);
+	const Mat4x4& animationMatrix = animator_->GetIsActive() ? animator_->GetLocalMat4x4() : renderSet->GetNode().loacalMatrix;
 
 	render->SetWVPMatrix({
-		animator_->GetLocalMat4x4() * worldMatrix,
+		animationMatrix * worldMatrix,
 		camera
 		}
 	);
