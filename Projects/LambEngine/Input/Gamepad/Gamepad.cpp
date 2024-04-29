@@ -48,17 +48,15 @@ bool Gamepad::Released(Button type) {
 
 bool Gamepad::PushAnyKey() {
 	Gamepad* instance = Gamepad::GetInstance();
-	float leftStickX = GetStick(Stick::LEFT_X);
-	float leftStickY = GetStick(Stick::LEFT_Y);
-	float rightStickX = GetStick(Stick::RIGHT_X);
-	float rightStickY = GetStick(Stick::RIGHT_Y);
+	Vector2 leftStick = GetStick(Stick::LEFT);
+	Vector2 rightStick = GetStick(Stick::RIGHT);
 
 	if (instance->state_.Gamepad.bLeftTrigger
 		|| instance->state_.Gamepad.bRightTrigger
-		|| leftStickX < -0.3f || 0.3f <leftStickX
-		|| leftStickY < -0.3f || 0.3f <leftStickY
-		|| rightStickX < -0.3f || 0.3f < rightStickX
-		|| rightStickY < -0.3f || 0.3f < rightStickY
+		|| leftStick.x < -0.3f || 0.3f <leftStick.x
+		|| leftStick.y < -0.3f || 0.3f <leftStick.y
+		|| rightStick.x < -0.3f || 0.3f < rightStick.x
+		|| rightStick.y < -0.3f || 0.3f < rightStick.y
 		) {
 		return true;
 	}
@@ -86,32 +84,30 @@ float Gamepad::GetTriger(Triger type, float deadZone) {
 	return moveTriger <= deadZone ? 0.0f : moveTriger;
 }
 
-float Gamepad::GetStick(Stick type, float deadZone) {
+Vector2 Gamepad::GetStick(Stick type, float deadZone) {
 	static constexpr float kNormal = 1.0f / static_cast<float>(SHRT_MAX);
-	float moveStick = 0.0f;
+	Vector2 moveStick = Vector2::kZero;
 	deadZone = std::clamp(deadZone, 0.0f, 1.0f);
 
 	switch (type)
 	{
-	case Gamepad::Stick::LEFT_X:
-		moveStick = static_cast<float>(state_.Gamepad.sThumbLX) * kNormal;
+	case Gamepad::Stick::LEFT:
+		moveStick.x = static_cast<float>(state_.Gamepad.sThumbLX) * kNormal;
+		moveStick.y = static_cast<float>(state_.Gamepad.sThumbLY) * kNormal;
 		break;
-	case Gamepad::Stick::LEFT_Y:
-		moveStick = static_cast<float>(state_.Gamepad.sThumbLY) * kNormal;
-		break;
-	case Gamepad::Stick::RIGHT_X:
-		moveStick = static_cast<float>(state_.Gamepad.sThumbRX) * kNormal;
-		break;
-	case Gamepad::Stick::RIGHT_Y:
-		moveStick = static_cast<float>(state_.Gamepad.sThumbRY) * kNormal;
+	case Gamepad::Stick::RIGHT:
+		moveStick.x = static_cast<float>(state_.Gamepad.sThumbRX) * kNormal;
+		moveStick.y = static_cast<float>(state_.Gamepad.sThumbRY) * kNormal;
 		break;
 	default:
-		return 0.0f;
+		return Vector2::kZero;
 	}
 
+	float length = moveStick.Length();
+
 	// もしデッドゾーン内だった場合は0.0fを返す
-	if (-deadZone <= moveStick && moveStick <= deadZone) {
-		return 0.0f;
+	if (-deadZone <= length && length <= deadZone) {
+		return Vector2::kZero;
 	}
 
 	return moveStick;
@@ -131,10 +127,10 @@ void Gamepad::Debug() {
 	ImGui::SetNextWindowSizeConstraints({}, { 210.0f, 400.0f });
 	ImGui::Begin("Gamepad Debug");
 	if (ImGui::TreeNode("stick")) {
-		ImGui::Text("LeftX          = %.2f%%\n", static_cast<float>(GetStick(Stick::LEFT_X)) * 100.0f);
-		ImGui::Text("LeftY          = %.2f%%\n", static_cast<float>(GetStick(Stick::LEFT_Y)) * 100.0f);
-		ImGui::Text("RightX         = %.2f%%\n", static_cast<float>(GetStick(Stick::RIGHT_X)) * 100.0f);
-		ImGui::Text("RightY         = %.2f%%\n", static_cast<float>(GetStick(Stick::RIGHT_Y)) * 100.0f);
+		ImGui::Text("LeftX          = %.2f%%\n", static_cast<float>(GetStick(Stick::LEFT).x) * 100.0f);
+		ImGui::Text("LeftY          = %.2f%%\n", static_cast<float>(GetStick(Stick::LEFT).y) * 100.0f);
+		ImGui::Text("RightX         = %.2f%%\n", static_cast<float>(GetStick(Stick::RIGHT).x) * 100.0f);
+		ImGui::Text("RightY         = %.2f%%\n", static_cast<float>(GetStick(Stick::RIGHT).y) * 100.0f);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("triger")) {

@@ -7,6 +7,7 @@
 #include <Xinput.h>
 #pragma comment (lib, "xinput.lib")
 #include <cstdint>
+#include "Math/Vector2.h"
 
 // Xボックスコントローラーでやったのでコメントアウトの説明はそれ
 // ほかのコントローラーは分からないので検証必須
@@ -43,10 +44,8 @@ public:
 
 	// スティック
 	enum class Stick {
-		LEFT_X,
-		LEFT_Y,
-		RIGHT_X,
-		RIGHT_Y
+		LEFT,
+		RIGHT,
 	};
 
 private:
@@ -129,7 +128,7 @@ public:
 	/// <param name="type">スティックのタイプ</param>
 	/// <param name="deadZone">デッドゾーン(0.0f～1.0f)の範囲内なら0.0fを返す</param>
 	/// <returns>-1.0f ～ 1.0f の値</returns>
-	float GetStick(Stick type, float deadZone = 0.3f);
+	Vector2 GetStick(Stick type, float deadZone = 0.3f);
 
 	/// <summary>
 	/// バイブレーション
