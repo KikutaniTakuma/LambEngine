@@ -26,6 +26,7 @@ public:
 
 private:
 	void Falling();
+	void StopFalling();
 
 private:
 	// ブロックのモデル

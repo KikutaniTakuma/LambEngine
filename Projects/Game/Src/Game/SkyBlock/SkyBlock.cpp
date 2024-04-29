@@ -24,6 +24,7 @@ void SkyBlock::Init(const Transform& transform) {
 void SkyBlock::Update() {
 	if (isFall_) {
 		Falling();
+		StopFalling();
 	}
 
 	transform_.translate.y += speed_;
@@ -59,14 +60,15 @@ void SkyBlock::Debug([[maybe_unused]]const std::string& guiName)
 }
 
 void SkyBlock::Falling() {
+	speed_ = -gravity_ * fallingTime_;
+	fallingTime_ += Lamb::DeltaTime();
+}
+
+void SkyBlock::StopFalling() {
 	if (transform_.translate.y < 0.0f) {
 		transform_.translate.y = 0.0f;
 		speed_ = 0.0f;
 		fallingTime_ = 0.0f;
 		isFall_ = false;
-	}
-	else {
-		speed_ = -gravity_ * fallingTime_;
-		fallingTime_ += Lamb::DeltaTime();
 	}
 }
