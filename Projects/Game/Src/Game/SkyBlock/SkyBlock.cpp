@@ -27,7 +27,7 @@ void SkyBlock::Update() {
 		StopFalling();
 	}
 
-	transform_.translate.y += speed_;
+	transform_.translate.y += speed_ * Lamb::DeltaTime();
 }
 
 void SkyBlock::Draw(const Camera& camera) {
