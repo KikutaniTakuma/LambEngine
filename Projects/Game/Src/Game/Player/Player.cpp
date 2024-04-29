@@ -1,0 +1,87 @@
+#include "Player.h"
+#include "Camera/Camera.h"
+#include "Input/Gamepad/Gamepad.h"
+#include "Input/KeyInput/KeyInput.h"
+#include "Utils/EngineInfo/EngineInfo.h"
+
+void Player::Init(const Transform& transform)
+{
+	std::string fileName = "./Resources/Common/Player/Player.gltf";
+	std::string punchFileName = "./Resources/Common/Player/PlayerPunch.gltf";
+
+
+	waitAnimator_ = std::make_unique<Animator>();
+	waitAnimator_->Load(fileName);
+	waitAnimator_->SetIsFullAnimation(false);
+	waitAnimator_->SetLoopAnimation(true);
+	waitAnimator_->Start();
+	punchAnimator_ = std::make_unique<Animator>();
+	punchAnimator_->Load(punchFileName);
+	punchAnimator_->SetIsFullAnimation(false);
+	punchAnimator_->SetLoopAnimation(false);
+
+	transform_ = transform;
+
+	gravity_ = 9.80665f;
+}
+
+void Player::Update() {
+	if (punchAnimator_->GetIsActive().OnExit()) {
+		waitAnimator_->Start();
+		punchAnimator_->Stop();
+		isPunch_ = false;
+	}
+
+	punchAnimator_->Update(model_->GetNode().name);
+	waitAnimator_->Update(model_->GetNode().name);
+
+	Move();
+
+
+}
+
+void Player::Draw(const Camera& camera) {
+	const Mat4x4& localMatrix = punchAnimator_->GetIsActive() ? punchAnimator_->GetLocalMat4x4() : waitAnimator_->GetLocalMat4x4();
+
+	model_->Draw(
+		localMatrix * transform_.GetMatrix(),
+		camera.GetViewProjection(),
+		0xffffffff,
+		BlendType::kNormal
+	);
+}
+
+void Player::Punch() {
+	Lamb::SafePtr gamepad = Gamepad::GetInstance();
+	if (not isPunch_ and gamepad->GetButton(Gamepad::Button::B)) {
+		punchAnimator_->Start();
+		isPunch_ = true;
+		punchAnimator_->Pause();
+	}
+}
+
+void Player::Move() {
+	Lamb::SafePtr gamepad = Gamepad::GetInstance();
+	Vector2&& stick = gamepad->GetStick(Gamepad::Stick::LEFT);
+
+	direction_ = Vector2::kIdentity;
+
+	direction_ = stick;
+}
+
+void Player::Jump() {
+	Lamb::SafePtr gamepad = Gamepad::GetInstance();
+	if (not isJump_ and gamepad->GetButton(Gamepad::Button::A)) {
+		isJump_ = true;
+
+		jumpSpeed_ = jump_;
+		jumpTime_ = 0.0f;
+	}
+}
+
+void Player::Falling() {
+	if (isJump_) {
+		jumpSpeed_ += -gravity_ * jumpTime_;
+		jumpTime_ += Lamb::DeltaTime();
+	}
+}
