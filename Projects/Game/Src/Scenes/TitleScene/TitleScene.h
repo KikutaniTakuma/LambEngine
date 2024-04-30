@@ -14,6 +14,7 @@
 #include "Utils/SafePtr/SafePtr.h"
 #include "Drawers/Other/WaterTex2D/WaterTex2D.h"
 #include "Game/SkyBlock/SkyBlock.h"
+#include "Game/Player/Player.h"
 
 class TitleScene : public BaseScene {
 public:
@@ -39,6 +40,7 @@ public:
 	std::unique_ptr<Sphere> sphere_;
 	std::unique_ptr<WaterTex2D> watertsetUgoitekure_;
 	std::unique_ptr<SkyBlock> skyBlock_;
+	std::unique_ptr<Player> player_;
 
 	Transform waterPos_;
 	Vector3 random_;

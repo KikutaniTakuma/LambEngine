@@ -23,6 +23,8 @@ void Player::Init(const Transform& transform)
 	transform_ = transform;
 
 	gravity_ = 9.80665f;
+
+	jump_ = 30.0f;
 }
 
 void Player::Update() {
@@ -38,7 +40,14 @@ void Player::Update() {
 	Move();
 	Jump();
 	Falling();
+	if (not isJump_) {
+		Punch();
+	}
 
+	transform_.translate.x += direction_.x * speed_ * Lamb::DeltaTime();
+	transform_.translate.z += direction_.y * speed_ * Lamb::DeltaTime();
+
+	transform_.translate.y += jumpSpeed_ * Lamb::DeltaTime();
 }
 
 void Player::Draw(const Camera& camera) {
@@ -90,8 +99,23 @@ void Player::Falling() {
 void Player::Landing(bool isCollision) {
 	if (transform_.translate.y <= 0.0f) {
 		transform_.translate.y = 0.0f;
+		isJump_ = false;
+		JumpReset();
 	}
 	else if(isCollision){
 		isJump_ = false;
+		JumpReset();
 	}
+	else if(not isJump_ and not isCollision){
+		isJump_ = true;
+
+		jumpSpeed_ = 0.0f;
+		jumpTime_ = 0.0f;
+	}
+}
+
+void Player::JumpReset()
+{
+	jumpSpeed_ = 0.0f;
+	jumpTime_ = 0.0f;
 }

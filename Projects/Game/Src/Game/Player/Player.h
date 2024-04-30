@@ -53,6 +53,9 @@ public:
 	}
 
 private:
+	void JumpReset();
+
+private:
 	// ブロックのモデル
 	Lamb::SafePtr<Model> model_;
 
