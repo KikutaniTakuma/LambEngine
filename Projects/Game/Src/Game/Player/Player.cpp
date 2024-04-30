@@ -36,7 +36,8 @@ void Player::Update() {
 	waitAnimator_->Update(model_->GetNode().name);
 
 	Move();
-
+	Jump();
+	Falling();
 
 }
 
@@ -83,5 +84,14 @@ void Player::Falling() {
 	if (isJump_) {
 		jumpSpeed_ += -gravity_ * jumpTime_;
 		jumpTime_ += Lamb::DeltaTime();
+	}
+}
+
+void Player::Landing(bool isCollision) {
+	if (transform_.translate.y <= 0.0f) {
+		transform_.translate.y = 0.0f;
+	}
+	else if(isCollision){
+		isJump_ = false;
 	}
 }

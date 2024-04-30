@@ -38,6 +38,9 @@ public:
 
 	void Falling();
 
+	// 着地
+	void Landing(bool isCollision);
+
 	const Vector3& GetTranslate() const {
 		return transform_.translate;
 	}
