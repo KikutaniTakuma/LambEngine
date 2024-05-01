@@ -3,6 +3,7 @@
 #include "SceneFactory/SceneFactory.h"
 
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
 
 #include "imgui.h"
 
@@ -24,7 +25,8 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 	scene_->Initialize();
 
 
-	load_.reset(new SceneLoad{});
+	load_ = std::make_unique<SceneLoad>();
+
 
 #ifdef _DEBUG
 	sceneName_[BaseScene::ID::Title] = "Title";
@@ -37,6 +39,9 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 	sceneNum_[BaseScene::ID::Game] = DIK_2;
 	sceneNum_[BaseScene::ID::StageSelect] = DIK_3;
 	sceneNum_[BaseScene::ID::Result] = DIK_4;
+
+	// テクスチャデータのアップロード
+	UploadTextureData();
 }
 
 void SceneManager::SceneChange(std::optional<BaseScene::ID> next) {
@@ -97,6 +102,10 @@ void SceneManager::Update() {
 #pragma region ロード中
 		// シーンの初期化
 		scene_->Initialize();
+
+		// テクスチャデータのアップロード
+		UploadTextureData();
+
 		// ロード中の描画を終了
 		load_->Stop();
 #pragma endregion
@@ -171,6 +180,15 @@ void SceneManager::Debug()
 	ImGui::Text((std::string("preScene : ") + sceneName_[preSceneID_.value()]).c_str());
 	ImGui::End();
 #endif // _DEBUG
+}
+
+void SceneManager::UploadTextureData()
+{
+	auto textureManager = TextureManager::GetInstance();
+	// このフレームで画像読み込みが発生していたらTextureをvramに送る
+	textureManager->UploadTextureData();
+	// dramから解放
+	textureManager->ReleaseIntermediateResource();
 }
 
 void SceneManager::Finalize() {
