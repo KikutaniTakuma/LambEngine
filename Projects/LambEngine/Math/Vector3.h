@@ -164,6 +164,12 @@ struct Segment {
 	Vector3 diff;
 };
 
+/// <summary>
+/// ベクトル1をベクトル2に投影する関数
+/// </summary>
+/// <param name="vec1">投影するベクトル</param>
+/// <param name="vec2">投影先のベクトル</param>
+/// <returns>正射影ベクトル</returns>
 [[nodiscard]] Vector3 Project(const Vector3& vec1, const Vector3& vec2);
 
 [[nodiscard]] Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
