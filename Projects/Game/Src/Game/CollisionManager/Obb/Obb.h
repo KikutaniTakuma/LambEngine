@@ -26,11 +26,9 @@ public:
 
 	void Debug(const std::string& guiName);
 
-	bool IsCollision(Vector3 pos, float radius);
-	bool IsCollision(Obb& other);
-
-private:
-
+	[[nodiscard]]bool IsCollision(Vector3 pos, float radius);
+	[[nodiscard]]bool IsCollision(Obb& other);
+	[[nodiscard]]bool IsCollision(Obb& other, Vector3& pushVector);
 
 public:
 	Vector3 center;
