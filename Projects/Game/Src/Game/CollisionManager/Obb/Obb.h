@@ -27,21 +27,24 @@ public:
 	void Debug(const std::string& guiName);
 
 	bool IsCollision(Vector3 pos, float radius);
+	bool IsCollision(Obb& other);
+
+private:
+
 
 public:
-	Vector3 center_;
-	Vector3 scale_;
-	Vector3 rotate_;
+	Vector3 center;
+	Vector3 scale;
+	Vector3 rotate;
 
+private:
 	uint32_t color_;
 
 private:
-	std::array<Vector3, 3> orientations_;
-	std::array<std::unique_ptr<Line>, 12> lines_;
-	std::array<std::unique_ptr<Line>, 3> orientationLines_;
-	Vector3 size_;
-
-	Mat4x4 worldMatrix_;
+	std::unique_ptr<std::array<Vector3, 8>> localPositions_;
+	std::unique_ptr<std::array<Vector3, 8>> positions_;
+	std::unique_ptr<std::array<Vector3, 3>> localOrientations_;
+	std::unique_ptr<std::array<Vector3, 3>> orientations_;
 
 	Lamb::Flg isCollision_;
 
