@@ -215,6 +215,11 @@ public:
         }
     }
 
+    inline void DrawAndResetDrawCount() {
+        Draw();
+        ResetDrawCount();
+    }
+
 public:
     inline RenderData* GetRenderContext(BlendType blend) {
         return renderDatas_[blend].get();
