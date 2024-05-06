@@ -103,8 +103,6 @@ void SceneManager::Update() {
 		// シーンの初期化
 		scene_->Initialize();
 
-		// テクスチャデータのアップロード
-		UploadTextureData();
 
 		// ロード中の描画を終了
 		load_->Stop();
@@ -119,6 +117,8 @@ void SceneManager::Update() {
 #pragma endregion
 	}
 
+	// テクスチャデータのアップロード
+	UploadTextureData();
 }
 
 void SceneManager::Draw() {
