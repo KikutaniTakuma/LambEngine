@@ -5,43 +5,37 @@
 #include "Game/CollisionManager/Plane/Plane.h"
 #include "Math/Quaternion.h"
 
+std::unique_ptr<std::array<const Vector3, 8>> Obb::localPositions_ = std::make_unique<std::array<const Vector3, 8>>(
+	std::array<const Vector3, 8>{
+		Vector3(-0.5f, -0.5f, -0.5f), // 左下手前
+		Vector3(-0.5f, -0.5f, +0.5f), // 左下奥
+		Vector3(+0.5f, -0.5f, -0.5f), // 右下手前
+		Vector3(+0.5f, -0.5f, +0.5f), // 右下奥
+
+		Vector3(-0.5f, +0.5f, -0.5f), // 左上手前
+		Vector3(-0.5f, +0.5f, +0.5f), // 左上奥
+		Vector3(+0.5f, +0.5f, -0.5f), // 右上手前
+		Vector3(+0.5f, +0.5f, +0.5f)  // 右上奥
+	}
+);
+std::unique_ptr<std::array<const Vector3, 3>> Obb::localOrientations_ = std::make_unique<std::array<const Vector3, 3>>(
+	std::array<const Vector3, 3>{
+	   Vector3(1.0f,0.0f,0.0f),
+	   Vector3(0.0f,1.0f,0.0f),
+	   Vector3(0.0f,0.0f,1.0f)
+	}
+);
+
 Obb::Obb():
 	center(),
 	scale(Vector3::kIdentity),
 	rotate(),
 	color_(std::numeric_limits<uint32_t>::max()),
-	localPositions_(),
 	positions_(),
-	localOrientations_(),
 	orientations_()
 {
-	localPositions_ = std::make_unique<std::array<Vector3, 8>>();
 	positions_ = std::make_unique<std::array<Vector3, 8>>();
-
-	Vector3 basisLocal = Vector3::kIdentity * 0.5f;
-	*localPositions_ = {
-		Vector3(-basisLocal), // 左下手前
-		Vector3(-basisLocal.x, -basisLocal.y, +basisLocal.z), // 左下奥
-		Vector3(+basisLocal.x, -basisLocal.y, -basisLocal.z), // 右下手前
-		Vector3(+basisLocal.x, -basisLocal.y, +basisLocal.z), // 右下奥
-
-		Vector3(-basisLocal.x, +basisLocal.y, -basisLocal.z), // 左上手前
-		Vector3(-basisLocal.x, +basisLocal.y, +basisLocal.z), // 左上奥
-		Vector3(+basisLocal.x, +basisLocal.y, -basisLocal.z), // 右上手前
-		Vector3(+basisLocal) // 右上奥
-	};
-
-
-
-	localOrientations_ = std::make_unique<std::array<Vector3, 3>>();
 	orientations_ = std::make_unique<std::array<Vector3, 3>>();
-
-	*localOrientations_ = {
-		Vector3::kXIdentity,
-		Vector3::kYIdentity,
-		Vector3::kZIdentity
-	};
-
 }
 
 bool Obb::IsCollision(Vector3 pos, float radius) {
@@ -73,9 +67,7 @@ bool Obb::IsCollision(Vector3 pos, float radius) {
 	return false;
 }
 
-bool Obb::IsCollision(Obb& other)
-{
-	// 分離軸(面法線)
+bool Obb::IsCollision(Obb& other) {
 	float length = 0.0f, otherLength = 0.0f;
 	float min = 0.0f, max = 0.0f, otherMin = 0.0f, otherMax = 0.0f;
 
@@ -107,6 +99,7 @@ bool Obb::IsCollision(Obb& other)
 		return false;
 		};
 
+	// 分離軸(面法線)
 	for (const auto& separationAxis : *orientations_) {
 		if (isSepatateAxis(separationAxis)) {
 			return false;
@@ -118,6 +111,7 @@ bool Obb::IsCollision(Obb& other)
 		}
 	}
 
+	// 各軸のクロス積
 	for (const auto& orientation : *orientations_) {
 		for (const auto& otherOrientation : *other.orientations_) {
 			if (isSepatateAxis(orientation.Cross(otherOrientation))) {
@@ -136,7 +130,6 @@ bool Obb::IsCollision(Obb& other)
 }
 
 bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
-	// 分離軸(面法線)
 	float length = 0.0f, otherLength = 0.0f;
 	float min = 0.0f, max = 0.0f, otherMin = 0.0f, otherMax = 0.0f;
 
@@ -181,6 +174,7 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 		return false;
 	};
 
+	// 分離軸(面法線)
 	for (const auto& separationAxis : *orientations_) {
 		if (isSepatateAxisAndClacOverLap(separationAxis)) {
 			return false;
@@ -192,6 +186,7 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 		}
 	}
 
+	// 各軸のクロス積
 	for (const auto& orientation : *orientations_) {
 		for (const auto& otherOrientation : *other.orientations_) {
 			Vector3&& separationAxis = orientation.Cross(otherOrientation);
@@ -202,7 +197,7 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 	}
 
 	float dot = (other.center - center).Dot(overLapAxis.Normalize());
-	if (dot <= 0.0f) {
+	if (not (0.0f < dot)) {
 		overLapAxis = -overLapAxis;
 	}
 	pushVector = overLapAxis.Normalize() * minOverLap;

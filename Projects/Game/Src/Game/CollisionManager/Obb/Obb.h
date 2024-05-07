@@ -39,9 +39,10 @@ private:
 	uint32_t color_;
 
 private:
-	std::unique_ptr<std::array<Vector3, 8>> localPositions_;
+	static std::unique_ptr<std::array<const Vector3, 8>> localPositions_;
+	static std::unique_ptr<std::array<const Vector3, 3>> localOrientations_;
+private:
 	std::unique_ptr<std::array<Vector3, 8>> positions_;
-	std::unique_ptr<std::array<Vector3, 3>> localOrientations_;
 	std::unique_ptr<std::array<Vector3, 3>> orientations_;
 
 	Lamb::Flg isCollision_;
