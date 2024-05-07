@@ -185,7 +185,7 @@ void PeraRender::Draw(
 
 	// 各種描画コマンドを積む
 	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	peraPipelineObject_->Use(blend, isDepth);
 	commandList->IASetVertexBuffers(0, 1, &peraVertexView_);
 	commandList->IASetIndexBuffer(&indexView_);
