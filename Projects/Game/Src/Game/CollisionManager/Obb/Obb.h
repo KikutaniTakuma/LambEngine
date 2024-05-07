@@ -1,6 +1,5 @@
 #pragma once
-#include "Math/Vector3.h"
-#include "Math/Mat4x4.h"
+#include "Transform/Transform.h"
 #include "Drawers/Line/Line.h"
 #include "Utils/Flg/Flg.h"
 #include <array>
@@ -31,9 +30,7 @@ public:
 	[[nodiscard]]bool IsCollision(Obb& other, Vector3& pushVector);
 
 public:
-	Vector3 center;
-	Vector3 scale;
-	Vector3 rotate;
+	Transform transform;
 
 #ifdef _DEBUG
 private:

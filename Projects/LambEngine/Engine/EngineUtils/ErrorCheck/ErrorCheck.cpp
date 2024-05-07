@@ -44,7 +44,7 @@ void ErrorCheck::ErrorTextBox(const std::string& text, const std::string& boxNam
 
 void ErrorCheck::CrashProgram() {
 	if (isError_) {
-		Lamb::AddLog("WARNIG CrashProgram : Please check the Error.log");
+		Lamb::AddLog("Error CrashProgram : Please check the Error.log");
 
 		std::exit(EXIT_FAILURE);
 	}
@@ -69,6 +69,6 @@ void ErrorCheck::ErrorLog(const std::string& text, const std::string& boxName) {
 		return;
 	}
 
-	file << Lamb::NowTime() << ": "  << std::format("{} : {}", boxName, text) << std::endl;
+	file << Lamb::NowTime() << ": "  << std::format("{} :\n{}", boxName, text) << std::endl;
 	file.close();
 }

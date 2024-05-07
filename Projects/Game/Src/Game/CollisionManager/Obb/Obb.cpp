@@ -27,9 +27,7 @@ std::unique_ptr<std::array<const Vector3, 3>> Obb::localOrientations_ = std::mak
 );
 
 Obb::Obb():
-	center(),
-	scale(Vector3::kIdentity),
-	rotate(),
+	transform(),
 #ifdef _DEBUG
 	color_(std::numeric_limits<uint32_t>::max()),
 #endif // _DEBUG
@@ -45,12 +43,12 @@ bool Obb::IsCollision(Vector3 pos, float radius) {
 	constexpr int32_t max = 1;
 
 	std::array<Vector3, 2> positions = {
-		scale * 0.5f, // 左下手前
+		transform.scale * 0.5f, // 左下手前
 		
-		-scale * 0.5f // 右上奥
+		-transform.scale * 0.5f // 右上奥
 	};
 
-	pos *= Mat4x4::MakeAffin(Vector3::kIdentity, rotate, center).Inverse();
+	pos *= Mat4x4::MakeAffin(Vector3::kIdentity, transform.rotate, transform.translate).Inverse();
 
 	Vector3 closestPoint = {
 		std::clamp(pos.x, positions[min].x,positions[max].x),
@@ -200,7 +198,7 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 		}
 	}
 
-	float dot = (other.center - center).Dot(overLapAxis.Normalize());
+	float dot = (other.transform.translate - transform.translate).Dot(overLapAxis.Normalize());
 	if (not (0.0f < dot)) {
 		overLapAxis = -overLapAxis;
 	}
@@ -217,8 +215,8 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 }
 
 void Obb::Update() {
-	Mat4x4&& worldMatrix = Mat4x4::MakeAffin(scale, rotate, center);
-	Quaternion&& rotateQuaternion = Quaternion::EulerToQuaternion(rotate);
+	Mat4x4&& worldMatrix = transform.GetMatrix();
+	Quaternion&& rotateQuaternion = Quaternion::EulerToQuaternion(transform.rotate);
 
 	for (size_t i = 0; i < localPositions_->size(); i++) {
 		positions_->at(i) = localPositions_->at(i) * worldMatrix;
@@ -318,10 +316,10 @@ void Obb::Draw([[maybe_unused]] const Mat4x4& viewProjection) {
 		color_
 	);
 
-	Mat4x4&& worldMatrix = Mat4x4::MakeAffin(scale, rotate, center);
+	Mat4x4&& worldMatrix = transform.GetMatrix();
 	for (size_t i = 0llu; i < orientations_->size(); i++) {
 		Line::Draw(
-			center,
+			transform.translate,
 			localOrientations_->at(i) * 0.5f * worldMatrix,
 			viewProjection,
 			Vector4{ localOrientations_->at(i), 1.0f }.GetColorRGBA()
@@ -333,9 +331,7 @@ void Obb::Draw([[maybe_unused]] const Mat4x4& viewProjection) {
 void Obb::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	ImGui::DragFloat3("center", center.data(), 0.01f);
-	ImGui::DragFloat3("size", scale.data(), 0.01f);
-	ImGui::DragFloat3("rotate", rotate.data(), 0.01f);
+	transform.Debug(guiName);
 	static Vector4 colorEdit;
 	colorEdit = UintToVector4(color_);
 	ImGui::ColorEdit4("color", colorEdit.m.data());

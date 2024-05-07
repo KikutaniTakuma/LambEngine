@@ -3,6 +3,7 @@
 #include "Engine/Graphics/Animator/Animator.h"
 #include "Utils/SafePtr/SafePtr.h"
 #include "Utils/Flg/Flg.h"
+#include "Game/CollisionManager/Obb/Obb.h"
 #include <memory>
 
 class Player {
@@ -19,6 +20,8 @@ public:
 	void Init(const Transform& transform);
 
 	void Update();
+
+	void AfterCollisionUpdate(const Vector3& pushVector);
 
 	void Draw(const class Camera& camera);
 
@@ -52,10 +55,19 @@ public:
 		isCollision_ = isCollision;
 	}
 
+	Obb& GetObb() {
+		if (not obb_) {
+			throw Lamb::Error::Code<Obb>("obb is nullptr(must call Init)", __func__);
+		}
+		return *obb_;
+	}
+
 private:
 	void JumpReset();
 
 private:
+	ObbPtr obb_;
+
 	// ブロックのモデル
 	Lamb::SafePtr<Model> model_;
 

@@ -39,9 +39,9 @@ void BaseScene::ChangeCamera()
 {
 #ifdef _DEBUG
 	ImGui::Begin("SceneCamera");
-	if (ImGui::Checkbox("debug", &isDebug_)) {
+	if (ImGui::Checkbox("debug", isDebug_.data())) {
 		currentCamera_ = isDebug_ ? debugCamera_.get() : camera_.get();
-		if (isDebug_) {
+		if (isDebug_.OnEnter()) {
 			debugCamera_->pos = camera_->pos;
 			debugCamera_->rotate = camera_->rotate;
 			debugCamera_->scale = camera_->scale;

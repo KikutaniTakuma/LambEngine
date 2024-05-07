@@ -19,6 +19,8 @@ void SkyBlock::Init(const Transform& transform) {
 	gravity_ = 9.80665f;
 	speed_ = 0.0f;
 	fallingTime_ = 0.0f;
+
+	obb_ = MakeObb();
 }
 
 void SkyBlock::Update() {
@@ -28,6 +30,24 @@ void SkyBlock::Update() {
 	}
 
 	transform_.translate.y += speed_ * Lamb::DeltaTime();
+
+	obb_->transform = transform_;
+	obb_->transform.scale *= 2.0f;
+	obb_->Update();
+}
+
+void SkyBlock::SetIsCollisionOtherBlock(bool isCollision) {
+	isCollisionBlock_ = isCollision;
+}
+
+void SkyBlock::AfterCollisionUpdate(const Vector3& pushVector) {
+	if (isCollisionBlock_.OnEnter()) {
+		transform_.translate += pushVector;
+		obb_->transform = transform_;
+		obb_->transform.scale *= 2.0f;
+		isCollisionBlock_ = false;
+		StopFalling();
+	}
 }
 
 void SkyBlock::Draw(const Camera& camera) {
@@ -37,6 +57,8 @@ void SkyBlock::Draw(const Camera& camera) {
 		0xffffffff,
 		BlendType::kNormal
 	);
+
+	obb_->Draw(camera.GetViewProjection());
 }
 
 void SkyBlock::StartFall() {

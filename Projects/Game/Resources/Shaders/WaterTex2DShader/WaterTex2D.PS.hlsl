@@ -53,8 +53,7 @@ PixelShaderOutPut main(WaterTex2DVertexOutPut waterinput)
     
     //lig = pow(lig, 1.0f);
     //kColor[input.instanceID].color + 
-    //output.color = causticsColor;
-    output.color = kColor[input.instanceID].color;
+    output.color = causticsColor;
     //output.color.xyz *= lig;
 
     return output;

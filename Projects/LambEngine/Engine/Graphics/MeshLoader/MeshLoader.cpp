@@ -167,7 +167,7 @@ Animations MeshLoader::LoadAnimation(const std::string& fileName)
 	Assimp::Importer importer;
 	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
 	if (not (scene->mNumAnimations != 0)) {
-		throw Lamb::Error::Code<MeshLoader>("this file does not have meshes -> " + fileName, __func__);
+		throw Lamb::Error::Code<MeshLoader>("this file does not have animation -> " + fileName, __func__);
 	}
 
 	result.data.resize(scene->mNumAnimations);

@@ -9,6 +9,7 @@
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 
 #include "Utils/SafePtr/SafePtr.h"
+#include "Utils/Flg/Flg.h"
 
 #include <memory>
 
@@ -72,6 +73,6 @@ protected:
 
 #ifdef _DEBUG
 	std::unique_ptr<DebugCamera> debugCamera_;
-	bool isDebug_;
+	Lamb::Flg isDebug_;
 #endif // _DEBUG
 };
