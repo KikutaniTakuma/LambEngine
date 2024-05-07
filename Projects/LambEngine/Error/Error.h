@@ -31,21 +31,37 @@ namespace Lamb {
 			return className_;
 		}
 
+		const std::string& SourceFileName() const {
+			return sourceFileName_;
+		}
+		const std::string& CodeLineNumber() const {
+			return codeLineNumber_;
+		}
+
 	private:
 		std::string className_;
 		std::string errorCode_;
 		std::string functionName_;
+		std::string sourceFileName_;
+		std::string codeLineNumber_;
 
 	public:
 		template<class T>
-		static const Error& Code(const std::string& errorCode, const std::string& functionName) {
+		static const Error& Code(
+			const std::string& errorCode, 
+			const std::string& functionName,
+			const std::string& sourceFileName,
+			uint32_t codeLineNumber
+		) {
 			static Error err;
 			err = Error{};
 
 			err.errorCode_ = errorCode;
 			err.className_ = typeid(T).name();
 			err.functionName_ = functionName + "()";
-			Lamb::DebugLog(std::string{ typeid(Error).name() } + " " + err.ClassName() + " : " + err.FunctionName() + " : " + err.What());
+			err.sourceFileName_ = sourceFileName;
+			err.codeLineNumber_ = std::to_string(codeLineNumber);
+			Lamb::DebugLog(std::string("Error ") + err.SourceFileName() + ":" + err.CodeLineNumber() + " : " + err.What());
 
 			return err;
 		}

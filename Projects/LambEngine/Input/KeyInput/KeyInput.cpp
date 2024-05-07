@@ -68,19 +68,19 @@ KeyInput::KeyInput(IDirectInput8* input):
 	HRESULT hr = input->CreateDevice(GUID_SysKeyboard, keyBoard_.GetAddressOf(), NULL);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<KeyInput>("CreateDevice failed", "Constructor");
+		throw Lamb::Error::Code<KeyInput>("CreateDevice failed",__func__, __FILE__, __LINE__);
 	}
 
 	hr = keyBoard_->SetDataFormat(&c_dfDIKeyboard);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<KeyInput>("SetDataFormat failed", "Constructor");
+		throw Lamb::Error::Code<KeyInput>("SetDataFormat failed",__func__, __FILE__, __LINE__);
 	}
 
 	hr = keyBoard_->SetCooperativeLevel(WindowFactory::GetInstance()->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<KeyInput>("SetDataFormat failed", "Constructor");
+		throw Lamb::Error::Code<KeyInput>("SetDataFormat failed",__func__, __FILE__, __LINE__);
 	}
 
 	initalizeSucceeded_ = true;

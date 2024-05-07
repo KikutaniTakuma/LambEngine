@@ -31,7 +31,7 @@ public:
 
 	Obb& GetObb() {
 		if (not obb_) {
-			throw Lamb::Error::Code<Obb>("obb is nullptr(must call Init)", __func__);
+			throw Lamb::Error::Code<Obb>("obb is nullptr(must call Init)", __func__, __FILE__, __LINE__);
 		}
 		return *obb_;
 	}

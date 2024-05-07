@@ -9,10 +9,10 @@ std::vector<std::vector<int32_t>> CsvLoad(const std::string& fileName) {
 	std::vector<std::vector<int32_t>> result;
 
 	if (!(std::filesystem::path(fileName).extension() == ".csv")) {
-		throw Lamb::Error::Code<Lamb::Error::Function>("This file is not csv -> " + fileName, __func__);
+		throw Lamb::Error::Code<Lamb::Error::Function>("This file is not csv -> " + fileName, __func__, __FILE__, __LINE__);
 	}
 	else if(std::filesystem::exists(fileName)){
-		throw Lamb::Error::Code<Lamb::Error::Function>("This file is not exists -> " + fileName, __func__);
+		throw Lamb::Error::Code<Lamb::Error::Function>("This file is not exists -> " + fileName, __func__, __FILE__, __LINE__);
 	}
 
 	std::ifstream file{ fileName };

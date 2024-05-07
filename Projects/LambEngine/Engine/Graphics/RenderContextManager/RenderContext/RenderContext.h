@@ -137,19 +137,19 @@ public:
 public:
     inline void SetMesh(const Mesh* const mesh) override {
         if (!mesh) {
-            throw Lamb::Error::Code<RenderContext>("mesh is nullptr", __func__);
+            throw Lamb::Error::Code<RenderContext>("mesh is nullptr", __func__, __FILE__, __LINE__);
         }
         mesh_ = mesh;
     }
     inline void SetPipeline(Pipeline* const pipeline) override {
         if (!pipeline) {
-            throw Lamb::Error::Code<RenderContext>("pipeline is nullptr", __func__);
+            throw Lamb::Error::Code<RenderContext>("pipeline is nullptr", __func__, __FILE__, __LINE__);
         }
         pipeline_ = pipeline;
     }
     inline void SetWVPMatrix(const WVPMatrix& matrix) override {
         if (kMaxDrawInstance <= drawCount_) {
-            throw Lamb::Error::Code<RenderContext>("drawCount is over 256", __func__);
+            throw Lamb::Error::Code<RenderContext>("drawCount is over 256", __func__, __FILE__, __LINE__);
         }
 
         shaderData_.wvpMatrix[drawCount_].worldMat = mesh_->node.loacalMatrix * matrix.worldMat;
@@ -157,7 +157,7 @@ public:
     }
     inline void SetColor(const Vector4& color) override {
         if (kMaxDrawInstance <= drawCount_) {
-            throw Lamb::Error::Code<RenderContext>("drawCount is over 256", __func__);
+            throw Lamb::Error::Code<RenderContext>("drawCount is over 256", __func__, __FILE__, __LINE__);
         }
 
         shaderData_.color[drawCount_] = color;
@@ -167,7 +167,7 @@ public:
     }
     inline void SetSahderStruct(const T& data) {
         if (kMaxDrawInstance <= drawCount_) {
-            throw Lamb::Error::Code<RenderContext>("drawCount is over 256", __func__);
+            throw Lamb::Error::Code<RenderContext>("drawCount is over 256", __func__, __FILE__, __LINE__);
         }
         shaderData_.shaderStruct[drawCount_] = data;
     }
@@ -194,7 +194,7 @@ public:
 public:
     inline void Set(RenderData* const renderData, BlendType blend) {
         if (not renderData) {
-            throw Lamb::Error::Code<RenderSet>("renderData is nullptr", __func__);
+            throw Lamb::Error::Code<RenderSet>("renderData is nullptr", __func__, __FILE__, __LINE__);
         }
 
         renderDatas_[blend].reset(renderData);
@@ -232,7 +232,7 @@ public:
     template<IsBasedRenderContext ClassName>
     inline ClassName* GetRenderContextDowncast(BlendType blend) {
         if (typeid(ClassName).name() != renderDatas_[blend]->GetID()) {
-            throw Lamb::Error::Code<RenderSet>("does not match class type", __func__);
+            throw Lamb::Error::Code<RenderSet>("does not match class type", __func__, __FILE__, __LINE__);
         }
 
         return dynamic_cast<ClassName*>(renderDatas_[blend].get());
