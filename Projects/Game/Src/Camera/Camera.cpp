@@ -94,8 +94,8 @@ void Camera::Debug([[maybe_unused]] const std::string& guiName) {
 	ImGui::Begin(guiName.c_str());
 	ImGui::DragFloat3("pos", pos.data(), 0.01f);
 	ImGui::DragFloat3("scale", scale.data(), 0.01f);
-	ImGui::DragFloat3("rotate", rotate.data());
-	ImGui::DragFloat3("offset", offset.data());
+	ImGui::DragFloat3("rotate", rotate.data(), 0.01f);
+	ImGui::DragFloat3("offset", offset.data(), 0.01f);
 	ImGui::End();
 #endif // _DEBUG
 }

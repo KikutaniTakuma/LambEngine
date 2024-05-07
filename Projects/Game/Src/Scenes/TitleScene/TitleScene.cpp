@@ -19,13 +19,11 @@ TitleScene::TitleScene():
 void TitleScene::Initialize()
 {
 	//currentCamera_->pos.y = 2.85f;
-	currentCamera_->pos.z = -10.0f;
-	//currentCamera_->rotate.x = 0.21f;
+	currentCamera_->offset.y = -0.7f;
+	currentCamera_->offset.z = -55.0f;
+	currentCamera_->rotate.x = 0.37f;
 
-	/*model_->light.ptRange = 5.0f;
-	model_->light.ptPos = model_->pos;
-	model_->light.ptPos.y = 3.8f;
-	model_->light.ptColor = Vector3::kIdentity * 15.0f;*/
+	
 	currentCamera_->Update();
 
 	watertsetUgoitekure_ = std::make_unique<WaterTex2D>();
@@ -42,16 +40,19 @@ void TitleScene::Initialize()
 
 	random_ = Lamb::Random(Vector3::kZero, Vector3::kIdentity);
 
-	sphere_.reset(new Sphere);
-
 	water_ = Water::GetInstance();
 
+	Transform playerTransform;
+	playerTransform.translate = Vector3::kYIdentity * 30.0f;
 	player_ = std::make_unique<Player>();
-	player_->Init(Transform());
+	player_->Init(playerTransform);
 
 
+	Transform skyTransform;
+	skyTransform.scale = Vector3{ 3.0f,1.0f,3.0f };
+	skyTransform.translate = Vector3::kYIdentity * 25.0f;
 	skyBlock_ = std::make_unique<SkyBlock>();
-	skyBlock_->Init(Transform());
+	skyBlock_->Init(skyTransform);
 }
 
 void TitleScene::Finalize()
@@ -63,13 +64,13 @@ void TitleScene::Update()
 {
 	currentCamera_->Debug("カメラ");
 
-	sphere_->Debug("Sphere");
-	sphere_->Update();
+	player_->Update();
+
+
 
 	skyBlock_->Debug("tset");
 	skyBlock_->Update();
 
-	player_->Update();
 
 	/*if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
 		sceneManager_->SceneChange(BaseScene::ID::Game);
@@ -79,21 +80,12 @@ void TitleScene::Update()
 	bool isCollision = skyBlock_->GetObb().IsCollision(player_->GetObb(), pushVector);
 	if (isCollision) {
 		player_->AfterCollisionUpdate(pushVector);
+		if (player_->GetIsPunch().OnExit()) {
+			skyBlock_->StartFall();
+		}
 	}
 
 	player_->Landing(isCollision);
-
-	/*obb1.Update();
-	obb2.Update();
-
-	obb1.Debug("obb1");
-	obb2.Debug("obb2");
-
-	Vector3 hoge;
-	if (obb1.IsCollision(obb2, hoge)) {
-		obb2.transform.translate += hoge;
-		obb2.Update();
-	}*/
 
 
 #ifdef _DEBUG
@@ -114,31 +106,25 @@ void TitleScene::Update()
 
 
 	water_->Update(currentCamera_->GetPos());
+	postEffectManager_->GetGrayPera().Debug("pera");
+	postEffectManager_->GetGrayPera().Update();
 }
 
 void TitleScene::Draw()
 {
 	water_->Draw(currentCamera_->GetViewProjection());
 
-	sphere_->Draw(currentCamera_->GetViewProjection(), std::numeric_limits<uint32_t>::max());
-
-
-	/*watertsetUgoitekure_->Draw(
-		waterPos_.GetMatrix(),
-		currentCamera_->GetViewProjection(),
-		{ random_.x, random_.y },
-		color_.GetColorRGBA(),
-		BlendType::kNormal
-	);*/
-
-
 	skyBlock_->Draw(*currentCamera_);
 
 	player_->Draw(*currentCamera_);
 
-	/*obb1.Draw(currentCamera_->GetViewProjection());
-	obb2.Draw(currentCamera_->GetViewProjection());*/
-
+	if (player_->GetIsPunch()) {
+		postEffectManager_->GetGrayPera().PreDraw();
+		sceneManager_->AllDraw();
+		postEffectManager_->GetGrayPera().Draw(
+			postEffectManager_->GetPeraCamera().GetViewOthographics(),
+			Pipeline::Blend::Normal, nullptr, false);
+	}
 
 	Lamb::screenout << "Model scene" << Lamb::endline
 		<< "Press space to change ""Water and cloud scene""";

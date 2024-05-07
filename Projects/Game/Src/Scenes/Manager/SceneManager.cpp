@@ -4,10 +4,14 @@
 
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
+#include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+#include "Scenes/Manager/PostEffectManager/PostEffectManager.h"
 
 #include "imgui.h"
 
 void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID) {
+	PostEffectManager::Initialize();
+
 	finishID_ = finishID;
 	preSceneID_ = firstScene.value();
 
@@ -42,6 +46,7 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 
 	// テクスチャデータのアップロード
 	UploadTextureData();
+
 }
 
 void SceneManager::SceneChange(std::optional<BaseScene::ID> next) {
@@ -129,6 +134,13 @@ void SceneManager::Draw() {
 	fade_->Draw(fadeCamera_.GetViewOthographics());
 }
 
+void SceneManager::AllDraw() {
+	RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
+	renderContextManager->Draw();
+	// ドローカウントリセット
+	renderContextManager->ResetDrawCount();
+}
+
 bool SceneManager::IsEnd() const {
 	if (!scene_) {
 		return true;
@@ -206,4 +218,6 @@ void SceneManager::Finalize() {
 		next_->Finalize();
 	}
 	next_.reset();
+
+	PostEffectManager::Finalize();
 }

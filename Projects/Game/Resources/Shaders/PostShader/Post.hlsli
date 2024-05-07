@@ -1,16 +1,20 @@
-Texture2D<float4> tex : register(t0);
+Texture2D<float32_t4> tex : register(t0);
 SamplerState smp : register(s0);
 
-cbuffer Matrix : register(b0){
-    float4x4 worldmat;
-    float4x4 viewProjectionMatrix;
-}
+struct WVPMatrix{
+    float32_t4x4 worldmat;
+    float32_t4x4 viewProjectionMatrix;
+};
 
-cbuffer Color : register(b1){
-    float4 color;
-}
+ConstantBuffer<WVPMatrix> kWvpMatrix : register(b0);
+
+struct Color{
+    float32_t4 color;
+};
+
+ConstantBuffer<Color> kColor : register(b1);
 
 struct Output{
-    float4 svPos : SV_POSITION;
-    float2 uv : TEXCOORD;
+    float32_t4 svPos : SV_POSITION;
+    float32_t2 uv : TEXCOORD;
 };

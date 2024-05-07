@@ -10,6 +10,7 @@
 
 #include "Utils/SafePtr/SafePtr.h"
 #include "Utils/Flg/Flg.h"
+#include "../PostEffectManager/PostEffectManager.h"
 
 #include <memory>
 
@@ -52,7 +53,7 @@ public:
 
 protected:
 	class SceneManager* sceneManager_;
-	
+
 	DrawerManager* drawerManager_;
 
 	AudioManager* audioManager_;
@@ -64,6 +65,8 @@ protected:
 	StringOutPutManager* stringOutPutManager_;
 
 	BaseScene::ID sceneID_;
+
+	PostEffectManager* postEffectManager_;
 
 private:
 	std::unique_ptr<Camera> camera_;

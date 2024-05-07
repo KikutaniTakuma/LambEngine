@@ -68,6 +68,8 @@ void World::Draw() {
 	if (sceneManager_) {
 		sceneManager_->Draw();
 		particleEditor_->Draw(sceneManager_->GetCurrentSceneCamera());
+
+		sceneManager_->AllDraw();
 	}
 	else {
 		isEnd_ = true;

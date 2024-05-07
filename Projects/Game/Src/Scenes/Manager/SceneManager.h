@@ -30,6 +30,8 @@ public:
 
 	void Draw();
 
+	void AllDraw();
+
 public:
 	inline bool GetIsPad() const {
 		return isPad_;

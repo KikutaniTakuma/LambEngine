@@ -15,7 +15,6 @@
 #include "Drawers/Other/WaterTex2D/WaterTex2D.h"
 #include "Game/SkyBlock/SkyBlock.h"
 #include "Game/Player/Player.h"
-#include "Game/CollisionManager/Obb/Obb.h"
 
 class TitleScene : public BaseScene {
 public:
@@ -38,13 +37,10 @@ public:
 
 public:
 	class Water* water_;
-	std::unique_ptr<Sphere> sphere_;
 	std::unique_ptr<WaterTex2D> watertsetUgoitekure_;
 	std::unique_ptr<SkyBlock> skyBlock_;
 	std::unique_ptr<Player> player_;
 
-	Obb obb1;
-	Obb obb2;
 
 	Transform waterPos_;
 	Vector3 random_;

@@ -29,7 +29,7 @@ void SkyBlock::Update() {
 		StopFalling();
 	}
 
-	transform_.translate.y += speed_ * Lamb::DeltaTime();
+	transform_.translate.y += speed_;
 
 	obb_->transform = transform_;
 	obb_->transform.scale *= 2.0f;

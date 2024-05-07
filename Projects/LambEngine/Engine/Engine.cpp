@@ -409,9 +409,6 @@ void Engine::FrameEnd() {
 	}
 	FlgManager::GetInstance()->AllFlgUpdate();
 
-	RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
-	renderContextManager->Draw();
-
 	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	frameInfo->DrawFps();
 	Lamb::screenout.Draw();
@@ -436,9 +433,6 @@ void Engine::FrameEnd() {
 	instance_->directXCommand_->WaitForFinishCommnadlist();
 
 	instance_->directXCommand_->ResetCommandlist();
-
-	// ドローカウントリセット
-	renderContextManager->ResetDrawCount();
 
 	frameInfo->End();
 }
