@@ -30,7 +30,9 @@ Obb::Obb():
 	center(),
 	scale(Vector3::kIdentity),
 	rotate(),
+#ifdef _DEBUG
 	color_(std::numeric_limits<uint32_t>::max()),
+#endif // _DEBUG
 	positions_(),
 	orientations_()
 {
@@ -71,8 +73,8 @@ bool Obb::IsCollision(Obb& other) {
 	float length = 0.0f, otherLength = 0.0f;
 	float min = 0.0f, max = 0.0f, otherMin = 0.0f, otherMax = 0.0f;
 
-	std::array<float, 8> projectLength;
-	std::array<float, 8> otherProjectLength;
+	std::array<float, 8> projectLength{};
+	std::array<float, 8> otherProjectLength{};
 
 	auto isSepatateAxis = [&](const Vector3& separationAxis)->bool {
 		for (size_t i = 0; i < 8llu; i++) {
@@ -121,10 +123,12 @@ bool Obb::IsCollision(Obb& other) {
 	}
 
 	isCollision_ = true;
-	color_ = 0xff0000ff;
-
 	other.isCollision_ = true;
+
+#ifdef _DEBUG
+	color_ = 0xff0000ff;
 	other.color_ = 0xff0000ff;
+#endif // _DEBUG
 
 	return true;
 }
@@ -133,8 +137,8 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 	float length = 0.0f, otherLength = 0.0f;
 	float min = 0.0f, max = 0.0f, otherMin = 0.0f, otherMax = 0.0f;
 
-	std::array<float, 8> projectLength;
-	std::array<float, 8> otherProjectLength;
+	std::array<float, 8> projectLength{};
+	std::array<float, 8> otherProjectLength{};
 
 	float minOverLap = std::numeric_limits<float>::max();
 	Vector3 overLapAxis;
@@ -203,10 +207,11 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 	pushVector = overLapAxis.Normalize() * minOverLap;
 
 	isCollision_ = true;
-	color_ = 0xff0000ff;
-
 	other.isCollision_ = true;
+#ifdef _DEBUG
+	color_ = 0xff0000ff;
 	other.color_ = 0xff0000ff;
+#endif // _DEBUG
 
 	return true;
 }
@@ -227,7 +232,8 @@ void Obb::Update() {
 	color_ = std::numeric_limits<uint32_t>::max();
 }
 
-void Obb::Draw(const Mat4x4& viewProjection) {
+void Obb::Draw([[maybe_unused]] const Mat4x4& viewProjection) {
+#ifdef _DEBUG
 	Line::Draw(
 		(*positions_)[0],
 		(*positions_)[1],
@@ -321,6 +327,7 @@ void Obb::Draw(const Mat4x4& viewProjection) {
 			Vector4{ localOrientations_->at(i), 1.0f }.GetColorRGBA()
 		);
 	}
+#endif // _DEBUG
 }
 
 void Obb::Debug([[maybe_unused]]const std::string& guiName) {

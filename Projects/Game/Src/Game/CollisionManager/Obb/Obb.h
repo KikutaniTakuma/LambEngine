@@ -35,8 +35,10 @@ public:
 	Vector3 scale;
 	Vector3 rotate;
 
+#ifdef _DEBUG
 private:
 	uint32_t color_;
+#endif // _DEBUG
 
 private:
 	static std::unique_ptr<std::array<const Vector3, 8>> localPositions_;
@@ -55,3 +57,10 @@ public:
 		return isCollision_;
 	}
 };
+
+using ObbPtr = std::unique_ptr<Obb>;
+
+template<class... Types>
+ObbPtr MakeObb(Types&&... args) {
+	return std::make_unique<Obb>(std::forward<Types>(args)...);
+}
