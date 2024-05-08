@@ -22,6 +22,7 @@ void GameScene::Initialize() {
 
 	transform_.scale *= 100.0f;
 	transform_.rotate.x = -1.57f;
+	transform_.rotate.y = 3.14f;
 }
 
 void GameScene::Finalize() {
