@@ -18,6 +18,7 @@ public:
 		srvDesc_(),
 		data_(nullptr),
 		isWright_(true),
+		bufferSize_(0u),
 		isCreateView_(false),
 		range_(),
 		roootParamater_()
@@ -28,21 +29,53 @@ public:
 	~StructuredBuffer() = default;
 
 	inline StructuredBuffer(const StructuredBuffer& right) :
-		StructuredBuffer{ right.Size() }
+		StructuredBuffer()
 	{
 		*this = right;
 	}
 
-	inline StructuredBuffer(StructuredBuffer&&) = delete;
+	inline StructuredBuffer(StructuredBuffer&& right) :
+		StructuredBuffer()
+	{
+		*this = right;
+	}
 
 	inline StructuredBuffer& operator=(const StructuredBuffer& right) {
-		for (uint32_t i = 0; i < bufferSize_; i++) {
-			(*this)[i] = right[i];
-		}
+		bufferResource_ = right.bufferResource_;
+		srvDesc_ = right.srvDesc_;
+		isWright_ = right.isWright_;
+		bufferSize_ = right.bufferSize_;
+		isCreateView_ = right.isCreateView_;
+		range_ = right.range_;
+
+		roootParamater_ = {};
+		roootParamater_.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		roootParamater_.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		roootParamater_.DescriptorTable.pDescriptorRanges = &range_;
+		roootParamater_.DescriptorTable.NumDescriptorRanges = 1;
+
+		data_ = right.data_;
 
 		return *this;
 	}
-	inline StructuredBuffer<T>& operator=(StructuredBuffer&&) = delete;
+	inline StructuredBuffer<T>& operator=(StructuredBuffer&& right) noexcept {
+		bufferResource_ = right.bufferResource_.Release();
+		srvDesc_ = right.srvDesc_;
+		isWright_ = right.isWright_;
+		bufferSize_ = right.bufferSize_;
+		isCreateView_ = right.isCreateView_;
+		range_ = right.range_;
+
+		roootParamater_ = {};
+		roootParamater_.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		roootParamater_.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		roootParamater_.DescriptorTable.pDescriptorRanges = &range_;
+		roootParamater_.DescriptorTable.NumDescriptorRanges = 1;
+
+		data_ = right.data_;
+
+		return *this;
+	}
 
 public:
 	void Create(uint32_t bufferSize) {
