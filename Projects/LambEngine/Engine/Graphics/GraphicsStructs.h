@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <span>
 
 #include "Transform/Transform.h"
 
@@ -61,8 +62,20 @@ struct Node {
     Node& operator=(const Node&) = default;
 };
 
+struct VertexWeightData {
+    float weight;
+    uint32_t vertexIndex;
+};
+
+struct JointWeightData {
+    Mat4x4 inverseBindPoseMatrix;
+    std::vector<VertexWeightData> vertexWeights;
+};
+
 struct ModelData {
+    std::unordered_map<std::string, JointWeightData> skinClusterData;
     std::vector<Vertex> vertices;
+    std::vector<uint32_t> indices;
     Node rootNode;
 };
 
@@ -109,12 +122,12 @@ struct Light {
     float ptRange;
 };
 
-template<class T, uint32_t bufferSize>
+template<class T>
 struct ShaderData {
     ConstBuffer<Light> light;
-    StructuredBuffer<WVPMatrix, bufferSize> wvpMatrix;
-    StructuredBuffer<Vector4, bufferSize> color;
-    StructuredBuffer<T, bufferSize> shaderStruct;
+    StructuredBuffer<WVPMatrix> wvpMatrix;
+    StructuredBuffer<Vector4> color;
+    StructuredBuffer<T> shaderStruct;
 };
 
 struct ShaderFileNames {

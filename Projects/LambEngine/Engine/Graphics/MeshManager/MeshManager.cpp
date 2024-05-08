@@ -26,14 +26,51 @@ void MeshManager::Finalize() {
 	instance_.reset();
 }
 
-Mesh* MeshManager::LoadObj(const std::string& objFileName) {
+Mesh* MeshManager::LoadModel(const std::string& objFileName) {
 	auto mesh = meshs_.find(objFileName);
 
 	if (mesh == meshs_.end()) {
 		meshs_[objFileName];
-		meshs_[objFileName] = std::make_unique<Mesh>();
-		*meshs_[objFileName] = MeshLoader::LoadModel(objFileName);
+		meshs_[objFileName].reset(CreateMesh(MeshLoader::LoadModel(objFileName)));
 	}
 
 	return meshs_[objFileName].get();
+}
+
+Mesh* MeshManager::CreateMesh(const ModelData& modelData)
+{
+	Lamb::SafePtr result = Lamb::MakeSafePtr<Mesh>();
+	Lamb::SafePtr directXDevice = DirectXDevice::GetInstance();
+
+
+	uint32_t indexSizeInBytes = static_cast<uint32_t>(sizeof(uint32_t) * modelData.indices.size());
+	uint32_t vertexSizeInBytes = static_cast<uint32_t>(sizeof(Vertex) * modelData.vertices.size());
+
+	result->node = modelData.rootNode;
+	result->indexResource = directXDevice->CreateBufferResuorce(indexSizeInBytes);
+
+	Lamb::SafePtr<uint32_t> indexMap = nullptr;
+	result->indexResource->Map(0, nullptr, reinterpret_cast<void**>(&indexMap));
+	std::copy(modelData.indices.begin(), modelData.indices.end(), indexMap);
+	result->indexResource->Unmap(0, nullptr);
+
+	result->indexNumber = static_cast<uint32_t>(modelData.indices.size());
+	result->indexView.SizeInBytes = indexSizeInBytes;
+	result->indexView.Format = DXGI_FORMAT_R32_UINT;
+	result->indexView.BufferLocation = result->indexResource->GetGPUVirtualAddress();
+
+
+	result->vertexResource = directXDevice->CreateBufferResuorce(vertexSizeInBytes);
+
+	Lamb::SafePtr<Vertex> vertMap = nullptr;
+	result->vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertMap));
+	std::copy(modelData.vertices.begin(), modelData.vertices.end(), vertMap);
+	result->vertexResource->Unmap(0, nullptr);
+
+	result->vertexNumber = static_cast<uint32_t>(modelData.vertices.size());
+	result->vertexView.SizeInBytes = vertexSizeInBytes;
+	result->vertexView.StrideInBytes = static_cast<uint32_t>(sizeof(Vertex));
+	result->vertexView.BufferLocation = result->vertexResource->GetGPUVirtualAddress();
+
+	return result.release();
 }

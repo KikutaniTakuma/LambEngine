@@ -11,7 +11,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-Mesh MeshLoader::LoadModel(const std::string& fileName)
+ModelData MeshLoader::LoadModel(const std::string& fileName)
 {
 	Assimp::Importer importer;
 	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
@@ -34,6 +34,7 @@ Mesh MeshLoader::LoadModel(const std::string& fileName)
 
 	LoadMtl(scene.get(), directorypath, textures);
 	
+	ModelData result;
 
 	// mesh解析
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
@@ -103,6 +104,27 @@ Mesh MeshLoader::LoadModel(const std::string& fileName)
 				}
 			}
 		}
+
+		for (uint32_t boneIndex = 0; boneIndex < mesh->mNumBones; boneIndex++) {
+			aiBone* bone = mesh->mBones[boneIndex];
+			std::string jointName = bone->mName.C_Str();
+			JointWeightData& jointWeightData = result.skinClusterData[jointName];
+
+			aiMatrix4x4 bindMatrixAssimp = bone->mOffsetMatrix.Inverse();
+			aiVector3D scale, translate;
+			aiQuaternion rotate;
+			bindMatrixAssimp.Decompose(scale, rotate, translate);
+			Mat4x4 bindPoseMatrix = Mat4x4::MakeAffin(
+				{ scale.x, scale.y, scale.z },
+				{ rotate.x, -rotate.y, -rotate.z, rotate.w },
+				{ -translate.x, translate.y, translate.z }
+			);
+			jointWeightData.inverseBindPoseMatrix = bindPoseMatrix.Inverse();
+
+			for (uint32_t weightIndex = 0; weightIndex < bone->mNumWeights; weightIndex++) {
+				jointWeightData.vertexWeights.push_back({ bone->mWeights[weightIndex].mWeight,bone->mWeights[weightIndex].mVertexId });
+			}
+		}
 	}
 
 	//Mesh result;
@@ -120,43 +142,13 @@ Mesh MeshLoader::LoadModel(const std::string& fileName)
 	//result.vertexView.StrideInBytes = static_cast<uint32_t>(sizeof(Vertex));
 	//result.vertexView.BufferLocation = result.vertexResource->GetGPUVirtualAddress();
 
-	std::vector<Vertex> verticesTmp;
-	verticesTmp.resize(vertices.size());
+	result.vertices.resize(vertices.size());
 	for (const auto& i : vertices) {
-		verticesTmp[i.second] = i.first;
+		result.vertices[i.second] = i.first;
 	}
-
-
-	Mesh result;
-	result.node = ReadNode(scene->mRootNode);
-
-	uint32_t indexSizeInBytes = static_cast<uint32_t>(sizeof(uint32_t) * indices.size());
-	uint32_t vertexSizeInBytes = static_cast<uint32_t>(sizeof(Vertex) * verticesTmp.size());
-
-	result.indexResource = DirectXDevice::GetInstance()->CreateBufferResuorce(indexSizeInBytes);
-
-	Lamb::SafePtr<uint32_t> indexMap = nullptr;
-	result.indexResource->Map(0, nullptr, reinterpret_cast<void**>(&indexMap));
-	std::copy(indices.begin(), indices.end(), indexMap);
-	result.indexResource->Unmap(0, nullptr);
-
-	result.indexNumber = static_cast<uint32_t>(indices.size());
-	result.indexView.SizeInBytes = indexSizeInBytes;
-	result.indexView.Format = DXGI_FORMAT_R32_UINT;
-	result.indexView.BufferLocation = result.indexResource->GetGPUVirtualAddress();
-
-
-	result.vertexResource = DirectXDevice::GetInstance()->CreateBufferResuorce(vertexSizeInBytes);
-	
-	Lamb::SafePtr<Vertex> vertMap = nullptr;
-	result.vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertMap));
-	std::copy(verticesTmp.begin(), verticesTmp.end(), vertMap);
-	result.vertexResource->Unmap(0, nullptr);
-
-	result.vertexNumber = static_cast<uint32_t>(verticesTmp.size());
-	result.vertexView.SizeInBytes = vertexSizeInBytes;
-	result.vertexView.StrideInBytes = static_cast<uint32_t>(sizeof(Vertex));
-	result.vertexView.BufferLocation = result.vertexResource->GetGPUVirtualAddress();
+	result.indices.resize(indices.size());
+	std::copy(indices.begin(), indices.end(), result.indices.begin());
+	result.rootNode = ReadNode(scene->mRootNode);
 
 	return result;
 }

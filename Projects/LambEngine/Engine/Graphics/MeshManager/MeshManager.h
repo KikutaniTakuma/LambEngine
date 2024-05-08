@@ -30,7 +30,10 @@ private:
 	static Lamb::SafePtr<MeshManager> instance_;
 
 public:
-	[[nodiscard]] Mesh* LoadObj(const std::string& objFileName);
+	[[nodiscard]] Mesh* LoadModel(const std::string& objFileName);
+
+private:
+	[[nodiscard]] Mesh* CreateMesh(const ModelData& modelData);
 
 private:
 	std::unordered_map<std::string, std::unique_ptr<Mesh>> meshs_;

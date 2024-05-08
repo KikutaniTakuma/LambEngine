@@ -78,6 +78,11 @@ public:
     RenderContext():
         shaderData_()
     {
+        shaderData_.wvpMatrix.Create(bufferSize);
+        shaderData_.color.Create(bufferSize);
+        shaderData_.shaderStruct.Create(bufferSize);
+
+
         pipeline_ = nullptr;
         drawCount_ = 0u;
 
@@ -174,7 +179,7 @@ public:
 
 
 private:
-    ShaderData<T, bufferSize> shaderData_;
+    ShaderData<T> shaderData_;
 };
 
 template<class T>

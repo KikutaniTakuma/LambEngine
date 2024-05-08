@@ -10,7 +10,7 @@
 /// ストラクチャードバッファ
 /// </summary>
 /// <typeparam name="T">ポインタと参照型以外をサポート</typeparam>
-template<Lamb::IsNotReferenceAndPtr T, uint32_t bufferSize = 256u>
+template<Lamb::IsNotReferenceAndPtr T>
 class StructuredBuffer final : public Descriptor {
 public:
 	StructuredBuffer() :
@@ -22,6 +22,32 @@ public:
 		range_(),
 		roootParamater_()
 	{
+		
+	}
+
+	~StructuredBuffer() = default;
+
+	inline StructuredBuffer(const StructuredBuffer& right) :
+		StructuredBuffer{ right.Size() }
+	{
+		*this = right;
+	}
+
+	inline StructuredBuffer(StructuredBuffer&&) = delete;
+
+	inline StructuredBuffer& operator=(const StructuredBuffer& right) {
+		for (uint32_t i = 0; i < bufferSize_; i++) {
+			(*this)[i] = right[i];
+		}
+
+		return *this;
+	}
+	inline StructuredBuffer<T>& operator=(StructuredBuffer&&) = delete;
+
+public:
+	void Create(uint32_t bufferSize) {
+		bufferSize_ = bufferSize;
+
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(T) * size());
 #ifdef _DEBUG
 		bufferResource_.SetName<decltype(*this)>();
@@ -53,25 +79,6 @@ public:
 		roootParamater_.DescriptorTable.NumDescriptorRanges = 1;
 	}
 
-	~StructuredBuffer() = default;
-
-	inline StructuredBuffer(const StructuredBuffer& right) :
-		StructuredBuffer{ right.Size() }
-	{
-		*this = right;
-	}
-
-	inline StructuredBuffer(StructuredBuffer&&) = delete;
-
-	inline StructuredBuffer& operator=(const StructuredBuffer& right) {
-		for (uint32_t i = 0; i < bufferSize; i++) {
-			(*this)[i] = right[i];
-		}
-
-		return *this;
-	}
-	inline StructuredBuffer<T>& operator=(StructuredBuffer&&) = delete;
-
 public:
 	void OnWright() noexcept {
 		if (!isWright_) {
@@ -89,18 +96,18 @@ public:
 
 	template<Lamb::IsInt IsInt>
 	T& operator[](IsInt index) {
-		assert(static_cast<uint32_t>(index) < bufferSize);
+		assert(static_cast<uint32_t>(index) < bufferSize_);
 		return data_[index];
 	}
 
 	template<Lamb::IsInt IsInt>
 	const T& operator[](IsInt index) const {
-		assert(static_cast<uint32_t>(index) < bufferSize);
+		assert(static_cast<uint32_t>(index) < bufferSize_);
 		return data_[index];
 	}
 
-	constexpr uint32_t size() const {
-		return bufferSize;
+	uint32_t size() const {
+		return bufferSize_;
 	}
 
 	D3D12_GPU_VIRTUAL_ADDRESS GetGPUVtlAdrs() const noexcept {
@@ -133,6 +140,8 @@ private:
 	D3D12_ROOT_PARAMETER roootParamater_;
 
 	T* data_;
+
+	uint32_t bufferSize_;
 
 	bool isWright_;
 

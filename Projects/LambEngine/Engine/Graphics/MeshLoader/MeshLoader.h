@@ -29,7 +29,7 @@ public:
 	/// </summary>
 	/// <param name="fileName">obj, gltfファイルパス</param>
 	/// <returns>頂点とインデックス情報</returns>
-	static Mesh LoadModel(const std::string& fileName);
+	static ModelData LoadModel(const std::string& fileName);
 
 	/// <summary>
 	/// gltfアニメーションロード
