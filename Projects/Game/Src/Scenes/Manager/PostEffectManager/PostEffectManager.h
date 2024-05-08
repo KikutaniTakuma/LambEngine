@@ -33,7 +33,7 @@ private:
 public:
 	const Camera& GetPeraCamera() const {
 		if (not gray_) {
-			throw Lamb::Error::Code<PostEffectManager>("peraCamera is nullptr", __func__, __FILE__, __LINE__);
+			throw Lamb::Error::Code<PostEffectManager>("peraCamera is nullptr", ErrorPlace);
 		}
 		return *camera_;
 	}
@@ -44,7 +44,7 @@ private:
 public:
 	PeraRender& GetGrayPera() {
 		if (not gray_) {
-			throw Lamb::Error::Code<PostEffectManager>("Gray pera is nullptr", __func__, __FILE__, __LINE__);
+			throw Lamb::Error::Code<PostEffectManager>("Gray pera is nullptr", ErrorPlace);
 		}
 		return *gray_;
 	}

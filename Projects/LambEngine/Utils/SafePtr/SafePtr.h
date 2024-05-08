@@ -69,30 +69,30 @@ namespace Lamb {
 		}
 
 		T* operator->()  {
-			NullPointerException(__func__, __FILE__, __LINE__);
+			NullPointerException(ErrorPlace);
 			return ptr_;
 		}
 		const T* operator->() const  {
-			NullPointerException(__func__, __FILE__, __LINE__);
+			NullPointerException(ErrorPlace);
 			return ptr_;
 		}
 
 		T& operator*()  {
-			NullPointerException(__func__, __FILE__, __LINE__);
+			NullPointerException(ErrorPlace);
 			return *ptr_;
 		}
 
 		const T& operator*() const  {
-			NullPointerException(__func__, __FILE__, __LINE__);
+			NullPointerException(ErrorPlace);
 			return *ptr_;
 		}
 
 		T& operator[](size_t index)  {
-			NullPointerException(__func__, __FILE__, __LINE__);
+			NullPointerException(ErrorPlace);
 			return (ptr_[index]);
 		}
 		const T& operator[](size_t index) const  {
-			NullPointerException(__func__, __FILE__, __LINE__);
+			NullPointerException(ErrorPlace);
 			return (ptr_[index]);
 		}
 

@@ -17,7 +17,7 @@ void PipelineManager::Initialize() {
 		Lamb::AddLog("Initialize PipelineManager succeeded");
 	}
 	else {
-		throw Lamb::Error::Code<PipelineManager>("instance is nullptr", __func__, __FILE__, __LINE__);
+		throw Lamb::Error::Code<PipelineManager>("instance is nullptr", ErrorPlace);
 	}
 }
 void PipelineManager::Finalize() {

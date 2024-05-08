@@ -12,7 +12,7 @@ void SkyBlock::Init(const Transform& transform) {
 	transform_ = transform;
 
 	Lamb::SafePtr draweManager = DrawerManager::GetInstance();
-	draweManager->LoadModel("./Resources/Common/Cube.ob");
+	draweManager->LoadModel("./Resources/Common/Cube.obj");
 	model_ = draweManager->GetModel("./Resources/Common/Cube.obj");
 
 	isFall_ = false;

@@ -49,7 +49,7 @@ void CloudPipeline::Update() {
 			);
 		}
 		else {
-			throw Lamb::Error::Code<decltype(*this)>("something Error", __func__, __FILE__, __LINE__);
+			throw Lamb::Error::Code<decltype(*this)>("something Error", ErrorPlace);
 		}
 	}
 

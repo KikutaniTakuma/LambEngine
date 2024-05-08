@@ -121,7 +121,7 @@ public:
 public:
 	[[nodiscard]] constexpr width_reference operator[](size_t index) {
 		if (height <= index) {
-			OutOfRange(__func__, __FILE__, __LINE__);
+			OutOfRange(ErrorPlace);
 		}
 
 		return matrix_[index];
@@ -129,7 +129,7 @@ public:
 
 	[[nodiscard]] constexpr width_const_reference operator[](size_t index) const {
 		if (height <= index) {
-			OutOfRange(__func__, __FILE__, __LINE__);
+			OutOfRange(ErrorPlace);
 		}
 		return matrix_[index];
 	}
@@ -243,7 +243,7 @@ public:
 
 	[[nodiscard]] constexpr width_reference at(size_t index) {
 		if (height <= index) {
-			OutOfRange(__func__, __FILE__, __LINE__);
+			OutOfRange(ErrorPlace);
 		}
 
 		return matrix_.at(index);
@@ -251,7 +251,7 @@ public:
 
 	[[nodiscard]] constexpr width_const_reference at(size_t index) const {
 		if (height <= index) {
-			OutOfRange(__func__, __FILE__, __LINE__);
+			OutOfRange(ErrorPlace);
 		}
 		return matrix_.at(index);
 	}

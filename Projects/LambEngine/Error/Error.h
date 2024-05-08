@@ -46,6 +46,15 @@ namespace Lamb {
 		std::string codeLineNumber_;
 
 	public:
+		/// <summary>
+		/// 例外をthrowするための関数
+		/// </summary>
+		/// <typeparam name="T">className</typeparam>
+		/// <param name="errorCode">どんな内容のエラーか</param>
+		/// <param name="functionName">関数名</param>
+		/// <param name="sourceFileName">ソースコードのファイル名</param>
+		/// <param name="codeLineNumber">ラインの場所</param>
+		/// <returns></returns>
 		template<class T>
 		static const Error& Code(
 			const std::string& errorCode, 
@@ -67,3 +76,7 @@ namespace Lamb {
 		}
 	};
 }
+
+#ifndef ErrorPlace
+#define ErrorPlace __func__, __FILE__, __LINE__
+#endif // !ErrorPlace
