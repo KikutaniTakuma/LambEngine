@@ -26,15 +26,15 @@ void MeshManager::Finalize() {
 	instance_.reset();
 }
 
-Mesh* MeshManager::LoadModel(const std::string& objFileName) {
-	auto mesh = meshs_.find(objFileName);
+Mesh* MeshManager::LoadModel(const std::string& fileName) {
+	auto mesh = meshs_.find(fileName);
 
 	if (mesh == meshs_.end()) {
-		meshs_[objFileName];
-		meshs_[objFileName].reset(CreateMesh(MeshLoader::LoadModel(objFileName)));
+		modelData_.insert(std::make_pair(fileName, std::make_unique<ModelData>(MeshLoader::LoadModel(fileName))));
+		meshs_.insert(std::make_pair(fileName, CreateMesh(*modelData_[fileName])));
 	}
 
-	return meshs_[objFileName].get();
+	return meshs_[fileName].get();
 }
 
 Mesh* MeshManager::CreateMesh(const ModelData& modelData)

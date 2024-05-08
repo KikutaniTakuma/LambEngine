@@ -6,24 +6,6 @@
 #include "Transform/Transform.h"
 #include "GraphicsStructs.h"
 
-struct VertexInfluence {
-	static constexpr uint32_t kNumMaxInfluence = 4u;
-	std::array<float, kNumMaxInfluence> weights;
-	std::array<int32_t, kNumMaxInfluence> jointIndices;
-};
-
-struct WellForGpu {
-	Mat4x4 skeletonSoaceMatrix;
-	Mat4x4 skeletonSpaceInverseTransposeMatrix;
-};
-
-struct SkinCluster {
-	std::vector<Mat4x4> inversebindPoseMatrices;
-	Lamb::LambPtr<ID3D12Resource> influenceResource;
-	D3D12_VERTEX_BUFFER_VIEW infliuenceBufferView;
-	std::span<VertexInfluence> mappedInfluence;
-	StructuredBuffer<WellForGpu> paletteBuffer;
-};
 
 struct Joint {
 	Joint() = default;
@@ -60,6 +42,27 @@ struct Skeleton {
 	std::vector<Joint> joints;
 };
 
+struct VertexInfluence {
+	static constexpr uint32_t kNumMaxInfluence = 4u;
+	std::array<float, kNumMaxInfluence> weights;
+	std::array<int32_t, kNumMaxInfluence> jointIndices;
+};
+
+struct WellForGpu {
+	Mat4x4 skeletonSpaceMatrix;
+	Mat4x4 skeletonSpaceInverseTransposeMatrix;
+};
+
+struct SkinCluster {
+	void Update(const Skeleton& skeleton);
+
+	std::vector<Mat4x4> inversebindPoseMatrices;
+	Lamb::LambPtr<ID3D12Resource> influenceResource;
+	D3D12_VERTEX_BUFFER_VIEW infliuenceBufferView;
+	std::span<VertexInfluence> mappedInfluence;
+	StructuredBuffer<WellForGpu> paletteBuffer;
+};
+
 namespace Lamb {
 	Skeleton CreateSkeleton(const Node& rootNode);
 	int32_t CreateJoint(
@@ -68,5 +71,5 @@ namespace Lamb {
 		std::vector<Joint>& joints
 	);
 
-	SkinCluster CreateAkinCluster();
+	SkinCluster CreateAkinCluster(const Skeleton& skeleton, const ModelData& modelData);
 }
