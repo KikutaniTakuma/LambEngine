@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "Transform/Transform.h"
+#include "GraphicsStructs.h"
 
 
 struct Joint {
@@ -41,9 +42,11 @@ struct Skeleton {
 	std::vector<Joint> joints;
 };
 
-Skeleton CreateSkeleton(const struct Node& rootNode);
-int32_t CreateJoint(
-	const struct Node& rootNode,
-	const std::optional<int32_t> parent,
-	std::vector<Joint>& joints
-);
+namespace Lamb {
+	Skeleton CreateSkeleton(const Node& rootNode);
+	int32_t CreateJoint(
+		const Node& rootNode,
+		const std::optional<int32_t> parent,
+		std::vector<Joint>& joints
+	);
+}
