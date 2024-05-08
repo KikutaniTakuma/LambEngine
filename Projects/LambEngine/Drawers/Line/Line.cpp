@@ -10,11 +10,7 @@
 uint32_t Line::indexCount_ = 0u;
 Shader Line::shader_ = {};
 Lamb::SafePtr<Pipeline> Line::pipline_ = nullptr;
-Lamb::LambPtr<ID3D12Resource> Line::vertexBuffer_;
-// 頂点バッファビュー
-D3D12_VERTEX_BUFFER_VIEW Line::vertexView_;
-
-std::unique_ptr<StructuredBuffer<Line::VertxData, Line::kDrawMaxNumber_>> Line::vertData_;
+std::unique_ptr<StructuredBuffer<Line::VertxData>> Line::vertData_;
 
 void Line::Initialize() {
 	Lamb::SafePtr shaderManager = ShaderManager::GetInstance();
@@ -40,24 +36,12 @@ void Line::Initialize() {
 	pipline_ = PipelineManager::Create();
 	PipelineManager::StateReset();
 
-	vertData_ = std::make_unique<StructuredBuffer<VertxData, kDrawMaxNumber_>>();
+	vertData_ = std::make_unique<StructuredBuffer<VertxData>>();
+	vertData_->Create(Line::kDrawMaxNumber_);
 
 	Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
 	heap->BookingHeapPos(1);
 	heap->CreateView(*vertData_);
-
-	vertexBuffer_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(Vector4) * kVertexNum);
-	vertexView_.BufferLocation = vertexBuffer_->GetGPUVirtualAddress();
-	vertexView_.SizeInBytes = sizeof(Vector4) * kVertexNum;
-	vertexView_.StrideInBytes = sizeof(Vector4);
-
-	Lamb::SafePtr<Vector4> vertexMap = nullptr;
-	vertexBuffer_->Map(0, nullptr, reinterpret_cast<void**>(&vertexMap));
-	vertexMap[0] = Vector4::kZero + Vector4::kWIdentity;
-	vertexMap[1] = Vector4::kXIdentity + Vector4::kWIdentity;
-	vertexBuffer_->Unmap(0, nullptr);
-
-	vertexBuffer_.SetName<Line>();
 }
 
 void Line::Finalize() {
@@ -65,10 +49,6 @@ void Line::Finalize() {
 		CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
 		heap->ReleaseView(vertData_->GetHandleUINT());
 		vertData_.reset();
-	}
-
-	if (vertexBuffer_) {
-		vertexBuffer_.Reset();
 	}
 }
 
@@ -85,7 +65,6 @@ void Line::AllDraw() {
 	Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
 	heap->Use(vertData_->GetHandleUINT(), 0);
 	auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	commandList->IASetVertexBuffers(0, 1, &vertexView_);
 	commandList->DrawInstanced(kVertexNum, indexCount_, 0, 0);
 
 	ResetDrawCount();
