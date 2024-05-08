@@ -49,8 +49,8 @@ void PipelineManager::SetRootSgnature(RootSignature* rootSignature) {
 	instance_->rootSignature_ = rootSignature;
 }
 
-void PipelineManager::SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format) {
-	instance_->vertexInputStates_.push_back({ semanticName, semanticIndex, format });
+void PipelineManager::SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format, uint32_t inputSlot) {
+	instance_->vertexInputStates_.push_back({ semanticName, semanticIndex, format,inputSlot });
 }
 void PipelineManager::SetShader(const Shader& shader) {
 	instance_->shader_ = shader;
@@ -96,7 +96,7 @@ Pipeline* const PipelineManager::Create() {
 		auto pipeline = std::make_unique<Pipeline>();
 		pipeline->SetShader(instance_->shader_);
 		for (auto& i : instance_->vertexInputStates_) {
-			pipeline->SetVertexInput(std::get<0>(i), std::get<1>(i), std::get<2>(i));
+			pipeline->SetVertexInput(std::get<0>(i), std::get<1>(i), std::get<2>(i), std::get<3>(i));
 		}
 		pipeline->Create(
 			*instance_->rootSignature_,

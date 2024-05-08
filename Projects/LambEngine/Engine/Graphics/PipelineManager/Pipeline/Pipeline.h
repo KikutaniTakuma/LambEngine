@@ -61,7 +61,9 @@ public:
 	void SetVertexInput(
 		std::string semanticName, 
 		uint32_t semanticIndex, 
-		DXGI_FORMAT format
+		DXGI_FORMAT format, 
+		uint32_t inputSlot
+
 	);
 
 	void SetShader(const Shader& shader);

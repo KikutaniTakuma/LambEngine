@@ -32,6 +32,8 @@ private:
 
 
 public:
+#pragma warning(push)
+#pragma warning(disable:4702)
 	template<IsBasedRenderContext RenderContextType = RenderContext<>>
 	void Load(const LoadFileNames& fileNames) {
 		auto isExist = renderData_.find(fileNames);
@@ -50,16 +52,54 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader);
 
-		Mesh* mesh = MeshManager::GetInstance()->LoadModel(fileNames.resourceFileName);
+		Lamb::SafePtr meshManager = MeshManager::GetInstance();
+		meshManager->LoadModel(fileNames.resourceFileName);
+		Mesh* mesh = meshManager->GetMesh(fileNames.resourceFileName);
+		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();
 
 			renderContext->SetMesh(mesh);
+			renderContext->SetModelData(modelData);
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
 	}
+
+	template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
+	void LoadSkinAnimationModel(const LoadFileNames& fileNames) {
+		auto isExist = renderData_.find(fileNames);
+
+		if (isExist != renderData_.end()) {
+			return;
+		}
+
+		auto& currentRenderData = (isNowThreading_ ? threadRenderData_ : renderData_);
+
+		currentRenderData.insert(std::make_pair(fileNames, std::make_unique<RenderSet>()));
+
+		RenderSet& currentRenderSet = *currentRenderData[fileNames];
+
+		Shader shader = LoadShader(fileNames.shaderName);
+
+		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader);
+
+		Lamb::SafePtr meshManager = MeshManager::GetInstance();
+		meshManager->LoadModel(fileNames.resourceFileName);
+		Mesh* mesh = meshManager->GetMesh(fileNames.resourceFileName);
+		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
+
+		for (uint32_t i = 0; i < BlendType::kNum; i++) {
+			std::unique_ptr<SkinRenderContext<T, bufferSize>> renderContext = std::make_unique<SkinRenderContext<T, bufferSize>>();
+
+			renderContext->SetMesh(mesh);
+			renderContext->SetModelData(modelData);
+			renderContext->SetPipeline(pipelines[i]);
+			currentRenderSet.Set(renderContext.release(), BlendType(i));
+		}
+	}
+#pragma warning(pop)
 
 	[[nodiscard]] RenderSet* const Get(const LoadFileNames& fileNames);
 
@@ -72,6 +112,7 @@ private:
 	[[nodiscard]] Shader LoadShader(const ShaderFileNames& shaderName);
 
 	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateGraphicsPipelines(Shader shader);
+	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateSkinAnimationGraphicsPipelines(Shader shader);
 
 
 private:

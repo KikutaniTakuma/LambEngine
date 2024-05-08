@@ -1,10 +1,12 @@
 #pragma once
 #include "../Model/Model.h"
 #include "Engine/Graphics/Animator/Animator.h"
+#include "Engine/Graphics/Skeleton.h"
 
 #include <memory>
 
 class AnimationModel : public Model {
+
 public:
 	AnimationModel() = default;
 	AnimationModel(const std::string& fileName);
@@ -34,13 +36,8 @@ public:
 	}
 
 private:
-	void Draw(
-		const Mat4x4& worldMatrix, 
-		const Mat4x4& camera, 
-		uint32_t color, 
-		BlendType blend
-	) override;
-
-private:
 	std::unique_ptr<Animator> animator_;
+
+	std::unique_ptr<Skeleton> skeleton_;
+	std::unique_ptr<SkinCluster> skinCluster_;
 };

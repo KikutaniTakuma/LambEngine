@@ -50,7 +50,7 @@ public:
 	/// <param name="semanticName_">セマンティクス名</param>
 	/// <param name="semanticIndex_">セマンティクスインデックス</param>
 	/// <param name="format_">フォーマット</param>
-	static void SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format);
+	static void SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format, uint32_t inputSlot = 0);
 
 	/// <summary>
 	/// 使うシェーダの設定
@@ -109,5 +109,5 @@ private:
 	uint32_t numRenderTarget_;
 	bool isDepth_;
 
-	std::vector<std::tuple<std::string, uint32_t, DXGI_FORMAT>> vertexInputStates_;
+	std::vector<std::tuple<std::string, uint32_t, DXGI_FORMAT, uint32_t>> vertexInputStates_;
 };

@@ -50,13 +50,14 @@ bool Pipeline::operator!=(const Pipeline& right) const {
 	return !this->operator==(right);
 }
 
-void Pipeline::SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format) {
+void Pipeline::SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format, uint32_t inputSlot) {
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs{};
 
 	inputElementDescs.SemanticIndex = semanticIndex;
 	inputElementDescs.Format = format;
 	inputElementDescs.AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 	inputElementDescs.InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
+	inputElementDescs.InputSlot = inputSlot;
 
 	vertexInput_.push_back(inputElementDescs);
 	semanticNames_.push_back(semanticName);

@@ -3,6 +3,7 @@
 #include "Transform/Transform.h"
 #include "Engine/Graphics/Skeleton.h"
 #include "Engine/Graphics/Animator/Animator.h"
+#include "Drawers/AnimationModel/AnimationModel.h"
 
 class GameScene : public BaseScene {
 public:
@@ -24,8 +25,6 @@ public:
 	void Draw() override;
 
 public:
-	std::unique_ptr<Skeleton> skeleton_;
-	Lamb::SafePtr<Model> model_;
-	std::unique_ptr<Animator> animator_;
+	std::unique_ptr<AnimationModel> model_;
 	Transform transform_;
 };

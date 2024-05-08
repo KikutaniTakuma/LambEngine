@@ -37,56 +37,6 @@ namespace Lamb {
         }
         return joint.index;
     }
-    SkinCluster CreateAkinCluster(const Skeleton& skeleton, const ModelData& modelData)
-    {
-        Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-        Lamb::SafePtr device = DirectXDevice::GetInstance();
-
-        SkinCluster result;
-        result.paletteBuffer.Create(static_cast<uint32_t>(skeleton.joints.size()));
-
-        heap->BookingHeapPos(1u);
-        heap->CreateView(result.paletteBuffer);
-
-
-
-        uint32_t bufferSize = static_cast<uint32_t>(sizeof(VertexInfluence) * modelData.vertices.size());
-        result.influenceResource = device->CreateBufferResuorce(bufferSize);
-        Lamb::SafePtr<VertexInfluence> mappedInfluence;
-        result.influenceResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
-        std::memset(mappedInfluence.get(), 0, bufferSize);
-        result.mappedInfluence = { mappedInfluence.release(), modelData.vertices.size() };
-
-        result.infliuenceBufferView.BufferLocation = result.influenceResource->GetGPUVirtualAddress();
-        result.infliuenceBufferView.SizeInBytes = bufferSize;
-        result.infliuenceBufferView.StrideInBytes = sizeof(VertexInfluence);
-
-        result.inversebindPoseMatrices.resize(skeleton.joints.size());
-        std::ranges::fill(result.inversebindPoseMatrices, Mat4x4::kIdentity);
-
-
-        for (const auto& jointWeight : modelData.skinClusterData) {
-            auto itr = skeleton.jointMap.find(jointWeight.first);
-            if (itr == skeleton.jointMap.end()) {
-                continue;
-            }
-
-            result.inversebindPoseMatrices[itr->second] = jointWeight.second.inverseBindPoseMatrix;
-            for (const auto& vertexWeight : jointWeight.second.vertexWeights) {
-                auto& currentInfuluence = result.mappedInfluence[vertexWeight.vertexIndex];
-                for (uint32_t index = 0; index < VertexInfluence::kNumMaxInfluence; index++) {
-                    if (currentInfuluence.weights[index] == 0.0f) {
-                        currentInfuluence.weights[index] = vertexWeight.weight;
-                        currentInfuluence.jointIndices[index] = itr->second;
-                        break;
-                    }
-                }
-            }
-        }
-
-
-        return result;
-    }
 }
 
 void Skeleton::Update() {
@@ -118,6 +68,63 @@ void Skeleton::Draw([[maybe_unused]]const Mat4x4& camera) {
         );
     }
 #endif // _DEBUG
+}
+
+SkinCluster* SkinCluster::CreateSkinCluster(const Skeleton& skeleton, const ModelData& modelData)
+{
+    Lamb::SafePtr<CbvSrvUavHeap> heap = CbvSrvUavHeap::GetInstance();
+    Lamb::SafePtr device = DirectXDevice::GetInstance();
+
+    SkinCluster* result = new SkinCluster();
+    result->paletteBuffer.Create(static_cast<uint32_t>(skeleton.joints.size()));
+
+    heap->BookingHeapPos(1u);
+    heap->CreateView(result->paletteBuffer);
+
+
+
+    uint32_t bufferSize = static_cast<uint32_t>(sizeof(VertexInfluence) * modelData.vertices.size());
+    result->influenceResource = device->CreateBufferResuorce(bufferSize);
+    Lamb::SafePtr<VertexInfluence> mappedInfluence;
+    result->influenceResource->Map(0, nullptr, reinterpret_cast<void**>(&mappedInfluence));
+    std::memset(mappedInfluence.get(), 0, bufferSize);
+    result->mappedInfluence = { mappedInfluence.release(), modelData.vertices.size() };
+
+    result->infliuenceBufferView.BufferLocation = result->influenceResource->GetGPUVirtualAddress();
+    result->infliuenceBufferView.SizeInBytes = bufferSize;
+    result->infliuenceBufferView.StrideInBytes = sizeof(VertexInfluence);
+
+    result->inversebindPoseMatrices.resize(skeleton.joints.size());
+    std::ranges::fill(result->inversebindPoseMatrices, Mat4x4::kIdentity);
+
+
+    for (const auto& jointWeight : modelData.skinClusterData) {
+        auto itr = skeleton.jointMap.find(jointWeight.first);
+        if (itr == skeleton.jointMap.end()) {
+            continue;
+        }
+
+        result->inversebindPoseMatrices[itr->second] = jointWeight.second.inverseBindPoseMatrix;
+        for (const auto& vertexWeight : jointWeight.second.vertexWeights) {
+            auto& currentInfuluence = result->mappedInfluence[vertexWeight.vertexIndex];
+            for (uint32_t index = 0; index < VertexInfluence::kNumMaxInfluence; index++) {
+                if (currentInfuluence.weights[index] == 0.0f) {
+                    currentInfuluence.weights[index] = vertexWeight.weight;
+                    currentInfuluence.jointIndices[index] = itr->second;
+                    break;
+                }
+            }
+        }
+    }
+
+
+    return result;
+}
+
+SkinCluster::~SkinCluster()
+{
+    Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
+    heap->ReleaseView(this->paletteBuffer.GetHandleUINT());
 }
 
 void SkinCluster::Update(const Skeleton& skeleton) {

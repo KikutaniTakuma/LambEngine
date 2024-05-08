@@ -57,3 +57,7 @@ const Node& Model::GetNode() const
 {
 	return renderSet->GetNode();
 }
+
+const ModelData& Model::GetModelData() const {
+	return *renderSet->GetModelData();
+}

@@ -2,6 +2,7 @@
 #include "Utils/EngineInfo/EngineInfo.h"
 #include "Utils/SafeDelete/SafeDelete.h"
 #include "../MeshLoader/MeshLoader.h"
+#include "Error/Error.h"
 
 Lamb::SafePtr<MeshManager> MeshManager::instance_ = nullptr;
 
@@ -26,15 +27,35 @@ void MeshManager::Finalize() {
 	instance_.reset();
 }
 
-Mesh* MeshManager::LoadModel(const std::string& fileName) {
+void MeshManager::LoadModel(const std::string& fileName) {
 	auto mesh = meshs_.find(fileName);
 
 	if (mesh == meshs_.end()) {
 		modelData_.insert(std::make_pair(fileName, std::make_unique<ModelData>(MeshLoader::LoadModel(fileName))));
 		meshs_.insert(std::make_pair(fileName, CreateMesh(*modelData_[fileName])));
 	}
+}
 
-	return meshs_[fileName].get();
+Mesh* MeshManager::GetMesh(const std::string& fileName)
+{
+	auto mesh = meshs_.find(fileName);
+
+	if (mesh == meshs_.end()) {
+		throw Lamb::Error::Code<MeshManager>("This file is not loaded -> " + fileName, ErrorPlace);
+	}
+
+	return mesh->second.get();
+}
+
+ModelData* MeshManager::GetModelData(const std::string& fileName)
+{
+	auto modelData = modelData_.find(fileName);
+
+	if (modelData == modelData_.end()) {
+		throw Lamb::Error::Code<MeshManager>("This file is not loaded -> " + fileName, ErrorPlace);
+	}
+
+	return modelData->second.get();
 }
 
 Mesh* MeshManager::CreateMesh(const ModelData& modelData)

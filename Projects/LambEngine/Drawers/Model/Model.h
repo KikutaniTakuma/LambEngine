@@ -28,4 +28,5 @@ public:
 
 public:
 	const Node& GetNode() const;
+	const ModelData& GetModelData() const;
 };

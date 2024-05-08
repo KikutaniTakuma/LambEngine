@@ -54,22 +54,38 @@ struct WellForGpu {
 };
 
 struct SkinCluster {
+public:
+	static [[nodiscard]] SkinCluster* CreateSkinCluster(const Skeleton& skeleton, const ModelData& modelData);
+
+private:
+	SkinCluster() = default;
+
+public:
+	SkinCluster(const SkinCluster&) = default;
+	SkinCluster(SkinCluster&&) noexcept = default;
+
+	SkinCluster& operator=(const SkinCluster&) = default;
+	SkinCluster& operator=(SkinCluster&&) noexcept = default;
+
+public:
+	~SkinCluster();
+
+public:
 	void Update(const Skeleton& skeleton);
 
 	std::vector<Mat4x4> inversebindPoseMatrices;
 	Lamb::LambPtr<ID3D12Resource> influenceResource;
-	D3D12_VERTEX_BUFFER_VIEW infliuenceBufferView;
+	D3D12_VERTEX_BUFFER_VIEW infliuenceBufferView{};
 	std::span<VertexInfluence> mappedInfluence;
 	StructuredBuffer<WellForGpu> paletteBuffer;
 };
 
 namespace Lamb {
 	Skeleton CreateSkeleton(const Node& rootNode);
+
 	int32_t CreateJoint(
 		const Node& rootNode,
 		const std::optional<int32_t> parent,
 		std::vector<Joint>& joints
 	);
-
-	SkinCluster CreateAkinCluster(const Skeleton& skeleton, const ModelData& modelData);
 }
