@@ -33,7 +33,7 @@ SceneLoad::SceneLoad() :
 	textureID_ = drawerManager->LoadTexture(setting.fileName);
 
 	std::unique_ptr<Camera> camera =  std::make_unique<Camera>();
-	camera->pos.z = -1.0f;
+	camera->pos.z = -10.0f;
 	camera->Update();
 	cameraMatrix_ = camera->GetViewOthographics();
 
@@ -48,6 +48,7 @@ SceneLoad::SceneLoad() :
 
 		std::unique_lock<std::mutex> uniqueLock(mtx_);
 
+		Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
 		while (!exit_) {
 			if (!isLoad_) {
@@ -63,7 +64,7 @@ SceneLoad::SceneLoad() :
 			tex2Danimator_->Update();
 
 			loadTex_->Draw(
-				Mat4x4::MakeAffin(Vector3(Lamb::ClientSize(), 1.0f), Vector3::kZero, Vector3::kZero),
+				Mat4x4::MakeAffin(Vector3(Lamb::ClientSize(), 1.0f), Vector3::kZero, Vector3::kZIdentity * -9.0f),
 				tex2Danimator_->GetUvMat4x4(),
 				cameraMatrix_,
 				textureID_,
@@ -71,8 +72,11 @@ SceneLoad::SceneLoad() :
 				BlendType::kNone
 			);
 
+			renderContextManager->Draw();
+
 			Engine::FrameEnd();
 
+			renderContextManager->ResetDrawCount();
 		}
 
 		// COM 終了
