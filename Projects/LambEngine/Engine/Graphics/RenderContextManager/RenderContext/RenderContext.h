@@ -302,7 +302,7 @@ public:
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        shaderData_.wvpMatrix[drawCount_].worldMat = mesh_->node.loacalMatrix * matrix.worldMat;
+        shaderData_.wvpMatrix[drawCount_].worldMat = matrix.worldMat;
         shaderData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
