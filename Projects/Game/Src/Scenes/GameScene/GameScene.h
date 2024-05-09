@@ -26,6 +26,8 @@ public:
 
 public:
 	std::unique_ptr<AnimationModel> model_;
+	Animations* animations_;
+	Animations* animations2_;
 	Lamb::SafePtr<Model> model2_;
 	Transform transform_;
 };

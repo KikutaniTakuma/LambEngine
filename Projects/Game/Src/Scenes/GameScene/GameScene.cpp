@@ -15,6 +15,10 @@ void GameScene::Initialize() {
 	model_->Load("./Resources/Common/human/sneakWalk.gltf");
 	model_->GetAnimator().SetLoopAnimation(true);
 	model_->GetAnimator().Start();
+
+	animationManager_->LoadAnimations("./Resources/Common/human/walk.gltf");
+	animations_ = animationManager_->GetAnimations("./Resources/Common/human/walk.gltf");
+	animations2_ = animationManager_->GetAnimations("./Resources/Common/human/sneakWalk.gltf");
 }
 
 void GameScene::Finalize() {
@@ -24,6 +28,13 @@ void GameScene::Finalize() {
 void GameScene::Update() {
 	currentCamera_->Debug("camera");
 	currentCamera_->Update();
+
+	if (input_->GetKey()->Pushed(DIK_1)) {
+		model_->GetAnimator().SetAnimations(animations_);
+	}
+	else if (input_->GetKey()->Pushed(DIK_2)) {
+		model_->GetAnimator().SetAnimations(animations2_);
+	}
 
 	model_->Update();
 
