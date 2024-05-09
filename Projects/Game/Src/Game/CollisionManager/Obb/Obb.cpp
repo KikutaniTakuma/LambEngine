@@ -60,7 +60,10 @@ bool Obb::IsCollision(Vector3 pos, float radius) {
 
 	if (distance <= radius) {
 		isCollision_ = true;
+#ifdef _DEBUG
 		color_ = 0xff0000ff;
+#endif // _DEBUG
+
 		return true;
 	}
 	
@@ -227,7 +230,9 @@ void Obb::Update() {
 	}
 
 	isCollision_ = false;
+#ifdef DEBUG
 	color_ = std::numeric_limits<uint32_t>::max();
+#endif // DEBUG
 }
 
 void Obb::Draw([[maybe_unused]] const Mat4x4& viewProjection) {
