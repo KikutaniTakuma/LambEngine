@@ -230,5 +230,5 @@ void MeshLoader::EndLoadTimeCountAndAddLog(const std::string& fileName) {
 
 	auto time = std::chrono::duration_cast<std::chrono::milliseconds>(loadEndTime - loadStartTime_);
 
-	Lamb::AddLog("File Load Time : " + fileName + " : " +  Lamb::TimeToString(time));
+	Lamb::AddLog("Load successed : " + fileName + " : " +  Lamb::TimeToString(time));
 }
