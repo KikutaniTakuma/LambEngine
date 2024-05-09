@@ -76,6 +76,12 @@ public:
 	/// </summary>
 	/// <param name="speed">アニメーション速度</param>
 	void SetAnimationSpeed(float speed);
+	
+	/// <summary>
+	/// 新しいアニメーションを設定する
+	/// </summary>
+	/// <param name="animations">アニメーション</param>
+	void SetAnimations(struct Animations* const animations);
 
 private:
 	Vector3 CalaclateValue(const AnimationCurve<Vector3>& animationCurve, float time);

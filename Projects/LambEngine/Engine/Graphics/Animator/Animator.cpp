@@ -25,7 +25,7 @@ Animator::Animator():
 #pragma warning(disable:4702)
 void Animator::Load(const std::string& fileName) {
 	Lamb::SafePtr animationManager = AnimationManager::GetInstance();
-	animationManager->LoadAniamtions(fileName);
+	animationManager->LoadAnimations(fileName);
 	animations_ = animationManager->GetAnimations(fileName);
 }
 #pragma warning(pop)
@@ -203,6 +203,10 @@ void Animator::SetLoopAnimation(bool isLoop) {
 
 void Animator::SetAnimationSpeed(float speed) {
 	animationSpeed_ = speed;
+}
+
+void Animator::SetAnimations(Animations* const animations) {
+	animations_ = animations;
 }
 
 Vector3 Animator::CalaclateValue(const AnimationCurve<Vector3>& animationCurve, float time) {
