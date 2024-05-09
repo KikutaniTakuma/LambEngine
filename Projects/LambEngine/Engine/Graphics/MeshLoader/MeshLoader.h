@@ -1,5 +1,6 @@
 #pragma once
 #include "../GraphicsStructs.h"
+#include <chrono>
 namespace Assimp {
 	class Importer;
 };
@@ -48,6 +49,13 @@ private:
 	/// <returns></returns>
 	static Node ReadNode(struct aiNode* node);
 
-private:
+
 	static void LoadMtl(const struct aiScene* scene, const std::string& directorypath, std::vector<uint32_t>& result);
+
+	static void StartLoadTimeCount();
+
+	static void EndLoadTimeCountAndAddLog(const std::string& fileName);
+
+private:
+	static std::chrono::steady_clock::time_point loadStartTime_;
 };

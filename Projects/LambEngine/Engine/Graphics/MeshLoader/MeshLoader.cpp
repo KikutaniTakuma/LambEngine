@@ -11,8 +11,12 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+std::chrono::steady_clock::time_point MeshLoader::loadStartTime_;
+
 ModelData MeshLoader::LoadModel(const std::string& fileName)
 {
+	StartLoadTimeCount();
+
 	Assimp::Importer importer;
 	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
 	if (not scene->HasMeshes()) {
@@ -58,6 +62,7 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 			);
 		}
 
+		uint32_t latestIndexSize = static_cast<uint32_t>(result.indices.size());
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; faceIndex++) {
 			aiFace& face = mesh->mFaces[faceIndex];
 			if (face.mNumIndices != 3) {
@@ -66,7 +71,7 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 
 			for (uint32_t element = 0; element < face.mNumIndices; element++) {
 				uint32_t vertexIndex = face.mIndices[element];
-				result.indices.push_back(vertexIndex);
+				result.indices.push_back(latestIndexSize + vertexIndex);
 			}
 		}
 
@@ -94,11 +99,16 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 
 	result.rootNode = ReadNode(scene->mRootNode);
 
+
+	EndLoadTimeCountAndAddLog(fileName);
+
 	return result;
 }
 
 Animations MeshLoader::LoadAnimation(const std::string& fileName)
 {
+	StartLoadTimeCount();
+
 	Animations result;
 	Assimp::Importer importer;
 	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
@@ -146,6 +156,8 @@ Animations MeshLoader::LoadAnimation(const std::string& fileName)
 			}
 		}
 	}
+
+	EndLoadTimeCountAndAddLog(fileName);
 
 	return result;
 }
@@ -209,3 +221,14 @@ void MeshLoader::LoadMtl(const aiScene* scene, const std::string& directorypath,
 	}
 }
 
+void MeshLoader::StartLoadTimeCount() {
+	loadStartTime_ = std::chrono::steady_clock::now();
+}
+
+void MeshLoader::EndLoadTimeCountAndAddLog(const std::string& fileName) {
+	auto loadEndTime = std::chrono::steady_clock::now();
+
+	auto time = std::chrono::duration_cast<std::chrono::milliseconds>(loadEndTime - loadStartTime_);
+
+	Lamb::AddLog("File Load Time : " + fileName + " : " +  Lamb::TimeToString(time));
+}
