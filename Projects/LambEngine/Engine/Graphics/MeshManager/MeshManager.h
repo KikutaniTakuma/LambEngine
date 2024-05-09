@@ -30,7 +30,7 @@ private:
 	static Lamb::SafePtr<MeshManager> instance_;
 
 public:
-	[[noreturn]] void LoadModel(const std::string& objFileName);
+	void LoadModel(const std::string& objFileName);
 	[[nodiscard]] Mesh* GetMesh(const std::string& objFileName);
 	[[nodiscard]] ModelData* GetModelData(const std::string& objFileName);
 

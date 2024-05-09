@@ -124,7 +124,7 @@ public:
     RenderContext& operator=(RenderContext&&) = delete;
 
 public:
-    [[noreturn]] void Draw() override {
+    void Draw() override {
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
         // コマンドリスト
@@ -240,7 +240,7 @@ public:
     SkinRenderContext& operator=(SkinRenderContext&&) = delete;
 
 public:
-    [[noreturn]] void Draw() override {
+    void Draw() override {
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
         // コマンドリスト

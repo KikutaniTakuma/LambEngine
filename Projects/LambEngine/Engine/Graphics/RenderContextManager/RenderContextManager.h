@@ -32,8 +32,6 @@ private:
 
 
 public:
-#pragma warning(push)
-#pragma warning(disable:4702)
 	template<IsBasedRenderContext RenderContextType = RenderContext<>>
 	void Load(const LoadFileNames& fileNames) {
 		auto isExist = renderData_.find(fileNames);
@@ -99,7 +97,6 @@ public:
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
 	}
-#pragma warning(pop)
 
 	[[nodiscard]] RenderSet* const Get(const LoadFileNames& fileNames);
 

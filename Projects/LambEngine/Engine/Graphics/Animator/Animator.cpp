@@ -21,14 +21,11 @@ Animator::Animator():
 {}
 
 // 警告の誤検知
-#pragma warning(push)
-#pragma warning(disable:4702)
 void Animator::Load(const std::string& fileName) {
 	Lamb::SafePtr animationManager = AnimationManager::GetInstance();
 	animationManager->LoadAnimations(fileName);
 	animations_ = animationManager->GetAnimations(fileName);
 }
-#pragma warning(pop)
 
 void Animator::Update(const Mesh* const mesh) {
 	Update(mesh->node.name);

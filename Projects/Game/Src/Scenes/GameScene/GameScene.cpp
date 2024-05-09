@@ -5,8 +5,6 @@ GameScene::GameScene() :
 	BaseScene(BaseScene::ID::Game)
 {}
 
-#pragma warning(push)
-#pragma warning(disable:4702)
 void GameScene::Initialize() {
 	currentCamera_->farClip = 3000.0f;
 	currentCamera_->pos.z = -10.0f;
@@ -22,7 +20,6 @@ void GameScene::Initialize() {
 	animations_ = animationManager_->GetAnimations("./Resources/Common/human/walk.gltf");
 	animations2_ = animationManager_->GetAnimations("./Resources/Common/human/sneakWalk.gltf");
 }
-#pragma warning(pop)
 
 void GameScene::Finalize() {
 

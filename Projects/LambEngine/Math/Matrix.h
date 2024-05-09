@@ -291,11 +291,11 @@ public:
 		return matrix_;
 	}
 
-	[[noreturn]] constexpr void swap(Matrix& right) {
+	constexpr void swap(Matrix& right) {
 		vector_.swap(right.vector_);
 	}
 
-	[[noreturn]] constexpr void fill(value_type value) {
+	constexpr void fill(value_type value) {
 		vector_.fill(value);
 	}
 
