@@ -65,4 +65,5 @@ void AnimationModel::Draw(
 	renderContext->SetSahderStruct(static_cast<uint32_t>(isLighting));
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
+	skeleton_->Draw(worldMatrix, camera);
 }
