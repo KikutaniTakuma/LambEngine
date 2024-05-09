@@ -51,7 +51,7 @@ void Skeleton::Update() {
     }
 }
 
-void Skeleton::Draw([[maybe_unused]]const Mat4x4& camera) {
+void Skeleton::Draw([[maybe_unused]] const Mat4x4& worldMatrix, [[maybe_unused]]const Mat4x4& camera) {
 #ifdef _DEBUG
     for (Joint& joint : joints) {
         if (not joint.parent) {
@@ -60,9 +60,10 @@ void Skeleton::Draw([[maybe_unused]]const Mat4x4& camera) {
         Vector3&& start = joint.skeletonSpaceMatrix.GetTranslate();
         Vector3&& end = joints[*joint.parent].skeletonSpaceMatrix.GetTranslate();
 
+
         Line::Draw(
-            start,
-            end,
+            start * worldMatrix,
+            end * worldMatrix,
             camera,
             std::numeric_limits<uint32_t>::max()
         );
@@ -94,8 +95,8 @@ SkinCluster* SkinCluster::CreateSkinCluster(const Skeleton& skeleton, const Mode
     result->infliuenceBufferView.SizeInBytes = bufferSize;
     result->infliuenceBufferView.StrideInBytes = sizeof(VertexInfluence);
 
-    result->inversebindPoseMatrices.resize(skeleton.joints.size());
-    std::ranges::fill(result->inversebindPoseMatrices, Mat4x4::kIdentity);
+    result->inverseBindPoseMatrices.resize(skeleton.joints.size());
+    std::ranges::fill(result->inverseBindPoseMatrices, Mat4x4::kIdentity);
 
 
     for (const auto& jointWeight : modelData.skinClusterData) {
@@ -104,7 +105,7 @@ SkinCluster* SkinCluster::CreateSkinCluster(const Skeleton& skeleton, const Mode
             continue;
         }
 
-        result->inversebindPoseMatrices[itr->second] = jointWeight.second.inverseBindPoseMatrix;
+        result->inverseBindPoseMatrices[itr->second] = jointWeight.second.inverseBindPoseMatrix;
         for (const auto& vertexWeight : jointWeight.second.vertexWeights) {
             auto& currentInfuluence = result->mappedInfluence[vertexWeight.vertexIndex];
             for (uint32_t index = 0; index < VertexInfluence::kNumMaxInfluence; index++) {
@@ -134,7 +135,7 @@ void SkinCluster::Update(const Skeleton& skeleton) {
         }
 
         this->paletteBuffer[jointIndex].skeletonSpaceMatrix =
-            this->inversebindPoseMatrices[jointIndex] * skeleton.joints[jointIndex].skeletonSpaceMatrix;
+            this->inverseBindPoseMatrices[jointIndex] * skeleton.joints[jointIndex].skeletonSpaceMatrix;
         this->paletteBuffer[jointIndex].skeletonSpaceInverseTransposeMatrix = 
             this->paletteBuffer[jointIndex].skeletonSpaceMatrix.Inverse().Transepose();
     }

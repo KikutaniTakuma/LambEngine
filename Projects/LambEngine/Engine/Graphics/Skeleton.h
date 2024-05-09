@@ -35,7 +35,7 @@ struct Skeleton {
 	Skeleton& operator=(Skeleton&&) = default;
 
 	void Update();
-	void Draw(const Mat4x4& camera);
+	void Draw(const Mat4x4& worldMatrix, const Mat4x4& camera);
 
 	int32_t root = 0;
 	std::unordered_map<std::string, int32_t> jointMap;
@@ -73,7 +73,7 @@ public:
 public:
 	void Update(const Skeleton& skeleton);
 
-	std::vector<Mat4x4> inversebindPoseMatrices;
+	std::vector<Mat4x4> inverseBindPoseMatrices;
 	Lamb::LambPtr<ID3D12Resource> influenceResource;
 	D3D12_VERTEX_BUFFER_VIEW infliuenceBufferView{};
 	std::span<VertexInfluence> mappedInfluence;
