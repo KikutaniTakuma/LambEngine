@@ -209,7 +209,9 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimation
 	PipelineManager::SetVertexInput("BLENDINDICES", 0, DXGI_FORMAT_R32_UINT);
 
 	PipelineManager::SetVertexInput("WEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1);
+	PipelineManager::SetVertexInput("WEIGHT", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1);
 	PipelineManager::SetVertexInput("INDEX", 0, DXGI_FORMAT_R32G32B32A32_SINT, 1);
+	PipelineManager::SetVertexInput("INDEX", 1, DXGI_FORMAT_R32G32B32A32_SINT, 1);
 
 	for (size_t i = 0; i < size_t(BlendType::kNum); i++) {
 		size_t blendType = i < Pipeline::Blend::BlendTypeNum ? i : i - Pipeline::Blend::BlendTypeNum;

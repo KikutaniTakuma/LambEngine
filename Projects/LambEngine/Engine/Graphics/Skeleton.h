@@ -43,7 +43,7 @@ struct Skeleton {
 };
 
 struct VertexInfluence {
-	static constexpr uint32_t kNumMaxInfluence = 4u;
+	static constexpr uint32_t kNumMaxInfluence = 8u;
 	std::array<float, kNumMaxInfluence> weights;
 	std::array<int32_t, kNumMaxInfluence> jointIndices;
 };
