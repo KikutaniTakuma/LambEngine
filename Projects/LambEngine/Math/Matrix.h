@@ -52,7 +52,7 @@ public:
 #define requiresMust requires(0llu != height and 0llu != width)
 #endif // requiresMust
 #ifndef requiresSQ
-#define requiresSQ requires(height == width)
+#define requiresSQ requires(height == width and 0llu != height)
 #endif // requiresSQ
 
 
@@ -322,8 +322,7 @@ public:
 		const Matrix& kIdentity = Identity();
 		Matrix identity = kIdentity;
 
-		value_type toOne = tmp.front().front();
-
+		value_type toOne = value_cast(0.0);
 		value_type tmpNum = value_cast(0.0);
 
 		for (size_t i = 0; i < height; i++) {
