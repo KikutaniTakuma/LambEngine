@@ -26,7 +26,7 @@ AnimationManager* const AnimationManager::GetInstance()
 	return instance_.get();
 }
 
-void AnimationManager::LoadAniamtions(const std::string& fileName) {
+void AnimationManager::LoadAnimations(const std::string& fileName) {
 	auto isExist = animationData_.find(fileName);
 
 	if (isExist == animationData_.end()) {
