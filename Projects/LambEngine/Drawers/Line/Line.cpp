@@ -32,6 +32,7 @@ void Line::Initialize() {
 	PipelineManager::CreateRootSgnature(&paramater, 1, false);
 	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT);
 	PipelineManager::SetShader(shader_);
+	PipelineManager::IsDepth(false);
 	PipelineManager::SetState(Pipeline::None, Pipeline::SolidState::Solid, Pipeline::CullMode::None, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
 	pipline_ = PipelineManager::Create();
 	PipelineManager::StateReset();
