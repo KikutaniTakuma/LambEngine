@@ -2,8 +2,6 @@
 #include "Engine//EngineUtils/ErrorCheck/ErrorCheck.h"
 #include <fstream>
 #include <filesystem>
-#include <cassert>
-#include <chrono>
 #include "Error/Error.h"
 
 #include "Math/Vector2.h"
@@ -12,6 +10,30 @@
 #include "Math/Quaternion.h"
 
 namespace Lamb {
+	std::string TimeToString(std::chrono::milliseconds ms) {
+		// 1秒、1分、1時間のミリ秒
+		const auto ms_per_second = std::chrono::milliseconds(1000);
+		const auto ms_per_minute = std::chrono::milliseconds(60000);
+		const auto ms_per_hour = std::chrono::milliseconds(3600000);
+
+		// 時間、分、秒を計算
+		auto hours = ms.count() / ms_per_hour.count();
+		ms -= hours * ms_per_hour;
+		auto minutes = ms.count() / ms_per_minute.count();
+		ms -= minutes * ms_per_minute;
+		auto seconds = ms.count() / ms_per_second.count();
+		ms -= seconds * ms_per_second;
+
+		// 残りのミリ秒
+		auto milliseconds = ms.count();
+
+		// 文字列フォーマット
+		return std::to_string(hours) + "h" +
+			std::to_string(minutes) + "m" +
+			std::to_string(seconds) + "s" +
+			std::to_string(milliseconds) + "ms";
+	}
+
 	bool AddLog(const std::string& text) {
 		const std::filesystem::path fileName = "./Log/Execution.log";
 		static bool isOpned = false;

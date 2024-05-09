@@ -2,6 +2,7 @@
 #include <string>
 #include <format>
 #include "Utils/Cocepts/Cocepts.h"
+#include <chrono>
 
 #include <Windows.h>
 #undef max
@@ -17,6 +18,13 @@ class Quaternion;
 /// ログ関連
 /// </summary>
 namespace Lamb {
+	/// <summary>
+	/// 時間を文字列に変換する
+	/// </summary>
+	/// <param name="millisecond">ミリ秒</param>
+	/// <returns>文字列</returns>
+	std::string TimeToString(std::chrono::milliseconds millisecond);
+
 	/// <summary>
 	/// 実行ログをファイルに出力する
 	/// </summary>
