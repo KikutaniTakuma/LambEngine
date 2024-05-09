@@ -42,7 +42,7 @@ void Texture2D::Draw(
 ) {
 	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
 
-	renderContext->SetSahderStruct(
+	renderContext->SetShaderStruct(
 		ShaderData{
 			.uvTransform = uvTransform,
 			.pad = Vector3::kZero,

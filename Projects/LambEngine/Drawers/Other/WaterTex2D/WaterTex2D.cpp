@@ -44,7 +44,7 @@ void WaterTex2D::Draw(
 ) {
 	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<WaterRenderContext>(blend);
 
-	renderContext->SetSahderStruct(
+	renderContext->SetShaderStruct(
 		ShaderData{
 			.randomVec = randomVec,
 			.normal  = Vector3(0.0f,0.0f,1.0f),

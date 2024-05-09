@@ -186,7 +186,7 @@ public:
     inline void SetLight(const Light& light) override {
         *shaderData_.light = light;
     }
-    inline void SetSahderStruct(const T& data) {
+    inline void SetShaderStruct(const T& data) {
         if (kMaxDrawInstance <= drawCount_) {
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
@@ -315,7 +315,7 @@ public:
     inline void SetLight(const Light& light) override {
         *shaderData_.light = light;
     }
-    inline void SetSahderStruct(const T& data) {
+    inline void SetShaderStruct(const T& data) {
         if (kMaxDrawInstance <= drawCount_) {
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }

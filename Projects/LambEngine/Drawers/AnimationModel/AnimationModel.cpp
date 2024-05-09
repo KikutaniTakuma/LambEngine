@@ -62,7 +62,7 @@ void AnimationModel::Draw(
 ) {
 	SkinRenderContext<uint32_t, 1>* renderContext = renderSet->GetRenderContextDowncast<SkinRenderContext<uint32_t, 1>>(blend);
 	renderContext->SetSkinCluster(skinCluster_.get());
-	renderContext->SetSahderStruct(static_cast<uint32_t>(isLighting));
+	renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
 	skeleton_->Draw(worldMatrix, camera);
