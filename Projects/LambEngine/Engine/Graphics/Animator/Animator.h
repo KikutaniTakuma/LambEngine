@@ -22,6 +22,8 @@ public:
 	void Update(Skeleton& skeleton);
 	void Update(const std::string& rootNodeName);
 
+	void Debug(const std::string& guiName);
+
 public:
 	// 最初からスタート
 	void Start();
@@ -69,12 +71,19 @@ public:
 	/// <param name="isLoop"></param>
 	void SetLoopAnimation(bool isLoop);
 
+	/// <summary>
+	/// アニメーション速度を設定する
+	/// </summary>
+	/// <param name="speed">アニメーション速度</param>
+	void SetAnimationSpeed(float speed);
+
 private:
 	Vector3 CalaclateValue(const AnimationCurve<Vector3>& animationCurve, float time);
 	Quaternion CalaclateValue(const AnimationCurve<Quaternion>& animationCurve, float time);
 
 private:
 	float animationTime_;
+	float animationSpeed_;
 	struct Animations* animations_;
 	Mat4x4 animationMatrix_;
 	size_t currentAnimationIndex_;

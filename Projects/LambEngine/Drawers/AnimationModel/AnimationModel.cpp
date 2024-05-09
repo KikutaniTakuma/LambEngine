@@ -48,6 +48,7 @@ void AnimationModel::Load(const std::string& fileName) {
 }
 
 void AnimationModel::Update() {
+	animator_->Debug("animation model");
 	animator_->Update(*skeleton_);
 	skeleton_->Update();
 	skinCluster_->Update(*skeleton_);

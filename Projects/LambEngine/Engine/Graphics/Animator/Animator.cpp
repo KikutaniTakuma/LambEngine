@@ -3,9 +3,15 @@
 #include "Utils/EngineInfo/EngineInfo.h"
 #include <algorithm>
 
+#ifdef _DEBUG
+#include "imgui.h"
+#endif // _DEBUG
+
+
 
 Animator::Animator():
 	animationTime_(0.0f),
+	animationSpeed_(1.0f),
 	animations_(nullptr),
 	currentAnimationIndex_(0llu),
 	animationMatrix_(Mat4x4::kIdentity),
@@ -45,7 +51,7 @@ void Animator::Update(Skeleton& skeleton) {
 	// アクティブ時
 	if (isActive_) {
 		// アニメーション時間を加算
-		animationTime_ += Lamb::DeltaTime();
+		animationTime_ += Lamb::DeltaTime() * animationSpeed_;
 
 		// アニメーション時間がアニメーション再生を超えたら
 		if (currentAnimation.duration < animationTime_) {
@@ -95,7 +101,7 @@ void Animator::Update(const std::string& rootNodeName)
 	// アクティブ時
 	if (isActive_) {
 		// アニメーション時間を加算
-		animationTime_ += Lamb::DeltaTime();
+		animationTime_ += Lamb::DeltaTime() * animationSpeed_;
 
 		// アニメーション時間がアニメーション再生を超えたら
 		if (currentAnimation.duration < animationTime_) {
@@ -128,6 +134,31 @@ void Animator::Update(const std::string& rootNodeName)
 			}
 		}
 	}
+}
+
+void Animator::Debug([[maybe_unused]]const std::string& guiName) {
+#ifdef _DEBUG
+	ImGui::Begin(guiName.c_str());
+	if (ImGui::TreeNode("Animator")) {
+		if (ImGui::Button("Start")) {
+			Start();
+		}
+		if (ImGui::Button("Rrstart")) {
+			Restart();
+		}
+		if (ImGui::Button("Puase")) {
+			Pause();
+		}
+		if (ImGui::Button("Stop")) {
+			Stop();
+		}
+
+		ImGui::DragFloat("アニメーション速度", &animationSpeed_, 0.01f, 0.0f, 10.0f);
+
+		ImGui::TreePop();
+	}
+	ImGui::End();
+#endif // _DEBUG
 }
 
 void Animator::Start() {
@@ -168,6 +199,10 @@ void Animator::SetAnimationIndex(size_t index) {
 
 void Animator::SetLoopAnimation(bool isLoop) {
 	isLoop_ = isLoop;
+}
+
+void Animator::SetAnimationSpeed(float speed) {
+	animationSpeed_ = speed;
 }
 
 Vector3 Animator::CalaclateValue(const AnimationCurve<Vector3>& animationCurve, float time) {
