@@ -1,8 +1,8 @@
 #include "Model.hlsli"
 
 struct Well{
-	float32_t4x4 skeletonMatrix;
-	float32_t4x4 skeletonSpaceInverseMatrix;
+	float32_t4x4 skeletonSpaceMatrix;
+	float32_t4x4 skeletonSpaceInverseTransposeMatrix;
 };
 
 StructuredBuffer<Well> kMatrixPalette : register(t4);
@@ -23,16 +23,16 @@ struct Skinned {
 
 Skinned Skinning(AnimationVertexInput input){
 	Skinned result;
-	result.position = mul(input.position, kMatrixPalette[input.index.x].skeletonSpaceInverseMatrix) * input.weight.x;
-	result.position += mul(input.position, kMatrixPalette[input.index.y].skeletonSpaceInverseMatrix) * input.weight.y;
-	result.position += mul(input.position, kMatrixPalette[input.index.z].skeletonSpaceInverseMatrix) * input.weight.z;
-	result.position += mul(input.position, kMatrixPalette[input.index.w].skeletonSpaceInverseMatrix) * input.weight.w;
+	result.position = mul(input.position, kMatrixPalette[input.index.x].skeletonSpaceMatrix) * input.weight.x;
+	result.position += mul(input.position, kMatrixPalette[input.index.y].skeletonSpaceMatrix) * input.weight.y;
+	result.position += mul(input.position, kMatrixPalette[input.index.z].skeletonSpaceMatrix) * input.weight.z;
+	result.position += mul(input.position, kMatrixPalette[input.index.w].skeletonSpaceMatrix) * input.weight.w;
 	result.position.w = 1.0f;
 
-	result.normal = mul(input.normal, (float32_t3x3)kMatrixPalette[input.index.x].skeletonSpaceInverseMatrix) * input.weight.x;
-	result.normal += mul(input.normal, (float32_t3x3)kMatrixPalette[input.index.y].skeletonSpaceInverseMatrix) * input.weight.y;
-	result.normal += mul(input.normal, (float32_t3x3)kMatrixPalette[input.index.z].skeletonSpaceInverseMatrix) * input.weight.z;
-	result.normal += mul(input.normal, (float32_t3x3)kMatrixPalette[input.index.w].skeletonSpaceInverseMatrix) * input.weight.w;
+	result.normal = mul(input.normal, (float32_t3x3)kMatrixPalette[input.index.x].skeletonSpaceInverseTransposeMatrix) * input.weight.x;
+	result.normal += mul(input.normal, (float32_t3x3)kMatrixPalette[input.index.y].skeletonSpaceInverseTransposeMatrix) * input.weight.y;
+	result.normal += mul(input.normal, (float32_t3x3)kMatrixPalette[input.index.z].skeletonSpaceInverseTransposeMatrix) * input.weight.z;
+	result.normal += mul(input.normal, (float32_t3x3)kMatrixPalette[input.index.w].skeletonSpaceInverseTransposeMatrix) * input.weight.w;
 	result.normal = normalize(result.normal);
 
 	return result;
