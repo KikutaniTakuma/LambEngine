@@ -36,6 +36,8 @@ void BaseScene::SceneInitialize(SceneManager* sceneManager) {
 	input_ = Input::GetInstance();
 
 	postEffectManager_ = PostEffectManager::GetInstance();
+
+	animationManager_ = AnimationManager::GetInstance();
 }
 
 void BaseScene::ChangeCamera()

@@ -7,6 +7,7 @@
 #include "Input/Input.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
+#include "Engine/Graphics/AnimationManager/AnimationManager.h"
 
 #include "Utils/SafePtr/SafePtr.h"
 #include "Utils/Flg/Flg.h"
@@ -67,6 +68,8 @@ protected:
 	BaseScene::ID sceneID_;
 
 	PostEffectManager* postEffectManager_;
+
+	AnimationManager* animationManager_;
 
 private:
 	std::unique_ptr<Camera> camera_;
