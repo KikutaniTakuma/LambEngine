@@ -12,7 +12,7 @@ void GameScene::Initialize() {
 	/*drawerManager_->LoadModel("./Resources/Common/Hololive/Watame/Watame.obj");
 	model2_ = drawerManager_->GetModel("./Resources/Common/Hololive/Watame/Watame.obj");*/
 	model_ = std::make_unique<AnimationModel>();
-	model_->Load("./Resources/Common/human/walk.gltf");
+	model_->Load("./Resources/Common/human/sneakWalk.gltf");
 	model_->GetAnimator().SetLoopAnimation(true);
 	model_->GetAnimator().Start();
 }
