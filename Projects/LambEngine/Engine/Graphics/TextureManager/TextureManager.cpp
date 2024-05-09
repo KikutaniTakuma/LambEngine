@@ -44,7 +44,7 @@ TextureManager::~TextureManager() {
 
 uint32_t TextureManager::LoadTexture(const std::string& fileName) {
 	if (!std::filesystem::exists(fileName)) {
-		throw Lamb::Error::Code<TextureManager>("this file is not exist -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<TextureManager>("This file is not exist -> " + fileName, ErrorPlace);
 	}
 
 	auto itr = textures_.find(fileName);

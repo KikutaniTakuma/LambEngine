@@ -39,7 +39,7 @@ void AnimationManager::LoadAnimations(const std::string& fileName) {
 Animations* const AnimationManager::GetAnimations(const std::string& fileName)
 {
 	if (not animationData_[fileName]) {
-		throw Lamb::Error::Code<AnimationManager>("this file does not load -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<AnimationManager>("This file does not load -> " + fileName, ErrorPlace);
 	}
 	return animationData_[fileName].get();
 }

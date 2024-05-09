@@ -20,7 +20,7 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 	Assimp::Importer importer;
 	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
 	if (not scene->HasMeshes()) {
-		throw Lamb::Error::Code<MeshLoader>("this file does not have meshes -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<MeshLoader>("This file does not have meshes -> " + fileName, ErrorPlace);
 	}
 
 	std::filesystem::path path = fileName;
@@ -38,10 +38,10 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
 		Lamb::SafePtr<aiMesh> mesh = scene->mMeshes[meshIndex];
 		if (not mesh->HasNormals()) {
-			throw Lamb::Error::Code<MeshLoader>("this file does not have normal -> " + fileName, ErrorPlace);
+			throw Lamb::Error::Code<MeshLoader>("This file does not have normal -> " + fileName, ErrorPlace);
 		}
 		if (not mesh->HasTextureCoords(0)) {
-			throw Lamb::Error::Code<MeshLoader>("this file does not have texcoord -> " + fileName, ErrorPlace);
+			throw Lamb::Error::Code<MeshLoader>("This file does not have texcoord -> " + fileName, ErrorPlace);
 		}
 
 		// 要素数追加
@@ -113,7 +113,7 @@ Animations MeshLoader::LoadAnimation(const std::string& fileName)
 	Assimp::Importer importer;
 	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
 	if (not (scene->mNumAnimations != 0)) {
-		throw Lamb::Error::Code<MeshLoader>("this file does not have animation -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<MeshLoader>("This file does not have animation -> " + fileName, ErrorPlace);
 	}
 
 	result.data.resize(scene->mNumAnimations);
@@ -168,11 +168,11 @@ const aiScene* MeshLoader::ReadFile(Assimp::Importer& importer, const std::strin
 
 	// ファイル見つかんない
 	if (not std::filesystem::exists(path)) {
-		throw Lamb::Error::Code<MeshLoader>("this file does not find -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<MeshLoader>("This file does not find -> " + fileName, ErrorPlace);
 	}
 	// objかgltfではない
 	if (not (path.extension() == ".obj" or path.extension() == ".gltf")) {
-		throw Lamb::Error::Code<MeshLoader>("this file does not support -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<MeshLoader>("This file does not support -> " + fileName, ErrorPlace);
 	}
 
 	return importer.ReadFile(fileName.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);

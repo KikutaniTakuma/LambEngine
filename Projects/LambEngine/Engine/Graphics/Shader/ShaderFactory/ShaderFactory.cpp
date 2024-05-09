@@ -74,7 +74,7 @@ IDxcBlob* ShaderFactory::CompileShader(
 	const wchar_t* profile
 ) {
 	if (!std::filesystem::exists(filePath)) {
-		throw Lamb::Error::Code<ShaderFactory>("this file is not exists -> " + ConvertString(filePath), ErrorPlace);
+		throw Lamb::Error::Code<ShaderFactory>("This file is not exists -> " + ConvertString(filePath), ErrorPlace);
 	}
 
 	// 1. hlslファイルを読む
