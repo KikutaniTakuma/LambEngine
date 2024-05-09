@@ -15,7 +15,7 @@ private:
 	DrawerManager& operator=(const DrawerManager&) = delete;
 	DrawerManager& operator=(DrawerManager&&) = delete;
 public:
-	~DrawerManager() = default;
+	~DrawerManager();
 
 public:
 	static DrawerManager* GetInstance();

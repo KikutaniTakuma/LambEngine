@@ -186,6 +186,7 @@ void Engine::Finalize() {
 
 	// COM 終了
 	CoUninitialize();
+	Lamb::AddLog("CoUninitialize succeeded");
 
 	ErrorCheck::GetInstance()->CrashProgram();
 }

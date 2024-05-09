@@ -69,6 +69,6 @@ void ErrorCheck::ErrorLog(const std::string& text, const std::string& boxName) {
 		return;
 	}
 
-	file << Lamb::NowTime() << ": "  << std::format("{} :\n{}", boxName, text) << std::endl;
+	file << Lamb::NowTime() << ": "  << std::format("{} : {}", boxName, text) << std::endl;
 	file.close();
 }

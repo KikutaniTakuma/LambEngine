@@ -14,7 +14,7 @@ public:
 	RtvHeap& operator=(const RtvHeap&) = delete;
 	RtvHeap& operator=(RtvHeap&&) = delete;
 public:
-	~RtvHeap() = default;
+	~RtvHeap();
 
 public:
 	static void Initialize(UINT heapSize);

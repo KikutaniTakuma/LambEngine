@@ -17,7 +17,7 @@ private:
 	DirectXDevice operator=(const DirectXDevice&) = delete;
 	DirectXDevice operator=(DirectXDevice&&) = delete;
 public:
-	~DirectXDevice() = default;
+	~DirectXDevice();
 
 public:
 	static DirectXDevice* const GetInstance();

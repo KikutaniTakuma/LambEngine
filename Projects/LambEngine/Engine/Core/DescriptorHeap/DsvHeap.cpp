@@ -6,6 +6,11 @@
 
 Lamb::SafePtr<DsvHeap> DsvHeap::instance_ = nullptr;
 
+DsvHeap::~DsvHeap()
+{
+	Lamb::AddLog("Finalize DsvHeap succeeded");
+}
+
 void DsvHeap::Initialize(UINT heapSize) {
 	instance_.reset(new DsvHeap( heapSize ));
 }

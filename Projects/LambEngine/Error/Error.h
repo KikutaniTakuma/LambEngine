@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <filesystem>
 #include <typeinfo>
 #include "Utils/ExecutionLog/ExecutionLog.h"
 
@@ -78,5 +79,5 @@ namespace Lamb {
 }
 
 #ifndef ErrorPlace
-#define ErrorPlace __func__, __FILE__, __LINE__
+#define ErrorPlace __func__, std::filesystem::path(__FILE__).filename().string(), __LINE__
 #endif // !ErrorPlace

@@ -39,6 +39,8 @@ void Framework::Execution() {
 		Input* const input = Input::GetInstance();
 		WindowFactory* const window = WindowFactory::GetInstance();
 
+		frameInfo->StartFrameInfo();
+
 		while (window->WindowMassage()) {
 			// 描画開始処理
 			Engine::FrameStart();

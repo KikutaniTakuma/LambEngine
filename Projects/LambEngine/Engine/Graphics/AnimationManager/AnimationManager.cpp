@@ -12,10 +12,13 @@ void AnimationManager::Initialize() {
 	}
 
 	instance_.reset(new AnimationManager());
+
+	Lamb::AddLog("Initialize AnimationManager succeeded");
 }
 
 void AnimationManager::Finalize() {
 	instance_.reset();
+	Lamb::AddLog("Finalize AnimationManager succeeded");
 }
 
 AnimationManager* const AnimationManager::GetInstance()

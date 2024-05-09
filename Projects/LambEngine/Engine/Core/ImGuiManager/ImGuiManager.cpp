@@ -65,6 +65,8 @@ ImGuiManager::ImGuiManager() {
 	);
 
 	descriptorHeap->UseThisPosition(useHandle);
+
+	Lamb::AddLog("Initialize ImGuiManager succeeded");
 #endif // DEBUG
 }
 ImGuiManager::~ImGuiManager() {
@@ -72,6 +74,8 @@ ImGuiManager::~ImGuiManager() {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+
+	Lamb::AddLog("Finalize ImGuiManager succeeded");
 #endif // DEBUG
 }
 

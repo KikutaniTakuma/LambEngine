@@ -11,6 +11,12 @@ DrawerManager::DrawerManager():
 
 	tex2D_ = std::make_unique<Texture2D>();
 	tex2D_->Load();
+
+	Lamb::AddLog("Initialize DrawerManager succeeded");
+}
+
+DrawerManager::~DrawerManager(){ 
+	Lamb::AddLog("Finalize DrawerManager succeeded");
 }
 
 DrawerManager* DrawerManager::GetInstance()

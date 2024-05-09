@@ -15,6 +15,10 @@
 
 Lamb::SafePtr<CbvSrvUavHeap> CbvSrvUavHeap::instance_ = nullptr;
 
+CbvSrvUavHeap::~CbvSrvUavHeap() {
+	Lamb::AddLog("Finalize CbvSrvUavHeap succeeded");
+}
+
 void CbvSrvUavHeap::Initialize(UINT heapSize, UINT maxTexture) {
 	instance_.reset(new CbvSrvUavHeap(heapSize, maxTexture));
 }

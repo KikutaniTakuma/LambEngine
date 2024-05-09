@@ -18,7 +18,7 @@ private:
 	DirectXSwapChain& operator=(const DirectXSwapChain&) = delete;
 	DirectXSwapChain& operator=(DirectXSwapChain&&) = delete;
 public:
-	~DirectXSwapChain() = default;
+	~DirectXSwapChain();
 
 public:
 	static DirectXSwapChain* const GetInstance();

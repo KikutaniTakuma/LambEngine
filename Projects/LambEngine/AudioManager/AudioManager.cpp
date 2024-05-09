@@ -37,6 +37,7 @@ AudioManager::AudioManager() :
 AudioManager::~AudioManager() {
 	xAudio2_.Reset();
 	MFShutdown();
+	Lamb::AddLog("Finalize AudioManager succeeded");
 }
 
 Audio* const AudioManager::Load(const std::string& fileName) {

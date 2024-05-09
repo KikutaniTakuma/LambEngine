@@ -13,6 +13,10 @@
 
 Lamb::SafePtr<DirectXSwapChain> DirectXSwapChain::instance_ = nullptr;
 
+DirectXSwapChain::~DirectXSwapChain() {
+	Lamb::AddLog("Finalize DirectXSwapChain succeeded");
+}
+
 DirectXSwapChain* const DirectXSwapChain::GetInstance() {
 	return instance_.get();
 }

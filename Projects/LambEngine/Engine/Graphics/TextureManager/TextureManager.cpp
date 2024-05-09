@@ -38,6 +38,7 @@ TextureManager::TextureManager() :
 
 TextureManager::~TextureManager() {
 	textures_.clear();
+	Lamb::AddLog("Finalize TextureManager succeeded");
 }
 
 

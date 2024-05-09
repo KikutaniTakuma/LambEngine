@@ -44,6 +44,11 @@ public:
 	/// </summary>
 	void End();
 
+	/// <summary>
+	/// フレームインフォ開始
+	/// </summary>
+	void StartFrameInfo();
+
 /// <summary>
 /// getter
 /// </summary>
@@ -185,6 +190,8 @@ private:
 
 	StringOut fpsStringOutPut_;
 	bool isDrawFps_;
+
+	bool isStartFrameInfo_;
 	
 
 #ifdef _DEBUG

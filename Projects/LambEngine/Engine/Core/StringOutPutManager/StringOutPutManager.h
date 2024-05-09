@@ -16,7 +16,7 @@ private:
 	StringOutPutManager& operator=(const StringOutPutManager&) = delete;
 	StringOutPutManager& operator=(StringOutPutManager&&) = delete;
 public:
-	~StringOutPutManager() = default;
+	~StringOutPutManager();
 
 public:
 	static void Initialize();

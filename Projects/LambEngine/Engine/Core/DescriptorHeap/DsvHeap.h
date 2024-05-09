@@ -13,7 +13,7 @@ private:
 	DsvHeap& operator=(DsvHeap&&) = delete;
 
 public:
-	~DsvHeap() = default;
+	~DsvHeap();
 
 public:
 	static void Initialize(UINT heapSize);

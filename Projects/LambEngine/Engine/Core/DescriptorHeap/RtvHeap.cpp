@@ -12,6 +12,11 @@
 
 Lamb::SafePtr<RtvHeap> RtvHeap::instance_ = nullptr;
 
+RtvHeap::~RtvHeap()
+{
+	Lamb::AddLog("Finalize RtvHeap succeeded");
+}
+
 void RtvHeap::Initialize(UINT heapSize) {
 	instance_.reset(new RtvHeap(heapSize));
 }

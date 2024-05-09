@@ -14,6 +14,10 @@
 
 Lamb::SafePtr<StringOutPutManager> StringOutPutManager::instance_ = nullptr;
 
+StringOutPutManager::~StringOutPutManager() {
+	Lamb::AddLog("Finalize StringOutPutManager succeeded");
+}
+
 void StringOutPutManager::Initialize() {
 	instance_.reset(new StringOutPutManager());
 }
@@ -35,6 +39,7 @@ StringOutPutManager::StringOutPutManager():
 	// GraphicsMemory初期化
 	auto device = DirectXDevice::GetInstance()->GetDevice();
 	gmemory_.reset(new DirectX::GraphicsMemory(device));
+	Lamb::AddLog("Initialize StringOutPutManager succeeded");
 }
 
 void StringOutPutManager::LoadFont(const std::string& fontName) {

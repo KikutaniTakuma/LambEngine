@@ -81,6 +81,7 @@ SceneLoad::SceneLoad() :
 
 		// COM 終了
 		CoUninitialize();
+		Lamb::AddLog("CoUninitialize succeeded");
 	};
 
 	CreateLoad();

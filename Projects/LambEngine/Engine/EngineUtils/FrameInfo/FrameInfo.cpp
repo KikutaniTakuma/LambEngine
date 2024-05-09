@@ -41,11 +41,12 @@ FrameInfo::FrameInfo() :
 	frameDataDurationStartTime_{},
 	avgProcDuration_{600llu},
 	fpsStringOutPut_{},
-	isDrawFps_(false)
+	isDrawFps_(false),
+	isStartFrameInfo_(false)
 {
 	// リフレッシュレート取得
 	fps_ = kMaxMonitorFps_;
-	minFps_ = maxFps_ = fps_;
+	minFps_ = fps_;
 	deltaTime_ = 1.0 / fps_;
 
 	auto nowTime = std::chrono::steady_clock::now();
@@ -137,7 +138,7 @@ void FrameInfo::End() {
 	fps_ = 1.0 / deltaTime_;
 
 
-	if (std::chrono::duration_cast<std::chrono::seconds>(end - gameStartTime_) > std::chrono::seconds(1)) {
+	if (isStartFrameInfo_) {
 		maxFps_ = std::max(fps_, maxFps_);
 		minFps_ = std::min(fps_, minFps_);
 	}
@@ -162,6 +163,13 @@ void FrameInfo::End() {
 			avgFps /= size;
 			frameDatas_.push(avgFps);
 		}
+	}
+}
+
+void FrameInfo::StartFrameInfo() {
+	if (not isStartFrameInfo_) {
+		isStartFrameInfo_ = true;
+		frameDataDurationStartTime_ = std::chrono::steady_clock::now();
 	}
 }
 

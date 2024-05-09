@@ -12,6 +12,10 @@
 
 Lamb::SafePtr<DirectXDevice> DirectXDevice::instance_ = nullptr;
 
+DirectXDevice::~DirectXDevice() {
+	Lamb::AddLog("Finalize DirectXDevice succeeded");
+}
+
 DirectXDevice* const DirectXDevice::GetInstance() {
 	return instance_.get();
 }

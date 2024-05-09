@@ -29,6 +29,8 @@ DirectXCommand::DirectXCommand():
 
 DirectXCommand::~DirectXCommand() {
 	CloseHandle(fenceEvent_);
+
+	Lamb::AddLog("Finalize DirectXCommand succeeded");
 }
 
 DirectXCommand* const DirectXCommand::GetMainCommandlist()

@@ -21,7 +21,7 @@ private:
 	CbvSrvUavHeap& operator=(const CbvSrvUavHeap& right) = delete;
 	CbvSrvUavHeap& operator=(CbvSrvUavHeap&& right) noexcept = delete;
 public:
-	~CbvSrvUavHeap() = default;
+	~CbvSrvUavHeap();
 
 public:
 	static void Initialize(UINT heapSize, UINT maxTexture = 128u);

@@ -12,6 +12,7 @@ MeshManager* const MeshManager::GetInstance() {
 
 MeshManager::~MeshManager() {
 	meshs_.clear();
+	Lamb::AddLog("Finalize MeshManager succeeded");
 }
 
 void MeshManager::Initialize() {

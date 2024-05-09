@@ -22,6 +22,8 @@ void PipelineManager::Initialize() {
 }
 void PipelineManager::Finalize() {
 	instance_.reset();
+
+	Lamb::AddLog("Finalize PipelineManager succeeded");
 }
 
 void PipelineManager::CreateRootSgnature(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture, bool isOutRangeBorder) {

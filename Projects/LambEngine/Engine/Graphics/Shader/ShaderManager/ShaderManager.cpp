@@ -23,7 +23,7 @@ ShaderManager::ShaderManager() {
 }
 
 ShaderManager::~ShaderManager() {
-	
+	Lamb::AddLog("Finalize ShaderManager succeeded");
 }
 
 void ShaderManager::Initialize() {

@@ -19,10 +19,12 @@ RenderContextManager* const RenderContextManager::GetInstance() {
 
 void RenderContextManager::Initialize() {
 	instance_.reset(new RenderContextManager());
+	Lamb::AddLog("Initialize RenderContextManager succeeded");
 }
 
 void RenderContextManager::Finalize() {
 	instance_.reset();
+	Lamb::AddLog("Finalize RenderContextManager succeeded");
 }
 
 RenderSet* const RenderContextManager::Get(const LoadFileNames& fileNames)
