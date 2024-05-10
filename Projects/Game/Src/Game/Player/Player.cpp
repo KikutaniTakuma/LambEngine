@@ -3,31 +3,31 @@
 #include "Input/Gamepad/Gamepad.h"
 #include "Input/KeyInput/KeyInput.h"
 #include "Utils/EngineInfo/EngineInfo.h"
-#include "Drawers/DrawerManager.h"
+#include "Engine/Graphics/AnimationManager/AnimationManager.h"
 
 void Player::Init(const Transform& transform)
 {
-	std::string fileName = "./Resources/Common/Player/Player.gltf";
-	std::string punchFileName = "./Resources/Common/Player/PlayerPunch.gltf";
-	Lamb::SafePtr drawerManager = DrawerManager::GetInstance();
+	std::string fileName = "./Resources/Common/Player/player.gltf";
+	std::string punchFileName = "./Resources/Common/Player/playerPunch.gltf";
+	std::string walkFileName = "./Resources/Common/Player/walk.gltf";
+	std::string floatingFileName = "./Resources/Common/Player/playerFloating.gltf";
+	Lamb::SafePtr animationManager = AnimationManager::GetInstance();
+	animationManager->LoadAnimations(walkFileName);
+	animationManager->LoadAnimations(fileName);
+	animationManager->LoadAnimations(punchFileName);
+	animationManager->LoadAnimations(floatingFileName);
 
-
-	drawerManager->LoadModel(fileName);
-	model_ = drawerManager->GetModel(fileName);
-	waitAnimator_ = std::make_unique<Animator>();
-	waitAnimator_->Load(fileName);
-	waitAnimator_->SetIsFullAnimation(false);
-	waitAnimator_->SetLoopAnimation(true);
-	waitAnimator_->Start();
-	punchAnimator_ = std::make_unique<Animator>();
-	punchAnimator_->Load(punchFileName);
-	punchAnimator_->SetIsFullAnimation(false);
-	punchAnimator_->SetLoopAnimation(false);
-
+	model_ = std::make_unique<AnimationModel>(fileName);
+	model_->GetAnimator().SetLoopAnimation(true);
+	model_->GetAnimator().Start();
+	waitAnimatons_ = animationManager->GetAnimations(fileName);
+	punchAnimatons_ = animationManager->GetAnimations(punchFileName);
+	walkAnimatons_ = animationManager->GetAnimations(walkFileName);
+	floatingAnimatons_ = animationManager->GetAnimations(floatingFileName);
 	transform_ = transform;
-	transform_.rotate = { 1.57f, 0.0f, 1.57f };
+	transform_.scale *= 2.0f;
 
-	gravity_ = 9.80665f;
+	gravity_ = 9.80665f * 0.2f;
 
 	jump_ = 30.0f;
 
@@ -38,14 +38,15 @@ void Player::Init(const Transform& transform)
 
 void Player::Update() {
 	transform_.Debug("player");
+	model_->Update();
 
-
-	punchAnimator_->Update(model_->GetNode().name);
-	waitAnimator_->Update(model_->GetNode().name);
-	if (punchAnimator_->GetIsActive().OnExit()) {
-		waitAnimator_->Start();
-		punchAnimator_->Stop();
+	if (isPunch_ and model_->GetAnimator().GetIsActive().OnExit()) {
 		isPunch_ = false;
+		model_->GetAnimator().SetAnimations(waitAnimatons_);
+		model_->GetAnimator().SetLoopAnimation(true);
+		/*model_->GetAnimator().SetIsFullAnimation(false);
+		model_->GetAnimator().SetAnimationIndex(0);*/
+		model_->GetAnimator().Start();
 	}
 
 	Move();
@@ -61,10 +62,10 @@ void Player::Update() {
 
 	transform_.translate.y += jumpSpeed_ * Lamb::DeltaTime();
 
+	transform_.rotate = Vector3::QuaternionToEuler(Quaternion::DirectionToDirection(Vector3::kZIdentity, Vector3(direction_.x, 0.0f, direction_.y)));
 
-	obb_->transform = transform_;
-	obb_->transform.scale *= 2.0f;
-	obb_->transform.rotate -= (Vector3::kXIdentity + Vector3::kZIdentity) * 1.57f;
+	obb_->transform.translate = transform_.translate;
+	obb_->transform.scale = transform_.scale;
 	obb_->Update();
 }
 void Player::AfterCollisionUpdate([[maybe_unused]]const Vector3& pushVector) {
@@ -74,13 +75,12 @@ void Player::AfterCollisionUpdate([[maybe_unused]]const Vector3& pushVector) {
 }
 
 void Player::Draw(const Camera& camera) {
-	const Mat4x4& localMatrix = punchAnimator_->GetIsActive() ? punchAnimator_->GetLocalMat4x4() : waitAnimator_->GetLocalMat4x4();
-
 	model_->Draw(
-		localMatrix * transform_.GetMatrix(),
+		Mat4x4::MakeAffin(Vector3::kIdentity, Vector3::kZero, Vector3::kYIdentity * -0.5f) * transform_.GetMatrix(),
 		camera.GetViewProjection(),
 		0xffffffff,
-		BlendType::kNormal
+		BlendType::kNormal,
+		true
 	);
 
 	obb_->Draw(camera.GetViewProjection());
@@ -89,18 +89,36 @@ void Player::Draw(const Camera& camera) {
 void Player::Punch() {
 	Lamb::SafePtr gamepad = Gamepad::GetInstance();
 	if (not isPunch_ and gamepad->GetButton(Gamepad::Button::B)) {
-		punchAnimator_->Start();
+		model_->GetAnimator().Stop();
+		model_->GetAnimator().SetAnimations(punchAnimatons_);
+		model_->GetAnimator().SetLoopAnimation(false);
+		//model_->GetAnimator().SetIsFullAnimation(true);
+		model_->GetAnimator().Start();
 		isPunch_ = true;
 	}
 }
 
 void Player::Move() {
-	Lamb::SafePtr gamepad = Gamepad::GetInstance();
-	Vector2&& stick = gamepad->GetStick(Gamepad::Stick::LEFT);
+	if (not isPunch_) {
+		Lamb::SafePtr gamepad = Gamepad::GetInstance();
+		Vector2&& stick = gamepad->GetStick(Gamepad::Stick::LEFT);
 
-	direction_ = Vector2::kIdentity;
+		if(isJump_){
+			model_->GetAnimator().SetAnimations(floatingAnimatons_);
+			model_->GetAnimator().SetAnimationSpeed(2.0f);
+		}
+		else if (stick == Vector2::kZero) {
+			model_->GetAnimator().SetAnimations(waitAnimatons_);
+		}
+		else {
+			model_->GetAnimator().SetAnimations(walkAnimatons_);
+		}
 
-	direction_ = stick;
+		direction_ = stick;
+	}
+	else {
+		direction_ = Vector2::kZero;
+	}
 }
 
 void Player::Jump() {
@@ -142,4 +160,5 @@ void Player::JumpReset()
 {
 	jumpSpeed_ = 0.0f;
 	jumpTime_ = 0.0f;
+	model_->GetAnimator().SetAnimationSpeed(1.0f);
 }

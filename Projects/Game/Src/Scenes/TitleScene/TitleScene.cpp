@@ -53,6 +53,11 @@ void TitleScene::Initialize()
 	skyTransform.translate = Vector3::kYIdentity * 25.0f;
 	skyBlock_ = std::make_unique<SkyBlock>();
 	skyBlock_->Init(skyTransform);
+
+	coin_ = std::make_unique<Coin>();
+	Transform coinTransform;
+	coinTransform.scale *= 2.0f;
+	coin_->Init(coinTransform);
 }
 
 void TitleScene::Finalize()
@@ -66,7 +71,7 @@ void TitleScene::Update()
 
 	player_->Update();
 
-
+	coin_->Update();
 
 	skyBlock_->Debug("tset");
 	skyBlock_->Update();
@@ -86,6 +91,8 @@ void TitleScene::Update()
 	}
 
 	player_->Landing(isCollision);
+
+	coin_->SetIsCollision(coin_->GetObb().IsCollision(player_->GetObb()));
 
 
 #ifdef _DEBUG
@@ -117,6 +124,8 @@ void TitleScene::Draw()
 	skyBlock_->Draw(*currentCamera_);
 
 	player_->Draw(*currentCamera_);
+
+	coin_->Draw(*currentCamera_);
 
 	if (player_->GetIsPunch()) {
 		postEffectManager_->GetGrayPera().PreDraw();

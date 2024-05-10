@@ -30,14 +30,14 @@ public:
 	/// </summary>
 	/// <param name="fileName">obj, gltfファイルパス</param>
 	/// <returns>頂点とインデックス情報</returns>
-	static ModelData LoadModel(const std::string& fileName);
+	static [[nodiscard]] ModelData LoadModel(const std::string& fileName);
 
 	/// <summary>
 	/// gltfアニメーションロード
 	/// </summary>
 	/// <param name="fileName">gltfファイルのロード</param>
 	/// <returns></returns>
-	static Animations LoadAnimation(const std::string& fileName);
+	static [[nodiscard]] Animations* LoadAnimation(const std::string& fileName);
 
 private:
 	static const struct aiScene* ReadFile(Assimp::Importer& importer, const std::string& fileName);

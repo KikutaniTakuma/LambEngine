@@ -219,6 +219,10 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 
 void Obb::Update() {
 	Mat4x4&& worldMatrix = transform.GetMatrix();
+	transform.rotate.x = transform.rotate.x - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.x) / 90));
+	transform.rotate.y = transform.rotate.y - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.y) / 90));
+	transform.rotate.z = transform.rotate.z - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.z) / 90));
+
 	Quaternion&& rotateQuaternion = Quaternion::EulerToQuaternion(transform.rotate);
 
 	for (size_t i = 0; i < localPositions_->size(); i++) {
