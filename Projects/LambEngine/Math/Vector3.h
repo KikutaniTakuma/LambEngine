@@ -101,6 +101,14 @@ public:
 		return std::make_reverse_iterator(cbegin());
 	}
 
+	[[nodiscard]] constexpr size_t size() const {
+		return 3llu;
+	}
+
+	[[nodiscard]] constexpr bool empty() const {
+		return false;
+	}
+
 
 /// <summary>
 /// 静的定数

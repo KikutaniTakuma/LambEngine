@@ -1,4 +1,5 @@
 #pragma once
+#include <iterator>
 
 /// <summary>
 ///	二次元ベクトル
@@ -40,6 +41,9 @@ public:
 	[[nodiscard]] bool operator==(const Vector2& right) const noexcept;
 	[[nodiscard]] bool operator!=(const Vector2& right) const noexcept;
 
+	[[nodiscard]] float& operator[](size_t index);
+	[[nodiscard]] const float& operator[](size_t index) const;
+
 /// <summary>
 /// メンバ関数
 /// </summary>
@@ -75,6 +79,38 @@ public:
 	[[nodiscard]] const float& back() const {
 		return y;
 	}
+	[[nodiscard]] auto begin() noexcept {
+		return std::data(*this);
+	}
+	[[nodiscard]] auto end() noexcept {
+		return std::data(*this) + 2;
+	}
+	[[nodiscard]] auto cbegin() const noexcept {
+		return std::data(*this);
+	}
+	[[nodiscard]] auto cend() const noexcept {
+		return std::data(*this) + 2;
+	}
+	[[nodiscard]] auto rbegin() noexcept {
+		return std::make_reverse_iterator(end());
+	}
+	[[nodiscard]] auto rend() noexcept {
+		return std::make_reverse_iterator(begin());
+	}
+	[[nodiscard]] auto crbegin() const noexcept {
+		return std::make_reverse_iterator(cend());
+	}
+	[[nodiscard]] auto crend() const noexcept {
+		return std::make_reverse_iterator(cbegin());
+	}
+
+	[[nodiscard]] constexpr size_t size() const {
+		return 2llu;
+	}
+
+	[[nodiscard]] constexpr bool empty() const {
+		return false;
+	}
 
 
 
@@ -82,8 +118,16 @@ public:
 /// メンバ変数
 /// </summary>
 public:
-	float x;
-	float y;
+	union {
+		float x;
+		float first;
+		float min;
+	};
+	union {
+		float y;
+		float second;
+		float max;
+	};
 
 /// <summary>
 /// 静的関数
