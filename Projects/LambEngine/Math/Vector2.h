@@ -83,13 +83,13 @@ public:
 		return std::data(*this);
 	}
 	[[nodiscard]] auto end() noexcept {
-		return std::data(*this) + 2;
+		return std::data(*this) + size();
 	}
 	[[nodiscard]] auto cbegin() const noexcept {
 		return std::data(*this);
 	}
 	[[nodiscard]] auto cend() const noexcept {
-		return std::data(*this) + 2;
+		return std::data(*this) + size();
 	}
 	[[nodiscard]] auto rbegin() noexcept {
 		return std::make_reverse_iterator(end());

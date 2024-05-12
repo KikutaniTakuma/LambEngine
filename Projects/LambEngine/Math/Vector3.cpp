@@ -94,7 +94,7 @@ Vector3 Vector3::operator*(const Mat4x4& mat) const {
 	return result;
 }
 
-Vector3 operator*(const Mat4x4& left, const Vector3& right) {
+[[nodiscard]] Vector3 operator*(const Mat4x4& left, const Vector3& right) {
 	Vector3 result;
 	Matrix<float, 4, 1>&& tmp = Matrix<float, 4, 1>::vector_type{ right.x,right.y, right.z, 1.0f };
 
