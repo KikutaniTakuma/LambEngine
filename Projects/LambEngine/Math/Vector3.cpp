@@ -190,6 +190,20 @@ Vector3 Vector3::Normalize() const noexcept {
 }
 
 
+float& Vector3::at(size_t index)
+{
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+const float& Vector3::at(size_t index) const {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+
 Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, float t) {
 	Vector3 result;
 

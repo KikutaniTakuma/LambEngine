@@ -135,6 +135,13 @@ public:
 		return m.crend();
 	}
 
+	constexpr void fill(float value) {
+		m.fill(value);
+	}
+	constexpr void swap(Vector4& other) {
+		m.swap(other.m);
+	}
+
 
 /// <summary>
 /// 静的定数
