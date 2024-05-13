@@ -165,6 +165,32 @@ bool Vector4::operator!=(const Vector4& right) const noexcept {
 	return m != right.m;
 }
 
+float& Vector4::operator[](size_t index) noexcept {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+const float& Vector4::operator[](size_t index) const noexcept {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+
+float& Vector4::at(size_t index) {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+const float& Vector4::at(size_t index) const {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+
 float Vector4::Length() const noexcept {
 	return std::sqrt(Dot(*this));
 }

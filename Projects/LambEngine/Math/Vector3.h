@@ -5,11 +5,14 @@
 /// 三次元配列
 /// </summary>
 class Vector3 final {
+private:
+	static constexpr size_t arraySize = 3llu;
+
 public:
 	using size_type = size_t;
 
-	using iterator = std::_Array_iterator<float, 3>;
-	using const_iterator = std::_Array_const_iterator<float, 3>;
+	using iterator = std::_Array_iterator<float, arraySize>;
+	using const_iterator = std::_Array_const_iterator<float, arraySize>;
 
 	using reverse_iterator = std::reverse_iterator<iterator>;
 	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
@@ -144,10 +147,10 @@ public:
 	}
 
 	[[nodiscard]] constexpr size_type size() const {
-		return 3llu;
+		return arraySize;
 	}
 	[[nodiscard]] constexpr size_type max_size() const {
-		return 3llu;
+		return arraySize;
 	}
 
 	[[nodiscard]] constexpr bool empty() const {
