@@ -212,7 +212,7 @@ public:
 	/// </summary>
 public:
 	union {
-		std::array<float, 4> m;
+		std::array<float, arraySize> m;
 		struct {
 			float x;
 			float y;
