@@ -165,13 +165,13 @@ bool Vector4::operator!=(const Vector4& right) const noexcept {
 	return m != right.m;
 }
 
-float& Vector4::operator[](size_t index) noexcept {
+float& Vector4::operator[](size_t index) {
 	if (size() <= index) {
 		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
 	}
 	return data()[index];
 }
-const float& Vector4::operator[](size_t index) const noexcept {
+const float& Vector4::operator[](size_t index) const {
 	if (size() <= index) {
 		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
 	}

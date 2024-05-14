@@ -65,8 +65,8 @@ public:
 	[[nodiscard]] bool operator==(const Vector4& right) const noexcept;
 	[[nodiscard]] bool operator!=(const Vector4& right) const noexcept;
 
-	[[nodiscard]] float& operator[](size_t index) noexcept;
-	[[nodiscard]] const float& operator[](size_t index) const noexcept;
+	[[nodiscard]] float& operator[](size_t index);
+	[[nodiscard]] const float& operator[](size_t index) const;
 
 	/// <summary>
 	/// メンバ関数
@@ -92,7 +92,7 @@ public:
 	constexpr void fill(float value) {
 		std::fill_n(data(), size(), value);
 	}
-	constexpr void swap(Vector2& other)noexcept(std::_Is_nothrow_swappable<float>::value) {
+	constexpr void swap(Vector4& other)noexcept(std::_Is_nothrow_swappable<float>::value) {
 		std::_Swap_ranges_unchecked(data(), data() + size(), other.data());
 	}
 
