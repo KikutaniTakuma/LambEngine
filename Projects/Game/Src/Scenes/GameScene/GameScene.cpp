@@ -39,6 +39,8 @@ void GameScene::Update() {
 	model_->Update();
 
 	transform_.Debug("model");
+
+	line_.Debug("error");
 }
 
 void GameScene::Draw() {
@@ -49,4 +51,10 @@ void GameScene::Draw() {
 		BlendType::kNone,
 		true
 	);
+
+	line_.Draw(
+		currentCamera_->GetViewProjection()
+	);
+
+
 }

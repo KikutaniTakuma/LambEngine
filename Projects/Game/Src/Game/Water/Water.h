@@ -28,7 +28,7 @@ public:
 
 	void Update(const Vector3& cameraPos);
 
-	void Draw(const Mat4x4& cameraMat);
+	void Draw(const Mat4x4& cameraMat, PeraRender* const pera = nullptr);
 
 	void Debug(const std::string& guiName);
 

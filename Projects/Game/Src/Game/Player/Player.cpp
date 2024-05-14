@@ -88,7 +88,8 @@ void Player::Draw(const Camera& camera) {
 
 void Player::Punch() {
 	Lamb::SafePtr gamepad = Gamepad::GetInstance();
-	if (not isPunch_ and gamepad->GetButton(Gamepad::Button::B)) {
+	Lamb::SafePtr key = KeyInput::GetInstance();
+	if (not isPunch_ and (gamepad->Pushed(Gamepad::Button::B) or key->Pushed(DIK_SPACE))) {
 		model_->GetAnimator().Stop();
 		model_->GetAnimator().SetAnimations(punchAnimatons_);
 		model_->GetAnimator().SetLoopAnimation(false);
@@ -123,7 +124,7 @@ void Player::Move() {
 
 void Player::Jump() {
 	Lamb::SafePtr gamepad = Gamepad::GetInstance();
-	if (not isJump_ and gamepad->GetButton(Gamepad::Button::A)) {
+	if (not isJump_ and gamepad->Pushed(Gamepad::Button::A)) {
 		isJump_ = true;
 
 		jumpSpeed_ = jump_;

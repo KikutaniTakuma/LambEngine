@@ -113,13 +113,13 @@ void TitleScene::Update()
 
 
 	water_->Update(currentCamera_->GetPos());
-	postEffectManager_->GetGrayPera().Debug("pera");
-	postEffectManager_->GetGrayPera().Update();
+	postEffectManager_->GetPera().Debug("pera");
+	postEffectManager_->GetPera().Update();
 }
 
 void TitleScene::Draw()
 {
-	water_->Draw(currentCamera_->GetViewProjection());
+	water_->Draw(currentCamera_->GetViewProjection(), player_->GetIsPunch()  ? &postEffectManager_->GetPera(): nullptr);
 
 	skyBlock_->Draw(*currentCamera_);
 
@@ -128,9 +128,12 @@ void TitleScene::Draw()
 	coin_->Draw(*currentCamera_);
 
 	if (player_->GetIsPunch()) {
-		postEffectManager_->GetGrayPera().PreDraw();
+		postEffectManager_->GetPera().Draw(
+			postEffectManager_->GetPeraCamera().GetViewOthographics(),
+			Pipeline::Blend::Normal, nullptr, false);
+		postEffectManager_->GetPera().PreDraw();
 		sceneManager_->AllDraw();
-		postEffectManager_->GetGrayPera().Draw(
+		postEffectManager_->GetPera().Draw(
 			postEffectManager_->GetPeraCamera().GetViewOthographics(),
 			Pipeline::Blend::Normal, nullptr, false);
 	}

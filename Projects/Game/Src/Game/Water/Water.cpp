@@ -70,8 +70,7 @@ void Water::Update(const Vector3& cameraPos) {
 	bloom_->Update();
 }
 
-void Water::Draw(const Mat4x4& cameraMat) {
-
+void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 	pera_->PreDraw();
 	waterSurface_->Draw(
 		waterTransform_.GetMatrix(),
@@ -82,7 +81,7 @@ void Water::Draw(const Mat4x4& cameraMat) {
 		BlendType::kUnenableDepthNone
 	);
 	waterSurface_->AllDraw();
-	pera_->Draw(cameraMat, Pipeline::None, nullptr, true);
+	pera_->Draw(cameraMat, Pipeline::None, pera, true);
 
 	pera_->PreDraw();
 	waterSurface_->Draw(
