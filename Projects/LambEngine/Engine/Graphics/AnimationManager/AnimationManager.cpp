@@ -30,9 +30,7 @@ void AnimationManager::LoadAnimations(const std::string& fileName) {
 	auto isExist = animationData_.find(fileName);
 
 	if (isExist == animationData_.end()) {
-		animationData_[fileName] = std::make_unique<Animations>();
-
-		*animationData_[fileName] = MeshLoader::LoadAnimation(fileName);
+		animationData_[fileName].reset(MeshLoader::LoadAnimation(fileName));
 	}
 }
 

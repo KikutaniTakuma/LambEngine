@@ -15,6 +15,7 @@
 #include "Drawers/Other/WaterTex2D/WaterTex2D.h"
 #include "Game/SkyBlock/SkyBlock.h"
 #include "Game/Player/Player.h"
+#include "Game/Coin/Coin.h"
 
 class TitleScene : public BaseScene {
 public:
@@ -40,6 +41,7 @@ public:
 	std::unique_ptr<WaterTex2D> watertsetUgoitekure_;
 	std::unique_ptr<SkyBlock> skyBlock_;
 	std::unique_ptr<Player> player_;
+	std::unique_ptr<Coin> coin_;
 
 
 	Transform waterPos_;

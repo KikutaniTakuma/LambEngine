@@ -1,6 +1,5 @@
 #pragma once
-#include "Drawers/Model/Model.h"
-#include "Engine/Graphics/Animator/Animator.h"
+#include "Drawers/AnimationModel/AnimationModel.h"
 #include "Utils/SafePtr/SafePtr.h"
 #include "Utils/Flg/Flg.h"
 #include "Game/CollisionManager/Obb/Obb.h"
@@ -69,11 +68,13 @@ private:
 	ObbPtr obb_;
 
 	// ブロックのモデル
-	Lamb::SafePtr<Model> model_;
+	std::unique_ptr<AnimationModel> model_;
 
 	// アニメーション
-	std::unique_ptr<Animator> punchAnimator_;
-	std::unique_ptr<Animator> waitAnimator_;
+	Animations* punchAnimatons_;
+	Animations* waitAnimatons_;
+	Animations* walkAnimatons_;
+	Animations* floatingAnimatons_;
 
 	Transform transform_;
 

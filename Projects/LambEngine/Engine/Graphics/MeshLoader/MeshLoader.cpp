@@ -105,22 +105,22 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 	return result;
 }
 
-Animations MeshLoader::LoadAnimation(const std::string& fileName)
+Animations* MeshLoader::LoadAnimation(const std::string& fileName)
 {
 	StartLoadTimeCount();
 
-	Animations result;
+	std::unique_ptr result = std::make_unique<Animations>();
 	Assimp::Importer importer;
 	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
 	if (not (scene->mNumAnimations != 0)) {
 		throw Lamb::Error::Code<MeshLoader>("This file does not have animation -> " + fileName, ErrorPlace);
 	}
 
-	result.data.resize(scene->mNumAnimations);
+	result->data.resize(scene->mNumAnimations);
 
 	for (uint32_t animtionIndex = 0; animtionIndex < scene->mNumAnimations; animtionIndex++) {
 		Lamb::SafePtr<aiAnimation> animationAssimp = scene->mAnimations[animtionIndex];
-		Animation& animation = result.data[animtionIndex];
+		Animation& animation = result->data[animtionIndex];
 		animation.duration = static_cast<float>(animationAssimp->mDuration / animationAssimp->mTicksPerSecond);
 		
 		for (uint32_t channelIndex = 0; channelIndex < animationAssimp->mNumChannels; channelIndex++) {
@@ -159,7 +159,7 @@ Animations MeshLoader::LoadAnimation(const std::string& fileName)
 
 	EndLoadTimeCountAndAddLog(fileName);
 
-	return result;
+	return result.release();
 }
 
 const aiScene* MeshLoader::ReadFile(Assimp::Importer& importer, const std::string& fileName)
