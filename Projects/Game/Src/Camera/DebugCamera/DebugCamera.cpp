@@ -2,6 +2,7 @@
 #include "Input/Input.h"
 #include "imgui.h"
 #include "Utils/EngineInfo/EngineInfo.h"
+#include "Math/Quaternion.h"
 
 #undef max
 #undef min

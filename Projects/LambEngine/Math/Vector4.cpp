@@ -1,5 +1,4 @@
 #include "Vector4.h"
-#include "Mat4x4.h"
 #include "Vector3.h"
 #include "Vector2.h"
 #include <cmath>
@@ -134,11 +133,7 @@ Vector4& Vector4::operator/=(float scalar) noexcept {
 Vector4 Vector4::operator*(const Mat4x4& mat) const noexcept {
 	Vector4 result;
 
-	Mat4x4&& tmp = mat.Transepose();
-
-	for (int32_t i = 0; i < m.size(); i++) {
-		result.m[i] = Dot(tmp[i]);
-	}
+	result.m128 = DirectX::XMVector3Transform(this->m128, mat.GetXMMatrix());
 
 	return result;
 }
@@ -147,15 +142,6 @@ Vector4& Vector4::operator*=(const Mat4x4& mat) noexcept {
 	*this = *this * mat;
 
 	return *this;
-}
-
-[[nodiscard]] Vector4 operator*(const Mat4x4& left, const Vector4& right) noexcept {
-	Vector4 result;
-	Matrix<float, 4, 1>&& tmp = right.m;
-
-	result.m = (left * tmp).GetVector();
-
-	return result;
 }
 
 bool Vector4::operator==(const Vector4& right) const noexcept {

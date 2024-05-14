@@ -1,5 +1,6 @@
 #pragma once
 #include <array>
+#include "Mat4x4.h"
 
 /// <summary>
 /// 三次元配列
@@ -54,9 +55,8 @@ public:
 	[[nodiscard]] Vector3 operator/(float scalar) const noexcept;
 	Vector3& operator/=(float scalar) noexcept;
 
-	[[nodiscard]] Vector3 operator*(const class Mat4x4& mat) const;
-	Vector3& operator*=(const class Mat4x4& mat);
-	friend Vector3 operator*(const class Mat4x4& left, const Vector3& right);
+	[[nodiscard]] Vector3 operator*(const Mat4x4& mat) const;
+	Vector3& operator*=(const Mat4x4& mat);
 
 	Vector3& operator=(const class Vector2& right) noexcept;
 

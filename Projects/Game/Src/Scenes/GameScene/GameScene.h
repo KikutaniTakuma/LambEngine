@@ -4,6 +4,7 @@
 #include "Engine/Graphics/Skeleton.h"
 #include "Engine/Graphics/Animator/Animator.h"
 #include "Drawers/AnimationModel/AnimationModel.h"
+#include "Drawers/Line/Line.h"
 
 class GameScene : public BaseScene {
 public:
@@ -30,4 +31,6 @@ public:
 	Animations* animations2_;
 	Lamb::SafePtr<Model> model2_;
 	Transform transform_;
+
+	Line line_;
 };

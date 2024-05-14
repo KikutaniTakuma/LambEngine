@@ -2,6 +2,7 @@
 #include <array>
 #include <immintrin.h>
 #include "Utils/Cocepts/Cocepts.h"
+#include "Mat4x4.h"
 
 /// <summary>
 /// 4次元配列
@@ -58,9 +59,8 @@ public:
 	[[nodiscard]] Vector4 operator/(float scalar) const noexcept;
 	Vector4& operator/=(float scalar) noexcept;
 
-	[[nodiscard]] Vector4 operator*(const class Mat4x4& mat) const noexcept;
-	Vector4& operator*=(const class Mat4x4& mat) noexcept;
-	friend Vector4 operator*(const class Mat4x4& left, const Vector4& right) noexcept;
+	[[nodiscard]] Vector4 operator*(const Mat4x4& mat) const noexcept;
+	Vector4& operator*=(const Mat4x4& mat) noexcept;
 
 	[[nodiscard]] bool operator==(const Vector4& right) const noexcept;
 	[[nodiscard]] bool operator!=(const Vector4& right) const noexcept;
