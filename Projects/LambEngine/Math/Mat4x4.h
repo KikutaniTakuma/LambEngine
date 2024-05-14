@@ -7,7 +7,7 @@
 #include <initializer_list>
 #include "Matrix.h"
 
-#include "Error/Error.h"v
+#include "Error/Error.h"
 
 // 4x4行列
 template<>
