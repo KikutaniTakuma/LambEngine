@@ -16,7 +16,7 @@ private:
 	static constexpr size_t kWidth = 4;
 	static constexpr size_t kHeight = 4;
 
-	static_assert(0llu != kWidth and 0llu != 4,
+	static_assert(0llu != kWidth and 0llu != kHeight,
 		"Height and width must be greater than ""0""");
 public:
 	using value_type = float;
