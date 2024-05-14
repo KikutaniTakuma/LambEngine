@@ -5,15 +5,15 @@ Lamb::SafePtr<PostEffectManager> PostEffectManager::instance_ = nullptr;
 
 PostEffectManager::PostEffectManager():
 	camera_(),
-	gray_()
+	pera_()
 {
 	camera_ = std::make_unique<Camera>();
 	camera_->pos.z = -10.0f;
 	camera_->Update();
 
-	gray_ = std::make_unique<PeraRender>();
-	gray_->Initialize("./Resources/Shaders/PostShader/PostGrayScale.PS.hlsl");
-	gray_->scale = Lamb::ClientSize();
+	pera_ = std::make_unique<PeraRender>();
+	pera_->Initialize("./Resources/Shaders/PostShader/PostVignetting.PS.hlsl");
+	pera_->scale = Lamb::ClientSize();
 }
 
 void PostEffectManager::Initialize() {
