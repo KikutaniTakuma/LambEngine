@@ -94,7 +94,7 @@ Vector3 Vector3::operator*(const Mat4x4& mat) const {
 	return result;
 }
 
-Vector3 operator*(const Mat4x4& left, const Vector3& right) {
+[[nodiscard]] Vector3 operator*(const Mat4x4& left, const Vector3& right) {
 	Vector3 result;
 	Matrix<float, 4, 1>&& tmp = Matrix<float, 4, 1>::vector_type{ right.x,right.y, right.z, 1.0f };
 
@@ -147,14 +147,14 @@ bool Vector3::operator!=(const Vector3& right) const noexcept {
 }
 
 float& Vector3::operator[](size_t index) {
-	if (3llu <= index) {
+	if (size() <= index) {
 		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
 	}
 	return data()[index];
 }
 
 const float& Vector3::operator[](size_t index) const {
-	if (3llu <= index) {
+	if (size() <= index) {
 		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
 	}
 	return data()[index];
@@ -189,6 +189,20 @@ Vector3 Vector3::Normalize() const noexcept {
 	return *this / this->Length();
 }
 
+
+float& Vector3::at(size_t index)
+{
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+const float& Vector3::at(size_t index) const {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
 
 Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, float t) {
 	Vector3 result;

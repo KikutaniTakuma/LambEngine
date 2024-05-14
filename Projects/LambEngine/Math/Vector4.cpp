@@ -165,6 +165,32 @@ bool Vector4::operator!=(const Vector4& right) const noexcept {
 	return m != right.m;
 }
 
+float& Vector4::operator[](size_t index) {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+const float& Vector4::operator[](size_t index) const {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+
+float& Vector4::at(size_t index) {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+const float& Vector4::at(size_t index) const {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+
 float Vector4::Length() const noexcept {
 	return std::sqrt(Dot(*this));
 }
@@ -197,10 +223,10 @@ uint32_t Vector4::GetColorRGBA() const
 {
 	uint32_t result = 0u;
 
-	result += static_cast<uint32_t>(color.r * 255.0f) << 24;
-	result += static_cast<uint32_t>(color.g * 255.0f) << 16;
-	result += static_cast<uint32_t>(color.b * 255.0f) << 8;
-	result += static_cast<uint32_t>(color.a * 255.0f);
+	result += static_cast<uint32_t>(std::clamp(color.r, 0.0f, 1.0f) * 255.0f) << 24;
+	result += static_cast<uint32_t>(std::clamp(color.g, 0.0f, 1.0f) * 255.0f) << 16;
+	result += static_cast<uint32_t>(std::clamp(color.b, 0.0f, 1.0f) * 255.0f) << 8;
+	result += static_cast<uint32_t>(std::clamp(color.a, 0.0f, 1.0f) * 255.0f);
 
 	return result;
 }
