@@ -128,7 +128,7 @@ IDxcBlob* ShaderFactory::CompileShader(
 	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(shaderError.GetAddressOf()), nullptr);
 	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
 		// 警告・エラーダメゼッタイ
-		throw Lamb::Error::Code<ShaderFactory>(shaderError->GetStringPointer(), ErrorPlace);
+		throw Lamb::Error::Code<ShaderFactory>("\n" + std::string(shaderError->GetStringPointer()), ErrorPlace);
 	}
 
 	// 4. Compileを受け取って返す
