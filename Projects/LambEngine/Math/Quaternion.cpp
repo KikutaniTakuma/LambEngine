@@ -18,11 +18,11 @@ const Quaternion Quaternion::kZero = { 0.0f, 0.0f, 0.0f, 0.0f };
 /// コンストラクタ
 /// ========================================================================
 #pragma region Constructor
-constexpr Quaternion::Quaternion():
+constexpr Quaternion::Quaternion() :
 	m({ 0.0f })
 {}
 
-Quaternion::Quaternion(const Vector4& right):
+Quaternion::Quaternion(const Vector4& right) :
 	Quaternion()
 {
 	*this = right;
@@ -311,8 +311,8 @@ Quaternion Quaternion::DirectionToDirection(const Vector3& from, const Vector3& 
 
 Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	Quaternion result;
-	result.vector.w = std::cos(angle * 0.5f);
-	result.vector.vector3 = axis * std::sin(angle * 0.5f);
+
+	result.m128 = DirectX::XMQuaternionRotationAxis({ axis.x,axis.y,axis.z }, angle);
 
 	return result;
 }
@@ -328,18 +328,9 @@ Quaternion Quaternion::MakeRotateZAxis(float angle) {
 
 Quaternion Quaternion::EulerToQuaternion(const Vector3& euler)
 {
-	float cz = std::cos(euler.z * 0.5f);
-	float sz = std::sin(euler.z * 0.5f);
-	float cy = std::cos(euler.y * 0.5f);
-	float sy = std::sin(euler.y * 0.5f);
-	float cx = std::cos(euler.x * 0.5f);
-	float sx = std::sin(euler.x * 0.5f);
-
 	Quaternion result;
-	result.quaternion.w = cz * cy * cx + sz * sy * sx;
-	result.quaternion.x = cz * cy * sx - sz * sy * cx;
-	result.quaternion.y = sz * cy * sx + cz * sy * cx;
-	result.quaternion.z = sz * cy * cx - cz * sy * sx;
+
+	result.m128 = DirectX::XMQuaternionRotationRollPitchYawFromVector({ euler.x, euler.y, euler.z });
 
 	return result.Normalize();
 }
@@ -376,7 +367,7 @@ LogQuaternion Quaternion::Log(const Quaternion& quaternion)
 	}
 	Vector3&& u = quaternion.vector.vector3 / std::sin(theata);
 	result = u * theata;
-	
+
 	return result;
 }
 Quaternion Quaternion::Exp(const LogQuaternion& logQuaternion)
