@@ -1,10 +1,29 @@
 #include "Camera.h"
+#include "Utils/SafePtr/SafePtr.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Input/Input.h"
 #include "imgui.h"
 #include <algorithm>
 #include <numbers>
 #include <cmath>
+
+Mat4x4 Camera::kViewProjection;
+Mat4x4 Camera::kViewOthographics;
+
+void Camera::InitStaticMatrix() {
+	Lamb::SafePtr window = WindowFactory::GetInstance();
+	Vector2 clientSize = window->GetClientSize();
+	const float aspect = clientSize.x / clientSize.y;
+
+	kViewOthographics = Mat4x4::MakeOrthographic(
+		clientSize.x, clientSize.y,
+		kNearClip_, 1000.0f
+	);
+	kViewOthographics = Mat4x4::MakePerspectiveFov(
+		0.45f, aspect,
+		kNearClip_, 1000.0f
+	);
+}
 
 Camera::Camera() noexcept :
 	pos(),
