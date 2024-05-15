@@ -113,6 +113,20 @@ public:
 		return result;
 	}
 	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
+	[[nodiscard]] constexpr Matrix<value_type, kHeight, otherWidth> operator*(const Matrix<othertype, otherHeight, otherWidth>& right) const requires(kWidth == otherHeight and kWidth != otherWidth) {
+		Matrix<value_type, kHeight, otherWidth> result;
+
+		for (size_t y = 0; y < result.HeightSize(); y++) {
+			for (size_t x = 0; x < result.WidthSize(); x++) {
+				for (size_t i = 0; i < kWidth; i++) {
+					result[y][x] += matrix_[y][i] * value_cast(right[i][x]);
+				}
+			}
+		}
+
+		return result;
+	}
+	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
 	constexpr Matrix& operator*=(const Matrix<othertype, otherHeight, otherWidth>& right) requires(otherHeight == otherWidth and kWidth == otherHeight) {
 		*this = *this * right;
 
