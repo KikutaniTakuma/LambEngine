@@ -169,7 +169,7 @@ public:
         pipeline_ = pipeline;
     }
     inline void SetWVPMatrix(const WVPMatrix& matrix) override {
-        if (kMaxDrawInstance <= drawCount_) {
+        if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
@@ -177,7 +177,7 @@ public:
         shaderData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
-        if (kMaxDrawInstance <= drawCount_) {
+        if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
@@ -187,7 +187,7 @@ public:
         *shaderData_.light = light;
     }
     inline void SetShaderStruct(const T& data) {
-        if (kMaxDrawInstance <= drawCount_) {
+        if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
         shaderData_.shaderStruct[drawCount_] = data;
@@ -298,7 +298,7 @@ public:
         skinCluster_ = skinCluster;
     }
     inline void SetWVPMatrix(const WVPMatrix& matrix) override {
-        if (kMaxDrawInstance <= drawCount_) {
+        if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
@@ -306,7 +306,7 @@ public:
         shaderData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
-        if (kMaxDrawInstance <= drawCount_) {
+        if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
@@ -316,7 +316,7 @@ public:
         *shaderData_.light = light;
     }
     inline void SetShaderStruct(const T& data) {
-        if (kMaxDrawInstance <= drawCount_) {
+        if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
         shaderData_.shaderStruct[drawCount_] = data;
