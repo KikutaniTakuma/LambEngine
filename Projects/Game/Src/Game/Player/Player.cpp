@@ -62,7 +62,7 @@ void Player::Update() {
 
 	transform_.translate.y += jumpSpeed_ * Lamb::DeltaTime();
 
-	transform_.rotate = Vector3::QuaternionToEuler(Quaternion::DirectionToDirection(Vector3::kZIdentity, Vector3(direction_.x, 0.0f, direction_.y)));
+	transform_.rotate = Quaternion::QuaternionToEuler(Quaternion::DirectionToDirection(Vector3::kZIdentity, Vector3(direction_.x, 0.0f, direction_.y)));
 
 	obb_->transform.translate = transform_.translate;
 	obb_->transform.scale = transform_.scale;

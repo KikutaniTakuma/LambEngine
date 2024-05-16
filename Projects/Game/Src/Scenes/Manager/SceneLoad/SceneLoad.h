@@ -1,8 +1,5 @@
 #pragma once
-#include <mutex>
-#include <thread>
-#include <condition_variable>
-#include <functional>
+#include "Utils/Thread/Thread.h"
 #include <memory>
 #include "Drawers/Texture2D/Texture2D.h"
 #include "Engine/Graphics/Tex2DAniamtor/Tex2DAniamtor.h"
@@ -24,7 +21,7 @@ public:
 	SceneLoad();
 	SceneLoad(const SceneLoad&) = delete;
 	SceneLoad(SceneLoad&&) = delete;
-	~SceneLoad();
+	~SceneLoad() = default;
 
 	SceneLoad& operator=(const SceneLoad&) = delete;
 	SceneLoad& operator=(SceneLoad&&) = delete;
@@ -38,21 +35,8 @@ private:
 	void CreateLoad();
 
 private:
-	// load描画用スレッド
-	std::thread loadDrawThread_;
-	// ロック用
-	std::mutex mtx_;
-
-	std::condition_variable condition_;
-
-	// ロード中に実行する関数
-	std::function<void(void)> loadProc_;
-
-	bool exit_;
-
+	std::unique_ptr<Lamb::Thread> thread_;
 	bool isLoad_;
-
-	bool isWait_;
 
 	std::unique_ptr<Tex2DAniamtor> tex2Danimator_;
 	Lamb::SafePtr<Texture2D> loadTex_;

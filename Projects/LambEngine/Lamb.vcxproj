@@ -186,6 +186,7 @@
     <ClCompile Include="Utils\Flg\Flg.cpp" />
     <ClCompile Include="Utils\Random\Random.cpp" />
     <ClCompile Include="Utils\ScreenOut\ScreenOut.cpp" />
+    <ClCompile Include="Utils\Thread\Thread.cpp" />
     <ClCompile Include="Utils\UtilsLib\UtilsLib.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -267,6 +268,7 @@
     <ClInclude Include="Utils\SafeDelete\SafeDelete.h" />
     <ClInclude Include="Utils\SafePtr\SafePtr.h" />
     <ClInclude Include="Utils\ScreenOut\ScreenOut.h" />
+    <ClInclude Include="Utils\Thread\Thread.h" />
     <ClInclude Include="Utils\UtilsLib\UtilsLib.h" />
   </ItemGroup>
   <ItemGroup>

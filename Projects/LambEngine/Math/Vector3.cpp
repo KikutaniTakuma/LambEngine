@@ -185,36 +185,6 @@ Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, float t) {
 	return result;
 }
 
-Vector3 Vector3::QuaternionToEuler(const Quaternion& quaternion)
-{
-	Vector3 result;
-
-	// y
-	float sinp = 2.0f * (quaternion.quaternion.w * quaternion.quaternion.y - quaternion.quaternion.z * quaternion.quaternion.x);
-	if (std::abs(sinp) >= 1.0f) {
-		result.y = std::copysign(std::numbers::pi_v<float> *0.5f, sinp);
-	}
-	else {
-		result.y = std::asin(sinp);
-	}
-
-	// zとx
-	if (std::abs(sinp) < 1.0f - static_cast<float>(10e-5)) {
-		result.z = std::atan2f(2.0f * (quaternion.quaternion.w * quaternion.quaternion.z + quaternion.quaternion.x * quaternion.quaternion.y), 1.0f - 2.0f * (quaternion.quaternion.y * quaternion.quaternion.y + quaternion.quaternion.z * quaternion.quaternion.z));
-		result.x = std::atan2f(2.0f * (quaternion.quaternion.w * quaternion.quaternion.x + quaternion.quaternion.y * quaternion.quaternion.z), 1.0f - 2.0f * (quaternion.quaternion.x * quaternion.quaternion.x + quaternion.quaternion.y * quaternion.quaternion.y));
-	}
-	else {
-		result.z = std::atan2f(
-			-2.0f * 
-			(quaternion.quaternion.x * quaternion.quaternion.y - quaternion.quaternion.w * quaternion.quaternion.z), 
-			quaternion.quaternion.w * quaternion.quaternion.w + quaternion.quaternion.x * quaternion.quaternion.x - quaternion.quaternion.y * quaternion.quaternion.y - quaternion.quaternion.z * quaternion.quaternion.z
-		);
-		result.x = 0.0f;
-	}
-
-	return result;
-}
-
 Vector3 Project(const Vector3& vec1, const Vector3& vec2) {
 	return vec2 * (vec1.Dot(vec2) / std::pow(vec2.Length(), 2.0f));
 }

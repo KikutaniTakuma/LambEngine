@@ -202,6 +202,9 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.cpp">
       <Filter>Engine\Graphics\PipelineObject\WaterPipeline</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\Thread\Thread.cpp">
+      <Filter>Utils\Thread</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -416,6 +419,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\WaterPipeline">
       <UniqueIdentifier>{fc36af07-3785-481d-b32c-b52965121ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Thread">
+      <UniqueIdentifier>{8414086f-34fd-43a7-8609-89566521b2e2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -655,6 +661,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.h">
       <Filter>Engine\Graphics\PipelineObject\WaterPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Thread\Thread.h">
+      <Filter>Utils\Thread</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
