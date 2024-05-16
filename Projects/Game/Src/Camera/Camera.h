@@ -13,7 +13,7 @@ public:
 	static const Mat4x4& GetStaticViewProjection() {
 		return kViewProjection;
 	}
-	static const Mat4x4& GetStatickViewOthographics() {
+	static const Mat4x4& GetStaticViewOthographics() {
 		return kViewOthographics;
 	}
 
