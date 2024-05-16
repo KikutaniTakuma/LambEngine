@@ -184,18 +184,18 @@ Mat4x4 Mat4x4::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 }
 
 
-Vector3 Mat4x4::GetTranslate()
+Vector3 Mat4x4::GetTranslate() const
 {
 	return Vector3(matrix_[3][0], matrix_[3][1], matrix_[3][2]);
 }
-Vector3 Mat4x4::GetScale() {
+Vector3 Mat4x4::GetScale() const {
 	return Vector3(
 		Lamb::Math::Length({ matrix_[0][0], matrix_[0][1], matrix_[0][2] }),
 		Lamb::Math::Length({ matrix_[1][0], matrix_[1][1], matrix_[1][2] }),
 		Lamb::Math::Length({ matrix_[2][0], matrix_[2][1], matrix_[2][2]})
 	);
 }
-Quaternion Mat4x4::GetRotate() {
+Quaternion Mat4x4::GetRotate() const {
 	Vector3 scale;
 	Quaternion rotate;
 	Vector3 translate;
@@ -209,7 +209,7 @@ Quaternion Mat4x4::GetRotate() {
 	return rotate.Normalize();
 }
 
-void Mat4x4::Decompose(Vector3& scale, Quaternion& rotate, Vector3& translate) {
+void Mat4x4::Decompose(Vector3& scale, Quaternion& rotate, Vector3& translate) const {
 	DirectX::XMMatrixDecompose(
 		reinterpret_cast<DirectX::XMVECTOR*>(scale.data()),
 		reinterpret_cast<DirectX::XMVECTOR*>(rotate.data()),
@@ -218,7 +218,7 @@ void Mat4x4::Decompose(Vector3& scale, Quaternion& rotate, Vector3& translate) {
 		);
 }
 
-void Mat4x4::Decompose(Vector3& scale, Vector3& rotate, Vector3& translate) {
+void Mat4x4::Decompose(Vector3& scale, Vector3& rotate, Vector3& translate) const {
 	Quaternion quaternion;
 	DirectX::XMMatrixDecompose(
 		reinterpret_cast<DirectX::XMVECTOR*>(scale.data()),

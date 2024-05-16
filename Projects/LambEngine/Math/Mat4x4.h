@@ -344,12 +344,12 @@ protected:
 /// 4x4行列用の関数
 /// </summary>
 public:
-	class Vector3 GetTranslate();
-	class Vector3 GetScale();
-	class Quaternion GetRotate();
+	class Vector3 GetTranslate() const;
+	class Vector3 GetScale() const;
+	class Quaternion GetRotate() const;
 
-	void Decompose(class Vector3& scale, class Quaternion& rotate, class Vector3& translate);
-	void Decompose(class Vector3& scale, class Vector3& rotate, class Vector3& translate);
+	void Decompose(class Vector3& scale, class Quaternion& rotate, class Vector3& translate) const;
+	void Decompose(class Vector3& scale, class Vector3& rotate, class Vector3& translate) const;
 
 // 静的メンバ関数
 public:
