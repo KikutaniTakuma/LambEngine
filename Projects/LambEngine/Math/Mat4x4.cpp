@@ -227,5 +227,5 @@ void Mat4x4::Decompose(Vector3& scale, Vector3& rotate, Vector3& translate) {
 		this->xmMatrix_
 	);
 
-	rotate = Vector3::QuaternionToEuler(quaternion);
+	rotate = Quaternion::QuaternionToEuler(quaternion);
 }
