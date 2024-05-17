@@ -15,3 +15,35 @@ namespace Lamb {
 		float Length(const std::initializer_list<float>& data);
 	}
 }
+
+inline uint16_t operator""_u16(size_t i) {
+	return static_cast<uint16_t>(i);
+}
+
+inline uint32_t operator""_u32(size_t i) {
+	return static_cast<uint32_t>(i);
+}
+
+inline uint64_t operator""_u64(size_t i) {
+	return i;
+}
+
+inline int16_t operator""_16(size_t i) {
+	return static_cast<uint16_t>(i);
+}
+
+inline int32_t operator""_32(size_t i) {
+	return static_cast<uint32_t>(i);
+}
+
+inline int64_t operator""_64(size_t i) {
+	return i;
+}
+
+inline float operator""_32f(long double i) {
+	return static_cast<float>(i);
+}
+
+inline double operator""_64f(long double i) {
+	return static_cast<double>(i);
+}
