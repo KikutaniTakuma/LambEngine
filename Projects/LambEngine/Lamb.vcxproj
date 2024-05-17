@@ -128,6 +128,7 @@
     <ClCompile Include="Drawers\Other\WaterTex2D\WaterTex2D.cpp" />
     <ClCompile Include="Drawers\Particle\Particle.cpp" />
     <ClCompile Include="Drawers\PeraRender\PeraRender.cpp" />
+    <ClCompile Include="Drawers\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Drawers\StringOut\StringOut.cpp" />
     <ClCompile Include="Drawers\Texture2D\Texture2D.cpp" />
     <ClCompile Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Drawers\Other\WaterTex2D\WaterTex2D.h" />
     <ClInclude Include="Drawers\Particle\Particle.h" />
     <ClInclude Include="Drawers\PeraRender\PeraRender.h" />
+    <ClInclude Include="Drawers\SkyBox\SkyBox.h" />
     <ClInclude Include="Drawers\StringOut\StringOut.h" />
     <ClInclude Include="Drawers\Texture2D\Texture2D.h" />
     <ClInclude Include="Engine\Buffer\ConstBuffer\ConstBuffer.h" />

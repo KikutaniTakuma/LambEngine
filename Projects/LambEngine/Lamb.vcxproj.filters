@@ -205,6 +205,9 @@
     <ClCompile Include="Utils\Thread\Thread.cpp">
       <Filter>Utils\Thread</Filter>
     </ClCompile>
+    <ClCompile Include="Drawers\SkyBox\SkyBox.cpp">
+      <Filter>Drawers\SkyBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -393,9 +396,6 @@
     <Filter Include="Engine\Graphics\AnimationManager">
       <UniqueIdentifier>{add96670-dfee-46cd-bd03-5f72b25dbe9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Animator">
-      <UniqueIdentifier>{0359fcab-3674-4f23-a03c-3ef946b211c0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Drawers\AnimationModel">
       <UniqueIdentifier>{ce9b2a74-162e-42e2-9e98-2f278ed2aa76}</UniqueIdentifier>
     </Filter>
@@ -422,6 +422,12 @@
     </Filter>
     <Filter Include="Utils\Thread">
       <UniqueIdentifier>{8414086f-34fd-43a7-8609-89566521b2e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Animator">
+      <UniqueIdentifier>{0359fcab-3674-4f23-a03c-3ef946b211c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawers\SkyBox">
+      <UniqueIdentifier>{035a3a54-6a51-4f0b-bfcd-a00c979ca55f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -664,6 +670,9 @@
     </ClInclude>
     <ClInclude Include="Utils\Thread\Thread.h">
       <Filter>Utils\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawers\SkyBox\SkyBox.h">
+      <Filter>Drawers\SkyBox</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
