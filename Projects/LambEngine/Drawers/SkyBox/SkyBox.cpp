@@ -5,14 +5,14 @@
 
 SkyBox::SkyBox() {
     std::array<Vector4, 8> vertexData = {
-        {  1.0f,  1.0f, -1.0f },
-        {  1.0f, -1.0f, -1.0f },
-        {  1.0f,  1.0f,  1.0f },
-        {  1.0f, -1.0f,  1.0f },
-        { -1.0f,  1.0f, -1.0f },
-        { -1.0f, -1.0f, -1.0f },
-        { -1.0f,  1.0f,  1.0f },
-        { -1.0f, -1.0f,  1.0f }
+        Vector4(  1.0f,  1.0f, -1.0f, 1.0f ),
+        Vector4(  1.0f, -1.0f, -1.0f, 1.0f ),
+        Vector4(  1.0f,  1.0f,  1.0f, 1.0f ),
+        Vector4(  1.0f, -1.0f,  1.0f, 1.0f ),
+        Vector4( -1.0f,  1.0f, -1.0f, 1.0f ),
+        Vector4( -1.0f, -1.0f, -1.0f, 1.0f ),
+        Vector4( -1.0f,  1.0f,  1.0f, 1.0f ),
+        Vector4( -1.0f, -1.0f,  1.0f, 1.0f )
     };
 
     std::array indexData = {
