@@ -27,6 +27,9 @@ inline uint32_t operator""_u32(size_t i) {
 inline uint64_t operator""_u64(size_t i) {
 	return i;
 }
+inline size_t operator""_z(size_t i) {
+	return i;
+}
 
 inline int16_t operator""_16(size_t i) {
 	return static_cast<uint16_t>(i);
@@ -40,13 +43,13 @@ inline int64_t operator""_64(size_t i) {
 	return i;
 }
 
-inline float operator""_32f(long double i) {
+using float32_t = float;
+using float64_t = double;
+
+inline float32_t operator""_f32(long double i) {
 	return static_cast<float>(i);
 }
 
-inline double operator""_64f(long double i) {
+inline float64_t operator""_f64(long double i) {
 	return static_cast<double>(i);
 }
-
-using float32_t = float;
-using float64_t = double;
