@@ -10,7 +10,7 @@ PixelShaderOutPut main(VertexShaderOutput input)
 
 	output.color = textureColor * kColor[input.instanceID].color;
 
-	if(output.color.a){
+	if(output.color.a == 0.0f){
 		discard;
 	}
     

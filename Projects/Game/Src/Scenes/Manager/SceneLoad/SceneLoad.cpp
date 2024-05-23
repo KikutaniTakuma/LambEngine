@@ -25,7 +25,10 @@ SceneLoad::SceneLoad() :
 	tex2Danimator_->SetLoopAnimation(true);
 	textureID_ = drawerManager->LoadTexture(setting.fileName);
 
-	cameraMatrix_ = Camera::GetStaticViewOthographics();
+	std::unique_ptr<Camera> camera = std::make_unique<Camera>();
+	camera->pos.z = -1.0f;
+	camera->Update();
+	cameraMatrix_ = camera->GetViewOthographics();
 
 	CreateLoad();
 }
@@ -34,6 +37,17 @@ void SceneLoad::Start()
 {
 	if (!isLoad_) {
 		isLoad_ = true;
+
+		loadTex_->Draw(
+			Mat4x4::MakeAffin(Vector3(Lamb::ClientSize(), 1.0f), Vector3::kZero, Vector3::kZero),
+			Mat4x4::MakeScalar(
+				Vector3(1.0f / static_cast<float>(setting.animationNumber), 1.0f, 1.0f)
+			),
+			cameraMatrix_,
+			textureID_,
+			std::numeric_limits<uint32_t>::max(),
+			BlendType::kUnenableDepthNone
+		);
 
 		Engine::FrameEnd();
 
@@ -69,12 +83,12 @@ void SceneLoad::CreateLoad()
 			tex2Danimator_->Update();
 
 			loadTex_->Draw(
-				Mat4x4::MakeAffin(Vector3(Lamb::ClientSize(), 1.0f), Vector3::kZero, Vector3::kZIdentity * 1.0f),
+				Mat4x4::MakeAffin(Vector3(Lamb::ClientSize(), 1.0f), Vector3::kZero, Vector3::kZero),
 				tex2Danimator_->GetUvMat4x4(),
 				cameraMatrix_,
 				textureID_,
 				std::numeric_limits<uint32_t>::max(),
-				BlendType::kNone
+				BlendType::kUnenableDepthNone
 			);
 
 			renderContextManager->Draw();

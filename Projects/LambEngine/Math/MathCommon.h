@@ -47,3 +47,6 @@ inline float operator""_32f(long double i) {
 inline double operator""_64f(long double i) {
 	return static_cast<double>(i);
 }
+
+using float32_t = float;
+using float64_t = double;

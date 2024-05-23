@@ -24,7 +24,7 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 	}
 
 	std::filesystem::path path = fileName;
-	bool isGltf = (path.extension() == ".gltf");
+	bool isGltf = (path.extension() == ".gltf") or (path.extension() == ".glb");
 
 
 	std::string&& directorypath = path.parent_path().string();
