@@ -14,7 +14,9 @@
 std::filesystem::path NormalizePath(const std::filesystem::path& fullPath, const std::filesystem::path& parentDir) {
     // 親ディレクトリがフルパスの先頭にあるかを確認
     if (fullPath.string().find(parentDir.string()) == 0) {
-        return std::filesystem::relative(fullPath, parentDir);
+        auto result = std::filesystem::relative(fullPath, parentDir);
+        result = result.parent_path() / result.stem();
+        return result;
     }
     else {
         throw std::runtime_error("Specified parent directory is not a parent of the full path");
@@ -38,6 +40,7 @@ void CopyFilesWithStructure(const std::filesystem::path& sourceDir, const std::f
 }
 
 int main() {
+#ifdef _DEBUG
     try {
         std::ifstream file;
         file.open("./Projects/Game/Log/LoadResrouce.log");
@@ -48,24 +51,30 @@ int main() {
             data.push_back(line);
         }
 
-
-        if (std::filesystem::exists("./Game/")) {
-            std::filesystem::create_directories("./Game/");
-        }
-
-        CopyFilesWithStructure("./Projects/Game/Resources/", "./Game/Resources/", [&data](const std::filesystem::path& path){
-            auto&& tmp = NormalizePath(path, "./Projects/Game/Resources/");
-            for (auto& i : data) {
-                if (i == tmp) {
-                    return true;
+        CopyFilesWithStructure("./Projects/Game/Resources/", "../Game/Resources/", [&data](const std::filesystem::path& path){
+            if (path.has_extension()) {
+                auto&& tmp = L"./" + NormalizePath(path, "./Projects/Game/").generic_wstring();
+                for (auto& i : data) {
+                    if (i.generic_wstring() == tmp) {
+                        return true;
+                    }
                 }
             }
-
             return false;
             }
         );
-        CopyFilesWithStructure("./Projects/Game/Resources/Datas", "./Game/Resources/Datas", [](const std::filesystem::path& path) {
+        CopyFilesWithStructure("./Projects/Game/Resources/Datas", "../Game/Resources/Datas", [](const std::filesystem::path& path) {
             return path.has_extension();
+            }
+        );
+
+        CopyFilesWithStructure("./Projects/Game/Resources/Shaders", "../Game/Resources/Shaders", [](const std::filesystem::path& path) {
+            return path.has_extension();
+            }
+        );
+
+        CopyFilesWithStructure("../Generated/Outputs/Game/Release", "../Game/", [](const std::filesystem::path& path) {
+            return path.has_extension() and path.extension().string() != ".pdb"; 
             }
         );
 
@@ -74,6 +83,7 @@ int main() {
         std::cout << err.what();
         return -1;
     }
+#endif // _DEBUG
 
     return 0;
 }

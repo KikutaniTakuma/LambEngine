@@ -1,5 +1,5 @@
 #pragma once
-#include <unordered_map>
+#include <list>
 #include <filesystem>
 
 class ResourceLoadLog {
@@ -19,5 +19,5 @@ public:
 
 
 private:
-	std::unordered_map<std::filesystem::path, int32_t> resoucePathData;
+	std::list<std::filesystem::path> resoucePathData;
 };
