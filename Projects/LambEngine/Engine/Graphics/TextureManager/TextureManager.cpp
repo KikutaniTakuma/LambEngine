@@ -8,6 +8,8 @@
 
 #include "Error/Error.h"
 
+#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
+
 Lamb::SafePtr<TextureManager> TextureManager::instance_ = nullptr;
 const std::string TextureManager::kWhiteTexturePath = "./Resources/EngineResources/white2x2.png";
 
@@ -61,6 +63,8 @@ uint32_t TextureManager::LoadTexture(const std::string& fileName) {
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 
 		thisFrameLoadFlg_ = true;
+
+		ResourceLoadLog::Set(fileName);
 	}
 
 	return textures_[fileName]->GetHandleUINT();

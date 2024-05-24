@@ -3,6 +3,7 @@
 #include "Utils/SafePtr/SafePtr.h"
 #include "../TextureManager/TextureManager.h"
 #include "../../Core/DirectXDevice/DirectXDevice.h"
+#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
 #include <filesystem>
 #include <unordered_map>
@@ -102,6 +103,8 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 
 	EndLoadTimeCountAndAddLog(fileName);
 
+	ResourceLoadLog::Set(fileName);
+
 	return result;
 }
 
@@ -158,6 +161,8 @@ Animations* MeshLoader::LoadAnimation(const std::string& fileName)
 	}
 
 	EndLoadTimeCountAndAddLog(fileName);
+
+	ResourceLoadLog::Set(fileName);
 
 	return result.release();
 }

@@ -208,6 +208,9 @@
     <ClCompile Include="Drawers\SkyBox\SkyBox.cpp">
       <Filter>Drawers\SkyBox</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\EngineUtils\ResourceLoadLog\ResourceLoadLog.cpp">
+      <Filter>Engine\EngineUtils\ResourceLoadLog</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -428,6 +431,9 @@
     </Filter>
     <Filter Include="Drawers\SkyBox">
       <UniqueIdentifier>{035a3a54-6a51-4f0b-bfcd-a00c979ca55f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\EngineUtils\ResourceLoadLog">
+      <UniqueIdentifier>{5d704287-10e8-4615-9e1d-949b3bb47401}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -673,6 +679,9 @@
     </ClInclude>
     <ClInclude Include="Drawers\SkyBox\SkyBox.h">
       <Filter>Drawers\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineUtils\ResourceLoadLog\ResourceLoadLog.h">
+      <Filter>Engine\EngineUtils\ResourceLoadLog</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
