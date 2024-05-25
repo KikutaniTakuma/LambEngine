@@ -43,7 +43,7 @@ int main() {
 #ifdef _DEBUG
     try {
         std::ifstream file;
-        file.open("./Projects/Game/Log/LoadResrouce.log");
+        file.open("./LoadResrouce.log");
 
         std::vector<std::filesystem::path> data;
         std::string line;
