@@ -12,6 +12,8 @@
 
 #include "Utils/SafeDelete.h"
 
+#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
+
 Lamb::SafePtr<StringOutPutManager> StringOutPutManager::instance_ = nullptr;
 
 StringOutPutManager::~StringOutPutManager() {
@@ -102,6 +104,8 @@ void StringOutPutManager::LoadFont(const std::string& fontName) {
 	directXCommon->WaitForFinishCommnadlist();
 
 	future.wait();
+
+	ResourceLoadLog::Set(fontName);
 }
 
 DirectX::SpriteFont* const StringOutPutManager::GetFont(const std::string& fontName) {
