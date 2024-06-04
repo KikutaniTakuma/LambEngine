@@ -5,6 +5,10 @@ GameScene::GameScene() :
 	BaseScene(BaseScene::ID::Game)
 {}
 
+void GameScene::Load()
+{
+}
+
 void GameScene::Initialize() {
 	currentCamera_->farClip = 3000.0f;
 	currentCamera_->pos.z = -10.0f;

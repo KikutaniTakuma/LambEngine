@@ -37,12 +37,14 @@ private:
 
 
 public:
-	uint32_t LoadTexture(const std::string& fileName);
+	void LoadTexture(const std::string& fileName);
 
-	Texture* const GetTexture(const std::string& fileName);
+	[[nodiscard]] uint32_t GetHandle(const std::string& fileName);
+
+	[[nodiscard]] Texture* const GetTexture(const std::string& fileName);
 
 public:
-	uint32_t GetWhiteTex();
+	[[nodiscard]] uint32_t GetWhiteTex();
 
 	void UploadTextureData();
 

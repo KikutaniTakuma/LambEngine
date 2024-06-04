@@ -38,6 +38,8 @@ public:
 public:
 	void SceneInitialize(class SceneManager* sceneManager);
 
+	virtual void Load() = 0;
+
 	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
 

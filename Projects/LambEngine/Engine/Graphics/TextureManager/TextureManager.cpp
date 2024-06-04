@@ -44,8 +44,8 @@ TextureManager::~TextureManager() {
 }
 
 
-uint32_t TextureManager::LoadTexture(const std::string& fileName) {
-	if (!std::filesystem::exists(fileName)) {
+void TextureManager::LoadTexture(const std::string& fileName) {
+	if (!std::filesystem::exists(fileName)) [[unlikely]] {
 		throw Lamb::Error::Code<TextureManager>("This file is not exist -> " + fileName, ErrorPlace);
 	}
 
@@ -54,8 +54,8 @@ uint32_t TextureManager::LoadTexture(const std::string& fileName) {
 		auto tex = std::make_unique<Texture>();
 		tex->Load(fileName, directXCommand_->GetCommandList());
 
-		if (!tex->isLoad_) {
-			return 0u;
+		if (not tex->isLoad_) [[unlikely]] {
+			throw Lamb::Error::Code<TextureManager>("Texture::Load failed -> " + fileName, ErrorPlace);
 		}
 
 		srvHeap_->CreateView(*tex);
@@ -66,8 +66,17 @@ uint32_t TextureManager::LoadTexture(const std::string& fileName) {
 
 		ResourceLoadLog::Set(fileName);
 	}
+}
 
-	return textures_[fileName]->GetHandleUINT();
+uint32_t TextureManager::GetHandle(const std::string& fileName)
+{
+	auto itr = textures_.find(fileName);
+
+	if (itr == textures_.end()) [[unlikely]] {
+		throw Lamb::Error::Code<TextureManager>("This file is not loaded -> " + fileName , ErrorPlace);
+	}
+
+	return itr->second->GetHandleUINT();
 }
 
 Texture* const TextureManager::GetTexture(const std::string& fileName) {

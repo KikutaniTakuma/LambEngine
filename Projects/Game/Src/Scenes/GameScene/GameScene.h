@@ -17,6 +17,8 @@ public:
 	GameScene& operator=(GameScene&&) = delete;
 
 public:
+	void Load() override;
+
 	void Initialize() override;
 
 	void Finalize() override;

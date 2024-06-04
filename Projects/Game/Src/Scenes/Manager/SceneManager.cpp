@@ -101,7 +101,7 @@ void SceneManager::Update() {
 		scene_->Finalize();
 		// 次のシーンへ
 		scene_.reset(next_.release());
-		// 次のシーンを格納するものユニークポインタをリセット
+		// 次のシーンを格納するユニークポインタをリセット
 		next_.reset();
 #pragma endregion
 
@@ -109,6 +109,7 @@ void SceneManager::Update() {
 		// シーンの初期化
 		scene_->Initialize();
 
+		scene_->Load();
 
 		// ロード中の描画を終了
 		load_->Stop();

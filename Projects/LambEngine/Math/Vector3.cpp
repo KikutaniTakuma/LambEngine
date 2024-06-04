@@ -118,14 +118,14 @@ bool Vector3::operator!=(const Vector3& right) const noexcept {
 }
 
 float& Vector3::operator[](size_t index) {
-	if (size() <= index) {
+	if (size() <= index) [[unlikely]] {
 		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
 	}
 	return data()[index];
 }
 
 const float& Vector3::operator[](size_t index) const {
-	if (size() <= index) {
+	if (size() <= index) [[unlikely]] {
 		throw Lamb::Error::Code<Vector3>("index is over", ErrorPlace);
 	}
 	return data()[index];

@@ -16,6 +16,10 @@ TitleScene::TitleScene():
 {
 }
 
+void TitleScene::Load()
+{
+}
+
 void TitleScene::Initialize()
 {
 	//currentCamera_->pos.y = 2.85f;

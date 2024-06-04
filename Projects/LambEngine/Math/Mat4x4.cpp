@@ -196,15 +196,9 @@ Vector3 Mat4x4::GetScale() const {
 	);
 }
 Quaternion Mat4x4::GetRotate() const {
-	Vector3 scale;
 	Quaternion rotate;
-	Vector3 translate;
-	DirectX::XMMatrixDecompose(
-		reinterpret_cast<DirectX::XMVECTOR*>(scale.data()),
-		reinterpret_cast<DirectX::XMVECTOR*>(rotate.data()),
-		reinterpret_cast<DirectX::XMVECTOR*>(translate.data()),
-		this->xmMatrix_
-	);
+
+	rotate.m128 = DirectX::XMQuaternionRotationMatrix(this->xmMatrix_);
 
 	return rotate.Normalize();
 }
