@@ -7,7 +7,7 @@
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"
-#include"Utils/Flg/Flg.h"
+#include"Utils/Flg.h"
 
 /// <summary>
 /// イージング管理

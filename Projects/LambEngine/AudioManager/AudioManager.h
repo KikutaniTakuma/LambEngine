@@ -2,7 +2,7 @@
 #include <memory>
 #include <unordered_map>
 #include "Audio/Audio.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 /// <summary>

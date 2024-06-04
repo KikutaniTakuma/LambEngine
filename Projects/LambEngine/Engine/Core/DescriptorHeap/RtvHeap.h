@@ -2,7 +2,7 @@
 #include "DescriptorHeap.h"
 #include <array>
 #include <initializer_list>
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 class RtvHeap final : public DescriptorHeap {
 public:

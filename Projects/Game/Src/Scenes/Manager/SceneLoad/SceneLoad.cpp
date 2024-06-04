@@ -1,7 +1,7 @@
 #include "SceneLoad.h"
 #include "Engine/Engine.h"
 #include "./Camera/Camera.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 #include "Drawers/DrawerManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include <climits>
@@ -23,7 +23,8 @@ SceneLoad::SceneLoad() :
 	tex2Danimator_->SetDuration(setting.animationSpeed);
 	tex2Danimator_->SetAnimationNumber(setting.animationNumber);
 	tex2Danimator_->SetLoopAnimation(true);
-	textureID_ = drawerManager->LoadTexture(setting.fileName);
+	drawerManager->LoadTexture(setting.fileName);
+	textureID_ = drawerManager->GetTexture(setting.fileName);
 
 	std::unique_ptr<Camera> camera = std::make_unique<Camera>();
 	camera->pos.z = -1.0f;

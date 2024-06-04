@@ -1,6 +1,6 @@
 #include "DirectXDevice.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ExecutionLog.h"
+#include "Utils/ConvertString.h"
 #include "Math/Vector2.h"
 
 #include <cassert>
@@ -8,7 +8,7 @@
 #include <array>
 
 #include "Error/Error.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 Lamb::SafePtr<DirectXDevice> DirectXDevice::instance_ = nullptr;
 

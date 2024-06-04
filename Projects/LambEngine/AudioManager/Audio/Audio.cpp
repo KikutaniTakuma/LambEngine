@@ -1,10 +1,10 @@
 #include <fstream>
 #include <filesystem>
 #include "AudioManager/AudioManager.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "imgui.h"
 #include "Error/Error.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ConvertString.h"
 
 Audio::Audio():
 	wfet_(),

@@ -1,6 +1,6 @@
 #include "MeshLoader.h"
 #include "Error/Error.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include "../TextureManager/TextureManager.h"
 #include "../../Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"

@@ -2,12 +2,12 @@
 #include "Game/Water/Water.h"
 #include <cmath>
 #include <numbers>
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 #include "Game/Cloud/Cloud.h"
 #include "AudioManager/AudioManager.h"
-#include "Utils/ScreenOut/ScreenOut.h"
+#include "Utils/ScreenOut.h"
 
-#include "Utils/Random/Random.h"
+#include "Utils/Random.h"
 #include "imgui.h"
 #include "Game/Water/Water.h"
 

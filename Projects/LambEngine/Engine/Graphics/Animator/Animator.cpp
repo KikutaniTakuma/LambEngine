@@ -1,6 +1,6 @@
 #include "Animator.h"
 #include "../AnimationManager/AnimationManager.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 #include <algorithm>
 
 #ifdef _DEBUG

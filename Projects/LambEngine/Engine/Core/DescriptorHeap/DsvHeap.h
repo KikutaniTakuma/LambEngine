@@ -1,6 +1,6 @@
 #pragma once
 #include "Engine/Core/DescriptorHeap/DescriptorHeap.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 class DsvHeap final : public DescriptorHeap{
 private:

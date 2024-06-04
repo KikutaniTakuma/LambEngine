@@ -1,7 +1,7 @@
 #pragma once
 #include <utility>
 #include "Error/Error.h"
-#include "../SafeDelete/SafeDelete.h"
+#include "SafeDelete.h"
 
 namespace Lamb {
 	/// <summary>

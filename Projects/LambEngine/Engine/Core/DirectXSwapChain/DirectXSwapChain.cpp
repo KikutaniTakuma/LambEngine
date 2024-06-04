@@ -1,5 +1,5 @@
 #include "DirectXSwapChain.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
@@ -9,7 +9,7 @@
 #include <cassert>
 
 #include "Error/Error.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 Lamb::SafePtr<DirectXSwapChain> DirectXSwapChain::instance_ = nullptr;
 

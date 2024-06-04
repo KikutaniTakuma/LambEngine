@@ -6,14 +6,14 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg
 
 #include <cassert>
 
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ConvertString.h"
 #include "Input/Input.h"
 
 #include "Error/Error.h"
 
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 
 WindowFactory::WindowFactory():
 	hwnd_{},

@@ -12,7 +12,7 @@
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"
 
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 Lamb::SafePtr<ImGuiManager> ImGuiManager::instance_ = nullptr;
 

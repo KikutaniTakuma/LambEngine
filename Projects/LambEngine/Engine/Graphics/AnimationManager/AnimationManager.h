@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 class AnimationManager {
 private:

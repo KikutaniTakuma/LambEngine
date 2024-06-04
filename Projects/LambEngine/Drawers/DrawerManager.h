@@ -3,7 +3,7 @@
 #include <memory>
 #include "Texture2D/Texture2D.h"
 #include "Model/Model.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 
 class DrawerManager {

@@ -1,11 +1,11 @@
 #include "PeraPipeline.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
-#include "Utils/Random/Random.h"
+#include "Utils/Random.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 
 void PeraPipeline::Update() {
 	*colorBuf_ = color;

@@ -1,4 +1,4 @@
-#include "Utils/Random/Random.h"
+#include "Utils/Random.h"
 
 namespace Lamb {
 	std::random_device seed;

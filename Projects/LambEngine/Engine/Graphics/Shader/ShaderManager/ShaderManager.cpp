@@ -1,10 +1,10 @@
 #include "ShaderManager.h"
 #include "../ShaderFactory/ShaderFactory.h"
-#include "Utils/ConvertString/ConvertString.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/ConvertString.h"
+#include "Utils/SafeDelete.h"
 #include <cassert>
 #include <format>
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 
 Lamb::SafePtr<ShaderManager> ShaderManager::instance_ = nullptr;
 

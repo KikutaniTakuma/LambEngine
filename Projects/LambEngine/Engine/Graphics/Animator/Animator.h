@@ -3,7 +3,7 @@
 #include "Math/Mat4x4.h"
 #include "Engine/Graphics/GraphicsStructs.h"
 #include "Engine/Graphics/Skeleton.h"
-#include "Utils/Flg/Flg.h"
+#include "Utils/Flg.h"
 
 class Animator {
 public:

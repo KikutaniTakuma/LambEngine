@@ -1,6 +1,6 @@
 #include "AnimationManager.h"
 #include "Error/Error.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 #include "../MeshLoader/MeshLoader.h"
 

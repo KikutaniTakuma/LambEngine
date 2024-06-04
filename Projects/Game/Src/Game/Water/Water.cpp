@@ -1,7 +1,7 @@
 #include "Water.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 #include "imgui.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 Water* Water::instance_ = nullptr;
 

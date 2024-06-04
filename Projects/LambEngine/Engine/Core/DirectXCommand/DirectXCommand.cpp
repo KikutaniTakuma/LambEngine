@@ -1,10 +1,10 @@
 #include "DirectXCommand.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include <cassert>
 #include "Error/Error.h"
 #include "Engine/Engine.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 
 DirectXCommand::DirectXCommand():

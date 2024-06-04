@@ -2,7 +2,7 @@
 #include "Camera/Camera.h"
 #include "Input/Gamepad/Gamepad.h"
 #include "Input/KeyInput/KeyInput.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 #include "Engine/Graphics/AnimationManager/AnimationManager.h"
 
 void Player::Init(const Transform& transform)

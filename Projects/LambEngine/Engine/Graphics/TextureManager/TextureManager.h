@@ -1,7 +1,7 @@
 #pragma once
 #include "Texture/Texture.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include <unordered_map>
 #include <string>
 #include <memory>

@@ -1,7 +1,7 @@
 #include "KeyInput.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include <cassert>
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "Error/Error.h"
 
 void KeyInput::Input() {

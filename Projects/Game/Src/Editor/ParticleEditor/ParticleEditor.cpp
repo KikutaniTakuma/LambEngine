@@ -1,7 +1,7 @@
 #include "ParticleEditor.h"
 #include <cassert>
 #include "imgui.h"
-#include "Utils/UtilsLib/UtilsLib.h"
+#include "Utils/UtilsLib.h"
 
 ParticleEditor* ParticleEditor::instance_ = nullptr;
 

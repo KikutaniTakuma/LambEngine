@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <string>
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 #include "../Shader.h"
 

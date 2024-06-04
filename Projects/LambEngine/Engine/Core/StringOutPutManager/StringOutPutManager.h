@@ -5,7 +5,7 @@
 #include "../externals/DirectXTK12/Inc/SpriteFont.h"
 #include "../externals/DirectXTK12/Inc/ResourceUploadBatch.h"
 #pragma comment(lib, "DirectXTK12.lib")
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 class StringOutPutManager {
 private:

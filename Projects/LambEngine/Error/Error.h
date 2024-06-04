@@ -2,7 +2,7 @@
 #include <string>
 #include <filesystem>
 #include <typeinfo>
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 
 namespace Lamb {
 	class Error {

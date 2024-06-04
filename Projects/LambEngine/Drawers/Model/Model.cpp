@@ -1,6 +1,6 @@
 #include "Model.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 Model::Model(const std::string& fileName):
 	Model()

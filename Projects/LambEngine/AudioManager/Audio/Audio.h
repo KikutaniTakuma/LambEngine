@@ -14,7 +14,7 @@
 
 
 #include <string>
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 /// <summary>
 /// 音の再生や停止、ロードを担う

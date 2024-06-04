@@ -2,9 +2,9 @@
 #include "DescriptorHeap.h"
 #include "Engine/Graphics/TextureManager/Texture/Texture.h"
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 #include <list>
 

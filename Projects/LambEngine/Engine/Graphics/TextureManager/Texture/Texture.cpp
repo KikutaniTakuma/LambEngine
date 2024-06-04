@@ -1,7 +1,7 @@
 #include "Texture.h"
 #include "../TextureManager.h"
 #include "../externals/DirectXTex/d3dx12.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ConvertString.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include <cassert>
 #include <filesystem>

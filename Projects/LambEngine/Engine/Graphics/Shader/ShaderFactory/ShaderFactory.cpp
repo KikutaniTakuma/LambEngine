@@ -1,6 +1,6 @@
 #include "ShaderFactory.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ExecutionLog.h"
+#include "Utils/ConvertString.h"
 
 #include "Error/Error.h"
 

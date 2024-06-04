@@ -1,8 +1,8 @@
 #pragma once
 #include "Engine/Graphics/GraphicsStructs.h"
 
-#include "Utils/Flg/Flg.h"
-#include "Utils/Easeing/Easeing.h"
+#include "Utils/Flg.h"
+#include "Utils/Easeing.h"
 
 #include <array>
 #include <variant>

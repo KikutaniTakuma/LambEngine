@@ -1,9 +1,9 @@
 #pragma once
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include "Transform/Transform.h"
 #include "Drawers/Texture2D/Texture2D.h"
-#include "Utils/UtilsLib/UtilsLib.h"
-#include "Utils/Easeing/Easeing.h"
+#include "Utils/UtilsLib.h"
+#include "Utils/Easeing.h"
 #include <memory>
 
 class Fade {

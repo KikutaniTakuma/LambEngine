@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Input/Input.h"
 #include "imgui.h"

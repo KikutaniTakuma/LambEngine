@@ -1,8 +1,8 @@
 #include "TextureManager.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 #include <cassert>
 #include <filesystem>
 

@@ -1,10 +1,10 @@
 #include "Texture2D.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 #ifdef _DEBUG
-#include "Utils/UtilsLib/UtilsLib.h"
+#include "Utils/UtilsLib.h"
 
 #include "imgui.h"
 #endif // _DEBUG

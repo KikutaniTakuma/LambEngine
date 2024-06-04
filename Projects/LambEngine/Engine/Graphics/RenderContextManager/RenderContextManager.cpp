@@ -1,5 +1,5 @@
 #include "RenderContextManager.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 #include "../Shader/ShaderManager/ShaderManager.h"
 

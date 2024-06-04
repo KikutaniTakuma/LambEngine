@@ -9,8 +9,8 @@
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "Engine/Graphics/AnimationManager/AnimationManager.h"
 
-#include "Utils/SafePtr/SafePtr.h"
-#include "Utils/Flg/Flg.h"
+#include "Utils/SafePtr.h"
+#include "Utils/Flg.h"
 #include "../PostEffectManager/PostEffectManager.h"
 
 #include <memory>

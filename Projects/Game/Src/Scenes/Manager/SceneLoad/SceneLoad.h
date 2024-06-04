@@ -1,9 +1,9 @@
 #pragma once
-#include "Utils/Thread/Thread.h"
+#include "Utils/Thread.h"
 #include <memory>
 #include "Drawers/Texture2D/Texture2D.h"
 #include "Engine/Graphics/Tex2DAniamtor/Tex2DAniamtor.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 
 // ロード中の描画クラス

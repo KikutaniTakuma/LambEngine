@@ -1,6 +1,6 @@
 #pragma once
 #include "Pipeline/Pipeline.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include <list>
 #include <vector>
 #include <memory>

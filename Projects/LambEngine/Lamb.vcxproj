@@ -180,16 +180,16 @@
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
     <ClCompile Include="Transform\Transform.cpp" />
-    <ClCompile Include="Utils\ConvertString\ConvertString.cpp" />
-    <ClCompile Include="Utils\CsvLoad\CsvLoad.cpp" />
-    <ClCompile Include="Utils\Easeing\Easeing.cpp" />
-    <ClCompile Include="Utils\EngineInfo\EngineInfo.cpp" />
-    <ClCompile Include="Utils\ExecutionLog\ExecutionLog.cpp" />
-    <ClCompile Include="Utils\Flg\Flg.cpp" />
-    <ClCompile Include="Utils\Random\Random.cpp" />
-    <ClCompile Include="Utils\ScreenOut\ScreenOut.cpp" />
-    <ClCompile Include="Utils\Thread\Thread.cpp" />
-    <ClCompile Include="Utils\UtilsLib\UtilsLib.cpp" />
+    <ClCompile Include="Utils\ConvertString.cpp" />
+    <ClCompile Include="Utils\CsvLoad.cpp" />
+    <ClCompile Include="Utils\Easeing.cpp" />
+    <ClCompile Include="Utils\EngineInfo.cpp" />
+    <ClCompile Include="Utils\ExecutionLog.cpp" />
+    <ClCompile Include="Utils\Flg.cpp" />
+    <ClCompile Include="Utils\Random.cpp" />
+    <ClCompile Include="Utils\ScreenOut.cpp" />
+    <ClCompile Include="Utils\Thread.cpp" />
+    <ClCompile Include="Utils\UtilsLib.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioManager\AudioManager.h" />
@@ -261,19 +261,19 @@
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="Transform\Transform.h" />
-    <ClInclude Include="Utils\Cocepts\Cocepts.h" />
-    <ClInclude Include="Utils\ConvertString\ConvertString.h" />
-    <ClInclude Include="Utils\CsvLoad\CsvLoad.h" />
-    <ClInclude Include="Utils\Easeing\Easeing.h" />
-    <ClInclude Include="Utils\EngineInfo\EngineInfo.h" />
-    <ClInclude Include="Utils\ExecutionLog\ExecutionLog.h" />
-    <ClInclude Include="Utils\Flg\Flg.h" />
-    <ClInclude Include="Utils\Random\Random.h" />
-    <ClInclude Include="Utils\SafeDelete\SafeDelete.h" />
-    <ClInclude Include="Utils\SafePtr\SafePtr.h" />
-    <ClInclude Include="Utils\ScreenOut\ScreenOut.h" />
-    <ClInclude Include="Utils\Thread\Thread.h" />
-    <ClInclude Include="Utils\UtilsLib\UtilsLib.h" />
+    <ClInclude Include="Utils\Cocepts.h" />
+    <ClInclude Include="Utils\ConvertString.h" />
+    <ClInclude Include="Utils\CsvLoad.h" />
+    <ClInclude Include="Utils\Easeing.h" />
+    <ClInclude Include="Utils\EngineInfo.h" />
+    <ClInclude Include="Utils\ExecutionLog.h" />
+    <ClInclude Include="Utils\Flg.h" />
+    <ClInclude Include="Utils\Random.h" />
+    <ClInclude Include="Utils\SafeDelete.h" />
+    <ClInclude Include="Utils\SafePtr.h" />
+    <ClInclude Include="Utils\ScreenOut.h" />
+    <ClInclude Include="Utils\Thread.h" />
+    <ClInclude Include="Utils\UtilsLib.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
