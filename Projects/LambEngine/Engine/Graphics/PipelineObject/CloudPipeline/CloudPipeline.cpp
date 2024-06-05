@@ -103,18 +103,18 @@ void CloudPipeline::Init(
 		dsFileName
 	);
 
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> renderRange = {};
+	Lamb::Array<D3D12_DESCRIPTOR_RANGE, 1> renderRange = {};
 	renderRange[0].BaseShaderRegister = 0;
 	renderRange[0].NumDescriptors = 1;
 	renderRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
+	Lamb::Array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].BaseShaderRegister = 0;
 	cbvRange[0].NumDescriptors = 5;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 2> roootParamater = {};
+	Lamb::Array<D3D12_ROOT_PARAMETER, 2> roootParamater = {};
 	roootParamater[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	roootParamater[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	roootParamater[0].DescriptorTable.pDescriptorRanges = renderRange.data();

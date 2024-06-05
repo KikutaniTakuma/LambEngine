@@ -33,7 +33,7 @@ Quaternion::Quaternion(const Vector3& right, float w) {
 	vector.w = w;
 }
 
-Quaternion::Quaternion(const std::array<float, 4>& right) {
+Quaternion::Quaternion(const Lamb::Array<float, 4>& right) {
 	m = right;
 }
 

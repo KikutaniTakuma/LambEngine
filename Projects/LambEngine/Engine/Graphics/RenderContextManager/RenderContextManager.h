@@ -48,7 +48,7 @@ public:
 
 		Shader shader = LoadShader(fileNames.shaderName);
 
-		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader);
+		const Lamb::Array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader);
 
 		Lamb::SafePtr meshManager = MeshManager::GetInstance();
 		meshManager->LoadModel(fileNames.resourceFileName);
@@ -81,7 +81,7 @@ public:
 
 		Shader shader = LoadShader(fileNames.shaderName);
 
-		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader);
+		const Lamb::Array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader);
 
 		Lamb::SafePtr meshManager = MeshManager::GetInstance();
 		meshManager->LoadModel(fileNames.resourceFileName);
@@ -108,8 +108,8 @@ public:
 private:
 	[[nodiscard]] Shader LoadShader(const ShaderFileNames& shaderName);
 
-	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateGraphicsPipelines(Shader shader);
-	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateSkinAnimationGraphicsPipelines(Shader shader);
+	[[nodiscard]] Lamb::Array<Pipeline*, BlendType::kNum> CreateGraphicsPipelines(Shader shader);
+	[[nodiscard]] Lamb::Array<Pipeline*, BlendType::kNum> CreateSkinAnimationGraphicsPipelines(Shader shader);
 
 
 private:

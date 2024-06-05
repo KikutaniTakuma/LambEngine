@@ -4,7 +4,7 @@
 #include "Utils/SafePtr.h"
 
 #ifdef _DEBUG
-#include "Utils/UtilsLib.h"
+#include "Utils/FileUtils.h"
 
 #include "imgui.h"
 #endif // _DEBUG

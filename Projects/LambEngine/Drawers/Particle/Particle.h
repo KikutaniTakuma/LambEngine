@@ -4,7 +4,7 @@
 #include "Utils/Flg.h"
 #include "Utils/Easeing.h"
 
-#include <array>
+#include "Utils/Array.h"
 #include <variant>
 #include <deque>
 #include <chrono>

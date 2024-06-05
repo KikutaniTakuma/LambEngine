@@ -1,5 +1,5 @@
 #pragma once
-#include <array>
+#include "Utils/Array.h"
 #include <type_traits>
 #include <string>
 #include <cmath>
@@ -18,14 +18,14 @@ public:
 	using const_reference = const value_type&;
 
 
-	using width_type = std::array<value_type, width>;
+	using width_type = Lamb::Array<value_type, width>;
 	using width_pointer = width_type*;
 	using width_const_pointer = const width_type*;
 	using width_reference = width_type&;
 	using width_const_reference = const width_type&;
-	using height_type = std::array<width_type, height>;
+	using height_type = Lamb::Array<width_type, height>;
 
-	using vector_type = std::array<value_type, height* width>;
+	using vector_type = Lamb::Array<value_type, height* width>;
 	using vector_pointer = vector_type*;
 	using vector_const_pointer = const vector_type*;
 	using vector_reference = vector_type&;
@@ -70,7 +70,7 @@ public:
 		*this = right;
 	}
 	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
-	constexpr Matrix(const std::array<std::array<othertype, otherWidth>, otherHeight>& right) noexcept requiresMust {
+	constexpr Matrix(const Lamb::Array<Lamb::Array<othertype, otherWidth>, otherHeight>& right) noexcept requiresMust {
 		*this = right;
 	}
 	constexpr Matrix(const Matrix&) requiresMust = default;
@@ -108,7 +108,7 @@ public:
 		return *this;
 	}
 	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
-	constexpr Matrix& operator=(const std::array<std::array<othertype, otherWidth>, otherHeight>& right) {
+	constexpr Matrix& operator=(const Lamb::Array<Lamb::Array<othertype, otherWidth>, otherHeight>& right) {
 		for (size_t y = 0; y < height and y < otherHeight; y++) {
 			for (size_t x = 0; x < width and x < otherWidth; x++) {
 				this->matrix_[y][x] = value_cast(right[y][x]);

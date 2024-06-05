@@ -1,5 +1,5 @@
 #pragma once
-#include <array>
+#include "Utils/Array.h"
 
 /// <summary>
 ///	二次元ベクトル

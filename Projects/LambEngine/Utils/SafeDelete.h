@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/Cocepts.h"
+#include "Utils/Concepts.h"
 
 namespace Lamb {
 	template<IsPtr T>

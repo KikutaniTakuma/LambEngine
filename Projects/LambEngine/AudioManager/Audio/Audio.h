@@ -1,5 +1,5 @@
 #pragma once
-#include <array>
+#include "Utils/Array.h"
 #include <xaudio2.h>
 #pragma comment(lib, "xaudio2.lib")
 
@@ -24,12 +24,12 @@ class Audio {
 
 private:
 	struct ChunkHeader {
-		std::array<char,4> id_;
+		Lamb::Array<char,4> id_;
 		int32_t size_;
 	};
 	struct RiffHeader {
 		ChunkHeader chunk_;
-		std::array<char, 4> type_;
+		Lamb::Array<char, 4> type_;
 	};
 	struct FormatChunk
 	{

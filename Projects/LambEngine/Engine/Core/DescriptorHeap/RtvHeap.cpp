@@ -62,7 +62,7 @@ void RtvHeap::CreateHeapHandles() {
 }
 
 void RtvHeap::CreateBackBuffer(
-	std::array<Lamb::LambPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber_>& backBuffer,
+	Lamb::Array<Lamb::LambPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber_>& backBuffer,
 	IDXGISwapChain4* const swapChain
 ) {
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();

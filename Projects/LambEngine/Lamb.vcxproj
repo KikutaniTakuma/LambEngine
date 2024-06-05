@@ -185,11 +185,11 @@
     <ClCompile Include="Utils\Easeing.cpp" />
     <ClCompile Include="Utils\EngineInfo.cpp" />
     <ClCompile Include="Utils\ExecutionLog.cpp" />
+    <ClCompile Include="Utils\FileUtils.cpp" />
     <ClCompile Include="Utils\Flg.cpp" />
     <ClCompile Include="Utils\Random.cpp" />
     <ClCompile Include="Utils\ScreenOut.cpp" />
     <ClCompile Include="Utils\Thread.cpp" />
-    <ClCompile Include="Utils\UtilsLib.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioManager\AudioManager.h" />
@@ -261,19 +261,20 @@
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="Transform\Transform.h" />
-    <ClInclude Include="Utils\Cocepts.h" />
+    <ClInclude Include="Utils\Array.h" />
+    <ClInclude Include="Utils\Concepts.h" />
     <ClInclude Include="Utils\ConvertString.h" />
     <ClInclude Include="Utils\CsvLoad.h" />
     <ClInclude Include="Utils\Easeing.h" />
     <ClInclude Include="Utils\EngineInfo.h" />
     <ClInclude Include="Utils\ExecutionLog.h" />
+    <ClInclude Include="Utils\FileUtils.h" />
     <ClInclude Include="Utils\Flg.h" />
     <ClInclude Include="Utils\Random.h" />
     <ClInclude Include="Utils\SafeDelete.h" />
     <ClInclude Include="Utils\SafePtr.h" />
     <ClInclude Include="Utils\ScreenOut.h" />
     <ClInclude Include="Utils\Thread.h" />
-    <ClInclude Include="Utils\UtilsLib.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">

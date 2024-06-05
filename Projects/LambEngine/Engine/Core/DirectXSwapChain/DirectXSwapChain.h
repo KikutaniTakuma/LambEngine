@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-#include <array>
+#include "Utils/Array.h"
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
 #include <dxgi1_6.h>
@@ -71,6 +71,6 @@ public:
 
 private:
 	Lamb::LambPtr<IDXGISwapChain4> swapChain_;
-	std::array<Lamb::LambPtr<ID3D12Resource>, kBackBufferNumber_> swapChainResource_;
+	Lamb::Array<Lamb::LambPtr<ID3D12Resource>, kBackBufferNumber_> swapChainResource_;
 	bool isRenderState_;
 };

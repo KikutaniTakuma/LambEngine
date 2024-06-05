@@ -196,9 +196,6 @@
     <ClCompile Include="Utils\Thread.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\UtilsLib.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\ConvertString.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -209,6 +206,9 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\EngineInfo.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\FileUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
@@ -629,10 +629,7 @@
     <ClInclude Include="Utils\Thread.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\UtilsLib.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Cocepts.h">
+    <ClInclude Include="Utils\Concepts.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\ConvertString.h">
@@ -642,6 +639,12 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Easeing.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\FileUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Array.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

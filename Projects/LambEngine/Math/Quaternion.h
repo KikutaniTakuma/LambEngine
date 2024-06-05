@@ -18,7 +18,7 @@ public:
 	constexpr Quaternion(Quaternion&&) = default;
 	Quaternion(const Vector4& right);
 	Quaternion(const Vector3& right, float w);
-	Quaternion(const std::array<float, 4>& right);
+	Quaternion(const Lamb::Array<float, 4>& right);
 	Quaternion(float x, float y, float z, float w);
 	~Quaternion() = default;
 
@@ -70,28 +70,28 @@ public:
 		return m.data();
 	}
 
-	[[nodiscard]] std::array<float, 4>::iterator begin() noexcept {
+	[[nodiscard]] Lamb::Array<float, 4>::iterator begin() noexcept {
 		return m.begin();
 	}
-	[[nodiscard]] std::array<float, 4>::iterator end() noexcept {
+	[[nodiscard]] Lamb::Array<float, 4>::iterator end() noexcept {
 		return m.end();
 	}
-	[[nodiscard]] std::array<float, 4>::const_iterator cbegin() const noexcept {
+	[[nodiscard]] Lamb::Array<float, 4>::const_iterator cbegin() const noexcept {
 		return m.cbegin();
 	}
-	[[nodiscard]] std::array<float, 4>::const_iterator cend() const noexcept {
+	[[nodiscard]] Lamb::Array<float, 4>::const_iterator cend() const noexcept {
 		return m.cend();
 	}
-	[[nodiscard]] std::array<float, 4>::reverse_iterator rbegin() noexcept {
+	[[nodiscard]] Lamb::Array<float, 4>::reverse_iterator rbegin() noexcept {
 		return m.rbegin();
 	}
-	[[nodiscard]] std::array<float, 4>::reverse_iterator rend() noexcept {
+	[[nodiscard]] Lamb::Array<float, 4>::reverse_iterator rend() noexcept {
 		return m.rend();
 	}
-	[[nodiscard]] std::array<float, 4>::const_reverse_iterator crbegin() const noexcept {
+	[[nodiscard]] Lamb::Array<float, 4>::const_reverse_iterator crbegin() const noexcept {
 		return m.crbegin();
 	}
-	[[nodiscard]] std::array<float, 4>::const_reverse_iterator crend() const noexcept {
+	[[nodiscard]] Lamb::Array<float, 4>::const_reverse_iterator crend() const noexcept {
 		return m.crend();
 	}
 
@@ -237,7 +237,7 @@ public:
 public:
 	union
 	{
-		std::array<float, 4> m;
+		Lamb::Array<float, 4> m;
 		__m128 m128;
 		Vector4 vector4;
 		struct {
