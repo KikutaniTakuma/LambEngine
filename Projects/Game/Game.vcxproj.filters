@@ -160,6 +160,9 @@
     <Filter Include="Game\Coin">
       <UniqueIdentifier>{b499dd18-c71b-43fe-b48e-a5f00311c7c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{e5c92456-0708-4165-9d68-847d8014d2ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -236,6 +239,9 @@
     </ClInclude>
     <ClInclude Include="Src\Game\Coin\Coin.h">
       <Filter>Game\Coin</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Object.h">
+      <Filter>GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
