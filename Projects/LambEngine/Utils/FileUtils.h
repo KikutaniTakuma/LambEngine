@@ -16,4 +16,11 @@ namespace Lamb {
 		const std::filesystem::path& directoryName,
 		const std::filesystem::path& extension
 	);
+
+	/// <summary>
+	/// Csvローダー
+	/// </summary>
+	/// <param name="fileNmae">csvのファイル名</param>
+	/// <returns>ロードしたcsvの二次元配列</returns>
+	std::vector<std::vector<int32_t>> CsvLoad(const std::string& fileNmae);
 }

@@ -199,9 +199,6 @@
     <ClCompile Include="Utils\ConvertString.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\CsvLoad.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\Easeing.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -633,9 +630,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\ConvertString.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\CsvLoad.h">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\Easeing.h">

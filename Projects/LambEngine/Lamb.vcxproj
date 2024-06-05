@@ -181,7 +181,6 @@
     <ClCompile Include="Math\Vector4.cpp" />
     <ClCompile Include="Transform\Transform.cpp" />
     <ClCompile Include="Utils\ConvertString.cpp" />
-    <ClCompile Include="Utils\CsvLoad.cpp" />
     <ClCompile Include="Utils\Easeing.cpp" />
     <ClCompile Include="Utils\EngineInfo.cpp" />
     <ClCompile Include="Utils\ExecutionLog.cpp" />
@@ -264,7 +263,6 @@
     <ClInclude Include="Utils\Array.h" />
     <ClInclude Include="Utils\Concepts.h" />
     <ClInclude Include="Utils\ConvertString.h" />
-    <ClInclude Include="Utils\CsvLoad.h" />
     <ClInclude Include="Utils\Easeing.h" />
     <ClInclude Include="Utils\EngineInfo.h" />
     <ClInclude Include="Utils\ExecutionLog.h" />
