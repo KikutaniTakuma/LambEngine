@@ -41,7 +41,7 @@ void SceneLoad::Start()
 
 		loadTex_->Draw(
 			Mat4x4::MakeAffin(Vector3(Lamb::ClientSize(), 1.0f), Vector3::kZero, Vector3::kZero),
-			Mat4x4::MakeScalar(
+			Mat4x4::MakeScale(
 				Vector3(1.0f / static_cast<float>(setting.animationNumber), 1.0f, 1.0f)
 			),
 			cameraMatrix_,

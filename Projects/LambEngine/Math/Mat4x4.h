@@ -66,18 +66,9 @@ public:
 	{}
 	constexpr Matrix(const Matrix&)  = default;
 	constexpr Matrix(Matrix&&)  = default;
-	constexpr Matrix(const DirectX::XMMATRIX& xmMatrix);
-
-
-private:
-	constexpr Matrix(value_type identity) noexcept
-		: Matrix()
-	{
-		for (size_t i = 0; i < kHeight; i++) {
-			matrix_[i][i] = identity;
-		}
-	}
-
+	constexpr Matrix(const DirectX::XMMATRIX& xmMatrix) :
+		xmMatrix_(xmMatrix)
+	{}
 public:
 	~Matrix() = default;
 
@@ -354,7 +345,7 @@ public:
 public:
 	static [[nodiscard]] Matrix MakeTranslate(const class Vector3& vec);
 
-	static [[nodiscard]] Matrix MakeScalar(const class Vector3& vec);
+	static [[nodiscard]] Matrix MakeScale(const class Vector3& vec);
 
 	static [[nodiscard]] Matrix MakeRotateX(float rad);
 

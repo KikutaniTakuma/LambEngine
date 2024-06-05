@@ -3,65 +3,61 @@
 #include <cmath>
 #include "Math/MathCommon.h"
 
-const Mat4x4 Mat4x4::kIdentity = DirectX::XMMatrixIdentity();
+const Matrix<float,4,4> Matrix<float,4,4>::kIdentity = DirectX::XMMatrixIdentity();
 
-const Mat4x4 Mat4x4::kZero = Mat4x4();
+const Matrix<float,4,4> Matrix<float,4,4>::kZero = Matrix<float,4,4>();
 
-constexpr Mat4x4::Matrix(const DirectX::XMMATRIX& xmMatrix) {
-	xmMatrix_ = xmMatrix;
-}
-
-Mat4x4 Mat4x4::MakeTranslate(const Vector3& vec) {
-	Mat4x4 result;
+Matrix<float,4,4> Matrix<float,4,4>::MakeTranslate(const Vector3& vec) {
+	Matrix<float,4,4> result;
 
 	result.xmMatrix_ = DirectX::XMMatrixTranslation(vec.x, vec.y, vec.z);
 
 	return result;
 }
 
-Mat4x4 Mat4x4::MakeScalar(const Vector3& vec) {
-	Mat4x4 result;
+Matrix<float,4,4> Matrix<float,4,4>::MakeScale(const Vector3& vec) {
+	Matrix<float,4,4> result;
 
 	result.xmMatrix_ = DirectX::XMMatrixScaling(vec.x, vec.y, vec.z);
 
 	return result;
 }
 
-Mat4x4 Mat4x4::MakeRotateX(float rad) {
-	Mat4x4 result;
+Matrix<float,4,4> Matrix<float,4,4>::MakeRotateX(float rad) {
+	Matrix<float,4,4> result;
 
 	result.xmMatrix_ = DirectX::XMMatrixRotationX(rad);
 
 	return result;
 }
 
-Mat4x4 Mat4x4::MakeRotateY(float rad) {
-	Mat4x4 result;
+Matrix<float,4,4> Matrix<float,4,4>::MakeRotateY(float rad) {
+	Matrix<float,4,4> result;
 
 	result.xmMatrix_ = DirectX::XMMatrixRotationY(rad);
 
 	return result;
 }
 
-Mat4x4 Mat4x4::MakeRotateZ(float rad) {
-	Mat4x4 result;
+Matrix<float,4,4> Matrix<float,4,4>::MakeRotateZ(float rad) {
+	Matrix<float,4,4> result;
 
 	result.xmMatrix_ = DirectX::XMMatrixRotationZ(rad);
 
 	return result;
 }
 
-Mat4x4 Mat4x4::MakeRotate(const Vector3& rad) {
+Matrix<float,4,4> Matrix<float,4,4>::MakeRotate(const Vector3& rad) {
 	return DirectX::XMMatrixRotationRollPitchYawFromVector({ rad.x,rad.y, rad.z });
 }
 
-Mat4x4 Mat4x4::MakeRotate(const Quaternion& rad)
+Matrix<float,4,4> Matrix<float,4,4>::MakeRotate(const Quaternion& rad)
 {
 	return DirectX::XMMatrixRotationQuaternion(rad.m128);
 }
 
-Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Vector3& rad, const Vector3& translate) {
-	Mat4x4 result;
+Matrix<float,4,4> Matrix<float,4,4>::MakeAffin(const Vector3& scale, const Vector3& rad, const Vector3& translate) {
+	Matrix<float,4,4> result;
 
 	result.xmMatrix_ = DirectX::XMMatrixAffineTransformation({ scale.x, scale.y, scale.z }, {}, Quaternion::EulerToQuaternion(rad).m128, {translate.x,translate.y,translate.z});
 
@@ -69,25 +65,25 @@ Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Vector3& rad, const Vector3
 	return result;
 }
 
-Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Quaternion& rad, const Vector3& translate)
+Matrix<float,4,4> Matrix<float,4,4>::MakeAffin(const Vector3& scale, const Quaternion& rad, const Vector3& translate)
 {
-	Mat4x4 result;
+	Matrix<float,4,4> result;
 
 	result.xmMatrix_ = DirectX::XMMatrixAffineTransformation({ scale.x, scale.y, scale.z }, {}, rad.m128, { translate.x,translate.y,translate.z });
 
 	return result;
 }
 
-Mat4x4 Mat4x4::MakeAffin(const Vector3& scale, const Vector3& from, const Vector3& to, const Vector3& translate) {
-	Mat4x4 result;
+Matrix<float,4,4> Matrix<float,4,4>::MakeAffin(const Vector3& scale, const Vector3& from, const Vector3& to, const Vector3& translate) {
+	Matrix<float,4,4> result;
 
 	result.xmMatrix_ = DirectX::XMMatrixAffineTransformation({ scale.x, scale.y, scale.z }, {}, Quaternion::DirectionToDirection(from, to).m128, { translate.x,translate.y,translate.z });
 
 	return result;
 }
 
-Mat4x4 Mat4x4::MakePerspectiveFov(float fovY, float aspectRatio, float nearClip, float farClip) {
-	Mat4x4 result;
+Matrix<float,4,4> Matrix<float,4,4>::MakePerspectiveFov(float fovY, float aspectRatio, float nearClip, float farClip) {
+	Matrix<float,4,4> result;
 
 	/*
 	result[0][0] = (1.0f / aspectRatio) * (1.0f / std::tan(fovY / 2.0f));
@@ -102,8 +98,8 @@ Mat4x4 Mat4x4::MakePerspectiveFov(float fovY, float aspectRatio, float nearClip,
 	return result;
 }
 
-Mat4x4 Mat4x4::MakeOrthographic(float width, float height, float nearClip, float farClip) {
-	Mat4x4 result;
+Matrix<float,4,4> Matrix<float,4,4>::MakeOrthographic(float width, float height, float nearClip, float farClip) {
+	Matrix<float,4,4> result;
 
 	/*
 	result[0][0] = 2.0f / (right - left);
@@ -121,8 +117,8 @@ Mat4x4 Mat4x4::MakeOrthographic(float width, float height, float nearClip, float
 	return result;
 }
 
-Mat4x4 Mat4x4::MakeViewPort(float left, float top, float width, float height, float minDepth, float maxDepth) {
-	Mat4x4 result;
+Matrix<float,4,4> Matrix<float,4,4>::MakeViewPort(float left, float top, float width, float height, float minDepth, float maxDepth) {
+	Matrix<float,4,4> result;
 
 	result[0][0] = width / 2.0f;
 	result[1][1] = height / -2.0f;
@@ -136,7 +132,7 @@ Mat4x4 Mat4x4::MakeViewPort(float left, float top, float width, float height, fl
 	return result;
 }
 
-Mat4x4 Mat4x4::DirectionToDirection(const Vector3& from, const Vector3& to) {
+Matrix<float,4,4> Matrix<float,4,4>::DirectionToDirection(const Vector3& from, const Vector3& to) {
 	Vector3 normal;
 
 	if (from.Dot(to) == -1.0f) {
@@ -155,7 +151,7 @@ Mat4x4 Mat4x4::DirectionToDirection(const Vector3& from, const Vector3& to) {
 	float theataCos = from.Dot(to);
 	float theataSin = from.Cross(to).Length();
 
-	Mat4x4 result = 
+	Matrix<float,4,4> result = 
 		vector_type{
 			normal.x * normal.x * (1.0f - theataCos) + theataCos,
 			normal.x * normal.y * (1.0f - theataCos) + normal.z * theataSin,
@@ -179,23 +175,23 @@ Mat4x4 Mat4x4::DirectionToDirection(const Vector3& from, const Vector3& to) {
 	return result;
 }
 
-Mat4x4 Mat4x4::MakeRotateAxisAngle(const Vector3& axis, float angle) {
+Matrix<float,4,4> Matrix<float,4,4>::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	return DirectX::XMMatrixRotationAxis({ axis.x,axis.y,axis.z }, angle);
 }
 
 
-Vector3 Mat4x4::GetTranslate() const
+Vector3 Matrix<float,4,4>::GetTranslate() const
 {
 	return Vector3(matrix_[3][0], matrix_[3][1], matrix_[3][2]);
 }
-Vector3 Mat4x4::GetScale() const {
+Vector3 Matrix<float,4,4>::GetScale() const {
 	return Vector3(
 		Lamb::Math::Length({ matrix_[0][0], matrix_[0][1], matrix_[0][2] }),
 		Lamb::Math::Length({ matrix_[1][0], matrix_[1][1], matrix_[1][2] }),
 		Lamb::Math::Length({ matrix_[2][0], matrix_[2][1], matrix_[2][2]})
 	);
 }
-Quaternion Mat4x4::GetRotate() const {
+Quaternion Matrix<float,4,4>::GetRotate() const {
 	Quaternion rotate;
 
 	rotate.m128 = DirectX::XMQuaternionRotationMatrix(this->xmMatrix_);
@@ -203,7 +199,7 @@ Quaternion Mat4x4::GetRotate() const {
 	return rotate.Normalize();
 }
 
-void Mat4x4::Decompose(Vector3& scale, Quaternion& rotate, Vector3& translate) const {
+void Matrix<float,4,4>::Decompose(Vector3& scale, Quaternion& rotate, Vector3& translate) const {
 	DirectX::XMMatrixDecompose(
 		reinterpret_cast<DirectX::XMVECTOR*>(scale.data()),
 		reinterpret_cast<DirectX::XMVECTOR*>(rotate.data()),
@@ -212,7 +208,7 @@ void Mat4x4::Decompose(Vector3& scale, Quaternion& rotate, Vector3& translate) c
 		);
 }
 
-void Mat4x4::Decompose(Vector3& scale, Vector3& rotate, Vector3& translate) const {
+void Matrix<float,4,4>::Decompose(Vector3& scale, Vector3& rotate, Vector3& translate) const {
 	Quaternion quaternion;
 	DirectX::XMMatrixDecompose(
 		reinterpret_cast<DirectX::XMVECTOR*>(scale.data()),
