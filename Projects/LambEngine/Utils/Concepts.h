@@ -47,4 +47,10 @@ namespace Lamb {
 
 	template<class T>
 	concept IsNotFloat = !std::is_floating_point_v<T>;
+
+	template<typename T>
+	concept IsObject = std::is_object_v<T>;
+
+	template<typename T>
+	concept IsNotObject = !std::is_object_v<T>;
 }
