@@ -177,36 +177,41 @@ namespace Lamb {
 
 #if !_HAS_CXX20
     template<typename Type, size_t kSize>
-    [[nodiscard]] constexpr bool operator==(const Array<Type, kSize>& left, const Array<Type, kSize>& right) {
+    [[nodiscard]] constexpr bool operator!=(const Array<Type, kSize>& left, const Array<Type, kSize>& right) {
         return not (left == right);
     }
 #endif // !_HAS_CXX20
 
 #ifdef __cpp_lib_concepts
    template <class Type, size_t kSize>
-        [[nodiscard]] constexpr std::_Synth_three_way_result<Type> operator<=>(
-            const Array<Type, kSize>& left, const Array<Type, kSize>& right) {
+   [[nodiscard]] constexpr std::_Synth_three_way_result<Type> operator<=>(
+   const Array<Type, kSize>& left, const Array<Type, kSize>& right) {
         return std::lexicographical_compare_three_way(
-            left.data(), left.data() + kSize, right.data(), right.data() + kSize, std::_Synth_three_way{});
+            left.data(), 
+            left.data() + kSize, 
+            right.data(), 
+            right.data() + kSize, 
+            std::_Synth_three_way{}
+        );
    }
 #else
     template <class Type, size_t kSize>
-    [[nodiscard]] _CONSTEXPR20 bool operator<(const array<Type, kSize>& left, const array<Type, kSize>& right) {
-        return _STD lexicographical_compare(left.data(), left.data() + kSize, right.data(), right.data() + kSize);
+    [[nodiscard]] constexpr bool operator<(const Array<Type, kSize>& left, const Array<Type, kSize>& right) {
+        return std::lexicographical_compare(left.data(), left.data() + kSize, right.data(), right.data() + kSize);
     }
 
     template <class Type, size_t kSize>
-    [[nodiscard]] _CONSTEXPR20 bool operator>(const array<Type, kSize>& left, const array<Type, kSize>& right) {
+    [[nodiscard]] constexpr bool operator>(const Array<Type, kSize>& left, const Array<Type, kSize>& right) {
         return right < left;
     }
 
     template <class Type, size_t kSize>
-    [[nodiscard]] _CONSTEXPR20 bool operator<=(const array<Type, kSize>& left, const array<Type, kSize>& right) {
+    [[nodiscard]] constexpr bool operator<=(const Array<Type, kSize>& left, const Array<Type, kSize>& right) {
         return !(right < left);
     }
 
     template <class Type, size_t kSize>
-    [[nodiscard]] _CONSTEXPR20 bool operator>=(const array<Type, kSize>& left, const array<Type, kSize>& right) {
+    [[nodiscard]] constexpr bool operator>=(const Array<Type, kSize>& left, const Array<Type, kSize>& right) {
         return !(left < right);
     }
 #endif
