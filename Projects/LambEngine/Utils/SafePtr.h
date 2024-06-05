@@ -41,7 +41,11 @@ namespace Lamb {
 			return *this;
 		}
 		SafePtr& operator=(const SafePtr&) = default;
-		SafePtr& operator=(SafePtr&&) = default;
+		SafePtr& operator=(SafePtr&& right) noexcept {
+			ptr_ = right.release();
+
+			return *this;
+		}
 
 	public:
 		explicit operator bool() const {
@@ -64,35 +68,47 @@ namespace Lamb {
 			return ptr_ != right;
 		}
 
-		T** operator&()  {
+		T*const* operator&()  {
 			return &ptr_;
 		}
 
 		T* operator->()  {
-			NullPointerException(ErrorPlace);
+			if (not ptr_) [[unlikely]] {
+				NullPointerException(ErrorPlace);
+			}
 			return ptr_;
 		}
-		const T* operator->() const  {
-			NullPointerException(ErrorPlace);
+		T* operator->() const  {
+			if (not ptr_) [[unlikely]] {
+				NullPointerException(ErrorPlace);
+			}
 			return ptr_;
 		}
 
 		T& operator*()  {
-			NullPointerException(ErrorPlace);
+			if (not ptr_) [[unlikely]] {
+				NullPointerException(ErrorPlace);
+			}
 			return *ptr_;
 		}
 
-		const T& operator*() const  {
-			NullPointerException(ErrorPlace);
+		T& operator*() const  {
+			if (not ptr_) [[unlikely]] {
+				NullPointerException(ErrorPlace);
+			}
 			return *ptr_;
 		}
 
 		T& operator[](size_t index)  {
-			NullPointerException(ErrorPlace);
+			if (not ptr_) [[unlikely]] {
+				NullPointerException(ErrorPlace);
+			}
 			return (ptr_[index]);
 		}
-		const T& operator[](size_t index) const  {
-			NullPointerException(ErrorPlace);
+		T& operator[](size_t index) const  {
+			if (not ptr_) [[unlikely]] {
+				NullPointerException(ErrorPlace);
+			}
 			return (ptr_[index]);
 		}
 
@@ -174,9 +190,7 @@ namespace Lamb {
 			const std::string& sourceFileName,
 			uint32_t codeLineNumber
 		) const {
-			if (not ptr_) {
-				throw Lamb::Error::Code<Name>("NullPointerException", funcName, sourceFileName, codeLineNumber);
-			}
+			throw Lamb::Error::Code<Name>("NullPointerException", funcName, sourceFileName, codeLineNumber);
 		}
 
 	private:
