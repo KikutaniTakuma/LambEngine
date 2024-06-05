@@ -19,7 +19,7 @@ TextureManager* const TextureManager::GetInstance() {
 
 void TextureManager::Initialize() {
 	instance_.reset(new TextureManager());
-	instance_.NullPointerException<TextureManager>(ErrorPlace);
+	instance_.NullCheck<TextureManager>(ErrorPlace);
 	instance_->LoadTexture(kWhiteTexturePath);
 }
 
