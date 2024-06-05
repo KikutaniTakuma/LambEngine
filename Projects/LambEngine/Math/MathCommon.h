@@ -43,13 +43,15 @@ inline int64_t operator""_64(size_t i) {
 	return i;
 }
 
+#if !_HAS_CXX23
 using float32_t = float;
 using float64_t = double;
+#endif // !_HAS_CXX23
 
-inline float32_t operator""_f32(long double i) {
+inline float operator""_f32(long double i) {
 	return static_cast<float>(i);
 }
 
-inline float64_t operator""_f64(long double i) {
+inline double operator""_f64(long double i) {
 	return static_cast<double>(i);
 }
