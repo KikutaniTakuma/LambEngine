@@ -3,7 +3,7 @@
 #include <filesystem>
 
 /// <summary>
-/// 便利なあれやこれや
+/// ファイル関係の関数やクラス
 /// </summary>
 namespace Lamb {
 	/// <summary>
