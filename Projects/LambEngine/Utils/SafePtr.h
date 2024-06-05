@@ -68,7 +68,7 @@ namespace Lamb {
 			return ptr_ != right;
 		}
 
-		T*const* operator&()  {
+		T** operator&()  {
 			return &ptr_;
 		}
 
@@ -185,7 +185,19 @@ namespace Lamb {
 		/// </summary>
 		/// <param name="funcName">関数名</param>
 		template<class Name = SafePtr<T>>
-		inline void NullPointerException(
+		inline void NullCheck(
+			const std::string& funcName,
+			const std::string& sourceFileName,
+			uint32_t codeLineNumber
+		) const {
+			if (not ptr_) {
+				NullPointerException<Name>(funcName, sourceFileName, codeLineNumber);
+			}
+		}
+
+	private:
+		template<class Name = SafePtr<T>>
+		void NullPointerException(
 			const std::string& funcName,
 			const std::string& sourceFileName,
 			uint32_t codeLineNumber
