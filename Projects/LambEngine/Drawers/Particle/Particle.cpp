@@ -8,7 +8,7 @@
 #include "Utils/Random.h"
 #include "Drawers/DrawerManager.h"
 
-#include "../externals/nlohmann/json.hpp"
+#include "json.hpp"
 #include <cassert>
 #include <filesystem>
 #include <fstream>
