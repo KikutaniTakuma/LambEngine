@@ -1,0 +1,32 @@
+#pragma once
+#include "../Object.h"
+#include "Drawers/Model/Model.h"
+
+
+class ModelRenderComp : public IComp{
+public:
+	using IComp::IComp;
+
+	~ModelRenderComp() = default;
+
+	void Init() override;
+
+	void Update0() override;
+
+	void Draw() override;
+
+	void Load();
+
+	void SetFileNmae(const std::string& fileName) {
+		fileName_ = fileName;
+	}
+
+private:
+	std::string fileName_;
+
+	Lamb::SafePtr<Model> model_;
+
+	class RenderDataComp* renderDataComp_;
+
+	class TransformComp* transformComp_;
+};
