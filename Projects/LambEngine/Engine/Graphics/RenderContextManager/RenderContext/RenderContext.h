@@ -7,7 +7,7 @@
 
 #include <typeinfo>
 #include <concepts>
-#include "Utils/Array.h"
+#include <array>
 #include <memory>
 
 
@@ -258,7 +258,7 @@ public:
         // テクスチャ
         commandlist->SetGraphicsRootDescriptorTable(3, descriptorHeap->GetGpuHeapHandle(0));
 
-        Lamb::Array vertexBuffer = {
+        std::array vertexBuffer = {
             mesh_->vertexView,
             skinCluster_->infliuenceBufferView
         };
@@ -406,28 +406,28 @@ public:
     }
 
 public:
-    Lamb::Array<std::unique_ptr<RenderData>, BlendType::kNum>::iterator begin() {
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::iterator begin() {
         return renderDatas_.begin();
     }
-    Lamb::Array<std::unique_ptr<RenderData>, BlendType::kNum>::iterator end() {
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::iterator end() {
         return renderDatas_.end();
     }
-    Lamb::Array<std::unique_ptr<RenderData>, BlendType::kNum>::const_iterator cbegin() const {
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_iterator cbegin() const {
         return renderDatas_.cbegin();
     }
-    Lamb::Array<std::unique_ptr<RenderData>, BlendType::kNum>::const_iterator cend() const {
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_iterator cend() const {
         return renderDatas_.cend();
     }
-    Lamb::Array<std::unique_ptr<RenderData>, BlendType::kNum>::reverse_iterator rbegin() {
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::reverse_iterator rbegin() {
         return renderDatas_.rbegin();
     }
-    Lamb::Array<std::unique_ptr<RenderData>, BlendType::kNum>::reverse_iterator rend() {
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::reverse_iterator rend() {
         return renderDatas_.rend();
     }
-    Lamb::Array<std::unique_ptr<RenderData>, BlendType::kNum>::const_reverse_iterator crbegin() const {
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_reverse_iterator crbegin() const {
         return renderDatas_.crbegin();
     }
-    Lamb::Array<std::unique_ptr<RenderData>, BlendType::kNum>::const_reverse_iterator crend() const {
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_reverse_iterator crend() const {
         return renderDatas_.crend();
     }
 
@@ -439,5 +439,5 @@ public:
     }
 
 private:
-    Lamb::Array<std::unique_ptr<RenderData>, BlendType::kNum> renderDatas_;
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum> renderDatas_;
 };

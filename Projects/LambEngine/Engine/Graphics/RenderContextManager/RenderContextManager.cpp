@@ -87,35 +87,35 @@ Shader RenderContextManager::LoadShader(const ShaderFileNames& shaderName)
 	return result;
 }
 
-Lamb::Array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipelines(Shader shader)
+std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipelines(Shader shader)
 {
-	Lamb::Array<Pipeline*, BlendType::kNum> result = {nullptr};
+	std::array<Pipeline*, BlendType::kNum> result = {nullptr};
 
 	auto srvHeap = CbvSrvUavHeap::GetInstance();
 
 
-	Lamb::Array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].NumDescriptors = 1;
 	cbvRange[0].BaseShaderRegister = 0;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 
 	uint32_t baseShaderRegister = 0;
-	Lamb::Array<D3D12_DESCRIPTOR_RANGE, 1> srvRange = {};
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> srvRange = {};
 	srvRange[0].NumDescriptors = 3;
 	srvRange[0].BaseShaderRegister = baseShaderRegister;
 	srvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
 	srvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	baseShaderRegister = srvRange[0].NumDescriptors;
 
-	Lamb::Array<D3D12_DESCRIPTOR_RANGE, 1> texRange = {};
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> texRange = {};
 	texRange[0].NumDescriptors = srvHeap->GetMaxTexture();
 	texRange[0].BaseShaderRegister = baseShaderRegister;
 	texRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
 	texRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 
 
-	Lamb::Array<D3D12_ROOT_PARAMETER, 3> rootPrams = {};
+	std::array<D3D12_ROOT_PARAMETER, 3> rootPrams = {};
 	rootPrams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootPrams[0].DescriptorTable.NumDescriptorRanges = UINT(cbvRange.size());
 	rootPrams[0].DescriptorTable.pDescriptorRanges = cbvRange.data();
@@ -153,32 +153,32 @@ Lamb::Array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipe
 	return result;
 }
 
-Lamb::Array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimationGraphicsPipelines(Shader shader)
+std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimationGraphicsPipelines(Shader shader)
 {
-	Lamb::Array<Pipeline*, BlendType::kNum> result = { nullptr };
+	std::array<Pipeline*, BlendType::kNum> result = { nullptr };
 
 	auto srvHeap = CbvSrvUavHeap::GetInstance();
 
 
-	Lamb::Array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].NumDescriptors = 1;
 	cbvRange[0].BaseShaderRegister = 0;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 
-	Lamb::Array<D3D12_DESCRIPTOR_RANGE, 1> srvRange = {};
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> srvRange = {};
 	srvRange[0].NumDescriptors = 3;
 	srvRange[0].BaseShaderRegister = 0;
 	srvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
 	srvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 
-	Lamb::Array<D3D12_DESCRIPTOR_RANGE, 1> skinRange = {};
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> skinRange = {};
 	skinRange[0].NumDescriptors = 1;
 	skinRange[0].BaseShaderRegister = 4;
 	skinRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
 	skinRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 
-	Lamb::Array<D3D12_DESCRIPTOR_RANGE, 1> texRange = {};
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> texRange = {};
 	texRange[0].NumDescriptors = srvHeap->GetMaxTexture();
 	texRange[0].BaseShaderRegister = 3;
 	texRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
@@ -186,7 +186,7 @@ Lamb::Array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimatio
 
 
 
-	Lamb::Array<D3D12_ROOT_PARAMETER, 4> rootPrams = {};
+	std::array<D3D12_ROOT_PARAMETER, 4> rootPrams = {};
 	rootPrams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootPrams[0].DescriptorTable.NumDescriptorRanges = UINT(cbvRange.size());
 	rootPrams[0].DescriptorTable.pDescriptorRanges = cbvRange.data();

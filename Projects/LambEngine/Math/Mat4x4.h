@@ -25,14 +25,14 @@ public:
 	using const_reference = const value_type&;
 
 
-	using width_type = Lamb::Array<value_type, kWidth>;
+	using width_type = std::array<value_type, kWidth>;
 	using width_pointer = width_type*;
 	using width_const_pointer = const width_type*;
 	using width_reference = width_type&;
 	using width_const_reference = const width_type&;
-	using height_type = Lamb::Array<width_type, kHeight>;
+	using height_type = std::array<width_type, kHeight>;
 
-	using vector_type = Lamb::Array<value_type, kHeight* kWidth>;
+	using vector_type = std::array<value_type, kHeight* kWidth>;
 	using vector_pointer = vector_type*;
 	using vector_const_pointer = const vector_type*;
 	using vector_reference = vector_type&;

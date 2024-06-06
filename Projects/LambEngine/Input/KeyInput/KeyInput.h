@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/Array.h"
+#include <array>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
@@ -62,8 +62,8 @@ private:
 	Lamb::LambPtr<IDirectInputDevice8> keyBoard_;
 
 	// キー入力バッファー
-	Lamb::Array<BYTE, 0x100> key_;
-	Lamb::Array<BYTE, 0x100> preKey_;
+	std::array<BYTE, 0x100> key_;
+	std::array<BYTE, 0x100> preKey_;
 
 	bool initalizeSucceeded_;
 };

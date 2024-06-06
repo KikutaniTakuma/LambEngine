@@ -5,7 +5,7 @@
 
 #include <cassert>
 #include <format>
-#include "Utils/Array.h"
+#include <array>
 
 #include "Error/Error.h"
 #include "Utils/SafeDelete.h"
@@ -88,12 +88,12 @@ void DirectXDevice::SettingAdapter() {
 void DirectXDevice::CreateDevice() {
 	// Deviceの初期化
 	// 使用しているデバイスによってD3D_FEATURE_LEVELの対応バージョンが違うので成功するまでバージョンを変えて繰り返す
-	Lamb::Array featureLevels = {
+	std::array featureLevels = {
 		D3D_FEATURE_LEVEL_12_2,
 		D3D_FEATURE_LEVEL_12_1,
 		D3D_FEATURE_LEVEL_12_0,
 	};
-	Lamb::Array featureLevelString = {
+	std::array featureLevelString = {
 		"12.2", "12.1", "12.0"
 	};
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "Utils/Array.h"
+#include <array>
 
 #include "Engine/Graphics/PipelineObject/PeraPipeline/PeraPipeline.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "DescriptorHeap.h"
-#include "Utils/Array.h"
+#include <array>
 #include <initializer_list>
 #include "Utils/SafePtr.h"
 
@@ -38,7 +38,7 @@ private:
 
 public:
 	void CreateBackBuffer(
-		Lamb::Array<Lamb::LambPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber_>& backBuffer,
+		std::array<Lamb::LambPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber_>& backBuffer,
 		IDXGISwapChain4* const swapChain
 		);
 	

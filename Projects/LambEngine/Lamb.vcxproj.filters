@@ -638,8 +638,5 @@
     <ClInclude Include="Utils\FileUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\Array.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

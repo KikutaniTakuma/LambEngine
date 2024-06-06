@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/Array.h"
+#include <array>
 #include <immintrin.h>
 #include "Utils/Concepts.h"
 #include "Mat4x4.h"
@@ -31,7 +31,7 @@ public:
 	Vector4(const class Vector3& vec3, float w) noexcept;
 	Vector4(const class Vector2& vec2, float z, float w) noexcept;
 	Vector4(uint32_t right) noexcept;
-	Vector4(const Lamb::Array<float, 4>& right) noexcept;
+	Vector4(const std::array<float, 4>& right) noexcept;
 public:
 	~Vector4() = default;
 
@@ -212,7 +212,7 @@ public:
 	/// </summary>
 public:
 	union {
-		Lamb::Array<float, arraySize> m;
+		std::array<float, arraySize> m;
 		struct {
 			float x;
 			float y;

@@ -260,7 +260,6 @@
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="Transform\Transform.h" />
-    <ClInclude Include="Utils\Array.h" />
     <ClInclude Include="Utils\Concepts.h" />
     <ClInclude Include="Utils\ConvertString.h" />
     <ClInclude Include="Utils\Easeing.h" />

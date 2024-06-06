@@ -32,7 +32,7 @@ Vector4::Vector4(uint32_t right) noexcept {
 	*this = right;
 }
 
-Vector4::Vector4(const Lamb::Array<float, 4>& right) noexcept
+Vector4::Vector4(const std::array<float, 4>& right) noexcept
 {
 	m = right;
 }

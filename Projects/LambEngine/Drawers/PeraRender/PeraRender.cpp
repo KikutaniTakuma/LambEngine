@@ -68,7 +68,7 @@ void PeraRender::Initialize(const std::string& psFileName) {
 	}
 	indexResource_->Unmap(0, nullptr);
 
-	Lamb::Array<PeraVertexData, 4> pv = {
+	std::array<PeraVertexData, 4> pv = {
 		Vector3{ -0.5f,  0.5f, 0.1f }, Vector2{ 0.0f, 1.0f },
 		Vector3{  0.5f,  0.5f, 0.1f }, Vector2{ 0.0f, 0.0f },
 		Vector3{  0.5f, -0.5f, 0.1f }, Vector2{ 1.0f, 1.0f },
@@ -106,7 +106,7 @@ void PeraRender::Initialize(PeraPipeline* pipelineObject) {
 	}
 	indexResource_->Unmap(0, nullptr);
 
-	Lamb::Array<PeraVertexData, 4> pv = {
+	std::array<PeraVertexData, 4> pv = {
 		Vector3{ -0.5f,  0.5f, 0.1f }, Vector2{ 0.0f, 1.0f },
 		Vector3{  0.5f,  0.5f, 0.1f }, Vector2{ 0.0f, 0.0f },
 		Vector3{  0.5f, -0.5f, 0.1f }, Vector2{ 1.0f, 1.0f },
@@ -155,14 +155,14 @@ void PeraRender::Draw(
 	const Vector2& uv0 = { uvPibot.x, uvPibot.y + uvSize.y }; const Vector2& uv1 = uvSize + uvPibot;
 	const Vector2& uv2 = { uvPibot.x + uvSize.x, uvPibot.y }; const Vector2& uv3 = uvPibot;
 
-	const Lamb::Array<Vector3, 4> localpos{
+	const std::array<Vector3, 4> localpos{
 			Vector3{ -0.5f,  0.5f, 0.0f },
 			Vector3{  0.5f,  0.5f, 0.0f },
 			Vector3{  0.5f, -0.5f, 0.0f },
 			Vector3{ -0.5f, -0.5f, 0.0f },
 	};
 
-	Lamb::Array<PeraVertexData, 4> pv = {
+	std::array<PeraVertexData, 4> pv = {
 		localpos[0], uv3,
 		localpos[1], uv2,
 		localpos[2], uv1,

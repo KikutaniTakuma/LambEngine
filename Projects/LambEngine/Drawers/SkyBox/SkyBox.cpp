@@ -1,10 +1,10 @@
 #include "SkyBox.h"
-#include "Utils/Array.h"
+#include <array>
 #include "Math/Vector4.h"
 #include "Math/MathCommon.h"
 
 SkyBox::SkyBox() {
-    Lamb::Array vertexData = {
+    std::array vertexData = {
         Vector4(  1.0f,  1.0f, -1.0f, 1.0f ),
         Vector4(  1.0f, -1.0f, -1.0f, 1.0f ),
         Vector4(  1.0f,  1.0f,  1.0f, 1.0f ),
@@ -15,7 +15,7 @@ SkyBox::SkyBox() {
         Vector4( -1.0f, -1.0f,  1.0f, 1.0f ),
     };
 
-    Lamb::Array indexData = {
+    std::array indexData = {
         0_u16, 2_u16, 4_u16,
         3_u16, 7_u16, 2_u16,
         7_u16, 5_u16, 6_u16,

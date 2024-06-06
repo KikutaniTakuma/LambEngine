@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/Array.h"
+#include <array>
 #include "Mat4x4.h"
 
 /// <summary>
