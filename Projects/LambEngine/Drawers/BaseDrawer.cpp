@@ -1,5 +1,5 @@
 #include "BaseDrawer.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #ifdef _DEBUG

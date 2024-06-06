@@ -2,7 +2,7 @@
 #include <memory>
 #include <unordered_map>
 #include "Audio/Audio.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
 
 /// <summary>
@@ -31,7 +31,8 @@ private:
 	static Lamb::SafePtr<AudioManager> instance_;
 
 public:
-	Audio* const Load(const std::string& fileName);
+	void Load(const std::string& fileName);
+	Audio* const Get(const std::string& fileName);
 
 	void Unload(const std::string& fileName);
 	void Unload(Audio* audio);

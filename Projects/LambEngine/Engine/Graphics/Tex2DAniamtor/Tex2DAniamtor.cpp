@@ -1,5 +1,5 @@
 #include "Tex2DAniamtor.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 
 void Tex2DAniamtor::Update() {
 

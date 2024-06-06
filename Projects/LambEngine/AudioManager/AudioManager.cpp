@@ -1,9 +1,10 @@
 #include "AudioManager.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/ExecutionLog.h"
+#include "Utils/EngineInfo.h"
 #include <filesystem>
 #include "Error/Error.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
+#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
 Lamb::SafePtr<AudioManager> AudioManager::instance_ = nullptr;
 void AudioManager::Inititalize() {
@@ -40,7 +41,7 @@ AudioManager::~AudioManager() {
 	Lamb::AddLog("Finalize AudioManager succeeded");
 }
 
-Audio* const AudioManager::Load(const std::string& fileName) {
+void AudioManager::Load(const std::string& fileName) {
 	if (!std::filesystem::exists(std::filesystem::path(fileName))) {
 		throw Lamb::Error::Code<AudioManager>("There is not this file -> " + fileName, ErrorPlace);
 	}
@@ -52,9 +53,20 @@ Audio* const AudioManager::Load(const std::string& fileName) {
 		auto audio = std::make_unique<Audio>();
 		audio->Load(fileName);
 		audios_.insert({ fileName, std::move(audio) });
+
+		ResourceLoadLog::Set(fileName);
+	}
+}
+
+Audio* const AudioManager::Get(const std::string& fileName)
+{
+	auto itr = audios_.find(fileName);
+
+	if (itr == audios_.end()) {
+		throw Lamb::Error::Code<AudioManager>("This file is not loaded -> " + fileName, ErrorPlace);
 	}
 
-	return audios_[fileName].get();
+	return itr->second.get();
 }
 
 void AudioManager::Unload(const std::string& fileName)

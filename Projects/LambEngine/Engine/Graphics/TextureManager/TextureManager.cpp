@@ -1,12 +1,14 @@
 #include "TextureManager.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 #include <cassert>
 #include <filesystem>
 
 #include "Error/Error.h"
+
+#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
 Lamb::SafePtr<TextureManager> TextureManager::instance_ = nullptr;
 const std::string TextureManager::kWhiteTexturePath = "./Resources/EngineResources/white2x2.png";
@@ -17,7 +19,7 @@ TextureManager* const TextureManager::GetInstance() {
 
 void TextureManager::Initialize() {
 	instance_.reset(new TextureManager());
-	instance_.NullPointerException<TextureManager>(ErrorPlace);
+	instance_.NullCheck<TextureManager>(ErrorPlace);
 	instance_->LoadTexture(kWhiteTexturePath);
 }
 
@@ -42,8 +44,8 @@ TextureManager::~TextureManager() {
 }
 
 
-uint32_t TextureManager::LoadTexture(const std::string& fileName) {
-	if (!std::filesystem::exists(fileName)) {
+void TextureManager::LoadTexture(const std::string& fileName) {
+	if (!std::filesystem::exists(fileName)) [[unlikely]] {
 		throw Lamb::Error::Code<TextureManager>("This file is not exist -> " + fileName, ErrorPlace);
 	}
 
@@ -52,8 +54,8 @@ uint32_t TextureManager::LoadTexture(const std::string& fileName) {
 		auto tex = std::make_unique<Texture>();
 		tex->Load(fileName, directXCommand_->GetCommandList());
 
-		if (!tex->isLoad_) {
-			return 0u;
+		if (not tex->isLoad_) [[unlikely]] {
+			throw Lamb::Error::Code<TextureManager>("Texture::Load failed -> " + fileName, ErrorPlace);
 		}
 
 		srvHeap_->CreateView(*tex);
@@ -61,9 +63,20 @@ uint32_t TextureManager::LoadTexture(const std::string& fileName) {
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 
 		thisFrameLoadFlg_ = true;
+
+		ResourceLoadLog::Set(fileName);
+	}
+}
+
+uint32_t TextureManager::GetHandle(const std::string& fileName)
+{
+	auto itr = textures_.find(fileName);
+
+	if (itr == textures_.end()) [[unlikely]] {
+		throw Lamb::Error::Code<TextureManager>("This file is not loaded -> " + fileName , ErrorPlace);
 	}
 
-	return textures_[fileName]->GetHandleUINT();
+	return itr->second->GetHandleUINT();
 }
 
 Texture* const TextureManager::GetTexture(const std::string& fileName) {

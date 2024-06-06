@@ -1,5 +1,5 @@
 #include "CbvSrvUavHeap.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ConvertString.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
@@ -9,7 +9,7 @@
 #include <cmath>
 #include <algorithm>
 #include <numeric>
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
 

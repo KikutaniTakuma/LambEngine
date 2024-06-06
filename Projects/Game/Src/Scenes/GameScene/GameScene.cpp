@@ -1,9 +1,22 @@
 #include "GameScene.h"
 #include "AudioManager/AudioManager.h"
+#include "GameObject/Comp/ModelRenderComp.h"
 
 GameScene::GameScene() :
 	BaseScene(BaseScene::ID::Game)
 {}
+
+void GameScene::Load()
+{
+	levelData_.reset(LoadLevel("SceneData/GameScene.json"));
+
+	for (auto& i : levelData_->objects) {
+		if (i->HasTag("Model")) {
+			auto modelComp = i->GetComp<ModelRenderComp>();
+			modelComp->Load();
+		}
+	}
+}
 
 void GameScene::Initialize() {
 	currentCamera_->farClip = 3000.0f;
@@ -11,14 +24,11 @@ void GameScene::Initialize() {
 	
 	/*drawerManager_->LoadModel("./Resources/Common/Hololive/Watame/Watame.obj");
 	model2_ = drawerManager_->GetModel("./Resources/Common/Hololive/Watame/Watame.obj");*/
-	model_ = std::make_unique<AnimationModel>();
-	model_->Load("./Resources/Common/human/sneakWalk.gltf");
-	model_->GetAnimator().SetLoopAnimation(true);
-	model_->GetAnimator().Start();
-
-	animationManager_->LoadAnimations("./Resources/Common/human/walk.gltf");
-	animations_ = animationManager_->GetAnimations("./Resources/Common/human/walk.gltf");
-	animations2_ = animationManager_->GetAnimations("./Resources/Common/human/sneakWalk.gltf");
+	
+	for (auto& i : levelData_->objects) {
+		i->Init();
+		i->SetCamera(currentCamera_.get());
+	}
 }
 
 void GameScene::Finalize() {
@@ -29,32 +39,13 @@ void GameScene::Update() {
 	currentCamera_->Debug("camera");
 	currentCamera_->Update();
 
-	if (input_->GetKey()->Pushed(DIK_1)) {
-		model_->GetAnimator().SetAnimations(animations_);
+	for (auto& i : levelData_->objects) {
+		i->Update();
 	}
-	else if (input_->GetKey()->Pushed(DIK_2)) {
-		model_->GetAnimator().SetAnimations(animations2_);
-	}
-
-	model_->Update();
-
-	transform_.Debug("model");
-
-	line_.Debug("error");
 }
 
 void GameScene::Draw() {
-	model_->Draw(
-		transform_.GetMatrix(),
-		currentCamera_->GetViewProjection(),
-		std::numeric_limits<uint32_t>::max(),
-		BlendType::kNone,
-		true
-	);
-
-	line_.Draw(
-		currentCamera_->GetViewProjection()
-	);
-
-
+	for (auto& i : levelData_->objects) {
+		i->Draw();
+	}
 }

@@ -4,7 +4,7 @@
 #include <dxgi1_6.h>
 #pragma comment(lib, "dxgi.lib")
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 /// <summary>
 /// デバイス等の管理クラス

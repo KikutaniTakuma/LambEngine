@@ -1,12 +1,12 @@
 #include "WaterPipeline.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
-#include "Utils/Random/Random.h"
+#include "Utils/Random.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 
 #ifdef _DEBUG
 #include "imgui.h"

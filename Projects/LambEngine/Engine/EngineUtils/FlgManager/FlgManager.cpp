@@ -1,5 +1,5 @@
 #include "FlgManager.h"
-#include "Utils/Flg/Flg.h"
+#include "Utils/Flg.h"
 
 void FlgManager::AllFlgUpdate() const {
 	for (auto const i : flags_) {

@@ -117,12 +117,7 @@ Vector4& Vector4::operator*=(float scalar) noexcept {
 }
 
 Vector4 Vector4::operator/(float scalar) const noexcept {
-	Vector4 result = *this;
-	scalar = 1.0f / scalar;
-
-	result *= scalar;
-
-	return result;
+	return *this * (1.0f / scalar);
 }
 Vector4& Vector4::operator/=(float scalar) noexcept {
 	*this = *this / scalar;

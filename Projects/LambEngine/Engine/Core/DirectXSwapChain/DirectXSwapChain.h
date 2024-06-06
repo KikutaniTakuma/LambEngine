@@ -8,7 +8,7 @@
 #undef max
 #undef min
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 class DirectXSwapChain {
 private:
 	DirectXSwapChain();

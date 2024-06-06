@@ -1,7 +1,7 @@
 #include "DebugCamera.h"
 #include "Input/Input.h"
 #include "imgui.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 #include "Math/Quaternion.h"
 
 #undef max

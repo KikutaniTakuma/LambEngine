@@ -1,5 +1,5 @@
 #include "PostEffectManager.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 
 Lamb::SafePtr<PostEffectManager> PostEffectManager::instance_ = nullptr;
 

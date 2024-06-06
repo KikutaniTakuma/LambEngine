@@ -9,6 +9,20 @@
 /// カメラ
 /// </summary>
 class Camera {
+public:
+	static const Mat4x4& GetStaticViewProjection() {
+		return kViewProjection;
+	}
+	static const Mat4x4& GetStaticViewOthographics() {
+		return kViewOthographics;
+	}
+
+	static void InitStaticMatrix();
+
+private:
+	static Mat4x4 kViewProjection;
+	static Mat4x4 kViewOthographics;
+
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>

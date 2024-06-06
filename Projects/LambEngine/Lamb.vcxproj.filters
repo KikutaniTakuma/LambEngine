@@ -34,23 +34,11 @@
     <ClCompile Include="Drawers\StringOut\StringOut.cpp">
       <Filter>Drawers\StringOut</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\CsvLoad\CsvLoad.cpp">
-      <Filter>Utils\CsvLoad</Filter>
-    </ClCompile>
     <ClCompile Include="Input\Input.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\ConvertString\ConvertString.cpp">
-      <Filter>Utils\ConvertString</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\UtilsLib\UtilsLib.cpp">
-      <Filter>Utils\UtilsLib</Filter>
-    </ClCompile>
     <ClCompile Include="Drawers\Particle\Particle.cpp">
       <Filter>Drawers\Particle</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\ExecutionLog\ExecutionLog.cpp">
-      <Filter>Utils\ExecutionLog</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.cpp">
       <Filter>Engine\Core\DescriptorHeap</Filter>
@@ -85,15 +73,6 @@
     <ClCompile Include="Engine\EngineUtils\FrameInfo\FrameInfo.cpp">
       <Filter>Engine\EngineUtils\FrameInfo</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Random\Random.cpp">
-      <Filter>Utils\Random</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\Flg\Flg.cpp">
-      <Filter>Utils\Flg</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\ScreenOut\ScreenOut.cpp">
-      <Filter>Utils\ScreenOut</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Core\WindowFactory\WindowFactory.cpp">
       <Filter>Engine\Core\WindowFactory</Filter>
     </ClCompile>
@@ -111,9 +90,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Core\ImGuiManager\ImGuiManager.cpp">
       <Filter>Engine\Core\ImGuiManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\EngineInfo\EngineInfo.cpp">
-      <Filter>Utils\EngineInfo</Filter>
     </ClCompile>
     <ClCompile Include="Engine\EngineUtils\FlgManager\FlgManager.cpp">
       <Filter>Engine\EngineUtils\FlgManager</Filter>
@@ -184,9 +160,6 @@
     <ClCompile Include="Drawers\DrawerManager.cpp">
       <Filter>Drawers</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Easeing\Easeing.cpp">
-      <Filter>Utils\Easeing</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Skeleton.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
@@ -201,6 +174,39 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.cpp">
       <Filter>Engine\Graphics\PipelineObject\WaterPipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawers\SkyBox\SkyBox.cpp">
+      <Filter>Drawers\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\EngineUtils\ResourceLoadLog\ResourceLoadLog.cpp">
+      <Filter>Engine\EngineUtils\ResourceLoadLog</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\ExecutionLog.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Flg.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Random.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\ScreenOut.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Thread.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\ConvertString.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\Easeing.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\EngineInfo.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\FileUtils.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -246,20 +252,8 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{42aaa316-1089-4ab2-ba8d-4be0f3334763}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils\ConvertString">
-      <UniqueIdentifier>{5a7a3057-cf34-4af9-a2fc-9484d57e4dd8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\UtilsLib">
-      <UniqueIdentifier>{c6f84b96-4130-443c-b4b7-b47e1dc84f27}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Drawers\Particle">
       <UniqueIdentifier>{81d2d594-ca17-412f-85ce-bbbad35d144c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\ExecutionLog">
-      <UniqueIdentifier>{68109607-fdfe-4fef-9345-8ea31bbf59bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\CsvLoad">
-      <UniqueIdentifier>{0801bfcf-a0f8-4f86-b79a-283b0de7cdd3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Core">
       <UniqueIdentifier>{078e13f7-3a71-446c-96c7-2c855798a9b8}</UniqueIdentifier>
@@ -306,15 +300,6 @@
     <Filter Include="Engine\EngineUtils\FrameInfo">
       <UniqueIdentifier>{0b450b74-986a-4b3d-9a34-b57d457b62d0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils\Random">
-      <UniqueIdentifier>{a6b1a7fc-44db-494f-887b-b5bd46a2f7c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\Flg">
-      <UniqueIdentifier>{8a74e60d-02ab-49cd-b758-52783946efb1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\ScreenOut">
-      <UniqueIdentifier>{e20685bc-e5ff-4b6a-897a-0cd31371c1f9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Core\WindowFactory">
       <UniqueIdentifier>{b53c25de-314b-4648-8852-e97c158f0275}</UniqueIdentifier>
     </Filter>
@@ -327,17 +312,8 @@
     <Filter Include="Engine\Graphics\DepthBuffer">
       <UniqueIdentifier>{acd3416a-219a-4a0f-b725-6643048c704d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils\SafeDelete">
-      <UniqueIdentifier>{94134e6e-da45-45f9-b920-bf5e3ae5f7af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\Cocepts">
-      <UniqueIdentifier>{d34d4eed-7ec5-4e6e-a6d6-e19ad5846855}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Core\ImGuiManager">
       <UniqueIdentifier>{d6d93ca6-1ebb-4ead-ad68-07b252c618a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\EngineInfo">
-      <UniqueIdentifier>{43053c56-0360-4ba5-903a-08a26af29cde}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\EngineUtils\FlgManager">
       <UniqueIdentifier>{a2e5192d-ba59-4283-8ae9-56cbc98d6efc}</UniqueIdentifier>
@@ -390,9 +366,6 @@
     <Filter Include="Engine\Graphics\AnimationManager">
       <UniqueIdentifier>{add96670-dfee-46cd-bd03-5f72b25dbe9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\Animator">
-      <UniqueIdentifier>{0359fcab-3674-4f23-a03c-3ef946b211c0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Drawers\AnimationModel">
       <UniqueIdentifier>{ce9b2a74-162e-42e2-9e98-2f278ed2aa76}</UniqueIdentifier>
     </Filter>
@@ -402,12 +375,6 @@
     <Filter Include="Transform">
       <UniqueIdentifier>{aa982000-c4e2-4c12-a54a-f75fa2d1c84d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils\SafePtr">
-      <UniqueIdentifier>{fcae1063-d491-4ffb-bc1c-4ab8f97d5d6d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utils\Easeing">
-      <UniqueIdentifier>{13e71929-8314-444c-8528-b5cef5a1e71c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Tex2DAniamtor">
       <UniqueIdentifier>{d2bdf60c-0eca-4b04-af8b-a90657a2185f}</UniqueIdentifier>
     </Filter>
@@ -416,6 +383,15 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\WaterPipeline">
       <UniqueIdentifier>{fc36af07-3785-481d-b32c-b52965121ffe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Animator">
+      <UniqueIdentifier>{0359fcab-3674-4f23-a03c-3ef946b211c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawers\SkyBox">
+      <UniqueIdentifier>{035a3a54-6a51-4f0b-bfcd-a00c979ca55f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\EngineUtils\ResourceLoadLog">
+      <UniqueIdentifier>{5d704287-10e8-4615-9e1d-949b3bb47401}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -452,23 +428,11 @@
     <ClInclude Include="Drawers\StringOut\StringOut.h">
       <Filter>Drawers\StringOut</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\CsvLoad\CsvLoad.h">
-      <Filter>Utils\CsvLoad</Filter>
-    </ClInclude>
     <ClInclude Include="Input\Input.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\ConvertString\ConvertString.h">
-      <Filter>Utils\ConvertString</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\UtilsLib\UtilsLib.h">
-      <Filter>Utils\UtilsLib</Filter>
-    </ClInclude>
     <ClInclude Include="Drawers\Particle\Particle.h">
       <Filter>Drawers\Particle</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\ExecutionLog\ExecutionLog.h">
-      <Filter>Utils\ExecutionLog</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.h">
       <Filter>Engine\Core\DescriptorHeap</Filter>
@@ -509,15 +473,6 @@
     <ClInclude Include="Engine\EngineUtils\FrameInfo\FrameInfo.h">
       <Filter>Engine\EngineUtils\FrameInfo</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\Random\Random.h">
-      <Filter>Utils\Random</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Flg\Flg.h">
-      <Filter>Utils\Flg</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\ScreenOut\ScreenOut.h">
-      <Filter>Utils\ScreenOut</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Core\WindowFactory\WindowFactory.h">
       <Filter>Engine\Core\WindowFactory</Filter>
     </ClInclude>
@@ -533,17 +488,8 @@
     <ClInclude Include="Engine\Core\DescriptorHeap\DsvHeap.h">
       <Filter>Engine\Core\DescriptorHeap</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\SafeDelete\SafeDelete.h">
-      <Filter>Utils\SafeDelete</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Cocepts\Cocepts.h">
-      <Filter>Utils\Cocepts</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Core\ImGuiManager\ImGuiManager.h">
       <Filter>Engine\Core\ImGuiManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\EngineInfo\EngineInfo.h">
-      <Filter>Utils\EngineInfo</Filter>
     </ClInclude>
     <ClInclude Include="Engine\EngineUtils\FlgManager\FlgManager.h">
       <Filter>Engine\EngineUtils\FlgManager</Filter>
@@ -638,12 +584,6 @@
     <ClInclude Include="Drawers\DrawerManager.h">
       <Filter>Drawers</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\SafePtr\SafePtr.h">
-      <Filter>Utils\SafePtr</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\Easeing\Easeing.h">
-      <Filter>Utils\Easeing</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Skeleton.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
@@ -655,6 +595,48 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.h">
       <Filter>Engine\Graphics\PipelineObject\WaterPipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawers\SkyBox\SkyBox.h">
+      <Filter>Drawers\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\EngineUtils\ResourceLoadLog\ResourceLoadLog.h">
+      <Filter>Engine\EngineUtils\ResourceLoadLog</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\EngineInfo.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ExecutionLog.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Flg.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Random.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SafeDelete.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\SafePtr.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ScreenOut.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Thread.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Concepts.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ConvertString.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Easeing.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\FileUtils.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,14 +1,14 @@
 #include "Particle.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "imgui.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 
-#include "Utils/UtilsLib/UtilsLib.h"
-#include "Utils/Random/Random.h"
+#include "Utils/FileUtils.h"
+#include "Utils/Random.h"
 #include "Drawers/DrawerManager.h"
 
-#include "../externals/nlohmann/json.hpp"
+#include "json.hpp"
 #include <cassert>
 #include <filesystem>
 #include <fstream>

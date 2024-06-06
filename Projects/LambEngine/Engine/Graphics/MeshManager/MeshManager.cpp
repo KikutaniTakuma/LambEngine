@@ -1,6 +1,6 @@
 #include "MeshManager.h"
-#include "Utils/EngineInfo/EngineInfo.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/EngineInfo.h"
+#include "Utils/SafeDelete.h"
 #include "../MeshLoader/MeshLoader.h"
 #include "Error/Error.h"
 

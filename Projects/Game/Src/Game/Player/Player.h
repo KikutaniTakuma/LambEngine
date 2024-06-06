@@ -1,7 +1,7 @@
 #pragma once
 #include "Drawers/AnimationModel/AnimationModel.h"
-#include "Utils/SafePtr/SafePtr.h"
-#include "Utils/Flg/Flg.h"
+#include "Utils/SafePtr.h"
+#include "Utils/Flg.h"
 #include "Game/CollisionManager/Obb/Obb.h"
 #include <memory>
 

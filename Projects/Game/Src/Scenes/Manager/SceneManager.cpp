@@ -27,6 +27,7 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 
 	scene_.reset(sceneFactory->CreateBaseScene(firstScene));
 	scene_->SceneInitialize(this);
+	scene_->Load();
 	scene_->Initialize();
 
 
@@ -101,11 +102,12 @@ void SceneManager::Update() {
 		scene_->Finalize();
 		// 次のシーンへ
 		scene_.reset(next_.release());
-		// 次のシーンを格納するものユニークポインタをリセット
+		// 次のシーンを格納するユニークポインタをリセット
 		next_.reset();
 #pragma endregion
 
 #pragma region ロード中
+		scene_->Load();
 		// シーンの初期化
 		scene_->Initialize();
 

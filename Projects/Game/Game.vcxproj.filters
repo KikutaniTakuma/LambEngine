@@ -77,6 +77,21 @@
     <ClCompile Include="Src\Game\Coin\Coin.cpp">
       <Filter>Game\Coin</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\Object.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\ModelRenderComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\RenderDataComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\TransformComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Level\LevelLoader.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -160,6 +175,15 @@
     <Filter Include="Game\Coin">
       <UniqueIdentifier>{b499dd18-c71b-43fe-b48e-a5f00311c7c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{e5c92456-0708-4165-9d68-847d8014d2ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Comp">
+      <UniqueIdentifier>{e4b79d00-bb6c-4437-be7f-657e660eae2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{c64135c3-3f27-4633-8ec5-9da98995a1b5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
@@ -236,6 +260,27 @@
     </ClInclude>
     <ClInclude Include="Src\Game\Coin\Coin.h">
       <Filter>Game\Coin</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Object.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\IComp.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\ModelRenderComp.h">
+      <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\RenderDataComp.h">
+      <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\TransformComp.h">
+      <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Level\LevelLoader.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Level\LevelData.h">
+      <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

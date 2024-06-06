@@ -15,7 +15,7 @@ QuaternionTransform& QuaternionTransform::operator=(const Transform& transform) 
 
 Transform& Transform::operator=(const QuaternionTransform& transform) {
 	this->scale = transform.scale;
-	this->rotate = Vector3::QuaternionToEuler(transform.rotate);
+	this->rotate = Quaternion::QuaternionToEuler(transform.rotate);
 	this->translate = transform.translate;
 
 	return *this;

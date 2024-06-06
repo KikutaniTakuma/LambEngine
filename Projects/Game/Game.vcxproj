@@ -58,7 +58,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\nlohmann\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -96,7 +96,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\nlohmann\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -132,6 +132,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\Camera\Camera.cpp" />
     <ClCompile Include="Src\Camera\DebugCamera\DebugCamera.cpp" />
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\ModelRenderComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\RenderDataComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\TransformComp.cpp" />
+    <ClCompile Include="Src\GameObject\Object.cpp" />
     <ClCompile Include="Src\Game\Cloud\Cloud.cpp" />
     <ClCompile Include="Src\Game\Coin\Coin.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Collider\Collider.cpp" />
@@ -144,6 +148,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\Game\SkyDome\SkyDome.cpp" />
     <ClCompile Include="Src\Game\Water\Water.cpp" />
     <ClCompile Include="Src\GlobalVariables\GlobalVariables.cpp" />
+    <ClCompile Include="Src\Level\LevelLoader.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\Scenes\GameScene\GameScene.cpp" />
     <ClCompile Include="Src\Scenes\Manager\BaseScene\BaseScene.cpp" />
@@ -160,6 +165,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\Camera\Camera.h" />
     <ClInclude Include="Src\Camera\DebugCamera\DebugCamera.h" />
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h" />
+    <ClInclude Include="Src\GameObject\Comp\ModelRenderComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\RenderDataComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\TransformComp.h" />
+    <ClInclude Include="Src\GameObject\IComp.h" />
+    <ClInclude Include="Src\GameObject\Object.h" />
     <ClInclude Include="Src\Game\Cloud\Cloud.h" />
     <ClInclude Include="Src\Game\Coin\Coin.h" />
     <ClInclude Include="Src\Game\CollisionManager\Collider\Collider.h" />
@@ -172,6 +182,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\Game\SkyDome\SkyDome.h" />
     <ClInclude Include="Src\Game\Water\Water.h" />
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h" />
+    <ClInclude Include="Src\Level\LevelData.h" />
+    <ClInclude Include="Src\Level\LevelLoader.h" />
     <ClInclude Include="Src\Scenes\GameScene\GameScene.h" />
     <ClInclude Include="Src\Scenes\Manager\BaseScene\BaseScene.h" />
     <ClInclude Include="Src\Scenes\Manager\Fade\Fade.h" />

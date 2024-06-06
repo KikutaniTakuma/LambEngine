@@ -1,8 +1,9 @@
 #include "MeshLoader.h"
 #include "Error/Error.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include "../TextureManager/TextureManager.h"
 #include "../../Core/DirectXDevice/DirectXDevice.h"
+#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
 #include <filesystem>
 #include <unordered_map>
@@ -19,12 +20,12 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 
 	Assimp::Importer importer;
 	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
-	if (not scene->HasMeshes()) {
+	if (not scene->HasMeshes()) [[unlikely]] {
 		throw Lamb::Error::Code<MeshLoader>("This file does not have meshes -> " + fileName, ErrorPlace);
 	}
 
 	std::filesystem::path path = fileName;
-	bool isGltf = (path.extension() == ".gltf");
+	bool isGltf = (path.extension() == ".gltf") or (path.extension() == ".glb");
 
 
 	std::string&& directorypath = path.parent_path().string();
@@ -37,10 +38,10 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 	// mesh解析
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
 		Lamb::SafePtr<aiMesh> mesh = scene->mMeshes[meshIndex];
-		if (not mesh->HasNormals()) {
+		if (not mesh->HasNormals()) [[unlikely]] {
 			throw Lamb::Error::Code<MeshLoader>("This file does not have normal -> " + fileName, ErrorPlace);
 		}
-		if (not mesh->HasTextureCoords(0)) {
+		if (not mesh->HasTextureCoords(0)) [[unlikely]] {
 			throw Lamb::Error::Code<MeshLoader>("This file does not have texcoord -> " + fileName, ErrorPlace);
 		}
 
@@ -102,6 +103,8 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 
 	EndLoadTimeCountAndAddLog(fileName);
 
+	ResourceLoadLog::Set(fileName);
+
 	return result;
 }
 
@@ -112,7 +115,7 @@ Animations* MeshLoader::LoadAnimation(const std::string& fileName)
 	std::unique_ptr result = std::make_unique<Animations>();
 	Assimp::Importer importer;
 	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
-	if (not (scene->mNumAnimations != 0)) {
+	if (not (scene->mNumAnimations != 0)) [[unlikely]] {
 		throw Lamb::Error::Code<MeshLoader>("This file does not have animation -> " + fileName, ErrorPlace);
 	}
 
@@ -159,6 +162,8 @@ Animations* MeshLoader::LoadAnimation(const std::string& fileName)
 
 	EndLoadTimeCountAndAddLog(fileName);
 
+	ResourceLoadLog::Set(fileName);
+
 	return result.release();
 }
 
@@ -167,11 +172,11 @@ const aiScene* MeshLoader::ReadFile(Assimp::Importer& importer, const std::strin
 	std::filesystem::path path = fileName;
 
 	// ファイル見つかんない
-	if (not std::filesystem::exists(path)) {
+	if (not std::filesystem::exists(path)) [[unlikely]] {
 		throw Lamb::Error::Code<MeshLoader>("This file does not find -> " + fileName, ErrorPlace);
 	}
 	// objかgltfではない
-	if (not (path.extension() == ".obj" or path.extension() == ".gltf")) {
+	if (not (path.extension() == ".obj" or path.extension() == ".gltf")) [[unlikely]] {
 		throw Lamb::Error::Code<MeshLoader>("This file does not support -> " + fileName, ErrorPlace);
 	}
 
@@ -217,7 +222,8 @@ void MeshLoader::LoadMtl(const aiScene* scene, const std::string& directorypath,
 	TextureManager* const textureMaanger = TextureManager::GetInstance();
 
 	for (const auto& i : textureFileNames) {
-		result.push_back(textureMaanger->LoadTexture(i));
+		textureMaanger->LoadTexture(i);
+		result.push_back(textureMaanger->GetHandle(i));
 	}
 }
 

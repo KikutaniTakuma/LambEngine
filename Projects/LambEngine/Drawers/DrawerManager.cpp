@@ -37,9 +37,13 @@ Texture2D* const DrawerManager::GetTexture2D() const
 	return tex2D_.get();
 }
 
-uint32_t DrawerManager::LoadTexture(const std::string& fileName)
+uint32_t DrawerManager::GetTexture(const std::string& fileName)
 {
-	return textureManager_->LoadTexture(fileName);
+	return textureManager_->GetHandle(fileName);
+}
+
+void DrawerManager::LoadTexture(const std::string& fileName) {
+	textureManager_->LoadTexture(fileName);
 }
 
 void DrawerManager::LoadModel(const std::string& fileName) {

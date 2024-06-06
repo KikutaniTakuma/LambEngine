@@ -1,10 +1,10 @@
 #include "WaterTex2D.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 #ifdef _DEBUG
-#include "Utils/UtilsLib/UtilsLib.h"
+#include "Utils/FileUtils.h"
 
 #include "imgui.h"
 #endif // _DEBUG
@@ -32,7 +32,10 @@ void WaterTex2D::Load()
 
 	renderSet = renderContextManager->Get(kFileNames_);
 
-	kCausticsTextureID_ = TextureManager::GetInstance()->LoadTexture("./Resources/Common/Water/caustics_01.bmp");
+	Lamb::SafePtr textureManager = TextureManager::GetInstance();
+	textureManager->LoadTexture("./Resources/Common/Water/caustics_01.bmp");
+
+	kCausticsTextureID_ = textureManager->GetHandle("./Resources/Common/Water/caustics_01.bmp");
 }
 
 void WaterTex2D::Draw(

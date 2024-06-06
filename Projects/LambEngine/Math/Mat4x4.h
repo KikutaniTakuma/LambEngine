@@ -1,6 +1,5 @@
 #pragma once
 
-#include <array>
 #include <concepts>
 #include <string>
 #include "DirectXMath.h"
@@ -67,18 +66,9 @@ public:
 	{}
 	constexpr Matrix(const Matrix&)  = default;
 	constexpr Matrix(Matrix&&)  = default;
-	constexpr Matrix(const DirectX::XMMATRIX& xmMatrix);
-
-
-private:
-	constexpr Matrix(value_type identity) noexcept
-		: Matrix()
-	{
-		for (size_t i = 0; i < kHeight; i++) {
-			matrix_[i][i] = identity;
-		}
-	}
-
+	constexpr Matrix(const DirectX::XMMATRIX& xmMatrix) :
+		xmMatrix_(xmMatrix)
+	{}
 public:
 	~Matrix() = default;
 
@@ -109,6 +99,20 @@ public:
 		Matrix result;
 
 		result.xmMatrix_ = DirectX::XMMatrixMultiply(this->xmMatrix_, right.xmMatrix_);
+
+		return result;
+	}
+	template<std::floating_point othertype, size_t otherHeight, size_t otherWidth>
+	[[nodiscard]] constexpr Matrix<value_type, kHeight, otherWidth> operator*(const Matrix<othertype, otherHeight, otherWidth>& right) const requires(kWidth == otherHeight and kWidth != otherWidth) {
+		Matrix<value_type, kHeight, otherWidth> result;
+
+		for (size_t y = 0; y < result.HeightSize(); y++) {
+			for (size_t x = 0; x < result.WidthSize(); x++) {
+				for (size_t i = 0; i < kWidth; i++) {
+					result[y][x] += matrix_[y][i] * value_cast(right[i][x]);
+				}
+			}
+		}
 
 		return result;
 	}
@@ -330,18 +334,18 @@ protected:
 /// 4x4行列用の関数
 /// </summary>
 public:
-	class Vector3 GetTranslate();
-	class Vector3 GetScale();
-	class Quaternion GetRotate();
+	class Vector3 GetTranslate() const;
+	class Vector3 GetScale() const;
+	class Quaternion GetRotate() const;
 
-	void Decompose(class Vector3& scale, class Quaternion& rotate, class Vector3& translate);
-	void Decompose(class Vector3& scale, class Vector3& rotate, class Vector3& translate);
+	void Decompose(class Vector3& scale, class Quaternion& rotate, class Vector3& translate) const;
+	void Decompose(class Vector3& scale, class Vector3& rotate, class Vector3& translate) const;
 
 // 静的メンバ関数
 public:
 	static [[nodiscard]] Matrix MakeTranslate(const class Vector3& vec);
 
-	static [[nodiscard]] Matrix MakeScalar(const class Vector3& vec);
+	static [[nodiscard]] Matrix MakeScale(const class Vector3& vec);
 
 	static [[nodiscard]] Matrix MakeRotateX(float rad);
 

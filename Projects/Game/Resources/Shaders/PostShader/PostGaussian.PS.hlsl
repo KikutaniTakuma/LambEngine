@@ -4,8 +4,8 @@ float32_t4 main(Output input) : SV_TARGET{
     float32_t w, h, levels;
     tex.GetDimensions(0, w,h,levels);
 
-    float32_t dx = 1.0f / w;
-    float32_t dy = 1.0f / h;
+    float32_t dx = rcp(w);
+    float32_t dy = rcp(h);
     float32_t4 ret = float32_t4(0.0f,0.0f,0.0f,0.0f);
 
     // 最上段
@@ -43,5 +43,5 @@ float32_t4 main(Output input) : SV_TARGET{
     ret += tex.Sample(smp, input.uv + float32_t2( 1.0f * dx, -2.0f * dy)) * 4.0f;
     ret += tex.Sample(smp, input.uv + float32_t2( 2.0f * dx, -2.0f * dy)) * 1.0f;
 
-    return ret / 256.0f;
+    return ret * rcp(256.0f);
 }

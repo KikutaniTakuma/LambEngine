@@ -3,7 +3,7 @@
 #include <thread>
 #include <queue>
 
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include "../GraphicsStructs.h"
 
 /// <summary>

@@ -5,7 +5,7 @@
 #include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
 
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 #include <memory>
 

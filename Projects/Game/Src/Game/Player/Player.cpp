@@ -2,7 +2,7 @@
 #include "Camera/Camera.h"
 #include "Input/Gamepad/Gamepad.h"
 #include "Input/KeyInput/KeyInput.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 #include "Engine/Graphics/AnimationManager/AnimationManager.h"
 
 void Player::Init(const Transform& transform)
@@ -62,7 +62,7 @@ void Player::Update() {
 
 	transform_.translate.y += jumpSpeed_ * Lamb::DeltaTime();
 
-	transform_.rotate = Vector3::QuaternionToEuler(Quaternion::DirectionToDirection(Vector3::kZIdentity, Vector3(direction_.x, 0.0f, direction_.y)));
+	transform_.rotate = Quaternion::QuaternionToEuler(Quaternion::DirectionToDirection(Vector3::kZIdentity, Vector3(direction_.x, 0.0f, direction_.y)));
 
 	obb_->transform.translate = transform_.translate;
 	obb_->transform.scale = transform_.scale;

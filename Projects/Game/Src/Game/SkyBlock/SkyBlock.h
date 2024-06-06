@@ -1,7 +1,7 @@
 #pragma once
 #include "Drawers/Model/Model.h"
-#include "Utils/SafePtr/SafePtr.h"
-#include "Utils/Flg/Flg.h"
+#include "Utils/SafePtr.h"
+#include "Utils/Flg.h"
 #include "Game/CollisionManager/Obb/Obb.h"
 
 class SkyBlock {

@@ -188,6 +188,13 @@ public:
 	static [[nodiscard]] Quaternion EulerToQuaternion(const Vector3& euler);
 
 	/// <summary>
+	/// Quaternionからオイラー角への変換
+	/// </summary>
+	/// <param name="quaternion">Quaternion</param>
+	/// <returns></returns>
+	static [[nodiscard]] Vector3 QuaternionToEuler(const class Quaternion& quaternion);
+
+	/// <summary>
 	/// クォータニオン線形補完関数(近いものの方向に回転する)
 	/// </summary>
 	/// <param name="start">スタート時の回転</param>

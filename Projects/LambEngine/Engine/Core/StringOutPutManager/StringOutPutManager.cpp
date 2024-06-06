@@ -1,8 +1,8 @@
 #include "StringOutPutManager.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ExecutionLog.h"
+#include "Utils/ConvertString.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include <cassert>
@@ -10,7 +10,9 @@
 
 #include "Error/Error.h"
 
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
+
+#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
 Lamb::SafePtr<StringOutPutManager> StringOutPutManager::instance_ = nullptr;
 
@@ -102,6 +104,8 @@ void StringOutPutManager::LoadFont(const std::string& fontName) {
 	directXCommon->WaitForFinishCommnadlist();
 
 	future.wait();
+
+	ResourceLoadLog::Set(fontName);
 }
 
 DirectX::SpriteFont* const StringOutPutManager::GetFont(const std::string& fontName) {

@@ -1,10 +1,11 @@
 #include "Texture.h"
+#include "../TextureManager.h"
 #include "../externals/DirectXTex/d3dx12.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ConvertString.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include <cassert>
 #include <filesystem>
-#include "../TextureManager.h"
+#include "dxgiformat.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Error/Error.h"
 
@@ -54,8 +55,17 @@ void Texture::Load(const std::string& filePath, ID3D12GraphicsCommandList* comma
 
 		srvDesc_.Format = metadata.format;
 		srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-		srvDesc_.Texture2D.MipLevels = UINT(metadata.mipLevels);
+
+		if (metadata.IsCubemap()) {
+			srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+			srvDesc_.TextureCube.MostDetailedMip = 0;
+			srvDesc_.TextureCube.MipLevels = UINT_MAX;
+			srvDesc_.TextureCube.ResourceMinLODClamp = 0.0f;
+		}
+		else {
+			srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+			srvDesc_.Texture2D.MipLevels = UINT(metadata.mipLevels);
+		}
 
 		// load済み
 		isLoad_ = true;
@@ -89,18 +99,49 @@ DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 	// テクスチャファイルを読み込んでプログラムを扱えるようにする
 	DirectX::ScratchImage image{};
 	std::wstring filePathW = ConvertString(filePath);
-	HRESULT hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
+	bool isddsfile = filePathW.ends_with(L".dds");
+	HRESULT hr;
+	if (isddsfile) {
+		hr = DirectX::LoadFromDDSFile(filePathW.c_str(), DirectX::DDS_FLAGS_NONE, nullptr, image);
+	}
+	else {
+		hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
+	}
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<Texture>("DirectX::LoadFromWICFile() failed", ErrorPlace);
 	}
 
 	// ミップマップの作成
 	DirectX::ScratchImage mipImages{};
-	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImages);
-	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<Texture>("DirectX::GenerateMipMaps failed", ErrorPlace);
+
+	// 圧縮されていたら解凍する
+	if (DirectX::IsCompressed(image.GetMetadata().format)) {
+		DirectX::ScratchImage tmpImage{};
+		hr = DirectX::Decompress(
+			image.GetImages(),
+			image.GetImageCount(),
+			image.GetMetadata(),
+			DXGI_FORMAT_UNKNOWN,
+			tmpImage
+		);
+
+		if (not SUCCEEDED(hr)) {
+			throw Lamb::Error::Code<Texture>("DirectX::Decompress failed", ErrorPlace);
+		}
+
+		image = std::move(tmpImage);
 	}
 
+	hr = DirectX::GenerateMipMaps(
+		image.GetImages(),
+		image.GetImageCount(),
+		image.GetMetadata(),
+		DirectX::TEX_FILTER_SRGB, isddsfile ? 4 : 0, mipImages
+	);
+
+	if (not SUCCEEDED(hr)) {
+		throw Lamb::Error::Code<Texture>("DirectX::GenerateMipMaps failed", ErrorPlace);
+	}
 
 	// ミップマップ付きのデータを返す
 	return mipImages;

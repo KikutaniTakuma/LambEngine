@@ -1,6 +1,6 @@
 #include "Input.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "Error/Error.h"
 
 Input* Input::instance_ = nullptr;

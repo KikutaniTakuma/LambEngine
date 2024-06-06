@@ -18,11 +18,11 @@ const Quaternion Quaternion::kZero = { 0.0f, 0.0f, 0.0f, 0.0f };
 /// コンストラクタ
 /// ========================================================================
 #pragma region Constructor
-constexpr Quaternion::Quaternion():
+constexpr Quaternion::Quaternion() :
 	m({ 0.0f })
 {}
 
-Quaternion::Quaternion(const Vector4& right):
+Quaternion::Quaternion(const Vector4& right) :
 	Quaternion()
 {
 	*this = right;
@@ -311,8 +311,8 @@ Quaternion Quaternion::DirectionToDirection(const Vector3& from, const Vector3& 
 
 Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	Quaternion result;
-	result.vector.w = std::cos(angle * 0.5f);
-	result.vector.vector3 = axis * std::sin(angle * 0.5f);
+
+	result.m128 = DirectX::XMQuaternionRotationAxis({ axis.x,axis.y,axis.z }, angle);
 
 	return result;
 }
@@ -328,42 +328,65 @@ Quaternion Quaternion::MakeRotateZAxis(float angle) {
 
 Quaternion Quaternion::EulerToQuaternion(const Vector3& euler)
 {
-	float cz = std::cos(euler.z * 0.5f);
-	float sz = std::sin(euler.z * 0.5f);
-	float cy = std::cos(euler.y * 0.5f);
-	float sy = std::sin(euler.y * 0.5f);
-	float cx = std::cos(euler.x * 0.5f);
-	float sx = std::sin(euler.x * 0.5f);
-
 	Quaternion result;
-	result.quaternion.w = cz * cy * cx + sz * sy * sx;
-	result.quaternion.x = cz * cy * sx - sz * sy * cx;
-	result.quaternion.y = sz * cy * sx + cz * sy * cx;
-	result.quaternion.z = sz * cy * cx - cz * sy * sx;
+
+	result.m128 = DirectX::XMQuaternionRotationRollPitchYawFromVector({ euler.x, euler.y, euler.z });
 
 	return result.Normalize();
 }
 
-Quaternion Quaternion::Slerp(Quaternion start, const Quaternion& end, float t) {
-	float dot = start.Dot(end);
-	if (dot < 0.0f) {
-		start = -start;
-		dot = -dot;
-	}
-	float theata = std::acos(dot);
-	float sinTheata = 1.0f / std::sin(theata);
+Vector3 Quaternion::QuaternionToEuler(const Quaternion& quaternion)
+{
+	Vector3 result;
 
-	static constexpr float kEpsilon = 0.0005f;
+	// y
+	float sinp = 2.0f * (quaternion.quaternion.w * quaternion.quaternion.y - quaternion.quaternion.z * quaternion.quaternion.x);
+	if (std::abs(sinp) >= 1.0f) {
+		result.y = std::copysign(std::numbers::pi_v<float> *0.5f, sinp);
+	}
+	else {
+		result.y = std::asin(sinp);
+	}
+
+	// zとx
+	if (std::abs(sinp) < 1.0f - static_cast<float>(10e-5)) {
+		result.z = std::atan2f(2.0f * (quaternion.quaternion.w * quaternion.quaternion.z + quaternion.quaternion.x * quaternion.quaternion.y), 1.0f - 2.0f * (quaternion.quaternion.y * quaternion.quaternion.y + quaternion.quaternion.z * quaternion.quaternion.z));
+		result.x = std::atan2f(2.0f * (quaternion.quaternion.w * quaternion.quaternion.x + quaternion.quaternion.y * quaternion.quaternion.z), 1.0f - 2.0f * (quaternion.quaternion.x * quaternion.quaternion.x + quaternion.quaternion.y * quaternion.quaternion.y));
+	}
+	else {
+		result.z = std::atan2f(
+			-2.0f *
+			(quaternion.quaternion.x * quaternion.quaternion.y - quaternion.quaternion.w * quaternion.quaternion.z),
+			quaternion.quaternion.w * quaternion.quaternion.w + quaternion.quaternion.x * quaternion.quaternion.x - quaternion.quaternion.y * quaternion.quaternion.y - quaternion.quaternion.z * quaternion.quaternion.z
+		);
+		result.x = 0.0f;
+	}
+
+	return result;
+}
+
+Quaternion Quaternion::Slerp(Quaternion start, const Quaternion& end, float t) {
+	//float dot = start.Dot(end);
+	//if (dot < 0.0f) {
+	//	start = -start;
+	//	dot = -dot;
+	//}
+	//float theata = std::acos(dot);
+	//float sinTheata = 1.0f / std::sin(theata);
+
+	//static constexpr float kEpsilon = 0.0005f;
 
 	Quaternion result;
 
-	// sinθが0.0fになる場合またはそれに近くなる場合
-	if (1.0f - kEpsilon <= dot) {
-		result = (1.0f - t) * start + t * end;
-	}
-	else {
-		result = (std::sin(theata * (1.0f - t)) * sinTheata) * start + (std::sin(theata * t) * sinTheata) * end;
-	}
+	//// sinθが0.0fになる場合またはそれに近くなる場合
+	//if (1.0f - kEpsilon <= dot) {
+	//	result = (1.0f - t) * start + t * end;
+	//}
+	//else {
+	//	result = (std::sin(theata * (1.0f - t)) * sinTheata) * start + (std::sin(theata * t) * sinTheata) * end;
+	//}
+
+	result.m128 = DirectX::XMQuaternionSlerp(start.m128, end.m128, t);
 
 	return result;
 }
@@ -376,7 +399,7 @@ LogQuaternion Quaternion::Log(const Quaternion& quaternion)
 	}
 	Vector3&& u = quaternion.vector.vector3 / std::sin(theata);
 	result = u * theata;
-	
+
 	return result;
 }
 Quaternion Quaternion::Exp(const LogQuaternion& logQuaternion)

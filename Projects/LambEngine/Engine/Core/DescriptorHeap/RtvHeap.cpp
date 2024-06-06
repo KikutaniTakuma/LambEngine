@@ -1,6 +1,6 @@
 #include "RtvHeap.h"
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Engine.h"
 #include "Math/Vector4.h"
@@ -8,7 +8,7 @@
 #include <cassert>
 #include "Error/Error.h"
 
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 Lamb::SafePtr<RtvHeap> RtvHeap::instance_ = nullptr;
 

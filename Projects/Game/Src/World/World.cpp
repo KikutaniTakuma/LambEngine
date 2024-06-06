@@ -21,6 +21,7 @@ void World::Initialize() {
 	};
 
 	Framework::Initialize();
+	Camera::InitStaticMatrix();
 
 	Water::Initialize();
 
