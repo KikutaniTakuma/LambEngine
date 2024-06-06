@@ -34,7 +34,6 @@ LevelData* LoadLevel(const std::string& fileName)
             }
             
             Lamb::SafePtr transformComp = element.AddComp<TransformComp>();
-            auto& quaternionTransform = transformComp->GetTransform();
             Transform transform{};
 
             nlohmann::json& transformData = object["transform"];
@@ -50,7 +49,9 @@ LevelData* LoadLevel(const std::string& fileName)
             }
 
             
-            quaternionTransform = transform;
+            transformComp->translate = transform.translate;
+            transformComp->rotate = Quaternion::EulerToQuaternion(transform.rotate);
+            transformComp->scale = transform.scale;
 
             element.SetTag("transform");
         }

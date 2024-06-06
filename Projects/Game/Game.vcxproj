@@ -148,6 +148,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\Game\SkyDome\SkyDome.cpp" />
     <ClCompile Include="Src\Game\Water\Water.cpp" />
     <ClCompile Include="Src\GlobalVariables\GlobalVariables.cpp" />
+    <ClCompile Include="Src\Level\LevelLoader.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\Scenes\GameScene\GameScene.cpp" />
     <ClCompile Include="Src\Scenes\Manager\BaseScene\BaseScene.cpp" />
@@ -181,6 +182,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\Game\SkyDome\SkyDome.h" />
     <ClInclude Include="Src\Game\Water\Water.h" />
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h" />
+    <ClInclude Include="Src\Level\LevelData.h" />
+    <ClInclude Include="Src\Level\LevelLoader.h" />
     <ClInclude Include="Src\Scenes\GameScene\GameScene.h" />
     <ClInclude Include="Src\Scenes\Manager\BaseScene\BaseScene.h" />
     <ClInclude Include="Src\Scenes\Manager\Fade\Fade.h" />

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <filesystem>
+#include "json.hpp"
 
 /// <summary>
 /// ファイル関係の関数やクラス
@@ -22,5 +23,12 @@ namespace Lamb {
 	/// </summary>
 	/// <param name="fileNmae">csvのファイル名</param>
 	/// <returns>ロードしたcsvの二次元配列</returns>
-	std::vector<std::vector<int32_t>> CsvLoad(const std::string& fileNmae);
+	std::vector<std::vector<int32_t>> LoadCsv(const std::string& fileNmae);
+
+	/// <summary>
+	/// jsonファイルのローダー
+	/// </summary>
+	/// <param name="fileName">読み込むファイルの名前</param>
+	/// <returns>解凍したjsonファイル</returns>
+	nlohmann::json LoadJson(const std::filesystem::path& fileName);
 }

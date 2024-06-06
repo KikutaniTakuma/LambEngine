@@ -1,10 +1,6 @@
 #pragma once
 #include "Scenes/Manager/SceneManager.h"
-#include "Transform/Transform.h"
-#include "Engine/Graphics/Skeleton.h"
-#include "Engine/Graphics/Animator/Animator.h"
-#include "Drawers/AnimationModel/AnimationModel.h"
-#include "Drawers/Line/Line.h"
+#include "Level/LevelLoader.h"
 
 class GameScene : public BaseScene {
 public:
@@ -28,11 +24,5 @@ public:
 	void Draw() override;
 
 public:
-	std::unique_ptr<AnimationModel> model_;
-	Animations* animations_;
-	Animations* animations2_;
-	Lamb::SafePtr<Model> model2_;
-	Transform transform_;
-
-	Line line_;
+	std::unique_ptr<LevelData> levelData_;
 };

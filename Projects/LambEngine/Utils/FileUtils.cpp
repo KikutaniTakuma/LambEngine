@@ -41,7 +41,7 @@ namespace Lamb {
 		return result;
 	}
 
-	std::vector<std::vector<int32_t>> CsvLoad(const std::string& fileName) {
+	std::vector<std::vector<int32_t>> LoadCsv(const std::string& fileName) {
 		std::vector<std::vector<int32_t>> result;
 
 		if (!(std::filesystem::path(fileName).extension() == ".csv")) {
@@ -67,6 +67,30 @@ namespace Lamb {
 				}
 			}
 		}
+
+		return result;
+	}
+
+	nlohmann::json LoadJson(const std::filesystem::path& fileName)
+	{
+		if (not std::filesystem::exists(fileName)) {
+			throw Lamb::Error::Code<Lamb::Error::Function>("This file is not exists -> " + fileName.string(), ErrorPlace);
+		}
+		if (not (fileName.extension() == ".json")) {
+			throw Lamb::Error::Code<Lamb::Error::Function>("This file is not json -> " + fileName.string(), ErrorPlace);
+		}
+
+		std::ifstream file;
+
+		file.open(fileName);
+
+		if (not file.is_open()) {
+			throw Lamb::Error::Code<Lamb::Error::Function>("This file can not open -> " + fileName.string(), ErrorPlace);
+		}
+
+		nlohmann::json result;
+
+		file >> result;
 
 		return result;
 	}

@@ -27,6 +27,7 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 
 	scene_.reset(sceneFactory->CreateBaseScene(firstScene));
 	scene_->SceneInitialize(this);
+	scene_->Load();
 	scene_->Initialize();
 
 
@@ -106,10 +107,10 @@ void SceneManager::Update() {
 #pragma endregion
 
 #pragma region ロード中
+		scene_->Load();
 		// シーンの初期化
 		scene_->Initialize();
 
-		scene_->Load();
 
 		// ロード中の描画を終了
 		load_->Stop();

@@ -89,6 +89,9 @@
     <ClCompile Include="Src\GameObject\Comp\TransformComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Level\LevelLoader.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -177,6 +180,9 @@
     </Filter>
     <Filter Include="GameObject\Comp">
       <UniqueIdentifier>{e4b79d00-bb6c-4437-be7f-657e660eae2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Level">
+      <UniqueIdentifier>{c64135c3-3f27-4633-8ec5-9da98995a1b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +275,12 @@
     </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\TransformComp.h">
       <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Level\LevelLoader.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Level\LevelData.h">
+      <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
