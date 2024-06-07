@@ -45,8 +45,7 @@ class Object;
 class IComp : public GameFlow {
 public:
 	IComp(Object* const object) :
-		object_(*object),
-		deltatime_(0.0_f32)
+		object_(*object)
 	{}
 	virtual ~IComp() = default;
 	IComp() = delete;
@@ -60,9 +59,6 @@ public:
 	virtual void Init() {}
 	virtual void Finalize() {}
 
-	void SetDeltaTime(float32_t deltatime) {
-		deltatime_ = deltatime;
-	}
 
 	virtual void FirstUpdate() override {}
 	virtual void Move() override {}
@@ -74,7 +70,6 @@ public:
 
 protected:
 	Object& object_;
-	float32_t deltatime_;
 };
 
 template<class T>
@@ -96,6 +91,14 @@ public:
 
 	virtual void Draw() const;
 
+public:
+	void SetDeltaTime(float32_t deltatime) {
+		deltatime_ = deltatime;
+	}
+
+	float32_t GetDeltaTime() const {
+		return deltatime_;
+	}
 
 public:
 	void SetTag(const std::string& tag) {
@@ -151,4 +154,5 @@ protected:
 	std::unordered_set<std::string> tags_;
 
 	Lamb::SafePtr<Camera> camera_;
+	float32_t deltatime_ = 0.0_f32;
 };
