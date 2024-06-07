@@ -133,6 +133,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\Camera\DebugCamera\DebugCamera.cpp" />
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ModelRenderComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\ObbComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\RenderDataComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\TransformComp.cpp" />
     <ClCompile Include="Src\GameObject\Object.cpp" />
@@ -166,6 +167,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\Camera\DebugCamera\DebugCamera.h" />
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h" />
     <ClInclude Include="Src\GameObject\Comp\ModelRenderComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\ObbComp.h" />
     <ClInclude Include="Src\GameObject\Comp\RenderDataComp.h" />
     <ClInclude Include="Src\GameObject\Comp\TransformComp.h" />
     <ClInclude Include="Src\GameObject\IComp.h" />

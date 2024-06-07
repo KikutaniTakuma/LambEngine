@@ -92,6 +92,9 @@
     <ClCompile Include="Src\Level\LevelLoader.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\ObbComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -281,6 +284,9 @@
     </ClInclude>
     <ClInclude Include="Src\Level\LevelData.h">
       <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\ObbComp.h">
+      <Filter>GameObject\Comp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
