@@ -13,7 +13,6 @@ namespace Lamb {
 	class SafePtr {
 	public:
 		using type = T;
-		static constexpr size_t size = sizeof(T);
 
 	public:
 		SafePtr():
@@ -177,6 +176,18 @@ namespace Lamb {
 		void reset(const Lamb::SafePtr<T>& ptr) {
 			reset();
 			*this = ptr;
+		}
+
+		bool have() const {
+			return !!ptr_;
+		}
+
+		bool empty() const {
+			return !ptr_;
+		}
+
+		constexpr size_t byte_size() const {
+			return sizeof(T);
 		}
 
 	public:
