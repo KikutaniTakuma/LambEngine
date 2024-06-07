@@ -7,25 +7,38 @@ void Object::Init() {
 	}*/
 }
 
-void Object::Update() {
+void Object::FirstUpdate()
+{
 	float32_t deltaTime = Lamb::DeltaTime();
 	for (auto& i : components_) {
 		i.second->SetDeltaTime(deltaTime);
+		i.second->FirstUpdate();
 	}
+}
+
+void Object::Move()
+{
 	for (auto& i : components_) {
-		i.second->Update0();
+		i.second->Move();
 	}
+}
+
+void Object::Event() {
 	for (auto& i : components_) {
-		i.second->Update1();
+		i.second->Event();
 	}
+}
+
+void Object::Update() {
 	for (auto& i : components_) {
-		i.second->Update2();
+		i.second->Update();
 	}
+}
+
+void Object::LastUpdate()
+{
 	for (auto& i : components_) {
-		i.second->Update3();
-	}
-	for (auto& i : components_) {
-		i.second->Update4();
+		i.second->LastUpdate();
 	}
 }
 

@@ -5,7 +5,7 @@ void TransformComp::Init()
 	
 }
 
-void TransformComp::Update4()
+void TransformComp::LastUpdate()
 {
 	worldMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
 

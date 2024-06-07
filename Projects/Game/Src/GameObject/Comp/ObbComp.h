@@ -1,25 +1,24 @@
 #pragma once
+
 #include "../Object.h"
 #include "Transform/Transform.h"
 
 #include <memory>
 
 
-class TransformComp : public IComp {
+class ObbComp : public IComp {
 public:
 	using IComp::IComp;
 
-	~TransformComp() = default;
+	~ObbComp() = default;
 
 	void Init() override;
 
 	void LastUpdate() override;
 
-	void SetParent(TransformComp* parent);
+	void SetParent(ObbComp* parent);
 
-	const Mat4x4& GetMatrix() const {
-		return worldMatrix_;
-	}
+	bool IsCollision() const;
 
 public:
 	Vector3 scale = Vector3::kIdentity;
@@ -28,5 +27,5 @@ public:
 
 private:
 	Mat4x4 worldMatrix_;
-	TransformComp* parent_ = nullptr;
+	ObbComp* parent_ = nullptr;
 };

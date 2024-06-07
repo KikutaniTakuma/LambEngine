@@ -11,8 +11,6 @@ public:
 
 	void Init() override;
 
-	void Update0() override;
-
 	void Draw() override;
 
 	void Load();
