@@ -9,7 +9,7 @@ void TransformComp::LastUpdate()
 {
 	worldMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
 
-	if (parent_) {
+	if (parent_.have()) {
 		worldMatrix_ *= parent_->worldMatrix_;
 	}
 }

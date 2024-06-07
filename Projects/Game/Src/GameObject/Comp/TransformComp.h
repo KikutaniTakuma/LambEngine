@@ -28,5 +28,5 @@ public:
 
 private:
 	Mat4x4 worldMatrix_;
-	TransformComp* parent_ = nullptr;
+	Lamb::SafePtr<TransformComp> parent_ = nullptr;
 };

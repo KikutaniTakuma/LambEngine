@@ -1,7 +1,7 @@
 #pragma once
 #include "Camera/Camera.h"
 #include "Math/MathCommon.h"
-#include "Transform/Transform.h"
+#include "Utils/SafePtr.h"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -122,7 +122,7 @@ public:
 			components_[key]->Init();
 		}
 
-		return static_cast<CompType*>(components_[key].get());
+		return static_cast<CompType*>(components_.at(key).get());
 	}
 
 	template<IsBaseIComp CompType>
@@ -134,7 +134,7 @@ public:
 			throw Lamb::Error::Code<Object>("This comp is not add", ErrorPlace);
 		}
 		else {
-			return static_cast<CompType*>(components_[key]);
+			return static_cast<CompType*>(components_.at(key).get());
 		}
 	}
 
@@ -143,12 +143,12 @@ public:
 	}
 
 	const Camera* const GetCamera() const {
-		return camera_;
+		return camera_.get();
 	}
 
 protected:
 	std::unordered_map<std::string, std::unique_ptr<IComp>> components_;
 	std::unordered_set<std::string> tags_;
 
-	class Camera* camera_;
+	Lamb::SafePtr<Camera> camera_;
 };
