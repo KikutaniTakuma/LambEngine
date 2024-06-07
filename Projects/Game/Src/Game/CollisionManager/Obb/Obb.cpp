@@ -1,5 +1,6 @@
 #include "Obb.h"
 #include <climits>
+#include <cmath>
 #include <algorithm>
 #include "imgui.h"
 #include "Game/CollisionManager/Plane/Plane.h"
@@ -219,9 +220,9 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 
 void Obb::Update() {
 	Mat4x4&& worldMatrix = transform.GetMatrix();
-	transform.rotate.x = transform.rotate.x - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.x) / 90));
-	transform.rotate.y = transform.rotate.y - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.y) / 90));
-	transform.rotate.z = transform.rotate.z - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.z) / 90));
+	transform.rotate.x = transform.rotate.x - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.x) % 90)) * (std::signbit(transform.rotate.x) ? -1.0f : 1.0f);
+	transform.rotate.y = transform.rotate.y - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.y) % 90)) * (std::signbit(transform.rotate.y) ? -1.0f : 1.0f);
+	transform.rotate.z = transform.rotate.z - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.z) % 90)) * (std::signbit(transform.rotate.z) ? -1.0f : 1.0f);
 
 	Quaternion&& rotateQuaternion = Quaternion::EulerToQuaternion(transform.rotate);
 
