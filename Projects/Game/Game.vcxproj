@@ -132,6 +132,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\Camera\Camera.cpp" />
     <ClCompile Include="Src\Camera\DebugCamera\DebugCamera.cpp" />
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\FallComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ModelRenderComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ObbComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\RenderDataComp.cpp" />
@@ -166,11 +167,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\Camera\Camera.h" />
     <ClInclude Include="Src\Camera\DebugCamera\DebugCamera.h" />
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h" />
+    <ClInclude Include="Src\GameObject\Comp\FallComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ModelRenderComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ObbComp.h" />
     <ClInclude Include="Src\GameObject\Comp\RenderDataComp.h" />
     <ClInclude Include="Src\GameObject\Comp\TransformComp.h" />
-    <ClInclude Include="Src\GameObject\IComp.h" />
     <ClInclude Include="Src\GameObject\Object.h" />
     <ClInclude Include="Src\Game\Cloud\Cloud.h" />
     <ClInclude Include="Src\Game\Coin\Coin.h" />
