@@ -235,9 +235,9 @@ void Obb::Update() {
 	}
 
 	isCollision_ = false;
-#ifdef DEBUG
+#ifdef _DEBUG
 	color_ = std::numeric_limits<uint32_t>::max();
-#endif // DEBUG
+#endif // _DEBUG
 }
 
 void Obb::Draw([[maybe_unused]] const Mat4x4& viewProjection) {
