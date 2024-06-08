@@ -1,6 +1,15 @@
 #pragma once
 #include "Scenes/Manager/SceneManager.h"
-#include "Level/LevelLoader.h"
+#include "Drawers/Model/Model.h"
+#include "Drawers/Texture2D/Texture2D.h"
+#include "Drawers/PeraRender/PeraRender.h"
+#include "Drawers/Particle/Particle.h"
+#include "Drawers/StringOut/StringOut.h"
+#include "GlobalVariables/GlobalVariables.h"
+#include "Game/CollisionManager/Collider/Collider.h"
+#include "Utils/Easeing.h"
+#include "Game/SkyDome/SkyDome.h"
+#include "Utils/SafePtr.h"
 
 class TitleScene : public BaseScene {
 public:
@@ -14,7 +23,6 @@ public:
 
 public:
 	void Load() override;
-
 	void Initialize() override;
 
 	void Finalize() override;
@@ -24,5 +32,15 @@ public:
 	void Draw() override;
 
 public:
-	std::unique_ptr<LevelData> levelData_;
+	class Water* water_;
+	StringOut str_;
+	std::unique_ptr<Camera> uiCamera_;
+	//Lamb::SafePtr<Model> player_;
+	//Transform playerTransform_;
+
+	StringOut startMessage_;
+	float messageAlpah_;
+
+	class Audio* waterSE_;
+	class Audio* inGameSE_;
 };
