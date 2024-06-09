@@ -149,9 +149,18 @@ public:
 		return camera_.get();
 	}
 
+	const std::string& GetObjectName() const {
+		return objectName_;
+	}
+
+	void SetObjectName(const std::string& objectName) {
+		objectName_ = objectName;
+	}
+
 protected:
 	std::unordered_map<std::string, std::unique_ptr<IComp>> components_;
 	std::unordered_set<std::string> tags_;
+	std::string objectName_;
 
 	Lamb::SafePtr<Camera> camera_;
 	float32_t deltatime_ = 0.0_f32;
