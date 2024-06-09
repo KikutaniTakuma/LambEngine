@@ -13,7 +13,7 @@ public:
 
 	void Init() override;
 
-	void LastUpdate() override;
+	void Update() override;
 
 	void SetParent(TransformComp* parent);
 
