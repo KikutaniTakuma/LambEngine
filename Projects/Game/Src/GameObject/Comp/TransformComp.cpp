@@ -14,7 +14,14 @@ void TransformComp::Update()
 	}
 }
 
-void TransformComp::SetParent(TransformComp* parent)
+void TransformComp::SetParent(Lamb::SafePtr<TransformComp>& parent)
 {
+	// もしparent_がnullじゃないかつ、今もっているやつと違うものかつ、親のchildに自身を持っているか
+	if (parent_.have() and parent_ != parent and parent_->childlen_.contains(this)) {
+		parent_->childlen_.erase(this);
+	}
 	parent_ = parent;
+	if (parent_.have()) {
+		parent_->childlen_.insert(this);
+	}
 }
