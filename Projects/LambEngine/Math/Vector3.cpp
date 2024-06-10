@@ -60,6 +60,15 @@ Vector3& Vector3::operator-=(const Vector3& right) noexcept {
 	return *this;
 }
 
+Vector3 Vector3::operator*(const Vector3& right) const noexcept {
+	return Vector3(x * right.x, y * right.y, z * right.z);
+}
+Vector3& Vector3::operator*=(const Vector3& right) noexcept {
+	*this = *this * right;
+
+	return *this;
+}
+
 Vector3 Vector3::operator*(float scalar) const noexcept {
 	return Vector3(x * scalar, y * scalar, z * scalar);
 }

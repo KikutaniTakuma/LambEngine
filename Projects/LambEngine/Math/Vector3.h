@@ -50,6 +50,8 @@ public:
 	[[nodiscard]] Vector3 operator-(const Vector3& right) const noexcept;
 	Vector3& operator+=(const Vector3& right) noexcept;
 	Vector3& operator-=(const Vector3& right) noexcept;
+	[[nodiscard]] Vector3 operator*(const Vector3& right) const noexcept;
+	Vector3& operator*=(const Vector3& right) noexcept;
 	[[nodiscard]] Vector3 operator*(float scalar) const noexcept;
 	Vector3& operator*=(float scalar) noexcept;
 	[[nodiscard]] Vector3 operator/(float scalar) const noexcept;
