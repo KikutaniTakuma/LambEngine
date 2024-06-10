@@ -225,3 +225,17 @@ namespace Lamb {
 		return SafePtr<T>(new T(std::forward<Types>(args)...));
 	}
 }
+
+template<typename T, typename U>
+bool operator==(const Lamb::SafePtr<T>& left, const Lamb::SafePtr<U>& right) {
+	return (void*)left.get() == (void*)right.get();
+}
+
+namespace std {
+	template<typename T>
+	struct hash<Lamb::SafePtr<T>> {
+		size_t operator()(const Lamb::SafePtr<T>& key) const {
+			return std::hash<const T*>()(key.get());
+		}
+	};
+}
