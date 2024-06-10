@@ -136,6 +136,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\Comp\Camera3DComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\FallComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ModelRenderComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\InputMoveComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ObbComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\RenderDataComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\TransformComp.cpp" />
@@ -172,6 +173,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\Comp\Camera2DComp.h" />
     <ClInclude Include="Src\GameObject\Comp\Camera3DComp.h" />
     <ClInclude Include="Src\GameObject\Comp\FallComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\InputMoveComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ModelRenderComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ObbComp.h" />
     <ClInclude Include="Src\GameObject\Comp\RenderDataComp.h" />
