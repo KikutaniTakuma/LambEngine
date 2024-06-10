@@ -9,7 +9,7 @@ namespace Lamb {
 	/// <para>自動開放機能はない</para>
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	template<typename T>
+	template<IsObject T>
 	class SafePtr {
 	public:
 		using type = T;
