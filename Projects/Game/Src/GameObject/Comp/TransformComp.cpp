@@ -5,7 +5,7 @@ void TransformComp::Init()
 	
 }
 
-void TransformComp::Update()
+void TransformComp::UpdateMatrix()
 {
 	worldMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
 
@@ -16,12 +16,12 @@ void TransformComp::Update()
 
 void TransformComp::SetParent(Lamb::SafePtr<TransformComp>& parent)
 {
-	// もしparent_がnullじゃないかつ、今もっているやつと違うものかつ、親のchildに自身を持っているか
-	if (parent_.have() and parent_ != parent and parent_->childlen_.contains(this)) {
-		parent_->childlen_.erase(this);
+	// もしparent_がnullじゃないかつ、今もっているやつと違うものかつ、親のchildrenに自身を持っているか
+	if (parent_.have() and parent_ != parent and parent_->children_.contains(this)) {
+		parent_->children_.erase(this);
 	}
 	parent_ = parent;
 	if (parent_.have()) {
-		parent_->childlen_.insert(this);
+		parent_->children_.insert(this);
 	}
 }

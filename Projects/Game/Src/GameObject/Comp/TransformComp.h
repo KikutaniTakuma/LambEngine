@@ -13,7 +13,7 @@ public:
 
 	void Init() override;
 
-	void Update() override;
+	void UpdateMatrix();
 
 	void SetParent(Lamb::SafePtr<TransformComp>& parent);
 
@@ -25,8 +25,8 @@ public:
 		return parent_.empty();
 	}
 
-	bool HaveChildlen() const {
-		return not childlen_.empty();
+	bool HaveChildren() const {
+		return not children_.empty();
 	}
 
 	bool HaveParent() const {
@@ -39,7 +39,7 @@ public:
 	Vector3 translate;
 
 private:
-	Mat4x4 worldMatrix_;
+	Mat4x4 worldMatrix_ = Mat4x4::kIdentity;
 	Lamb::SafePtr<TransformComp> parent_ = nullptr;
-	std::unordered_set<Lamb::SafePtr<TransformComp>> childlen_;
+	std::unordered_set<Lamb::SafePtr<TransformComp>> children_;
 };

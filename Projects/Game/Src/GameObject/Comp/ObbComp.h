@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Object.h"
-#include "Transform/Transform.h"
+#include "TransformComp.h"
 #include "Utils/Flg.h"
 
 #include <memory>
@@ -27,7 +27,12 @@ public:
 	[[nodiscard]] bool IsCollision(ObbComp* const other, Vector3& pushVector);
 
 public:
-	QuaternionTransform transform;
+	Vector3 scale = Vector3::kIdentity;
+	Vector3 center;
+
+
+private:
+	Lamb::SafePtr<TransformComp> transformComp_;
 
 #ifdef _DEBUG
 private:

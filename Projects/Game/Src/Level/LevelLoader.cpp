@@ -18,8 +18,15 @@ LevelData* LevelLoader::Load(const std::string& fileName)
         throw Lamb::Error::Code<Lamb::Error::Function>("this file is invalid" + fileName, ErrorPlace);
     }
 
-    LevelData* levelData = new LevelData();
+    Lamb::SafePtr levelData = Lamb::MakeSafePtr<LevelData>();
 
+    AddObjects(data, levelData);
+
+    return levelData.get();
+}
+
+void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> levelData)
+{
     // 全オブジェクトを走査
     for (nlohmann::json& objectData : data["objects"]) {
         // オブジェクトを追加
@@ -49,13 +56,19 @@ LevelData* LevelLoader::Load(const std::string& fileName)
                 AddCamera(objectData, object);
             }
         }
+        // コライダーがあるなら
+        if (objectData.contains("collider")) {
+            AddObb(objectData, object);
+        }
         // Transformがあるなら
         if (objectData.contains("transform")) {
             AddTransform(objectData, object);
         }
+        // childrenがあるなら
+        if (objectData.contains("transform")) {
+            AddChildren(objectData, levelData, object);
+        }
     }
-
-    return levelData;
 }
 
 void LevelLoader::AddTransform(nlohmann::json& data, Object& object)
@@ -101,5 +114,72 @@ void LevelLoader::AddCamera(nlohmann::json& data, Object& object)
         cameraComp->SetHeight(static_cast<float32_t>(data["height"]));
         cameraComp->SetFarClip(static_cast<float32_t>(data["far_clip"]));
         cameraComp->SetNearClip(static_cast<float32_t>(data["near_clip"]));
+    }
+}
+
+void LevelLoader::AddObb(nlohmann::json& data, Object& object)
+{
+    Lamb::SafePtr obbComp = object.AddComp<ObbComp>();
+
+    nlohmann::json& colliderData = data["collider"];
+
+    for (size_t i = 0; i < obbComp->center.size(); i++) {
+        obbComp->center[i] = static_cast<float>(colliderData["center"][i]);
+    }
+    for (size_t i = 0; i < obbComp->scale.size(); i++) {
+        obbComp->scale[i] = static_cast<float>(colliderData["size"][i]);
+    }
+
+    object.SetTag("collider");
+}
+
+void LevelLoader::AddChildren(nlohmann::json& data, Lamb::SafePtr<LevelData> levelData, Object& parent)
+{
+    // 全childlenを走査
+    for (nlohmann::json& objectData : data["children"]) {
+        // オブジェクトを追加
+        levelData->objects.emplace_back(std::make_unique<Object>());
+        Object& object = *levelData->objects.back();
+
+        // オブジェクトの名前を設定
+        if (objectData.contains("name")) {
+            object.SetObjectName(objectData["name"].get<std::string>());
+        }
+
+        // タイプがあるかどうか確認
+        if (objectData.contains("type")) {
+            // タイプの文字列取得
+            std::string type = objectData["type"].get<std::string>();
+
+            // タイプがメッシュだったら
+            if (type.compare("MESH") == 0) {
+                if (objectData.contains("file_name")) {
+                    Lamb::SafePtr model = object.AddComp<ModelRenderComp>();
+                    model->SetFileNmae(objectData["file_name"]);
+                    object.SetTag("Model");
+                }
+            }
+            // カメラだったら
+            if (type.compare("CAMERA") == 0) {
+                AddCamera(objectData, object);
+            }
+        }
+        // コライダーがあるなら
+        if (objectData.contains("collider")) {
+            AddObb(objectData, object);
+        }
+        // Transformがあるなら
+        if (objectData.contains("transform")) {
+            AddTransform(objectData, object);
+
+            // 親をセット
+            Lamb::SafePtr transform = object.GetComp<TransformComp>();
+            Lamb::SafePtr parentTransform = parent.GetComp<TransformComp>();
+            transform->SetParent(parentTransform);
+        }
+        // childrenがあるなら
+        if (objectData.contains("transform")) {
+            AddChildren(objectData, levelData, object);
+        }
     }
 }
