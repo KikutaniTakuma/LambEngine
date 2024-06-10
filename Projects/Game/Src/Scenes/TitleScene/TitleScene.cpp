@@ -14,8 +14,8 @@ TitleScene::TitleScene() :
 void TitleScene::Load()
 {
 	//drawerManager_->LoadModel("./Resources/Player/Player.obj");
-	audioManager_->Load("./Resources/Sound/SE_Water.wav");
-	audioManager_->Load("./Resources/Sound/SE_InGame.wav");
+	/*audioManager_->Load("./Resources/Sound/SE_Water.wav");
+	audioManager_->Load("./Resources/Sound/SE_InGame.wav");*/
 }
 
 void TitleScene::Initialize()
@@ -49,16 +49,16 @@ void TitleScene::Initialize()
 	skydome_->Initialize();
 	skydome_->SetTexture(cloud_->GetTex());*/
 
-	waterSE_ = audioManager_->Get("./Resources/Sound/SE_Water.wav");
+	/*waterSE_ = audioManager_->Get("./Resources/Sound/SE_Water.wav");
 	waterSE_->Start(0.5f, true);
 
-	inGameSE_ = audioManager_->Get("./Resources/Sound/SE_InGame.wav");
+	inGameSE_ = audioManager_->Get("./Resources/Sound/SE_InGame.wav");*/
 }
 
 void TitleScene::Finalize()
 {
-	waterSE_->Stop();
-	inGameSE_->Stop();
+	//waterSE_->Stop();
+	//inGameSE_->Stop();
 }
 
 void TitleScene::Update()
@@ -74,7 +74,7 @@ void TitleScene::Update()
 
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
 		sceneManager_->SceneChange(BaseScene::ID::Game);
-		inGameSE_->Start(0.8f, false);
+		//inGameSE_->Start(0.8f, false);
 	}
 
 	messageAlpah_ += std::numbers::pi_v<float> *0.5f * Lamb::DeltaTime();

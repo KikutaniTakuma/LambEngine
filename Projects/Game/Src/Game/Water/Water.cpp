@@ -55,7 +55,7 @@ void Water::Init() {
 	luminate_ = std::make_unique<PeraRender>();
 	bloom_ = std::make_unique<PeraRender>();
 	luminate_->Initialize("./Resources/Shaders/PostShader/PostGrayScale.PS.hlsl");
-	bloom_->Initialize("./Resources/Shaders/PostShader/PostAveraging.PS.hlsl");
+	bloom_->Initialize("./Resources/Shaders/PostShader/PostGaussian.PS.hlsl");
 }
 
 void Water::Update(const Vector3& cameraPos) {

@@ -22,17 +22,18 @@ float32_t4 main(Output input) : SV_TARGET{
 
     for(uint32_t y = 0; y < 3; y++){
         for(uint32_t x = 0; x < 3; x++){
-            kernel[y][x] gauss(kIndex[y][x].x, kIndex[y][x].y, 2.0f);
+            kernel[y][x] = gauss(kIndex[y][x].x, kIndex[y][x].y, 2.0f);
         }
     }
 
     float32_t4 result = float32_t4(0.0f,0.0f,0.0f,0.0f);
 
-    for(uint32_t y = 0; y < 3; y++){
+    for(y = 0; y < 3; y++){
         for(uint32_t x = 0; x < 3; x++){
             result += tex.Sample(smp, input.uv + kIndex[y][x]) * kernel[y][x];
         }
     }
 
-    return result * rcp(5.0f * 5.0f);
+    result.rgb *= rcp(weight);
+    return result;
 }
