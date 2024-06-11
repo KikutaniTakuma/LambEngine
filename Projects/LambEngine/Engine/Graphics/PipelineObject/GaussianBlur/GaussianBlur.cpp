@@ -76,32 +76,22 @@ void GaussianBlur::Init(
 	renderRange[0].NumDescriptors = 1;
 	renderRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> causticsRange = {};
-	causticsRange[0].BaseShaderRegister = 1;
-	causticsRange[0].NumDescriptors = 1;
-	causticsRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	causticsRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].BaseShaderRegister = 0;
 	cbvRange[0].NumDescriptors = 3;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 3> roootParamater = {};
+	std::array<D3D12_ROOT_PARAMETER, 2> roootParamater = {};
 	roootParamater[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	roootParamater[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	roootParamater[0].DescriptorTable.pDescriptorRanges = renderRange.data();
 	roootParamater[0].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(renderRange.size());
 
 	roootParamater[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	roootParamater[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	roootParamater[1].DescriptorTable.pDescriptorRanges = causticsRange.data();
-	roootParamater[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(causticsRange.size());
-
-	roootParamater[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	roootParamater[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	roootParamater[2].DescriptorTable.pDescriptorRanges = cbvRange.data();
-	roootParamater[2].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
+	roootParamater[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	roootParamater[1].DescriptorTable.pDescriptorRanges = cbvRange.data();
+	roootParamater[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
 
 	PipelineManager::CreateRootSgnature(roootParamater.data(), roootParamater.size(), true);
 

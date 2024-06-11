@@ -43,7 +43,7 @@ void Water::Init() {
 	rotate.x = 1.57f;
 
 	staticCamera_ = std::make_unique<Camera>();
-	staticCamera_->pos.z = -0.01f;
+	staticCamera_->pos.z = -10.0f;
 	staticCamera_->Update();
 
 	waterSurface_.reset(new Texture2D{});
@@ -51,7 +51,7 @@ void Water::Init() {
 
 	waterTransform_.scale = Lamb::ClientSize();
 	waterTransform_.translate.z += 100.0f;
-	color_ = Vector4{ 0.1f, 0.25f, 0.5f, 0.0f }.GetColorRGBA();
+	color_ = Vector4{ 0.1f, 0.25f, 0.5f, 1.0f }.GetColorRGBA();
 
 	luminate_ = std::make_unique<PeraRender>();
 	luminate_->Initialize("./Resources/Shaders/PostShader/PostGrayScale.PS.hlsl");
@@ -131,11 +131,10 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 		BlendType::kUnenableDepthNone
 	);
 	waterSurface_->AllDraw();
-	//model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
 	pera_->Draw(cameraMat, Pipeline::None, luminate_.get());
 	luminate_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, gaussianBlur1_.get());
-	gaussianBlur1_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None/*, gaussianBlur2_.get()*/);
-	//gaussianBlur2_->Draw(staticCamera_->GetViewOthographics(), Pipeline::Add);
+	gaussianBlur1_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, gaussianBlur2_.get());
+	gaussianBlur2_->Draw(staticCamera_->GetViewOthographics(), Pipeline::Add);
 }
 
 void Water::Debug([[maybe_unused]]const std::string& guiName){
