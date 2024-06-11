@@ -9,11 +9,10 @@ namespace Lamb {
 	/// <para>自動開放機能はない</para>
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	template<typename T>
+	template<IsObject T>
 	class SafePtr {
 	public:
 		using type = T;
-		static constexpr size_t size = sizeof(T);
 
 	public:
 		SafePtr():
@@ -179,6 +178,18 @@ namespace Lamb {
 			*this = ptr;
 		}
 
+		bool have() const {
+			return !!ptr_;
+		}
+
+		bool empty() const {
+			return !ptr_;
+		}
+
+		constexpr size_t byte_size() const {
+			return sizeof(T);
+		}
+
 	public:
 		/// <summary>
 		/// ヌルの場合は例外をthrowする
@@ -213,4 +224,18 @@ namespace Lamb {
 	SafePtr<T> MakeSafePtr(Types&&... args) {
 		return SafePtr<T>(new T(std::forward<Types>(args)...));
 	}
+}
+
+template<typename T, typename U>
+bool operator==(const Lamb::SafePtr<T>& left, const Lamb::SafePtr<U>& right) {
+	return (void*)left.get() == (void*)right.get();
+}
+
+namespace std {
+	template<typename T>
+	struct hash<Lamb::SafePtr<T>> {
+		size_t operator()(const Lamb::SafePtr<T>& key) const {
+			return std::hash<const T*>()(key.get());
+		}
+	};
 }

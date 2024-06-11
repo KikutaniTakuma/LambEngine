@@ -11,8 +11,6 @@ public:
 
 	void Init() override;
 
-	void Update0() override;
-
 	void Draw() override;
 
 	void Load();
@@ -26,7 +24,7 @@ private:
 
 	Lamb::SafePtr<Model> model_;
 
-	class RenderDataComp* renderDataComp_;
+	Lamb::SafePtr<class RenderDataComp> renderDataComp_;
 
-	class TransformComp* transformComp_;
+	Lamb::SafePtr<class TransformComp> transformComp_;
 };

@@ -9,10 +9,6 @@ void ModelRenderComp::Init() {
 	renderDataComp_ = object_.AddComp<RenderDataComp>();
 }
 
-void ModelRenderComp::Update0() {
-	
-}
-
 void ModelRenderComp::Draw() {
 	const Camera& camera = *object_.GetCamera();
 

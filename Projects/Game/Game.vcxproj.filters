@@ -92,6 +92,21 @@
     <ClCompile Include="Src\Level\LevelLoader.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\ObbComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\FallComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\Camera3DComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\Camera2DComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\InputMoveComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -264,9 +279,6 @@
     <ClInclude Include="Src\GameObject\Object.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Src\GameObject\IComp.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\ModelRenderComp.h">
       <Filter>GameObject\Comp</Filter>
     </ClInclude>
@@ -281,6 +293,21 @@
     </ClInclude>
     <ClInclude Include="Src\Level\LevelData.h">
       <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\ObbComp.h">
+      <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\FallComp.h">
+      <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\Camera3DComp.h">
+      <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\Camera2DComp.h">
+      <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\InputMoveComp.h">
+      <Filter>GameObject\Comp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

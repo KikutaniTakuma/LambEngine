@@ -1,12 +1,13 @@
-#include "Obb.h"
+#include "ObbComp.h"
 #include <climits>
-#include <cmath>
 #include <algorithm>
-#include "imgui.h"
-#include "Game/CollisionManager/Plane/Plane.h"
-#include "Math/Quaternion.h"
 
-std::unique_ptr<std::array<const Vector3, 8>> Obb::localPositions_ = std::make_unique<std::array<const Vector3, 8>>(
+#ifdef _DEBUG
+#include "Drawers/Line/Line.h"
+#endif // _DEBUG
+
+
+std::unique_ptr<std::array<const Vector3, 8>> ObbComp::localPositions_ = std::make_unique<std::array<const Vector3, 8>>(
 	std::array<const Vector3, 8>{
 		Vector3(-0.5f, -0.5f, -0.5f), // 左下手前
 		Vector3(-0.5f, -0.5f, +0.5f), // 左下奥
@@ -19,37 +20,154 @@ std::unique_ptr<std::array<const Vector3, 8>> Obb::localPositions_ = std::make_u
 		Vector3(+0.5f, +0.5f, +0.5f)  // 右上奥
 	}
 );
-std::unique_ptr<std::array<const Vector3, 3>> Obb::localOrientations_ = std::make_unique<std::array<const Vector3, 3>>(
+std::unique_ptr<std::array<const Vector3, 3>> ObbComp::localOrientations_ = std::make_unique<std::array<const Vector3, 3>>(
 	std::array<const Vector3, 3>{
-	   Vector3(1.0f,0.0f,0.0f),
-	   Vector3(0.0f,1.0f,0.0f),
-	   Vector3(0.0f,0.0f,1.0f)
+		Vector3(1.0f, 0.0f, 0.0f),
+		Vector3(0.0f, 1.0f, 0.0f),
+		Vector3(0.0f, 0.0f, 1.0f)
 	}
 );
 
-Obb::Obb():
-	transform(),
-#ifdef _DEBUG
-	color_(std::numeric_limits<uint32_t>::max()),
-#endif // _DEBUG
-	positions_(),
-	orientations_()
+void ObbComp::Init()
 {
+	transformComp_ = object_.AddComp<TransformComp>();
 	positions_ = std::make_unique<std::array<Vector3, 8>>();
 	orientations_ = std::make_unique<std::array<Vector3, 3>>();
+#ifdef _DEBUG
+	color_ = std::numeric_limits<uint32_t>::max();
+#endif // _DEBUG
 }
 
-bool Obb::IsCollision(Vector3 pos, float radius) {
+void ObbComp::UpdatePosAndOrient()
+{
+	const Mat4x4& worldMatrix = transformComp_->GetMatrix();
+
+	for (size_t i = 0; i < localPositions_->size(); i++) {
+		positions_->at(i) = (center + localPositions_->at(i) * scale) * worldMatrix;
+	}
+
+	for (size_t i = 0; i < localOrientations_->size(); i++) {
+		orientations_->at(i) = localOrientations_->at(i) * transformComp_->rotate;
+	}
+
+	isCollision_ = false;
+#ifdef _DEBUG
+	color_ = std::numeric_limits<uint32_t>::max();
+#endif // _DEBUG
+}
+
+void ObbComp::Draw() {
+#ifdef _DEBUG
+	const Mat4x4& viewProjection = object_.GetCamera()->GetViewProjection();
+
+	Line::Draw(
+		(*positions_)[0],
+		(*positions_)[1],
+		viewProjection,
+		color_
+	);
+
+	Line::Draw(
+		(*positions_)[0],
+		(*positions_)[2],
+		viewProjection,
+		color_
+	);
+
+	Line::Draw(
+		(*positions_)[0],
+		(*positions_)[4],
+		viewProjection,
+		color_
+	);
+
+	Line::Draw(
+		(*positions_)[3],
+		(*positions_)[1],
+		viewProjection,
+		color_
+	);
+
+	Line::Draw(
+		(*positions_)[3],
+		(*positions_)[2],
+		viewProjection,
+		color_
+	);
+
+	Line::Draw(
+		(*positions_)[3],
+		(*positions_)[7],
+		viewProjection,
+		color_
+	);
+
+	Line::Draw(
+		(*positions_)[5],
+		(*positions_)[4],
+		viewProjection,
+		color_
+	);
+
+	Line::Draw(
+		(*positions_)[5],
+		(*positions_)[7],
+		viewProjection,
+		color_
+	);
+
+	Line::Draw(
+		(*positions_)[5],
+		(*positions_)[1],
+		viewProjection,
+		color_
+	);
+
+	Line::Draw(
+		(*positions_)[6],
+		(*positions_)[4],
+		viewProjection,
+		color_
+	);
+
+	Line::Draw(
+		(*positions_)[6],
+		(*positions_)[7],
+		viewProjection,
+		color_
+	);
+
+	Line::Draw(
+		(*positions_)[6],
+		(*positions_)[2],
+		viewProjection,
+		color_
+	);
+
+	const Mat4x4& worldMatrix = transformComp_->GetMatrix();
+	for (size_t i = 0llu; i < orientations_->size(); i++) {
+		Line::Draw(
+			transformComp_->translate,
+			localOrientations_->at(i) * 0.5f * worldMatrix,
+			viewProjection,
+			Vector4{ localOrientations_->at(i), 1.0f }.GetColorRGBA()
+		);
+	}
+#endif // _DEBUG
+}
+
+bool ObbComp::IsCollision(Vector3 pos, float radius)
+{
 	constexpr int32_t min = 0;
 	constexpr int32_t max = 1;
 
 	std::array<Vector3, 2> positions = {
-		transform.scale * 0.5f, // 左下手前
-		
-		-transform.scale * 0.5f // 右上奥
+		transformComp_->scale * 0.5f, // 左下手前
+
+		-transformComp_->scale * 0.5f // 右上奥
 	};
 
-	pos *= Mat4x4::MakeAffin(Vector3::kIdentity, transform.rotate, transform.translate).Inverse();
+	pos *= Mat4x4::MakeAffin(Vector3::kIdentity, transformComp_->rotate, transformComp_->translate).Inverse();
 
 	Vector3 closestPoint = {
 		std::clamp(pos.x, positions[min].x,positions[max].x),
@@ -67,11 +185,12 @@ bool Obb::IsCollision(Vector3 pos, float radius) {
 
 		return true;
 	}
-	
+
 	return false;
 }
 
-bool Obb::IsCollision(Obb& other) {
+bool ObbComp::IsCollision(ObbComp* const other)
+{
 	float length = 0.0f, otherLength = 0.0f;
 	float min = 0.0f, max = 0.0f, otherMin = 0.0f, otherMax = 0.0f;
 
@@ -81,7 +200,7 @@ bool Obb::IsCollision(Obb& other) {
 	auto isSepatateAxis = [&](const Vector3& separationAxis)->bool {
 		for (size_t i = 0; i < 8llu; i++) {
 			projectLength[i] = positions_->at(i).Dot(separationAxis);
-			otherProjectLength[i] = other.positions_->at(i).Dot(separationAxis);
+			otherProjectLength[i] = other->positions_->at(i).Dot(separationAxis);
 		}
 
 		min = *std::min_element(projectLength.begin(), projectLength.end());
@@ -109,7 +228,7 @@ bool Obb::IsCollision(Obb& other) {
 			return false;
 		}
 	}
-	for (const auto& separationAxis : *(other.orientations_)) {
+	for (const auto& separationAxis : *(other->orientations_)) {
 		if (isSepatateAxis(separationAxis)) {
 			return false;
 		}
@@ -117,7 +236,7 @@ bool Obb::IsCollision(Obb& other) {
 
 	// 各軸のクロス積
 	for (const auto& orientation : *orientations_) {
-		for (const auto& otherOrientation : *other.orientations_) {
+		for (const auto& otherOrientation : *other->orientations_) {
 			if (isSepatateAxis(orientation.Cross(otherOrientation))) {
 				return false;
 			}
@@ -125,17 +244,18 @@ bool Obb::IsCollision(Obb& other) {
 	}
 
 	isCollision_ = true;
-	other.isCollision_ = true;
+	other->isCollision_ = true;
 
 #ifdef _DEBUG
 	color_ = 0xff0000ff;
-	other.color_ = 0xff0000ff;
+	other->color_ = 0xff0000ff;
 #endif // _DEBUG
 
 	return true;
 }
 
-bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
+bool ObbComp::IsCollision(ObbComp* const other, Vector3& pushVector)
+{
 	float length = 0.0f, otherLength = 0.0f;
 	float min = 0.0f, max = 0.0f, otherMin = 0.0f, otherMax = 0.0f;
 
@@ -152,7 +272,7 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 
 		for (size_t i = 0; i < 8llu; i++) {
 			projectLength[i] = positions_->at(i).Dot(separationAxis);
-			otherProjectLength[i] = other.positions_->at(i).Dot(separationAxis);
+			otherProjectLength[i] = other->positions_->at(i).Dot(separationAxis);
 		}
 
 		min = *std::min_element(projectLength.begin(), projectLength.end());
@@ -178,7 +298,7 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 		}
 
 		return false;
-	};
+		};
 
 	// 分離軸(面法線)
 	for (const auto& separationAxis : *orientations_) {
@@ -186,7 +306,7 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 			return false;
 		}
 	}
-	for (const auto& separationAxis : *(other.orientations_)) {
+	for (const auto& separationAxis : *(other->orientations_)) {
 		if (isSepatateAxisAndClacOverLap(separationAxis)) {
 			return false;
 		}
@@ -194,7 +314,7 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 
 	// 各軸のクロス積
 	for (const auto& orientation : *orientations_) {
-		for (const auto& otherOrientation : *other.orientations_) {
+		for (const auto& otherOrientation : *other->orientations_) {
 			Vector3&& separationAxis = orientation.Cross(otherOrientation);
 			if (isSepatateAxisAndClacOverLap(separationAxis)) {
 				return false;
@@ -202,150 +322,18 @@ bool Obb::IsCollision(Obb& other, Vector3& pushVector) {
 		}
 	}
 
-	float dot = (other.transform.translate - transform.translate).Dot(overLapAxis.Normalize());
+	float dot = (other->transformComp_->translate - transformComp_->translate).Dot(overLapAxis.Normalize());
 	if (not (0.0f < dot)) {
 		overLapAxis = -overLapAxis;
 	}
 	pushVector = overLapAxis.Normalize() * minOverLap;
 
 	isCollision_ = true;
-	other.isCollision_ = true;
+	other->isCollision_ = true;
 #ifdef _DEBUG
 	color_ = 0xff0000ff;
-	other.color_ = 0xff0000ff;
+	other->color_ = 0xff0000ff;
 #endif // _DEBUG
 
 	return true;
-}
-
-void Obb::Update() {
-	Mat4x4&& worldMatrix = transform.GetMatrix();
-	transform.rotate.x = transform.rotate.x - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.x) % 90)) * (std::signbit(transform.rotate.x) ? -1.0f : 1.0f);
-	transform.rotate.y = transform.rotate.y - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.y) % 90)) * (std::signbit(transform.rotate.y) ? -1.0f : 1.0f);
-	transform.rotate.z = transform.rotate.z - (90.0f * static_cast<float>(static_cast<int32_t>(transform.rotate.z) % 90)) * (std::signbit(transform.rotate.z) ? -1.0f : 1.0f);
-
-	Quaternion&& rotateQuaternion = Quaternion::EulerToQuaternion(transform.rotate);
-
-	for (size_t i = 0; i < localPositions_->size(); i++) {
-		positions_->at(i) = localPositions_->at(i) * worldMatrix;
-	}
-
-	for (size_t i = 0; i < localOrientations_->size(); i++) {
-		orientations_->at(i) = localOrientations_->at(i) * rotateQuaternion;
-	}
-
-	isCollision_ = false;
-#ifdef _DEBUG
-	color_ = std::numeric_limits<uint32_t>::max();
-#endif // _DEBUG
-}
-
-void Obb::Draw([[maybe_unused]] const Mat4x4& viewProjection) {
-#ifdef _DEBUG
-	Line::Draw(
-		(*positions_)[0],
-		(*positions_)[1],
-		viewProjection,
-		color_
-	);
-
-	Line::Draw(
-		(*positions_)[0],
-		(*positions_)[2],
-		viewProjection,
-		color_
-	);
-
-	Line::Draw(
-		(*positions_)[0],
-		(*positions_)[4],
-		viewProjection,
-		color_
-	);
-
-	Line::Draw(
-		(*positions_)[3],
-		(*positions_)[1],
-		viewProjection,
-		color_
-	);
-
-	Line::Draw(
-		(*positions_)[3],
-		(*positions_)[2],
-		viewProjection,
-		color_
-	);
-
-	Line::Draw(
-		(*positions_)[3],
-		(*positions_)[7],
-		viewProjection,
-		color_
-	);
-
-	Line::Draw(
-		(*positions_)[5],
-		(*positions_)[4],
-		viewProjection,
-		color_
-	);
-
-	Line::Draw(
-		(*positions_)[5],
-		(*positions_)[7],
-		viewProjection,
-		color_
-	);
-
-	Line::Draw(
-		(*positions_)[5],
-		(*positions_)[1],
-		viewProjection,
-		color_
-	);
-
-	Line::Draw(
-		(*positions_)[6],
-		(*positions_)[4],
-		viewProjection,
-		color_
-	);
-
-	Line::Draw(
-		(*positions_)[6],
-		(*positions_)[7],
-		viewProjection,
-		color_
-	);
-
-	Line::Draw(
-		(*positions_)[6],
-		(*positions_)[2],
-		viewProjection,
-		color_
-	);
-
-	Mat4x4&& worldMatrix = transform.GetMatrix();
-	for (size_t i = 0llu; i < orientations_->size(); i++) {
-		Line::Draw(
-			transform.translate,
-			localOrientations_->at(i) * 0.5f * worldMatrix,
-			viewProjection,
-			Vector4{ localOrientations_->at(i), 1.0f }.GetColorRGBA()
-		);
-	}
-#endif // _DEBUG
-}
-
-void Obb::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef _DEBUG
-	ImGui::Begin(guiName.c_str());
-	transform.Debug(guiName);
-	static Vector4 colorEdit;
-	colorEdit = UintToVector4(color_);
-	ImGui::ColorEdit4("color", colorEdit.m.data());
-	color_ = Vector4ToUint(colorEdit);
-	ImGui::End();
-#endif // _DEBUG
 }

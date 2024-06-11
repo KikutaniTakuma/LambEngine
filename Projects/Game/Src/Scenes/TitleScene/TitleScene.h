@@ -9,13 +9,7 @@
 #include "Game/CollisionManager/Collider/Collider.h"
 #include "Utils/Easeing.h"
 #include "Game/SkyDome/SkyDome.h"
-#include "Game/CollisionManager/Sphere/Sphere.h"
-#include "Engine/Graphics/Tex2DAniamtor/Tex2DAniamtor.h"
 #include "Utils/SafePtr.h"
-#include "Drawers/Other/WaterTex2D/WaterTex2D.h"
-#include "Game/SkyBlock/SkyBlock.h"
-#include "Game/Player/Player.h"
-#include "Game/Coin/Coin.h"
 
 class TitleScene : public BaseScene {
 public:
@@ -29,7 +23,6 @@ public:
 
 public:
 	void Load() override;
-
 	void Initialize() override;
 
 	void Finalize() override;
@@ -40,13 +33,14 @@ public:
 
 public:
 	class Water* water_;
-	std::unique_ptr<WaterTex2D> watertsetUgoitekure_;
-	std::unique_ptr<SkyBlock> skyBlock_;
-	std::unique_ptr<Player> player_;
-	std::unique_ptr<Coin> coin_;
+	StringOut str_;
+	std::unique_ptr<Camera> uiCamera_;
+	//Lamb::SafePtr<Model> player_;
+	//Transform playerTransform_;
 
+	StringOut startMessage_;
+	float messageAlpah_;
 
-	Transform waterPos_;
-	Vector3 random_;
-	Vector4 color_;
+	class Audio* waterSE_;
+	class Audio* inGameSE_;
 };

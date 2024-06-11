@@ -2,7 +2,7 @@
 #include "../Object.h"
 #include "Transform/Transform.h"
 
-#include <memory>
+#include <unordered_set>
 
 
 class TransformComp : public IComp {
@@ -13,12 +13,24 @@ public:
 
 	void Init() override;
 
-	void Update4() override;
+	void UpdateMatrix();
 
-	void SetParent(TransformComp* parent);
+	void SetParent(Lamb::SafePtr<TransformComp>& parent);
 
 	const Mat4x4& GetMatrix() const {
 		return worldMatrix_;
+	}
+
+	bool IsRootTransForm() const {
+		return parent_.empty();
+	}
+
+	bool HaveChildren() const {
+		return not children_.empty();
+	}
+
+	bool HaveParent() const {
+		return parent_.have();
 	}
 
 public:
@@ -27,6 +39,7 @@ public:
 	Vector3 translate;
 
 private:
-	Mat4x4 worldMatrix_;
-	TransformComp* parent_ = nullptr;
+	Mat4x4 worldMatrix_ = Mat4x4::kIdentity;
+	Lamb::SafePtr<TransformComp> parent_ = nullptr;
+	std::unordered_set<Lamb::SafePtr<TransformComp>> children_;
 };
