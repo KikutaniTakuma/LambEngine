@@ -26,7 +26,7 @@ RenderTarget::RenderTarget() :
 	// リソース用のヒープの設定
 	D3D12_HEAP_PROPERTIES heapPropaerties{};
 	heapPropaerties.Type = D3D12_HEAP_TYPE_DEFAULT;
-	Vector4 clsValue = { 0.1f, 0.25f, 0.5f, 0.0f };
+	Vector4 clsValue = { 0.0f, 0.0f, 0.0f, 0.0f };
 	D3D12_CLEAR_VALUE clearValue{};
 	clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	for (size_t i = 0; i < clsValue.m.size(); i++) {
@@ -79,7 +79,7 @@ RenderTarget::RenderTarget(uint32_t width, uint32_t height) :
 	// リソース用のヒープの設定
 	D3D12_HEAP_PROPERTIES heapPropaerties{};
 	heapPropaerties.Type = D3D12_HEAP_TYPE_DEFAULT;
-	Vector4 clsValue = { 0.1f, 0.25f, 0.5f, 0.0f };
+	Vector4 clsValue = { 0.0f, 0.0f, 0.0f, 0.0f };
 	D3D12_CLEAR_VALUE clearValue{};
 	clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	for (size_t i = 0; i < clsValue.m.size(); i++) {
@@ -130,7 +130,7 @@ void RenderTarget::SetThisRenderTarget() {
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
 	rtvHeap->SetRtv(rtvHeapHandleUint_);
 
-	Vector4 clearColor = { 0.1f, 0.25f, 0.5f, 0.0f };
+	Vector4 clearColor = { 0.0f, 0.0f, 0.0f, 0.0f };
 	rtvHeap->ClearRenderTargetView(rtvHeapHandleUint_, clearColor);
 }
 
