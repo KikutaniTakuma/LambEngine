@@ -425,7 +425,7 @@ class DrawCollider:
         shader = gpu.shader.from_builtin("3D_UNIFORM_COLOR")
 
         #バッチを作成
-        batch = gpu_extras.batch.batch_for_shader(shader, "LINES", vertices, indices)
+        batch = gpu_extras.batch.batch_for_shader(shader, "LINES", vertices, indices = indices)
 
         #シェーダのパラメータ
         color = [0.5, 1.0, 1.0, 1.0]
