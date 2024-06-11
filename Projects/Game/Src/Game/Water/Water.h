@@ -40,12 +40,15 @@ public:
 private:
 	std::unique_ptr<PeraRender> pera_;
 	std::unique_ptr<PeraRender> luminate_;
-	std::unique_ptr<PeraRender> bloom_;
+	std::unique_ptr<PeraRender> gaussianBlur1_;
+	std::unique_ptr<PeraRender> gaussianBlur2_;
 	std::unique_ptr<Texture2D> waterSurface_;
 	Transform waterTransform_;
 	uint32_t color_;
 
 	class WaterPipeline* waterPipelineObject_ = nullptr;
+	class GaussianBlur* gaussianBlurObject1_ = nullptr;
+	class GaussianBlur* gaussianBlurObject2_ = nullptr;
 
 	std::unique_ptr<Camera> staticCamera_;
 };

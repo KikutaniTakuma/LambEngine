@@ -208,6 +208,9 @@
     <ClCompile Include="Utils\FileUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\GaussianBlur\GaussianBlur.cpp">
+      <Filter>Engine\Graphics\PipelineObject\GaussianBlur</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -392,6 +395,9 @@
     </Filter>
     <Filter Include="Engine\EngineUtils\ResourceLoadLog">
       <UniqueIdentifier>{5d704287-10e8-4615-9e1d-949b3bb47401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject\GaussianBlur">
+      <UniqueIdentifier>{bcc30c3c-78cb-4f5e-8b79-0fff4d880363}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -637,6 +643,9 @@
     </ClInclude>
     <ClInclude Include="Utils\FileUtils.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\GaussianBlur\GaussianBlur.h">
+      <Filter>Engine\Graphics\PipelineObject\GaussianBlur</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
