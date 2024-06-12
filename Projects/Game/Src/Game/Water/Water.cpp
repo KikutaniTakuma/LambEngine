@@ -54,7 +54,7 @@ void Water::Init() {
 	color_ = Vector4{ 0.1f, 0.25f, 0.5f, 1.0f }.GetColorRGBA();
 
 	luminate_ = std::make_unique<PeraRender>();
-	luminate_->Initialize("./Resources/Shaders/PostShader/PostGrayScale.PS.hlsl");
+	luminate_->Initialize("./Resources/Shaders/PostShader/PostLuminate.PS.hlsl");
 
 
 	gaussianBlurObject1_ = new GaussianBlur{};
@@ -147,8 +147,8 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 		ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
 		ImGui::TreePop();
 	}
-	gaussianBlur1_->Debug(guiName);
-	gaussianBlur2_->Debug(guiName);
+	gaussianBlurObject1_->Debug("gaussianBlurObject1");
+	gaussianBlurObject2_->Debug("gaussianBlurObject2");
 
 	ImGui::End();
 #endif // _DEBUG

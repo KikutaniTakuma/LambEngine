@@ -69,7 +69,7 @@ void TitleScene::Update()
 	currentCamera_->Debug("camera");
 	currentCamera_->Update();
 
-
+	water_->Debug("water");
 	water_->Update(currentCamera_->GetPos());
 
 	if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {

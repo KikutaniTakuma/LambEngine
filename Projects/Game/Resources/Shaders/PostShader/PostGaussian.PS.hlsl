@@ -17,7 +17,7 @@ float32_t gauss(float32_t x, float32_t y, float32_t sigma){
 }
 
 float32_t gauss1Dimantion(float32_t x, float32_t sigma){
-    return rcp(sqrt(2.0f * PI) * sigma) * exp(-(x*x)) * rcp(2.0f * sigma * sigma);
+    return 1.0f / (sqrt(2.0f * PI) * sigma) * exp(-(x*x)  / (2.0f * sigma * sigma));
 }
 
 float32_t4 GaussianBlur(
@@ -28,7 +28,7 @@ float32_t4 GaussianBlur(
     float32_t2 dir
     )
 {
-    float32_t4 output;
+    float32_t4 output = float32_t4(0.0f,0.0f,0.0f,0.0f);
     float32_t sum = 0.0f;
     float32_t2 uvOffset;
     float32_t weight = 0.0f;
@@ -42,7 +42,7 @@ float32_t4 GaussianBlur(
         sum += weight;
     }
 
-    output.rgb *= rcp(sum);
+    output *= rcp(sum);
 
     return output;
 }

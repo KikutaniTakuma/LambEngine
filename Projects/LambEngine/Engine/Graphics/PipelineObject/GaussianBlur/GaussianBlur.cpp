@@ -15,14 +15,12 @@
 
 void GaussianBlur::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
-	ImGui::Begin(guiName.c_str());
-	if (ImGui::TreeNode("GaussianBlurState")) {
+	if (ImGui::TreeNode(guiName.c_str())) {
 		ImGui::DragInt("kernel", &gaussianBlurState_->kernelSize, 0.1f, 0, 64);
 		ImGui::DragFloat2("dir", gaussianBlurState_->dir.data(), 1.0f, 0.0f, 1.0f);
 		ImGui::DragFloat("dir", &gaussianBlurState_->sigma, 0.01f, 0.0f, 10.0f);
 		ImGui::TreePop();
 	}
-	ImGui::End();
 #endif // _DEBUG
 
 }
