@@ -72,40 +72,40 @@ namespace Lamb {
 		}
 
 		T* operator->()  {
-			if (not ptr_) [[unlikely]] {
+			if (empty()) [[unlikely]] {
 				NullPointerException(ErrorPlace);
 			}
 			return ptr_;
 		}
-		T* operator->() const  {
-			if (not ptr_) [[unlikely]] {
+		T* const operator->() const  {
+			if (empty()) [[unlikely]] {
 				NullPointerException(ErrorPlace);
 			}
 			return ptr_;
 		}
 
 		T& operator*()  {
-			if (not ptr_) [[unlikely]] {
+			if (empty()) [[unlikely]] {
 				NullPointerException(ErrorPlace);
 			}
 			return *ptr_;
 		}
 
 		T& operator*() const  {
-			if (not ptr_) [[unlikely]] {
+			if (empty()) [[unlikely]] {
 				NullPointerException(ErrorPlace);
 			}
 			return *ptr_;
 		}
 
 		T& operator[](size_t index)  {
-			if (not ptr_) [[unlikely]] {
+			if (empty()) [[unlikely]] {
 				NullPointerException(ErrorPlace);
 			}
 			return (ptr_[index]);
 		}
 		T& operator[](size_t index) const  {
-			if (not ptr_) [[unlikely]] {
+			if (empty()) [[unlikely]] {
 				NullPointerException(ErrorPlace);
 			}
 			return (ptr_[index]);
@@ -201,7 +201,7 @@ namespace Lamb {
 			const std::string& sourceFileName,
 			uint32_t codeLineNumber
 		) const {
-			if (not ptr_) {
+			if (empty()) {
 				NullPointerException<Name>(funcName, sourceFileName, codeLineNumber);
 			}
 		}
