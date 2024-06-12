@@ -16,9 +16,9 @@
 void GaussianBlur::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
-		ImGui::DragInt("kernel", &gaussianBlurState_->kernelSize, 0.1f, 0, 64);
+		ImGui::DragInt("kernel", &gaussianBlurState_->kernelSize, 0.1f, 0, 128);
 		ImGui::DragFloat2("dir", gaussianBlurState_->dir.data(), 1.0f, 0.0f, 1.0f);
-		ImGui::DragFloat("dir", &gaussianBlurState_->sigma, 0.01f, 0.0f, 10.0f);
+		ImGui::DragFloat("sigma", &gaussianBlurState_->sigma, 0.01f, 0.0f, 1000.0f);
 		ImGui::TreePop();
 	}
 #endif // _DEBUG
@@ -91,7 +91,7 @@ void GaussianBlur::Init(
 	roootParamater[1].DescriptorTable.pDescriptorRanges = cbvRange.data();
 	roootParamater[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
 
-	PipelineManager::CreateRootSgnature(roootParamater.data(), roootParamater.size(), true);
+	PipelineManager::CreateRootSgnature(roootParamater.data(), roootParamater.size(), true,true);
 
 	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT);
 	PipelineManager::SetVertexInput("TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT);
