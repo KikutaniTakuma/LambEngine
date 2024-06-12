@@ -15,5 +15,6 @@ float32_t4 main(Output input) : SV_TARGET{
     color.g = t;
     color.b = t;
 
+
     return color;
 }
