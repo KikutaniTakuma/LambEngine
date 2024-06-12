@@ -82,15 +82,15 @@ void Water::Init() {
 	gaussianBlurObject1_->SetGaussianState(
 		GaussianBlur::GaussianBlurState{
 			.dir = Vector2(1.0f, 0.0f),
-			.sigma = 2.0f,
-			.kernelSize = 3,
+			.sigma = 10.0f,
+			.kernelSize = 35,
 		}
 	);
 	gaussianBlurObject2_->SetGaussianState(
 		GaussianBlur::GaussianBlurState{
 			.dir = Vector2(0.0f, 1.0f),
-			.sigma = 2.0f,
-			.kernelSize = 3,
+			.sigma = 10.0f,
+			.kernelSize = 35,
 		}
 	);
 }
