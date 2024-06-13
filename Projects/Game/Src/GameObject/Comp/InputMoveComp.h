@@ -20,6 +20,10 @@ public:
 
 
 public:
+	const Vector3& GetDirection() const {
+		return direction_;
+	}
+
 	const Vector3& GetMoveVector() const {
 		return moveVector_;
 	}
