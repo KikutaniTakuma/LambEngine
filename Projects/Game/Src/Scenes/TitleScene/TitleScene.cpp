@@ -53,6 +53,9 @@ void TitleScene::Initialize()
 	waterSE_->Start(0.5f, true);
 
 	inGameSE_ = audioManager_->Get("./Resources/Sound/SE_InGame.wav");*/
+
+	skybox_ = std::make_unique<SkyBox>();
+	skybox_->Load("./Resources/Common/SkyBox/rostock_laage_airport_4k.dds");
 }
 
 void TitleScene::Finalize()
@@ -79,14 +82,17 @@ void TitleScene::Update()
 
 	messageAlpah_ += std::numbers::pi_v<float> *0.5f * Lamb::DeltaTime();
 	startMessage_.color = static_cast<uint32_t>(255.0f * std::abs(std::cos(messageAlpah_)));
+
+	transform_.Debug("skybox");
 }
 
 void TitleScene::Draw()
 {
+	skybox_->Draw(transform_.GetMatrix(), currentCamera_->GetViewProjection(), 0xffffffff);
 	/*cloud_->Draw();
 	skydome_->Draw(*currentCamera_);*/
 
-	water_->Draw(currentCamera_->GetViewProjection());
+	//water_->Draw(currentCamera_->GetViewProjection());
 	/*player_->Draw(
 		playerTransform_.GetMatrix(),
 		currentCamera_->GetViewProjection(),
@@ -94,6 +100,7 @@ void TitleScene::Draw()
 		BlendType::kNormal
 	);*/
 
-	str_.Draw();
-	startMessage_.Draw();
+	//str_.Draw();
+	//startMessage_.Draw();
+
 }
