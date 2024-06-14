@@ -190,6 +190,13 @@ namespace Lamb {
 			return sizeof(T);
 		}
 
+		void*const* GetPtrAdress() const {
+			return reinterpret_cast<void*const*>(&ptr_);
+		}
+		void** GetPtrAdress() {
+			return reinterpret_cast<void**>(&ptr_);
+		}
+
 	public:
 		/// <summary>
 		/// ヌルの場合は例外をthrowする

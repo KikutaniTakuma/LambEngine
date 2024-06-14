@@ -1,24 +1,43 @@
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
+#include "Math/Mat4x4.h"
+#include "Math/Vector4.h"
+#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
 
 class SkyBox {
 public:
-	SkyBox();
+	struct ShaderData {
+		Mat4x4 wvpMat;
+		Vector4 color;
+	};
+
+public:
+	SkyBox() = default;
 	SkyBox(const SkyBox&) = delete;
 	SkyBox(SkyBox&&) = delete;
-	~SkyBox() = default;
+	~SkyBox();
 
 public:
 	SkyBox& operator=(const SkyBox&) = delete;
 	SkyBox& operator=(SkyBox&&) = delete;
 
+public:
+	void Load(const std::string& fileName);
+
+	void Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color);
+
 private:
-	D3D12_VERTEX_BUFFER_VIEW vertexView;
-	Lamb::LambPtr<ID3D12Resource> vertexResource;
-	uint32_t vertexNumber;
+	void CreateGraphicsPipeline();
 
-	D3D12_INDEX_BUFFER_VIEW indexView;
-	Lamb::LambPtr<ID3D12Resource> indexResource;
+private:
+	D3D12_VERTEX_BUFFER_VIEW vertexView_ = {};
+	Lamb::LambPtr<ID3D12Resource> vertexResource_;
 
-	static constexpr uint32_t kIndexNumber = 36u;
+	D3D12_INDEX_BUFFER_VIEW indexView_ = {};
+	Lamb::LambPtr<ID3D12Resource> indexResource_;
+
+	static constexpr uint32_t kIndexNumber_ = 36u;
+	std::unique_ptr<ConstBuffer<ShaderData>> cbuffer_;
+	Lamb::SafePtr<class Texture> texture_;
+	Lamb::SafePtr<class Pipeline> pipeline_;
 };
