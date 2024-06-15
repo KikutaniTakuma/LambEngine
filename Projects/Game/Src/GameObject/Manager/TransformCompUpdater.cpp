@@ -1,5 +1,4 @@
 #include "TransformCompUpdater.h"
-#include "../Comp/TransformComp.h"
 
 std::unique_ptr<TransformCompUpdater> TransformCompUpdater::instance_;
 

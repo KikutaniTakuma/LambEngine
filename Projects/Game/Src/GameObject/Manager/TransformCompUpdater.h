@@ -4,6 +4,8 @@
 
 #include "Utils/SafePtr.h"
 
+#include "../Comp/TransformComp.h"
+
 class TransformCompUpdater {
 private:
 	TransformCompUpdater();
@@ -25,11 +27,11 @@ private:
 	static std::unique_ptr<TransformCompUpdater> instance_;
 
 public:
-	void Set(const Lamb::SafePtr<class TransformComp>& transformComp);
-	void Erase(const Lamb::SafePtr<class TransformComp>& transformComp);
+	void Set(const Lamb::SafePtr<TransformComp>& transformComp);
+	void Erase(const Lamb::SafePtr<TransformComp>& transformComp);
 
 	void UpdateMatrix();
 
 private:
-	std::unordered_set<const Lamb::SafePtr<class TransformComp>> transformComps_;
+	std::unordered_set<const Lamb::SafePtr<TransformComp>> transformComps_;
 };

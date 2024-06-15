@@ -7,9 +7,9 @@
 
 class TransformComp : public IComp {
 public:
-	using IComp::IComp;
+	TransformComp(Object* const object);
 
-	~TransformComp() = default;
+	~TransformComp();
 
 	void Init() override;
 
@@ -34,12 +34,12 @@ public:
 	}
 
 public:
-	Vector3 scale = Vector3::kIdentity;
+	Vector3 scale;
 	Quaternion rotate;
 	Vector3 translate;
 
 private:
-	Mat4x4 worldMatrix_ = Mat4x4::kIdentity;
-	Lamb::SafePtr<TransformComp> parent_ = nullptr;
+	Mat4x4 worldMatrix_;
+	Lamb::SafePtr<TransformComp> parent_;
 	std::unordered_set<Lamb::SafePtr<TransformComp>> children_;
 };
