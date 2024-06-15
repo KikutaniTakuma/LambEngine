@@ -8,7 +8,7 @@
 
 class TransformCompUpdater {
 private:
-	TransformCompUpdater();
+	TransformCompUpdater() = default;
 	TransformCompUpdater(const TransformCompUpdater&)  =delete;
 	TransformCompUpdater(TransformCompUpdater&&) = delete;
 
@@ -33,5 +33,5 @@ public:
 	void UpdateMatrix();
 
 private:
-	std::unordered_set<const Lamb::SafePtr<TransformComp>> transformComps_;
+	std::unordered_set<Lamb::SafePtr<TransformComp>> transformComps_;
 };

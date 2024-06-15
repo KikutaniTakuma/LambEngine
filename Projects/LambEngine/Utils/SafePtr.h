@@ -70,6 +70,9 @@ namespace Lamb {
 		T** operator&()  {
 			return &ptr_;
 		}
+		T*const* operator&() const {
+			return &ptr_;
+		}
 
 		T* operator->()  {
 			if (empty()) [[unlikely]] {
@@ -144,7 +147,7 @@ namespace Lamb {
 		/// 通常ポインタを取得
 		/// </summary>
 		/// <returns>ポインタ</returns>
-		const T* get() const {
+		T* const get() const {
 			return ptr_;
 		}
 

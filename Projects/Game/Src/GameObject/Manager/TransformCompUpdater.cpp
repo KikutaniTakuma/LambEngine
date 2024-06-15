@@ -14,11 +14,11 @@ void TransformCompUpdater::Initialize(){
 	if(instance_){
 		return;
 	}
-	instance_ = std::make_unique<TransformCompUpdater>();
+	instance_.reset(new TransformCompUpdater());
 }
 
 void TransformCompUpdater::Set(const Lamb::SafePtr<class TransformComp>& transformComp) {
-	if (transformComps_.contains(transformComp)) {
+	if (not transformComps_.contains(transformComp)) {
 		transformComps_.insert(transformComp);
 	}
 }
