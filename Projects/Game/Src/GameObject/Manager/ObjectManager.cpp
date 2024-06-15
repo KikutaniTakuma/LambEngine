@@ -1,6 +1,10 @@
 #include "ObjectManager.h"
 #include "Utils/EngineInfo.h"
 
+#include "TransformCompUpdater.h"
+
+#include "GameObject/Comp/ObbPushComp.h"
+
 std::unique_ptr<ObjectManager> ObjectManager::instance_;
 
 ObjectManager::~ObjectManager()
@@ -24,6 +28,9 @@ void ObjectManager::Initialize() {
 void ObjectManager::Set(const Lamb::SafePtr<Object>& object) {
 	if (not objects_.contains(object) and object.have()) {
 		objects_.insert(object);
+		if (object->HasComp<ObbPushComp>()) {
+			obbObjects_.push_back(object->GetComp<ObbPushComp>());
+		}
 	}
 }
 
@@ -58,9 +65,21 @@ void ObjectManager::Update() {
 		i->Move();
 	}
 
-	// ここに当たり判定が入る
+	TransformCompUpdater::GetInstance()->UpdateMatrix();
 
+	// 当たり判定
+	for (auto i = obbObjects_.begin(); i != obbObjects_.end(); i++) {
+		// 二重forで全部と当たり判定を取ると同じ組み合わせで2回当たり判定をとってしまうので
+		// 2番目のループで1ループの値で初期化する
+		for (auto j = i; j != obbObjects_.end(); j++) {
+			if (j == i) {
+				continue;
+			}
+			(*i)->Collision(&(*j)->GetObbComp());
+		}
+	}
 
+	TransformCompUpdater::GetInstance()->UpdateMatrix();
 
 	// 移動後、当たり判定からの何かしらの処理
 	for (auto& i : objects_) {

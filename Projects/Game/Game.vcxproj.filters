@@ -113,6 +113,12 @@
     <ClCompile Include="Src\GameObject\Manager\TransformCompUpdater.cpp">
       <Filter>GameObject\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\Manager\ObjectManager.cpp">
+      <Filter>GameObject\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\ObbPushComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -207,6 +213,9 @@
     </Filter>
     <Filter Include="GameObject\Manager">
       <UniqueIdentifier>{2795ad23-5238-41cd-b501-ec1d9cd1431c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Manager">
+      <UniqueIdentifier>{66e69158-e7eb-4378-bcd3-bc17939d8612}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -323,6 +332,12 @@
     </ClInclude>
     <ClInclude Include="Src\GameObject\Manager\TransformCompUpdater.h">
       <Filter>GameObject\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Manager\ObjectManager.h">
+      <Filter>GameObject\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\ObbPushComp.h">
+      <Filter>GameObject\Comp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "GameObject/Comp/ModelRenderComp.h"
 #include "GameObject/Comp/TransformComp.h"
 #include "GameObject/Comp/ObbComp.h"
+#include "GameObject/Comp/ObbPushComp.h"
 #include "GameObject/Comp/Camera2DComp.h"
 #include "GameObject/Comp/Camera3DComp.h"
 
@@ -119,7 +120,8 @@ void LevelLoader::AddCamera(nlohmann::json& data, Object& object)
 
 void LevelLoader::AddObb(nlohmann::json& data, Object& object)
 {
-    Lamb::SafePtr obbComp = object.AddComp<ObbComp>();
+    object.AddComp<ObbPushComp>();
+    Lamb::SafePtr obbComp = object.GetComp<ObbComp>();
 
     nlohmann::json& colliderData = data["collider"];
 

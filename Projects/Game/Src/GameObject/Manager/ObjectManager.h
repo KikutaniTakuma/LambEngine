@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <unordered_set>
+#include <list>
 
 #include "Utils/SafePtr.h"
 
@@ -38,4 +39,5 @@ public:
 
 private:
 	std::unordered_set<Lamb::SafePtr<Object>> objects_;
+	std::list<const Lamb::SafePtr<class ObbPushComp>> obbObjects_;
 };
