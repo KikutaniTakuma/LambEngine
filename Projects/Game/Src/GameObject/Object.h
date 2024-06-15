@@ -68,6 +68,11 @@ public:
 
 	virtual void Draw() {}
 
+public:
+	const Object& getObject() const {
+		return object_;
+	}
+
 protected:
 	Object& object_;
 };
