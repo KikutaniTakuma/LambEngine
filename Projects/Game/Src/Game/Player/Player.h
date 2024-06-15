@@ -76,7 +76,7 @@ private:
 	Animations* walkAnimatons_;
 	Animations* floatingAnimatons_;
 
-	Transform transform_;
+	QuaternionTransform transform_;
 
 	// パンチしたか
 	Lamb::Flg isPunch_;
@@ -92,4 +92,5 @@ private:
 
 	float speed_ = 0.0f;
 	Vector2 direction_;
+	Vector2 playerDirection_ = Vector2::kYIdentity;
 };

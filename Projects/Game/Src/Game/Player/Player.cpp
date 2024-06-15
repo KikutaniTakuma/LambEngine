@@ -37,7 +37,6 @@ void Player::Init(const Transform& transform)
 }
 
 void Player::Update() {
-	transform_.Debug("player");
 	model_->Update();
 
 	if (isPunch_ and model_->GetAnimator().GetIsActive().OnExit()) {
@@ -62,7 +61,10 @@ void Player::Update() {
 
 	transform_.translate.y += jumpSpeed_ * Lamb::DeltaTime();
 
-	transform_.rotate = Quaternion::QuaternionToEuler(Quaternion::DirectionToDirection(Vector3::kZIdentity, Vector3(direction_.x, 0.0f, direction_.y)));
+	Vector3&& toDir = Vector3(playerDirection_.x, 0.0f, playerDirection_.y).Normalize();
+	const Vector3& fromDir = Vector3::kZIdentity/* * (direction_.y < 0.0f ? -1.0f : 1.0f)*/;
+
+	transform_.rotate = Quaternion::DirectionToDirection(fromDir, toDir);
 
 	obb_->transform.translate = transform_.translate;
 	obb_->transform.scale = transform_.scale;
@@ -76,7 +78,7 @@ void Player::AfterCollisionUpdate([[maybe_unused]]const Vector3& pushVector) {
 
 void Player::Draw(const Camera& camera) {
 	model_->Draw(
-		Mat4x4::MakeAffin(Vector3::kIdentity, Vector3::kZero, Vector3::kYIdentity * -0.5f) * transform_.GetMatrix(),
+		Mat4x4::MakeTranslate(Vector3::kYIdentity * -0.5f) * transform_.GetMatrix(),
 		camera.GetViewProjection(),
 		0xffffffff,
 		BlendType::kNormal,
@@ -116,6 +118,9 @@ void Player::Move() {
 		}
 
 		direction_ = stick;
+		if (direction_ != Vector2::kZero) {
+			playerDirection_ = direction_.Normalize();
+		}
 	}
 	else {
 		direction_ = Vector2::kZero;
