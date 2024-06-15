@@ -39,5 +39,5 @@ public:
 
 private:
 	std::unordered_set<Lamb::SafePtr<Object>> objects_;
-	std::list<const Lamb::SafePtr<class ObbPushComp>> obbObjects_;
+	std::list<Lamb::SafePtr<class ObbPushComp>> obbObjects_;
 };

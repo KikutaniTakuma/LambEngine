@@ -8,13 +8,15 @@ void ObbPushComp::Init()
 void ObbPushComp::Collision(Lamb::SafePtr<ObbComp> other) {
 	if (not pushTag_.empty() and other->getObject().HasTag(pushTag_)) {
 		Vector3 pushvector;
-		obbComp_->IsCollision(other.get(), pushvector);
-		other->GetTransformComp().translate += pushvector;
+		if (obbComp_->IsCollision(other.get(), pushvector)) {
+			other->GetTransformComp().translate += pushvector;
+		}
 	}
 	else {
 		Vector3 pushvector;
-		other->IsCollision(obbComp_.get(), pushvector);
-		obbComp_->GetTransformComp().translate += pushvector;
+		if (other->IsCollision(obbComp_.get(), pushvector)) {
+			obbComp_->GetTransformComp().translate += pushvector;
+		}
 	}
 }
 
