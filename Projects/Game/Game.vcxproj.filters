@@ -110,6 +110,9 @@
     <ClCompile Include="Src\GameObject\Comp\InputJump.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\Manager\TransformCompUpdater.cpp">
+      <Filter>GameObject\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -201,6 +204,9 @@
     </Filter>
     <Filter Include="Level">
       <UniqueIdentifier>{c64135c3-3f27-4633-8ec5-9da98995a1b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Manager">
+      <UniqueIdentifier>{2795ad23-5238-41cd-b501-ec1d9cd1431c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -314,6 +320,9 @@
     </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\InputJump.h">
       <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Manager\TransformCompUpdater.h">
+      <Filter>GameObject\Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

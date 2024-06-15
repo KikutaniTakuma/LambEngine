@@ -1,0 +1,35 @@
+#pragma once
+#include <memory>
+#include <unordered_set>
+
+#include "Utils/SafePtr.h"
+
+class TransformCompUpdater {
+private:
+	TransformCompUpdater();
+	TransformCompUpdater(const TransformCompUpdater&)  =delete;
+	TransformCompUpdater(TransformCompUpdater&&) = delete;
+
+	TransformCompUpdater& operator=(const TransformCompUpdater&) = delete;
+	TransformCompUpdater& operator=(TransformCompUpdater&&) = delete;
+
+public:
+	~TransformCompUpdater();
+
+public:
+	static TransformCompUpdater* const GetInstance();
+
+	static void Initialize();
+
+private:
+	static std::unique_ptr<TransformCompUpdater> instance_;
+
+public:
+	void Set(const Lamb::SafePtr<class TransformComp>& transformComp);
+	void Erase(const Lamb::SafePtr<class TransformComp>& transformComp);
+
+	void UpdateMatrix();
+
+private:
+	std::unordered_set<const Lamb::SafePtr<class TransformComp>> transformComps_;
+};
