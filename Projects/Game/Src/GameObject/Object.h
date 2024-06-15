@@ -39,6 +39,16 @@ public:
 	virtual void LastUpdate() {}
 };
 
+
+/// 最小構成のコンポーネント
+/// #include "../Object.h"
+/// class DerivedComp : public IComp {
+/// public:
+/// 	using IComp::IComp;
+/// 
+/// 	~DerivedComp() = default;
+/// };
+
 // 前方宣言
 class Object;
 
