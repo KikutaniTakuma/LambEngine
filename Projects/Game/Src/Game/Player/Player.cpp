@@ -36,7 +36,7 @@ void Player::Init(const Transform& transformInput)
 	obb_ = MakeObb();
 }
 
-void Player::Update() {
+void Player::Update(const Vector3& cameraRotate) {
 	model_->Update();
 
 	if (isPunch_ and model_->GetAnimator().GetIsActive().OnExit()) {
@@ -55,16 +55,20 @@ void Player::Update() {
 		Punch();
 	}
 
+	Vector3 directionTmp = Vector3(direction_.x, 0.0f, direction_.y) * Quaternion::MakeRotateYAxis(cameraRotate.y);
 
-	transform.translate.x += direction_.x * speed_ * Lamb::DeltaTime();
-	transform.translate.z += direction_.y * speed_ * Lamb::DeltaTime();
+	directionTmp = directionTmp.Normalize();
+	transform.translate.x += directionTmp.x * speed_ * Lamb::DeltaTime();
+	transform.translate.z += directionTmp.z * speed_ * Lamb::DeltaTime();
 
 	transform.translate.y += jumpSpeed_ * Lamb::DeltaTime();
 
-	Vector3&& toDir = Vector3(playerDirection_.x, 0.0f, playerDirection_.y).Normalize();
-	const Vector3& fromDir = Vector3::kZIdentity/* * (direction_.y < 0.0f ? -1.0f : 1.0f)*/;
+	Vector3 toDir = Vector3(playerDirection_.x, 0.0f, playerDirection_.y).Normalize();
+	toDir.x *= (direction_.y < 0.0f ? -1.0f : 1.0f);
+	const Vector3& fromDir = Vector3::kZIdentity;
 
 	transform.rotate = Quaternion::DirectionToDirection(fromDir, toDir).ToEuler();
+	transform.rotate.y += cameraRotate.y;
 
 	obb_->transform.translate = transform.translate;
 	obb_->transform.scale = transform.scale;

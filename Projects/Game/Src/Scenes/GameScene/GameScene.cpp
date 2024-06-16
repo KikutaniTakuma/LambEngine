@@ -49,7 +49,7 @@ void GameScene::Update()
 {
 	currentCamera_->Debug("カメラ");
 
-	levelData_->player->Update();
+	levelData_->player->Update(currentCamera_->rotate);
 
 	coin_->Update();
 

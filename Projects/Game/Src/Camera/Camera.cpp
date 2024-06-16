@@ -74,7 +74,15 @@ void Camera::Update() {
 }
 
 void Camera::Update(const Vector3& gazePoint) {
+	Lamb::SafePtr pad = Input::GetInstance()->GetGamepad();
+	float stickX = pad->GetStick(Gamepad::Stick::RIGHT).x;
+
+	if (stickX != 0.0f) {
+		rotate.y += stickX * 0.1f;
+	}
 	pos = gazePoint + (offset * Mat4x4::MakeRotate(rotate));
+
+
 
 	Update();
 }

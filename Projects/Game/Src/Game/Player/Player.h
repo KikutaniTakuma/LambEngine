@@ -18,7 +18,7 @@ public:
 public:
 	void Init(const Transform& transformInput);
 
-	void Update();
+	void Update(const Vector3& cameraRotate);
 
 	void AfterCollisionUpdate(const Vector3& pushVector);
 
