@@ -11,6 +11,8 @@
 #include "Game/SkyDome/SkyDome.h"
 #include "Utils/SafePtr.h"
 
+#include "Drawers/SkyBox/SkyBox.h"
+
 class TitleScene : public BaseScene {
 public:
 	TitleScene();
@@ -43,4 +45,7 @@ public:
 
 	class Audio* waterSE_;
 	class Audio* inGameSE_;
+
+	std::unique_ptr<SkyBox> skybox_;
+	Transform transform_;
 };

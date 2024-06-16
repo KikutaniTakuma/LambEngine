@@ -38,6 +38,15 @@ void ObbComp::Init()
 #endif // _DEBUG
 }
 
+void ObbComp::FirstUpdate()
+{
+	UpdatePosAndOrient();
+}
+
+void ObbComp::Event() {
+	UpdatePosAndOrient();
+}
+
 void ObbComp::UpdatePosAndOrient()
 {
 	const Mat4x4& worldMatrix = transformComp_->GetMatrix();
@@ -336,4 +345,14 @@ bool ObbComp::IsCollision(ObbComp* const other, Vector3& pushVector)
 #endif // _DEBUG
 
 	return true;
+}
+
+TransformComp& ObbComp::GetTransformComp()
+{
+	return *transformComp_;
+}
+
+const TransformComp& ObbComp::GetTransformComp() const
+{
+	return *transformComp_;
 }

@@ -15,7 +15,7 @@ public:
 	SkyBlock& operator=(SkyBlock&&) = default;
 
 public:
-	void Init(const Transform& transform);
+	void Init(const Transform& transformInput);
 
 	void Update();
 
@@ -40,6 +40,8 @@ private:
 	void Falling();
 	void StopFalling();
 
+public:
+	Transform transform;
 private:
 	ObbPtr obb_;
 
@@ -51,7 +53,6 @@ private:
 	// 他のブロックに当たっているか
 	Lamb::Flg isCollisionBlock_;
 
-	Transform transform_;
 
 	float gravity_ = 0.0f;
 	float speed_ = 0.0f;

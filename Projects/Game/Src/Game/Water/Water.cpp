@@ -2,6 +2,7 @@
 #include "Utils/EngineInfo.h"
 #include "imgui.h"
 #include "Utils/SafeDelete.h"
+#include "Engine/Graphics/PipelineObject/GaussianBlur/GaussianBlur.h"
 
 Water* Water::instance_ = nullptr;
 
@@ -53,9 +54,45 @@ void Water::Init() {
 	color_ = Vector4{ 0.1f, 0.25f, 0.5f, 1.0f }.GetColorRGBA();
 
 	luminate_ = std::make_unique<PeraRender>();
-	bloom_ = std::make_unique<PeraRender>();
 	luminate_->Initialize("./Resources/Shaders/PostShader/PostLuminate.PS.hlsl");
-	bloom_->Initialize("./Resources/Shaders/PostShader/PostGaussian.PS.hlsl");
+
+
+	gaussianBlurObjectWidth_ = new GaussianBlur{};
+	try {
+		gaussianBlurObjectWidth_->Init();
+	}
+	catch (const Lamb::Error& err) {
+		delete gaussianBlurObjectWidth_;
+		throw err;
+	}
+	gaussianBlurWidth_ = std::make_unique<PeraRender>();
+	gaussianBlurWidth_->Initialize(gaussianBlurObjectWidth_);
+
+	gaussianBlurObjectHeight_ = new GaussianBlur{};
+	try {
+		gaussianBlurObjectHeight_->Init();
+	}
+	catch (const Lamb::Error& err) {
+		delete gaussianBlurObjectHeight_;
+		throw err;
+	}
+	gaussianBlurHeight_ = std::make_unique<PeraRender>();
+	gaussianBlurHeight_->Initialize(gaussianBlurObjectHeight_);
+
+	gaussianBlurObjectWidth_->SetGaussianState(
+		GaussianBlur::GaussianBlurState{
+			.dir = Vector2(1.0f, 0.0f),
+			.sigma = 10.0f,
+			.kernelSize = 35,
+		}
+	);
+	gaussianBlurObjectHeight_->SetGaussianState(
+		GaussianBlur::GaussianBlurState{
+			.dir = Vector2(0.0f, 1.0f),
+			.sigma = 10.0f,
+			.kernelSize = 35,
+		}
+	);
 }
 
 void Water::Update(const Vector3& cameraPos) {
@@ -67,7 +104,8 @@ void Water::Update(const Vector3& cameraPos) {
 	pera_->Update();
 
 	luminate_->Update();
-	bloom_->Update();
+	gaussianBlurWidth_->Update();
+	gaussianBlurHeight_->Update();
 }
 
 void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
@@ -93,10 +131,10 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 		BlendType::kUnenableDepthNone
 	);
 	waterSurface_->AllDraw();
-	//model_->Draw(camera_->GetViewProjection(), camera_->GetPos());
 	pera_->Draw(cameraMat, Pipeline::None, luminate_.get());
-	luminate_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, bloom_.get());
-	bloom_->Draw(staticCamera_->GetViewOthographics(), Pipeline::Add);
+	luminate_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, gaussianBlurWidth_.get());
+	gaussianBlurWidth_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, gaussianBlurHeight_.get());
+	gaussianBlurHeight_->Draw(staticCamera_->GetViewOthographics(), Pipeline::Add);
 }
 
 void Water::Debug([[maybe_unused]]const std::string& guiName){
@@ -109,6 +147,9 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 		ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
 		ImGui::TreePop();
 	}
+	gaussianBlurObjectWidth_->Debug("gaussianBlurObjectWidth");
+	gaussianBlurObjectHeight_->Debug("gaussianBlurObjectHeight");
+
 	ImGui::End();
 #endif // _DEBUG
 }

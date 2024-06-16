@@ -79,7 +79,7 @@ public:
 	/// 設定したものでPSOの生成
 	/// </summary>
 	/// <returns>psoのポインタ(勝手にdeleteしてはいけない)</returns>
-	static Pipeline* const Create();
+	static Pipeline* const Create(bool isCubeMap = false);
 
 	/// <summary>
 	/// CreateRootSgnature(), SetVertexInput(), SetShader(), SetState()で設定した値をリセット

@@ -2,6 +2,7 @@
 #include "GameObject/Comp/ModelRenderComp.h"
 #include "GameObject/Comp/TransformComp.h"
 #include "GameObject/Comp/ObbComp.h"
+#include "GameObject/Comp/ObbPushComp.h"
 #include "GameObject/Comp/Camera2DComp.h"
 #include "GameObject/Comp/Camera3DComp.h"
 
@@ -29,6 +30,52 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
 {
     // 全オブジェクトを走査
     for (nlohmann::json& objectData : data["objects"]) {
+        if (objectData.contains("skyblock")) {
+            levelData->skyBlocks.emplace_back(std::make_unique<SkyBlock>());
+            auto& skyBlock = levelData->skyBlocks.back();
+
+            Transform transform{};
+            if (objectData.contains("transform")) {
+
+                nlohmann::json& transformData = objectData["transform"];
+
+                for (size_t i = 0; i < transform.translate.size(); i++) {
+                    transform.translate[i] = static_cast<float>(transformData["translation"][i]);
+                }
+                for (size_t i = 0; i < transform.rotate.size(); i++) {
+                    transform.rotate[i] = static_cast<float>(transformData["rotation"][i]);
+                }
+                for (size_t i = 0; i < transform.scale.size(); i++) {
+                    transform.scale[i] = static_cast<float>(transformData["scaling"][i]);
+                }
+            }
+            skyBlock->Init(transform);
+
+            continue;
+
+        }
+        if (objectData.contains("player") and not levelData->player) {
+            levelData->player = std::make_unique<Player>();
+            Transform transform{};
+            if (objectData.contains("transform")) {
+
+                nlohmann::json& transformData = objectData["transform"];
+
+                for (size_t i = 0; i < transform.translate.size(); i++) {
+                    transform.translate[i] = static_cast<float>(transformData["translation"][i]);
+                }
+                for (size_t i = 0; i < transform.rotate.size(); i++) {
+                    transform.rotate[i] = static_cast<float>(transformData["rotation"][i]);
+                }
+                for (size_t i = 0; i < transform.scale.size(); i++) {
+                    transform.scale[i] = static_cast<float>(transformData["scaling"][i]);
+                }
+            }
+            levelData->player->Init(transform);
+
+            continue;
+        }
+
         // オブジェクトを追加
         levelData->objects.emplace_back(std::make_unique<Object>());
         Object& object = *levelData->objects.back();
@@ -119,7 +166,8 @@ void LevelLoader::AddCamera(nlohmann::json& data, Object& object)
 
 void LevelLoader::AddObb(nlohmann::json& data, Object& object)
 {
-    Lamb::SafePtr obbComp = object.AddComp<ObbComp>();
+    object.AddComp<ObbPushComp>();
+    Lamb::SafePtr obbComp = object.GetComp<ObbComp>();
 
     nlohmann::json& colliderData = data["collider"];
 

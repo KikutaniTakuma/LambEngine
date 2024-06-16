@@ -17,6 +17,8 @@
 #include "Game/Player/Player.h"
 #include "Game/Coin/Coin.h"
 
+#include "Level/LevelLoader.h"
+
 class GameScene : public BaseScene {
 public:
 	GameScene();
@@ -40,13 +42,6 @@ public:
 
 public:
 	class Water* water_;
-	std::unique_ptr<WaterTex2D> watertsetUgoitekure_;
-	std::unique_ptr<SkyBlock> skyBlock_;
-	std::unique_ptr<Player> player_;
+	Lamb::SafePtr<LevelData> levelData_;
 	std::unique_ptr<Coin> coin_;
-
-
-	Transform waterPos_;
-	Vector3 random_;
-	Vector4 color_;
 };

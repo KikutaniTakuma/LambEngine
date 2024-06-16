@@ -1,4 +1,22 @@
 #include "TransformComp.h"
+#include "../Manager/TransformCompUpdater.h"
+
+TransformComp::TransformComp(Object* const object):
+	IComp(object),
+	scale(Vector3::kIdentity),
+	rotate(),
+	translate(),
+	worldMatrix_(Mat4x4::kIdentity),
+	parent_(nullptr),
+	children_()
+{
+	TransformCompUpdater::GetInstance()->Set(this);
+}
+
+TransformComp::~TransformComp()
+{
+	TransformCompUpdater::GetInstance()->Erase(this);
+}
 
 void TransformComp::Init()
 {

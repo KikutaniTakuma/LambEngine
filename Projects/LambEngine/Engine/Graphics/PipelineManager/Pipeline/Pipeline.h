@@ -78,6 +78,15 @@ public:
 		bool isDepth = true
 	);
 
+	void CreateCubeMap(
+		const RootSignature& rootSignature,
+		Pipeline::Blend blend,
+		Pipeline::CullMode cullMode,
+		Pipeline::SolidState solidState,
+		D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType,
+		uint32_t numRenderTarget = 1
+	);
+
 	void Use() const;
 
 	bool IsSame(

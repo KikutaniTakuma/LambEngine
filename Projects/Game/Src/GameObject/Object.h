@@ -39,6 +39,16 @@ public:
 	virtual void LastUpdate() {}
 };
 
+
+/// 最小構成のコンポーネント
+/// #include "../Object.h"
+/// class DerivedComp : public IComp {
+/// public:
+/// 	using IComp::IComp;
+/// 
+/// 	~DerivedComp() = default;
+/// };
+
 // 前方宣言
 class Object;
 
@@ -67,6 +77,11 @@ public:
 	virtual void LastUpdate() override {}
 
 	virtual void Draw() {}
+
+public:
+	const Object& getObject() const {
+		return object_;
+	}
 
 protected:
 	Object& object_;
@@ -105,7 +120,7 @@ public:
 		tags_.insert(tag);
 	}
 
-	bool HasTag(const std::string& tag) const {
+	[[nodiscard]] bool HasTag(const std::string& tag) const {
 		return tags_.contains(tag);
 	}
 
@@ -129,7 +144,7 @@ public:
 	}
 
 	template<IsBaseIComp CompType>
-	CompType* const GetComp() const {
+	[[nodiscard]]CompType* const GetComp() const {
 		auto&& key = std::string(typeid(CompType).name());
 		bool isExist = components_.contains(key);
 
@@ -140,6 +155,13 @@ public:
 			return static_cast<CompType*>(components_.at(key).get());
 		}
 	}
+
+	template<IsBaseIComp CompType>
+	[[nodiscard]] bool HasComp() const {
+		auto&& key = std::string(typeid(CompType).name());
+		return components_.contains(key);
+	}
+
 
 	void SetCamera(Camera* const camera) {
 		camera_ = camera;

@@ -10,10 +10,31 @@ public:
 
 	~InputMoveComp() = default;
 
-	void FirstUpdate() override;;
+	void FirstUpdate() override;
+
+	
+public:
+	void SetSpeed(float32_t speed) {
+		speed_ = speed;
+	}
+
+
+public:
+	const Vector3& GetDirection() const {
+		return direction_;
+	}
+
+	const Vector3& GetMoveVector() const {
+		return moveVector_;
+	}
+
+
 
 private:
-	float32_t speed_;
+	float32_t speed_ = 0.0f;
+	Vector3 direction_;
 
+	Vector3 moveVector_;
 
+	bool isPad_ = false;
 };

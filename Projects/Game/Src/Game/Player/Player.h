@@ -16,9 +16,9 @@ public:
 	Player& operator=(Player&&) = default;
 
 public:
-	void Init(const Transform& transform);
+	void Init(const Transform& transformInput);
 
-	void Update();
+	void Update(const Vector3& cameraRotate);
 
 	void AfterCollisionUpdate(const Vector3& pushVector);
 
@@ -44,10 +44,10 @@ public:
 	void Landing(bool isCollision);
 
 	const Vector3& GetTranslate() const {
-		return transform_.translate;
+		return transform.translate;
 	}
 	const Vector3& GetScale() const {
-		return transform_.scale;
+		return transform.scale;
 	}
 
 	void SetIsCollision(bool isCollision) {
@@ -64,6 +64,9 @@ public:
 private:
 	void JumpReset();
 
+public:
+	Transform transform;
+
 private:
 	ObbPtr obb_;
 
@@ -76,7 +79,6 @@ private:
 	Animations* walkAnimatons_;
 	Animations* floatingAnimatons_;
 
-	Transform transform_;
 
 	// パンチしたか
 	Lamb::Flg isPunch_;
@@ -92,4 +94,5 @@ private:
 
 	float speed_ = 0.0f;
 	Vector2 direction_;
+	Vector2 playerDirection_ = Vector2::kYIdentity;
 };

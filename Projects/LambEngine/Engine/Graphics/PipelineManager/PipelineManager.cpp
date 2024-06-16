@@ -76,7 +76,7 @@ void PipelineManager::IsDepth(bool isDepth_) {
 	instance_->isDepth_ = isDepth_;
 }
 
-Pipeline* const PipelineManager::Create() {
+Pipeline* const PipelineManager::Create(bool isCubeMap) {
 	auto IsSmae = [](const std::unique_ptr<Pipeline>& pipeline) {
 		bool issame = pipeline->IsSame(
 			instance_->shader_,
@@ -100,15 +100,27 @@ Pipeline* const PipelineManager::Create() {
 		for (auto& i : instance_->vertexInputStates_) {
 			pipeline->SetVertexInput(std::get<0>(i), std::get<1>(i), std::get<2>(i), std::get<3>(i));
 		}
-		pipeline->Create(
-			*instance_->rootSignature_,
-			instance_->blend_,
-			instance_->cullMode_,
-			instance_->solidState_,
-			instance_->topologyType_,
-			instance_->numRenderTarget_,
-			instance_->isDepth_
-		);
+		if (isCubeMap) {
+			pipeline->CreateCubeMap(
+				*instance_->rootSignature_,
+				instance_->blend_,
+				instance_->cullMode_,
+				instance_->solidState_,
+				instance_->topologyType_,
+				instance_->numRenderTarget_
+			);
+		}
+		else {
+			pipeline->Create(
+				*instance_->rootSignature_,
+				instance_->blend_,
+				instance_->cullMode_,
+				instance_->solidState_,
+				instance_->topologyType_,
+				instance_->numRenderTarget_,
+				instance_->isDepth_
+			);
+		}
 
 		if (!pipeline->graphicsPipelineState_) {
 			return nullptr;

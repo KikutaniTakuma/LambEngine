@@ -15,6 +15,10 @@ public:
 
 	void Init() override;
 
+	void FirstUpdate() override;
+
+	void Event() override;
+
 	/// <summary>
 	/// 移動したら呼び出すこと
 	/// </summary>
@@ -25,6 +29,9 @@ public:
 	[[nodiscard]] bool IsCollision(Vector3 pos, float radius);
 	[[nodiscard]] bool IsCollision(ObbComp* const other);
 	[[nodiscard]] bool IsCollision(ObbComp* const other, Vector3& pushVector);
+
+	TransformComp& GetTransformComp();
+	const TransformComp& GetTransformComp() const;
 
 public:
 	Vector3 scale = Vector3::kIdentity;
