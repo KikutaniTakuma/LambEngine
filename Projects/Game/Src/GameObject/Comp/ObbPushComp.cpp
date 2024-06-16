@@ -6,7 +6,16 @@ void ObbPushComp::Init()
 }
 
 void ObbPushComp::Collision(Lamb::SafePtr<ObbComp> other) {
-	if (not pushTag_.empty() and other->getObject().HasTag(pushTag_)) {
+	bool isPush = false;
+
+	for (const auto& i : pushTags_) {
+		if (other->getObject().HasTag(i)) {
+			isPush = true;
+			break;
+		}
+	}
+
+	if (isPush) {
 		Vector3 pushvector;
 		if (obbComp_->IsCollision(other.get(), pushvector)) {
 			other->GetTransformComp().translate += pushvector;
@@ -21,5 +30,13 @@ void ObbPushComp::Collision(Lamb::SafePtr<ObbComp> other) {
 }
 
 void ObbPushComp::SetPushTag(const std::string& pushTag) {
-	pushTag_ = pushTag;
+	if (not pushTags_.contains(pushTag)) {
+		pushTags_.insert(pushTag);
+	}
+}
+
+void ObbPushComp::ErasePushTag(const std::string& pushTag) {
+	if (pushTags_.contains(pushTag)) {
+		pushTags_.erase(pushTag);
+	}
 }

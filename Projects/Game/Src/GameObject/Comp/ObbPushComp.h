@@ -15,6 +15,7 @@ public:
 	// 押し出すタグ
 	// なければ""をいれて
 	void SetPushTag(const std::string& pushTag);
+	void ErasePushTag(const std::string& pushTag);
 
 	ObbComp& GetObbComp() {
 		return *obbComp_;
@@ -24,6 +25,6 @@ public:
 	}
 
 private:
-	std::string pushTag_;
+	std::unordered_set<std::string> pushTags_;
 	Lamb::SafePtr<ObbComp> obbComp_;
 };
