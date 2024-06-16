@@ -4,6 +4,9 @@
 #include "../Game/Water/Water.h"
 #include "../Game/Cloud/Cloud.h"
 
+#include "GameObject/Manager/ObjectManager.h"
+#include "GameObject/Manager/TransformCompUpdater.h"
+
 void World::Initialize() {
 	// ウィンドウ初期化オプション
 	initDesc_ = Framework::InitDesc{
@@ -30,6 +33,9 @@ void World::Initialize() {
 	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/mincho_size_32.spritefont");
 	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/default.spritefont");
 
+	TransformCompUpdater::Initialize();
+	ObjectManager::Initialize();
+
 	// シーンマネージャー初期化
 	sceneManager_ = std::make_unique<SceneManager>();
 
@@ -37,6 +43,7 @@ void World::Initialize() {
 
 	ParticleEditor::Initialize();
 	particleEditor_ = ParticleEditor::GetInstance();
+
 }
 
 void World::Finalize() {
@@ -48,6 +55,9 @@ void World::Finalize() {
 	}
 
 	sceneManager_.reset();
+
+	ObjectManager::Finalize();
+	TransformCompUpdater::Finalize();
 
 	ParticleEditor::Finalize();
 

@@ -17,6 +17,11 @@ void TransformCompUpdater::Initialize(){
 	instance_.reset(new TransformCompUpdater());
 }
 
+void TransformCompUpdater::Finalize()
+{
+	instance_.reset();
+}
+
 void TransformCompUpdater::Set(const Lamb::SafePtr<class TransformComp>& transformComp) {
 	if (not transformComps_.contains(transformComp)) {
 		transformComps_.insert(transformComp);

@@ -8,8 +8,8 @@
 #endif // _DEBUG
 
 
-void SkyBlock::Init(const Transform& transform) {
-	transform_ = transform;
+void SkyBlock::Init(const Transform& transformInput) {
+	transform = transformInput;
 
 	Lamb::SafePtr draweManager = DrawerManager::GetInstance();
 	draweManager->LoadModel("./Resources/Common/Cube.obj");
@@ -29,9 +29,9 @@ void SkyBlock::Update() {
 		StopFalling();
 	}
 
-	transform_.translate.y += speed_;
+	transform.translate.y += speed_;
 
-	obb_->transform = transform_;
+	obb_->transform = transform;
 	obb_->transform.scale *= 2.0f;
 	obb_->Update();
 }
@@ -42,8 +42,8 @@ void SkyBlock::SetIsCollisionOtherBlock(bool isCollision) {
 
 void SkyBlock::AfterCollisionUpdate(const Vector3& pushVector) {
 	if (isCollisionBlock_.OnEnter()) {
-		transform_.translate += pushVector;
-		obb_->transform = transform_;
+		transform.translate += pushVector;
+		obb_->transform = transform;
 		obb_->transform.scale *= 2.0f;
 		isCollisionBlock_ = false;
 		StopFalling();
@@ -52,7 +52,7 @@ void SkyBlock::AfterCollisionUpdate(const Vector3& pushVector) {
 
 void SkyBlock::Draw(const Camera& camera) {
 	model_->Draw(
-		transform_.GetMatrix(),
+		transform.GetMatrix(),
 		camera.GetViewProjection(),
 		0xffffffff,
 		BlendType::kNormal
@@ -69,7 +69,7 @@ void SkyBlock::Debug([[maybe_unused]]const std::string& guiName)
 {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	transform_.Debug(guiName.c_str());
+	transform.Debug(guiName.c_str());
 	if (ImGui::TreeNode("skyBlock state")) {
 		ImGui::Checkbox("isFalling", isFall_.data());
 
@@ -87,8 +87,8 @@ void SkyBlock::Falling() {
 }
 
 void SkyBlock::StopFalling() {
-	if (transform_.translate.y < 0.0f) {
-		transform_.translate.y = 0.0f;
+	if (transform.translate.y < 0.0f) {
+		transform.translate.y = 0.0f;
 		speed_ = 0.0f;
 		fallingTime_ = 0.0f;
 		isFall_ = false;

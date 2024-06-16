@@ -25,6 +25,11 @@ void ObjectManager::Initialize() {
 	instance_.reset(new ObjectManager());
 }
 
+void ObjectManager::Finalize()
+{
+	instance_.reset();
+}
+
 void ObjectManager::Set(const Lamb::SafePtr<Object>& object) {
 	if (not objects_.contains(object) and object.have()) {
 		objects_.insert(object);

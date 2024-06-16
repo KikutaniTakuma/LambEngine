@@ -24,6 +24,8 @@ public:
 
 	static void Initialize();
 
+	static void Finalize();
+
 private:
 	static std::unique_ptr<ObjectManager> instance_;
 

@@ -23,6 +23,8 @@ public:
 
 	static void Initialize();
 
+	static void Finalize();
+
 private:
 	static std::unique_ptr<TransformCompUpdater> instance_;
 

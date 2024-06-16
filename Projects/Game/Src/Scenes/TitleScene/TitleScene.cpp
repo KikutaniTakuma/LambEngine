@@ -92,7 +92,7 @@ void TitleScene::Draw()
 	/*cloud_->Draw();
 	skydome_->Draw(*currentCamera_);*/
 
-	//water_->Draw(currentCamera_->GetViewProjection());
+	water_->Draw(currentCamera_->GetViewProjection());
 	/*player_->Draw(
 		playerTransform_.GetMatrix(),
 		currentCamera_->GetViewProjection(),
@@ -100,7 +100,7 @@ void TitleScene::Draw()
 		BlendType::kNormal
 	);*/
 
-	//str_.Draw();
-	//startMessage_.Draw();
+	str_.Draw();
+	startMessage_.Draw();
 
 }

@@ -18,6 +18,7 @@ GameScene::GameScene() :
 
 void GameScene::Load()
 {
+	levelData_ = LevelLoader::Load("./SceneData/GameScene.json");
 }
 
 void GameScene::Initialize()
@@ -30,55 +31,31 @@ void GameScene::Initialize()
 
 	currentCamera_->Update();
 
-	watertsetUgoitekure_ = std::make_unique<WaterTex2D>();
-	watertsetUgoitekure_->Load();
-	watertsetUgoitekure_->SetLight(
-		Light{
-			.ligDirection = -Vector3::kYIdentity,
-			.ligColor = Vector3::kIdentity,
-			.eyePos = currentCamera_->GetPos(),
-			.ptPos = Vector3(0.0, 10.0f, 10.0f),
-			.ptColor = Vector3::kIdentity * 15.0f
-		}
-	);
-
-	random_ = Lamb::Random(Vector3::kZero, Vector3::kIdentity);
-
 	water_ = Water::GetInstance();
-
-	Transform playerTransform;
-	playerTransform.translate = Vector3::kYIdentity * 30.0f;
-	player_ = std::make_unique<Player>();
-	player_->Init(playerTransform);
-
-
-	Transform skyTransform;
-	skyTransform.scale = Vector3{ 3.0f,1.0f,3.0f };
-	skyTransform.translate = Vector3::kYIdentity * 25.0f;
-	skyBlock_ = std::make_unique<SkyBlock>();
-	skyBlock_->Init(skyTransform);
 
 	coin_ = std::make_unique<Coin>();
 	Transform coinTransform;
 	coinTransform.scale *= 2.0f;
 	coin_->Init(coinTransform);
+
 }
 
 void GameScene::Finalize()
 {
-
+	levelData_.reset();
 }
 
 void GameScene::Update()
 {
 	currentCamera_->Debug("カメラ");
 
-	player_->Update();
+	levelData_->player->Update();
 
 	coin_->Update();
 
-	skyBlock_->Debug("tset");
-	skyBlock_->Update();
+	for (auto& i : levelData_->skyBlocks) {
+		i->Update();
+	}
 
 
 	/*if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
@@ -86,34 +63,36 @@ void GameScene::Update()
 	}*/
 
 	Vector3 pushVector;
-	bool isCollision = skyBlock_->GetObb().IsCollision(player_->GetObb(), pushVector);
-	if (isCollision) {
-		player_->AfterCollisionUpdate(pushVector);
-		if (player_->GetIsPunch().OnExit()) {
-			skyBlock_->StartFall();
+	bool isCollision = false;
+
+	for (auto& i : levelData_->skyBlocks) {
+		isCollision = i->GetObb().IsCollision(levelData_->player->GetObb(), pushVector);
+
+		if (isCollision) {
+			levelData_->player->AfterCollisionUpdate(pushVector);
+			if (levelData_->player->GetIsPunch().OnExit()) {
+				i->StartFall();
+			}
+			break;
 		}
 	}
 
-	player_->Landing(isCollision);
 
-	coin_->SetIsCollision(coin_->GetObb().IsCollision(player_->GetObb()));
+	levelData_->player->Landing(isCollision);
+
+	coin_->SetIsCollision(coin_->GetObb().IsCollision(levelData_->player->GetObb()));
 
 
 #ifdef _DEBUG
 	if (not isDebug_) {
-		currentCamera_->Update(player_->GetTranslate());
+		currentCamera_->Update(levelData_->player->GetTranslate());
 	}
 	else {
 		currentCamera_->Update();
 	}
 #else
-	currentCamera_->Update(player_->GetTranslate());
+	currentCamera_->Update(levelData_->player->GetTranslate());
 #endif // DEBUG
-#ifdef _DEBUG
-	ImGui::Begin("水の色");
-	ImGui::ColorEdit4("色", color_.m.data());
-	ImGui::End();
-#endif // _DEBUG
 
 
 	water_->Update(currentCamera_->GetPos());
@@ -123,15 +102,17 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-	water_->Draw(currentCamera_->GetViewProjection(), player_->GetIsPunch() ? &postEffectManager_->GetPera() : nullptr);
+	water_->Draw(currentCamera_->GetViewProjection(), levelData_->player->GetIsPunch() ? &postEffectManager_->GetPera() : nullptr);
 
-	skyBlock_->Draw(*currentCamera_);
+	for (auto& i : levelData_->skyBlocks) {
+		i->Draw(*currentCamera_);
+	}
 
-	player_->Draw(*currentCamera_);
+	levelData_->player->Draw(*currentCamera_);
 
 	coin_->Draw(*currentCamera_);
 
-	if (player_->GetIsPunch()) {
+	if (levelData_->player->GetIsPunch()) {
 		postEffectManager_->GetPera().Draw(
 			postEffectManager_->GetPeraCamera().GetViewOthographics(),
 			Pipeline::Blend::Normal, nullptr, false);

@@ -276,6 +276,11 @@ Mat4x4 Quaternion::GetMatrix() const {
 
 	return Mat4x4::MakeRotate(*this);
 }
+
+Vector3 Quaternion::ToEuler() const {
+	return QuaternionToEuler(*this);
+}
+
 #pragma endregion
 /// ========================================================================
 /// ========================================================================

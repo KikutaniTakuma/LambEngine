@@ -5,7 +5,7 @@
 #include "Utils/EngineInfo.h"
 #include "Engine/Graphics/AnimationManager/AnimationManager.h"
 
-void Player::Init(const Transform& transform)
+void Player::Init(const Transform& transformInput)
 {
 	std::string fileName = "./Resources/Common/Player/player.gltf";
 	std::string punchFileName = "./Resources/Common/Player/playerPunch.gltf";
@@ -24,8 +24,8 @@ void Player::Init(const Transform& transform)
 	punchAnimatons_ = animationManager->GetAnimations(punchFileName);
 	walkAnimatons_ = animationManager->GetAnimations(walkFileName);
 	floatingAnimatons_ = animationManager->GetAnimations(floatingFileName);
-	transform_ = transform;
-	transform_.scale *= 2.0f;
+	transform = transformInput;
+	transform.scale *= 2.0f;
 
 	gravity_ = 9.80665f * 0.2f;
 
@@ -56,29 +56,29 @@ void Player::Update() {
 	}
 
 
-	transform_.translate.x += direction_.x * speed_ * Lamb::DeltaTime();
-	transform_.translate.z += direction_.y * speed_ * Lamb::DeltaTime();
+	transform.translate.x += direction_.x * speed_ * Lamb::DeltaTime();
+	transform.translate.z += direction_.y * speed_ * Lamb::DeltaTime();
 
-	transform_.translate.y += jumpSpeed_ * Lamb::DeltaTime();
+	transform.translate.y += jumpSpeed_ * Lamb::DeltaTime();
 
 	Vector3&& toDir = Vector3(playerDirection_.x, 0.0f, playerDirection_.y).Normalize();
 	const Vector3& fromDir = Vector3::kZIdentity/* * (direction_.y < 0.0f ? -1.0f : 1.0f)*/;
 
-	transform_.rotate = Quaternion::DirectionToDirection(fromDir, toDir);
+	transform.rotate = Quaternion::DirectionToDirection(fromDir, toDir).ToEuler();
 
-	obb_->transform.translate = transform_.translate;
-	obb_->transform.scale = transform_.scale;
+	obb_->transform.translate = transform.translate;
+	obb_->transform.scale = transform.scale;
 	obb_->Update();
 }
 void Player::AfterCollisionUpdate([[maybe_unused]]const Vector3& pushVector) {
 	obb_->transform.translate += pushVector;
-	transform_.translate = obb_->transform.translate;
+	transform.translate = obb_->transform.translate;
 	obb_->Update();
 }
 
 void Player::Draw(const Camera& camera) {
 	model_->Draw(
-		Mat4x4::MakeTranslate(Vector3::kYIdentity * -0.5f) * transform_.GetMatrix(),
+		Mat4x4::MakeTranslate(Vector3::kYIdentity * -0.5f) * transform.GetMatrix(),
 		camera.GetViewProjection(),
 		0xffffffff,
 		BlendType::kNormal,
@@ -145,8 +145,8 @@ void Player::Falling() {
 }
 
 void Player::Landing(bool isCollision) {
-	if (transform_.translate.y <= 0.0f) {
-		transform_.translate.y = 0.0f;
+	if (transform.translate.y <= 0.0f) {
+		transform.translate.y = 0.0f;
 		isJump_ = false;
 		JumpReset();
 	}

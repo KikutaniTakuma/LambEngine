@@ -140,6 +140,8 @@ public:
 	/// <returns>クォータニオンからの回転行列</returns>
 	[[nodiscard]] Mat4x4 GetMatrix() const;
 
+	[[nodiscard]] Vector3 ToEuler() const;
+
 
 
 /// <summary>
