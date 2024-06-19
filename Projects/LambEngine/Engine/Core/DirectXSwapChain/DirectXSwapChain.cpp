@@ -1,5 +1,5 @@
 #include "DirectXSwapChain.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
@@ -9,9 +9,13 @@
 #include <cassert>
 
 #include "Error/Error.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 Lamb::SafePtr<DirectXSwapChain> DirectXSwapChain::instance_ = nullptr;
+
+DirectXSwapChain::~DirectXSwapChain() {
+	Lamb::AddLog("Finalize DirectXSwapChain succeeded");
+}
 
 DirectXSwapChain* const DirectXSwapChain::GetInstance() {
 	return instance_.get();
@@ -48,7 +52,7 @@ DirectXSwapChain::DirectXSwapChain():
 	HRESULT hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue, WindowFactory::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<DirectXSwapChain>("something error", "CreateSwapChainForHwnd");
+		throw Lamb::Error::Code<DirectXSwapChain>("something error", "CreateSwapChainForHwnd", __FILE__, __LINE__);
 	}
 
 	swapChain_.SetName<DirectXSwapChain>();

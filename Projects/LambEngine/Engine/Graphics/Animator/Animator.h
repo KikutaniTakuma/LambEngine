@@ -2,6 +2,8 @@
 #include <string>
 #include "Math/Mat4x4.h"
 #include "Engine/Graphics/GraphicsStructs.h"
+#include "Engine/Graphics/Skeleton.h"
+#include "Utils/Flg.h"
 
 class Animator {
 public:
@@ -17,6 +19,10 @@ public:
 	void Load(const std::string& fileName);
 
 	void Update(const Mesh* const mesh);
+	void Update(Skeleton& skeleton);
+	void Update(const std::string& rootNodeName);
+
+	void Debug(const std::string& guiName);
 
 public:
 	// 最初からスタート
@@ -33,6 +39,10 @@ public:
 
 	// 一時停止
 	void Pause();
+
+	const Lamb::Flg& GetIsActive() const {
+		return isActive_;
+	}
 
 public:
 	/// <summary>
@@ -61,17 +71,30 @@ public:
 	/// <param name="isLoop"></param>
 	void SetLoopAnimation(bool isLoop);
 
+	/// <summary>
+	/// アニメーション速度を設定する
+	/// </summary>
+	/// <param name="speed">アニメーション速度</param>
+	void SetAnimationSpeed(float speed);
+	
+	/// <summary>
+	/// 新しいアニメーションを設定する
+	/// </summary>
+	/// <param name="animations">アニメーション</param>
+	void SetAnimations(struct Animations* const animations);
+
 private:
 	Vector3 CalaclateValue(const AnimationCurve<Vector3>& animationCurve, float time);
 	Quaternion CalaclateValue(const AnimationCurve<Quaternion>& animationCurve, float time);
 
 private:
 	float animationTime_;
+	float animationSpeed_;
 	struct Animations* animations_;
 	Mat4x4 animationMatrix_;
 	size_t currentAnimationIndex_;
 
-	bool isActive_;
+	Lamb::Flg isActive_;
 
 	bool isFullAnimation_;
 	bool isLoop_;

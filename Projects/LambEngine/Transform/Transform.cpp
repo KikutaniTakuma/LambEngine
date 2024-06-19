@@ -15,7 +15,7 @@ QuaternionTransform& QuaternionTransform::operator=(const Transform& transform) 
 
 Transform& Transform::operator=(const QuaternionTransform& transform) {
 	this->scale = transform.scale;
-	this->rotate = Vector3::QuaternionToEuler(transform.rotate);
+	this->rotate = Quaternion::QuaternionToEuler(transform.rotate);
 	this->translate = transform.translate;
 
 	return *this;
@@ -29,9 +29,9 @@ Mat4x4 Transform::GetMatrix() const
 void Transform::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	ImGui::DragFloat3("スケール", &scale.x, 0.01f);
-	ImGui::DragFloat3("回転", &rotate.x, 0.01f);
-	ImGui::DragFloat3("ポジション", &translate.x, 0.01f);
+	ImGui::DragFloat3("スケール", scale.data(), 0.01f);
+	ImGui::DragFloat3("回転", rotate.data(), 0.01f);
+	ImGui::DragFloat3("ポジション", translate.data(), 0.01f);
 	ImGui::End();
 #endif // _DEBUG
 }

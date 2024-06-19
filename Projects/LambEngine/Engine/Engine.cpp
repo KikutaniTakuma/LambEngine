@@ -31,17 +31,17 @@
 
 #include "EngineUtils/FrameInfo/FrameInfo.h"
 #include "EngineUtils/FlgManager/FlgManager.h"
-#include "Utils/ConvertString/ConvertString.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ConvertString.h"
+#include "Utils/ExecutionLog.h"
 #include "Engine/EngineUtils/ErrorCheck/ErrorCheck.h"
 
 #include "Math/Vector2.h"
 
 #include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
-#include "Utils/ScreenOut/ScreenOut.h"
+#include "Utils/ScreenOut.h"
 
 #include "Error/Error.h"
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 #include "Drawers/DrawerManager.h"
 
@@ -80,7 +80,7 @@ void Engine::Debug::InitializeDebugLayer() {
 		Lamb::AddLog("InitializeDebugLayer succeeded");
 	}
 	else {
-		throw Lamb::Error::Code<Engine::Debug>("D3D12GetDebugInterface failed", __func__);
+		throw Lamb::Error::Code<Engine::Debug>("D3D12GetDebugInterface failed", ErrorPlace);
 	}
 }
 
@@ -95,7 +95,7 @@ Engine* Engine::instance_ = nullptr;
 void Engine::Initialize(const std::string& windowName, const Vector2& windowSize, float fpsLimit, bool isFullscreen) {
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<Engine>("CoInitializeEx failed", __func__);
+		throw Lamb::Error::Code<Engine>("CoInitializeEx failed", ErrorPlace);
 	}
 	else {
 		Lamb::AddLog("CoInitializeEx succeeded");
@@ -185,6 +185,7 @@ void Engine::Finalize() {
 
 	// COM 終了
 	CoUninitialize();
+	Lamb::AddLog("CoUninitialize succeeded");
 
 	ErrorCheck::GetInstance()->CrashProgram();
 }
@@ -410,20 +411,11 @@ void Engine::FrameEnd() {
 	}
 	FlgManager::GetInstance()->AllFlgUpdate();
 
-	RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
-	renderContextManager->Draw();
-
 	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	frameInfo->DrawFps();
 	Lamb::screenout.Draw();
 
 	ImGuiManager::GetInstance()->End();
-
-	auto textureManager = TextureManager::GetInstance();
-	// このフレームで画像読み込みが発生していたらTextureをvramに送る
-	textureManager->UploadTextureData();
-	// dramから解放
-	textureManager->ReleaseIntermediateResource();
 
 
 	instance_->directXSwapChain_->ChangeBackBufferState();
@@ -443,15 +435,6 @@ void Engine::FrameEnd() {
 	instance_->graphicsCommand_->WaitForFinishCommnadlist();
 
 	instance_->graphicsCommand_->ResetCommandlist();
-
-
-
-	// 音の非同期読み込み
-	auto audioManager = AudioManager::GetInstance();
-	audioManager->ThreadLoad();
-	audioManager->CheckThreadLoadFinish();
-
-	renderContextManager->ResetDrawCount();
 
 	frameInfo->End();
 }

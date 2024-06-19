@@ -2,7 +2,7 @@
 #include "DescriptorHeap.h"
 #include <array>
 #include <initializer_list>
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 class RtvHeap final : public DescriptorHeap {
 public:
@@ -14,7 +14,7 @@ public:
 	RtvHeap& operator=(const RtvHeap&) = delete;
 	RtvHeap& operator=(RtvHeap&&) = delete;
 public:
-	~RtvHeap() = default;
+	~RtvHeap();
 
 public:
 	static void Initialize(UINT heapSize);

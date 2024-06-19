@@ -2,9 +2,9 @@
 #include "DescriptorHeap.h"
 #include "Engine/Graphics/TextureManager/Texture/Texture.h"
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 #include <list>
 
@@ -21,7 +21,7 @@ private:
 	CbvSrvUavHeap& operator=(const CbvSrvUavHeap& right) = delete;
 	CbvSrvUavHeap& operator=(CbvSrvUavHeap&& right) noexcept = delete;
 public:
-	~CbvSrvUavHeap() = default;
+	~CbvSrvUavHeap();
 
 public:
 	static void Initialize(UINT heapSize, UINT maxTexture = 128u);

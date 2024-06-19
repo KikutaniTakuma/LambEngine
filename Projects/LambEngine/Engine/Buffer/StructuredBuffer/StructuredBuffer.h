@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
-#include "Utils/Cocepts/Cocepts.h"
+#include "Utils/ExecutionLog.h"
+#include "Utils/Concepts.h"
 #include "Error/Error.h"
 #include <cassert>
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
@@ -11,7 +11,7 @@
 /// ストラクチャードバッファ
 /// </summary>
 /// <typeparam name="T">ポインタと参照型以外をサポート</typeparam>
-template<Lamb::IsNotReferenceAndPtr T, uint32_t bufferSize = 256u>
+template<Lamb::IsNotReferenceAndPtr T>
 class StructuredBuffer final : public Descriptor {
 public:
 	StructuredBuffer() :
@@ -19,10 +19,69 @@ public:
 		srvDesc_(),
 		data_(nullptr),
 		isWright_(true),
+		bufferSize_(0u),
 		isCreateView_(false),
 		range_(),
 		roootParamater_()
 	{
+		
+	}
+
+	~StructuredBuffer() = default;
+
+	inline StructuredBuffer(const StructuredBuffer& right) :
+		StructuredBuffer()
+	{
+		*this = right;
+	}
+
+	inline StructuredBuffer(StructuredBuffer&& right) :
+		StructuredBuffer()
+	{
+		*this = right;
+	}
+
+	inline StructuredBuffer& operator=(const StructuredBuffer& right) {
+		bufferResource_ = right.bufferResource_;
+		srvDesc_ = right.srvDesc_;
+		isWright_ = right.isWright_;
+		bufferSize_ = right.bufferSize_;
+		isCreateView_ = right.isCreateView_;
+		range_ = right.range_;
+
+		roootParamater_ = {};
+		roootParamater_.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		roootParamater_.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		roootParamater_.DescriptorTable.pDescriptorRanges = &range_;
+		roootParamater_.DescriptorTable.NumDescriptorRanges = 1;
+
+		data_ = right.data_;
+
+		return *this;
+	}
+	inline StructuredBuffer<T>& operator=(StructuredBuffer&& right) noexcept {
+		bufferResource_ = right.bufferResource_.Release();
+		srvDesc_ = right.srvDesc_;
+		isWright_ = right.isWright_;
+		bufferSize_ = right.bufferSize_;
+		isCreateView_ = right.isCreateView_;
+		range_ = right.range_;
+
+		roootParamater_ = {};
+		roootParamater_.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+		roootParamater_.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+		roootParamater_.DescriptorTable.pDescriptorRanges = &range_;
+		roootParamater_.DescriptorTable.NumDescriptorRanges = 1;
+
+		data_ = right.data_;
+
+		return *this;
+	}
+
+public:
+	void Create(uint32_t bufferSize) {
+		bufferSize_ = bufferSize;
+
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(T) * size());
 #ifdef _DEBUG
 		bufferResource_.SetName<decltype(*this)>();
@@ -54,25 +113,6 @@ public:
 		roootParamater_.DescriptorTable.NumDescriptorRanges = 1;
 	}
 
-	~StructuredBuffer() = default;
-
-	inline StructuredBuffer(const StructuredBuffer& right) :
-		StructuredBuffer{ right.Size() }
-	{
-		*this = right;
-	}
-
-	inline StructuredBuffer(StructuredBuffer&&) = delete;
-
-	inline StructuredBuffer& operator=(const StructuredBuffer& right) {
-		for (uint32_t i = 0; i < bufferSize; i++) {
-			(*this)[i] = right[i];
-		}
-
-		return *this;
-	}
-	inline StructuredBuffer<T>& operator=(StructuredBuffer&&) = delete;
-
 public:
 	void OnWright() noexcept {
 		if (!isWright_) {
@@ -90,18 +130,18 @@ public:
 
 	template<Lamb::IsInt IsInt>
 	T& operator[](IsInt index) {
-		assert(static_cast<uint32_t>(index) < bufferSize);
+		assert(static_cast<uint32_t>(index) < bufferSize_);
 		return data_[index];
 	}
 
 	template<Lamb::IsInt IsInt>
 	const T& operator[](IsInt index) const {
-		assert(static_cast<uint32_t>(index) < bufferSize);
+		assert(static_cast<uint32_t>(index) < bufferSize_);
 		return data_[index];
 	}
 
-	constexpr uint32_t size() const {
-		return bufferSize;
+	uint32_t size() const {
+		return bufferSize_;
 	}
 
 	D3D12_GPU_VIRTUAL_ADDRESS GetGPUVtlAdrs() const noexcept {
@@ -134,6 +174,8 @@ private:
 	D3D12_ROOT_PARAMETER roootParamater_;
 
 	T* data_;
+
+	uint32_t bufferSize_;
 
 	bool isWright_;
 

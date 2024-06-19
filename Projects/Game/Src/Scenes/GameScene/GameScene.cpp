@@ -1,41 +1,128 @@
 #include "GameScene.h"
+#include "Game/Water/Water.h"
+#include <cmath>
+#include <numbers>
+#include "Utils/EngineInfo.h"
+#include "Game/Cloud/Cloud.h"
 #include "AudioManager/AudioManager.h"
+#include "Utils/ScreenOut.h"
+
+#include "Utils/Random.h"
+#include "imgui.h"
+#include "Game/Water/Water.h"
 
 GameScene::GameScene() :
-	BaseScene(BaseScene::ID::Game)
-{}
-
-void GameScene::Initialize() {
-	camera_->farClip = 3000.0f;
-	camera_->pos.z = -5.0f;
-	
-
-	transform_.scale = Vector3::kIdentity;
-
-	// モデルのロード
-	drawerManager_->LoadModel("./Resources/Cube.obj");
-	// ロードしたモデルの取得
-	model_ = drawerManager_->GetModel("./Resources/Cube.obj");
-	color_ = Vector4(0.8f,0.2f,0.2f,1.0f).GetColorRGBA();
+	BaseScene{ BaseScene::ID::Title }
+{
 }
 
-void GameScene::Finalize() {
+void GameScene::Load()
+{
+	levelData_ = LevelLoader::Load("./SceneData/GameScene.json");
+}
+
+void GameScene::Initialize()
+{
+	//currentCamera_->pos.y = 2.85f;
+	currentCamera_->offset.y = -0.7f;
+	currentCamera_->offset.z = -55.0f;
+	currentCamera_->rotate.x = 0.37f;
+
+
+	currentCamera_->Update();
+
+	water_ = Water::GetInstance();
+
+	coin_ = std::make_unique<Coin>();
+	Transform coinTransform;
+	coinTransform.scale *= 2.0f;
+	coin_->Init(coinTransform);
 
 }
 
-void GameScene::Update() {
-	camera_->Debug("camera");
-	camera_->Update();
-
-	transform_.Debug("model");
+void GameScene::Finalize()
+{
+	levelData_.reset();
 }
 
-void GameScene::Draw() {
-	model_->Draw(
-		transform_.GetMatrix(),         // ワールドマトリックス
-		camera_->GetViewOthographics(), // カメラのマトリックス
-		color_,                         // 色
-		BlendType::kNone,               // ブレンドタイプ
-		false                           // ライティングあり・なし
-	);
+void GameScene::Update()
+{
+	currentCamera_->Debug("カメラ");
+
+	levelData_->player->Update(currentCamera_->rotate);
+
+	coin_->Update();
+
+	for (auto& i : levelData_->skyBlocks) {
+		i->Update();
+	}
+
+
+	/*if (input_->GetKey()->Pushed(DIK_SPACE) || input_->GetGamepad()->Pushed(Gamepad::Button::A)) {
+		sceneManager_->SceneChange(BaseScene::ID::Game);
+	}*/
+
+	Vector3 pushVector;
+	bool isCollision = false;
+
+	for (auto& i : levelData_->skyBlocks) {
+		isCollision = i->GetObb().IsCollision(levelData_->player->GetObb(), pushVector);
+
+		if (isCollision) {
+			levelData_->player->AfterCollisionUpdate(pushVector);
+			if (levelData_->player->GetIsPunch().OnExit()) {
+				i->StartFall();
+			}
+			break;
+		}
+	}
+
+
+	levelData_->player->Landing(isCollision);
+
+	coin_->SetIsCollision(coin_->GetObb().IsCollision(levelData_->player->GetObb()));
+
+
+#ifdef _DEBUG
+	if (not isDebug_) {
+		currentCamera_->Update(levelData_->player->GetTranslate());
+	}
+	else {
+		currentCamera_->Update();
+	}
+#else
+	currentCamera_->Update(levelData_->player->GetTranslate());
+#endif // DEBUG
+
+
+	water_->Update(currentCamera_->GetPos());
+	postEffectManager_->GetPera().Debug("pera");
+	postEffectManager_->GetPera().Update();
+}
+
+void GameScene::Draw()
+{
+	water_->Draw(currentCamera_->GetViewProjection(), levelData_->player->GetIsPunch() ? &postEffectManager_->GetPera() : nullptr);
+
+	for (auto& i : levelData_->skyBlocks) {
+		i->Draw(*currentCamera_);
+	}
+
+	levelData_->player->Draw(*currentCamera_);
+
+	coin_->Draw(*currentCamera_);
+
+	if (levelData_->player->GetIsPunch()) {
+		postEffectManager_->GetPera().Draw(
+			postEffectManager_->GetPeraCamera().GetViewOthographics(),
+			Pipeline::Blend::Normal, nullptr, false);
+		postEffectManager_->GetPera().PreDraw();
+		sceneManager_->AllDraw();
+		postEffectManager_->GetPera().Draw(
+			postEffectManager_->GetPeraCamera().GetViewOthographics(),
+			Pipeline::Blend::Normal, nullptr, false);
+	}
+
+	Lamb::screenout << "Model scene" << Lamb::endline
+		<< "Press space to change ""Water and cloud scene""";
 }

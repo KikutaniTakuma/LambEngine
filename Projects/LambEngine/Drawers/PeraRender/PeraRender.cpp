@@ -1,16 +1,16 @@
 #include "PeraRender.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ConvertString.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "imgui.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include <cassert>
 #include <numbers>
 
-#include "Utils/Random/Random.h"
+#include "Utils/Random.h"
 
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 PeraRender::PeraRender():
 	peraVertexResource_(nullptr),
@@ -185,7 +185,7 @@ void PeraRender::Draw(
 
 	// 各種描画コマンドを積む
 	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	peraPipelineObject_->Use(blend, isDepth);
 	commandList->IASetVertexBuffers(0, 1, &peraVertexView_);
 	commandList->IASetIndexBuffer(&indexView_);
@@ -194,7 +194,7 @@ void PeraRender::Draw(
 
 void PeraRender::ResetPipelineObject(PeraPipeline* pipelineObject) {
 	if (!pipelineObject) {
-		throw Lamb::Error::Code<PeraRender>("pipelineObject is nullptr", __func__);
+		throw Lamb::Error::Code<PeraRender>("pipelineObject is nullptr", ErrorPlace);
 	}
 	else {
 		peraPipelineObject_.reset(pipelineObject);

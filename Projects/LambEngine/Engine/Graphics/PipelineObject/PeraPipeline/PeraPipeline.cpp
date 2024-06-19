@@ -1,11 +1,11 @@
 #include "PeraPipeline.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
-#include "Utils/Random/Random.h"
+#include "Utils/Random.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 
 void PeraPipeline::Update() {
 	*colorBuf_ = color;
@@ -73,7 +73,7 @@ void PeraPipeline::Init(
 	roootParamater[1].DescriptorTable.pDescriptorRanges = cbvRange.data();
 	roootParamater[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
 
-	PipelineManager::CreateRootSgnature(roootParamater.data(), roootParamater.size(), true);
+	PipelineManager::CreateRootSgnature(roootParamater.data(), roootParamater.size(), true, true);
 
 	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT);
 	PipelineManager::SetVertexInput("TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT);

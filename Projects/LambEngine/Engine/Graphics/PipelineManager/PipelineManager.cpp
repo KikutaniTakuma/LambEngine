@@ -2,8 +2,8 @@
 #include <cassert>
 #include <algorithm>
 #include "Engine/Graphics/RootSignature/RootSignature.h"
-#include "Utils/SafeDelete/SafeDelete.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/SafeDelete.h"
+#include "Utils/ExecutionLog.h"
 #include "Error/Error.h"
 
 Lamb::SafePtr<PipelineManager> PipelineManager::instance_ = nullptr;
@@ -17,11 +17,13 @@ void PipelineManager::Initialize() {
 		Lamb::AddLog("Initialize PipelineManager succeeded");
 	}
 	else {
-		throw Lamb::Error::Code<PipelineManager>("instance is nullptr", __func__);
+		throw Lamb::Error::Code<PipelineManager>("instance is nullptr", ErrorPlace);
 	}
 }
 void PipelineManager::Finalize() {
 	instance_.reset();
+
+	Lamb::AddLog("Finalize PipelineManager succeeded");
 }
 
 void PipelineManager::CreateRootSgnature(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture, bool isOutRangeBorder) {
@@ -49,8 +51,8 @@ void PipelineManager::SetRootSgnature(RootSignature* rootSignature) {
 	instance_->rootSignature_ = rootSignature;
 }
 
-void PipelineManager::SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format) {
-	instance_->vertexInputStates_.push_back({ semanticName, semanticIndex, format });
+void PipelineManager::SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format, uint32_t inputSlot) {
+	instance_->vertexInputStates_.push_back({ semanticName, semanticIndex, format,inputSlot });
 }
 void PipelineManager::SetShader(const Shader& shader) {
 	instance_->shader_ = shader;
@@ -74,7 +76,7 @@ void PipelineManager::IsDepth(bool isDepth_) {
 	instance_->isDepth_ = isDepth_;
 }
 
-Pipeline* const PipelineManager::Create() {
+Pipeline* const PipelineManager::Create(bool isCubeMap) {
 	auto IsSmae = [](const std::unique_ptr<Pipeline>& pipeline) {
 		bool issame = pipeline->IsSame(
 			instance_->shader_,
@@ -96,17 +98,29 @@ Pipeline* const PipelineManager::Create() {
 		auto pipeline = std::make_unique<Pipeline>();
 		pipeline->SetShader(instance_->shader_);
 		for (auto& i : instance_->vertexInputStates_) {
-			pipeline->SetVertexInput(std::get<0>(i), std::get<1>(i), std::get<2>(i));
+			pipeline->SetVertexInput(std::get<0>(i), std::get<1>(i), std::get<2>(i), std::get<3>(i));
 		}
-		pipeline->Create(
-			*instance_->rootSignature_,
-			instance_->blend_,
-			instance_->cullMode_,
-			instance_->solidState_,
-			instance_->topologyType_,
-			instance_->numRenderTarget_,
-			instance_->isDepth_
-		);
+		if (isCubeMap) {
+			pipeline->CreateCubeMap(
+				*instance_->rootSignature_,
+				instance_->blend_,
+				instance_->cullMode_,
+				instance_->solidState_,
+				instance_->topologyType_,
+				instance_->numRenderTarget_
+			);
+		}
+		else {
+			pipeline->Create(
+				*instance_->rootSignature_,
+				instance_->blend_,
+				instance_->cullMode_,
+				instance_->solidState_,
+				instance_->topologyType_,
+				instance_->numRenderTarget_,
+				instance_->isDepth_
+			);
+		}
 
 		if (!pipeline->graphicsPipelineState_) {
 			return nullptr;

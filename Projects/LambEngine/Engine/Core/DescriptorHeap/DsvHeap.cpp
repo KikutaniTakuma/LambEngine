@@ -1,10 +1,15 @@
 #include "DsvHeap.h"
 #include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include <algorithm>
 #include "Error/Error.h"
 
 Lamb::SafePtr<DsvHeap> DsvHeap::instance_ = nullptr;
+
+DsvHeap::~DsvHeap()
+{
+	Lamb::AddLog("Finalize DsvHeap succeeded");
+}
 
 void DsvHeap::Initialize(UINT heapSize) {
 	instance_.reset(new DsvHeap( heapSize ));
@@ -52,7 +57,7 @@ void DsvHeap::CreateHeapHandles() {
 
 uint32_t DsvHeap::CreateView(DepthBuffer& depthStencilBuffer) {
 	if (currentHandleIndex_ >= heapSize_) {
-		throw Lamb::Error::Code<DsvHeap>("Over HeapSize", __func__);
+		throw Lamb::Error::Code<DsvHeap>("Over HeapSize", ErrorPlace);
 	}
 
 	if (bookingHandle_.empty()) {

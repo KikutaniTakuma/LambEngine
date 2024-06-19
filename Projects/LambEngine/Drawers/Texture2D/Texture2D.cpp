@@ -1,10 +1,10 @@
 #include "Texture2D.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 #ifdef _DEBUG
-#include "Utils/UtilsLib/UtilsLib.h"
+#include "Utils/FileUtils.h"
 
 #include "imgui.h"
 #endif // _DEBUG
@@ -12,7 +12,7 @@
 
 const LoadFileNames Texture2D::kFileNames_ = 
 		LoadFileNames{
-			.resourceFileName{"./Resources/Texture2D/Texture2D.obj"},
+			.resourceFileName{"./Resources/EngineResources/Texture2D/Texture2D.obj"},
 			.shaderName{
 				.vsFileName = "./Resources/Shaders/Texture2DShader/Texture2D.VS.hlsl",
 				.psFileName = "./Resources/Shaders/Texture2DShader/Texture2D.PS.hlsl"
@@ -42,7 +42,7 @@ void Texture2D::Draw(
 ) {
 	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
 
-	renderContext->SetSahderStruct(
+	renderContext->SetShaderStruct(
 		ShaderData{
 			.uvTransform = uvTransform,
 			.pad = Vector3::kZero,
@@ -51,4 +51,9 @@ void Texture2D::Draw(
 	);
 
 	BaseDrawer::Draw(worldMatrix, camera, color,  blend);
+}
+
+void Texture2D::AllDraw() {
+	renderSet->Draw();
+	renderSet->ResetDrawCount();
 }

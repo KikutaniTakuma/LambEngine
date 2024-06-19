@@ -1,8 +1,8 @@
 #include "StringOutPutManager.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ExecutionLog.h"
+#include "Utils/ConvertString.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include <cassert>
@@ -10,9 +10,15 @@
 
 #include "Error/Error.h"
 
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
+
+#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
 Lamb::SafePtr<StringOutPutManager> StringOutPutManager::instance_ = nullptr;
+
+StringOutPutManager::~StringOutPutManager() {
+	Lamb::AddLog("Finalize StringOutPutManager succeeded");
+}
 
 void StringOutPutManager::Initialize() {
 	instance_.reset(new StringOutPutManager());
@@ -35,12 +41,13 @@ StringOutPutManager::StringOutPutManager():
 	// GraphicsMemory初期化
 	auto device = DirectXDevice::GetInstance()->GetDevice();
 	gmemory_.reset(new DirectX::GraphicsMemory(device));
+	Lamb::AddLog("Initialize StringOutPutManager succeeded");
 }
 
 void StringOutPutManager::LoadFont(const std::string& fontName) {
 	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
 	if (!std::filesystem::exists(std::filesystem::path(fontName))) {
-		throw Lamb::Error::Code<StringOutPutManager>("This file is not exist -> " + fontName, __func__);
+		throw Lamb::Error::Code<StringOutPutManager>("This file is not exist -> " + fontName, ErrorPlace);
 	}
 
 	// もしロード済みなら早期リターン
@@ -97,6 +104,8 @@ void StringOutPutManager::LoadFont(const std::string& fontName) {
 	directXCommon->WaitForFinishCommnadlist();
 
 	future.wait();
+
+	ResourceLoadLog::Set(fontName);
 }
 
 DirectX::SpriteFont* const StringOutPutManager::GetFont(const std::string& fontName) {

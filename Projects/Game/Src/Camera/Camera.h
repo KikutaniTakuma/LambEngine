@@ -9,32 +9,46 @@
 /// カメラ
 /// </summary>
 class Camera {
-/// <summary>
-/// コンストラクタ
-/// </summary>
+public:
+	static const Mat4x4& GetStaticViewProjection() {
+		return kViewProjection;
+	}
+	static const Mat4x4& GetStaticViewOthographics() {
+		return kViewOthographics;
+	}
+
+	static void InitStaticMatrix();
+
+private:
+	static Mat4x4 kViewProjection;
+	static Mat4x4 kViewOthographics;
+
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 public:
 	Camera() noexcept;
 	Camera(const Camera& right) noexcept;
 	Camera(Camera&& right) noexcept;
-	~Camera() noexcept = default;
+	virtual ~Camera() noexcept = default;
 
 
-/// <summary>
-///  代入演算子
-/// </summary>
+	/// <summary>
+	///  代入演算子
+	/// </summary>
 public:
 	Camera& operator=(const Camera& right) noexcept = default;
 	Camera& operator=(Camera&& right) noexcept = default;
 
 
-/// <summary>
-/// メンバ関数
-/// </summary>
+	/// <summary>
+	/// メンバ関数
+	/// </summary>
 public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update();
+	virtual void Update();
 
 	/// <summary>
 	/// 行列更新
@@ -78,7 +92,7 @@ public:
 	inline const Mat4x4& GetViewProjection() const noexcept {
 		return viewProjecction_;
 	}
-	
+
 	/// <summary>
 	/// 平衡投影行列を取得
 	/// </summary>
@@ -110,12 +124,12 @@ public:
 		return viewOthograohicsVp_;
 	}
 
-	void Debug(const std::string& guiName);
+	virtual void Debug(const std::string& guiName);
 
 
-/// <summary>
-/// メンバ変数
-/// </summary>
+	/// <summary>
+	/// メンバ変数
+	/// </summary>
 public:
 	Vector3 pos;
 	Vector3 scale;
@@ -129,7 +143,7 @@ protected:
 	Vector3 worldPos_;
 
 protected:
-	static constexpr float kNearClip_ = 0.01f;
+	static constexpr float kNearClip_ = 0.1f;
 
 public:
 	float farClip;

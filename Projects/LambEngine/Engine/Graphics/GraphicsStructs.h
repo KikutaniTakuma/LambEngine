@@ -2,6 +2,9 @@
 
 #include <unordered_map>
 #include <vector>
+#include <span>
+
+#include "Transform/Transform.h"
 
 #include "Math/Vector4.h"
 #include "Math/Vector3.h"
@@ -51,13 +54,28 @@ struct WVPMatrix {
 };
 
 struct Node {
+    QuaternionTransform transform;
     Mat4x4 loacalMatrix = Mat4x4::kIdentity;
     std::string name;
     std::vector<Node> children;
+
+    Node& operator=(const Node&) = default;
+};
+
+struct VertexWeightData {
+    float weight;
+    uint32_t vertexIndex;
+};
+
+struct JointWeightData {
+    Mat4x4 inverseBindPoseMatrix;
+    std::vector<VertexWeightData> vertexWeights;
 };
 
 struct ModelData {
+    std::unordered_map<std::string, JointWeightData> skinClusterData;
     std::vector<Vertex> vertices;
+    std::vector<uint32_t> indices;
     Node rootNode;
 };
 
@@ -71,6 +89,8 @@ struct Mesh {
 
     uint32_t indexNumber;
     Node node;
+
+    Mesh& operator=(const Mesh&) = default;
 };
 
 enum BlendType {
@@ -94,20 +114,20 @@ struct Light {
     Vector3 ligDirection = -Vector3::kYIdentity;
     float pad0;
     Vector3 ligColor = Vector3::kIdentity;
-    /*Vector3 eyePos;
+    Vector3 eyePos;
     float pad2;
     Vector3 ptPos;
     float pad3;
     Vector3 ptColor;
-    float ptRange;*/
+    float ptRange;
 };
 
-template<class T, uint32_t bufferSize>
+template<class T>
 struct ShaderData {
     ConstBuffer<Light> light;
-    StructuredBuffer<WVPMatrix, bufferSize> wvpMatrix;
-    StructuredBuffer<Vector4, bufferSize> color;
-    StructuredBuffer<T, bufferSize> shaderStruct;
+    StructuredBuffer<WVPMatrix> wvpMatrix;
+    StructuredBuffer<Vector4> color;
+    StructuredBuffer<T> shaderStruct;
 };
 
 struct ShaderFileNames {

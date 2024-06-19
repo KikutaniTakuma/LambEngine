@@ -7,9 +7,11 @@
 #include "Drawers/StringOut/StringOut.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Game/CollisionManager/Collider/Collider.h"
-#include "Utils/Easeing/Easeing.h"
+#include "Utils/Easeing.h"
 #include "Game/SkyDome/SkyDome.h"
-#include "Game/CollisionManager/Sphere/Sphere.h"
+#include "Utils/SafePtr.h"
+
+#include "Drawers/SkyBox/SkyBox.h"
 
 class TitleScene : public BaseScene {
 public:
@@ -22,6 +24,7 @@ public:
 	TitleScene& operator=(TitleScene&&) = delete;
 
 public:
+	void Load() override;
 	void Initialize() override;
 
 	void Finalize() override;
@@ -31,5 +34,18 @@ public:
 	void Draw() override;
 
 public:
-	std::unique_ptr<Sphere> sphere_;
+	class Water* water_;
+	StringOut str_;
+	std::unique_ptr<Camera> uiCamera_;
+	//Lamb::SafePtr<Model> player_;
+	//Transform playerTransform_;
+
+	StringOut startMessage_;
+	float messageAlpah_;
+
+	class Audio* waterSE_;
+	class Audio* inGameSE_;
+
+	std::unique_ptr<SkyBox> skybox_;
+	Transform transform_;
 };

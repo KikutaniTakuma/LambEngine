@@ -1,12 +1,12 @@
 #include "WaterPipeline.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
-#include "Utils/Random/Random.h"
+#include "Utils/Random.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 
 #ifdef _DEBUG
 #include "imgui.h"
@@ -44,7 +44,7 @@ void WaterPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
 	else {
 		pipelinesNoDepth_[blendType]->Use();
 	}
-	auto* const commandList = DirectXCommand::GetInstance()->GetCommandList();
+	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
 	caustics_->Use(1);
@@ -129,7 +129,8 @@ void WaterPipeline::Init(
 
 
 	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
-	caustics_ = TextureManager::GetInstance()->LoadTexture("./Resources/Water/caustics_01.bmp");
+	TextureManager::GetInstance()->LoadTexture("./Resources/Common/Water/caustics_01.bmp");
+	caustics_ = TextureManager::GetInstance()->GetTexture("./Resources/Common/Water/caustics_01.bmp");
 
 	srvHeap->BookingHeapPos(7u);
 	srvHeap->CreateView(*render_);

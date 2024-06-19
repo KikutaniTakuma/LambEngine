@@ -24,5 +24,5 @@ private:
 private:
 	std::unique_ptr<SceneManager> sceneManager_;
 
-	//class ParticleEditor* particleEditor_ = nullptr;
+	class ParticleEditor* particleEditor_ = nullptr;
 };

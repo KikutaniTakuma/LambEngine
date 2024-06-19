@@ -2,8 +2,7 @@
 #include "Engine/Engine.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
-#include "Engine/Graphics/ResourceManager/ResourceManager.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "Error/Error.h"
 
 #include "Input/Input.h"
@@ -11,7 +10,6 @@
 #include "Drawers/Line/Line.h"
 
 void Framework::Initialize() {
-	ResourceManager::Initialize();
 	// ライブラリ初期化
 	Engine::Initialize(initDesc_.windowName, initDesc_.windowSize, initDesc_.maxFps, initDesc_.isFullesceen);
 
@@ -29,8 +27,6 @@ void Framework::Finalize() {
 	// 入力関連解放
 	Input::Finalize();
 
-	ResourceManager::Finalize();
-
 	// ライブラリ終了
 	Engine::Finalize();
 }
@@ -42,6 +38,8 @@ void Framework::Execution() {
 		FrameInfo* const frameInfo = FrameInfo::GetInstance();
 		Input* const input = Input::GetInstance();
 		WindowFactory* const window = WindowFactory::GetInstance();
+
+		frameInfo->StartFrameInfo();
 
 		while (window->WindowMassage()) {
 			// 描画開始処理

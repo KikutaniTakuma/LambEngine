@@ -30,6 +30,8 @@ public:
 
 	void Draw();
 
+	void AllDraw();
+
 public:
 	inline bool GetIsPad() const {
 		return isPad_;
@@ -45,6 +47,8 @@ public:
 
 private:
 	void Debug();
+
+	void UploadTextureData();
 
 
 private:

@@ -1,5 +1,5 @@
 #include "CbvSrvUavHeap.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ConvertString.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
@@ -9,11 +9,15 @@
 #include <cmath>
 #include <algorithm>
 #include <numeric>
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
 
 Lamb::SafePtr<CbvSrvUavHeap> CbvSrvUavHeap::instance_ = nullptr;
+
+CbvSrvUavHeap::~CbvSrvUavHeap() {
+	Lamb::AddLog("Finalize CbvSrvUavHeap succeeded");
+}
 
 void CbvSrvUavHeap::Initialize(UINT heapSize, UINT maxTexture) {
 	instance_.reset(new CbvSrvUavHeap(heapSize, maxTexture));
@@ -66,7 +70,7 @@ void CbvSrvUavHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
 
 uint32_t CbvSrvUavHeap::CreateView(Descriptor& buffer) {
 	if (currentHandleIndex_ >= heapSize_) {
-		throw Lamb::Error::Code<CbvSrvUavHeap>("Over Heap Size", __func__);
+		throw Lamb::Error::Code<CbvSrvUavHeap>("Over Heap Size", ErrorPlace);
 	}
 
 	if (bookingHandle_.empty()) {
@@ -87,7 +91,7 @@ uint32_t CbvSrvUavHeap::CreateView(Descriptor& buffer) {
 uint32_t CbvSrvUavHeap::CreateView(Texture& tex)
 {
 	if (kMaxTextureHadle_ <= currentTextureHeapIndex_) {
-		throw Lamb::Error::Code<CbvSrvUavHeap>("Over Heap Size", __func__);
+		throw Lamb::Error::Code<CbvSrvUavHeap>("Over Heap Size", ErrorPlace);
 	}
 
 	if (releaseTextureHeapIndex_.empty()) {

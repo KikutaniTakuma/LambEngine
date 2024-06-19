@@ -1,10 +1,24 @@
 #pragma once
-#include <iterator>
+#include <array>
+#include "Mat4x4.h"
 
 /// <summary>
 /// 三次元配列
 /// </summary>
 class Vector3 final {
+private:
+	static constexpr size_t arraySize = 3llu;
+
+public:
+	using size_type = size_t;
+
+	using iterator = std::_Array_iterator<float, arraySize>;
+	using const_iterator = std::_Array_const_iterator<float, arraySize>;
+
+	using reverse_iterator = std::reverse_iterator<iterator>;
+	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -13,6 +27,7 @@ public:
 	Vector3(float x, float y, float z) noexcept;
 	constexpr Vector3(const Vector3&) noexcept = default;
 	Vector3(const class Vector2& right) noexcept;
+	Vector3(const class Vector2& right, float rightZ) noexcept;
 	constexpr Vector3(Vector3&&) noexcept = default;
 public:
 	~Vector3() = default;
@@ -35,14 +50,15 @@ public:
 	[[nodiscard]] Vector3 operator-(const Vector3& right) const noexcept;
 	Vector3& operator+=(const Vector3& right) noexcept;
 	Vector3& operator-=(const Vector3& right) noexcept;
+	[[nodiscard]] Vector3 operator*(const Vector3& right) const noexcept;
+	Vector3& operator*=(const Vector3& right) noexcept;
 	[[nodiscard]] Vector3 operator*(float scalar) const noexcept;
 	Vector3& operator*=(float scalar) noexcept;
 	[[nodiscard]] Vector3 operator/(float scalar) const noexcept;
 	Vector3& operator/=(float scalar) noexcept;
 
-	[[nodiscard]] Vector3 operator*(const class Mat4x4& mat) const;
-	Vector3& operator*=(const class Mat4x4& mat);
-	friend Vector3 operator*(const class Mat4x4& left, const Vector3& right);
+	[[nodiscard]] Vector3 operator*(const Mat4x4& mat) const;
+	Vector3& operator*=(const Mat4x4& mat);
 
 	Vector3& operator=(const class Vector2& right) noexcept;
 
@@ -67,37 +83,97 @@ public:
 	[[nodiscard]] float Dot(const Vector3& right) const noexcept;
 	[[nodiscard]] Vector3 Cross(const Vector3& right) const noexcept;
 	[[nodiscard]] float Length() const noexcept;
+	[[nodiscard]] float LengthSQ() const noexcept;
 	[[nodiscard]] Vector3 Normalize() const noexcept;
+
+public:
+	constexpr void fill(float value) {
+		std::fill_n(data(), size(), value);
+	}
+	constexpr void swap(Vector3& other)noexcept(std::_Is_nothrow_swappable<float>::value) {
+		std::_Swap_ranges_unchecked(data(), data() + size(), other.data());
+	}
+
 	[[nodiscard]] float* data() noexcept {
 		return &x;
 	}
 	[[nodiscard]] const float* data() const noexcept {
 		return &x;
 	}
-	[[nodiscard]] auto begin() noexcept {
-		return std::data(*this);
+	[[nodiscard]] constexpr iterator begin() noexcept {
+		return iterator(data(), 0);
 	}
-	[[nodiscard]] auto end() noexcept {
-		return std::data(*this) + 3;
+
+	[[nodiscard]] constexpr const_iterator begin() const noexcept {
+		return const_iterator(data(), 0);
 	}
-	[[nodiscard]] auto cbegin() const noexcept {
-		return std::data(*this);
+
+	[[nodiscard]] constexpr iterator end() noexcept {
+		return iterator(data(), size());
 	}
-	[[nodiscard]] auto cend() const noexcept {
-		return std::data(*this) + 3;
+
+	[[nodiscard]] constexpr const_iterator end() const noexcept {
+		return const_iterator(data(), size());
 	}
-	[[nodiscard]] auto rbegin() noexcept {
-		return std::make_reverse_iterator(end());
+
+	[[nodiscard]] constexpr reverse_iterator rbegin() noexcept {
+		return reverse_iterator(end());
 	}
-	[[nodiscard]] auto rend() noexcept {
-		return std::make_reverse_iterator(begin());
+
+	[[nodiscard]] constexpr const_reverse_iterator rbegin() const noexcept {
+		return const_reverse_iterator(end());
 	}
-	[[nodiscard]] auto crbegin() const noexcept {
-		return std::make_reverse_iterator(cend());
+
+	[[nodiscard]] constexpr reverse_iterator rend() noexcept {
+		return reverse_iterator(begin());
 	}
-	[[nodiscard]] auto crend() const noexcept {
-		return std::make_reverse_iterator(cbegin());
+
+	[[nodiscard]] constexpr const_reverse_iterator rend() const noexcept {
+		return const_reverse_iterator(begin());
 	}
+
+	[[nodiscard]] constexpr const_iterator cbegin() const noexcept {
+		return begin();
+	}
+
+	[[nodiscard]] constexpr const_iterator cend() const noexcept {
+		return end();
+	}
+
+	[[nodiscard]] constexpr const_reverse_iterator crbegin() const noexcept {
+		return rbegin();
+	}
+
+	[[nodiscard]] constexpr const_reverse_iterator crend() const noexcept {
+		return rend();
+	}
+
+	[[nodiscard]] constexpr size_type size() const {
+		return arraySize;
+	}
+	[[nodiscard]] constexpr size_type max_size() const {
+		return arraySize;
+	}
+
+	[[nodiscard]] constexpr bool empty() const {
+		return false;
+	}
+
+	[[nodiscard]] constexpr float& front() {
+		return x;
+	}
+	[[nodiscard]] constexpr const float& front() const {
+		return x;
+	}
+	[[nodiscard]] constexpr float& back() {
+		return z;
+	}
+	[[nodiscard]] constexpr const float& back() const {
+		return z;
+	}
+	[[nodiscard]] float& at(size_t index);
+	[[nodiscard]] const float& at(size_t index) const;
+
 
 
 /// <summary>
@@ -129,9 +205,18 @@ public:
 /// メンバ変数
 /// </summary>
 public:
-	float x;
-	float y;
-	float z;
+	union {
+		float x;
+		float r;
+	};
+	union {
+		float y;
+		float g;
+	};
+	union {
+		float z;
+		float b;
+	};
 
 
 /// <summary>
@@ -139,8 +224,6 @@ public:
 /// </summary>
 public:
 	static [[nodiscard]] Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
-	
-	static [[nodiscard]] class Vector3 QuaternionToEuler(const Quaternion& quaternion);
 };
 
 struct Ray {
@@ -153,6 +236,12 @@ struct Segment {
 	Vector3 diff;
 };
 
+/// <summary>
+/// ベクトル1をベクトル2に投影する関数
+/// </summary>
+/// <param name="vec1">投影するベクトル</param>
+/// <param name="vec2">投影先のベクトル</param>
+/// <returns>正射影ベクトル</returns>
 [[nodiscard]] Vector3 Project(const Vector3& vec1, const Vector3& vec2);
 
 [[nodiscard]] Vector3 ClosestPoint(const Vector3& point, const Segment& segment);

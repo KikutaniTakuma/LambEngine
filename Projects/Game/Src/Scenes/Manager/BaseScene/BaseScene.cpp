@@ -1,20 +1,25 @@
 #include "BaseScene.h"
-#include "Engine/Graphics/TextureManager/TextureManager.h"
-#include "AudioManager/AudioManager.h"
-#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
-#include "Input/Input.h"
-#include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
+
+#ifdef _DEBUG
+#include "imgui.h"
+#endif // _DEBUG
+
 
 BaseScene::BaseScene(BaseScene::ID sceneID) :
-	drawerManager_(nullptr),
+#ifdef _DEBUG
+	debugCamera_(std::make_unique<DebugCamera>()),
+	isDebug_(false),
+#endif // _DEBUG
 	sceneManager_(nullptr),
+	drawerManager_(nullptr),
 	audioManager_(nullptr),
-	textureManager_(nullptr),
 	frameInfo_(nullptr),
 	input_(nullptr),
 	stringOutPutManager_(nullptr),
+	postEffectManager_(nullptr),
 	sceneID_(sceneID),
-	camera_{ new Camera{} }
+	camera_(std::make_unique<Camera>()),
+	currentCamera_(camera_.get())
 {}
 
 void BaseScene::SceneInitialize(SceneManager* sceneManager) {
@@ -24,13 +29,31 @@ void BaseScene::SceneInitialize(SceneManager* sceneManager) {
 
 	audioManager_ = AudioManager::GetInstance();
 
-	textureManager_ = TextureManager::GetInstance();
-
 	frameInfo_ = FrameInfo::GetInstance();
 
 	stringOutPutManager_ = StringOutPutManager::GetInstance();
 
 	input_ = Input::GetInstance();
+
+	postEffectManager_ = PostEffectManager::GetInstance();
+
+	animationManager_ = AnimationManager::GetInstance();
+}
+
+void BaseScene::ChangeCamera()
+{
+#ifdef _DEBUG
+	ImGui::Begin("SceneCamera");
+	if (ImGui::Checkbox("debug", isDebug_.data())) {
+		currentCamera_ = isDebug_ ? debugCamera_.get() : camera_.get();
+		if (isDebug_.OnEnter()) {
+			debugCamera_->pos = camera_->pos;
+			debugCamera_->rotate = camera_->rotate;
+			debugCamera_->scale = camera_->scale;
+		}
+	}
+	ImGui::End();
+#endif // _DEBUG
 }
 
 const Camera& BaseScene::GetCamera() const

@@ -1,20 +1,18 @@
 #pragma once
-#include <mutex>
-#include <thread>
-#include <condition_variable>
-#include <functional>
+#include "Utils/Thread.h"
 #include <memory>
 #include "Drawers/Texture2D/Texture2D.h"
-#include "Math/Mat4x4.h"
+#include "Engine/Graphics/Tex2DAniamtor/Tex2DAniamtor.h"
+#include "Utils/SafePtr.h"
 
 
 // ロード中の描画クラス
 class SceneLoad {
 public:
 	struct Desc {
-		std::string fileName = "./Resources/Load.png";
+		std::string fileName = "./Resources/EngineResources/Load.png";
 		uint32_t animationNumber = 4;
-		uint32_t animationSpeed = 500;
+		float animationSpeed = 0.5f;
 	};
 public:
 	static Desc setting;
@@ -23,7 +21,7 @@ public:
 	SceneLoad();
 	SceneLoad(const SceneLoad&) = delete;
 	SceneLoad(SceneLoad&&) = delete;
-	~SceneLoad();
+	~SceneLoad() = default;
 
 	SceneLoad& operator=(const SceneLoad&) = delete;
 	SceneLoad& operator=(SceneLoad&&) = delete;
@@ -37,22 +35,12 @@ private:
 	void CreateLoad();
 
 private:
-	// load描画用スレッド
-	std::thread loadDrawThread_;
-	// ロック用
-	std::mutex mtx_;
-
-	std::condition_variable condition_;
-
-	// ロード中に実行する関数
-	std::function<void(void)> loadProc_;
-	std::unique_ptr<Texture2D> loadTex_;
-
-	bool exit_;
-
+	std::unique_ptr<Lamb::Thread> thread_;
 	bool isLoad_;
 
-	bool isWait_;
+	std::unique_ptr<Tex2DAniamtor> tex2Danimator_;
+	Lamb::SafePtr<Texture2D> loadTex_;
+	uint32_t textureID_;
 
 	Mat4x4 cameraMatrix_;
 

@@ -14,7 +14,7 @@
 
 
 #include <string>
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 /// <summary>
 /// 音の再生や停止、ロードを担う
@@ -67,10 +67,6 @@ private:
 	void Unload();
 
 	void Load(const std::string& fileName);
-
-	void LoadWav(const std::string& fileName);
-
-	void LoadMp3(const std::string& fileName);
 
 private:
 	WAVEFORMATEX wfet_;

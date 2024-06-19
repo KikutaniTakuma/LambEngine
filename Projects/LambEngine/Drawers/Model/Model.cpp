@@ -1,6 +1,6 @@
 #include "Model.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 Model::Model(const std::string& fileName):
 	Model()
@@ -31,15 +31,13 @@ void Model::Load(const std::string& fileName) {
 		}
 	);
 
-	for (auto& i : *renderSet) {
-		i->SetLight(
-			Light{
-				.ligDirection{-Vector3::kYIdentity},
-				.pad0{},
-				.ligColor{ Vector3::kIdentity },
-			}
-		);
-	}
+	SetLight(
+		Light{
+			.ligDirection{-Vector3::kYIdentity},
+			.pad0{},
+			.ligColor{ Vector3::kIdentity },
+		}
+	);
 }
 
 void Model::Draw(
@@ -50,7 +48,16 @@ void Model::Draw(
 	bool isLighting
 ) {
 	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
-	renderContext->SetSahderStruct(static_cast<uint32_t>(isLighting));
+	renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
+}
+
+const Node& Model::GetNode() const
+{
+	return renderSet->GetNode();
+}
+
+const ModelData& Model::GetModelData() const {
+	return *renderSet->GetModelData();
 }

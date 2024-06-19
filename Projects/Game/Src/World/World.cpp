@@ -4,6 +4,9 @@
 #include "../Game/Water/Water.h"
 #include "../Game/Cloud/Cloud.h"
 
+#include "GameObject/Manager/ObjectManager.h"
+#include "GameObject/Manager/TransformCompUpdater.h"
+
 void World::Initialize() {
 	// ウィンドウ初期化オプション
 	initDesc_ = Framework::InitDesc{
@@ -15,32 +18,37 @@ void World::Initialize() {
 
 	// ロードのステータス
 	SceneLoad::setting = SceneLoad::Desc{
-		.fileName = "./Resources/Load.png",
+		.fileName = "./Resources/EngineResources/Load.png",
 		.animationNumber = 6,
-		.animationSpeed = 100
+		.animationSpeed = 0.1f
 	};
 
 	Framework::Initialize();
+	Camera::InitStaticMatrix();
 
-	//Water::Initialize();
+	Water::Initialize();
 
 	//Cloud::Initialize();
 
 	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/mincho_size_32.spritefont");
+	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/default.spritefont");
 
+	TransformCompUpdater::Initialize();
+	ObjectManager::Initialize();
 
 	// シーンマネージャー初期化
 	sceneManager_ = std::make_unique<SceneManager>();
 
-	sceneManager_->Initialize(BaseScene::ID::Game, BaseScene::ID::Game);
+	sceneManager_->Initialize(BaseScene::ID::Title, BaseScene::ID::Title);
 
-	//ParticleEditor::Initialize();
-	//particleEditor_ = ParticleEditor::GetInstance();
+	ParticleEditor::Initialize();
+	particleEditor_ = ParticleEditor::GetInstance();
+
 }
 
 void World::Finalize() {
 	//Cloud::Finalize();
-	//Water::Finalize();
+	Water::Finalize();
 
 	if (sceneManager_) {
 		sceneManager_->Finalize();
@@ -48,7 +56,10 @@ void World::Finalize() {
 
 	sceneManager_.reset();
 
-	//ParticleEditor::Finalize();
+	ObjectManager::Finalize();
+	TransformCompUpdater::Finalize();
+
+	ParticleEditor::Finalize();
 
 	Framework::Finalize();
 }
@@ -56,7 +67,7 @@ void World::Finalize() {
 void World::Update() {
 	if (sceneManager_) {
 		sceneManager_->Update();
-		//particleEditor_->Editor();
+		particleEditor_->Editor();
 		isEnd_ = sceneManager_->IsEnd();
 	}
 	else {
@@ -67,7 +78,9 @@ void World::Update() {
 void World::Draw() {
 	if (sceneManager_) {
 		sceneManager_->Draw();
-		//particleEditor_->Draw();
+		particleEditor_->Draw(sceneManager_->GetCurrentSceneCamera());
+
+		sceneManager_->AllDraw();
 	}
 	else {
 		isEnd_ = true;

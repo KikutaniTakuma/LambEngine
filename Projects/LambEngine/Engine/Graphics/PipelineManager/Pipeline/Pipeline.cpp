@@ -1,7 +1,7 @@
 #include "Pipeline.h"
 #include <cassert>
 #include <algorithm>
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "Engine/Graphics/RootSignature/RootSignature.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
@@ -50,13 +50,14 @@ bool Pipeline::operator!=(const Pipeline& right) const {
 	return !this->operator==(right);
 }
 
-void Pipeline::SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format) {
+void Pipeline::SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format, uint32_t inputSlot) {
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs{};
 
 	inputElementDescs.SemanticIndex = semanticIndex;
 	inputElementDescs.Format = format;
 	inputElementDescs.AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 	inputElementDescs.InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
+	inputElementDescs.InputSlot = inputSlot;
 
 	vertexInput_.push_back(inputElementDescs);
 	semanticNames_.push_back(semanticName);
@@ -204,7 +205,146 @@ void Pipeline::Create(
 	HRESULT hr = device->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(graphicsPipelineState_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<Pipeline>("CreateGraphicsPipelineState failed", __func__);
+		throw Lamb::Error::Code<Pipeline>("CreateGraphicsPipelineState failed", ErrorPlace);
+	}
+}
+
+void Pipeline::CreateCubeMap(
+	const RootSignature& rootSignature, 
+	Pipeline::Blend blend, 
+	Pipeline::CullMode cullMode, 
+	Pipeline::SolidState solidState, 
+	D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType, 
+	uint32_t numRenderTarget
+) {
+	blend_ = blend;
+	cullMode_ = cullMode;
+	solidState_ = solidState;
+	topologyType_ = topologyType;
+	numRenderTarget_ = numRenderTarget;
+	isDepth_ = true;
+
+	rootSignature_ = rootSignature.Get();
+
+
+	numRenderTarget_ = std::clamp(numRenderTarget_, 1u, 8u);
+
+	for (size_t i = 0; i < vertexInput_.size(); i++) {
+		vertexInput_[i].SemanticName = semanticNames_[i].c_str();
+	}
+
+	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
+	inputLayoutDesc.pInputElementDescs = vertexInput_.data();
+	inputLayoutDesc.NumElements = UINT(vertexInput_.size());
+
+	// BlendStateの設定
+	D3D12_BLEND_DESC blendDec{};
+	// 全ての色要素を書き込む
+	blendDec.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+	// RasterizerStateの設定
+	D3D12_RASTERIZER_DESC rasterizerDesc{};
+	// 裏面(時計回り)を表示しない
+	rasterizerDesc.CullMode = D3D12_CULL_MODE(cullMode_);
+	// 三角形の中を塗りつぶす
+	rasterizerDesc.FillMode = D3D12_FILL_MODE(solidState_);
+	rasterizerDesc.DepthClipEnable = true;
+
+
+	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
+
+	graphicsPipelineStateDesc.pRootSignature = rootSignature_;
+	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
+
+	graphicsPipelineStateDesc.VS = {
+			shader_.vertex->GetBufferPointer(),
+			shader_.vertex->GetBufferSize()
+	};
+	graphicsPipelineStateDesc.PS = {
+			shader_.pixel->GetBufferPointer(),
+			shader_.pixel->GetBufferSize()
+	};
+	if (shader_.hull && shader_.domain) {
+		graphicsPipelineStateDesc.HS = {
+				shader_.hull->GetBufferPointer(),
+				shader_.hull->GetBufferSize()
+		};
+		graphicsPipelineStateDesc.DS = {
+				shader_.domain->GetBufferPointer(),
+				shader_.domain->GetBufferSize()
+		};
+	}
+	if (shader_.geometory) {
+		graphicsPipelineStateDesc.GS = {
+				shader_.geometory->GetBufferPointer(),
+				shader_.geometory->GetBufferSize()
+		};
+	}
+
+
+	graphicsPipelineStateDesc.BlendState = blendDec;
+	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
+	// 書き込むRTVの情報
+	graphicsPipelineStateDesc.NumRenderTargets = numRenderTarget_;
+	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	// 利用するトポロジ(形状)のタイプ
+	graphicsPipelineStateDesc.PrimitiveTopologyType = topologyType_;
+
+	// どのように画面に打ち込むかの設定
+	graphicsPipelineStateDesc.SampleDesc.Count = 1;
+	graphicsPipelineStateDesc.SampleDesc.Quality = 0;
+	graphicsPipelineStateDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+
+	if (isDepth_) {
+		graphicsPipelineStateDesc.DepthStencilState.DepthEnable = true;
+		graphicsPipelineStateDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+		graphicsPipelineStateDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+		graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
+	}
+
+	for (uint32_t i = 0; i < numRenderTarget_; i++) {
+		switch (blend_)
+		{
+		case Pipeline::Blend::None:
+		default:
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].BlendEnable = false;
+			break;
+		case Pipeline::Blend::Normal:
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].BlendEnable = true;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].SrcBlend = D3D12_BLEND_SRC_ALPHA;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].BlendOp = D3D12_BLEND_OP_ADD;
+			break;
+		case Pipeline::Blend::Add:
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].BlendEnable = true;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].SrcBlend = D3D12_BLEND_ONE;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].DestBlend = D3D12_BLEND_ONE;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].BlendOp = D3D12_BLEND_OP_ADD;
+			break;
+		case Pipeline::Blend::Sub:
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].BlendEnable = true;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].SrcBlend = D3D12_BLEND_ONE;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].DestBlend = D3D12_BLEND_ONE;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].BlendOp = D3D12_BLEND_OP_SUBTRACT;
+			break;
+		case Pipeline::Blend::Mul:
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].BlendEnable = true;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].SrcBlend = D3D12_BLEND_ZERO;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].DestBlend = D3D12_BLEND_SRC_COLOR;
+			graphicsPipelineStateDesc.BlendState.RenderTarget[i].BlendOp = D3D12_BLEND_OP_ADD;
+			break;
+		}
+
+		graphicsPipelineStateDesc.BlendState.RenderTarget[i].SrcBlendAlpha = D3D12_BLEND_ONE;
+		graphicsPipelineStateDesc.BlendState.RenderTarget[i].DestBlendAlpha = D3D12_BLEND_ZERO;
+		graphicsPipelineStateDesc.BlendState.RenderTarget[i].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+	}
+
+	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
+	HRESULT hr = device->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(graphicsPipelineState_.GetAddressOf()));
+	assert(SUCCEEDED(hr));
+	if (!SUCCEEDED(hr)) {
+		throw Lamb::Error::Code<Pipeline>("CreateGraphicsPipelineState failed", ErrorPlace);
 	}
 }
 
@@ -213,7 +353,7 @@ void Pipeline::Use() const {
 
 	assert(graphicsPipelineState_);
 	if (!graphicsPipelineState_) {
-		throw Lamb::Error::Code<Pipeline>("GraphicsPipelineState is nullptr", __func__);
+		throw Lamb::Error::Code<Pipeline>("GraphicsPipelineState is nullptr", ErrorPlace);
 	}
 	auto commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	commandlist->SetGraphicsRootSignature(rootSignature_);
@@ -233,7 +373,7 @@ void Pipeline::Use() const {
 	default:
 	case D3D12_PRIMITIVE_TOPOLOGY_TYPE_UNDEFINED:
 	case D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT:
-		throw Lamb::Error::Code<Pipeline>("Cannot use this primitive topology type", __func__);
+		throw Lamb::Error::Code<Pipeline>("Cannot use this primitive topology type", ErrorPlace);
 		break;
 	}
 }

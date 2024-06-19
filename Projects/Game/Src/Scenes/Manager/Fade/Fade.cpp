@@ -1,14 +1,22 @@
 #include "Fade.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
+#include "Drawers/DrawerManager.h"
 #include "imgui.h"
 
-Fade::Fade():
+#include <climits>
+
+Fade::Fade() :
 	isInStart_(false),
 	isOutStart_(false),
-	//tex_(),
+	tex_(),
+	transform(),
+	color_(std::numeric_limits<uint32_t>::max()),
 	fadeTime_(0.75f)
 {
-	//tex_.scale = Lamb::ClientSize();
+	tex_ = DrawerManager::GetInstance()->GetTexture2D();
+	transform = std::make_unique<Transform>();
+	transform->scale = Lamb::ClientSize();
+	transform->translate.z = 0.0f;
 }
 
 void Fade::OutStart() {
@@ -50,13 +58,11 @@ bool Fade::IsActive() const
 
 void Fade::Update() {
 	if (isInStart_) {
-		//tex_.color = ColorLerp(0xff, 0x00, ease_.GetT());
+		color_ = ColorLerp(0xff, 0x00, ease_.GetT());
 	}
 	else if (isOutStart_) {
-		//tex_.color = ColorLerp(0x00, 0xff, ease_.GetT());
+		color_ = ColorLerp(0x00, 0xff, ease_.GetT());
 	}
-
-	//tex_.Update();
 
 	ease_.Update();
 
@@ -65,8 +71,8 @@ void Fade::Update() {
 		isOutStart_ = false;
 	}
 }
-void Fade::Draw([[maybe_unused]]const Mat4x4& viewProjection) {
+void Fade::Draw([[maybe_unused]] const Mat4x4& viewProjection) {
 	if (isInStart_ || isOutStart_) {
-		//tex_.Draw(viewProjection, Pipeline::Blend::Normal, false);
+		tex_->Draw(transform->GetMatrix(), Mat4x4::kIdentity, viewProjection, 0u, color_, BlendType::kNormal);
 	}
 }

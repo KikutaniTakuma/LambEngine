@@ -1,9 +1,9 @@
 #pragma once
-#include "Math/Vector3.h"
-#include "Math/Mat4x4.h"
+#include "Transform/Transform.h"
 #include "Drawers/Line/Line.h"
-#include "Utils/Flg/Flg.h"
+#include "Utils/Flg.h"
 #include <array>
+#include <memory>
 
 /// <summary>
 /// 当たり判定(OBB)
@@ -25,22 +25,24 @@ public:
 
 	void Debug(const std::string& guiName);
 
-	bool IsCollision(Vector3 pos, float radius);
+	[[nodiscard]]bool IsCollision(Vector3 pos, float radius);
+	[[nodiscard]]bool IsCollision(Obb& other);
+	[[nodiscard]]bool IsCollision(Obb& other, Vector3& pushVector);
 
 public:
-	Vector3 center_;
-	Vector3 scale_;
-	Vector3 rotate_;
+	Transform transform;
 
+#ifdef _DEBUG
+private:
 	uint32_t color_;
+#endif // _DEBUG
 
 private:
-	std::array<Vector3, 3> orientations_;
-	std::array<Line, 12> lines_;
-	std::array<Line, 3> orientationLines_;
-	Vector3 size_;
-
-	Mat4x4 worldMatrix_;
+	static std::unique_ptr<std::array<const Vector3, 8>> localPositions_;
+	static std::unique_ptr<std::array<const Vector3, 3>> localOrientations_;
+private:
+	std::unique_ptr<std::array<Vector3, 8>> positions_;
+	std::unique_ptr<std::array<Vector3, 3>> orientations_;
 
 	Lamb::Flg isCollision_;
 
@@ -52,3 +54,10 @@ public:
 		return isCollision_;
 	}
 };
+
+using ObbPtr = std::unique_ptr<Obb>;
+
+template<class... Types>
+ObbPtr MakeObb(Types&&... args) {
+	return std::make_unique<Obb>(std::forward<Types>(args)...);
+}

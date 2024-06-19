@@ -9,7 +9,7 @@
 #undef max
 #undef min
 #include "Engine/Core/WindowFactory/WindowFactory.h"
-#include "Utils/ExecutionLog/ExecutionLog.h"
+#include "Utils/ExecutionLog.h"
 #include "Engine/Engine.h"
 #include <typeinfo>
 
@@ -44,7 +44,7 @@ void ErrorCheck::ErrorTextBox(const std::string& text, const std::string& boxNam
 
 void ErrorCheck::CrashProgram() {
 	if (isError_) {
-		Lamb::AddLog("WARNIG CrashProgram : Please check the Error.log");
+		Lamb::AddLog("Error CrashProgram : Please check the Error.log");
 
 		std::exit(EXIT_FAILURE);
 	}

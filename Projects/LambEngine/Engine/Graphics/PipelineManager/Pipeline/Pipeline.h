@@ -61,7 +61,9 @@ public:
 	void SetVertexInput(
 		std::string semanticName, 
 		uint32_t semanticIndex, 
-		DXGI_FORMAT format
+		DXGI_FORMAT format, 
+		uint32_t inputSlot
+
 	);
 
 	void SetShader(const Shader& shader);
@@ -74,6 +76,15 @@ public:
 		D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType,
 		uint32_t numRenderTarget = 1,
 		bool isDepth = true
+	);
+
+	void CreateCubeMap(
+		const RootSignature& rootSignature,
+		Pipeline::Blend blend,
+		Pipeline::CullMode cullMode,
+		Pipeline::SolidState solidState,
+		D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType,
+		uint32_t numRenderTarget = 1
 	);
 
 	void Use() const;

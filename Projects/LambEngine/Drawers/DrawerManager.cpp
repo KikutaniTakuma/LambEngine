@@ -11,6 +11,12 @@ DrawerManager::DrawerManager():
 
 	tex2D_ = std::make_unique<Texture2D>();
 	tex2D_->Load();
+
+	Lamb::AddLog("Initialize DrawerManager succeeded");
+}
+
+DrawerManager::~DrawerManager(){ 
+	Lamb::AddLog("Finalize DrawerManager succeeded");
 }
 
 DrawerManager* DrawerManager::GetInstance()
@@ -31,9 +37,13 @@ Texture2D* const DrawerManager::GetTexture2D() const
 	return tex2D_.get();
 }
 
-uint32_t DrawerManager::LoadTexture(const std::string& fileName)
+uint32_t DrawerManager::GetTexture(const std::string& fileName)
 {
-	return textureManager_->LoadTexture(fileName);
+	return textureManager_->GetHandle(fileName);
+}
+
+void DrawerManager::LoadTexture(const std::string& fileName) {
+	textureManager_->LoadTexture(fileName);
 }
 
 void DrawerManager::LoadModel(const std::string& fileName) {
@@ -49,7 +59,7 @@ void DrawerManager::LoadModel(const std::string& fileName) {
 Model* const DrawerManager::GetModel(const std::string& fileName)
 {
 	if (not models_[fileName]) {
-		throw Lamb::Error::Code<DrawerManager>("this model is not loaded -> " + fileName, __func__);
+		throw Lamb::Error::Code<DrawerManager>("this model is not loaded -> " + fileName, ErrorPlace);
 	}
 
 	return models_[fileName].get();

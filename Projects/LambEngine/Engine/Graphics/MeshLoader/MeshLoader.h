@@ -1,5 +1,6 @@
 #pragma once
 #include "../GraphicsStructs.h"
+#include <chrono>
 namespace Assimp {
 	class Importer;
 };
@@ -29,14 +30,14 @@ public:
 	/// </summary>
 	/// <param name="fileName">obj, gltfファイルパス</param>
 	/// <returns>頂点とインデックス情報</returns>
-	static Mesh LoadModel(const std::string& fileName);
+	static [[nodiscard]] ModelData LoadModel(const std::string& fileName);
 
 	/// <summary>
 	/// gltfアニメーションロード
 	/// </summary>
 	/// <param name="fileName">gltfファイルのロード</param>
 	/// <returns></returns>
-	static Animations LoadAnimation(const std::string& fileName);
+	static [[nodiscard]] Animations* LoadAnimation(const std::string& fileName);
 
 private:
 	static const struct aiScene* ReadFile(Assimp::Importer& importer, const std::string& fileName);
@@ -48,6 +49,13 @@ private:
 	/// <returns></returns>
 	static Node ReadNode(struct aiNode* node);
 
-private:
+
 	static void LoadMtl(const struct aiScene* scene, const std::string& directorypath, std::vector<uint32_t>& result);
+
+	static void StartLoadTimeCount();
+
+	static void EndLoadTimeCountAndAddLog(const std::string& fileName);
+
+private:
+	static std::chrono::steady_clock::time_point loadStartTime_;
 };

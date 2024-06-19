@@ -1,5 +1,5 @@
 #pragma once
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 class ImGuiManager {
 private:

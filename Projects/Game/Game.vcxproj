@@ -58,7 +58,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\nlohmann\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -96,7 +96,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\nlohmann\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -130,20 +130,39 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\Camera\Camera.cpp" />
+    <ClCompile Include="Src\Camera\DebugCamera\DebugCamera.cpp" />
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\Camera2DComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\Camera3DComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\FallComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\InputJump.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\ModelRenderComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\InputMoveComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\ObbComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\ObbPushComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\RenderDataComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\TransformComp.cpp" />
+    <ClCompile Include="Src\GameObject\Manager\ObjectManager.cpp" />
+    <ClCompile Include="Src\GameObject\Manager\TransformCompUpdater.cpp" />
+    <ClCompile Include="Src\GameObject\Object.cpp" />
     <ClCompile Include="Src\Game\Cloud\Cloud.cpp" />
+    <ClCompile Include="Src\Game\Coin\Coin.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Collider\Collider.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Obb\Obb.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Plane\Plane.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Sphere\Sphere.cpp" />
+    <ClCompile Include="Src\Game\Player\Player.cpp" />
+    <ClCompile Include="Src\Game\SkyBlock\SkyBlock.cpp" />
     <ClCompile Include="Src\Game\SkyDome\SkyDome.cpp" />
     <ClCompile Include="Src\Game\Water\Water.cpp" />
     <ClCompile Include="Src\GlobalVariables\GlobalVariables.cpp" />
+    <ClCompile Include="Src\Level\LevelLoader.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\Scenes\GameScene\GameScene.cpp" />
     <ClCompile Include="Src\Scenes\Manager\BaseScene\BaseScene.cpp" />
     <ClCompile Include="Src\Scenes\Manager\Fade\Fade.cpp" />
+    <ClCompile Include="Src\Scenes\Manager\PostEffectManager\PostEffectManager.cpp" />
     <ClCompile Include="Src\Scenes\Manager\SceneFactory\SceneFactory.cpp" />
     <ClCompile Include="Src\Scenes\Manager\SceneLoad\SceneLoad.cpp" />
     <ClCompile Include="Src\Scenes\Manager\SceneManager.cpp" />
@@ -153,19 +172,39 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Camera\Camera.h" />
+    <ClInclude Include="Src\Camera\DebugCamera\DebugCamera.h" />
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h" />
+    <ClInclude Include="Src\GameObject\Comp\Camera2DComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\Camera3DComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\FallComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\InputJump.h" />
+    <ClInclude Include="Src\GameObject\Comp\InputMoveComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\ModelRenderComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\ObbComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\ObbPushComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\RenderDataComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\TransformComp.h" />
+    <ClInclude Include="Src\GameObject\Manager\ObjectManager.h" />
+    <ClInclude Include="Src\GameObject\Manager\TransformCompUpdater.h" />
+    <ClInclude Include="Src\GameObject\Object.h" />
     <ClInclude Include="Src\Game\Cloud\Cloud.h" />
+    <ClInclude Include="Src\Game\Coin\Coin.h" />
     <ClInclude Include="Src\Game\CollisionManager\Collider\Collider.h" />
     <ClInclude Include="Src\Game\CollisionManager\CollisionManager.h" />
     <ClInclude Include="Src\Game\CollisionManager\Obb\Obb.h" />
     <ClInclude Include="Src\Game\CollisionManager\Plane\Plane.h" />
     <ClInclude Include="Src\Game\CollisionManager\Sphere\Sphere.h" />
+    <ClInclude Include="Src\Game\Player\Player.h" />
+    <ClInclude Include="Src\Game\SkyBlock\SkyBlock.h" />
     <ClInclude Include="Src\Game\SkyDome\SkyDome.h" />
     <ClInclude Include="Src\Game\Water\Water.h" />
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h" />
+    <ClInclude Include="Src\Level\LevelData.h" />
+    <ClInclude Include="Src\Level\LevelLoader.h" />
     <ClInclude Include="Src\Scenes\GameScene\GameScene.h" />
     <ClInclude Include="Src\Scenes\Manager\BaseScene\BaseScene.h" />
     <ClInclude Include="Src\Scenes\Manager\Fade\Fade.h" />
+    <ClInclude Include="Src\Scenes\Manager\PostEffectManager\PostEffectManager.h" />
     <ClInclude Include="Src\Scenes\Manager\SceneFactory\SceneFactory.h" />
     <ClInclude Include="Src\Scenes\Manager\SceneLoad\SceneLoad.h" />
     <ClInclude Include="Src\Scenes\Manager\SceneManager.h" />

@@ -1,12 +1,12 @@
 #include "CloudPipeline.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
-#include "Utils/Random/Random.h"
+#include "Utils/Random.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 
 #ifdef _DEBUG
 #include "imgui.h"
@@ -49,7 +49,7 @@ void CloudPipeline::Update() {
 			);
 		}
 		else {
-			throw Lamb::Error::Code<decltype(*this)>("something Error", __func__);
+			throw Lamb::Error::Code<decltype(*this)>("something Error", ErrorPlace);
 		}
 	}
 

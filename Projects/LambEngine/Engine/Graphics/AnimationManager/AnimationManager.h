@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <memory>
 
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 class AnimationManager {
 private:
@@ -30,7 +30,7 @@ private:
 	static Lamb::SafePtr<AnimationManager> instance_;
 
 public:
-	[[noreturn]] void LoadAniamtions(const std::string& fileName);
+	void LoadAnimations(const std::string& fileName);
 	
 	[[nodiscard]] Animations* const GetAnimations(const std::string& fileName);
 

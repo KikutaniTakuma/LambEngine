@@ -1,6 +1,18 @@
 #pragma once
-#include "Drawers/DrawerManager.h"
 #include "Camera/Camera.h"
+#include "Camera/DebugCamera/DebugCamera.h"
+
+#include "Drawers/DrawerManager.h"
+#include "AudioManager/AudioManager.h"
+#include "Input/Input.h"
+#include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
+#include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
+#include "Engine/Graphics/AnimationManager/AnimationManager.h"
+
+#include "Utils/SafePtr.h"
+#include "Utils/Flg.h"
+#include "../PostEffectManager/PostEffectManager.h"
+
 #include <memory>
 
 class BaseScene {
@@ -26,11 +38,15 @@ public:
 public:
 	void SceneInitialize(class SceneManager* sceneManager);
 
+	virtual void Load() = 0;
+
 	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
 
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
+
+	void ChangeCamera();
 
 	inline BaseScene::ID GetID() const {
 		return sceneID_;
@@ -40,21 +56,31 @@ public:
 
 protected:
 	class SceneManager* sceneManager_;
-	
+
 	DrawerManager* drawerManager_;
 
-	class AudioManager* audioManager_;
+	AudioManager* audioManager_;
 
-	class TextureManager* textureManager_;
+	FrameInfo* frameInfo_;
 
-	class FrameInfo* frameInfo_;
+	Input* input_;
 
-	class Input* input_;
-
-	class StringOutPutManager* stringOutPutManager_;
+	StringOutPutManager* stringOutPutManager_;
 
 	BaseScene::ID sceneID_;
 
-protected:
+	PostEffectManager* postEffectManager_;
+
+	AnimationManager* animationManager_;
+
+private:
 	std::unique_ptr<Camera> camera_;
+
+protected:
+	Lamb::SafePtr<Camera> currentCamera_;
+
+#ifdef _DEBUG
+	std::unique_ptr<DebugCamera> debugCamera_;
+	Lamb::Flg isDebug_;
+#endif // _DEBUG
 };

@@ -3,7 +3,7 @@
 #include <thread>
 #include <queue>
 
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include "../GraphicsStructs.h"
 
 /// <summary>
@@ -30,8 +30,14 @@ private:
 	static Lamb::SafePtr<MeshManager> instance_;
 
 public:
-	[[nodiscard]] Mesh* LoadObj(const std::string& objFileName);
+	void LoadModel(const std::string& objFileName);
+	[[nodiscard]] Mesh* GetMesh(const std::string& objFileName);
+	[[nodiscard]] ModelData* GetModelData(const std::string& objFileName);
+
+private:
+	[[nodiscard]] Mesh* CreateMesh(const ModelData& modelData);
 
 private:
 	std::unordered_map<std::string, std::unique_ptr<Mesh>> meshs_;
+	std::unordered_map<std::string, std::unique_ptr<ModelData>> modelData_;
 };

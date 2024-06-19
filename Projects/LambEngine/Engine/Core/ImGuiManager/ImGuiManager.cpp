@@ -12,7 +12,7 @@
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"
 
-#include "Utils/SafeDelete/SafeDelete.h"
+#include "Utils/SafeDelete.h"
 
 Lamb::SafePtr<ImGuiManager> ImGuiManager::instance_ = nullptr;
 
@@ -65,6 +65,8 @@ ImGuiManager::ImGuiManager() {
 	);
 
 	descriptorHeap->UseThisPosition(useHandle);
+
+	Lamb::AddLog("Initialize ImGuiManager succeeded");
 #endif // DEBUG
 }
 ImGuiManager::~ImGuiManager() {
@@ -72,6 +74,8 @@ ImGuiManager::~ImGuiManager() {
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
+
+	Lamb::AddLog("Finalize ImGuiManager succeeded");
 #endif // DEBUG
 }
 

@@ -3,6 +3,8 @@
 #include <cmath>
 #include <numbers>
 
+#include "Error/Error.h"
+
 constexpr Vector2::Vector2() noexcept :
 	x(0.0f),
 	y(0.0f)
@@ -102,6 +104,19 @@ bool Vector2::operator!=(const Vector2& right) const noexcept {
 	return this->x != right.x || this->y != right.y;
 }
 
+float& Vector2::operator[](size_t index) {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector2>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+const float& Vector2::operator[](size_t index) const {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector2>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+
 void Vector2::Rotate(float rad) noexcept {
 	x *= cosf(rad);
 	y *= sinf(rad);
@@ -115,7 +130,10 @@ float Vector2::Dot(const Vector2& right) const noexcept {
 }
 
 float Vector2::Length() const noexcept {
-	return std::hypot(x, y);
+	return std::sqrt(x * x + y* y);
+}
+float Vector2::LengthSQ() const noexcept {
+	return x * x + y * y;
 }
 
 Vector2 Vector2::Normalize() const noexcept {
@@ -131,6 +149,20 @@ float Vector2::GetRad() const noexcept {
 	}
 
 	return std::atan2(y, x);
+}
+
+float& Vector2::at(size_t index) {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector2>("index is over", ErrorPlace);
+	}
+	return data()[index];
+}
+
+const float& Vector2::at(size_t index) const {
+	if (size() <= index) {
+		throw Lamb::Error::Code<Vector2>("index is over", ErrorPlace);
+	}
+	return data()[index];
 }
 
 Vector2 Vector2::Lerp(const Vector2& start, const Vector2& end, float easeSpd) {

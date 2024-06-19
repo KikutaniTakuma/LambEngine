@@ -25,4 +25,8 @@ public:
 		BlendType blend,
 		bool isLighting = true
 	);
+
+public:
+	const Node& GetNode() const;
+	const ModelData& GetModelData() const;
 };

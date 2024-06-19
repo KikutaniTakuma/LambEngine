@@ -1,10 +1,29 @@
 #include "Camera.h"
+#include "Utils/SafePtr.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Input/Input.h"
 #include "imgui.h"
 #include <algorithm>
 #include <numbers>
 #include <cmath>
+
+Mat4x4 Camera::kViewProjection;
+Mat4x4 Camera::kViewOthographics;
+
+void Camera::InitStaticMatrix() {
+	Lamb::SafePtr window = WindowFactory::GetInstance();
+	Vector2 clientSize = window->GetClientSize();
+	const float aspect = clientSize.x / clientSize.y;
+
+	kViewOthographics = Mat4x4::MakeOrthographic(
+		clientSize.x, clientSize.y,
+		kNearClip_, 1000.0f
+	);
+	kViewOthographics = Mat4x4::MakePerspectiveFov(
+		0.45f, aspect,
+		kNearClip_, 1000.0f
+	);
+}
 
 Camera::Camera() noexcept :
 	pos(),
@@ -45,10 +64,8 @@ void Camera::Update() {
 	viewProjecctionVp_ = viewProjecction_ * Mat4x4::MakeViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 
 	othograohics_ = Mat4x4::MakeOrthographic(
-		-clientSize.x * 0.5f * drawScale,
-		clientSize.y * 0.5f * drawScale,
-		clientSize.x * 0.5f * drawScale,
-		-clientSize.y * 0.5f * drawScale,
+		clientSize.x * drawScale,
+		clientSize.y * drawScale,
 		kNearClip_, farClip);
 	viewOthograohics_ = view_ * othograohics_;
 
@@ -57,7 +74,15 @@ void Camera::Update() {
 }
 
 void Camera::Update(const Vector3& gazePoint) {
+	Lamb::SafePtr pad = Input::GetInstance()->GetGamepad();
+	float stickX = pad->GetStick(Gamepad::Stick::RIGHT).x;
+
+	if (stickX != 0.0f) {
+		rotate.y += stickX * 0.1f;
+	}
 	pos = gazePoint + (offset * Mat4x4::MakeRotate(rotate));
+
+
 
 	Update();
 }
@@ -78,10 +103,8 @@ void Camera::Update(const Mat4x4& worldMat) {
 	viewProjecctionVp_ = viewProjecction_ * Mat4x4::MakeViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f);
 
 	othograohics_ = Mat4x4::MakeOrthographic(
-		-clientSize.x * 0.5f * drawScale,
-		clientSize.y * 0.5f * drawScale,
-		clientSize.x * 0.5f * drawScale,
-		-clientSize.y * 0.5f * drawScale,
+		clientSize.x * drawScale,
+		clientSize.y * drawScale,
 		kNearClip_, farClip);
 	viewOthograohics_ = view_ * othograohics_;
 
@@ -92,10 +115,10 @@ void Camera::Update(const Mat4x4& worldMat) {
 void Camera::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	ImGui::DragFloat3("pos", &pos.x, 0.01f);
-	ImGui::DragFloat3("scale", &scale.x, 0.01f);
-	ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
-	ImGui::DragFloat3("offset", &offset.x);
+	ImGui::DragFloat3("pos", pos.data(), 0.01f);
+	ImGui::DragFloat3("scale", scale.data(), 0.01f);
+	ImGui::DragFloat3("rotate", rotate.data(), 0.01f);
+	ImGui::DragFloat3("offset", offset.data(), 0.01f);
 	ImGui::End();
 #endif // _DEBUG
 }

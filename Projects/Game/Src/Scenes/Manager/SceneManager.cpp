@@ -1,25 +1,23 @@
 #include "SceneManager.h"
-#include "Engine/Engine.h"
 #include "Input/Input.h"
 #include "SceneFactory/SceneFactory.h"
-#include "Engine/Graphics/ResourceManager/ResourceManager.h"
 
-#include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
-#include "Utils/UtilsLib/UtilsLib.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
+#include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+#include "Scenes/Manager/PostEffectManager/PostEffectManager.h"
 
 #include "imgui.h"
 
-#include <filesystem>
-#include <fstream>
-#include <format>
-
 void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID) {
+	PostEffectManager::Initialize();
+
 	finishID_ = finishID;
 	preSceneID_ = firstScene.value();
 
 
 	fade_ = std::make_unique<Fade>();
+	fadeCamera_.pos.z = -10.0f;
 	fadeCamera_.Update();
 
 	frameInfo_ = FrameInfo::GetInstance();
@@ -29,28 +27,34 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 
 	scene_.reset(sceneFactory->CreateBaseScene(firstScene));
 	scene_->SceneInitialize(this);
+	scene_->Load();
 	scene_->Initialize();
 
-	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/default.spritefont");
 
+	load_ = std::make_unique<SceneLoad>();
 
-	load_.reset(new SceneLoad{});
-
-	ResourceManager::GetInstance()->Enable();
 
 #ifdef _DEBUG
 	sceneName_[BaseScene::ID::Title] = "Title";
 	sceneName_[BaseScene::ID::Game] = "Game";
+	sceneName_[BaseScene::ID::StageSelect] = "Select";
+	sceneName_[BaseScene::ID::Result] = "Result";
 #endif // _DEBUG
 	sceneNum_;
 	sceneNum_[BaseScene::ID::Title] = DIK_1;
 	sceneNum_[BaseScene::ID::Game] = DIK_2;
+	sceneNum_[BaseScene::ID::StageSelect] = DIK_3;
+	sceneNum_[BaseScene::ID::Result] = DIK_4;
+
+	// テクスチャデータのアップロード
+	UploadTextureData();
+
 }
 
 void SceneManager::SceneChange(std::optional<BaseScene::ID> next) {
 	if (next_ || fade_->InEnd()
 		|| fade_->OutEnd() || fade_->IsActive()
-		) 
+		)
 	{
 		return;
 	}
@@ -73,6 +77,10 @@ void SceneManager::Update() {
 
 
 	if (scene_ && !next_) {
+#ifdef _DEBUG
+		scene_->ChangeCamera();
+#endif // _DEBUG
+
 		scene_->Update();
 		Debug();
 	}
@@ -94,15 +102,16 @@ void SceneManager::Update() {
 		scene_->Finalize();
 		// 次のシーンへ
 		scene_.reset(next_.release());
-		// 次のシーンを格納するものユニークポインタをリセット
+		// 次のシーンを格納するユニークポインタをリセット
 		next_.reset();
-
-		//ResourceManager::GetInstance()->Unload();
 #pragma endregion
 
 #pragma region ロード中
+		scene_->Load();
 		// シーンの初期化
 		scene_->Initialize();
+
+
 		// ロード中の描画を終了
 		load_->Stop();
 #pragma endregion
@@ -116,6 +125,8 @@ void SceneManager::Update() {
 #pragma endregion
 	}
 
+	// テクスチャデータのアップロード
+	UploadTextureData();
 }
 
 void SceneManager::Draw() {
@@ -124,6 +135,13 @@ void SceneManager::Draw() {
 	}
 
 	fade_->Draw(fadeCamera_.GetViewOthographics());
+}
+
+void SceneManager::AllDraw() {
+	RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
+	renderContextManager->Draw();
+	// ドローカウントリセット
+	renderContextManager->ResetDrawCount();
 }
 
 bool SceneManager::IsEnd() const {
@@ -179,6 +197,15 @@ void SceneManager::Debug()
 #endif // _DEBUG
 }
 
+void SceneManager::UploadTextureData()
+{
+	auto textureManager = TextureManager::GetInstance();
+	// このフレームで画像読み込みが発生していたらTextureをvramに送る
+	textureManager->UploadTextureData();
+	// dramから解放
+	textureManager->ReleaseIntermediateResource();
+}
+
 void SceneManager::Finalize() {
 	if (load_) {
 		load_.reset();
@@ -195,5 +222,5 @@ void SceneManager::Finalize() {
 	}
 	next_.reset();
 
-	ResourceManager::GetInstance()->Unenable();
+	PostEffectManager::Finalize();
 }

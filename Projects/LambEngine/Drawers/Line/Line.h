@@ -5,7 +5,7 @@
 #include "Engine/Buffer/StructuredBuffer/StructuredBuffer.h"
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
 
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 #include <memory>
 
@@ -39,11 +39,7 @@ private:
 
 	static Lamb::SafePtr<class Pipeline> pipline_;
 
-	static Lamb::LambPtr<ID3D12Resource> vertexBuffer_;
-	// 頂点バッファビュー
-	static D3D12_VERTEX_BUFFER_VIEW vertexView_;
-
-	static std::unique_ptr<StructuredBuffer<VertxData, kDrawMaxNumber_>> vertData_;
+	static std::unique_ptr<StructuredBuffer<VertxData>> vertData_;
 
 public:
 	Line();

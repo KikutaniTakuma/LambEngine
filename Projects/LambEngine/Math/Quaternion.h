@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3.h"
 #include "Vector4.h"
+#include "Mat4x4.h"
 
 using LogQuaternion = Vector3;
 
@@ -137,7 +138,9 @@ public:
 	/// 回転行列を取得
 	/// </summary>
 	/// <returns>クォータニオンからの回転行列</returns>
-	[[nodiscard]] class Mat4x4 GetMatrix() const;
+	[[nodiscard]] Mat4x4 GetMatrix() const;
+
+	[[nodiscard]] Vector3 ToEuler() const;
 
 
 
@@ -185,6 +188,13 @@ public:
 	/// <param name="euler">オイラー角</param>
 	/// <returns>Quaternion</returns>
 	static [[nodiscard]] Quaternion EulerToQuaternion(const Vector3& euler);
+
+	/// <summary>
+	/// Quaternionからオイラー角への変換
+	/// </summary>
+	/// <param name="quaternion">Quaternion</param>
+	/// <returns></returns>
+	static [[nodiscard]] Vector3 QuaternionToEuler(const class Quaternion& quaternion);
 
 	/// <summary>
 	/// クォータニオン線形補完関数(近いものの方向に回転する)

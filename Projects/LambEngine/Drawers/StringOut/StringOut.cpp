@@ -3,7 +3,7 @@
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "Engine/Engine.h"
 #include "imgui.h"
-#include "Utils/ConvertString/ConvertString.h"
+#include "Utils/ConvertString.h"
 #include <format>
 
 
@@ -157,10 +157,10 @@ void StringOut::Debug([[maybe_unused]]const std::string& debugName) {
 
 	ImGui::Begin(debugName.c_str());
 	ImGui::InputText("text", debugStr_.data(), debugStr_.size());
-	ImGui::DragFloat2("pos", &pos.x);
+	ImGui::DragFloat2("pos", pos.data());
 	ImGui::DragFloat("rotation", &rotation, 0.01f);
-	ImGui::DragFloat2("scale", &scale.x, 0.01f);
-	ImGui::ColorEdit4("SphereColor", &debugColor.color.r);
+	ImGui::DragFloat2("scale", scale.data(), 0.01f);
+	ImGui::ColorEdit4("SphereColor", debugColor.m.data());
 	ImGui::Checkbox("isHorizontal", &isHorizontal);
 	ImGui::End();
 

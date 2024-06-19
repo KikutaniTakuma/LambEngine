@@ -40,4 +40,6 @@ public:
 		uint32_t color, 
 		BlendType blend
 	);
+
+	void AllDraw();
 };

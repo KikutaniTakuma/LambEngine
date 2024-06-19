@@ -1,5 +1,5 @@
 #include "BaseDrawer.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #ifdef _DEBUG
@@ -24,4 +24,10 @@ void BaseDrawer::Draw(const Mat4x4& worldMatrix, const Mat4x4& camera, uint32_t 
 	render->SetColor(color);
 
 	render->AddDrawCount();
+}
+
+void BaseDrawer::SetLight(const Light& light) {
+	for (auto& i : *renderSet) {
+		i->SetLight(light);
+	}
 }

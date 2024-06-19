@@ -4,6 +4,10 @@
 #include "Math/Mat4x4.h"
 
 struct Transform {
+	Transform() = default;
+	Transform(const Transform&) = default;
+	Transform(Transform&&) = default;
+
 	Vector3 scale = Vector3::kIdentity;
 	Vector3 rotate;
 	Vector3 translate;
@@ -17,6 +21,10 @@ struct Transform {
 };
 
 struct QuaternionTransform {
+	QuaternionTransform() = default;
+	QuaternionTransform(const QuaternionTransform&) = default;
+	QuaternionTransform(QuaternionTransform&&) = default;
+
 	Vector3 scale = Vector3::kIdentity;
 	Quaternion rotate;
 	Vector3 translate;

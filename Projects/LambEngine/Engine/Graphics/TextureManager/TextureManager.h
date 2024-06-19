@@ -1,7 +1,7 @@
 #pragma once
 #include "Texture/Texture.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 #include <unordered_map>
 #include <string>
 #include <memory>
@@ -37,12 +37,14 @@ private:
 
 
 public:
-	uint32_t LoadTexture(const std::string& fileName);
+	void LoadTexture(const std::string& fileName);
 
-	const Texture* const GetTexture(const std::string& fileName);
+	[[nodiscard]] uint32_t GetHandle(const std::string& fileName);
+
+	[[nodiscard]] Texture* const GetTexture(const std::string& fileName);
 
 public:
-	uint32_t GetWhiteTex();
+	[[nodiscard]] uint32_t GetWhiteTex();
 
 	void UploadTextureData();
 
