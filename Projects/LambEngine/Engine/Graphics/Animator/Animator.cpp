@@ -20,7 +20,6 @@ Animator::Animator():
 	isLoop_(false)
 {}
 
-// 警告の誤検知
 void Animator::Load(const std::string& fileName) {
 	Lamb::SafePtr animationManager = AnimationManager::GetInstance();
 	animationManager->LoadAnimations(fileName);
