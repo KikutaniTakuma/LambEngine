@@ -72,6 +72,12 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
             temp_str = indent + "CS %f %f %f"
             temp_str %=(object["collider_size"][0], object["collider_size"][1], object["collider_size"][2])
             self.write_and_print(file,temp_str)
+        #カスタムプロパティ'skyblock'
+        if "skyblock" in object:
+            self.write_and_print(file, indent + "N %s" % object["skyblock"])
+        #カスタムプロパティ'player'
+        if "player" in object:
+            self.write_and_print(file, indent + "N %s" % object["player"])
 
 
         self.write_and_print(file, indent + 'END')
@@ -132,6 +138,12 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
 
     def parse_sceme_recursive_json(self, data_parent, object, level):
         json_object = dict()
+        #カスタムプロパティ'skyblock'
+        if "skyblock" in object:
+            json_object["skyblock"] = object["skyblock"]
+        #カスタムプロパティ'player'
+        if "player" in object:
+            json_object["player"] = object["player"]
         json_object["type"] = object.type
 
         json_object["name"] = object.name
@@ -144,9 +156,9 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         rot.z = math.degrees(rot.z)
 
         transform = dict()
-        transform["translation"] = (trans.x, trans.y, trans.z)
-        transform["rotation"] = (rot.x, rot.y, rot.z)
-        transform["scaling"] = (scale.x, scale.y, scale.z)
+        transform["translation"] = (-trans.x, trans.z, trans.y)
+        transform["rotation"] = (rot.x, -rot.z, -rot.y)
+        transform["scaling"] = (scale.x, scale.z, scale.y)
 
         json_object["transform"] = transform
 
@@ -198,6 +210,7 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
             collider["center"] = object["collider_center"].to_list()
             collider["size"] = object["collider_size"].to_list()
             json_object["collider"] = collider
+
 
         data_parent.append(json_object)
 
@@ -313,6 +326,30 @@ class MYADDON_OT_add_collider(bpy.types.Operator):
 
         return { "FINISHED" }
     
+class MYADDON_OT_add_skyblock(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_add_skyblock"
+    bl_label = "Skyblock 追加"
+    bl_description = "['skyblock']カスタムプロパティを追加します"
+    bl_options = {"REGISTER", "UNDO"}
+
+    def execute(self, context):
+        #['file_name']カスタムプロパティを追加
+        context.object["skyblock"] = "skyblock"
+
+        return {'FINISHED'}
+    
+class MYADDON_OT_add_player(bpy.types.Operator):
+    bl_idname = "myaddon.myaddon_ot_add_player"
+    bl_label = "Player 追加"
+    bl_description = "['player']カスタムプロパティを追加します"
+    bl_options = {"REGISTER", "UNDO"}
+
+    def execute(self, context):
+        #['file_name']カスタムプロパティを追加
+        context.object["player"] = "player"
+
+        return {'FINISHED'}
+
 
 class OBJECT_PT_collider(bpy.types.Panel):
     bl_idname = "OBJECT_PT_collider"
@@ -351,6 +388,38 @@ class OBJECT_PT_file_name(bpy.types.Panel):
         else:
             #プロパティがなければ、プロパティ追加ボタンを表示
             self.layout.operator(MYADDON_OT_add_filename.bl_idname)
+
+class OBJECT_PT_skyblock(bpy.types.Panel):
+    bl_idname = "OBJECT_PT_skyblock"
+    bl_label = "Skyblock"
+    bl_space_type = "PROPERTIES"
+    bl_region_type = "WINDOW"
+    bl_context = "object"
+
+    def draw(self, context):
+        #パネルに項目を追加
+        if "skyblock" in context.object:
+            #すでにプロパティがあれば、プロパティを表示
+            self.layout.prop(context.object, '["skyblock"]', text = "Type")
+        else:
+            #プロパティがなければ、プロパティ追加ボタンを表示
+            self.layout.operator(MYADDON_OT_add_skyblock.bl_idname)
+
+class OBJECT_PT_player(bpy.types.Panel):
+    bl_idname = "OBJECT_PT_player"
+    bl_label = "Player"
+    bl_space_type = "PROPERTIES"
+    bl_region_type = "WINDOW"
+    bl_context = "object"
+
+    def draw(self, context):
+        #パネルに項目を追加
+        if "player" in context.object:
+            #すでにプロパティがあれば、プロパティを表示
+            self.layout.prop(context.object, '["player"]', text = "Type")
+        else:
+            #プロパティがなければ、プロパティ追加ボタンを表示
+            self.layout.operator(MYADDON_OT_add_player.bl_idname)
 
 #コライダー描画
 class DrawCollider:
@@ -445,6 +514,10 @@ classes = (
     OBJECT_PT_file_name,
     MYADDON_OT_add_collider,
     OBJECT_PT_collider,
+    MYADDON_OT_add_skyblock,
+    OBJECT_PT_skyblock,
+    MYADDON_OT_add_player,
+    OBJECT_PT_player,
 )
 
 # メニュー項目画面
