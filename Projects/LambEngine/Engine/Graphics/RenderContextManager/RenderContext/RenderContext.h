@@ -48,6 +48,10 @@ public:
         drawCount_ = 0u;
     }
 
+    uint32_t GetDrawCount() const {
+        return drawCount_;
+    }
+
     bool IsDraw() const {
         return drawCount_ != 0u;
     }
