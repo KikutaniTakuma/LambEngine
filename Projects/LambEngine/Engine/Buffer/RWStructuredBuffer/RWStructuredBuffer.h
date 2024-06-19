@@ -4,10 +4,8 @@
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
 
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
-#include "Utils/SafePtr/SafePtr.h"
-#include "Utils/Cocepts/Cocepts.h"
-
-#include <array>
+#include "Utils/SafePtr.h"
+#include "Utils/Concepts.h"
 
 template<class T, size_t kBufferSize>
 class RWStructuredBuffer : public Descriptor {
@@ -25,7 +23,7 @@ public:
 			sizeof(type) * kBufferSize
 		);
 
-
+		OnWright();
 
 
 		uavDesc_ = {};
@@ -52,7 +50,7 @@ public:
 	void CreateView(
 		D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
 		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
-		UINT heapHandle) noexcept
+		UINT heapHandle) noexcept override
 	{
 		heapHandleCPU_ = heapHandleCPU;
 		heapHandleGPU_ = heapHandleGPU;
@@ -67,7 +65,7 @@ public:
 public:
 	void OnWright() noexcept {
 		if (!isWright_) {
-			bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&data_));
+			bufferResource_->Map(0, nullptr, data_.GetPtrAdress());
 			isWright_ = !isWright_;
 		}
 	}

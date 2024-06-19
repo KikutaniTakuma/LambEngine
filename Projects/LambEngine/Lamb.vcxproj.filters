@@ -399,8 +399,11 @@
     <Filter Include="Engine\Graphics\PipelineObject\GaussianBlur">
       <UniqueIdentifier>{bcc30c3c-78cb-4f5e-8b79-0fff4d880363}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Buffer\ComputeBuffer">
+    <Filter Include="Engine\Buffer\RWStructuredBuffer">
       <UniqueIdentifier>{742398d6-6eb6-4d04-a8d3-7ea888e0c722}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\ComputeShader">
+      <UniqueIdentifier>{14d924e6-474e-4038-8d73-5eaaf0f4534f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -650,8 +653,8 @@
     <ClInclude Include="Engine\Graphics\PipelineObject\GaussianBlur\GaussianBlur.h">
       <Filter>Engine\Graphics\PipelineObject\GaussianBlur</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Buffer\ComputeBuffer\RWStructuredBuffer.h">
-      <Filter>Engine\Buffer\ComputeBuffer</Filter>
+    <ClInclude Include="Engine\Buffer\RWStructuredBuffer\RWStructuredBuffer.h">
+      <Filter>Engine\Buffer\RWStructuredBuffer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
