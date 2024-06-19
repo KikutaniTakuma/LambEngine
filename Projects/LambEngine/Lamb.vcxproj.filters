@@ -632,7 +632,7 @@
     <ClInclude Include="Utils\Easeing\Easeing.h">
       <Filter>Utils\Easeing</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Buffer\ComputeBuffer\ComputeBuffer.h">
+    <ClInclude Include="Engine\Buffer\ComputeBuffer\RWStructuredBuffer.h">
       <Filter>Engine\Buffer\ComputeBuffer</Filter>
     </ClInclude>
   </ItemGroup>
