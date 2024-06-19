@@ -190,9 +190,6 @@
     <ClCompile Include="Utils\Easeing\Easeing.cpp">
       <Filter>Utils\Easeing</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Buffer\ComputeBuffer\ComputeBuffer.cpp">
-      <Filter>Engine\Buffer\ComputeBuffer</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
