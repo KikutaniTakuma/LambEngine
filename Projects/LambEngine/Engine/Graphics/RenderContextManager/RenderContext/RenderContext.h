@@ -9,6 +9,7 @@
 #include <concepts>
 #include <array>
 #include <memory>
+#include <vector>
 
 
 class BaseRenderContext {
@@ -81,20 +82,22 @@ protected:
     uint32_t drawCount_;
 
     std::string typeID_;
+
+    std::vector<WVPMatrix> wvpMatrices_;
 };
 
 using RenderData = BaseRenderContext;
 
 
-template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
+template<class T = uint32_t, uint32_t kBufferSize = RenderData::kMaxDrawInstance>
 class RenderContext : public BaseRenderContext {
 public:
     RenderContext():
         shaderData_()
     {
-        shaderData_.wvpMatrix.Create(bufferSize);
-        shaderData_.color.Create(bufferSize);
-        shaderData_.shaderStruct.Create(bufferSize);
+        shaderData_.wvpMatrix.Create(kBufferSize);
+        shaderData_.color.Create(kBufferSize);
+        shaderData_.shaderStruct.Create(kBufferSize);
 
 
         pipeline_ = nullptr;
@@ -110,6 +113,8 @@ public:
         descriptorHeap->CreateView(shaderData_.shaderStruct);
 
         typeID_ = (typeid(RenderContext<T, bufferSize>).name());
+
+        wvpMatrices_.resize(kBufferSize);
     }
     ~RenderContext() {
         // ディスクリプタヒープ
@@ -128,7 +133,7 @@ public:
     RenderContext& operator=(RenderContext&&) = delete;
 
 public:
-    void Draw() override {
+    void Draw(uint32_t& startIndexLocation) override {
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
         // コマンドリスト
@@ -149,8 +154,10 @@ public:
         // インデックスバッファセット
         commandlist->IASetIndexBuffer(&mesh_->indexView);
         // ドローコール
-        commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, 0);
+        commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, startIndexLocation);
         //commandlist->DrawInstanced(mesh_->vertexNumber, drawCount_, 0, 0);
+
+        startIndexLocation += drawCount_;
     }
     
 public:
@@ -173,16 +180,16 @@ public:
         pipeline_ = pipeline;
     }
     inline void SetWVPMatrix(const WVPMatrix& matrix) override {
-        if (bufferSize <= drawCount_) {
-            throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
+        if (kBufferSize <= drawCount_) {
+            throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(kBufferSize), ErrorPlace);
         }
 
         shaderData_.wvpMatrix[drawCount_].worldMat = mesh_->node.loacalMatrix * matrix.worldMat;
         shaderData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
-        if (bufferSize <= drawCount_) {
-            throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
+        if (kBufferSize <= drawCount_) {
+            throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(kBufferSize), ErrorPlace);
         }
 
         shaderData_.color[drawCount_] = color;
@@ -191,8 +198,8 @@ public:
         *shaderData_.light = light;
     }
     inline void SetShaderStruct(const T& data) {
-        if (bufferSize <= drawCount_) {
-            throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
+        if (kBufferSize <= drawCount_) {
+            throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(kBufferSize), ErrorPlace);
         }
         shaderData_.shaderStruct[drawCount_] = data;
     }
