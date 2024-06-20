@@ -18,28 +18,32 @@ public:
 
 public:
     BaseRenderContext():
-        mesh_(nullptr),
-        modelData_(nullptr),
         pipeline_(nullptr),
         drawCount_(0),
         typeID_()
     {}
     virtual ~BaseRenderContext() = default;
 
-    virtual void Draw() = 0;
+    void SetPipeline() {
+        pipeline_->Use();
+    }
 
     const std::string& GetID() const {
         return typeID_;
     }
 
-    virtual void SetMesh(const Mesh* const mesh) = 0;
-    virtual void SetModelData(const ModelData* const modelData) = 0;
-    virtual void SetPipeline(Pipeline* const pipeline) = 0;
+    virtual void SetPipeline(Pipeline* const pipeline) {
+        pipeline_ = pipeline;
+    }
     virtual void SetWVPMatrix(const WVPMatrix& matrix) = 0;
     virtual void SetColor(const Vector4& color) = 0;
     virtual void SetLight(const Light& light) = 0;
 
 public:
+    void AddStartInstanceLocation(uint32_t& startInstanceLocation) {
+        startInstanceLocation += drawCount_;
+    }
+
     void AddDrawCount() {
         drawCount_++;
     }
@@ -48,31 +52,15 @@ public:
         drawCount_ = 0u;
     }
 
+    uint32_t GetDrawCount() const {
+        return drawCount_;
+    }
+
     bool IsDraw() const {
         return drawCount_ != 0u;
     }
 
-    const std::string& GetRootName() const {
-        return mesh_->node.name;
-    }
-
-    const Mesh* const GetMesh() const {
-        return mesh_;
-    }
-
-    const ModelData* const GetModelData() const {
-        return modelData_;
-    }
-
-    const Node& GetNode() const {
-        return mesh_->node;
-    }
-
 protected:
-    const Mesh* mesh_;
-    const ModelData* modelData_;
-
-
     Pipeline* pipeline_;
     uint32_t drawCount_;
 
@@ -88,86 +76,24 @@ public:
     RenderContext():
         shaderData_()
     {
-        shaderData_.wvpMatrix.Create(bufferSize);
-        shaderData_.color.Create(bufferSize);
-        shaderData_.shaderStruct.Create(bufferSize);
-
-
         pipeline_ = nullptr;
         drawCount_ = 0u;
 
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
-
-        descriptorHeap->BookingHeapPos(4);
-        descriptorHeap->CreateView(shaderData_.light);
-        descriptorHeap->CreateView(shaderData_.wvpMatrix);
-        descriptorHeap->CreateView(shaderData_.color);
-        descriptorHeap->CreateView(shaderData_.shaderStruct);
-
         typeID_ = (typeid(RenderContext<T, bufferSize>).name());
-    }
-    ~RenderContext() {
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
 
-        descriptorHeap->ReleaseView(shaderData_.light.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.wvpMatrix.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.color.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.shaderStruct.GetHandleUINT());
+        shaderData_.wvpMatrix.resize(bufferSize);
+        shaderData_.color.resize(bufferSize);
+        shaderData_.shaderStruct.resize(bufferSize);
     }
+    ~RenderContext() = default;
 
     RenderContext(const RenderContext&) = delete;
     RenderContext(RenderContext&&) = delete;
 
     RenderContext& operator=(const RenderContext&) = delete;
     RenderContext& operator=(RenderContext&&) = delete;
-
-public:
-    void Draw() override {
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
-        // コマンドリスト
-        ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
-
-        // パイプライン設定
-        pipeline_->Use();
-
-        // ライト構造体
-        commandlist->SetGraphicsRootDescriptorTable(0, shaderData_.light.GetHandleGPU());
-        // ワールドとカメラマトリックス, 色, 各シェーダーの構造体
-        commandlist->SetGraphicsRootDescriptorTable(1, shaderData_.wvpMatrix.GetHandleGPU());
-        // テクスチャ
-        commandlist->SetGraphicsRootDescriptorTable(2, descriptorHeap->GetGpuHeapHandle(0));
-
-        // 頂点バッファセット
-        commandlist->IASetVertexBuffers(0, 1, &mesh_->vertexView);
-        // インデックスバッファセット
-        commandlist->IASetIndexBuffer(&mesh_->indexView);
-        // ドローコール
-        commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, 0);
-        //commandlist->DrawInstanced(mesh_->vertexNumber, drawCount_, 0, 0);
-    }
     
 public:
-    inline void SetMesh(const Mesh* const mesh) override {
-        if (!mesh) {
-            throw Lamb::Error::Code<RenderContext>("mesh is nullptr", ErrorPlace);
-        }
-        mesh_ = mesh;
-    }
-    inline void SetModelData(const ModelData* const modelData) override {
-        if (!modelData) {
-            throw Lamb::Error::Code<RenderContext>("modelData is nullptr", ErrorPlace);
-        }
-        modelData_ = modelData;
-    }
-    inline void SetPipeline(Pipeline* const pipeline) override {
-        if (!pipeline) {
-            throw Lamb::Error::Code<RenderContext>("pipeline is nullptr", ErrorPlace);
-        }
-        pipeline_ = pipeline;
-    }
     inline void SetWVPMatrix(const WVPMatrix& matrix) override {
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
@@ -191,6 +117,11 @@ public:
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
         shaderData_.shaderStruct[drawCount_] = data;
+    }
+
+public:
+    const ShaderData<T>& GetShaderData() const {
+        return shaderData_;
     }
 
 
@@ -324,7 +255,7 @@ public:
 
 
 private:
-    ShaderData<T> shaderData_;
+    ShaderDataBuffers<T> shaderData_;
 
     SkinCluster* skinCluster_;
 };
@@ -332,44 +263,42 @@ private:
 template<class T>
 concept IsBasedRenderContext =  std::is_base_of_v<BaseRenderContext, T>;
 
-class RenderSet {
+class BaseRenderSet {
 public:
-    RenderSet() = default;
-    ~RenderSet() = default;
-    RenderSet(const RenderSet&) = delete;
-    RenderSet(RenderSet&&) = delete;
+    BaseRenderSet() = default;
+    virtual ~BaseRenderSet() = default;
+    BaseRenderSet(const BaseRenderSet&) = delete;
+    BaseRenderSet(BaseRenderSet&&) = delete;
 
-    RenderSet& operator=(const RenderSet&) = delete;
-    RenderSet& operator=(RenderSet&&) = delete;
+    BaseRenderSet& operator=(const BaseRenderSet&) = delete;
+    BaseRenderSet& operator=(BaseRenderSet&&) = delete;
 
+public:
+    virtual void Draw() = 0;
+    virtual void UploadShaderData() = 0;
 
 public:
     inline void Set(RenderData* const renderData, BlendType blend) {
         if (not renderData) {
-            throw Lamb::Error::Code<RenderSet>("renderData is nullptr", ErrorPlace);
+            throw Lamb::Error::Code<BaseRenderSet>("renderData is nullptr", ErrorPlace);
         }
 
         renderDatas_[blend].reset(renderData);
     }
 
 
-    inline void Draw() {
-        for (auto& i : renderDatas_) {
-            if (i->IsDraw()) {
-                i->Draw();
-            }
-        }
-    }
 
     inline void ResetDrawCount() {
         for (auto& i : renderDatas_) {
             i->ResetDrawCount();
         }
+        startInstanceLocation_ = 0;
     }
 
     inline void DrawAndResetDrawCount() {
         Draw();
         ResetDrawCount();
+        startInstanceLocation_ = 0;
     }
 
 public:
@@ -384,60 +313,125 @@ public:
     template<IsBasedRenderContext ClassName>
     inline ClassName* GetRenderContextDowncast(BlendType blend) {
         if (typeid(ClassName).name() != renderDatas_[blend]->GetID()) {
-            throw Lamb::Error::Code<RenderSet>("does not match class type", ErrorPlace);
+            throw Lamb::Error::Code<BaseRenderSet>("does not match class type", ErrorPlace);
         }
 
         return dynamic_cast<ClassName*>(renderDatas_[blend].get());
     }
 
+
+public:
+    void SetMesh(const Mesh* const mesh) {
+        mesh_ = mesh;
+    }
+    void SetModelData(const ModelData* const modelData) {
+        modelData_ = modelData;
+    }
+
+
     const std::string& GetRootNodeName() const {
-        return renderDatas_.front()->GetRootName();
+        return mesh_->node.name;
     }
 
     const Node& GetNode() const {
-        return renderDatas_.front()->GetNode();
+        return mesh_->node;
     }
 
     const Mesh* const GetMesh() const {
-        return renderDatas_.front()->GetMesh();
+        return mesh_;
     }
     const ModelData* const GetModelData() const {
-        return renderDatas_.front()->GetModelData();
+        return modelData_;
     }
+
+protected:
+    std::array<std::unique_ptr<RenderData>, BlendType::kNum> renderDatas_;
+
+    const Mesh* mesh_ = nullptr;
+    const ModelData* modelData_ = nullptr;
+
+    uint32_t startInstanceLocation_ = 0;
+};
+
+template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
+class RenderSet : public BaseRenderSet {
+public:
+    RenderSet():
+        BaseRenderSet(),
+        shaderData_()
+    {
+        shaderData_.wvpMatrix.Create(bufferSize);
+        shaderData_.color.Create(bufferSize);
+        shaderData_.shaderStruct.Create(bufferSize);
+
+        // ディスクリプタヒープ
+        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+
+        descriptorHeap->BookingHeapPos(4);
+        descriptorHeap->CreateView(shaderData_.light);
+        descriptorHeap->CreateView(shaderData_.wvpMatrix);
+        descriptorHeap->CreateView(shaderData_.color);
+        descriptorHeap->CreateView(shaderData_.shaderStruct);
+    }
+    ~RenderSet() {
+        // ディスクリプタヒープ
+        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+
+        descriptorHeap->ReleaseView(shaderData_.light.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.wvpMatrix.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.color.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.shaderStruct.GetHandleUINT());
+    }
+    RenderSet(const RenderSet&) = delete;
+    RenderSet(RenderSet&&) = delete;
+
+    RenderSet& operator=(const RenderSet&) = delete;
+    RenderSet& operator=(RenderSet&&) = delete;
 
 public:
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::iterator begin() {
-        return renderDatas_.begin();
-    }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::iterator end() {
-        return renderDatas_.end();
-    }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_iterator cbegin() const {
-        return renderDatas_.cbegin();
-    }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_iterator cend() const {
-        return renderDatas_.cend();
-    }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::reverse_iterator rbegin() {
-        return renderDatas_.rbegin();
-    }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::reverse_iterator rend() {
-        return renderDatas_.rend();
-    }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_reverse_iterator crbegin() const {
-        return renderDatas_.crbegin();
-    }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_reverse_iterator crend() const {
-        return renderDatas_.crend();
+    void Draw(BlendType blendType) override {
+        // ディスクリプタヒープ
+        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+        // コマンドリスト
+        ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+        RenderData* renderContext = this->GetRenderContext(blendType);
+
+        // ライト構造体
+        commandlist->SetGraphicsRootDescriptorTable(0, shaderData_.light.GetHandleGPU());
+        // ワールドとカメラマトリックス, 色, 各シェーダーの構造体
+        commandlist->SetGraphicsRootDescriptorTable(1, shaderData_.wvpMatrix.GetHandleGPU());
+        // テクスチャ
+        commandlist->SetGraphicsRootDescriptorTable(2, descriptorHeap->GetGpuHeapHandle(0));
+
+        // 頂点バッファセット
+        commandlist->IASetVertexBuffers(0, 1, &mesh_->vertexView);
+        // インデックスバッファセット
+        commandlist->IASetIndexBuffer(&mesh_->indexView);
+        // ドローコール
+        commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, startInstanceLocation_);
+
+        renderContext->AddStartInstanceLocation(startInstanceLocation_);
     }
 
-    std::unique_ptr<RenderData>* const data() {
-        return renderDatas_.data();
-    }
-    const std::unique_ptr<RenderData>* const data() const {
-        return renderDatas_.data();
+    void UploadShaderData() override {
+        uint32_t startInstanceLocation = 0;
+
+        for (uint32_t i = 0; i < BlendType::kNum; i++) {
+            RenderContext<T, bufferSize>* renderContext = this->GetRenderContextDowncast<RenderContext<T, bufferSize>>(i);
+            const ShaderData<T>& shaderData = renderContext->GetShaderData();
+
+            for (uint32_t indexCount = 0; indexCount < bufferSize; indexCount++) {
+                shaderData_.wvpMatrix[startInstanceLocation + indexCount] = shaderData.wvpMatrix[indexCount];
+                shaderData_.color[startInstanceLocation + indexCount] = shaderData.color[indexCount];
+                shaderData_.shaderStruct[startInstanceLocation + indexCount] = shaderData.shaderStruct[indexCount];
+            }
+
+            startInstanceLocation += renderContext->GetDrawCount();
+        }
+
     }
 
 private:
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum> renderDatas_;
+    ShaderDataBuffers<T> shaderData_;
 };

@@ -123,11 +123,19 @@ struct Light {
 };
 
 template<class T>
-struct ShaderData {
+struct ShaderDataBuffers {
     ConstantBuffer<Light> light;
     StructuredBuffer<WVPMatrix> wvpMatrix;
     StructuredBuffer<Vector4> color;
     StructuredBuffer<T> shaderStruct;
+};
+
+template<class T>
+struct ShaderData {
+    Light light;
+    std::vector<WVPMatrix> wvpMatrix;
+    std::vector<Vector4> color;
+    std::vector<T> shaderStruct;
 };
 
 struct ShaderFileNames {
