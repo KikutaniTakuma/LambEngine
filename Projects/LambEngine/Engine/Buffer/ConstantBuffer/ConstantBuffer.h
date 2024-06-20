@@ -8,9 +8,9 @@
 /// 定数バッファ
 /// </summary>
 template<Lamb::IsNotReferenceAndPtr T>
-class ConstBuffer final : public Descriptor {
+class ConstantBuffer final : public Descriptor {
 public:
-	inline ConstBuffer() :
+	inline ConstantBuffer() :
 		bufferResource_(),
 		cbvDesc_(),
 		data_(nullptr),
@@ -23,7 +23,7 @@ public:
 		// バイトサイズは256アライメントする(vramを効率的に使うための仕組み)
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce((sizeof(T) + 0xff) & ~0xff);
 #ifdef _DEBUG
-		bufferResource_.SetName<ConstBuffer>();
+		bufferResource_.SetName<ConstantBuffer>();
 #endif // _DEBUG
 
 		cbvDesc_.BufferLocation = bufferResource_->GetGPUVirtualAddress();
@@ -35,23 +35,23 @@ public:
 		roootParamater_.ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	}
 
-	~ConstBuffer() = default;
+	~ConstantBuffer() = default;
 
-	inline ConstBuffer(const ConstBuffer& right) noexcept :
-		ConstBuffer{}
+	inline ConstantBuffer(const ConstantBuffer& right) noexcept :
+		ConstantBuffer{}
 	{
 		*this = right;
 	}
-	inline ConstBuffer(ConstBuffer&&) noexcept = delete;
+	inline ConstantBuffer(ConstantBuffer&&) noexcept = delete;
 
-	inline ConstBuffer<T>& operator=(const ConstBuffer& right) {
+	inline ConstantBuffer<T>& operator=(const ConstantBuffer& right) {
 		OnWright();
 
 		*(*this) = *right;
 
 		return *this;
 	}
-	inline ConstBuffer<T>& operator=(ConstBuffer&&) = delete;
+	inline ConstantBuffer<T>& operator=(ConstantBuffer&&) = delete;
 
 public:
 	void OnWright() noexcept {

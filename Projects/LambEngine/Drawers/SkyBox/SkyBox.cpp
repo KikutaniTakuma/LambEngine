@@ -82,7 +82,7 @@ void SkyBox::Load(const std::string& fileName) {
         heap->ReleaseView(cbuffer_->GetHandleUINT());
     }
 
-    cbuffer_ = std::make_unique<ConstBuffer<ShaderData>>();
+    cbuffer_ = std::make_unique<ConstantBuffer<ShaderData>>();
 
     heap->BookingHeapPos(1u);
     heap->CreateView(*cbuffer_);

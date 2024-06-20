@@ -205,7 +205,7 @@
     <ClInclude Include="Drawers\SkyBox\SkyBox.h" />
     <ClInclude Include="Drawers\StringOut\StringOut.h" />
     <ClInclude Include="Drawers\Texture2D\Texture2D.h" />
-    <ClInclude Include="Engine\Buffer\ConstBuffer\ConstBuffer.h" />
+    <ClInclude Include="Engine\Buffer\ConstantBuffer\ConstantBuffer.h" />
     <ClInclude Include="Engine\Buffer\StructuredBuffer\StructuredBuffer.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.h" />
     <ClInclude Include="Engine\Core\DescriptorHeap\Descriptor.h" />

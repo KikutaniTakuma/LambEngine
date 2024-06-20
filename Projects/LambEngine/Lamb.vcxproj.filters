@@ -288,9 +288,6 @@
     <Filter Include="Engine\Buffer">
       <UniqueIdentifier>{5d636698-24e8-45ca-88be-eda0819a5048}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Buffer\ConstBuffer">
-      <UniqueIdentifier>{e59427f8-55ba-46bf-b8a3-e4974976afc4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Buffer\StructuredBuffer">
       <UniqueIdentifier>{e1e79296-6a53-46cd-ad47-5079058ad278}</UniqueIdentifier>
     </Filter>
@@ -399,6 +396,9 @@
     <Filter Include="Engine\Graphics\PipelineObject\GaussianBlur">
       <UniqueIdentifier>{bcc30c3c-78cb-4f5e-8b79-0fff4d880363}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Buffer\ConstantBuffer">
+      <UniqueIdentifier>{e59427f8-55ba-46bf-b8a3-e4974976afc4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Engine.h">
@@ -466,9 +466,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\RootSignature\RootSignature.h">
       <Filter>Engine\Graphics\RootSignature</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Buffer\ConstBuffer\ConstBuffer.h">
-      <Filter>Engine\Buffer\ConstBuffer</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Buffer\StructuredBuffer\StructuredBuffer.h">
       <Filter>Engine\Buffer\StructuredBuffer</Filter>
@@ -646,6 +643,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\GaussianBlur\GaussianBlur.h">
       <Filter>Engine\Graphics\PipelineObject\GaussianBlur</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Buffer\ConstantBuffer\ConstantBuffer.h">
+      <Filter>Engine\Buffer\ConstantBuffer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

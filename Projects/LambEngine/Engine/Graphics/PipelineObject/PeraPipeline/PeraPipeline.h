@@ -1,6 +1,6 @@
 #pragma once
 #include "../PipelineObject.h"
-#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
+#include "Engine/Buffer/ConstantBuffer/ConstantBuffer.h"
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
 #include "Math/Vector2.h"
 #include "Math/Vector4.h"
@@ -58,8 +58,8 @@ public:
 protected:
 	std::unique_ptr<RenderTarget> render_;
 
-	ConstBuffer<WvpMat> wvpMat_;
-	ConstBuffer<Vector4> colorBuf_;
+	ConstantBuffer<WvpMat> wvpMat_;
+	ConstantBuffer<Vector4> colorBuf_;
 	uint32_t width_ = 0u;
 	uint32_t height_ = 0u;
 };
