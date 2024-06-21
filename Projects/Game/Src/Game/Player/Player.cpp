@@ -17,9 +17,10 @@ void Player::Init(const Transform& transformInput)
 	animationManager->LoadAnimations(punchFileName);
 	animationManager->LoadAnimations(floatingFileName);
 
-	model_ = std::make_unique<AnimationModel>(fileName);
+	model_ = std::make_unique<Model>(fileName);
+	/*model_ = std::make_unique<AnimationModel>(fileName);
 	model_->GetAnimator().SetLoopAnimation(true);
-	model_->GetAnimator().Start();
+	model_->GetAnimator().Start();*/
 	waitAnimatons_ = animationManager->GetAnimations(fileName);
 	punchAnimatons_ = animationManager->GetAnimations(punchFileName);
 	walkAnimatons_ = animationManager->GetAnimations(walkFileName);
@@ -37,16 +38,16 @@ void Player::Init(const Transform& transformInput)
 }
 
 void Player::Update(const Vector3& cameraRotate) {
-	model_->Update();
+	//model_->Update();
 
-	if (isPunch_ and model_->GetAnimator().GetIsActive().OnExit()) {
-		isPunch_ = false;
-		model_->GetAnimator().SetAnimations(waitAnimatons_);
-		model_->GetAnimator().SetLoopAnimation(true);
-		/*model_->GetAnimator().SetIsFullAnimation(false);
-		model_->GetAnimator().SetAnimationIndex(0);*/
-		model_->GetAnimator().Start();
-	}
+	//if (isPunch_ and model_->GetAnimator().GetIsActive().OnExit()) {
+	//	isPunch_ = false;
+	//	model_->GetAnimator().SetAnimations(waitAnimatons_);
+	//	model_->GetAnimator().SetLoopAnimation(true);
+	//	/*model_->GetAnimator().SetIsFullAnimation(false);
+	//	model_->GetAnimator().SetAnimationIndex(0);*/
+	//	model_->GetAnimator().Start();
+	//}
 
 	Move();
 	Jump();
@@ -96,11 +97,11 @@ void Player::Punch() {
 	Lamb::SafePtr gamepad = Gamepad::GetInstance();
 	Lamb::SafePtr key = KeyInput::GetInstance();
 	if (not isPunch_ and (gamepad->Pushed(Gamepad::Button::B) or key->Pushed(DIK_SPACE))) {
-		model_->GetAnimator().Stop();
-		model_->GetAnimator().SetAnimations(punchAnimatons_);
-		model_->GetAnimator().SetLoopAnimation(false);
-		//model_->GetAnimator().SetIsFullAnimation(true);
-		model_->GetAnimator().Start();
+		//model_->GetAnimator().Stop();
+		//model_->GetAnimator().SetAnimations(punchAnimatons_);
+		//model_->GetAnimator().SetLoopAnimation(false);
+		////model_->GetAnimator().SetIsFullAnimation(true);
+		//model_->GetAnimator().Start();
 		isPunch_ = true;
 	}
 }
@@ -110,7 +111,7 @@ void Player::Move() {
 		Lamb::SafePtr gamepad = Gamepad::GetInstance();
 		Vector2&& stick = gamepad->GetStick(Gamepad::Stick::LEFT);
 
-		if(isJump_){
+		/*if(isJump_){
 			model_->GetAnimator().SetAnimations(floatingAnimatons_);
 			model_->GetAnimator().SetAnimationSpeed(2.0f);
 		}
@@ -119,7 +120,7 @@ void Player::Move() {
 		}
 		else {
 			model_->GetAnimator().SetAnimations(walkAnimatons_);
-		}
+		}*/
 
 		direction_ = stick;
 		if (direction_ != Vector2::kZero) {
@@ -170,5 +171,5 @@ void Player::JumpReset()
 {
 	jumpSpeed_ = 0.0f;
 	jumpTime_ = 0.0f;
-	model_->GetAnimator().SetAnimationSpeed(1.0f);
+	//model_->GetAnimator().SetAnimationSpeed(1.0f);
 }

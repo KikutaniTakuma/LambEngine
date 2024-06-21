@@ -1,5 +1,6 @@
 #pragma once
-#include "Drawers/AnimationModel/AnimationModel.h"
+//#include "Drawers/AnimationModel/AnimationModel.h"
+#include "Drawers/Model/Model.h"
 #include "Utils/SafePtr.h"
 #include "Utils/Flg.h"
 #include "Game/CollisionManager/Obb/Obb.h"
@@ -71,7 +72,8 @@ private:
 	ObbPtr obb_;
 
 	// ブロックのモデル
-	std::unique_ptr<AnimationModel> model_;
+	std::unique_ptr<Model> model_;
+	//std::unique_ptr<AnimationModel> model_;
 
 	// アニメーション
 	Animations* punchAnimatons_;

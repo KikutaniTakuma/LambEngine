@@ -43,5 +43,5 @@ public:
 public:
 	class Water* water_;
 	Lamb::SafePtr<LevelData> levelData_;
-	std::unique_ptr<Coin> coin_;
+	//std::unique_ptr<Coin> coin_;
 };

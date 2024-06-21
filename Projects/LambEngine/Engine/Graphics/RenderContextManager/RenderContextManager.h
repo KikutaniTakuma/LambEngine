@@ -32,7 +32,7 @@ private:
 
 
 public:
-	template<IsBasedRenderContext RenderContextType = RenderContext<>>
+	template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
 	void Load(const LoadFileNames& fileNames) {
 		auto isExist = renderData_.find(fileNames);
 
@@ -42,9 +42,9 @@ public:
 
 		auto& currentRenderData = (isNowThreading_ ? threadRenderData_ : renderData_);
 
-		currentRenderData.insert(std::make_pair(fileNames, std::make_unique<RenderSet>()));
+		currentRenderData.insert(std::make_pair(fileNames, std::make_unique<RenderSet<T, bufferSize>>()));
 
-		RenderSet& currentRenderSet = *currentRenderData[fileNames];
+		BaseRenderSet& currentRenderSet = *currentRenderData[fileNames];
 
 		Shader shader = LoadShader(fileNames.shaderName);
 
@@ -55,17 +55,18 @@ public:
 		Mesh* mesh = meshManager->GetMesh(fileNames.resourceFileName);
 		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
 
-		for (uint32_t i = 0; i < BlendType::kNum; i++) {
-			std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();
+		currentRenderSet.SetMesh(mesh);
+		currentRenderSet.SetModelData(modelData);
 
-			renderContext->SetMesh(mesh);
-			renderContext->SetModelData(modelData);
+		for (uint32_t i = 0; i < BlendType::kNum; i++) {
+			std::unique_ptr<RenderContext<T, bufferSize>> renderContext = std::make_unique<RenderContext<T, bufferSize>>();
+
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
 	}
 
-	template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
+	/*template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
 	void LoadSkinAnimationModel(const LoadFileNames& fileNames) {
 		auto isExist = renderData_.find(fileNames);
 
@@ -96,9 +97,9 @@ public:
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
-	}
+	}*/
 
-	[[nodiscard]] RenderSet* const Get(const LoadFileNames& fileNames);
+	[[nodiscard]] BaseRenderSet* const Get(const LoadFileNames& fileNames);
 
 	void SetIsNowThreading(bool isNowThreading);
 public:
@@ -113,7 +114,7 @@ private:
 
 
 private:
-	std::unordered_map<Key, std::unique_ptr<RenderSet>> renderData_;
-	std::unordered_map<Key, std::unique_ptr<RenderSet>> threadRenderData_;
+	std::unordered_map<Key, std::unique_ptr<BaseRenderSet>> renderData_;
+	std::unordered_map<Key, std::unique_ptr<BaseRenderSet>> threadRenderData_;
 	bool isNowThreading_ = false;
 };

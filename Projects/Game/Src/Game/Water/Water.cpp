@@ -110,7 +110,7 @@ void Water::Update(const Vector3& cameraPos) {
 
 void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 	pera_->PreDraw();
-	waterSurface_->Draw(
+	waterSurface_->OnceDraw(
 		waterTransform_.GetMatrix(),
 		Mat4x4::kIdentity,
 		staticCamera_->GetViewOthographics(), 
@@ -118,11 +118,10 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 		color_,
 		BlendType::kUnenableDepthNone
 	);
-	waterSurface_->AllDraw();
 	pera_->Draw(cameraMat, Pipeline::None, pera, true);
 
 	pera_->PreDraw();
-	waterSurface_->Draw(
+	waterSurface_->OnceDraw(
 		waterTransform_.GetMatrix(),
 		Mat4x4::kIdentity,
 		staticCamera_->GetViewOthographics(),
@@ -130,7 +129,6 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 		color_,
 		BlendType::kUnenableDepthNone
 	);
-	waterSurface_->AllDraw();
 	pera_->Draw(cameraMat, Pipeline::None, luminate_.get());
 	luminate_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, gaussianBlurWidth_.get());
 	gaussianBlurWidth_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, gaussianBlurHeight_.get());

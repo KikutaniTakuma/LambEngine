@@ -132,7 +132,6 @@ struct ShaderDataBuffers {
 
 template<class T>
 struct ShaderData {
-    Light light;
     std::vector<WVPMatrix> wvpMatrix;
     std::vector<Vector4> color;
     std::vector<T> shaderStruct;

@@ -28,7 +28,7 @@ void WaterTex2D::Load()
 {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	renderContextManager->Load<WaterRenderContext>(kFileNames_);
+	renderContextManager->Load<WaterRenderContext::type, WaterRenderContext::size>(kFileNames_);
 
 	renderSet = renderContextManager->Get(kFileNames_);
 

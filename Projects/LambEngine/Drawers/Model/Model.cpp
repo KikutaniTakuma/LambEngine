@@ -11,7 +11,7 @@ Model::Model(const std::string& fileName):
 void Model::Load(const std::string& fileName) {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	renderContextManager->Load(
+	renderContextManager->Load<ModelRenderContext::type, ModelRenderContext::size>(
 		LoadFileNames{
 			.resourceFileName = fileName,
 			.shaderName{
