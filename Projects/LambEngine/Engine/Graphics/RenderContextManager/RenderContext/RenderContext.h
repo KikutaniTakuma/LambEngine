@@ -47,6 +47,9 @@ public:
         drawCount_++;
         (*allDrawCount_)++;
     }
+    void DecrimentDrawCount() {
+        drawCount_--;
+    }
 
     void ResetDrawCount() {
         drawCount_ = 0u;
@@ -467,9 +470,9 @@ public:
         // インデックスバッファセット
         commandlist->IASetIndexBuffer(&mesh_->indexView);
         // ドローコール
-        commandlist->DrawIndexedInstanced(mesh_->indexNumber, 1, 0, 0, startInstanceLocation_);
+        commandlist->DrawIndexedInstanced(mesh_->indexNumber, 1, 0, 0, dataIndex);
 
-        startInstanceLocation_ += 1;
+        renderContext->DecrimentDrawCount();
     }
 
 
