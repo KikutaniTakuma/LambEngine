@@ -20,9 +20,7 @@ public:
 		data_(nullptr),
 		isWright_(true),
 		bufferSize_(0u),
-		isCreateView_(false),
-		range_(),
-		roootParamater_()
+		isCreateView_(false)
 	{
 		
 	}
@@ -47,13 +45,6 @@ public:
 		isWright_ = right.isWright_;
 		bufferSize_ = right.bufferSize_;
 		isCreateView_ = right.isCreateView_;
-		range_ = right.range_;
-
-		roootParamater_ = {};
-		roootParamater_.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-		roootParamater_.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-		roootParamater_.DescriptorTable.pDescriptorRanges = &range_;
-		roootParamater_.DescriptorTable.NumDescriptorRanges = 1;
 
 		data_ = right.data_;
 
@@ -65,13 +56,6 @@ public:
 		isWright_ = right.isWright_;
 		bufferSize_ = right.bufferSize_;
 		isCreateView_ = right.isCreateView_;
-		range_ = right.range_;
-
-		roootParamater_ = {};
-		roootParamater_.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-		roootParamater_.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-		roootParamater_.DescriptorTable.pDescriptorRanges = &range_;
-		roootParamater_.DescriptorTable.NumDescriptorRanges = 1;
 
 		data_ = right.data_;
 
@@ -98,19 +82,6 @@ public:
 		if (isWright_) {
 			bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&data_));
 		}
-
-		range_ = {};
-		range_.BaseShaderRegister = 1;
-		range_.NumDescriptors = 1;
-		range_.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-		range_.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
-
-		roootParamater_ = {};
-		roootParamater_.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-		roootParamater_.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-		roootParamater_.DescriptorTable.pDescriptorRanges = &range_;
-		roootParamater_.DescriptorTable.NumDescriptorRanges = 1;
 	}
 
 public:
@@ -148,10 +119,6 @@ public:
 		return bufferResource_->GetGPUVirtualAddress();
 	}
 
-	const D3D12_ROOT_PARAMETER& GetRoootParamater() const noexcept {
-		return roootParamater_;
-	}
-
 	void CreateView(
 		D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
 		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
@@ -170,14 +137,10 @@ private:
 	Lamb::LambPtr<ID3D12Resource> bufferResource_;
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc_;
 
-	D3D12_DESCRIPTOR_RANGE range_;
-	D3D12_ROOT_PARAMETER roootParamater_;
-
 	T* data_;
 
 	uint32_t bufferSize_;
 
 	bool isWright_;
-
 	bool isCreateView_;
 };
