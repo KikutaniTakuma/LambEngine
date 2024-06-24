@@ -27,7 +27,7 @@ void Texture2D::Load()
 {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	renderContextManager->Load<Texture2DRenderContext>(kFileNames_);
+	renderContextManager->Load<Texture2DRenderContext::type, Texture2DRenderContext::size>(kFileNames_);
 
 	renderSet = renderContextManager->Get(kFileNames_);
 }
@@ -53,7 +53,25 @@ void Texture2D::Draw(
 	BaseDrawer::Draw(worldMatrix, camera, color,  blend);
 }
 
-void Texture2D::AllDraw() {
-	renderSet->Draw();
-	renderSet->ResetDrawCount();
+void Texture2D::OnceDraw(
+	const Mat4x4& worldMatrix,
+	const Mat4x4& uvTransform,
+	const Mat4x4& camera,
+	uint32_t textureID,
+	uint32_t color,
+	BlendType blend
+) {
+	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
+
+	renderContext->SetShaderStruct(
+		ShaderData{
+			.uvTransform = uvTransform,
+			.pad = Vector3::kZero,
+			.textureID = textureID
+		}
+	);
+
+	BaseDrawer::Draw(worldMatrix, camera, color, blend);
+
+	renderSet->OnceDraw(blend);
 }

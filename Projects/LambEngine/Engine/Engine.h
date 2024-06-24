@@ -3,7 +3,7 @@
 #pragma comment(lib, "d3d12.lib")
 
 #include "EngineUtils/LambPtr/LambPtr.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 
 #include "Core/DirectXCommand/DirectXCommand.h"

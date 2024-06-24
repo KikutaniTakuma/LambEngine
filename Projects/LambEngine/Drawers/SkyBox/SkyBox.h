@@ -2,7 +2,7 @@
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Math/Mat4x4.h"
 #include "Math/Vector4.h"
-#include "Engine/Buffer/ConstBuffer/ConstBuffer.h"
+#include "Engine/Buffer/ConstantBuffer/ConstantBuffer.h"
 
 class SkyBox {
 public:
@@ -37,7 +37,7 @@ private:
 	Lamb::LambPtr<ID3D12Resource> indexResource_;
 
 	static constexpr uint32_t kIndexNumber_ = 36u;
-	std::unique_ptr<ConstBuffer<ShaderData>> cbuffer_;
+	std::unique_ptr<ConstantBuffer<ShaderData>> cbuffer_;
 	Lamb::SafePtr<class Texture> texture_;
 	Lamb::SafePtr<class Pipeline> pipeline_;
 };

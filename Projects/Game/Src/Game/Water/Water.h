@@ -44,7 +44,7 @@ private:
 	std::unique_ptr<PeraRender> gaussianBlurHeight_;
 	std::unique_ptr<Texture2D> waterSurface_;
 	Transform waterTransform_;
-	uint32_t color_;
+	Vector4 color_;
 
 	class WaterPipeline* waterPipelineObject_ = nullptr;
 	class GaussianBlur* gaussianBlurObjectWidth_ = nullptr;

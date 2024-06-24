@@ -110,27 +110,25 @@ void Water::Update(const Vector3& cameraPos) {
 
 void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 	pera_->PreDraw();
-	waterSurface_->Draw(
+	waterSurface_->OnceDraw(
 		waterTransform_.GetMatrix(),
 		Mat4x4::kIdentity,
 		staticCamera_->GetViewOthographics(), 
 		0u,
-		color_,
+		color_.GetColorRGBA(),
 		BlendType::kUnenableDepthNone
 	);
-	waterSurface_->AllDraw();
 	pera_->Draw(cameraMat, Pipeline::None, pera, true);
 
 	pera_->PreDraw();
-	waterSurface_->Draw(
+	waterSurface_->OnceDraw(
 		waterTransform_.GetMatrix(),
 		Mat4x4::kIdentity,
 		staticCamera_->GetViewOthographics(),
 		0u,
-		color_,
+		color_.GetColorRGBA(),
 		BlendType::kUnenableDepthNone
 	);
-	waterSurface_->AllDraw();
 	pera_->Draw(cameraMat, Pipeline::None, luminate_.get());
 	luminate_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, gaussianBlurWidth_.get());
 	gaussianBlurWidth_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, gaussianBlurHeight_.get());
@@ -140,6 +138,7 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
+	ImGui::ColorEdit4("color", color_.data());
 	waterTransform_.Debug(guiName.c_str());
 	if (ImGui::TreeNode("WaterSRT")) {
 		ImGui::DragFloat3("pos", &pos.x, 0.01f);

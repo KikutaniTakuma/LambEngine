@@ -5,7 +5,7 @@
 #include "Error/Error.h"
 #include <cassert>
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
-#include "Utils/SafePtr/SafePtr.h"
+#include "Utils/SafePtr.h"
 
 /// <summary>
 /// ストラクチャードバッファ

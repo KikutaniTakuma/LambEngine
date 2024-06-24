@@ -25,6 +25,6 @@ public:
 	virtual void SetLight(const Light& light);
 
 protected:
-	class RenderSet* renderSet;
+	class BaseRenderSet* renderSet;
 };
 

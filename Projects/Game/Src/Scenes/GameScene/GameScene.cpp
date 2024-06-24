@@ -33,10 +33,10 @@ void GameScene::Initialize()
 
 	water_ = Water::GetInstance();
 
-	coin_ = std::make_unique<Coin>();
-	Transform coinTransform;
+	//coin_ = std::make_unique<Coin>();
+	/*Transform coinTransform;
 	coinTransform.scale *= 2.0f;
-	coin_->Init(coinTransform);
+	coin_->Init(coinTransform);*/
 
 }
 
@@ -51,7 +51,7 @@ void GameScene::Update()
 
 	levelData_->player->Update(currentCamera_->rotate);
 
-	coin_->Update();
+	//coin_->Update();
 
 	for (auto& i : levelData_->skyBlocks) {
 		i->Update();
@@ -80,7 +80,7 @@ void GameScene::Update()
 
 	levelData_->player->Landing(isCollision);
 
-	coin_->SetIsCollision(coin_->GetObb().IsCollision(levelData_->player->GetObb()));
+	//coin_->SetIsCollision(coin_->GetObb().IsCollision(levelData_->player->GetObb()));
 
 
 #ifdef _DEBUG
@@ -110,7 +110,7 @@ void GameScene::Draw()
 
 	levelData_->player->Draw(*currentCamera_);
 
-	coin_->Draw(*currentCamera_);
+	//coin_->Draw(*currentCamera_);
 
 	if (levelData_->player->GetIsPunch()) {
 		postEffectManager_->GetPera().Draw(

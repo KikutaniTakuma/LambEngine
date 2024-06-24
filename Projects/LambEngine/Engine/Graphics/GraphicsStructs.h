@@ -15,7 +15,7 @@
 #include "PipelineManager/Pipeline/Pipeline.h"
 #include "../EngineUtils/LambPtr/LambPtr.h"
 #include "../Buffer/StructuredBuffer/StructuredBuffer.h"
-#include "../Buffer/ConstBuffer/ConstBuffer.h"
+#include "../Buffer/ConstantBuffer/ConstantBuffer.h"
 
 
 #include <d3d12.h>
@@ -123,11 +123,18 @@ struct Light {
 };
 
 template<class T>
-struct ShaderData {
-    ConstBuffer<Light> light;
+struct ShaderDataBuffers {
+    ConstantBuffer<Light> light;
     StructuredBuffer<WVPMatrix> wvpMatrix;
     StructuredBuffer<Vector4> color;
     StructuredBuffer<T> shaderStruct;
+};
+
+template<class T>
+struct ShaderData {
+    std::vector<WVPMatrix> wvpMatrix;
+    std::vector<Vector4> color;
+    std::vector<T> shaderStruct;
 };
 
 struct ShaderFileNames {

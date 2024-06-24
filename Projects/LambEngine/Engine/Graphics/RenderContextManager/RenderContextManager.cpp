@@ -27,7 +27,7 @@ void RenderContextManager::Finalize() {
 	Lamb::AddLog("Finalize RenderContextManager succeeded");
 }
 
-RenderSet* const RenderContextManager::Get(const LoadFileNames& fileNames)
+BaseRenderSet* const RenderContextManager::Get(const LoadFileNames& fileNames)
 {
 	auto isExist = renderData_.find(fileNames);
 	if (isExist != renderData_.end()) {
@@ -61,7 +61,17 @@ void RenderContextManager::SetIsNowThreading(bool isNowThreading) {
 
 void RenderContextManager::Draw() {
 	for (auto& i : renderData_) {
-		i.second->Draw();
+		auto& renderSet = *i.second;
+
+		renderSet.UploadShaderData();
+	}
+
+	for (uint32_t blendIndex = 0; blendIndex < BlendType::kNum; ++blendIndex) {
+		for (auto& i : renderData_) {
+			auto& renderSet = *i.second;
+
+			renderSet.Draw(BlendType(blendIndex));
+		}
 	}
 }
 

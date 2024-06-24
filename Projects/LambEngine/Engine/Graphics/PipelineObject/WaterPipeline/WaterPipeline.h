@@ -40,10 +40,10 @@ public:
 	}
 
 private:
-	ConstBuffer<Normals> normalVector_;
-	ConstBuffer<Vector2> randomVec_;
-	ConstBuffer<Light> light_;
-	ConstBuffer<float> densityScale_;
+	ConstantBuffer<Normals> normalVector_;
+	ConstantBuffer<Vector2> randomVec_;
+	ConstantBuffer<Light> light_;
+	ConstantBuffer<float> densityScale_;
 
 	class Texture* caustics_;
 

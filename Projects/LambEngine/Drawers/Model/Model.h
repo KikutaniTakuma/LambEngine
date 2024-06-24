@@ -1,10 +1,15 @@
 #pragma once
 #include "../BaseDrawer.h"
 
+#include "Engine/Graphics/RenderContextManager/RenderContext/RenderContext.h"
+
 /// <summary>
 /// 3Dモデルの描画
 /// </summary>
 class Model : public BaseDrawer {
+public:
+	using ModelRenderContext = RenderContext<>;
+
 public:
 	Model() = default;
 	Model(const std::string& fileName);

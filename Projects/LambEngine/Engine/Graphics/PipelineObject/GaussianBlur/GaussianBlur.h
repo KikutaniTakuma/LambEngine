@@ -43,5 +43,5 @@ public:
 	void Debug(const std::string& guiName);
 
 private:
-	ConstBuffer<GaussianBlurState> gaussianBlurState_;
+	ConstantBuffer<GaussianBlurState> gaussianBlurState_;
 };

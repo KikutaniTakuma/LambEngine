@@ -40,9 +40,9 @@ public:
 	void Update()override;
 
 private:
-	ConstBuffer<Vector2> randomVec_;
-	ConstBuffer<CloudData> cloudData_;
-	ConstBuffer<Vector4> skyColor_;
+	ConstantBuffer<Vector2> randomVec_;
+	ConstantBuffer<CloudData> cloudData_;
+	ConstantBuffer<Vector4> skyColor_;
 
 	Vector2 speed_;
 };
