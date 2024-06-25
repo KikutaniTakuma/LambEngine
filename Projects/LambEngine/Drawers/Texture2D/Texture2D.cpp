@@ -63,15 +63,15 @@ void Texture2D::OnceDraw(
 ) {
 	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
 
-	renderContext->SetShaderStruct(
+	renderContext->SetOnceWVPMatrix({ worldMatrix, camera });
+	renderContext->SetOnceColor(color);
+	renderContext->SetOnceShaderStruct(
 		ShaderData{
 			.uvTransform = uvTransform,
 			.pad = Vector3::kZero,
 			.textureID = textureID
 		}
 	);
-
-	BaseDrawer::Draw(worldMatrix, camera, color, blend);
 
 	renderSet->OnceDraw(blend);
 }

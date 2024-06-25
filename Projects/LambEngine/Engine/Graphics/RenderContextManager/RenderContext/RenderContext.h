@@ -48,9 +48,6 @@ public:
         drawCount_++;
         (*allDrawCount_)++;
     }
-    void DecrimentDrawCount() {
-        drawCount_--;
-    }
 
     void ResetDrawCount() {
         drawCount_ = 0u;
@@ -104,6 +101,8 @@ public:
         shaderData_.wvpMatrix.resize(kBufferSize);
         shaderData_.color.resize(kBufferSize);
         shaderData_.shaderStruct.resize(kBufferSize);
+
+        onceDrawShaderStruct_ = std::make_unique<T>();
     }
     ~RenderContext() = default;
 
@@ -136,14 +135,50 @@ public:
         shaderData_.shaderStruct[drawCount_] = data;
     }
 
+    inline void SetOnceWVPMatrix(const WVPMatrix& matrix) {
+        if (kBufferSize <= *allDrawCount_) {
+            throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(kBufferSize), ErrorPlace);
+        }
+
+        onceDrawWvp_.worldMat = mesh_->node.loacalMatrix * matrix.worldMat;
+        onceDrawWvp_.cameraMat = matrix.cameraMat;
+    }
+    inline void SetOnceColor(const Vector4& color) {
+        if (kBufferSize <= *allDrawCount_) {
+            throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(kBufferSize), ErrorPlace);
+        }
+
+        onceDrawColor_ = color;
+    }
+    inline void SetOnceShaderStruct(const T& data) {
+        if (kBufferSize <= *allDrawCount_) {
+            throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(kBufferSize), ErrorPlace);
+        }
+        *onceDrawShaderStruct_ = data;
+    }
+
 public:
     const ShaderData<T>& GetShaderData() const {
         return shaderData_;
     }
 
+    const WVPMatrix& GetOnceDrawWvp() const {
+        return onceDrawWvp_;
+    }
+
+    const Vector4& GetOnceDrawColor() const {
+        return onceDrawColor_;
+    }
+    const T& GetOnceDrawShaderStruct() const {
+        return *onceDrawShaderStruct_;
+    }
+
 
 private:
     ShaderData<T> shaderData_;
+    WVPMatrix onceDrawWvp_;
+    Vector4 onceDrawColor_;
+    std::unique_ptr<T> onceDrawShaderStruct_;
 };
 
 //template<class T = uint32_t, uint32_t kBufferSize = RenderData::kMaxDrawInstance>
@@ -442,13 +477,11 @@ public:
 
     void OnceDraw(BlendType blendType) override {
         Lamb::SafePtr<RenderContext<T, kBufferSize>> renderContext = this->GetRenderContextDowncast<RenderContext<T, kBufferSize>>(blendType);
+        uint32_t dataIndex = onceDrawIndex_;
 
-        const ShaderData<T>& shaderData = renderContext->GetShaderData();
-        uint32_t dataIndex = renderContext->GetDrawCount() - 1;
-
-        shaderData_.wvpMatrix[startInstanceLocation_] = shaderData.wvpMatrix[dataIndex];
-        shaderData_.color[startInstanceLocation_] = shaderData.color[dataIndex];
-        shaderData_.shaderStruct[startInstanceLocation_] = shaderData.shaderStruct[dataIndex];
+        shaderData_.wvpMatrix[dataIndex] = renderContext->GetOnceDrawWvp();
+        shaderData_.color[dataIndex] = renderContext->GetOnceDrawColor();
+        shaderData_.shaderStruct[dataIndex] = renderContext->GetOnceDrawShaderStruct();
 
         // ディスクリプタヒープ
         const Lamb::SafePtr descriptorHeap = CbvSrvUavHeap::GetInstance();
@@ -471,27 +504,32 @@ public:
         // インデックスバッファセット
         commandlist->IASetIndexBuffer(&mesh_->indexView);
         // ドローコール
-        commandlist->DrawIndexedInstanced(mesh_->indexNumber, 1, 0, 0, dataIndex);
+        commandlist->DrawIndexedInstanced(mesh_->indexNumber, 1, 0, 0, onceDrawIndex_);
 
-        renderContext->DecrimentDrawCount();
+        onceDrawIndex_++;
+        allDrawCount_++;
     }
 
 
     void UploadShaderData() override {
-        uint32_t startInstanceLocation = 0;
+        uint32_t startInstanceLocation = onceDrawIndex_;
 
         for (uint32_t i = 0; i < BlendType::kNum; i++) {
             RenderContext<T, kBufferSize>* renderContext = this->GetRenderContextDowncast<RenderContext<T, kBufferSize>>(BlendType(i));
             const ShaderData<T>& shaderData = renderContext->GetShaderData();
 
             for (uint32_t indexCount = 0; indexCount < renderContext->GetDrawCount(); indexCount++) {
-                shaderData_.wvpMatrix[startInstanceLocation + indexCount] = shaderData.wvpMatrix[indexCount];
-                shaderData_.color[startInstanceLocation + indexCount] = shaderData.color[indexCount];
-                shaderData_.shaderStruct[startInstanceLocation + indexCount] = shaderData.shaderStruct[indexCount];
+                uint32_t index = startInstanceLocation + indexCount;
+                shaderData_.wvpMatrix[index] = shaderData.wvpMatrix[indexCount];
+                shaderData_.color[index] = shaderData.color[indexCount];
+                shaderData_.shaderStruct[index] = shaderData.shaderStruct[indexCount];
             }
 
             startInstanceLocation += renderContext->GetDrawCount();
         }
+
+        startInstanceLocation_ += onceDrawIndex_;
+        onceDrawIndex_ = 0;
     }
 
     inline void SetLight(const Light& light) override {
@@ -500,4 +538,5 @@ public:
 
 private:
     ShaderDataBuffers<T> shaderData_;
+    uint32_t onceDrawIndex_ = 0;
 };
