@@ -2,7 +2,7 @@
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Math/Mat4x4.h"
 #include "Math/Vector4.h"
-#include "Engine/Buffer/ConstantBuffer/ConstantBuffer.h"
+#include "Engine/Buffer/ConstantBuffer.h"
 
 class SkyBox {
 public:

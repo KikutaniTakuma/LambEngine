@@ -14,8 +14,8 @@
 
 #include "PipelineManager/Pipeline/Pipeline.h"
 #include "../EngineUtils/LambPtr/LambPtr.h"
-#include "../Buffer/StructuredBuffer/StructuredBuffer.h"
-#include "../Buffer/ConstantBuffer/ConstantBuffer.h"
+#include "../Buffer/StructuredBuffer.h"
+#include "../Buffer/ConstantBuffer.h"
 
 
 #include <d3d12.h>

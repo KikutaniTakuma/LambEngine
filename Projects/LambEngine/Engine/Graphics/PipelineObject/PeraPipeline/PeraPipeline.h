@@ -1,6 +1,6 @@
 #pragma once
 #include "../PipelineObject.h"
-#include "Engine/Buffer/ConstantBuffer/ConstantBuffer.h"
+#include "Engine/Buffer/ConstantBuffer.h"
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
 #include "Math/Vector2.h"
 #include "Math/Vector4.h"
