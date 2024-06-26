@@ -81,7 +81,7 @@ protected:
 	/// <summary>
 	/// ヒープのハンドルを作る
 	/// </summary>
-	virtual void CreateHeapHandles();
+	virtual void CreateHeapHandles() = 0;
 
 protected:
 	Lamb::LambPtr<ID3D12DescriptorHeap> heap_;
