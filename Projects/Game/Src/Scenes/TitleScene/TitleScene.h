@@ -12,6 +12,7 @@
 #include "Utils/SafePtr.h"
 
 #include "Drawers/SkyBox/SkyBox.h"
+#include "Drawers/Other/WaterTex2D/WaterTex2D.h"
 
 class TitleScene : public BaseScene {
 public:
@@ -48,4 +49,7 @@ public:
 
 	std::unique_ptr<SkyBox> skybox_;
 	Transform transform_;
+
+	std::unique_ptr<WaterTex2D> waterTex_;
+	Vector2 randomVec_;
 };

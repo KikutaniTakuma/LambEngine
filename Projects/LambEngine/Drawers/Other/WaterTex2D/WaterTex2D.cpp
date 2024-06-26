@@ -51,7 +51,6 @@ void WaterTex2D::Draw(
 		ShaderData{
 			.randomVec = randomVec,
 			.normal  = Vector3(0.0f,0.0f,1.0f),
-			.pad = 0.0f,
 			.tangent = Vector3(0.0f,-1.0f,0.0f),
 			.textureID = kCausticsTextureID_
 		}

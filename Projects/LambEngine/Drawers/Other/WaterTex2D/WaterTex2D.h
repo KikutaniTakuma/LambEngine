@@ -15,7 +15,6 @@ private:
 	struct ShaderData {
 		Vector2 randomVec;
 		Vector3 normal;
-		float pad = 0.0f;
 		Vector3 tangent;
 		uint32_t textureID = 0u;
 	};
