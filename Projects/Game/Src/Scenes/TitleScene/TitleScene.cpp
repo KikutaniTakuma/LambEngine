@@ -62,6 +62,10 @@ void TitleScene::Initialize()
 	waterTex_->Load();
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
+	waterTransform_.translate = Vector3(0.0f, -0.1f, 0.0f);
+	waterTransform_.rotate.x = 1.57f;
+	waterTransform_.scale = Vector3(200.0f, 200.0f, 0.0f);
+
 }
 
 void TitleScene::Finalize()
@@ -99,8 +103,10 @@ void TitleScene::Update()
 		}
 	);
 
-	randomVec_.x += 0.036f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
-	randomVec_.y += 0.036f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+
+	waterTransform_.Debug("water_transform");
 }
 
 void TitleScene::Draw()
@@ -111,10 +117,10 @@ void TitleScene::Draw()
 
 	//water_->Draw(currentCamera_->GetViewProjection());
 	waterTex_->Draw(
-		Mat4x4::MakeAffin(Vector3(200.0f, 200.0f, 0.0f), Quaternion::MakeRotateXAxis(1.57f), Vector3::kZero),
+		waterTransform_.GetMatrix(),
 		currentCamera_->GetViewProjection(),
 		randomVec_,
-		Vector4{ 0.1f, 0.25f, 0.5f, 1.0f }.GetColorRGBA(),
+		(Vector4(0.1f, 0.25f, 0.5f, 1.0f) * 1.7f).GetColorRGBA(),
 		BlendType::kNone
 	);
 	/*player_->Draw(
@@ -123,6 +129,8 @@ void TitleScene::Draw()
 		std::numeric_limits<uint32_t>::max(),
 		BlendType::kNormal
 	);*/
+
+	sceneManager_->AllDraw();
 
 	str_.Draw();
 	startMessage_.Draw();

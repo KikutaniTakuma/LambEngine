@@ -13,7 +13,7 @@ PixelShaderOutPut main(WaterTex2DVertexOutPut waterinput)
 	float32_t2 kRandomVec = kWaterData[input.instanceID].randomVec;
  	float32_t noise = CreateNoise(input.uv, kRandomVec, 1.0f);
     
-    float32_t4 causticsColor = textures[textureID].Sample(smp, input.uv + frac(CreateNoiseNoDdy(input.uv * 0.1f, kRandomVec, 1.0f)));
+    float32_t4 causticsColor = textures[textureID].Sample(smp, waterinput.causticsUv + frac(CreateNoiseNoDdy(waterinput.causticsUv * 0.1f, kRandomVec, 1.0f)));
     
     float32_t3 normal = CreateNormal(input.uv, kRandomVec, 1.0f);
     //normal = mul(normal, waterinput.tangentBasis);
@@ -47,13 +47,11 @@ PixelShaderOutPut main(WaterTex2DVertexOutPut waterinput)
     float32_t3 specDirection = kLight.ligColor * t;
     
     float32_t3 lig = diffDirection + specDirection;
-    //float32_t3 lig = specPerlin;
     
-    lig.xyz += 0.3f;
+    lig.xyz += 0.2f;
     
-    //lig = pow(lig, 1.0f);
-    //kColor[input.instanceID].color + 
-    output.color = causticsColor + kColor[input.instanceID].color;
+    //output.color = causticsColor + kColor[input.instanceID].color;
+    output.color = kColor[input.instanceID].color;
     output.color.xyz *= lig;
 
     return output;

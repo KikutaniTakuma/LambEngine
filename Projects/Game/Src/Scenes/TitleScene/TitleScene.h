@@ -51,5 +51,6 @@ public:
 	Transform transform_;
 
 	std::unique_ptr<WaterTex2D> waterTex_;
+	Transform waterTransform_;
 	Vector2 randomVec_;
 };
