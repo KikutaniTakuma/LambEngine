@@ -1,9 +1,7 @@
 #pragma once
 #include <memory>
 #include "Drawers/PeraRender/PeraRender.h"
-#include "Drawers/Texture2D/Texture2D.h"
-#include "./Camera/Camera.h"
-#include "Engine/Graphics/PipelineObject/WaterPipeline/WaterPipeline.h"
+#include "Drawers/Other/WaterTex2D/WaterTex2D.h"
 
 class Water final {
 private:
@@ -38,7 +36,6 @@ public:
 	Vector3 rotate;
 
 private:
-	std::unique_ptr<PeraRender> pera_;
 	std::unique_ptr<PeraRender> luminate_;
 	std::unique_ptr<PeraRender> gaussianBlurWidth_;
 	std::unique_ptr<PeraRender> gaussianBlurHeight_;
@@ -49,6 +46,4 @@ private:
 	class WaterPipeline* waterPipelineObject_ = nullptr;
 	class GaussianBlur* gaussianBlurObjectWidth_ = nullptr;
 	class GaussianBlur* gaussianBlurObjectHeight_ = nullptr;
-
-	std::unique_ptr<Camera> staticCamera_;
 };

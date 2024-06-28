@@ -97,23 +97,49 @@ void RtvHeap::SetMainRtv() {
 	commandList->OMSetRenderTargets(1, &heapHandles_[backBufferIndex].first, false, &dsvH);
 }
 
-void RtvHeap::SetRtv(uint32_t heapHandle, uint32_t renderTargetNum, bool isDrawDepth) {
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	// 描画先をRTVを設定する
-	auto dsvH = Engine::GetDsvHandle();
-	commandList->OMSetRenderTargets(renderTargetNum, &heapHandles_[heapHandle].first, false, isDrawDepth ? &dsvH : nullptr);
+void RtvHeap::SetRtv(uint32_t heapHandle,  bool isDrawDepth) {
+	SetRtv(&heapHandles_[heapHandle].first, 1, isDrawDepth);
 }
 void RtvHeap::SetRtv(std::initializer_list<D3D12_CPU_DESCRIPTOR_HANDLE> heapHandles, bool isDrawDepth) {
 	assert(0llu < heapHandles.size() || heapHandles.size() <= 8llu);
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
-	for (auto& i : heapHandles) {
-		handles.push_back(i);
-	}
+	handles.resize(heapHandles.size());
+	std::copy(heapHandles.begin(), heapHandles.end(), handles.begin());
 
 	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	// 描画先をRTVを設定する
 	auto dsvH = Engine::GetDsvHandle();
-	commandList->OMSetRenderTargets(static_cast<uint32_t>(handles.size()), &handles[0], false, isDrawDepth ? &dsvH : nullptr);
+	commandList->OMSetRenderTargets(static_cast<uint32_t>(handles.size()), handles.data(), false, isDrawDepth ? &dsvH : nullptr);
+}
+
+void RtvHeap::SetRtv(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, bool isDrawDepth)
+{
+	assert(0llu < numRenderTargets || numRenderTargets <= 8llu);
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
+	handles.resize(numRenderTargets);
+	std::memcpy(handles.data(), heapHandles, numRenderTargets);
+
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+	// 描画先をRTVを設定する
+	auto dsvH = Engine::GetDsvHandle();
+	commandList->OMSetRenderTargets(static_cast<uint32_t>(handles.size()), handles.data(), false, isDrawDepth ? &dsvH : nullptr);
+}
+
+void RtvHeap::SetRtvAndMain(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, bool isDrawDepth)
+{
+	assert(0llu < numRenderTargets || numRenderTargets <= 7llu);
+	IDXGISwapChain4* const swapChain = DirectXSwapChain::GetInstance()->GetSwapChain();
+	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
+
+	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
+	handles.resize(numRenderTargets + 1);
+	handles.front() = heapHandles_[backBufferIndex].first;
+	std::memcpy((&handles[1]), heapHandles, numRenderTargets);
+
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+	// 描画先をRTVを設定する
+	auto dsvH = Engine::GetDsvHandle();
+	commandList->OMSetRenderTargets(static_cast<uint32_t>(handles.size()), handles.data(), false, isDrawDepth ? &dsvH : nullptr);
 }
 
 void RtvHeap::ClearRenderTargetView(uint32_t handle, const Vector4& clearColor) {

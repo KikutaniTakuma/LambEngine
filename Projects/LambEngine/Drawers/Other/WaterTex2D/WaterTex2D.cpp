@@ -28,7 +28,7 @@ void WaterTex2D::Load()
 {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	renderContextManager->Load<WaterRenderContext>(kFileNames_);
+	renderContextManager->Load<WaterRenderContext>(kFileNames_, 2);
 
 	renderSet = renderContextManager->Get(kFileNames_);
 
@@ -57,4 +57,11 @@ void WaterTex2D::Draw(
 	);
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
+}
+
+void WaterTex2D::AllDraw(BlendType blend)
+{
+	Lamb::SafePtr renderContext = renderSet->GetRenderContext(blend);
+	renderContext->Draw();
+	renderContext->ResetDrawCount();
 }

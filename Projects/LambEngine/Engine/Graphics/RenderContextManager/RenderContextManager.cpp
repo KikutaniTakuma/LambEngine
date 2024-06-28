@@ -87,7 +87,7 @@ Shader RenderContextManager::LoadShader(const ShaderFileNames& shaderName)
 	return result;
 }
 
-std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipelines(Shader shader)
+std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipelines(Shader shader, uint32_t numRenderTarget)
 {
 	std::array<Pipeline*, BlendType::kNum> result = {nullptr};
 
@@ -143,7 +143,13 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 		size_t blendType = i < Pipeline::Blend::BlendTypeNum ? i : i - Pipeline::Blend::BlendTypeNum;
 
 		PipelineManager::IsDepth(i < Pipeline::Blend::BlendTypeNum);
-		PipelineManager::SetState(Pipeline::Blend(blendType), Pipeline::SolidState::Solid);
+		PipelineManager::SetState(
+			Pipeline::Blend(blendType),
+			Pipeline::SolidState::Solid,
+			Pipeline::CullMode::Back,
+			D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+			numRenderTarget
+		);
 		result[i] = PipelineManager::Create();
 	}
 
@@ -153,7 +159,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 	return result;
 }
 
-std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimationGraphicsPipelines(Shader shader)
+std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimationGraphicsPipelines(Shader shader, uint32_t numRenderTarget)
 {
 	std::array<Pipeline*, BlendType::kNum> result = { nullptr };
 
@@ -225,7 +231,13 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimation
 		size_t blendType = i < Pipeline::Blend::BlendTypeNum ? i : i - Pipeline::Blend::BlendTypeNum;
 
 		PipelineManager::IsDepth(i < Pipeline::Blend::BlendTypeNum);
-		PipelineManager::SetState(Pipeline::Blend(blendType), Pipeline::SolidState::Solid);
+		PipelineManager::SetState(
+			Pipeline::Blend(blendType), 
+			Pipeline::SolidState::Solid, 
+			Pipeline::CullMode::Back,
+			D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+			numRenderTarget
+		);
 		result[i] = PipelineManager::Create();
 	}
 

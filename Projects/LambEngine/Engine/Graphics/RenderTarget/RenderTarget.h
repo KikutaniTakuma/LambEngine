@@ -39,6 +39,10 @@ public:
 		return tex_.get();
 	}
 
+public:
+	static void SetRenderTargets(Lamb::SafePtr<Lamb::SafePtr<RenderTarget>> renderTargetPtrs, uint32_t numRenderTarget);
+	static void SetMainAndRenderTargets(Lamb::SafePtr<Lamb::SafePtr<RenderTarget>> renderTargetPtrs, uint32_t numRenderTarget);
+
 private:
 	Lamb::LambPtr<ID3D12Resource> resource_;
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc_;

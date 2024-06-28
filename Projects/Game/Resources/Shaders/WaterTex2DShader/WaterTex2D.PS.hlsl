@@ -1,11 +1,11 @@
 #include "WaterTex2D.hlsli"
 #include "../PerlinNoise.hlsli"
 
-PixelShaderOutPut main(WaterTex2DVertexOutPut waterinput)
+PixelShaderOutPut2 main(WaterTex2DVertexOutPut waterinput)
 {
     VertexShaderOutput input = waterinput.outputData;
 
-	PixelShaderOutPut output;
+	PixelShaderOutPut2 output;
 
     uint32_t textureID = kWaterData[input.instanceID].textureID;
 
@@ -50,9 +50,10 @@ PixelShaderOutPut main(WaterTex2DVertexOutPut waterinput)
     
     lig.xyz += 0.2f;
     
-    //output.color = causticsColor + kColor[input.instanceID].color;
-    output.color = kColor[input.instanceID].color;
-    output.color.xyz *= lig;
+    //output.color0 = causticsColor + kColor[input.instanceID].color;
+    output.color0 = kColor[input.instanceID].color;
+    output.color0.xyz *= lig;
+    output.color1 = output.color0;
 
     return output;
 }
