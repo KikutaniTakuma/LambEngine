@@ -198,7 +198,17 @@ void RenderTarget::CreateRTV(D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle, UINT de
 	rtvHeapHandleUint_ = descHeapHandleUINT;
 }
 
-void RenderTarget::SetRenderTargets(Lamb::SafePtr<Lamb::SafePtr<RenderTarget>> renderTargetPtrs, uint32_t numRenderTarget)
+const D3D12_CPU_DESCRIPTOR_HANDLE& RenderTarget::GetRtvHandleCPU() const
+{
+	return rtvHeapHandle_;
+}
+
+UINT RenderTarget::GetRtvHandleUINT() const
+{
+	return rtvHeapHandleUint_;
+}
+
+void RenderTarget::SetRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget)
 {
 	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
 	rendetTargets.resize(numRenderTarget);
@@ -213,7 +223,7 @@ void RenderTarget::SetRenderTargets(Lamb::SafePtr<Lamb::SafePtr<RenderTarget>> r
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
 	handles.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		handles[i] = rendetTargets[i]->GetHandleCPU();
+		handles[i] = rendetTargets[i]->GetRtvHandleCPU();
 	}
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
@@ -224,7 +234,7 @@ void RenderTarget::SetRenderTargets(Lamb::SafePtr<Lamb::SafePtr<RenderTarget>> r
 	}
 }
 
-void RenderTarget::SetMainAndRenderTargets(Lamb::SafePtr<Lamb::SafePtr<RenderTarget>> renderTargetPtrs, uint32_t numRenderTarget)
+void RenderTarget::SetMainAndRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget)
 {
 	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
 	rendetTargets.resize(numRenderTarget);
@@ -239,11 +249,11 @@ void RenderTarget::SetMainAndRenderTargets(Lamb::SafePtr<Lamb::SafePtr<RenderTar
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
 	handles.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		handles[i] = rendetTargets[i]->GetHandleCPU();
+		handles[i] = rendetTargets[i]->GetRtvHandleCPU();
 	}
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtv(handles.data(), numRenderTarget);
+	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget);
 
 	for (auto& i : rendetTargets) {
 		rtvHeap->ClearRenderTargetView(i->rtvHeapHandleUint_, Vector4::kZero);

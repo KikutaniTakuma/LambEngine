@@ -1,6 +1,8 @@
 #pragma once
 #include "Engine/Graphics/TextureManager/Texture/Texture.h"
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
+
+#include "Utils/SafePtr.h"
 #include <memory>
 
 /// <summary>
@@ -39,9 +41,12 @@ public:
 		return tex_.get();
 	}
 
+	const D3D12_CPU_DESCRIPTOR_HANDLE& GetRtvHandleCPU() const;
+	UINT GetRtvHandleUINT() const;
+
 public:
-	static void SetRenderTargets(Lamb::SafePtr<Lamb::SafePtr<RenderTarget>> renderTargetPtrs, uint32_t numRenderTarget);
-	static void SetMainAndRenderTargets(Lamb::SafePtr<Lamb::SafePtr<RenderTarget>> renderTargetPtrs, uint32_t numRenderTarget);
+	static void SetRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	static void SetMainAndRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
 
 private:
 	Lamb::LambPtr<ID3D12Resource> resource_;
