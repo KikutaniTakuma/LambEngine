@@ -57,15 +57,6 @@ void TitleScene::Initialize()
 
 	skybox_ = std::make_unique<SkyBox>();
 	skybox_->Load("./Resources/Common/SkyBox/rostock_laage_airport_4k.dds");
-
-	waterTex_ = std::make_unique<WaterTex2D>();
-	waterTex_->Load();
-
-	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
-	waterTransform_.translate = Vector3(0.0f, -0.1f, 0.0f);
-	waterTransform_.rotate.x = 1.57f;
-	waterTransform_.scale = Vector3(200.0f, 200.0f, 1.0f);
-
 }
 
 void TitleScene::Finalize()
@@ -94,19 +85,6 @@ void TitleScene::Update()
 	startMessage_.color = static_cast<uint32_t>(255.0f * std::abs(std::cos(messageAlpah_)));
 
 	transform_.Debug("skybox");
-
-	waterTex_->SetLight(
-		Light{
-			.ligDirection = Vector3{ 1.0f,-1.0f,0.0f }.Normalize(),
-			.ligColor = Vector3::kIdentity * 15.0f,
-			.eyePos = currentCamera_->GetPos()
-		}
-	);
-
-	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
-	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
-
-	waterTransform_.Debug("water_transform");
 }
 
 void TitleScene::Draw()
@@ -115,14 +93,7 @@ void TitleScene::Draw()
 	/*cloud_->Draw();
 	skydome_->Draw(*currentCamera_);*/
 
-	//water_->Draw(currentCamera_->GetViewProjection());
-	waterTex_->Draw(
-		waterTransform_.GetMatrix(),
-		currentCamera_->GetViewProjection(),
-		randomVec_,
-		(Vector4(0.1f, 0.25f, 0.5f, 1.0f) * 1.7f).GetColorRGBA(),
-		BlendType::kNone
-	);
+	water_->Draw(currentCamera_->GetViewProjection());
 	/*player_->Draw(
 		playerTransform_.GetMatrix(),
 		currentCamera_->GetViewProjection(),
