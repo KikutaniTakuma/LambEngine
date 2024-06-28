@@ -64,7 +64,7 @@ void TitleScene::Initialize()
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 	waterTransform_.translate = Vector3(0.0f, -0.1f, 0.0f);
 	waterTransform_.rotate.x = 1.57f;
-	waterTransform_.scale = Vector3(200.0f, 200.0f, 0.0f);
+	waterTransform_.scale = Vector3(200.0f, 200.0f, 1.0f);
 
 }
 
