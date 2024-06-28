@@ -117,7 +117,9 @@ void RtvHeap::SetRtv(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRende
 	assert(0llu < numRenderTargets || numRenderTargets <= 8llu);
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
 	handles.resize(numRenderTargets);
-	std::memcpy(handles.data(), heapHandles, numRenderTargets);
+	for (uint32_t i = 0; i < numRenderTargets; i++) {
+		handles[i].ptr = heapHandles[i].ptr;
+	}
 
 	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	// 描画先をRTVを設定する
@@ -133,8 +135,10 @@ void RtvHeap::SetRtvAndMain(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t n
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
 	handles.resize(numRenderTargets + 1);
-	handles.front() = heapHandles_[backBufferIndex].first;
-	std::memcpy((&handles[1]), heapHandles, numRenderTargets);
+	handles.front().ptr = heapHandles_[backBufferIndex].first.ptr;
+	for (size_t i = 0; i < handles.size() - 1; i++) {
+		handles[i + 1].ptr = heapHandles[i].ptr;
+	}
 
 	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	// 描画先をRTVを設定する

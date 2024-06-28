@@ -1,4 +1,6 @@
 #include "DescriptorHeap.h"
+
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Error/Error.h"
 
 DescriptorHeap::DescriptorHeap() :
@@ -160,4 +162,9 @@ void DescriptorHeap::CreateHeapHandles() {
 		hadleTmp.second.ptr += incrementSRVCBVUAVHeap * i;
 		heapHandles_.push_back(hadleTmp);
 	}
+}
+
+void DescriptorHeap::SetHeaps(size_t numHeap, ID3D12DescriptorHeap* const* descriptorHeaps) {
+	Lamb::SafePtr commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
+	commandlist->SetDescriptorHeaps(static_cast<uint32_t>(numHeap), descriptorHeaps);
 }

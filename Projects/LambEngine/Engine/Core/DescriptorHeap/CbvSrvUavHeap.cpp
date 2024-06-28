@@ -55,10 +55,6 @@ void CbvSrvUavHeap::CreateDescriptorHeap(uint32_t heapSize) {
 	heap_.SetName<CbvSrvUavHeap>();
 }
 
-void CbvSrvUavHeap::SetHeap() {
-	static auto commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	commandlist->SetDescriptorHeaps(1, heap_.GetAddressOf());
-}
 void CbvSrvUavHeap::Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex) {
 	static auto commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, handle);
