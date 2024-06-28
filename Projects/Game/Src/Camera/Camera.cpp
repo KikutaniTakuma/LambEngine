@@ -19,7 +19,7 @@ void Camera::InitStaticMatrix() {
 		clientSize.x, clientSize.y,
 		kNearClip_, 1000.0f
 	);
-	kViewOthographics = Mat4x4::MakePerspectiveFov(
+	kViewProjection = Mat4x4::MakePerspectiveFov(
 		0.45f, aspect,
 		kNearClip_, 1000.0f
 	);
