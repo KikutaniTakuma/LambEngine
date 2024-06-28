@@ -397,9 +397,9 @@ void Engine::FrameStart() {
 	instance_->directXSwapChain_->SetViewPort(static_cast<int32_t>(clientSize.x), static_cast<int32_t>(clientSize.y));
 
 	// SRV用のヒープ
-	static auto const srvDescriptorHeap = CbvSrvUavHeap::GetInstance();
-
-	srvDescriptorHeap->SetHeap();
+	const Lamb::SafePtr cbvSrvUavDescriptorHeap = CbvSrvUavHeap::GetInstance();
+	std::array heapPtrs = { cbvSrvUavDescriptorHeap ->Get()};
+	DescriptorHeap::SetHeaps(heapPtrs.size(), heapPtrs.data());
 }
 
 void Engine::FrameEnd() {
