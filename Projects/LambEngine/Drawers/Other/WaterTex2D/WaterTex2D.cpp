@@ -42,6 +42,7 @@ void WaterTex2D::Draw(
 	const Mat4x4& worldMatrix,
 	const Mat4x4& camera,
 	Vector2 randomVec,
+	float32_t density,
 	uint32_t color,
 	BlendType blend
 ) {
@@ -52,7 +53,8 @@ void WaterTex2D::Draw(
 			.randomVec = randomVec,
 			.normal  = Vector3(0.0f,1.0f,0.0f),
 			.tangent = Vector3(0.0f,0.0f,1.0f),
-			.textureID = kCausticsTextureID_
+			.textureID = kCausticsTextureID_,
+			.density = density
 		}
 	);
 

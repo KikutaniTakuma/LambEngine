@@ -40,6 +40,7 @@ private:
 	std::unique_ptr<WaterTex2D> waterSurface_;
 	uint32_t color_ = 0u;
 	Vector2 randomVec_;
+	float32_t density_ = 1.0f;
 
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectWidth_;
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectHeight_;

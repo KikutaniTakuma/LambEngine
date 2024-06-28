@@ -121,6 +121,7 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 		transform.GetMatrix(),
 		cameraMat,
 		randomVec_,
+		density_,
 		color_,
 		BlendType::kNone
 	);
@@ -136,7 +137,6 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	transform.Debug(guiName.c_str());
 	if (ImGui::TreeNode("WaterSRT")) {
 		ImGui::DragFloat3("pos", transform.translate.data(), 0.01f);
 		ImGui::DragFloat3("scale", transform.scale.data(), 0.01f);
@@ -145,6 +145,8 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	}
 	gaussianBlurObjectWidth_->Debug("gaussianBlurObjectWidth");
 	gaussianBlurObjectHeight_->Debug("gaussianBlurObjectHeight");
+
+	ImGui::DragFloat("density", &density_, 0.01f);
 
 	ImGui::End();
 #endif // _DEBUG
