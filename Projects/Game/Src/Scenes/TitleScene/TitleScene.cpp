@@ -5,6 +5,7 @@
 #include "Utils/EngineInfo.h"
 #include "Game/Cloud/Cloud.h"
 #include "AudioManager/AudioManager.h"
+#include "Utils/Random.h"
 
 TitleScene::TitleScene() :
 	BaseScene{ BaseScene::ID::Title }
@@ -99,6 +100,8 @@ void TitleScene::Draw()
 		std::numeric_limits<uint32_t>::max(),
 		BlendType::kNormal
 	);*/
+
+	sceneManager_->AllDraw();
 
 	str_.Draw();
 	startMessage_.Draw();

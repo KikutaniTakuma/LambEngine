@@ -12,6 +12,7 @@
 #include "Utils/SafePtr.h"
 
 #include "Drawers/SkyBox/SkyBox.h"
+#include "Drawers/Other/WaterTex2D/WaterTex2D.h"
 
 class TitleScene : public BaseScene {
 public:

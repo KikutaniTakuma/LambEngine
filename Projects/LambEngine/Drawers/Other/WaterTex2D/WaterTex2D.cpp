@@ -28,7 +28,7 @@ void WaterTex2D::Load()
 {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	renderContextManager->Load<WaterRenderContext>(kFileNames_);
+	renderContextManager->Load<WaterRenderContext>(kFileNames_, 2);
 
 	renderSet = renderContextManager->Get(kFileNames_);
 
@@ -42,6 +42,7 @@ void WaterTex2D::Draw(
 	const Mat4x4& worldMatrix,
 	const Mat4x4& camera,
 	Vector2 randomVec,
+	float32_t density,
 	uint32_t color,
 	BlendType blend
 ) {
@@ -50,12 +51,19 @@ void WaterTex2D::Draw(
 	renderContext->SetShaderStruct(
 		ShaderData{
 			.randomVec = randomVec,
-			.normal  = Vector3(0.0f,0.0f,1.0f),
-			.pad = 0.0f,
-			.tangent = Vector3(0.0f,-1.0f,0.0f),
-			.textureID = kCausticsTextureID_
+			.normal  = Vector3(0.0f,1.0f,0.0f),
+			.tangent = Vector3(0.0f,0.0f,1.0f),
+			.textureID = kCausticsTextureID_,
+			.density = density
 		}
 	);
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
+}
+
+void WaterTex2D::AllDraw(BlendType blend)
+{
+	Lamb::SafePtr renderContext = renderSet->GetRenderContext(blend);
+	renderContext->Draw();
+	renderContext->ResetDrawCount();
 }

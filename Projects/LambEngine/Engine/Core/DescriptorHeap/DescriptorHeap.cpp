@@ -1,4 +1,6 @@
 #include "DescriptorHeap.h"
+
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Error/Error.h"
 
 DescriptorHeap::DescriptorHeap() :
@@ -145,4 +147,9 @@ void DescriptorHeap::UseThisPosition(uint32_t handle) {
 	if (isBookingHandle != bookingHandle_.end()) {
 		std::erase(bookingHandle_, handle);
 	}
+}
+
+void DescriptorHeap::SetHeaps(size_t numHeap, ID3D12DescriptorHeap* const* descriptorHeaps) {
+	Lamb::SafePtr commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
+	commandlist->SetDescriptorHeaps(static_cast<uint32_t>(numHeap), descriptorHeaps);
 }

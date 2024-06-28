@@ -4,10 +4,8 @@ WaterTex2DVertexOutPut main(VertexShaderInput input,uint32_t instanceID : SV_Ins
 {
     VertexShaderOutput output;
 
-    input.position = mul(input.position, kWvpMat[instanceID].worldMat);
-	output.worldPosition = input.position;
-	output.position = mul(input.position, kWvpMat[instanceID].cameraMat);
-	input.normal = normalize(input.normal);
+	output.worldPosition = mul(input.position, kWvpMat[instanceID].worldMat);
+	output.position = mul(output.worldPosition, kWvpMat[instanceID].cameraMat);
 	output.normal = mul(input.normal, (float32_t3x3)kWvpMat[instanceID].worldMat);
 
 	output.uv = input.uv;
@@ -22,6 +20,7 @@ WaterTex2DVertexOutPut main(VertexShaderInput input,uint32_t instanceID : SV_Ins
     float32_t3 B = normalize(cross(N, T));
     
     outputData.tangentBasis = transpose(float32_t3x3(T, B, N));
+    outputData.causticsUv = output.uv * 10.0f;
 
     return outputData;
 }

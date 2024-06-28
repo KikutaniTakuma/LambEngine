@@ -33,7 +33,7 @@ private:
 
 public:
 	template<IsBasedRenderContext RenderContextType = RenderContext<>>
-	void Load(const LoadFileNames& fileNames) {
+	void Load(const LoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
 		auto isExist = renderData_.find(fileNames);
 
 		if (isExist != renderData_.end()) {
@@ -48,7 +48,7 @@ public:
 
 		Shader shader = LoadShader(fileNames.shaderName);
 
-		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader);
+		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader, numRenderTarget);
 
 		Lamb::SafePtr meshManager = MeshManager::GetInstance();
 		meshManager->LoadModel(fileNames.resourceFileName);
@@ -66,7 +66,7 @@ public:
 	}
 
 	template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
-	void LoadSkinAnimationModel(const LoadFileNames& fileNames) {
+	void LoadSkinAnimationModel(const LoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
 		auto isExist = renderData_.find(fileNames);
 
 		if (isExist != renderData_.end()) {
@@ -81,7 +81,7 @@ public:
 
 		Shader shader = LoadShader(fileNames.shaderName);
 
-		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader);
+		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader, numRenderTarget);
 
 		Lamb::SafePtr meshManager = MeshManager::GetInstance();
 		meshManager->LoadModel(fileNames.resourceFileName);
@@ -108,8 +108,8 @@ public:
 private:
 	[[nodiscard]] Shader LoadShader(const ShaderFileNames& shaderName);
 
-	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateGraphicsPipelines(Shader shader);
-	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateSkinAnimationGraphicsPipelines(Shader shader);
+	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateGraphicsPipelines(Shader shader, uint32_t numRenderTarget = 1);
+	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateSkinAnimationGraphicsPipelines(Shader shader, uint32_t numRenderTarget = 1);
 
 
 private:

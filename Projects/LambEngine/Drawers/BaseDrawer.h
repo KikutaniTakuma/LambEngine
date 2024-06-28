@@ -4,6 +4,7 @@
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"
+#include "Math/MathCommon.h"
 #include <string>
 #include "Engine/Graphics/GraphicsStructs.h"
 #include "Transform/Transform.h"

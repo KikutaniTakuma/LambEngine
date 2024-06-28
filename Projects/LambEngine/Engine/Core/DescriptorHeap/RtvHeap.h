@@ -45,8 +45,10 @@ public:
 	void SetMainRtv();
 
 public:
-	void SetRtv(uint32_t heapHandle, uint32_t renderTargetNum = 1u, bool isDrawDepth = true);
+	void SetRtv(uint32_t heapHandle, bool isDrawDepth = true);
 	void SetRtv(std::initializer_list<D3D12_CPU_DESCRIPTOR_HANDLE> heapHandles, bool isDrawDepth = true);
+	void SetRtv(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, bool isDrawDepth = true);
+	void SetRtvAndMain(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, bool isDrawDepth = true);
 
 	void ClearRenderTargetView(uint32_t handle, const class Vector4& clearColor);
 

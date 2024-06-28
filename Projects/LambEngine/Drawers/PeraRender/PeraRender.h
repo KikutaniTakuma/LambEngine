@@ -61,6 +61,9 @@ public:
 
 	void ResetPipelineObject(PeraPipeline* pipelineObject);
 
+	RenderTarget& GetRender();
+	const RenderTarget& GetRender() const;
+
 public:
 	Vector3 pos;
 	Vector3 rotate;
@@ -73,8 +76,6 @@ public:
 
 private:
 	std::unique_ptr<PeraPipeline> peraPipelineObject_;
-
-	bool isPreDraw_;
 
 	D3D12_VERTEX_BUFFER_VIEW peraVertexView_;
 	Lamb::LambPtr<ID3D12Resource> peraVertexResource_ = nullptr;
