@@ -81,7 +81,7 @@ struct PixelShaderOutPut7 {
 	float32_t4 color6 : SV_TARGET6;
 };
 struct PixelShaderOutPut8 {
-	float32_t4 color0: SV_TARGET0;
+	float32_t4 color0 : SV_TARGET0;
 	float32_t4 color1 : SV_TARGET1;
 	float32_t4 color2 : SV_TARGET2;
 	float32_t4 color3 : SV_TARGET3;
