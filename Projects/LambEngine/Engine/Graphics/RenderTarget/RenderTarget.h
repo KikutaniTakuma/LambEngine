@@ -48,7 +48,7 @@ private:
 
 	std::unique_ptr<Texture> tex_;
 
-	bool isResourceStateChange_;
+	bool isWrightResouceState_;
 
 	uint32_t width_, height_;
 };
