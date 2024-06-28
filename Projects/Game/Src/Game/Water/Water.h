@@ -31,19 +31,16 @@ public:
 	void Debug(const std::string& guiName);
 
 public:
-	Vector3 pos;
-	Vector3 scale;
-	Vector3 rotate;
+	Transform transform;
 
 private:
 	std::unique_ptr<PeraRender> luminate_;
 	std::unique_ptr<PeraRender> gaussianBlurWidth_;
 	std::unique_ptr<PeraRender> gaussianBlurHeight_;
-	std::unique_ptr<Texture2D> waterSurface_;
-	Transform waterTransform_;
+	std::unique_ptr<WaterTex2D> waterSurface_;
 	uint32_t color_ = 0u;
+	Vector2 randomVec_;
 
-	class WaterPipeline* waterPipelineObject_ = nullptr;
-	class GaussianBlur* gaussianBlurObjectWidth_ = nullptr;
-	class GaussianBlur* gaussianBlurObjectHeight_ = nullptr;
+	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectWidth_;
+	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectHeight_;
 };
