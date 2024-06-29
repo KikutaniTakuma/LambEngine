@@ -4,8 +4,8 @@ WaterTex2DVertexOutPut main(VertexShaderInput input,uint32_t instanceID : SV_Ins
 {
     VertexShaderOutput output;
 
-	output.worldPosition = mul(input.position, kWvpMat[instanceID].worldMat);
-	output.position = mul(output.worldPosition, kWvpMat[instanceID].cameraMat);
+	output.worldPosition = input.position;
+	output.position =output.worldPosition;
 	output.normal = mul(input.normal, (float32_t3x3)kWvpMat[instanceID].worldMat);
 
 	output.uv = input.uv;

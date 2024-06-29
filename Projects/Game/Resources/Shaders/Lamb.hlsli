@@ -22,6 +22,7 @@ StructuredBuffer<Color> kColor : register(t1);
 Texture2D<float32_t4> textures[] : register(t3);
 SamplerState smp : register(s0);
 
+// Vertex shader input
 struct VertexShaderInput {
 	float32_t4 position : POSITION0;
 	float32_t3 normal : NORMAL0;
@@ -29,10 +30,64 @@ struct VertexShaderInput {
 	uint32_t textureID : BLENDINDICES;
 };
 
+// Vertex shader out put to Rasterizer
 struct VertexShaderOutput{
     float32_t4 position : SV_POSITION;
     float32_t3 normal : NORMAL;
     float32_t4 worldPosition : POSITION1;
+    float32_t2 uv : TEXCOORD0;
+	uint32_t textureID : BLENDINDICES0;
+	uint32_t instanceID : BLENDINDICES1;
+};
+// Vertex shader out put to Hull shader
+struct VertexShaderOutputToHull{
+    float32_t4 position : POSITION;
+    float32_t3 normal : NORMAL;
+    float32_t4 worldPosition : POSITION1;
+    float32_t2 uv : TEXCOORD0;
+	uint32_t textureID : BLENDINDICES0;
+	uint32_t instanceID : BLENDINDICES1;
+};
+
+// Hull shader out put to Domain shader
+struct HullShaderOutPut{
+    float32_t4 position : SV_POSITION;
+    float32_t3 normal : NORMAL;
+	float32_t4 worldPosition : POSITION1;
+    float32_t2 uv : TEXCOORD0;
+	uint32_t textureID : BLENDINDICES0;
+	uint32_t instanceID : BLENDINDICES1;
+};
+struct ConstantHullShaderOutPut
+{
+	float32_t Edges[3] : SV_TessFactor;
+	float32_t Inside : SV_InsideTessFactor;
+};
+
+// Domain shader out put to Rasterizer
+struct DomainShaderOutPut{
+    float32_t4 position : SV_POSITION;
+    float32_t3 normal : NORMAL;
+	float32_t4 worldPosition : POSITION1;
+    float32_t2 uv : TEXCOORD0;
+	uint32_t textureID : BLENDINDICES0;
+	uint32_t instanceID : BLENDINDICES1;
+};
+// Domain shader out put to Geometory shader
+struct DomainShaderOutPutToGeometory{
+    float32_t4 position : POSITION;
+    float32_t3 normal : NORMAL;
+	float32_t4 worldPosition : POSITION1;
+    float32_t2 uv : TEXCOORD0;
+	uint32_t textureID : BLENDINDICES0;
+	uint32_t instanceID : BLENDINDICES1;
+};
+
+// Geometory shader out put to Rasterizer
+struct GeometoryOutPut{
+    float32_t4 position : SV_POSITION;
+    float32_t3 normal : NORMAL;
+	float32_t4 worldPosition : POSITION1;
     float32_t2 uv : TEXCOORD0;
 	uint32_t textureID : BLENDINDICES0;
 	uint32_t instanceID : BLENDINDICES1;

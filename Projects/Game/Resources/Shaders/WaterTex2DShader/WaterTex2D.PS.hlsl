@@ -1,7 +1,7 @@
 #include "WaterTex2D.hlsli"
 #include "../PerlinNoise.hlsli"
 
-PixelShaderOutPut2 main(WaterTex2DVertexOutPut waterinput)
+PixelShaderOutPut2 main(WaterTex2DDomainShaderOutPut waterinput)
 {
     VertexShaderOutput input = waterinput.outputData;
 

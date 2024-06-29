@@ -147,7 +147,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 			Pipeline::Blend(blendType),
 			Pipeline::SolidState::Solid,
 			Pipeline::CullMode::Back,
-			D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+			(shader.hull != nullptr ? D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH : D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE),
 			numRenderTarget
 		);
 		result[i] = PipelineManager::Create();

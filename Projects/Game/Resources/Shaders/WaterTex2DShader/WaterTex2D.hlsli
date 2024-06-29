@@ -11,7 +11,19 @@ struct WaterData {
 StructuredBuffer<WaterData> kWaterData : register(t2);
 
 struct WaterTex2DVertexOutPut{
-    VertexShaderOutput outputData;
+    VertexShaderOutputToHull outputData;
+    float32_t3x3 tangentBasis : TANGENT_BASIS;
+    float32_t2 causticsUv : TEXCOORD1;
+};
+
+struct WaterTex2DHullShaderOutPut{
+    HullShaderOutPut outputData;
+    float32_t3x3 tangentBasis : TANGENT_BASIS;
+    float32_t2 causticsUv : TEXCOORD1;
+};
+
+struct WaterTex2DDomainShaderOutPut{
+    DomainShaderOutPut outputData;
     float32_t3x3 tangentBasis : TANGENT_BASIS;
     float32_t2 causticsUv : TEXCOORD1;
 };
