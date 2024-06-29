@@ -21,9 +21,8 @@ void TitleScene::Load()
 
 void TitleScene::Initialize()
 {
-	currentCamera_->pos.y = 500.0f;
-	currentCamera_->pos.z = 100.0f;
-	currentCamera_->rotate = { 1.57f, 0.0f, 0.0f };
+	currentCamera_->pos.y = 6.46f;
+	currentCamera_->rotate = { 0.18f, 0.17f, 0.0f };
 
 	water_ = Water::GetInstance();
 
@@ -90,7 +89,7 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	//skybox_->Draw(transform_.GetMatrix(), currentCamera_->GetViewProjection(), 0xffffffff);
+	skybox_->Draw(transform_.GetMatrix(), currentCamera_->GetViewProjection(), 0xffffffff);
 	/*cloud_->Draw();
 	skydome_->Draw(*currentCamera_);*/
 
@@ -104,7 +103,7 @@ void TitleScene::Draw()
 
 	sceneManager_->AllDraw();
 
-	/*str_.Draw();
-	startMessage_.Draw();*/
+	str_.Draw();
+	startMessage_.Draw();
 
 }
