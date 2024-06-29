@@ -17,7 +17,7 @@ LoadFileNames{
 	.shaderName = ShaderFileNames{
 		.vsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.VS.hlsl",
 		.psFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl",
-		.gsFileName = "",
+		.gsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.GS.hlsl",
 		.dsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.DS.hlsl",
 		.hsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.HS.hlsl",
 	}

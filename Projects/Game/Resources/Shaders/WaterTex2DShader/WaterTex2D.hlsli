@@ -25,7 +25,13 @@ struct WaterTex2DHullShaderOutPut{
 };
 
 struct WaterTex2DDomainShaderOutPut{
-    DomainShaderOutPut outputData;
+    DomainShaderOutPutToGeometory outputData;
+    float32_t3x3 tangentBasis : TANGENT_BASIS;
+    float32_t2 causticsUv : TEXCOORD1;
+};
+
+struct WaterTex2DGeometoryShaderOutPut{
+    GeometoryOutPut outputData;
     float32_t3x3 tangentBasis : TANGENT_BASIS;
     float32_t2 causticsUv : TEXCOORD1;
 };
