@@ -6,6 +6,8 @@ struct WaterData {
     float32_t3 tangent;
     uint32_t textureID;
     float32_t density;
+    uint32_t edgeDivision;
+    uint32_t insideDivision;
 };
 
 StructuredBuffer<WaterData> kWaterData : register(t2);

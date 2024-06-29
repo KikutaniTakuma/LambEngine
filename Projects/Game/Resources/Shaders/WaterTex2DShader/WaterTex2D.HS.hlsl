@@ -1,11 +1,12 @@
 #include "WaterTex2D.hlsli"
 
-ConstantHullShaderOutPut ConstantsHS_Main( InputPatch<WaterTex2DVertexOutPut, 3> ip, uint32_t PatchID : SV_PrimitiveID )
+ConstantHullShaderOutPut ConstantsHS_Main( InputPatch<WaterTex2DVertexOutPut, 3> input, uint32_t PatchID : SV_PrimitiveID )
 {
   ConstantHullShaderOutPut output;
+  uint32_t instanceID = input[0].outputData.instanceID;
 
-  output.Edges[0] = output.Edges[1] = output.Edges[2] = 3;
-  output.Inside = 16;
+  output.Edges[0] = output.Edges[1] = output.Edges[2] = kWaterData[instanceID].edgeDivision;
+  output.Inside = kWaterData[instanceID].insideDivision;
 
   return output;
 }

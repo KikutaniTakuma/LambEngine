@@ -17,6 +17,8 @@ public:
 		Vector3 tangent;
 		uint32_t textureID = 0u;
 		float32_t density = 0.0_f32;
+		uint32_t edgeDivision = 1;
+		uint32_t insideDivision = 1;
 	};
 
 	using WaterRenderContext = RenderContext<ShaderData, kMaxDrawCount>;
@@ -43,6 +45,8 @@ public:
 		const Mat4x4& camera,
 		Vector2 randomVec,
 		float32_t density,
+		uint32_t edgeDivision,
+		uint32_t insideDivision,
 		uint32_t color,
 		BlendType blend
 	);

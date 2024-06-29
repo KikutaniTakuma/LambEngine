@@ -145,7 +145,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 		PipelineManager::IsDepth(i < Pipeline::Blend::BlendTypeNum);
 		PipelineManager::SetState(
 			Pipeline::Blend(blendType),
-			Pipeline::SolidState::Solid,
+			Pipeline::SolidState::Wireframe,
 			Pipeline::CullMode::Back,
 			(shader.hull != nullptr ? D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH : D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE),
 			numRenderTarget

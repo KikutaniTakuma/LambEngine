@@ -41,6 +41,8 @@ private:
 	uint32_t color_ = 0u;
 	Vector2 randomVec_;
 	float32_t density_ = 1.0f;
+	int32_t edgeDivision_ = 1;
+	int32_t insideDivision_ = 1;
 
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectWidth_;
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectHeight_;

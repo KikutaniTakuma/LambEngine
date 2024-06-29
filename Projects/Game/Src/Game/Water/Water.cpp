@@ -37,7 +37,6 @@ void Water::Init() {
 	waterSurface_ = std::make_unique<WaterTex2D>();
 	waterSurface_->Load();
 
-	transform.scale = Lamb::ClientSize();
 	transform.translate.z += 100.0f;
 	color_ = Vector4{ 0.1f, 0.25f, 0.5f, 1.0f }.GetColorRGBA();
 
@@ -122,6 +121,8 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 		cameraMat,
 		randomVec_,
 		density_,
+		edgeDivision_,
+		insideDivision_,
 		color_,
 		BlendType::kNone
 	);
@@ -147,6 +148,8 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	gaussianBlurObjectHeight_->Debug("gaussianBlurObjectHeight");
 
 	ImGui::DragFloat("density", &density_, 0.01f);
+	ImGui::DragInt("edgeDivision", &edgeDivision_, 0.1f, 1, 64);
+	ImGui::DragInt("insideDivision", &insideDivision_, 0.1f, 1, 64);
 
 	ImGui::End();
 #endif // _DEBUG
