@@ -36,6 +36,8 @@ private:
 private:
 	void CreateDescriptorHeap(uint32_t heapSize) override;
 
+	void CreateHeapHandles() override;
+
 public:
 	void Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex);
 	void Use(uint32_t handleIndex, UINT rootParmIndex);

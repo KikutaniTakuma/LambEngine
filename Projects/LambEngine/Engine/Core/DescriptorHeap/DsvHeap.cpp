@@ -42,16 +42,11 @@ void DsvHeap::CreateDescriptorHeap(uint32_t heapSize) {
 }
 
 void DsvHeap::CreateHeapHandles() {
-	UINT incrementSRVCBVUAVHeap = DirectXDevice::GetInstance()->GetIncrementSRVCBVUAVHeap();
+	uint64_t incrementDSVHeap = static_cast<uint64_t>(DirectXDevice::GetInstance()->GetIncrementDSVHeap());
 
-	heapHandles_.reserve(heapSize_);
-	heapHandles_.push_back({ heap_->GetCPUDescriptorHandleForHeapStart(),
-							D3D12_GPU_DESCRIPTOR_HANDLE{} });
-	auto heapHandleFirstItr = heapHandles_.begin();
-	for (uint32_t i = 1; i < heapSize_; i++) {
-		auto hadleTmp = *heapHandleFirstItr;
-		hadleTmp.first.ptr += incrementSRVCBVUAVHeap * i;
-		heapHandles_.push_back(hadleTmp);
+	heapHandles_.resize(heapSize_, { heap_->GetCPUDescriptorHandleForHeapStart(), D3D12_GPU_DESCRIPTOR_HANDLE{} });
+	for (uint64_t i = 0; i < static_cast<uint64_t>(heapSize_); i++) {
+		heapHandles_[i].first.ptr += incrementDSVHeap * i;
 	}
 }
 
