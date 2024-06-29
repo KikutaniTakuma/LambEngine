@@ -48,6 +48,7 @@ void WaterTex2D::Draw(
 	float32_t density,
 	uint32_t edgeDivision,
 	uint32_t insideDivision,
+	WaveData waveData,
 	uint32_t color,
 	BlendType blend
 ) {
@@ -61,7 +62,8 @@ void WaterTex2D::Draw(
 			.textureID = kCausticsTextureID_,
 			.density = density,
 			.edgeDivision = std::clamp(edgeDivision, 1u, 64u),
-			.insideDivision = std::clamp(insideDivision, 1u, 64u)
+			.insideDivision = std::clamp(insideDivision, 1u, 64u),
+			.waveData = waveData
 		}
 	);
 

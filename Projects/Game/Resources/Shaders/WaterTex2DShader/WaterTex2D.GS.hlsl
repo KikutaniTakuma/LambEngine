@@ -1,4 +1,20 @@
 #include "WaterTex2D.hlsli"
+#define M_PI 3.141592653589793238462643
+#define M_E 2.71828182846
+
+
+
+static float32_t radBasis = 0.5f;
+
+float32_t Waves(float32_t length, uint32_t instanceID){
+	float32_t A = kWaterData[instanceID].waveData.waveStrength;
+	float32_t k = 2.0f * M_PI * rcp(kWaterData[instanceID].waveData.ripples);
+	float32_t v = kWaterData[instanceID].waveData.waveSpeed;
+	float32_t time = kWaterData[instanceID].waveData.time;
+	 float32_t timeAttenuation = kWaterData[instanceID].waveData.timeAttenuation;
+	//* pow(M_E, -time)
+	return A * pow(M_E, -time * timeAttenuation) * sin(k * (length - v * time)) * rcp(max(length, kWaterData[instanceID].waveData.lengthAttenuation));
+}
 
 [maxvertexcount(3)]
 void main(
@@ -8,9 +24,18 @@ void main(
 	WaterTex2DGeometoryShaderOutPut output[3];
 	uint32_t instanceID = input[0].outputData.instanceID;
 
+	float32_t3 ripplesPoint = kWaterData[instanceID].waveData.ripplesPoint;
+
 	for(uint32_t i = 0; i < 3; ++i){
+		// ワールドポジション計算
     	output[i].outputData.position = input[i].outputData.position;
 		output[i].outputData.worldPosition = mul(output[i].outputData.position, kWvpMat[instanceID].worldMat);
+		
+		// 波紋からの長さ
+		float32_t ripplesPointToPos = length(output[i].outputData.worldPosition.xyz - ripplesPoint);
+		float32_t height = Waves(ripplesPointToPos * 0.01f, instanceID);
+		output[i].outputData.worldPosition.y += height;
+		
 		output[i].outputData.position = mul(output[i].outputData.worldPosition, kWvpMat[instanceID].cameraMat);
 
 		output[i].outputData.normal = input[i].outputData.normal;

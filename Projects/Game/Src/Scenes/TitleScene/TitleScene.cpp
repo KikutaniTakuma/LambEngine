@@ -89,7 +89,7 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	skybox_->Draw(transform_.GetMatrix(), currentCamera_->GetViewProjection(), 0xffffffff);
+	//skybox_->Draw(transform_.GetMatrix(), currentCamera_->GetViewProjection(), 0xffffffff);
 	/*cloud_->Draw();
 	skydome_->Draw(*currentCamera_);*/
 
@@ -103,7 +103,7 @@ void TitleScene::Draw()
 
 	sceneManager_->AllDraw();
 
-	str_.Draw();
-	startMessage_.Draw();
+	/*str_.Draw();
+	startMessage_.Draw();*/
 
 }

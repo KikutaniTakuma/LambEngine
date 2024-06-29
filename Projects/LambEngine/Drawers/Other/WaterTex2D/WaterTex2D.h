@@ -9,7 +9,17 @@
 /// </summary>
 class WaterTex2D : public BaseDrawer {
 public:
-	static constexpr uint32_t kMaxDrawCount = 1024u;
+	static constexpr uint32_t kMaxDrawCount = 1u;
+
+	struct WaveData {
+		float32_t waveStrength = 5.0f;
+		float32_t ripples = 1.0f;
+		float32_t waveSpeed = 0.1f;
+		float32_t time = 0.0f;
+		float32_t lengthAttenuation = 1.0f;
+		float32_t timeAttenuation = 0.1f;
+		Vector3 ripplesPoint;
+	};
 
 	struct ShaderData {
 		Vector2 randomVec;
@@ -19,6 +29,7 @@ public:
 		float32_t density = 0.0_f32;
 		uint32_t edgeDivision = 1;
 		uint32_t insideDivision = 1;
+		WaveData waveData;
 	};
 
 	using WaterRenderContext = RenderContext<ShaderData, kMaxDrawCount>;
@@ -47,6 +58,7 @@ public:
 		float32_t density,
 		uint32_t edgeDivision,
 		uint32_t insideDivision,
+		WaveData waveData,
 		uint32_t color,
 		BlendType blend
 	);
