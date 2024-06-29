@@ -98,11 +98,6 @@ void Pipeline::Create(
 	inputLayoutDesc.pInputElementDescs = vertexInput_.data();
 	inputLayoutDesc.NumElements = UINT(vertexInput_.size());
 
-	// BlendStateの設定
-	D3D12_BLEND_DESC blendDec{};
-	// 全ての色要素を書き込む
-	blendDec.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-
 	// RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
 	// 裏面(時計回り)を表示しない
@@ -142,8 +137,6 @@ void Pipeline::Create(
 		};
 	}
 
-
-	graphicsPipelineStateDesc.BlendState = blendDec;
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
 	// 書き込むRTVの情報
 	graphicsPipelineStateDesc.NumRenderTargets = numRenderTarget_;
@@ -166,6 +159,8 @@ void Pipeline::Create(
 	}
 
 	for (uint32_t i = 0; i < numRenderTarget_; i++) {
+		graphicsPipelineStateDesc.BlendState.RenderTarget[i].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+		
 		switch (blend_)
 		{
 		case Pipeline::Blend::None:
