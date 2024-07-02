@@ -146,6 +146,8 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
+	ImGui::DragFloat("density", &density_, 0.01f);
+
 	if (ImGui::TreeNode("WaterSRT")) {
 		ImGui::DragFloat3("pos", transform.translate.data(), 0.01f);
 		ImGui::DragFloat3("scale", transform.scale.data(), 0.01f);
@@ -155,9 +157,11 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	gaussianBlurObjectWidth_->Debug("gaussianBlurObjectWidth");
 	gaussianBlurObjectHeight_->Debug("gaussianBlurObjectHeight");
 
-	ImGui::DragFloat("density", &density_, 0.01f);
-	ImGui::DragInt("edgeDivision", &edgeDivision_, 0.1f, 1, 64);
-	ImGui::DragInt("insideDivision", &insideDivision_, 0.1f, 1, 64);
+	if (ImGui::TreeNode("ポリゴン分割数")) {
+		ImGui::DragInt("edgeDivision", &edgeDivision_, 0.1f, 1, 64);
+		ImGui::DragInt("insideDivision", &insideDivision_, 0.1f, 1, 64);
+		ImGui::TreePop();
+	}
 
 	if (ImGui::TreeNode("Wave")) {
 		ImGui::DragFloat("波の高さm", &waveData.waveStrength, 0.01f);

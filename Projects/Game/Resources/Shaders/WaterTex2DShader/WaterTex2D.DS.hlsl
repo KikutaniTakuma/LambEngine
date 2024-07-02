@@ -18,8 +18,7 @@ WaterTex2DDomainShaderOutPut main(ConstantHullShaderOutPut input,  float32_t3 do
 
 	output.outputData.textureID = patch[0].outputData.textureID;
 	output.outputData.instanceID = patch[0].outputData.instanceID;
-
-	output.tangentBasis = patch[0].tangentBasis;
+	
 	output.causticsUv = patch[0].causticsUv;
 
     return output;

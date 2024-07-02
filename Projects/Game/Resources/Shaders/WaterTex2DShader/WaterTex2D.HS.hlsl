@@ -26,8 +26,7 @@ WaterTex2DHullShaderOutPut main( InputPatch<WaterTex2DVertexOutPut, 3> input, ui
 	output.outputData.uv = input[ID].outputData.uv;
 	output.outputData.textureID = input[ID].outputData.textureID;
 	output.outputData.instanceID = input[ID].outputData.instanceID;
-
-	output.tangentBasis = input[ID].tangentBasis;
+	
 	output.causticsUv = input[ID].causticsUv;
 
 	return output;

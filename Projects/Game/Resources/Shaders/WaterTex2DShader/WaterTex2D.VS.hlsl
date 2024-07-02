@@ -15,11 +15,6 @@ WaterTex2DVertexOutPut main(VertexShaderInput input,uint32_t instanceID : SV_Ins
 	WaterTex2DVertexOutPut outputData;
 	outputData.outputData = output;
 
-	float32_t3 N = normalize(mul(kWaterData[instanceID].normal, (float32_t3x3) kWvpMat[instanceID].worldMat));
-    float32_t3 T = normalize(mul(kWaterData[instanceID].tangent, (float32_t3x3) kWvpMat[instanceID].worldMat));
-    float32_t3 B = normalize(cross(N, T));
-    
-    outputData.tangentBasis = transpose(float32_t3x3(T, B, N));
     outputData.causticsUv = output.uv * 10.0f;
 
     return outputData;
