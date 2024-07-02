@@ -83,6 +83,13 @@ public:
 		UINT handleUINT
 		);
 
+	Descriptor* const GetBaseClassPtr() {
+		return this;
+	}
+	const Descriptor* const GetBaseClassPtr() const {
+		return this;
+	}
+
 
 /// <summary>
 /// メンバ変数
@@ -96,6 +103,7 @@ private:
 	bool isLoad_;
 	bool threadLoadFlg_;
 
+	bool isCubeMap_;
 
 
 	Vector2 size_;
@@ -109,5 +117,9 @@ private:
 public:
 	inline const std::string& GetFileName() const {
 		return fileName_;
+	}
+
+	inline bool GetIsCubemap() const {
+		return isCubeMap_;
 	}
 };

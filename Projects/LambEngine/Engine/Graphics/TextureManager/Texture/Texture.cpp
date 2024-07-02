@@ -15,6 +15,7 @@ Texture::Texture():
 	srvDesc_(),
 	isLoad_(false),
 	threadLoadFlg_(false),
+	isCubeMap_(false),
 	size_(),
 	fileName_()
 {}
@@ -61,6 +62,8 @@ void Texture::Load(const std::string& filePath, ID3D12GraphicsCommandList* comma
 			srvDesc_.TextureCube.MostDetailedMip = 0;
 			srvDesc_.TextureCube.MipLevels = UINT_MAX;
 			srvDesc_.TextureCube.ResourceMinLODClamp = 0.0f;
+
+			isCubeMap_ = true;
 		}
 		else {
 			srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
