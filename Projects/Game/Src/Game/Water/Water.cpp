@@ -37,7 +37,6 @@ void Water::Init() {
 	waterSurface_ = std::make_unique<WaterTex2D>();
 	waterSurface_->Load();
 
-	transform.translate.z += 100.0f;
 	color_ = Vector4{ 0.1f, 0.25f, 0.5f, 1.0f }.GetColorRGBA();
 
 	luminate_ = std::make_unique<PeraRender>();
@@ -70,23 +69,24 @@ void Water::Init() {
 		GaussianBlur::GaussianBlurState{
 			.dir = Vector2(1.0f, 0.0f),
 			.sigma = 10.0f,
-			.kernelSize = 35,
+			.kernelSize = 8,
 		}
 	);
 	gaussianBlurObjectHeight_->SetGaussianState(
 		GaussianBlur::GaussianBlurState{
 			.dir = Vector2(0.0f, 1.0f),
 			.sigma = 10.0f,
-			.kernelSize = 35,
+			.kernelSize = 8,
 		}
 	);
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
 	waveData.ripplesPoint = transform.translate;
-	waveData.waveStrength = 0.5f;
+	waveData.waveStrength = 0.17f;
 	waveData.ripples = 10.0f;
-	waveData.waveSpeed = 19.0f;
+	waveData.waveSpeed = 10.0f;
+	waveData.timeAttenuation = 0.0f;
 }
 
 void Water::Update(const Vector3& cameraPos) {
