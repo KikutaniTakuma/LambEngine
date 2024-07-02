@@ -16,7 +16,6 @@ public:
 		float32_t ripples = 1.0f;
 		float32_t waveSpeed = 0.1f;
 		float32_t time = 0.0f;
-		float32_t lengthAttenuation = 1.0f;
 		float32_t timeAttenuation = 0.1f;
 		Vector3 ripplesPoint;
 	};

@@ -7,13 +7,12 @@
 static float32_t radBasis = 0.5f;
 
 float32_t Waves(float32_t length, uint32_t instanceID){
-	float32_t A = kWaterData[instanceID].waveData.waveStrength;
-	float32_t k = 2.0f * M_PI * rcp(kWaterData[instanceID].waveData.ripples);
-	float32_t v = kWaterData[instanceID].waveData.waveSpeed;
+	float32_t maxHeight = kWaterData[instanceID].waveData.waveStrength;
+	float32_t waveLength = 2.0f * M_PI * rcp(kWaterData[instanceID].waveData.ripples);
+	float32_t waveSpeed = kWaterData[instanceID].waveData.waveSpeed;
 	float32_t time = kWaterData[instanceID].waveData.time;
-	 float32_t timeAttenuation = kWaterData[instanceID].waveData.timeAttenuation;
-	//* pow(M_E, -time)
-	return A * pow(M_E, -time * timeAttenuation) * sin(k * (length - v * time)) * rcp(max(length, kWaterData[instanceID].waveData.lengthAttenuation));
+	float32_t timeAttenuation = kWaterData[instanceID].waveData.timeAttenuation;
+	return maxHeight * pow(M_E, -time * timeAttenuation) * sin(waveLength * (length - waveSpeed * time));
 }
 
 [maxvertexcount(3)]
@@ -33,7 +32,7 @@ void main(
 		
 		// 波紋からの長さ
 		float32_t ripplesPointToPos = length(output[i].outputData.worldPosition.xyz - ripplesPoint);
-		float32_t height = Waves(ripplesPointToPos * 0.01f, instanceID);
+		float32_t height = Waves(ripplesPointToPos, instanceID);
 		output[i].outputData.worldPosition.y += height;
 		
 		output[i].outputData.position = mul(output[i].outputData.worldPosition, kWvpMat[instanceID].cameraMat);

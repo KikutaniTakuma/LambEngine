@@ -85,9 +85,8 @@ void Water::Init() {
 
 	waveData.ripplesPoint = transform.translate;
 	waveData.waveStrength = 0.5f;
-	waveData.ripples = 0.236f;
-	waveData.waveSpeed = 0.19f;
-	waveData.lengthAttenuation = 0.09f;
+	waveData.ripples = 10.0f;
+	waveData.waveSpeed = 19.0f;
 }
 
 void Water::Update(const Vector3& cameraPos) {
@@ -164,7 +163,6 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 		ImGui::DragFloat("波の高さm", &waveData.waveStrength, 0.01f);
 		ImGui::DragFloat("波長", &waveData.ripples, 0.001f);
 		ImGui::DragFloat("波の速度m/s", &waveData.waveSpeed, 0.001f);
-		ImGui::DragFloat("距離減衰の強さ", &waveData.lengthAttenuation, 0.01f, 0.000001f, 100.0f);
 		ImGui::DragFloat("時間s", &waveData.time, 0.01f);
 		ImGui::DragFloat("時間減衰", &waveData.timeAttenuation, 0.01f);
 		ImGui::DragFloat3("波源", waveData.ripplesPoint.data(), 0.01f);
