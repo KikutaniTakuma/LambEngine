@@ -21,7 +21,7 @@ void TitleScene::Load()
 
 void TitleScene::Initialize()
 {
-	currentCamera_->pos.y = 6.46f;
+	currentCamera_->pos = { -0.216f, 6.692f, -1.256f };
 	currentCamera_->rotate = { 0.18f, 0.17f, 0.0f };
 
 	water_ = Water::GetInstance();
