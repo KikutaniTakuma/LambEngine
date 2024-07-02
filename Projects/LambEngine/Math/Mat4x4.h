@@ -380,6 +380,4 @@ public:
 	static const Matrix kZero;
 };
 
-namespace {
-	using Mat4x4 = Matrix<float, 4, 4>;
-}
+using Mat4x4 = Matrix<float, 4, 4>;
