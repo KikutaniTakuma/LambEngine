@@ -26,5 +26,5 @@ struct Output{
     float32_t2 uv : TEXCOORD0;
     float32_t2 causticsUv : TEXCOORD1;
     float32_t4 worldPos : POSITION;
-    float32_t3x3 tangentBasis : YANGENT_BASIS;
+    float32_t3x3 tangentBasis : TANGENT_BASIS;
 };

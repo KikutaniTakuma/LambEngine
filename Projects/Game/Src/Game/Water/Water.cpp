@@ -3,6 +3,9 @@
 #include "imgui.h"
 #include "Utils/SafeDelete.h"
 #include "Engine/Graphics/PipelineObject/GaussianBlur/GaussianBlur.h"
+#include "Utils/Random.h"
+
+#include "Camera/Camera.h"
 
 Water* Water::instance_ = nullptr;
 
@@ -25,59 +28,44 @@ Water* const Water::GetInstance()
 }
 
 void Water::Init() {
-	waterPipelineObject_ = new WaterPipeline{};
-	try {
-		waterPipelineObject_->Init();
-	}
-	catch (const Lamb::Error& err) {
-		delete waterPipelineObject_;
-		throw err;
-	}
-	int32_t waterScale = 1;
-	pera_ = std::make_unique<PeraRender>(1280 * waterScale,1280 * waterScale);
-	pera_->Initialize(waterPipelineObject_);
-	pos.y = -0.1f;
-	pos.z = 0.0f;
-	scale.x = 200.0f;
-	scale.y = 200.0f;
-	rotate.x = 1.57f;
+	transform.translate.y = -0.1f;
+	transform.translate.z = 0.0f;
+	transform.scale.x = 200.0f;
+	transform.scale.y = 200.0f;
+	transform.rotate.x = 1.57f;
 
-	staticCamera_ = std::make_unique<Camera>();
-	staticCamera_->pos.z = -10.0f;
-	staticCamera_->Update();
-
-	waterSurface_.reset(new Texture2D{});
+	waterSurface_ = std::make_unique<WaterTex2D>();
 	waterSurface_->Load();
 
-	waterTransform_.scale = Lamb::ClientSize();
-	waterTransform_.translate.z += 100.0f;
+	transform.scale = Lamb::ClientSize();
+	transform.translate.z += 100.0f;
 	color_ = Vector4{ 0.1f, 0.25f, 0.5f, 1.0f }.GetColorRGBA();
 
 	luminate_ = std::make_unique<PeraRender>();
 	luminate_->Initialize("./Resources/Shaders/PostShader/PostLuminate.PS.hlsl");
 
 
-	gaussianBlurObjectWidth_ = new GaussianBlur{};
+	gaussianBlurObjectWidth_ = Lamb::MakeSafePtr<GaussianBlur>();
 	try {
 		gaussianBlurObjectWidth_->Init();
 	}
 	catch (const Lamb::Error& err) {
-		delete gaussianBlurObjectWidth_;
+		gaussianBlurObjectWidth_.reset();
 		throw err;
 	}
 	gaussianBlurWidth_ = std::make_unique<PeraRender>();
-	gaussianBlurWidth_->Initialize(gaussianBlurObjectWidth_);
+	gaussianBlurWidth_->Initialize(gaussianBlurObjectWidth_.get());
 
-	gaussianBlurObjectHeight_ = new GaussianBlur{};
+	gaussianBlurObjectHeight_ = Lamb::MakeSafePtr<GaussianBlur>();
 	try {
 		gaussianBlurObjectHeight_->Init();
 	}
 	catch (const Lamb::Error& err) {
-		delete gaussianBlurObjectHeight_;
+		gaussianBlurObjectHeight_.reset();
 		throw err;
 	}
 	gaussianBlurHeight_ = std::make_unique<PeraRender>();
-	gaussianBlurHeight_->Initialize(gaussianBlurObjectHeight_);
+	gaussianBlurHeight_->Initialize(gaussianBlurObjectHeight_.get());
 
 	gaussianBlurObjectWidth_->SetGaussianState(
 		GaussianBlur::GaussianBlurState{
@@ -93,62 +81,72 @@ void Water::Init() {
 			.kernelSize = 35,
 		}
 	);
+
+	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 }
 
 void Water::Update(const Vector3& cameraPos) {
-	waterPipelineObject_->SetCameraPos(cameraPos);
-	
-	pera_->pos = pos;
-	pera_->scale = scale;
-	pera_->rotate = rotate;
-	pera_->Update();
+	waterSurface_->SetLight(
+		Light{
+			.ligDirection = Vector3{ 1.0f,-1.0f,0.0f }.Normalize(),
+			.ligColor = Vector3::kIdentity * 15.0f,
+			.eyePos = cameraPos
+		}
+	);
 
 	luminate_->Update();
 	gaussianBlurWidth_->Update();
 	gaussianBlurHeight_->Update();
+
+	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 }
 
 void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
-	pera_->PreDraw();
-	waterSurface_->Draw(
-		waterTransform_.GetMatrix(),
-		Mat4x4::kIdentity,
-		staticCamera_->GetViewOthographics(), 
-		0u,
-		color_,
-		BlendType::kUnenableDepthNone
-	);
-	waterSurface_->AllDraw();
-	pera_->Draw(cameraMat, Pipeline::None, pera, true);
+	std::vector renderTargets = {
+		&luminate_->GetRender()
+	};
 
-	pera_->PreDraw();
-	waterSurface_->Draw(
-		waterTransform_.GetMatrix(),
-		Mat4x4::kIdentity,
-		staticCamera_->GetViewOthographics(),
-		0u,
-		color_,
-		BlendType::kUnenableDepthNone
+	if (pera) {
+		renderTargets.push_back(&pera->GetRender());
+	}
+
+
+	RenderTarget::SetMainAndRenderTargets(
+		renderTargets.data(),
+		static_cast<uint32_t>(renderTargets.size())
 	);
-	waterSurface_->AllDraw();
-	pera_->Draw(cameraMat, Pipeline::None, luminate_.get());
-	luminate_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, gaussianBlurWidth_.get());
-	gaussianBlurWidth_->Draw(staticCamera_->GetViewOthographics(), Pipeline::None, gaussianBlurHeight_.get());
-	gaussianBlurHeight_->Draw(staticCamera_->GetViewOthographics(), Pipeline::Add);
+
+	waterSurface_->Draw(
+		transform.GetMatrix(),
+		cameraMat,
+		randomVec_,
+		density_,
+		color_,
+		BlendType::kNone
+	);
+	waterSurface_->AllDraw(BlendType::kNone);
+
+	Mat4x4&& staticCamera = Mat4x4::MakeTranslate(Vector3::kZIdentity * -10.0f).Inverse() * Camera::GetStaticViewOthographics();
+
+	luminate_->Draw(staticCamera, Pipeline::None, gaussianBlurWidth_.get());
+	gaussianBlurWidth_->Draw(staticCamera, Pipeline::None, gaussianBlurHeight_.get());
+	gaussianBlurHeight_->Draw(staticCamera, Pipeline::Add);
 }
 
 void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
-	waterTransform_.Debug(guiName.c_str());
 	if (ImGui::TreeNode("WaterSRT")) {
-		ImGui::DragFloat3("pos", &pos.x, 0.01f);
-		ImGui::DragFloat3("scale", &scale.x, 0.01f);
-		ImGui::DragFloat3("rotate", &rotate.x, 0.01f);
+		ImGui::DragFloat3("pos", transform.translate.data(), 0.01f);
+		ImGui::DragFloat3("scale", transform.scale.data(), 0.01f);
+		ImGui::DragFloat3("rotate", transform.rotate.data(), 0.01f);
 		ImGui::TreePop();
 	}
 	gaussianBlurObjectWidth_->Debug("gaussianBlurObjectWidth");
 	gaussianBlurObjectHeight_->Debug("gaussianBlurObjectHeight");
+
+	ImGui::DragFloat("density", &density_, 0.01f);
 
 	ImGui::End();
 #endif // _DEBUG

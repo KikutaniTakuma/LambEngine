@@ -147,7 +147,9 @@ void Pipeline::Create(
 	graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
 	// 書き込むRTVの情報
 	graphicsPipelineStateDesc.NumRenderTargets = numRenderTarget_;
-	graphicsPipelineStateDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	for (uint32_t i = 0; i < numRenderTarget_; ++i) {
+		graphicsPipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	}
 	// 利用するトポロジ(形状)のタイプ
 	graphicsPipelineStateDesc.PrimitiveTopologyType = topologyType_;
 

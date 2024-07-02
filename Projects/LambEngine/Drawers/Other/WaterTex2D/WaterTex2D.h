@@ -11,16 +11,16 @@ class WaterTex2D : public BaseDrawer {
 public:
 	static constexpr uint32_t kMaxDrawCount = 1024u;
 
-private:
 	struct ShaderData {
 		Vector2 randomVec;
 		Vector3 normal;
-		float pad = 0.0f;
 		Vector3 tangent;
 		uint32_t textureID = 0u;
+		float32_t density = 0.0_f32;
 	};
 
 	using WaterRenderContext = RenderContext<ShaderData, kMaxDrawCount>;
+private:
 
 	static const LoadFileNames kFileNames_;
 
@@ -41,8 +41,10 @@ public:
 	void Draw(
 		const Mat4x4& worldMatrix,
 		const Mat4x4& camera,
-		Vector2 randomVec, 
+		Vector2 randomVec,
+		float32_t density,
 		uint32_t color,
 		BlendType blend
 	);
+	void AllDraw(BlendType blend);
 };

@@ -20,7 +20,6 @@ PeraRender::PeraRender():
 	pos{},
 	rotate{},
 	scale{Lamb::ClientSize()},
-	isPreDraw_(false),
 	uvPibot(),
 	uvSize(Vector2::kIdentity),
 	color(std::numeric_limits<uint32_t>::max())
@@ -36,7 +35,6 @@ PeraRender::PeraRender(uint32_t width, uint32_t height):
 	pos{},
 	rotate{},
 	scale{ Vector3::kIdentity },
-	isPreDraw_(false),
 	uvPibot(),
 	uvSize(Vector2::kIdentity),
 	color(std::numeric_limits<uint32_t>::max())
@@ -127,14 +125,11 @@ void PeraRender::Initialize(PeraPipeline* pipelineObject) {
 }
 
 void PeraRender::Update() {
-	isPreDraw_ = false;
-
 	peraPipelineObject_->color = UintToVector4(color);
 }
 
 void PeraRender::PreDraw() {
 	peraPipelineObject_->GetRender().SetThisRenderTarget();
-	isPreDraw_ = true;
 }
 
 void PeraRender::Draw(
@@ -199,6 +194,16 @@ void PeraRender::ResetPipelineObject(PeraPipeline* pipelineObject) {
 	else {
 		peraPipelineObject_.reset(pipelineObject);
 	}
+}
+
+RenderTarget& PeraRender::GetRender()
+{
+	return peraPipelineObject_->GetRender();
+}
+
+const RenderTarget& PeraRender::GetRender() const
+{
+	return peraPipelineObject_->GetRender();
 }
 
 void PeraRender::Debug([[maybe_unused]]const std::string& guiName) {

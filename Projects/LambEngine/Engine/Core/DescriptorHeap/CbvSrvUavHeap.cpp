@@ -55,21 +55,17 @@ void CbvSrvUavHeap::CreateDescriptorHeap(uint32_t heapSize) {
 	heap_.SetName<CbvSrvUavHeap>();
 }
 
-void CbvSrvUavHeap::CreateHeapHandles() {
-	uint64_t incrementSRVCBVUAVHeap = static_cast<uint64_t>(DirectXDevice::GetInstance()->GetIncrementSRVCBVUAVHeap());
+void CbvSrvUavHeap::CreateHeapHandles()
+{
+	uint64_t incrementCbvSrvUavHeap = static_cast<uint64_t>(DirectXDevice::GetInstance()->GetIncrementSRVCBVUAVHeap());
 
-	// 要素分
 	heapHandles_.resize(heapSize_, { heap_->GetCPUDescriptorHandleForHeapStart(), heap_->GetGPUDescriptorHandleForHeapStart() });
-	for (uint64_t i = 0llu; i < static_cast<uint64_t>(heapSize_); i++) {
-		heapHandles_[i].first.ptr += incrementSRVCBVUAVHeap * i;
-		heapHandles_[i].second.ptr += incrementSRVCBVUAVHeap * i;
+	for (uint64_t i = 0; i < static_cast<uint64_t>(heapSize_); i++) {
+		heapHandles_[i].first.ptr += incrementCbvSrvUavHeap * i;
+		heapHandles_[i].second.ptr += incrementCbvSrvUavHeap * i;
 	}
 }
 
-void CbvSrvUavHeap::SetHeap() {
-	static auto commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	commandlist->SetDescriptorHeaps(1, heap_.GetAddressOf());
-}
 void CbvSrvUavHeap::Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex) {
 	static auto commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, handle);

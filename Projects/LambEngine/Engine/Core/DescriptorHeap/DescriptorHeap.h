@@ -95,4 +95,7 @@ protected:
 
 
 	std::vector<std::pair<D3D12_CPU_DESCRIPTOR_HANDLE, D3D12_GPU_DESCRIPTOR_HANDLE>> heapHandles_;
+
+public:
+	static void SetHeaps(size_t numHeap, ID3D12DescriptorHeap *const * descriptorHeaps);
 };
