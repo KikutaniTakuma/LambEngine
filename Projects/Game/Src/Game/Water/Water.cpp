@@ -85,9 +85,8 @@ void Water::Init() {
 
 	waveData.ripplesPoint = transform.translate;
 	waveData.waveStrength = 0.5f;
-	waveData.ripples = 0.236f;
-	waveData.waveSpeed = 0.19f;
-	waveData.lengthAttenuation = 0.09f;
+	waveData.ripples = 10.0f;
+	waveData.waveSpeed = 19.0f;
 }
 
 void Water::Update(const Vector3& cameraPos) {
@@ -147,6 +146,8 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
+	ImGui::DragFloat("density", &density_, 0.01f);
+
 	if (ImGui::TreeNode("WaterSRT")) {
 		ImGui::DragFloat3("pos", transform.translate.data(), 0.01f);
 		ImGui::DragFloat3("scale", transform.scale.data(), 0.01f);
@@ -156,15 +157,16 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	gaussianBlurObjectWidth_->Debug("gaussianBlurObjectWidth");
 	gaussianBlurObjectHeight_->Debug("gaussianBlurObjectHeight");
 
-	ImGui::DragFloat("density", &density_, 0.01f);
-	ImGui::DragInt("edgeDivision", &edgeDivision_, 0.1f, 1, 64);
-	ImGui::DragInt("insideDivision", &insideDivision_, 0.1f, 1, 64);
+	if (ImGui::TreeNode("ポリゴン分割数")) {
+		ImGui::DragInt("edgeDivision", &edgeDivision_, 0.1f, 1, 64);
+		ImGui::DragInt("insideDivision", &insideDivision_, 0.1f, 1, 64);
+		ImGui::TreePop();
+	}
 
 	if (ImGui::TreeNode("Wave")) {
 		ImGui::DragFloat("波の高さm", &waveData.waveStrength, 0.01f);
 		ImGui::DragFloat("波長", &waveData.ripples, 0.001f);
 		ImGui::DragFloat("波の速度m/s", &waveData.waveSpeed, 0.001f);
-		ImGui::DragFloat("距離減衰の強さ", &waveData.lengthAttenuation, 0.01f, 0.000001f, 100.0f);
 		ImGui::DragFloat("時間s", &waveData.time, 0.01f);
 		ImGui::DragFloat("時間減衰", &waveData.timeAttenuation, 0.01f);
 		ImGui::DragFloat3("波源", waveData.ripplesPoint.data(), 0.01f);

@@ -1,9 +1,10 @@
 #include "WaterTex2D.hlsli"
 #include "../PerlinNoise.hlsli"
+#include "../Normal.hlsli"
 
 PixelShaderOutPut2 main(WaterTex2DGeometoryShaderOutPut waterinput)
 {
-    VertexShaderOutput input = waterinput.outputData;
+    GeometoryOutPut input = waterinput.outputData;
 
 	PixelShaderOutPut2 output;
 
@@ -16,13 +17,22 @@ PixelShaderOutPut2 main(WaterTex2DGeometoryShaderOutPut waterinput)
     
     float32_t4 causticsColor = textures[textureID].Sample(smp, waterinput.causticsUv + frac(CreateNoiseNoDdy(waterinput.causticsUv * 0.1f, kRandomVec, kDensity)));
     
-    float32_t3 normal = CreateNormal(input.uv, kRandomVec, kDensity);
+    float32_t3 perlinNormal = CreateNormal(input.uv, kRandomVec, kDensity);
+    //float32_t3 normal = input.normal;
+    //float32_t3 tangent = NormalToTangent(normal);
+    //float32_t3 binormal = CalcBinormal(normal, tangent);
+    //float32_t3 blendNormal = BlendNormal(normal, tangent, binormal, perlinNormal);
+    
+    //float32_t3 blendNormal = input.normal;
+    
+    float32_t3 blendNormal = perlinNormal;
+
 
     float32_t3 ligDirection = kLight.ligDirection;
     ligDirection = mul(ligDirection, waterinput.tangentBasis);
     
     // ディレクションライト拡散反射光
-    float32_t t = dot(normal, -ligDirection);
+    float32_t t = dot(blendNormal, -normalize(ligDirection));
     t = saturate(t);
 
     float32_t3 diffDirection = kLight.ligColor * t;
@@ -32,12 +42,12 @@ PixelShaderOutPut2 main(WaterTex2DGeometoryShaderOutPut waterinput)
     toEye = mul(toEye, waterinput.tangentBasis);
     toEye = normalize(toEye);
     
-    float32_t3 refVec = -reflect(toEye, normal);
+    float32_t3 refVec = -reflect(toEye, blendNormal);
     refVec = normalize(refVec);
 
     t = dot(refVec, toEye);
 
-    t = pow(saturate(t), 128.0f);
+    t = pow(saturate(t), 32.0f);
     float32_t3 specDirection = kLight.ligColor * t;
     
     float32_t3 lig = diffDirection + specDirection;

@@ -1,3 +1,4 @@
+#include "../Normal.hlsli"
 #include "WaterTex2D.hlsli"
 #define M_PI 3.141592653589793238462643
 #define M_E 2.71828182846
@@ -7,13 +8,13 @@
 static float32_t radBasis = 0.5f;
 
 float32_t Waves(float32_t length, uint32_t instanceID){
-	float32_t A = kWaterData[instanceID].waveData.waveStrength;
-	float32_t k = 2.0f * M_PI * rcp(kWaterData[instanceID].waveData.ripples);
-	float32_t v = kWaterData[instanceID].waveData.waveSpeed;
+	float32_t maxHeight = kWaterData[instanceID].waveData.waveStrength;
+	float32_t waveLength = 2.0f * M_PI * rcp(kWaterData[instanceID].waveData.ripples);
+	float32_t waveSpeed = kWaterData[instanceID].waveData.waveSpeed;
 	float32_t time = kWaterData[instanceID].waveData.time;
-	 float32_t timeAttenuation = kWaterData[instanceID].waveData.timeAttenuation;
-	//* pow(M_E, -time)
-	return A * pow(M_E, -time * timeAttenuation) * sin(k * (length - v * time)) * rcp(max(length, kWaterData[instanceID].waveData.lengthAttenuation));
+	float32_t timeAttenuation = kWaterData[instanceID].waveData.timeAttenuation;
+
+	return maxHeight * pow(M_E, -time * timeAttenuation) * sin(waveLength * (length - waveSpeed * time));
 }
 
 float32_t3 CalcNormal(float32_t3 position, float32_t delta, uint32_t instanceID){
@@ -27,10 +28,10 @@ float32_t3 CalcNormal(float32_t3 position, float32_t delta, uint32_t instanceID)
 	float32_t3 leftPos = position;
 	leftPos.x -= delta;
 
-	float32_t upLength = length(upPos - ripplesPoint)* 0.01f;
-	float32_t bottomLength = length(bottomPos - ripplesPoint)* 0.01f;
-	float32_t rightLength = length(rightPos - ripplesPoint)* 0.01f;
-	float32_t leftLength = length(leftPos - ripplesPoint)* 0.01f;
+	float32_t upLength = length(upPos - ripplesPoint);
+	float32_t bottomLength = length(bottomPos - ripplesPoint);
+	float32_t rightLength = length(rightPos - ripplesPoint);
+	float32_t leftLength = length(leftPos - ripplesPoint);
 
 	float32_t up = Waves(upLength, instanceID);
 	float32_t bottom = Waves(bottomLength, instanceID);
@@ -43,17 +44,6 @@ float32_t3 CalcNormal(float32_t3 position, float32_t delta, uint32_t instanceID)
 	float32_t3 normal = normalize(float32_t3(-dx, -dy, 1.0));
 
 	return normal;
-}
-
-float32_t3 CalcTangent(float32_t3 normal)
-{
-    float32_t3 tangent;
-
-    float32_t3 a = abs(normal.x) < 0.999f ? float32_t3(1, 0, 0) : float32_t3(0, 1, 0);
-
-    tangent = normalize(cross(a, normal));
-
-    return tangent;
 }
 
 [maxvertexcount(3)]
@@ -70,11 +60,14 @@ void main(
 		// ワールドポジション計算
     	output[i].outputData.position = input[i].outputData.position;
 		output[i].outputData.worldPosition = mul(output[i].outputData.position, kWvpMat[instanceID].worldMat);
-		output[i].outputData.normal = CalcNormal(output[i].outputData.worldPosition.xyz, 0.0001f, instanceID);
+		float32_t3 ripplesNormal = CalcNormal(output[i].outputData.worldPosition.xyz, 0.001f, instanceID);
+		float32_t3 tangent = NormalToTangent(input[i].outputData.normal);
+		float32_t3 binormal = CalcBinormal(input[i].outputData.normal, tangent);
+		output[i].outputData.normal = BlendNormal(input[i].outputData.normal, tangent, binormal, ripplesNormal);
 		
 		// 波紋からの長さ
 		float32_t ripplesPointToPos = length(output[i].outputData.worldPosition.xyz - ripplesPoint);
-		float32_t height = Waves(ripplesPointToPos * 0.01f, instanceID);
+		float32_t height = Waves(ripplesPointToPos, instanceID);
 		output[i].outputData.worldPosition.y += height;
 
 		
@@ -84,8 +77,8 @@ void main(
 		output[i].outputData.textureID = input[i].outputData.textureID;
 		output[i].outputData.instanceID = input[i].outputData.instanceID;
 
-		float32_t3 N = normalize(mul(output[i].outputData.normal, (float32_t3x3) kWvpMat[instanceID].worldMat));
-    	float32_t3 T = normalize(mul(CalcTangent(output[i].outputData.normal), (float32_t3x3) kWvpMat[instanceID].worldMat));
+		float32_t3 N = normalize(mul(input[i].outputData.normal, (float32_t3x3) kWvpMat[instanceID].worldMat));
+    	float32_t3 T = normalize(mul(NormalToTangent(input[i].outputData.normal), (float32_t3x3) kWvpMat[instanceID].worldMat));
     	float32_t3 B = normalize(cross(N, T));
 
 		/*float32_t3 N = normalize(mul(kWaterData[instanceID].normal, (float32_t3x3) kWvpMat[instanceID].worldMat));
