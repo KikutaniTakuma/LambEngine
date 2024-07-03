@@ -1,8 +1,7 @@
 #include "Utils/Random.h"
 
 namespace Lamb {
-	std::random_device seed;
-	std::mt19937_64 rnd(seed());
+	RandomGenereator* const generator = RandomGenereator::GetInstance();
 
 	float Random(float min, float max) {
 		if (max < min) {
@@ -10,7 +9,7 @@ namespace Lamb {
 		}
 		std::uniform_real_distribution<float> dist{ min, max };
 
-		return static_cast<float>(dist(rnd));
+		return static_cast<float>(dist(generator->GetGenerator()));
 	}
 
 	double Random(double min, double max) {
@@ -19,7 +18,7 @@ namespace Lamb {
 		}
 		std::uniform_real_distribution<double> dist{ min, max };
 
-		return static_cast<double>(dist(rnd));
+		return static_cast<double>(dist(generator->GetGenerator()));
 	}
 
 
@@ -51,5 +50,23 @@ namespace Lamb {
 		result.vec.w = Random(min.vec.w, max.vec.w);
 
 		return result;
+	}
+	RandomGenereator::RandomGenereator() :  
+		generator_()
+	{
+		generator_ = std::make_unique<std::mt19937_64>(seed_);
+	}
+	RandomGenereator* const RandomGenereator::GetInstance()
+	{
+		static RandomGenereator instance;
+		return &instance;
+	}
+	uint32_t RandomGenereator::GetSeed() const
+	{
+		return seed_;
+	}
+	std::mt19937_64& RandomGenereator::GetGenerator()
+	{
+		return *generator_;
 	}
 }

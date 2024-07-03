@@ -2,13 +2,37 @@
 
 #include <random>
 #include <algorithm>
+#include <memory>
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Math/Vector4.h"
 
 namespace Lamb {
-	extern std::random_device seed;
-	extern std::mt19937_64 rnd;
+
+	class RandomGenereator {
+	private:
+		RandomGenereator();
+		~RandomGenereator() = default;
+		RandomGenereator(const RandomGenereator&) = delete;
+		RandomGenereator(RandomGenereator&&) = delete;
+
+		RandomGenereator& operator=(const RandomGenereator&) = delete;
+		RandomGenereator& operator=(RandomGenereator&&) = delete;
+
+	public:
+		static RandomGenereator* const GetInstance();
+
+	public:
+		uint32_t GetSeed() const;
+
+		std::mt19937_64& GetGenerator();
+
+	private:
+		const uint32_t seed_ = std::random_device()();
+		std::unique_ptr<std::mt19937_64> generator_;
+	};
+
+	extern RandomGenereator* const generator;
 
 	/// <summary>
 	/// 整数型のランダム関数
@@ -25,7 +49,7 @@ namespace Lamb {
 
 		std::uniform_int_distribution<T> dist{ min, max };
 
-		return static_cast<T>(dist(rnd));
+		return static_cast<T>(dist(generator->GetGenerator()));
 	}
 
 	/// <summary>
