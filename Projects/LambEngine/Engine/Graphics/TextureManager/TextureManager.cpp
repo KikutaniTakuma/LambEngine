@@ -58,7 +58,7 @@ void TextureManager::LoadTexture(const std::string& fileName) {
 			throw Lamb::Error::Code<TextureManager>("Texture::Load failed -> " + fileName, ErrorPlace);
 		}
 
-		srvHeap_->CreateView(*tex);
+		srvHeap_->CreateView(tex->GetIsCubemap() ? *(tex->GetBaseClassPtr()) : *tex);
 
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 

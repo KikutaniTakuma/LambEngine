@@ -57,6 +57,8 @@ void TitleScene::Initialize()
 
 	skybox_ = std::make_unique<SkyBox>();
 	skybox_->Load("./Resources/Common/SkyBox/rostock_laage_airport_4k.dds");
+
+	transform_.scale *= 500.0f;
 }
 
 void TitleScene::Finalize()
@@ -85,11 +87,13 @@ void TitleScene::Update()
 	startMessage_.color = static_cast<uint32_t>(255.0f * std::abs(std::cos(messageAlpah_)));
 
 	transform_.Debug("skybox");
+	transform_.translate = currentCamera_->GetPos();
+
 }
 
 void TitleScene::Draw()
 {
-	//skybox_->Draw(transform_.GetMatrix(), currentCamera_->GetViewProjection(), 0xffffffff);
+	skybox_->Draw(transform_.GetMatrix(), currentCamera_->GetViewProjection(), 0xffffffff);
 	/*cloud_->Draw();
 	skydome_->Draw(*currentCamera_);*/
 
