@@ -37,8 +37,6 @@ void Water::Init() {
 	waterSurface_ = std::make_unique<WaterTex2D>();
 	waterSurface_->Load();
 
-	transform.scale = Lamb::ClientSize();
-	transform.translate.z += 100.0f;
 	color_ = Vector4{ 0.1f, 0.25f, 0.5f, 1.0f }.GetColorRGBA();
 
 	luminate_ = std::make_unique<PeraRender>();
@@ -71,18 +69,24 @@ void Water::Init() {
 		GaussianBlur::GaussianBlurState{
 			.dir = Vector2(1.0f, 0.0f),
 			.sigma = 10.0f,
-			.kernelSize = 35,
+			.kernelSize = 8,
 		}
 	);
 	gaussianBlurObjectHeight_->SetGaussianState(
 		GaussianBlur::GaussianBlurState{
 			.dir = Vector2(0.0f, 1.0f),
 			.sigma = 10.0f,
-			.kernelSize = 35,
+			.kernelSize = 8,
 		}
 	);
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
+
+	waveData.ripplesPoint = transform.translate;
+	waveData.waveStrength = 0.17f;
+	waveData.ripples = 10.0f;
+	waveData.waveSpeed = 10.0f;
+	waveData.timeAttenuation = 0.0f;
 }
 
 void Water::Update(const Vector3& cameraPos) {
@@ -100,6 +104,8 @@ void Water::Update(const Vector3& cameraPos) {
 
 	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+
+	waveData.time += Lamb::DeltaTime();
 }
 
 void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
@@ -122,6 +128,9 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 		cameraMat,
 		randomVec_,
 		density_,
+		edgeDivision_,
+		insideDivision_,
+		waveData,
 		color_,
 		BlendType::kNone
 	);
@@ -137,6 +146,8 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
+	ImGui::DragFloat("density", &density_, 0.01f);
+
 	if (ImGui::TreeNode("WaterSRT")) {
 		ImGui::DragFloat3("pos", transform.translate.data(), 0.01f);
 		ImGui::DragFloat3("scale", transform.scale.data(), 0.01f);
@@ -146,7 +157,22 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	gaussianBlurObjectWidth_->Debug("gaussianBlurObjectWidth");
 	gaussianBlurObjectHeight_->Debug("gaussianBlurObjectHeight");
 
-	ImGui::DragFloat("density", &density_, 0.01f);
+	if (ImGui::TreeNode("ポリゴン分割数")) {
+		ImGui::DragInt("edgeDivision", &edgeDivision_, 0.1f, 1, 64);
+		ImGui::DragInt("insideDivision", &insideDivision_, 0.1f, 1, 64);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Wave")) {
+		ImGui::DragFloat("波の高さm", &waveData.waveStrength, 0.01f);
+		ImGui::DragFloat("波長", &waveData.ripples, 0.001f);
+		ImGui::DragFloat("波の速度m/s", &waveData.waveSpeed, 0.001f);
+		ImGui::DragFloat("時間s", &waveData.time, 0.01f);
+		ImGui::DragFloat("時間減衰", &waveData.timeAttenuation, 0.01f);
+		ImGui::DragFloat3("波源", waveData.ripplesPoint.data(), 0.01f);
+
+		ImGui::TreePop();
+	}
 
 	ImGui::End();
 #endif // _DEBUG

@@ -14,9 +14,12 @@ uint32_t WaterTex2D::kCausticsTextureID_ = 0u;
 const LoadFileNames WaterTex2D::kFileNames_ =
 LoadFileNames{
 	.resourceFileName{"./Resources/EngineResources/Texture2D/Texture2D.obj"},
-	.shaderName{
+	.shaderName = ShaderFileNames{
 		.vsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.VS.hlsl",
-		.psFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl"
+		.psFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl",
+		.gsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.GS.hlsl",
+		.dsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.DS.hlsl",
+		.hsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.HS.hlsl",
 	}
 };
 
@@ -43,6 +46,9 @@ void WaterTex2D::Draw(
 	const Mat4x4& camera,
 	Vector2 randomVec,
 	float32_t density,
+	uint32_t edgeDivision,
+	uint32_t insideDivision,
+	WaveData waveData,
 	uint32_t color,
 	BlendType blend
 ) {
@@ -54,7 +60,10 @@ void WaterTex2D::Draw(
 			.normal  = Vector3(0.0f,1.0f,0.0f),
 			.tangent = Vector3(0.0f,0.0f,1.0f),
 			.textureID = kCausticsTextureID_,
-			.density = density
+			.density = density,
+			.edgeDivision = std::clamp(edgeDivision, 1u, 64u),
+			.insideDivision = std::clamp(insideDivision, 1u, 64u),
+			.waveData = waveData
 		}
 	);
 
