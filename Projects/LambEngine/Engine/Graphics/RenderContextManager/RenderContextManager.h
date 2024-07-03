@@ -110,6 +110,7 @@ private:
 
 	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateGraphicsPipelines(Shader shader, uint32_t numRenderTarget = 1);
 	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateSkinAnimationGraphicsPipelines(Shader shader, uint32_t numRenderTarget = 1);
+	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateEnvironmentGraphicsPipelines(Shader shader, uint32_t numRenderTarget = 1);
 
 
 private:

@@ -329,6 +329,131 @@ private:
     SkinCluster* skinCluster_;
 };
 
+template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
+class EnvironmentRenderContext : public BaseRenderContext {
+public:
+    EnvironmentRenderContext() :
+        shaderData_()
+    {
+        shaderData_.wvpMatrix.Create(bufferSize);
+        shaderData_.color.Create(bufferSize);
+        shaderData_.shaderStruct.Create(bufferSize);
+
+
+        pipeline_ = nullptr;
+        drawCount_ = 0u;
+
+        // ディスクリプタヒープ
+        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+
+        descriptorHeap->BookingHeapPos(4);
+        descriptorHeap->CreateView(shaderData_.light);
+        descriptorHeap->CreateView(shaderData_.wvpMatrix);
+        descriptorHeap->CreateView(shaderData_.color);
+        descriptorHeap->CreateView(shaderData_.shaderStruct);
+
+        typeID_ = (typeid(EnvironmentRenderContext<T, bufferSize>).name());
+    }
+    ~EnvironmentRenderContext() {
+        // ディスクリプタヒープ
+        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+
+        descriptorHeap->ReleaseView(shaderData_.light.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.wvpMatrix.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.color.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.shaderStruct.GetHandleUINT());
+    }
+
+    EnvironmentRenderContext(const EnvironmentRenderContext&) = delete;
+    EnvironmentRenderContext(EnvironmentRenderContext&&) = delete;
+
+    EnvironmentRenderContext& operator=(const EnvironmentRenderContext&) = delete;
+    EnvironmentRenderContext& operator=(EnvironmentRenderContext&&) = delete;
+
+public:
+    void Draw() override {
+        // ディスクリプタヒープ
+        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+        // コマンドリスト
+        ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+        // パイプライン設定
+        pipeline_->Use();
+
+        // ライト構造体
+        commandlist->SetGraphicsRootDescriptorTable(0, shaderData_.light.GetHandleGPU());
+        // ワールドとカメラマトリックス, 色, 各シェーダーの構造体
+        commandlist->SetGraphicsRootDescriptorTable(1, shaderData_.wvpMatrix.GetHandleGPU());
+        // テクスチャ
+        commandlist->SetGraphicsRootDescriptorTable(2, environmentTex_->GetHandleGPU());
+
+        commandlist->SetGraphicsRootDescriptorTable(3, descriptorHeap->GetGpuHeapHandle(0));
+
+
+        // 頂点バッファセット
+        commandlist->IASetVertexBuffers(0, 1, &mesh_->vertexView);
+        // インデックスバッファセット
+        commandlist->IASetIndexBuffer(&mesh_->indexView);
+        // ドローコール
+        commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, 0);
+        //commandlist->DrawInstanced(mesh_->vertexNumber, drawCount_, 0, 0);
+    }
+
+public:
+    inline void SetMesh(const Mesh* const mesh) override {
+        if (!mesh) {
+            throw Lamb::Error::Code<EnvironmentRenderContext>("mesh is nullptr", ErrorPlace);
+        }
+        mesh_ = mesh;
+    }
+    inline void SetModelData(const ModelData* const modelData) override {
+        if (!modelData) {
+            throw Lamb::Error::Code<EnvironmentRenderContext>("modelData is nullptr", ErrorPlace);
+        }
+        modelData_ = modelData;
+    }
+    inline void SetPipeline(Pipeline* const pipeline) override {
+        if (!pipeline) {
+            throw Lamb::Error::Code<EnvironmentRenderContext>("pipeline is nullptr", ErrorPlace);
+        }
+        pipeline_ = pipeline;
+    }
+    inline void SetWVPMatrix(const WVPMatrix& matrix) override {
+        if (bufferSize <= drawCount_) {
+            throw Lamb::Error::Code<EnvironmentRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
+        }
+
+        shaderData_.wvpMatrix[drawCount_].worldMat = mesh_->node.loacalMatrix * matrix.worldMat;
+        shaderData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
+    }
+    inline void SetColor(const Vector4& color) override {
+        if (bufferSize <= drawCount_) {
+            throw Lamb::Error::Code<EnvironmentRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
+        }
+
+        shaderData_.color[drawCount_] = color;
+    }
+    inline void SetLight(const Light& light) override {
+        *shaderData_.light = light;
+    }
+    inline void SetShaderStruct(const T& data) {
+        if (bufferSize <= drawCount_) {
+            throw Lamb::Error::Code<EnvironmentRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
+        }
+        shaderData_.shaderStruct[drawCount_] = data;
+    }
+
+    inline void SetTexture(Texture* tex) {
+        environmentTex_ = tex;
+    }
+
+
+private:
+    ShaderData<T> shaderData_;
+
+    Texture* environmentTex_;
+};
+
 template<class T>
 concept IsBasedRenderContext =  std::is_base_of_v<BaseRenderContext, T>;
 

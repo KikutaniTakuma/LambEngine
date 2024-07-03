@@ -93,7 +93,7 @@ void Water::Update(const Vector3& cameraPos) {
 	waterSurface_->SetLight(
 		Light{
 			.ligDirection = Vector3{ 1.0f,-1.0f,0.0f }.Normalize(),
-			.ligColor = Vector3::kIdentity * 15.0f,
+			.ligColor = Vector3::kIdentity * 10.0f,
 			.eyePos = cameraPos
 		}
 	);
