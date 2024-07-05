@@ -26,9 +26,10 @@ void PipelineManager::Finalize() {
 	Lamb::AddLog("Finalize PipelineManager succeeded");
 }
 
-void PipelineManager::CreateRootSgnature(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture, bool isOutRangeBorder) {
-	auto IsSame = [&rootParamater, &rootParamaterSize, &isTexture,&isOutRangeBorder](const std::unique_ptr<RootSignature>& rootSignature_) {
-		return rootSignature_->IsSame(rootParamater, rootParamaterSize, isTexture, isOutRangeBorder);
+void PipelineManager::CreateRootSgnature(const RootSignature::Desc& desc, bool isTexture)
+{
+	auto IsSame = [&desc, &isTexture](const std::unique_ptr<RootSignature>& rootSignature_) {
+		return rootSignature_->IsSame(desc, isTexture);
 		};
 
 	auto rootSignatureItr = std::find_if(instance_->rootSignatures_.begin(), instance_->rootSignatures_.end(), IsSame);
@@ -36,7 +37,7 @@ void PipelineManager::CreateRootSgnature(D3D12_ROOT_PARAMETER* rootParamater, si
 	if (rootSignatureItr == instance_->rootSignatures_.end()) {
 		auto rootSignature = std::make_unique<RootSignature>();
 
-		rootSignature->Create(rootParamater, rootParamaterSize, isTexture, isOutRangeBorder);
+		rootSignature->Create(desc, isTexture);
 
 		instance_->rootSignature_ = rootSignature.get();
 

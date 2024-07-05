@@ -152,7 +152,7 @@ void DirectXCommand::CrateFence() {
 	Lamb::AddLog(std::string{ __func__ } + " succeeded");
 }
 
-void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {
+void DirectXCommand::Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {
 	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	// TransitionBarrierの設定
@@ -169,6 +169,22 @@ void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOU
 	barrier.Transition.StateBefore = before;
 	// 遷移後のResouceState
 	barrier.Transition.StateAfter = after;
+	// TransitionBarrierを張る
+	commandList->ResourceBarrier(1, &barrier);
+}
+
+void DirectXCommand::BarrierUAV(ID3D12Resource* resource)
+{
+	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+	// TransitionBarrierの設定
+	D3D12_RESOURCE_BARRIER barrier{};
+	// 今回のバリアはTransition
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_UAV;
+	// Noneにしておく
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	// バリアを張る対象のリソース
+	barrier.Transition.pResource = resource;
 	// TransitionBarrierを張る
 	commandList->ResourceBarrier(1, &barrier);
 }

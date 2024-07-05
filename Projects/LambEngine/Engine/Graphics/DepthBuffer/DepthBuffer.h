@@ -9,6 +9,12 @@
 
 class DepthBuffer final : public Descriptor{
 public:
+	enum class State {
+		kDepth,
+		kTexture
+	};
+
+public:
 	DepthBuffer();
 	DepthBuffer(const class Vector2& bufSize);
 	DepthBuffer(const DepthBuffer&) = delete;
@@ -29,6 +35,12 @@ public:
 	D3D12_CPU_DESCRIPTOR_HANDLE GetDepthHandle() const;
 	class Texture* const GetTex() const;
 
+	void Barrier();
+
+	DepthBuffer::State GetCurrentState() const {
+		return currentState_;
+	}
+
 private:
 	std::unique_ptr<class Texture> tex_;
 
@@ -37,4 +49,6 @@ private:
 
 	D3D12_CPU_DESCRIPTOR_HANDLE handle_;
 	uint32_t hadleUINT_;
+
+	State currentState_ = State::kDepth;
 };

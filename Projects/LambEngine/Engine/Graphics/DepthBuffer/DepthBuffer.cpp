@@ -1,5 +1,6 @@
 #include "DepthBuffer.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Utils/EngineInfo.h"
 #include "Engine/Graphics/TextureManager/Texture/Texture.h"
 #include "Utils/ExecutionLog.h"
@@ -115,4 +116,29 @@ D3D12_CPU_DESCRIPTOR_HANDLE DepthBuffer::GetDepthHandle() const {
 }
 Texture* const DepthBuffer::GetTex() const {
 	return tex_.get();
+}
+
+void DepthBuffer::Barrier()
+{
+	switch (currentState_)
+	{
+	case DepthBuffer::State::kDepth:
+		DirectXCommand::Barrier(
+			depthStencilResource_.Get(),
+			D3D12_RESOURCE_STATE_DEPTH_WRITE,
+			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
+			);
+		currentState_ = DepthBuffer::State::kTexture;
+		break;
+	case DepthBuffer::State::kTexture:
+		DirectXCommand::Barrier(
+			depthStencilResource_.Get(),
+			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+			D3D12_RESOURCE_STATE_DEPTH_WRITE
+		);
+		currentState_ = DepthBuffer::State::kDepth;
+		break;
+	default:
+		break;
+	}
 }

@@ -95,7 +95,7 @@ uint32_t CbvSrvUavHeap::CreateView(Descriptor& buffer) {
 	}
 }
 
-uint32_t CbvSrvUavHeap::CreateView(Texture& tex)
+uint32_t CbvSrvUavHeap::CreateTextureView(Descriptor& tex)
 {
 	if (kMaxTextureHadle_ <= currentTextureHeapIndex_) {
 		throw Lamb::Error::Code<CbvSrvUavHeap>("Over Heap Size", ErrorPlace);

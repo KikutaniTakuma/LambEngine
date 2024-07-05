@@ -62,7 +62,7 @@ void TextureManager::LoadTexture(const std::string& fileName) {
 			srvHeap_->CreateView(*(tex->GetBaseClassPtr()));
 		}
 		else {
-			srvHeap_->CreateView(*tex);
+			srvHeap_->CreateTextureView(*tex);
 		}
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 

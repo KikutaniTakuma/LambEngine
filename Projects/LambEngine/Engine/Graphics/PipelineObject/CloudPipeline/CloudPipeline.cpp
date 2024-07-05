@@ -114,18 +114,25 @@ void CloudPipeline::Init(
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 2> roootParamater = {};
-	roootParamater[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	roootParamater[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	roootParamater[0].DescriptorTable.pDescriptorRanges = renderRange.data();
-	roootParamater[0].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(renderRange.size());
+	std::array<D3D12_ROOT_PARAMETER, 2> rootParameter = {};
+	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[0].DescriptorTable.pDescriptorRanges = renderRange.data();
+	rootParameter[0].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(renderRange.size());
 
-	roootParamater[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	roootParamater[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	roootParamater[1].DescriptorTable.pDescriptorRanges = cbvRange.data();
-	roootParamater[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
+	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[1].DescriptorTable.pDescriptorRanges = cbvRange.data();
+	rootParameter[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
 
-	PipelineManager::CreateRootSgnature(roootParamater.data(), roootParamater.size(), true);
+	RootSignature::Desc desc;
+	desc.rootParameter = rootParameter.data();
+	desc.rootParameterSize = rootParameter.size();
+	desc.samplerDeacs.push_back(
+		CreateBorderLessSampler()
+	);
+
+	PipelineManager::CreateRootSgnature(desc, true);
 
 	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT);
 	PipelineManager::SetVertexInput("TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT);

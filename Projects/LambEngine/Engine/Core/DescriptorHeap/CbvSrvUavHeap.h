@@ -55,7 +55,7 @@ public:
 	/// </summary>
 	/// <param name="tex">テクスチャ</param>
 	/// <returns>作ったヒープハンドル</returns>
-	uint32_t CreateView(class Texture& tex);
+	uint32_t CreateTextureView(class Descriptor& tex);
 
 	/// <summary>
 	/// TextureのViewを解放済みにする

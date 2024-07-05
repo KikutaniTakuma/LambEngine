@@ -8,7 +8,7 @@
 RootSignature::RootSignature():
 	rootSignature_{},
 	isTexture_(false),
-	isOutRangeBorder_(false)
+	desc_()
 {
 	rootParamater_ = {};
 }
@@ -42,27 +42,29 @@ bool RootSignature::operator==(const RootSignature& right) const {
 			return false;
 		}
 	}
-	return  isTexture_ == right.isTexture_ && isOutRangeBorder_ == right.isOutRangeBorder_;
+	return  isTexture_ == right.isTexture_ && desc_ == right.desc_;
 }
 bool RootSignature::operator!=(const RootSignature& right) const {
 	return !(*this == right);
 }
 
-void RootSignature::Create(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture, bool isOutRangeBorder) {
+void RootSignature::Create(const Desc& desc, bool isTexture) {
+	desc_ = desc;
+
 	// RootSignatureの生成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 	rootParamater_.clear();
-	rootParamater_.reserve(rootParamaterSize);
-	for (size_t i = 0; i < rootParamaterSize; i++) {
+	rootParamater_.reserve(desc_.rootParameterSize);
+	for (size_t i = 0; i < desc_.rootParameterSize; i++) {
 		std::vector<D3D12_DESCRIPTOR_RANGE> ranges = {};
-		if (rootParamater[i].ParameterType == D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE) {
-			for (uint32_t j = 0; j < rootParamater[i].DescriptorTable.NumDescriptorRanges;j++) {
-				ranges.push_back(rootParamater[i].DescriptorTable.pDescriptorRanges[j]);
+		if (desc_.rootParameter[i].ParameterType == D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE) {
+			for (uint32_t j = 0; j < desc_.rootParameter[i].DescriptorTable.NumDescriptorRanges;j++) {
+				ranges.push_back(desc_.rootParameter[i].DescriptorTable.pDescriptorRanges[j]);
 			}
 		}
-		rootParamater_.push_back({ rootParamater[i], ranges });
+		rootParamater_.push_back({ desc_.rootParameter[i], ranges });
 	}
 
 	std::vector<D3D12_ROOT_PARAMETER> params = {};
@@ -79,33 +81,9 @@ void RootSignature::Create(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParam
 	descriptionRootSignature.NumParameters = static_cast<UINT>(params.size());
 
 	isTexture_ = isTexture;
-	isOutRangeBorder_ = isOutRangeBorder;
 
-	D3D12_STATIC_SAMPLER_DESC staticSamplers{};
-	if (isOutRangeBorder_) {
-		staticSamplers.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
-		staticSamplers.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-		staticSamplers.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-		staticSamplers.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
-		staticSamplers.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-		staticSamplers.MaxLOD = D3D12_FLOAT32_MAX;
-		staticSamplers.ShaderRegister = 0;
-		staticSamplers.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-		staticSamplers.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
-	}
-	else {
-		staticSamplers.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-		staticSamplers.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSamplers.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSamplers.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-		staticSamplers.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-		staticSamplers.MaxLOD = D3D12_FLOAT32_MAX;
-		staticSamplers.ShaderRegister = 0;
-		staticSamplers.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	}
-
-	descriptionRootSignature.pStaticSamplers = isTexture_ ? &staticSamplers : nullptr;
-	descriptionRootSignature.NumStaticSamplers = isTexture_ ? 1u : 0u;
+	descriptionRootSignature.pStaticSamplers = isTexture_ ? desc_.samplerDeacs.data() : nullptr;
+	descriptionRootSignature.NumStaticSamplers = UINT(isTexture_ ? desc_.samplerDeacs.size() : 0llu);
 
 	// シリアライズしてバイナリにする
 	Lamb::LambPtr<ID3DBlob> signatureBlob;
@@ -124,6 +102,72 @@ void RootSignature::Create(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParam
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<RootSignature>("CreateRootSignature failed", ErrorPlace);
 	}
+}
+
+D3D12_STATIC_SAMPLER_DESC CreateLinearSampler(uint32_t shaderRegister)
+{
+	D3D12_STATIC_SAMPLER_DESC staticSampler{};
+
+	staticSampler.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	staticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	staticSampler.MaxLOD = D3D12_FLOAT32_MAX;
+	staticSampler.ShaderRegister = shaderRegister;
+	staticSampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	return staticSampler;
+}
+
+D3D12_STATIC_SAMPLER_DESC CreateBorderLessSampler(uint32_t shaderRegister)
+{
+	D3D12_STATIC_SAMPLER_DESC staticSampler{};
+
+	staticSampler.Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+	staticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	staticSampler.MaxLOD = D3D12_FLOAT32_MAX;
+	staticSampler.ShaderRegister = shaderRegister;
+	staticSampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	staticSampler.BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+
+	return staticSampler;
+}
+
+D3D12_STATIC_SAMPLER_DESC CreatePointSampler(uint32_t shaderRegister)
+{
+	D3D12_STATIC_SAMPLER_DESC staticSampler{};
+
+	staticSampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+	staticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	staticSampler.MaxLOD = D3D12_FLOAT32_MAX;
+	staticSampler.ShaderRegister = shaderRegister;
+	staticSampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	return staticSampler;
+}
+
+bool operator==(const D3D12_STATIC_SAMPLER_DESC& left, const D3D12_STATIC_SAMPLER_DESC& right) {
+	return left.Filter == right.Filter
+		and left.AddressU == right.AddressU
+		and left.AddressV == right.AddressV
+		and left.AddressW == right.AddressW
+		and left.ComparisonFunc == right.ComparisonFunc
+		and left.MaxLOD == right.MaxLOD
+		and left.MinLOD == right.MaxLOD
+		and left.ShaderRegister == right.ShaderRegister
+		and left.RegisterSpace== right.RegisterSpace
+		and left.ShaderVisibility == right.ShaderVisibility
+		and left.BorderColor == right.BorderColor
+		and left.MaxAnisotropy == right.MaxAnisotropy
+		and left.MipLODBias == right.MipLODBias
+		;
 }
 
 bool operator==(const D3D12_ROOT_PARAMETER& left, const D3D12_ROOT_PARAMETER& right) {
@@ -170,14 +214,19 @@ bool operator!=(const D3D12_ROOT_PARAMETER& left, const D3D12_ROOT_PARAMETER& ri
 	return !(left == right);
 }
 
-bool RootSignature::IsSame(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture, bool isOutRangeBorder) const {
-	if (rootParamater_.size() != rootParamaterSize) {
+bool RootSignature::IsSame(const Desc& desc, bool isTexture) const {
+	return isTexture_ == isTexture && desc_ == desc;
+}
+
+bool RootSignature::Desc::operator==(const Desc& right) const
+{
+	if (this->rootParameterSize != right.rootParameterSize) {
 		return false;
 	}
-	for (size_t i = 0; i < rootParamater_.size();i++) {
-		if (rootParamater_[i].first != rootParamater[i]) {
+	for (size_t i = 0; i < this->rootParameterSize; i++) {
+		if (rootParameter[i] != right.rootParameter[i]) {
 			return false;
 		}
 	}
-	return isTexture_ == isTexture && isOutRangeBorder_ == isOutRangeBorder;
+	return samplerDeacs == right.samplerDeacs;
 }

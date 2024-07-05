@@ -1,5 +1,6 @@
 #pragma once
 #include "Pipeline/Pipeline.h"
+#include "../RootSignature/RootSignature.h"
 #include "Utils/SafePtr.h"
 #include <list>
 #include <vector>
@@ -40,7 +41,7 @@ public:
 	/// </summary>
 	/// <param name="rootParamater_">ルートパラメータ</param>
 	/// <param name="isTexture_">テクスチャを使う場合はtrue</param>
-	static void CreateRootSgnature(D3D12_ROOT_PARAMETER* rootParamater, size_t rootParamaterSize, bool isTexture, bool isOutRangeBorder = false);
+	static void CreateRootSgnature(const RootSignature::Desc& desc, bool isTexture);
 
 	static void SetRootSgnature(RootSignature* rootSignature);
 

@@ -131,8 +131,15 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 	rootPrams[2].DescriptorTable.pDescriptorRanges = texRange.data();
 	rootPrams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
+	RootSignature::Desc desc;
+	desc.rootParameter = rootPrams.data();
+	desc.rootParameterSize = rootPrams.size();
+	desc.samplerDeacs.push_back(
+		CreateLinearSampler()
+	);
 
-	PipelineManager::CreateRootSgnature(rootPrams.data(), rootPrams.size(), true, false);
+
+	PipelineManager::CreateRootSgnature(desc, true);
 	PipelineManager::SetShader(shader);
 	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT);
 	PipelineManager::SetVertexInput("NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT);
@@ -213,9 +220,15 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimation
 	rootPrams[3].DescriptorTable.pDescriptorRanges = texRange.data();
 	rootPrams[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
+	RootSignature::Desc desc;
+	desc.rootParameter = rootPrams.data();
+	desc.rootParameterSize = rootPrams.size();
+	desc.samplerDeacs.push_back(
+		CreateLinearSampler()
+	);
 
 
-	PipelineManager::CreateRootSgnature(rootPrams.data(), rootPrams.size(), true, false);
+	PipelineManager::CreateRootSgnature(desc, true);
 	PipelineManager::SetShader(shader);
 	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT);
 	PipelineManager::SetVertexInput("NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT);

@@ -116,7 +116,7 @@ void DirectXSwapChain::ClearBackBuffer() {
 
 void DirectXSwapChain::ChangeBackBufferState() {
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
-	Barrier(
+	DirectXCommand::Barrier(
 		swapChainResource_[backBufferIndex].Get(),
 		isRenderState_ ? D3D12_RESOURCE_STATE_RENDER_TARGET : D3D12_RESOURCE_STATE_PRESENT,
 		isRenderState_ ? D3D12_RESOURCE_STATE_PRESENT : D3D12_RESOURCE_STATE_RENDER_TARGET

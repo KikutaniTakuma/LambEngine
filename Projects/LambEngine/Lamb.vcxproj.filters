@@ -211,6 +211,9 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\GaussianBlur\GaussianBlur.cpp">
       <Filter>Engine\Graphics\PipelineObject\GaussianBlur</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\Outline\Outline.cpp">
+      <Filter>Engine\Graphics\PipelineObject\Outline</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -392,6 +395,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\GaussianBlur">
       <UniqueIdentifier>{bcc30c3c-78cb-4f5e-8b79-0fff4d880363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject\Outline">
+      <UniqueIdentifier>{bc006d18-e8e3-4d8c-9f50-62169e38f926}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -643,6 +649,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Buffer\ConstantBuffer.h">
       <Filter>Engine\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\Outline\Outline.h">
+      <Filter>Engine\Graphics\PipelineObject\Outline</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
