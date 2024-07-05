@@ -54,12 +54,16 @@ void TextureManager::LoadTexture(const std::string& fileName) {
 		auto tex = std::make_unique<Texture>();
 		tex->Load(fileName, directXCommand_->GetCommandList());
 
-		if (not tex->isLoad_) [[unlikely]] {
+		if (not tex->isLoad_) {
 			throw Lamb::Error::Code<TextureManager>("Texture::Load failed -> " + fileName, ErrorPlace);
 		}
 
-		srvHeap_->CreateView(tex->GetIsCubemap() ? *(tex->GetBaseClassPtr()) : *tex);
-
+		if (tex->GetIsCubemap()) {
+			srvHeap_->CreateView(*(tex->GetBaseClassPtr()));
+		}
+		else {
+			srvHeap_->CreateView(*tex);
+		}
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 
 		thisFrameLoadFlg_ = true;
