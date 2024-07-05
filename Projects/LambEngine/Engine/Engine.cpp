@@ -372,6 +372,11 @@ void Engine::InitializeDraw() {
 	cbvSrvUavHeap->CreateView(*depthStencil_);
 }
 
+DepthBuffer& Engine::GetDepthBuffer()
+{
+	return *depthStencil_;
+}
+
 
 
 /// 

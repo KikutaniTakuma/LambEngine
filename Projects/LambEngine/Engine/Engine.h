@@ -134,6 +134,9 @@ private:
 private:
 	void InitializeDraw();
 
+public:
+	class DepthBuffer& GetDepthBuffer();
+
 private:
 	std::unique_ptr<class DepthBuffer> depthStencil_;
 
