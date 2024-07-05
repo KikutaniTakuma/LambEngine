@@ -146,8 +146,15 @@ void SkyBox::CreateGraphicsPipeline() {
     rootPrams[1].DescriptorTable.pDescriptorRanges = srvRange.data();
     rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
+    RootSignature::Desc desc;
+    desc.rootParameter = rootPrams.data();
+    desc.rootParameterSize = rootPrams.size();
+    desc.samplerDeacs.push_back(
+        CreateLinearSampler()
+    );
 
-    PipelineManager::CreateRootSgnature(rootPrams.data(), rootPrams.size(), true, false);
+
+    PipelineManager::CreateRootSgnature(desc, true);
     PipelineManager::SetShader(shader);
     PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT);
 

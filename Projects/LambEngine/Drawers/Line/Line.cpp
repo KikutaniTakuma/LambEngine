@@ -29,7 +29,15 @@ void Line::Initialize() {
 	paramater.DescriptorTable.pDescriptorRanges = &range;
 	paramater.DescriptorTable.NumDescriptorRanges = 1;
 
-	PipelineManager::CreateRootSgnature(&paramater, 1, false);
+	RootSignature::Desc desc;
+	desc.rootParameter = &paramater;
+	desc.rootParameterSize = 1;
+	desc.samplerDeacs.push_back(
+		CreateLinearSampler()
+	);
+
+
+	PipelineManager::CreateRootSgnature(desc, false);
 	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT);
 	PipelineManager::SetShader(shader_);
 	PipelineManager::IsDepth(false);

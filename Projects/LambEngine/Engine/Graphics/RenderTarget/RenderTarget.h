@@ -47,6 +47,8 @@ public:
 public:
 	static void SetRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
 	static void SetMainAndRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	static void SetRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	static void SetMainAndRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
 
 private:
 	Lamb::LambPtr<ID3D12Resource> resource_;

@@ -2,11 +2,11 @@
 #include "../PerlinNoise.hlsli"
 #include "../Normal.hlsli"
 
-PixelShaderOutPut2 main(WaterTex2DGeometoryShaderOutPut waterinput)
+PixelShaderOutPut3 main(WaterTex2DGeometoryShaderOutPut waterinput)
 {
     GeometoryOutPut input = waterinput.outputData;
 
-	PixelShaderOutPut2 output;
+	PixelShaderOutPut3 output;
 
     uint32_t textureID = kWaterData[input.instanceID].textureID;
 
@@ -58,6 +58,7 @@ PixelShaderOutPut2 main(WaterTex2DGeometoryShaderOutPut waterinput)
     output.color0 = kColor[input.instanceID].color;
     output.color0.xyz *= lig;
     output.color1 = output.color0;
+    output.color2 = output.color0;
 
     return output;
 }

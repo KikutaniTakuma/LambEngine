@@ -26,7 +26,7 @@ DepthBuffer::DepthBuffer():
 
 	srvDesc_ = {};
 	srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc_.Format = DXGI_FORMAT_R32_FLOAT;
+	srvDesc_.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 	srvDesc_.Texture2D.MipLevels = 1;
 	srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
@@ -53,7 +53,7 @@ DepthBuffer::DepthBuffer(const Vector2& bufSize):
 
 	srvDesc_ = {};
 	srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc_.Format = DXGI_FORMAT_R32_FLOAT;
+	srvDesc_.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
 	srvDesc_.Texture2D.MipLevels = 1;
 	srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
@@ -77,7 +77,7 @@ void DepthBuffer::CreateDepthView(D3D12_CPU_DESCRIPTOR_HANDLE handle, uint32_t h
 
 	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
-	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
 

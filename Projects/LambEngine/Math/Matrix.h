@@ -432,3 +432,7 @@ private:
 #undef requiresSQ
 #endif // requiresSQ
 };
+
+using float32_t2x2 = Matrix<float, 2, 2>;
+using float32_t3x3 = Matrix<float, 3, 3>;
+using float32_t4x4 = Matrix<float, 4, 4>;

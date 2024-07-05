@@ -38,8 +38,6 @@ public:
 	class Water* water_;
 	StringOut str_;
 	std::unique_ptr<Camera> uiCamera_;
-	//Lamb::SafePtr<Model> player_;
-	//Transform playerTransform_;
 
 	StringOut startMessage_;
 	float messageAlpah_;
@@ -49,4 +47,7 @@ public:
 
 	std::unique_ptr<SkyBox> skybox_;
 	Transform transform_;
+
+	Lamb::SafePtr<class Outline> outline_;
+	std::unique_ptr<PeraRender> outlinePera_;
 };

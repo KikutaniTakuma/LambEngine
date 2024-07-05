@@ -18,7 +18,8 @@ void Model::Load(const std::string& fileName) {
 				.vsFileName = "./Resources/Shaders/ModelShader/Model.VS.hlsl",
 				.psFileName = "./Resources/Shaders/ModelShader/Model.PS.hlsl",
 			}
-		}
+		},
+		2
 	);
 
 	renderSet = renderContextManager->Get(
