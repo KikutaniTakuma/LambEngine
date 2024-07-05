@@ -105,7 +105,7 @@ void TitleScene::Draw()
 		BlendType::kNormal
 	);*/
 
-	sceneManager_->AllDraw();
+	//sceneManager_->AllDraw();
 
 	/*str_.Draw();
 	startMessage_.Draw();*/
