@@ -3,6 +3,7 @@
 #include <thread>
 #include <condition_variable>
 #include <functional>
+#include <memory>
 
 namespace Lamb {
 	class Thread {
@@ -42,20 +43,20 @@ namespace Lamb {
 		}
 
 	private:
-		std::thread thraed_;
-		std::mutex mtx_;
-		std::condition_variable condition_;
+		std::unique_ptr<std::thread> thraed_;
+		std::unique_ptr<std::mutex> mtx_;
+		std::unique_ptr<std::condition_variable> condition_;
 
 		// threadで行う処理
-		std::function<void(void)> threadProcess_;
+		std::unique_ptr<std::function<void(void)>> threadProcess_;
 		// threadProsess内で行う処理。
-		std::function<void(void)> userProcess_;
+		std::unique_ptr<std::function<void(void)>> userProcess_;
 		// waitに入るための関数(wait状態にするか否か)
-		std::function<bool(void)> waitProcess_;
+		std::unique_ptr<std::function<bool(void)>> waitProcess_;
 		// waitから起きるための関数(notify_allで起きるために必要)
-		std::function<bool(void)> restartProcess_;
+		std::unique_ptr<std::function<bool(void)>> restartProcess_;
 
-		bool exit_;
-		bool isWait_;
+		bool exit_ = false;
+		bool isWait_ = false;
 	};
 };

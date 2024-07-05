@@ -9,14 +9,14 @@ uint32_t Lamb::Thread::kHardwareThread_  = std::thread::hardware_concurrency();
 
 Lamb::Thread::~Thread() {
 	exit_ = true;
-	condition_.notify_all();
-	if (thraed_.joinable()) {
-		thraed_.join();
+	condition_->notify_all();
+	if (thraed_->joinable()) {
+		thraed_->join();
 	}
 }
 
 void Lamb::Thread::Notify() {
-	condition_.notify_all();
+	condition_->notify_all();
 }
 
 void Lamb::Thread::Create(
@@ -27,15 +27,19 @@ void Lamb::Thread::Create(
 	if (kHardwareThread_ <= currentThreadNum_) {
 		throw Lamb::Error::Code<Lamb::Thread>("over hardware thread number", ErrorPlace);
 	}
-	if (thraed_.joinable()) {
+	if (thraed_ and thraed_->joinable()) {
 		throw Lamb::Error::Code<Lamb::Thread>("Already created", ErrorPlace);
 	}
 
-	userProcess_ = userProcess;
-	waitProcess_ = waitProcess;
-	restartProcess_ = restartProcess;
+	mtx_ = std::make_unique<std::mutex>();
+	condition_ = std::make_unique<std::condition_variable>();
 
-	threadProcess_ = [this]() {
+	userProcess_ = std::make_unique<std::function<void(void)>>(userProcess);
+	waitProcess_ = std::make_unique<std::function<bool(void)>>(waitProcess);
+	restartProcess_ = std::make_unique<std::function<bool(void)>>(restartProcess);
+
+	threadProcess_ = std::make_unique<std::function<void(void)>>(
+		[this]() {
 		HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
 		if (SUCCEEDED(hr)) {
 			Lamb::AddLog("CoInitializeEx succeeded");
@@ -44,25 +48,31 @@ void Lamb::Thread::Create(
 			throw Lamb::Error::Code<Lamb::Thread>("CoInitializeEx failed", ErrorPlace);
 		}
 
-		std::unique_lock<std::mutex> uniqueLock(mtx_);
+		std::unique_lock<std::mutex> uniqueLock(*mtx_);
+
+		auto& waitProcess = *waitProcess_;
+		auto& restartProcess = *restartProcess_;
+		auto& userProcess = *userProcess_;
+		auto& condition = *condition_;
 
 		while (!exit_) {
-			if (waitProcess_()) {
+			if (waitProcess()) {
 				isWait_ = true;
-				condition_.wait(uniqueLock, [this]() { return restartProcess_() or exit_; });
+				condition.wait(uniqueLock, [this, &restartProcess]() { return restartProcess() or exit_; });
 			}
 			if (exit_) {
 				break;
 			}
 			isWait_ = false;
 
-			userProcess_();
+			userProcess();
 		}
 
 		// COM 終了
 		CoUninitialize();
 		Lamb::AddLog("CoUninitialize succeeded");
-	};
+		}
+	);
 
-	thraed_ = std::move(std::thread(threadProcess_));
+	thraed_ = std::make_unique<std::thread>(*threadProcess_);
 }
