@@ -153,7 +153,7 @@ void Outline::Init(
 	srvHeap->CreateView(colorBuf_);
 	srvHeap->CreateView(outlineData_);
 
-	outlineData_->weight = 1.0f;
+	outlineData_->weight = 0.3f;
 }
 
 Outline::~Outline() {
