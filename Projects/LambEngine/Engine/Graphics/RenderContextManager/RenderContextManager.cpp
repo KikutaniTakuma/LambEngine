@@ -139,29 +139,35 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 	);
 
 
-	PipelineManager::CreateRootSgnature(desc, true);
-	PipelineManager::SetShader(shader);
-	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT);
-	PipelineManager::SetVertexInput("NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT);
-	PipelineManager::SetVertexInput("TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT);
-	PipelineManager::SetVertexInput("BLENDINDICES", 0, DXGI_FORMAT_R32_UINT);
+	auto pipelineManager = PipelineManager::GetInstance();
+	Pipeline::Desc pipelineDesc;
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
+	pipelineDesc.vsInputData.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT });
+	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
+	pipelineDesc.vsInputData.push_back({ "BLENDINDICES", 0, DXGI_FORMAT_R32_UINT });
+	pipelineDesc.shader = shader;
+	pipelineDesc.isDepth = false;
+	pipelineDesc.blend[0] = Pipeline::None;
+	pipelineDesc.solidState = Pipeline::SolidState::Solid;
+	pipelineDesc.cullMode = Pipeline::CullMode::Back;
+	pipelineDesc.topologyType = (shader.hull != nullptr ? D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH : D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	pipelineDesc.numRenderTarget = numRenderTarget;
+
 
 	for (size_t i = 0; i < size_t(BlendType::kNum); i++) {
 		size_t blendType = i < Pipeline::Blend::BlendTypeNum ? i : i - Pipeline::Blend::BlendTypeNum;
 
-		PipelineManager::IsDepth(i < Pipeline::Blend::BlendTypeNum);
-		PipelineManager::SetState(
-			Pipeline::Blend(blendType),
-			Pipeline::SolidState::Solid,
-			Pipeline::CullMode::Back,
-			(shader.hull != nullptr ? D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH : D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE),
-			numRenderTarget
-		);
-		result[i] = PipelineManager::Create();
+		pipelineDesc.isDepth = i < Pipeline::Blend::BlendTypeNum;
+		for (uint32_t blendIndex = 0; blendIndex < pipelineDesc.numRenderTarget; blendIndex++) {
+			pipelineDesc.blend[blendIndex] = Pipeline::Blend(blendType);
+		}
+		pipelineManager->SetDesc(pipelineDesc);
+		result[i] = pipelineManager->Create();
 	}
 
 
-	PipelineManager::StateReset();
+	pipelineManager->StateReset();
 
 	return result;
 }
@@ -227,35 +233,40 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimation
 		CreateLinearSampler()
 	);
 
+	auto pipelineManager = PipelineManager::GetInstance();
+	Pipeline::Desc pipelineDesc;
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
+	pipelineDesc.vsInputData.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT });
+	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
+	pipelineDesc.vsInputData.push_back({ "BLENDINDICES", 0, DXGI_FORMAT_R32_UINT });
 
-	PipelineManager::CreateRootSgnature(desc, true);
-	PipelineManager::SetShader(shader);
-	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT);
-	PipelineManager::SetVertexInput("NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT);
-	PipelineManager::SetVertexInput("TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT);
-	PipelineManager::SetVertexInput("BLENDINDICES", 0, DXGI_FORMAT_R32_UINT);
+	pipelineDesc.vsInputData.push_back({ "WEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1 });
+	pipelineDesc.vsInputData.push_back({ "WEIGHT", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1 });
+	pipelineDesc.vsInputData.push_back({ "INDEX", 0, DXGI_FORMAT_R32G32B32A32_SINT, 1 });
+	pipelineDesc.vsInputData.push_back({ "INDEX", 1, DXGI_FORMAT_R32G32B32A32_SINT, 1 });
+	pipelineDesc.shader = shader;
+	pipelineDesc.isDepth = false;
+	pipelineDesc.blend[0] = Pipeline::None;
+	pipelineDesc.solidState = Pipeline::SolidState::Solid;
+	pipelineDesc.cullMode = Pipeline::CullMode::None;
+	pipelineDesc.topologyType = (shader.hull != nullptr ? D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH : D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
+	pipelineDesc.numRenderTarget = numRenderTarget;
 
-	PipelineManager::SetVertexInput("WEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1);
-	PipelineManager::SetVertexInput("WEIGHT", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1);
-	PipelineManager::SetVertexInput("INDEX", 0, DXGI_FORMAT_R32G32B32A32_SINT, 1);
-	PipelineManager::SetVertexInput("INDEX", 1, DXGI_FORMAT_R32G32B32A32_SINT, 1);
 
 	for (size_t i = 0; i < size_t(BlendType::kNum); i++) {
 		size_t blendType = i < Pipeline::Blend::BlendTypeNum ? i : i - Pipeline::Blend::BlendTypeNum;
 
-		PipelineManager::IsDepth(i < Pipeline::Blend::BlendTypeNum);
-		PipelineManager::SetState(
-			Pipeline::Blend(blendType), 
-			Pipeline::SolidState::Solid, 
-			Pipeline::CullMode::Back,
-			D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
-			numRenderTarget
-		);
-		result[i] = PipelineManager::Create();
+		pipelineDesc.isDepth = i < Pipeline::Blend::BlendTypeNum;
+		for (uint32_t blendIndex = 0; blendIndex < pipelineDesc.numRenderTarget; blendIndex++) {
+			pipelineDesc.blend[blendIndex] = Pipeline::Blend(blendType);
+		}
+		pipelineManager->SetDesc(pipelineDesc);
+		result[i] = pipelineManager->Create();
 	}
 
 
-	PipelineManager::StateReset();
+	pipelineManager->StateReset();
 
 	return result;
 }

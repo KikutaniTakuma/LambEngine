@@ -9,7 +9,7 @@
 
 uint32_t Line::indexCount_ = 0u;
 Shader Line::shader_ = {};
-Lamb::SafePtr<Pipeline> Line::pipline_ = nullptr;
+Lamb::SafePtr<Pipeline> Line::pipeline_ = nullptr;
 std::unique_ptr<StructuredBuffer<Line::VertxData>> Line::vertData_;
 
 void Line::Initialize() {
@@ -36,14 +36,20 @@ void Line::Initialize() {
 		CreateLinearSampler()
 	);
 
-
-	PipelineManager::CreateRootSgnature(desc, false);
-	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT);
-	PipelineManager::SetShader(shader_);
-	PipelineManager::IsDepth(false);
-	PipelineManager::SetState(Pipeline::None, Pipeline::SolidState::Solid, Pipeline::CullMode::None, D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE);
-	pipline_ = PipelineManager::Create();
-	PipelineManager::StateReset();
+	auto pipelineManager = PipelineManager::GetInstance();
+	Pipeline::Desc pipelineDesc;
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, false);
+	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
+	pipelineDesc.shader = shader_;
+	pipelineDesc.isDepth = false;
+	pipelineDesc.blend[0] = Pipeline::None;
+	pipelineDesc.solidState = Pipeline::SolidState::Solid;
+	pipelineDesc.cullMode = Pipeline::CullMode::None;
+	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
+	pipelineDesc.numRenderTarget = 1;
+	pipelineManager->SetDesc(pipelineDesc);
+	pipeline_ = pipelineManager->Create();
+	pipelineManager->StateReset();
 
 	vertData_ = std::make_unique<StructuredBuffer<VertxData>>();
 	vertData_->Create(Line::kDrawMaxNumber_);
@@ -70,7 +76,7 @@ void Line::AllDraw() {
 		return;
 	}
 
-	pipline_->Use();
+	pipeline_->Use();
 	Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
 	heap->Use(vertData_->GetHandleUINT(), 0);
 	auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();

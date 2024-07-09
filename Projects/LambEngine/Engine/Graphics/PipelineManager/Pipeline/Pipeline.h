@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
+#include <Utils/SafePtr.h>
+#include <array>
 class RootSignature;
 
 /// <summary>
@@ -36,6 +38,28 @@ public:
 		Solid = D3D12_FILL_MODE_SOLID,
 	};
 
+	struct VSInputData {
+		std::string semanticName;
+		uint32_t semanticIndex = 0;
+		DXGI_FORMAT format;
+		uint32_t inputSlot = 0;
+		[[nodiscard]] bool operator==(const VSInputData& right) const = default;
+	};
+
+	struct Desc {
+		Shader shader;
+		std::vector<VSInputData> vsInputData;
+		Lamb::SafePtr<RootSignature> rootSignature;
+		std::array<Pipeline::Blend, 8> blend;
+		Pipeline::CullMode cullMode;
+		Pipeline::SolidState solidState;
+		D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType;
+		uint32_t numRenderTarget = 1;
+		bool isDepth = true;
+
+		[[nodiscard]] bool operator==(const Desc& right) const;
+	};
+
 /// <summary>
 /// コンストラクタ
 /// </summary>
@@ -58,46 +82,22 @@ public:
 /// メンバ関数
 /// </summary>
 public:
-	void SetVertexInput(
-		std::string semanticName, 
-		uint32_t semanticIndex, 
-		DXGI_FORMAT format, 
-		uint32_t inputSlot
-
+	void AddVertexInput(
+		const VSInputData& vsInpuptData
 	);
 
-	void SetShader(const Shader& shader);
-
 	void Create(
-		const RootSignature& rootSignature,
-		Pipeline::Blend blend,
-		Pipeline::CullMode cullMode,
-		Pipeline::SolidState solidState,
-		D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType,
-		uint32_t numRenderTarget = 1,
-		bool isDepth = true
+		const Desc& desc
 	);
 
 	void CreateCubeMap(
-		const RootSignature& rootSignature,
-		Pipeline::Blend blend,
-		Pipeline::CullMode cullMode,
-		Pipeline::SolidState solidState,
-		D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType,
-		uint32_t numRenderTarget = 1
+		const Desc& desc
 	);
 
 	void Use() const;
 
 	bool IsSame(
-		const Shader& shader,
-		Pipeline::Blend blend,
-		Pipeline::CullMode cullMode,
-		Pipeline::SolidState solidState,
-		D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType,
-		uint32_t numRenderTarget,
-		ID3D12RootSignature* rootSignature,
-		bool isDepth
+		const Desc& desc
 	);
 
 /// <summary>
@@ -106,17 +106,6 @@ public:
 private:
 	Lamb::LambPtr<ID3D12PipelineState> graphicsPipelineState_;
 
-	Shader shader_;
-
 	std::vector<D3D12_INPUT_ELEMENT_DESC> vertexInput_;
-	std::vector<std::string> semanticNames_;
-
-	Pipeline::Blend blend_;
-	Pipeline::CullMode cullMode_;
-	Pipeline::SolidState solidState_;
-	uint32_t numRenderTarget_;
-	D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType_;
-	bool isDepth_;
-
-	ID3D12RootSignature* rootSignature_;
+	Desc desc_;
 };

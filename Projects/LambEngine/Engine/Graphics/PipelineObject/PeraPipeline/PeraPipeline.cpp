@@ -80,26 +80,34 @@ void PeraPipeline::Init(
 		CreateBorderLessSampler()
 	);
 
-	PipelineManager::CreateRootSgnature(desc, true);
-
-	PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT);
-	PipelineManager::SetVertexInput("TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT);
-
-	PipelineManager::SetShader(shader_);
-	PipelineManager::SetState(Pipeline::None, Pipeline::SolidState::Solid);
+	auto pipelineManager = PipelineManager::GetInstance();
+	Pipeline::Desc pipelineDesc;
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT });
+	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
+	pipelineDesc.shader = shader_;
+	pipelineDesc.isDepth = false;
+	pipelineDesc.blend[0] = Pipeline::None;
+	pipelineDesc.solidState = Pipeline::SolidState::Solid;
+	pipelineDesc.cullMode = Pipeline::CullMode::Back;
+	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+	pipelineDesc.numRenderTarget = 1;
 
 
 	for (int32_t i = Pipeline::Blend::None; i < Pipeline::Blend::BlendTypeNum; i++) {
-		PipelineManager::SetState(Pipeline::Blend(i), Pipeline::SolidState::Solid);
-		PipelineManager::IsDepth(true);
-		pipelines_[Pipeline::Blend(i)] = PipelineManager::Create();
+		for (auto& blend : pipelineDesc.blend) {
+			blend = Pipeline::Blend(i);
+		}
+		pipelineDesc.isDepth = true;
+		pipelineManager->SetDesc(pipelineDesc);
+		pipelines_[Pipeline::Blend(i)] = pipelineManager->Create();
 
-		PipelineManager::SetState(Pipeline::Blend(i), Pipeline::SolidState::Solid);
-		PipelineManager::IsDepth(false);
-		pipelinesNoDepth_[Pipeline::Blend(i)] = PipelineManager::Create();
+		pipelineDesc.isDepth = false;
+		pipelineManager->SetDesc(pipelineDesc);
+		pipelinesNoDepth_[Pipeline::Blend(i)] = pipelineManager->Create();
 	}
 
-	PipelineManager::StateReset();
+	pipelineManager->StateReset();
 
 
 	auto* const srvHeap = CbvSrvUavHeap::GetInstance();
