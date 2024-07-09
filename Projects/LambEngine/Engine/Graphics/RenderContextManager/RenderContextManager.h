@@ -33,6 +33,62 @@ private:
 
 public:
 	template<IsBasedRenderContext RenderContextType = RenderContext<>>
+	[[nodiscard]] RenderSet* const Create(const LoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
+		std::unique_ptr<RenderSet> renderSet = std::make_unique<RenderSet>();
+
+		Shader shader = LoadShader(fileNames.shaderName);
+
+		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader, numRenderTarget);
+
+		Lamb::SafePtr meshManager = MeshManager::GetInstance();
+		meshManager->LoadModel(fileNames.resourceFileName);
+		Mesh* mesh = meshManager->GetMesh(fileNames.resourceFileName);
+		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
+
+		for (uint32_t i = 0; i < BlendType::kNum; i++) {
+			std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();
+
+			renderContext->SetMesh(mesh);
+			renderContext->SetModelData(modelData);
+			renderContext->SetPipeline(pipelines[i]);
+			renderSet->Set(renderContext.release(), BlendType(i));
+		}
+
+		return renderSet.release();
+	}
+
+	template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
+	[[nodiscard]] RenderSet* const CreateSkinAnimationModel(const LoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
+		std::unique_ptr<RenderSet> renderSet = std::make_unique<RenderSet>();
+
+		Shader shader = LoadShader(fileNames.shaderName);
+
+		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader, numRenderTarget);
+
+		Lamb::SafePtr meshManager = MeshManager::GetInstance();
+		meshManager->LoadModel(fileNames.resourceFileName);
+		Mesh* mesh = meshManager->GetMesh(fileNames.resourceFileName);
+		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
+
+		for (uint32_t i = 0; i < BlendType::kNum; i++) {
+			std::unique_ptr<SkinRenderContext<T, bufferSize>> renderContext = std::make_unique<SkinRenderContext<T, bufferSize>>();
+
+			renderContext->SetMesh(mesh);
+			renderContext->SetModelData(modelData);
+			renderContext->SetPipeline(pipelines[i]);
+			renderSet->Set(renderContext.release(), BlendType(i));
+		}
+
+		return renderSet.release();
+	}
+
+	/// <summary>
+	/// 描画に必要なものをロードしてコンテナに追加(1度追加してたら追加しない)
+	/// </summary>
+	/// <typeparam name="RenderContextType">レンダーコンテキストタイプ</typeparam>
+	/// <param name="fileNames">リソースファイル名</param>
+	/// <param name="numRenderTarget">レンダーターゲットの数</param>
+	template<IsBasedRenderContext RenderContextType = RenderContext<>>
 	void Load(const LoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
 		auto isExist = renderData_.find(fileNames);
 
@@ -65,6 +121,12 @@ public:
 		}
 	}
 
+	/// <summary>
+	/// スキンアニメーション用。描画に必要なものをロードしてコンテナに追加(1度追加してたら追加しない)
+	/// </summary>
+	/// <typeparam name="RenderContextType">レンダーコンテキストタイプ</typeparam>
+	/// <param name="fileNames">リソースファイル名</param>
+	/// <param name="numRenderTarget">レンダーターゲットの数</param>
 	template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
 	void LoadSkinAnimationModel(const LoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
 		auto isExist = renderData_.find(fileNames);
@@ -98,6 +160,11 @@ public:
 		}
 	}
 
+	/// <summary>
+	/// リソースファイルから描画構造体を取得する(deleteしてはいけない)
+	/// </summary>
+	/// <param name="fileNames"></param>
+	/// <returns></returns>
 	[[nodiscard]] RenderSet* const Get(const LoadFileNames& fileNames);
 
 	void SetIsNowThreading(bool isNowThreading);
