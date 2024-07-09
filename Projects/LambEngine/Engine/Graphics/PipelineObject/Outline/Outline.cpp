@@ -19,7 +19,7 @@
 void Outline::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
-		ImGui::DragFloat("sigma", &(*weight_), 0.01f, 0.0f, 1000.0f);
+		ImGui::DragFloat("weight", &(outlineData_->weight), 0.01f, 0.0f, 1000.0f);
 		ImGui::TreePop();
 	}
 #endif // _DEBUG
@@ -108,7 +108,7 @@ void Outline::Init(
 	rootParameter[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
 
 	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[2].DescriptorTable.pDescriptorRanges = depthRange.data();
 	rootParameter[2].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(depthRange.size());
 
@@ -118,9 +118,11 @@ void Outline::Init(
 	desc.samplerDeacs.push_back(
 		CreateBorderLessSampler()
 	);
+	desc.samplerDeacs.back().ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	desc.samplerDeacs.push_back(
-		CreatePointSampler()
+		CreatePointSampler(1)
 	);
+	desc.samplerDeacs.back().ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 	PipelineManager::CreateRootSgnature(desc, true);
 
@@ -149,7 +151,9 @@ void Outline::Init(
 	srvHeap->CreateView(*render_);
 	srvHeap->CreateView(wvpMat_);
 	srvHeap->CreateView(colorBuf_);
-	srvHeap->CreateView(weight_);
+	srvHeap->CreateView(outlineData_);
+
+	outlineData_->weight = 1.0f;
 }
 
 Outline::~Outline() {
@@ -158,7 +162,7 @@ Outline::~Outline() {
 		srvHeap->ReleaseView(render_->GetHandleUINT());
 		srvHeap->ReleaseView(wvpMat_.GetHandleUINT());
 		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
-		srvHeap->ReleaseView(weight_.GetHandleUINT());
+		srvHeap->ReleaseView(outlineData_.GetHandleUINT());
 	}
 
 	render_.reset();

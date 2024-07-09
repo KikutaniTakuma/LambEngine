@@ -102,7 +102,7 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-	water_->Draw(currentCamera_->GetViewProjection(), levelData_->player->GetIsPunch() ? &postEffectManager_->GetPera() : nullptr);
+	water_->Draw(currentCamera_->GetViewProjection(), &postEffectManager_->GetPera());
 
 	for (auto& i : levelData_->skyBlocks) {
 		i->Draw(*currentCamera_);

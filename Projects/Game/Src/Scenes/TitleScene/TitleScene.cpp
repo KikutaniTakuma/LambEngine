@@ -7,6 +7,8 @@
 #include "AudioManager/AudioManager.h"
 #include "Utils/Random.h"
 
+#include "Engine/Graphics/PipelineObject/Outline/Outline.h"
+
 TitleScene::TitleScene() :
 	BaseScene{ BaseScene::ID::Title }
 {
@@ -59,6 +61,14 @@ void TitleScene::Initialize()
 	skybox_->Load("./Resources/Common/SkyBox/rostock_laage_airport_4k.dds");
 
 	transform_.scale *= 500.0f;
+
+	std::unique_ptr<Outline> outline = std::make_unique<Outline>();
+	outline->Init();
+	outline_ = outline.release();
+	outlinePera_ = std::make_unique<PeraRender>();
+	outlinePera_->Initialize(outline_.get());
+	outlinePera_->pos.z = 10.0f;
+
 }
 
 void TitleScene::Finalize()
@@ -89,6 +99,10 @@ void TitleScene::Update()
 	transform_.Debug("skybox");
 	transform_.translate = currentCamera_->GetPos();
 
+
+	outlinePera_->Update();
+	outline_->SetProjectionInverse(currentCamera_->GetProjection().Inverse());
+	outline_->Debug("outline");
 }
 
 void TitleScene::Draw()
@@ -97,13 +111,17 @@ void TitleScene::Draw()
 	/*cloud_->Draw();
 	skydome_->Draw(*currentCamera_);*/
 
-	water_->Draw(currentCamera_->GetViewProjection());
+	water_->Draw(currentCamera_->GetViewProjection(), outlinePera_.get());
 	/*player_->Draw(
 		playerTransform_.GetMatrix(),
 		currentCamera_->GetViewProjection(),
 		std::numeric_limits<uint32_t>::max(),
 		BlendType::kNormal
 	);*/
+
+	outline_->ChangeDepthBufferState();
+	outlinePera_->Draw(Camera::GetStaticViewOthographics(), Pipeline::Normal);
+	outline_->ChangeDepthBufferState();
 
 	//sceneManager_->AllDraw();
 

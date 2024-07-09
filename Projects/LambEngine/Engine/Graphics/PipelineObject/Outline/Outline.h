@@ -8,6 +8,12 @@
 
 class Outline final : public PeraPipeline {
 public:
+	struct OutlineData{
+		float32_t weight = 1.0f;
+		float32_t4x4 projectionInverse;
+	};
+
+public:
 	Outline() = default;
 	Outline(const Outline&) = delete;
 	Outline(Outline&&) = delete;
@@ -19,7 +25,7 @@ public:
 public:
 	void Init(
 		const std::string& vsShader = "./Resources/Shaders/PostShader/Post.VS.hlsl",
-		const std::string& psShader = "./Resources/Shaders/PostShader/PostGaussian.PS.hlsl",
+		const std::string& psShader = "./Resources/Shaders/PostShader/PostOutline.PS.hlsl",
 		const std::string& gsFileName = {},
 		const std::string& hsFileName = {},
 		const std::string& dsFileName = {}
@@ -33,11 +39,14 @@ public:
 	void Debug(const std::string& guiName);
 
 	void SetWeight(float32_t weight) {
-		*weight_ = weight;
+		outlineData_->weight = weight;
+	}
+	void SetProjectionInverse(const float32_t4x4& projectionInverse) {
+		outlineData_->projectionInverse = projectionInverse;
 	}
 
 	void ChangeDepthBufferState();
 
 private:
-	ConstantBuffer<float32_t> weight_;
+	ConstantBuffer<OutlineData> outlineData_;
 };
