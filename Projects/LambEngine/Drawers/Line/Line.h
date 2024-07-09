@@ -37,7 +37,7 @@ private:
 private:
 	static Shader shader_;
 
-	static Lamb::SafePtr<class Pipeline> pipline_;
+	static Lamb::SafePtr<class Pipeline> pipeline_;
 
 	static std::unique_ptr<StructuredBuffer<VertxData>> vertData_;
 
