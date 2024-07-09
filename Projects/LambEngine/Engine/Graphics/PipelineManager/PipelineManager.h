@@ -32,60 +32,36 @@ public:
 	static void Initialize();
 	static void Finalize();
 
+	static PipelineManager* const GetInstance();
+
 	///
 	/// 下の4つの関数を使った後にCreateする
 	/// 
 	
 	/// <summary>
-	/// ルートシグネチャを生成(この関数を呼び出したらそのルートシグネチャがPSOに使われる)
+	/// ルートシグネチャを生成
 	/// </summary>
-	/// <param name="rootParamater_">ルートパラメータ</param>
+	/// <param name="desc">設定</param>
 	/// <param name="isTexture_">テクスチャを使う場合はtrue</param>
-	static void CreateRootSgnature(const RootSignature::Desc& desc, bool isTexture);
+	[[nodiscard]] RootSignature* CreateRootSgnature(const RootSignature::Desc& desc, bool isTexture);
 
-	static void SetRootSgnature(RootSignature* rootSignature);
-
-	/// <summary>
-	/// 頂点シェーダの入力設定(呼び出し毎に複数設定可能)
-	/// </summary>
-	/// <param name="semanticName_">セマンティクス名</param>
-	/// <param name="semanticIndex_">セマンティクスインデックス</param>
-	/// <param name="format_">フォーマット</param>
-	static void SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format, uint32_t inputSlot = 0);
-
-	/// <summary>
-	/// 使うシェーダの設定
-	/// </summary>
-	/// <param name="shader_">シェーダ</param>
-	static void SetShader(const Shader& shader);
-
-	/// <summary>
-	/// ステイタスの設定
-	/// </summary>
-	/// <param name="blend_">ブレンドの設定</param>
-	/// <param name="solidState_">ソリッド設定</param>
-	/// <param name="cullMode_">カリング設定</param>
-	/// <param name="numRenderTarget_">レンダーターゲットの数</param>
-	static void SetState(
-		Pipeline::Blend blend,
-		Pipeline::SolidState solidState,
-		Pipeline::CullMode cullMode = Pipeline::CullMode::Back,
-		D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
-		uint32_t numRenderTarget = 1u
-	);
-
-	static void IsDepth(bool isDepth = true);
+	void SetDesc(const Pipeline::Desc& desc);
 
 	/// <summary>
 	/// 設定したものでPSOの生成
 	/// </summary>
 	/// <returns>psoのポインタ(勝手にdeleteしてはいけない)</returns>
-	static Pipeline* const Create(bool isCubeMap = false);
+	Pipeline* const Create();
+	/// <summary>
+	/// cubemapように最適化したパイプラインを作成する
+	/// </summary>
+	/// <returns></returns>
+	Pipeline* const CreateCubeMap();
 
 	/// <summary>
-	/// CreateRootSgnature(), SetVertexInput(), SetShader(), SetState()で設定した値をリセット
+	/// Descをリセット
 	/// </summary>
-	static void StateReset();
+	void StateReset();
 
 /// <summary>
 /// シングルトンインスタンス
@@ -100,15 +76,5 @@ private:
 	std::list<std::unique_ptr<Pipeline>> pipelines_;
 	std::list<std::unique_ptr<RootSignature>> rootSignatures_;
 
-	RootSignature* rootSignature_;
-
-	Shader shader_;
-	Pipeline::Blend blend_;
-	Pipeline::CullMode cullMode_;
-	Pipeline::SolidState solidState_;
-	D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType_;
-	uint32_t numRenderTarget_;
-	bool isDepth_;
-
-	std::vector<std::tuple<std::string, uint32_t, DXGI_FORMAT, uint32_t>> vertexInputStates_;
+	Pipeline::Desc pipelineDesc_;
 };
