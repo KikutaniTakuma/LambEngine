@@ -4,9 +4,11 @@
 #include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
 #include "Engine/Graphics/PipelineObject/GaussianBlur/GaussianBlur.h"
 #include "Engine/Graphics/PipelineObject/Outline/Outline.h"
+#include "Engine/Graphics/RenderContextManager/RenderContext/RenderContext.h"
 
 #include <array>
 
+#include <list>
 
 class RenderingManager {
 public:
@@ -29,11 +31,8 @@ private:
 	static std::unique_ptr<RenderingManager> instance_;
 
 public:
-	void Draw();
-
-private:
 	// アルファ値がないものを描画
-	void DrawRGB();
+	void DrawRGB(const std::list<const RenderData*>& renderList);
 
 	// cubemapの描画
 	void DrawSkyBox();
@@ -66,6 +65,8 @@ private:
 	std::unique_ptr<PeraRender> normalTexture_;
 	// 色書き込み用オフスクリーン
 	std::unique_ptr<PeraRender> colorTexture_;
+	// ワールドポジション書き込み用オフスクリーン
+	std::unique_ptr<PeraRender> worldPositionTexture_;
 
 	// 深度値(法線書き込みと色書き込み、アウトラインで使用する)
 	std::unique_ptr<DepthBuffer> depthStencil_;

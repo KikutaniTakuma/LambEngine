@@ -23,18 +23,18 @@ Lamb::SafePtr<RenderingManager> const RenderingManager::GetInstance()
 	return instance_.get();
 }
 
-void RenderingManager::Draw()
-{
-	DrawRGB();
-	DrawSkyBox();
-	DrawRGBA();
-	DrawParticle();
-	DrawPostEffect();
-	DrawUI();
-}
+void RenderingManager::DrawRGB(const std::list<const RenderData*>& renderList) {
+	std::array<RenderTarget*, 3> renderTargets;
+	renderTargets[0] = &normalTexture_->GetRender();
+	renderTargets[1] = &colorTexture_->GetRender();
+	renderTargets[2] = &worldPositionTexture_->GetRender();
 
-void RenderingManager::DrawRGB()
-{
+	RenderTarget::SetRenderTargets(renderTargets.data(), static_cast<uint32_t>(renderTargets.size()));
+
+	for (const auto& i : renderList) {
+		i->Draw();
+	}
+
 }
 
 void RenderingManager::DrawSkyBox()
