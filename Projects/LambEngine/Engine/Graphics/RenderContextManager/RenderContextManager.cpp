@@ -59,6 +59,19 @@ void RenderContextManager::SetIsNowThreading(bool isNowThreading) {
 	}
 }
 
+std::list<const RenderData*> RenderContextManager::GetRenderList(BlendType blend)
+{
+	std::list<const RenderData*> result;
+
+	for (auto& i : renderData_) {
+		if (i.second->IsDraw(blend)) {
+			result.emplace_back(i.second->GetRenderData(blend));
+		}
+	}
+
+	return result;
+}
+
 void RenderContextManager::Draw() {
 	for (auto& i : renderData_) {
 		i.second->Draw();

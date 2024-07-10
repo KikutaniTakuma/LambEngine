@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <string>
 #include <memory>
+#include <list>
 
 #include "RenderContext/RenderContext.h"
 #include "../MeshManager/MeshManager.h"
@@ -169,6 +170,8 @@ public:
 
 	void SetIsNowThreading(bool isNowThreading);
 public:
+	std::list<const RenderData*> GetRenderList(BlendType blend);
+	
 	void Draw();
 	void ResetDrawCount();
 
