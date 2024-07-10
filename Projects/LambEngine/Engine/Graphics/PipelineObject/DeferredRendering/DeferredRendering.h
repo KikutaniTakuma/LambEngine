@@ -13,8 +13,8 @@ public:
 	struct DeferredRenderingData {
 		Vector3 eyePos;
 		uint32_t rightNum = 0;
-		Directionight directionLight;
-		uint32_t isDirectionLight_;
+		DirectionLight directionLight;
+		uint32_t isDirectionLight;
 	};
 public:
 	DeferredRendering() = default;
@@ -28,7 +28,7 @@ public:
 public:
 	void Init(
 		const std::string& vsShader = "./Resources/Shaders/PostShader/Post.VS.hlsl",
-		const std::string& psShader = "./Resources/Shaders/PostShader/PostGaussian.PS.hlsl",
+		const std::string& psShader = "./Resources/Shaders/PostShader/PostDeferred.PS.hlsl",
 		const std::string& gsFileName = {},
 		const std::string& hsFileName = {},
 		const std::string& dsFileName = {}
@@ -47,7 +47,20 @@ public:
 
 	void Debug(const std::string& guiName);
 
+	void SetColorHandle(D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle) {
+		colorTextureHandle_ = colorTextureHandle;
+	}
+	void SetNormalHandle(D3D12_GPU_DESCRIPTOR_HANDLE normalTextureHandle) {
+		normalTextureHandle_ = normalTextureHandle;
+	}
+	void SetWoprldPositionHandle(D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle) {
+		worldPositionTextureHandle_ = worldPositionTextureHandle;
+	}
+
 private:
 	ConstantBuffer<DeferredRenderingData> deferredRenderingData_;
 	StructuredBuffer<PointLight> lights_;
+	D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle_;
+	D3D12_GPU_DESCRIPTOR_HANDLE normalTextureHandle_;
+	D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle_;
 };

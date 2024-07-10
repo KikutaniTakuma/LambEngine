@@ -40,6 +40,11 @@ void DeferredRendering::Use(Pipeline::Blend blendType, bool isDepth) {
 
 	render_->UseThisRenderTargetShaderResource();
 	commandList->SetGraphicsRootDescriptorTable(1, colorBuf_.GetHandleGPU());
+	commandList->SetGraphicsRootDescriptorTable(2, lights_.GetHandleGPU());
+
+	commandList->SetGraphicsRootDescriptorTable(3, colorTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(4, normalTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(5, worldPositionTextureHandle_);
 }
 
 void DeferredRendering::Init(
@@ -81,13 +86,23 @@ void DeferredRendering::Init(
 	lightRange[0].NumDescriptors = 1;
 	lightRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	lightRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> diffTextureRange = {};
-	diffTextureRange[0].BaseShaderRegister = 2;
-	diffTextureRange[0].NumDescriptors = 2;
-	diffTextureRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	diffTextureRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> diffColorTextureRange = {};
+	diffColorTextureRange[0].BaseShaderRegister = 2;
+	diffColorTextureRange[0].NumDescriptors = 1;
+	diffColorTextureRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	diffColorTextureRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> diffNormalTextureRange = {};
+	diffNormalTextureRange[0].BaseShaderRegister = 3;
+	diffNormalTextureRange[0].NumDescriptors = 1;
+	diffNormalTextureRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	diffNormalTextureRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> diffWorldPositionTextureRange = {};
+	diffWorldPositionTextureRange[0].BaseShaderRegister = 3;
+	diffWorldPositionTextureRange[0].NumDescriptors = 1;
+	diffWorldPositionTextureRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	diffWorldPositionTextureRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 4> rootParameter = {};
+	std::array<D3D12_ROOT_PARAMETER, 6> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[0].DescriptorTable.pDescriptorRanges = renderRange.data();
@@ -105,8 +120,18 @@ void DeferredRendering::Init(
 
 	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[3].DescriptorTable.pDescriptorRanges = diffTextureRange.data();
-	rootParameter[3].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffTextureRange.size());
+	rootParameter[3].DescriptorTable.pDescriptorRanges = diffColorTextureRange.data();
+	rootParameter[3].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffColorTextureRange.size());
+	
+	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[4].DescriptorTable.pDescriptorRanges = diffNormalTextureRange.data();
+	rootParameter[4].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffNormalTextureRange.size());
+
+	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[5].DescriptorTable.pDescriptorRanges = diffWorldPositionTextureRange.data();
+	rootParameter[5].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffWorldPositionTextureRange.size());
 
 
 	RootSignature::Desc desc;
@@ -114,6 +139,9 @@ void DeferredRendering::Init(
 	desc.rootParameterSize = rootParameter.size();
 	desc.samplerDeacs.push_back(
 		CreateBorderLessSampler()
+	);
+	desc.samplerDeacs.push_back(
+		CreatePointSampler(1)
 	);
 
 	auto pipelineManager = PipelineManager::GetInstance();
@@ -142,8 +170,12 @@ void DeferredRendering::Init(
 		pipelinesNoDepth_[Pipeline::Blend(i)] = pipelineManager->Create();
 	}
 
+	pipelineManager->StateReset();
+
 
 	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
+
+	lights_.Create(32);
 
 	srvHeap->BookingHeapPos(4u);
 	srvHeap->CreateView(*render_);
