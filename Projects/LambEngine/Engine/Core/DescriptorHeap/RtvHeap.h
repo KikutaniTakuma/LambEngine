@@ -32,7 +32,7 @@ private:
 	void CreateHeapHandles() override;
 
 	[[deprecated("Don`t use this function")]]
-	D3D12_GPU_DESCRIPTOR_HANDLE GetGpuHeapHandle([[maybe_unused]]uint32_t heapIndex) override {
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGpuHeapHandle([[maybe_unused]]uint32_t heapIndex) const override {
 		return D3D12_GPU_DESCRIPTOR_HANDLE{};
 	}
 
