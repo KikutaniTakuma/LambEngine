@@ -26,7 +26,7 @@ public:
     {}
     virtual ~BaseRenderContext() = default;
 
-    virtual void Draw() = 0;
+    virtual void Draw() const = 0;
 
     const std::string& GetID() const {
         return typeID_;
@@ -124,7 +124,7 @@ public:
     RenderContext& operator=(RenderContext&&) = delete;
 
 public:
-    void Draw() override {
+    void Draw() const override {
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
         // コマンドリスト
@@ -240,7 +240,7 @@ public:
     SkinRenderContext& operator=(SkinRenderContext&&) = delete;
 
 public:
-    void Draw() override {
+    void Draw() const override {
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
         // コマンドリスト
@@ -352,6 +352,12 @@ public:
         renderDatas_[blend].reset(renderData);
     }
 
+    const RenderData* const GetRenderData(BlendType blend) const {
+        return renderDatas_[blend].get();
+    }
+    bool IsDraw(BlendType blend) const {
+        return renderDatas_[blend]->IsDraw();
+    }
 
     inline void Draw() {
         for (auto& i : renderDatas_) {
