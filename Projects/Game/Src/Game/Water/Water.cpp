@@ -136,11 +136,9 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 	);
 	waterSurface_->AllDraw(BlendType::kNone);
 
-	Mat4x4&& staticCamera = Mat4x4::MakeTranslate(Vector3::kZIdentity * -10.0f).Inverse() * Camera::GetStaticViewOthographics();
-
-	luminate_->Draw(staticCamera, Pipeline::None, gaussianBlurWidth_.get());
-	gaussianBlurWidth_->Draw(staticCamera, Pipeline::None, gaussianBlurHeight_.get());
-	gaussianBlurHeight_->Draw(staticCamera, Pipeline::Add);
+	luminate_->Draw(Pipeline::None, gaussianBlurWidth_.get());
+	gaussianBlurWidth_->Draw(Pipeline::None, gaussianBlurHeight_.get());
+	gaussianBlurHeight_->Draw(Pipeline::Add);
 }
 
 void Water::Debug([[maybe_unused]]const std::string& guiName){

@@ -27,9 +27,6 @@ void GaussianBlur::Debug([[maybe_unused]]const std::string& guiName) {
 
 void GaussianBlur::Update() {
 	*colorBuf_ = color;
-
-	wvpMat_->worldMat = worldMat;
-	wvpMat_->viewProjection = viewProjection;
 }
 
 void GaussianBlur::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -42,7 +39,7 @@ void GaussianBlur::Use(Pipeline::Blend blendType, bool isDepth) {
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootDescriptorTable(1, wvpMat_.GetHandleGPU());
+	commandList->SetGraphicsRootDescriptorTable(1, colorBuf_.GetHandleGPU());
 }
 
 void GaussianBlur::Init(
@@ -76,7 +73,7 @@ void GaussianBlur::Init(
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 3;
+	cbvRange[0].NumDescriptors = 2;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
@@ -102,8 +99,7 @@ void GaussianBlur::Init(
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::Desc pipelineDesc;
 	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
-	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT });
-	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
+	pipelineDesc.vsInputData.clear();
 	pipelineDesc.shader = shader_;
 	pipelineDesc.isDepth = false;
 	pipelineDesc.blend[0] = Pipeline::None;
@@ -129,9 +125,8 @@ void GaussianBlur::Init(
 
 	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
 
-	srvHeap->BookingHeapPos(4u);
+	srvHeap->BookingHeapPos(3u);
 	srvHeap->CreateView(*render_);
-	srvHeap->CreateView(wvpMat_);
 	srvHeap->CreateView(colorBuf_);
 	srvHeap->CreateView(gaussianBlurState_);
 }
@@ -140,7 +135,6 @@ GaussianBlur::~GaussianBlur() {
 	if (render_) {
 		auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 		srvHeap->ReleaseView(render_->GetHandleUINT());
-		srvHeap->ReleaseView(wvpMat_.GetHandleUINT());
 		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
 		srvHeap->ReleaseView(gaussianBlurState_.GetHandleUINT());
 	}

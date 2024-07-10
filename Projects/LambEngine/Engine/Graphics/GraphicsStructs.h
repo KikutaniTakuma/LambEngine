@@ -110,6 +110,20 @@ enum BlendType {
     kNum
 };
 
+struct PointLight {
+    Vector3 ptPos;
+    float pad3;
+    Vector3 ptColor;
+    float ptRange;
+};
+
+struct Directionight {
+    Vector3 ligDirection = -Vector3::kYIdentity;
+    float pad0;
+    Vector3 ligColor = Vector3::kIdentity;
+    float pad1;
+};
+
 struct Light {
     Vector3 ligDirection = -Vector3::kYIdentity;
     float pad0;

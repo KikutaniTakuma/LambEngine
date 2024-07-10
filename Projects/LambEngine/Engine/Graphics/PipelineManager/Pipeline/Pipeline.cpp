@@ -55,8 +55,14 @@ void Pipeline::Create(
 	}
 
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
-	inputLayoutDesc.pInputElementDescs = vertexInput_.data();
-	inputLayoutDesc.NumElements = UINT(vertexInput_.size());
+	if (vertexInput_.empty()) {
+		inputLayoutDesc.pInputElementDescs = nullptr;
+		inputLayoutDesc.NumElements = 0;
+	}
+	else {
+		inputLayoutDesc.pInputElementDescs = vertexInput_.data();
+		inputLayoutDesc.NumElements = UINT(vertexInput_.size());
+	}
 
 	// RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};

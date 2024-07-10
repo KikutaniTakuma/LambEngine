@@ -67,7 +67,6 @@ void TitleScene::Initialize()
 	outline_ = outline.release();
 	outlinePera_ = std::make_unique<PeraRender>();
 	outlinePera_->Initialize(outline_.get());
-	outlinePera_->pos.z = 10.0f;
 
 }
 
@@ -120,7 +119,7 @@ void TitleScene::Draw()
 	);*/
 
 	outline_->ChangeDepthBufferState();
-	outlinePera_->Draw(Camera::GetStaticViewOthographics(), Pipeline::Normal);
+	outlinePera_->Draw(Pipeline::Normal);
 	outline_->ChangeDepthBufferState();
 
 	//sceneManager_->AllDraw();

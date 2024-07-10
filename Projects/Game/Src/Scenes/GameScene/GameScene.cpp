@@ -114,12 +114,10 @@ void GameScene::Draw()
 
 	if (levelData_->player->GetIsPunch()) {
 		postEffectManager_->GetPera().Draw(
-			postEffectManager_->GetPeraCamera().GetViewOthographics(),
 			Pipeline::Blend::Normal, nullptr, false);
 		postEffectManager_->GetPera().PreDraw();
 		sceneManager_->AllDraw();
 		postEffectManager_->GetPera().Draw(
-			postEffectManager_->GetPeraCamera().GetViewOthographics(),
 			Pipeline::Blend::Normal, nullptr, false);
 	}
 
