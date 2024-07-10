@@ -213,7 +213,7 @@ Quaternion Quaternion::Normalize() const {
 		return *this;
 	}
 
-	return Quaternion{ *this } / this->Length();
+	return *this / this->Length();
 }
 
 Quaternion Quaternion::Inverce() const {
