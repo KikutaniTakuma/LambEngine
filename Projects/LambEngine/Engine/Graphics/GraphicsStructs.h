@@ -117,7 +117,7 @@ struct PointLight {
     float ptRange;
 };
 
-struct Directionight {
+struct DirectionLight {
     Vector3 ligDirection = -Vector3::kYIdentity;
     float pad0;
     Vector3 ligColor = Vector3::kIdentity;
