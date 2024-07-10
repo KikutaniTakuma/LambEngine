@@ -56,7 +56,7 @@ void DeferredRendering::Init(
 		height_ = static_cast<uint32_t>(Lamb::ClientSize().y);
 	}
 
-	render_.reset(new RenderTarget{ width_, height_ });
+	render_ = std::make_unique<RenderTarget>(width_, height_);
 
 	this->LoadShader(
 		vsShader,
@@ -73,7 +73,7 @@ void DeferredRendering::Init(
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 3;
+	cbvRange[0].NumDescriptors = 2;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> lightRange = {};
@@ -99,12 +99,12 @@ void DeferredRendering::Init(
 	rootParameter[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
 
 	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[2].DescriptorTable.pDescriptorRanges = lightRange.data();
 	rootParameter[2].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(lightRange.size());
 
 	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[3].DescriptorTable.pDescriptorRanges = diffTextureRange.data();
 	rootParameter[3].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffTextureRange.size());
 
@@ -119,8 +119,7 @@ void DeferredRendering::Init(
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::Desc pipelineDesc;
 	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
-	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT });
-	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
+	pipelineDesc.vsInputData.clear();
 	pipelineDesc.shader = shader_;
 	pipelineDesc.isDepth = false;
 	pipelineDesc.blend[0] = Pipeline::None;
@@ -146,10 +145,11 @@ void DeferredRendering::Init(
 
 	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
 
-	srvHeap->BookingHeapPos(3u);
+	srvHeap->BookingHeapPos(4u);
 	srvHeap->CreateView(*render_);
 	srvHeap->CreateView(colorBuf_);
 	srvHeap->CreateView(deferredRenderingData_);
+	srvHeap->CreateView(lights_);
 }
 
 DeferredRendering::~DeferredRendering() {
@@ -158,6 +158,7 @@ DeferredRendering::~DeferredRendering() {
 		srvHeap->ReleaseView(render_->GetHandleUINT());
 		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
 		srvHeap->ReleaseView(deferredRenderingData_.GetHandleUINT());
+		srvHeap->ReleaseView(lights_.GetHandleUINT());
 	}
 
 	render_.reset();
