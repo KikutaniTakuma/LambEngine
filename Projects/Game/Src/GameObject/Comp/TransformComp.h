@@ -15,6 +15,9 @@ public:
 
 	void UpdateMatrix();
 
+	void UpdateChildrenMatrix();
+	void UpdateParentMatrix();
+
 	void SetParent(Lamb::SafePtr<TransformComp>& parent);
 
 	const Mat4x4& GetMatrix() const {
@@ -32,6 +35,8 @@ public:
 	bool HaveParent() const {
 		return parent_.have();
 	}
+
+	void Debug(const std::string& guiName);
 
 public:
 	Vector3 scale;

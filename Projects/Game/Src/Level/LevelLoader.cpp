@@ -172,6 +172,7 @@ void LevelLoader::AddChildren(nlohmann::json& data, Lamb::SafePtr<LevelData> lev
                 if (objectData.contains("file_name")) {
                     Lamb::SafePtr model = object.AddComp<ModelRenderComp>();
                     model->SetFileNmae(objectData["file_name"]);
+                    model->Load();
                     object.SetTag("Model");
                 }
             }
