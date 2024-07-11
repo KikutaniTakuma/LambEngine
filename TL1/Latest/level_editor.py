@@ -149,15 +149,10 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         json_object["name"] = object.name
 
         trans, rot, scale = object.matrix_local.decompose()
-        rot = rot.to_euler()
-
-        rot.x = math.degrees(rot.x)
-        rot.y = math.degrees(rot.y)
-        rot.z = math.degrees(rot.z)
 
         transform = dict()
         transform["translation"] = (trans.x, trans.y, trans.z)
-        transform["rotation"] = (rot.x, rot.y, rot.z)
+        transform["rotation"] = (rot.x, rot.y, rot.z, rot.w)
         transform["scaling"] = (scale.x, scale.y, scale.z)
 
         json_object["transform"] = transform

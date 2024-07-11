@@ -76,7 +76,7 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
 void LevelLoader::AddTransform(nlohmann::json& data, Object& object)
 {
     Lamb::SafePtr transformComp = object.AddComp<TransformComp>();
-    Transform transform{};
+    QuaternionTransform transform{};
 
     nlohmann::json& transformData = data["transform"];
 
@@ -86,21 +86,21 @@ void LevelLoader::AddTransform(nlohmann::json& data, Object& object)
 
     std::string type = data["type"].get<std::string>();
 
-    if (type.compare("CAMERA") == 0) {
-        transform.rotate[0] = -static_cast<float>(transformData["rotation"][0]) + 90.0f;
-    }
-    else {
-        transform.rotate[0] = -static_cast<float>(transformData["rotation"][0]);
-    }
 
-    transform.rotate[1] = -static_cast<float>(transformData["rotation"][2]);
-    transform.rotate[2] = -static_cast<float>(transformData["rotation"][1]);
+    transform.rotate.quaternion.x = -static_cast<float>(transformData["rotation"][0]);
+    transform.rotate.quaternion.y = -static_cast<float>(transformData["rotation"][2]);
+    transform.rotate.quaternion.z = -static_cast<float>(transformData["rotation"][1]);
+    transform.rotate.quaternion.w = static_cast<float>(transformData["rotation"][3]);
+    if (type.compare("CAMERA") == 0) {
+        transform.rotate *= Quaternion::MakeRotateXAxis(90.0f * Lamb::Math::toRadian<float>);
+    }
+    transform.rotate = transform.rotate.Normalize();
     transform.scale[0] = static_cast<float>(transformData["scaling"][0]);
     transform.scale[1] = static_cast<float>(transformData["scaling"][2]);
     transform.scale[2] = static_cast<float>(transformData["scaling"][1]);
 
     transformComp->translate = transform.translate;
-    transformComp->rotate = transform.rotate * Lamb::Math::toRadian<float>;
+    transformComp->rotate = transform.rotate;
     transformComp->scale = transform.scale;
 
     object.SetTag("transform");
