@@ -35,7 +35,7 @@ public:
 
 public:
 	Vector3 scale;
-	Vector3 rotate;
+	Quaternion rotate;
 	Vector3 translate;
 
 private:
