@@ -4,6 +4,8 @@
 #include "TransformCompUpdater.h"
 
 #include "GameObject/Comp/ObbPushComp.h"
+#include "GameObject/Comp/Camera3DComp.h"
+
 
 std::unique_ptr<ObjectManager> ObjectManager::instance_;
 
@@ -30,6 +32,20 @@ void ObjectManager::Finalize()
 	instance_.reset();
 }
 
+void ObjectManager::SetLevelData(Lamb::SafePtr<LevelData> levelData) {
+	assert(levelData.have());
+	for (auto& i : levelData->objects) {
+		this->Set(i.get());
+	}
+
+	SetCamera();
+}
+
+const Mat4x4& ObjectManager::GetCameraMatrix() const
+{
+	return cameraComp_.have() ? cameraComp_->GetMatrix() : Mat4x4::kIdentity;
+}
+
 void ObjectManager::Set(const Lamb::SafePtr<Object>& object) {
 	if (not objects_.contains(object) and object.have()) {
 		objects_.insert(object);
@@ -45,10 +61,45 @@ void ObjectManager::Erase(const Lamb::SafePtr<Object>& object) {
 	}
 }
 
+void ObjectManager::Clear() {
+	objects_.clear();
+	obbObjects_.clear();
+}
+
 void ObjectManager::SetCamera(const Lamb::SafePtr<Camera>& camera) {
 	for (auto& i : objects_) {
 		i->SetCamera(camera.get());
 	}
+}
+
+bool ObjectManager::SetCamera() {
+	Lamb::SafePtr<Object> cameraObject;
+
+	for (auto& i : objects_) {
+		if (i->HasTag("Camera3D")) {
+			cameraComp_ = i->GetComp<Camera3DComp>();
+			cameraObject = i;
+			break;
+		}
+	}
+
+	if (cameraObject.empty()) {
+		return false;
+	}
+
+	for (auto& i : objects_) {
+		if (i == cameraObject) {
+			continue;
+		}
+		else if (cameraObject.have()) {
+			i->SetCamera(cameraComp_.get());
+		}
+		else {
+			i->SetCamera(cameraComp_.get());
+		}
+	}
+
+	return true;
 }
 
 void ObjectManager::Update() {

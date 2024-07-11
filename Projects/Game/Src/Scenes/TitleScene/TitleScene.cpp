@@ -9,6 +9,9 @@
 
 #include "Engine/Graphics/PipelineObject/Outline/Outline.h"
 
+#include "GameObject/Manager/ObjectManager.h"
+#include "Level/LevelLoader.h"
+
 TitleScene::TitleScene() :
 	BaseScene{ BaseScene::ID::Title }
 {
@@ -16,9 +19,8 @@ TitleScene::TitleScene() :
 
 void TitleScene::Load()
 {
-	//drawerManager_->LoadModel("./Resources/Player/Player.obj");
-	/*audioManager_->Load("./Resources/Sound/SE_Water.wav");
-	audioManager_->Load("./Resources/Sound/SE_InGame.wav");*/
+	levelData_ = LevelLoader::Load("./SceneData/TitleScene.json");
+	ObjectManager::GetInstance()->SetLevelData(levelData_);
 }
 
 void TitleScene::Initialize()
@@ -66,8 +68,8 @@ void TitleScene::Initialize()
 
 void TitleScene::Finalize()
 {
-	//waterSE_->Stop();
-	//inGameSE_->Stop();
+	ObjectManager::GetInstance()->Clear();
+	levelData_.reset();
 }
 
 void TitleScene::Update()
@@ -91,21 +93,25 @@ void TitleScene::Update()
 
 	transform_.Debug("skybox");
 	transform_.translate = currentCamera_->GetPos();
+
+	ObjectManager::GetInstance()->Update();
 }
 
 void TitleScene::Draw()
 {
-	skybox_->Draw(transform_.GetMatrix(), currentCamera_->GetViewProjection(), 0xffffffff);
+	skybox_->Draw(transform_.GetMatrix(), ObjectManager::GetInstance()->GetCameraMatrix(), 0xffffffff);
 	/*cloud_->Draw();
 	skydome_->Draw(*currentCamera_);*/
 
-	water_->Draw(currentCamera_->GetViewProjection());
+	water_->Draw(ObjectManager::GetInstance()->GetCameraMatrix());
 	/*player_->Draw(
 		playerTransform_.GetMatrix(),
 		currentCamera_->GetViewProjection(),
 		std::numeric_limits<uint32_t>::max(),
 		BlendType::kNormal
 	);*/
+
+	ObjectManager::GetInstance()->Draw();
 
 	//sceneManager_->AllDraw();
 

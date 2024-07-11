@@ -7,6 +7,8 @@
 
 #include "../Object.h"
 
+#include "Level/LevelData.h"
+
 class ObjectManager {
 private:
 	ObjectManager() = default;
@@ -30,10 +32,17 @@ private:
 	static std::unique_ptr<ObjectManager> instance_;
 
 public:
+	void SetLevelData(Lamb::SafePtr<LevelData> levelData);
+
+	const Mat4x4& GetCameraMatrix() const;
+
 	void Set(const Lamb::SafePtr<Object>& object);
 	void Erase(const Lamb::SafePtr<Object>& object);
 
+	void Clear();
+
 	void SetCamera(const Lamb::SafePtr<Camera>& camera);
+	bool SetCamera();
 
 	void Update();
 
@@ -42,4 +51,5 @@ public:
 private:
 	std::unordered_set<Lamb::SafePtr<Object>> objects_;
 	std::list<Lamb::SafePtr<class ObbPushComp>> obbObjects_;
+	Lamb::SafePtr<class Camera3DComp> cameraComp_;
 };

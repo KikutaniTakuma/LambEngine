@@ -30,52 +30,6 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
 {
     // 全オブジェクトを走査
     for (nlohmann::json& objectData : data["objects"]) {
-        if (objectData.contains("skyblock")) {
-            levelData->skyBlocks.emplace_back(std::make_unique<SkyBlock>());
-            auto& skyBlock = levelData->skyBlocks.back();
-
-            Transform transform{};
-            if (objectData.contains("transform")) {
-
-                nlohmann::json& transformData = objectData["transform"];
-
-                for (size_t i = 0; i < transform.translate.size(); i++) {
-                    transform.translate[i] = static_cast<float>(transformData["translation"][i]);
-                }
-                for (size_t i = 0; i < transform.rotate.size(); i++) {
-                    transform.rotate[i] = static_cast<float>(transformData["rotation"][i]);
-                }
-                for (size_t i = 0; i < transform.scale.size(); i++) {
-                    transform.scale[i] = static_cast<float>(transformData["scaling"][i]);
-                }
-            }
-            skyBlock->Init(transform);
-
-            continue;
-
-        }
-        if (objectData.contains("player") and not levelData->player) {
-            levelData->player = std::make_unique<Player>();
-            Transform transform{};
-            if (objectData.contains("transform")) {
-
-                nlohmann::json& transformData = objectData["transform"];
-
-                for (size_t i = 0; i < transform.translate.size(); i++) {
-                    transform.translate[i] = static_cast<float>(transformData["translation"][i]);
-                }
-                for (size_t i = 0; i < transform.rotate.size(); i++) {
-                    transform.rotate[i] = static_cast<float>(transformData["rotation"][i]);
-                }
-                for (size_t i = 0; i < transform.scale.size(); i++) {
-                    transform.scale[i] = static_cast<float>(transformData["scaling"][i]);
-                }
-            }
-            levelData->player->Init(transform);
-
-            continue;
-        }
-
         // オブジェクトを追加
         levelData->objects.emplace_back(std::make_unique<Object>());
         Object& object = *levelData->objects.back();
@@ -112,7 +66,7 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
             AddTransform(objectData, object);
         }
         // childrenがあるなら
-        if (objectData.contains("transform")) {
+        if (objectData.contains("children")) {
             AddChildren(objectData, levelData, object);
         }
     }
@@ -153,6 +107,8 @@ void LevelLoader::AddCamera(nlohmann::json& data, Object& object)
         cameraComp->SetAspectRatio(static_cast<float32_t>(data["aspect_ratio"]));
         cameraComp->SetFarClip(static_cast<float32_t>(data["far_clip"]));
         cameraComp->SetNearClip(static_cast<float32_t>(data["near_clip"]));
+
+        object.SetTag("Camera3D");
     }
     else if (cameratype.compare("Othographic") == 0) {
         Lamb::SafePtr cameraComp = object.AddComp<Camera2DComp>();
@@ -161,6 +117,8 @@ void LevelLoader::AddCamera(nlohmann::json& data, Object& object)
         cameraComp->SetHeight(static_cast<float32_t>(data["height"]));
         cameraComp->SetFarClip(static_cast<float32_t>(data["far_clip"]));
         cameraComp->SetNearClip(static_cast<float32_t>(data["near_clip"]));
+        
+        object.SetTag("Camera2D");
     }
 }
 
