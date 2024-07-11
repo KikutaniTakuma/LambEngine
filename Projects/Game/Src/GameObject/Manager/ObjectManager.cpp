@@ -32,18 +32,25 @@ void ObjectManager::Finalize()
 	instance_.reset();
 }
 
-void ObjectManager::SetLevelData(Lamb::SafePtr<LevelData> levelData) {
+void ObjectManager::SetLevelData(Lamb::SafePtr<LevelData> levelData, Lamb::SafePtr<Camera> camera) {
 	assert(levelData.have());
 	for (auto& i : levelData->objects) {
 		this->Set(i.get());
 	}
 
-	SetCamera();
+	if (not SetCamera()) {
+		SetCamera(camera);
+	}
 }
 
 const Mat4x4& ObjectManager::GetCameraMatrix() const
 {
-	return cameraComp_.have() ? cameraComp_->GetMatrix() : Mat4x4::kIdentity;
+	return cameraComp_.have() ? cameraComp_->GetMatrix() : camera_->GetViewProjection();
+}
+
+const Vector3& ObjectManager::GetCameraPos() const
+{
+	return cameraComp_.have() ? cameraComp_->GetPos() : camera_->GetPos();
 }
 
 void ObjectManager::Set(const Lamb::SafePtr<Object>& object) {
@@ -64,9 +71,13 @@ void ObjectManager::Erase(const Lamb::SafePtr<Object>& object) {
 void ObjectManager::Clear() {
 	objects_.clear();
 	obbObjects_.clear();
+
+	cameraComp_ = nullptr;
+	camera_ = nullptr;
 }
 
 void ObjectManager::SetCamera(const Lamb::SafePtr<Camera>& camera) {
+	camera_ = camera;
 	for (auto& i : objects_) {
 		i->SetCamera(camera.get());
 	}
@@ -105,6 +116,13 @@ bool ObjectManager::SetCamera() {
 void ObjectManager::Update() {
 	// すべてに関数呼び出しするのはなんか不健全なのでバッファする
 	float32_t deltaTime = Lamb::DeltaTime();
+
+	if (cameraComp_.have()) {
+		cameraComp_->Debug("camera");
+	}
+	else if (camera_.have()) {
+		camera_->Debug("camera");
+	}
 
 	// デルタタイムセット
 	for (auto& i : objects_) {

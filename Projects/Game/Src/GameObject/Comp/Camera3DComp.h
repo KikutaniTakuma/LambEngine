@@ -45,6 +45,10 @@ public:
 		aspectRatio_ = aspectRatio;
 	}
 
+	const Vector3& GetPos() const;
+
+	void Debug(const std::string& guiNaneme);
+
 private:
 	Lamb::SafePtr<TransformComp> transform_;
 	float32_t fov_ = 0.0f;

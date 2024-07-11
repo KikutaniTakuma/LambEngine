@@ -49,6 +49,7 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
                 if (objectData.contains("file_name")) {
                     Lamb::SafePtr model = object.AddComp<ModelRenderComp>();
                     model->SetFileNmae(objectData["file_name"]);
+                    model->Load();
                     object.SetTag("Model");
                 }
             }
@@ -79,18 +80,27 @@ void LevelLoader::AddTransform(nlohmann::json& data, Object& object)
 
     nlohmann::json& transformData = data["transform"];
 
-    for (size_t i = 0; i < transform.translate.size(); i++) {
-        transform.translate[i] = static_cast<float>(transformData["translation"][i]);
+    transform.translate[0] = static_cast<float>(transformData["translation"][0]);
+    transform.translate[1] = static_cast<float>(transformData["translation"][2]);
+    transform.translate[2] = static_cast<float>(transformData["translation"][1]);
+
+    std::string type = data["type"].get<std::string>();
+
+    if (type.compare("CAMERA") == 0) {
+        transform.rotate[0] = -static_cast<float>(transformData["rotation"][0]) + 90.0f;
     }
-    for (size_t i = 0; i < transform.rotate.size(); i++) {
-        transform.rotate[i] = static_cast<float>(transformData["rotation"][i]);
-    }
-    for (size_t i = 0; i < transform.scale.size(); i++) {
-        transform.scale[i] = static_cast<float>(transformData["scaling"][i]);
+    else {
+        transform.rotate[0] = -static_cast<float>(transformData["rotation"][0]);
     }
 
+    transform.rotate[1] = -static_cast<float>(transformData["rotation"][2]);
+    transform.rotate[2] = -static_cast<float>(transformData["rotation"][1]);
+    transform.scale[0] = static_cast<float>(transformData["scaling"][0]);
+    transform.scale[1] = static_cast<float>(transformData["scaling"][2]);
+    transform.scale[2] = static_cast<float>(transformData["scaling"][1]);
+
     transformComp->translate = transform.translate;
-    transformComp->rotate = Quaternion::EulerToQuaternion(transform.rotate);
+    transformComp->rotate = transform.rotate * Lamb::Math::toRadian<float>;
     transformComp->scale = transform.scale;
 
     object.SetTag("transform");

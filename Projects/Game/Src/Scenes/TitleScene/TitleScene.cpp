@@ -20,7 +20,7 @@ TitleScene::TitleScene() :
 void TitleScene::Load()
 {
 	levelData_ = LevelLoader::Load("./SceneData/TitleScene.json");
-	ObjectManager::GetInstance()->SetLevelData(levelData_);
+	ObjectManager::GetInstance()->SetLevelData(levelData_, currentCamera_);
 }
 
 void TitleScene::Initialize()
@@ -77,7 +77,7 @@ void TitleScene::Update()
 	/*cloud_->Update();
 	skydome_->Upadate();*/
 
-	currentCamera_->Debug("camera");
+	//currentCamera_->Debug("camera");
 	currentCamera_->Update();
 
 	water_->Debug("water");
@@ -91,10 +91,11 @@ void TitleScene::Update()
 	messageAlpah_ += std::numbers::pi_v<float> *0.5f * Lamb::DeltaTime();
 	startMessage_.color = static_cast<uint32_t>(255.0f * std::abs(std::cos(messageAlpah_)));
 
-	transform_.Debug("skybox");
-	transform_.translate = currentCamera_->GetPos();
-
 	ObjectManager::GetInstance()->Update();
+
+	transform_.Debug("skybox");
+	transform_.translate = ObjectManager::GetInstance()->GetCameraPos();
+
 }
 
 void TitleScene::Draw()
