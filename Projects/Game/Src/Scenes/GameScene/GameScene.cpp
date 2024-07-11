@@ -102,7 +102,7 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-	water_->Draw(currentCamera_->GetViewProjection(), &postEffectManager_->GetPera());
+	water_->Draw(currentCamera_->GetViewProjection());
 
 	for (auto& i : levelData_->skyBlocks) {
 		i->Draw(*currentCamera_);
@@ -111,15 +111,6 @@ void GameScene::Draw()
 	levelData_->player->Draw(*currentCamera_);
 
 	coin_->Draw(*currentCamera_);
-
-	if (levelData_->player->GetIsPunch()) {
-		postEffectManager_->GetPera().Draw(
-			Pipeline::Blend::Normal, nullptr, false);
-		postEffectManager_->GetPera().PreDraw();
-		sceneManager_->AllDraw();
-		postEffectManager_->GetPera().Draw(
-			Pipeline::Blend::Normal, nullptr, false);
-	}
 
 	Lamb::screenout << "Model scene" << Lamb::endline
 		<< "Press space to change ""Water and cloud scene""";
