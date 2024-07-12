@@ -21,20 +21,7 @@
                     1.0
                 ]
             },
-            "file_name": "./Resources/Common/Cube.obj",
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
+            "file_name": "./Resources/Common/Cube.obj"
         },
         {
             "type": "LIGHT",
@@ -54,19 +41,6 @@
                     1.0,
                     0.9999999403953552,
                     1.0
-                ]
-            },
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
                 ]
             }
         },
@@ -93,7 +67,7 @@
             "camera_type": "Perspective",
             "fov": 0.34555558058171215,
             "aspect_ratio": 1.7777777777777777,
-            "far_clip": 1000.0,
+            "far_clip": 100.0,
             "near_clip": 0.10000000149011612
         },
         {
@@ -116,20 +90,7 @@
                     1.0
                 ]
             },
-            "file_name": "./Resources/Common/Cube.obj",
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
+            "file_name": "./Resources/Common/Cube.obj"
         },
         {
             "type": "MESH",
