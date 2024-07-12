@@ -153,15 +153,18 @@ void SkyBox::CreateGraphicsPipeline() {
         CreateLinearSampler()
     );
 
-
-    PipelineManager::CreateRootSgnature(desc, true);
-    PipelineManager::SetShader(shader);
-    PipelineManager::SetVertexInput("POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT);
-
-    PipelineManager::IsDepth();
-    PipelineManager::SetState(Pipeline::Blend::None, Pipeline::SolidState::Solid);
-    pipeline_ = PipelineManager::Create(true);
-
-
-    PipelineManager::StateReset();
+    auto pipelineManager = PipelineManager::GetInstance();
+    Pipeline::Desc pipelineDesc;
+    pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+    pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
+    pipelineDesc.shader = shader;
+    pipelineDesc.isDepth = false;
+    pipelineDesc.blend[0] = Pipeline::None;
+    pipelineDesc.solidState = Pipeline::SolidState::Solid;
+    pipelineDesc.cullMode = Pipeline::CullMode::Back;
+    pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+    pipelineDesc.numRenderTarget = 1;
+    pipelineManager->SetDesc(pipelineDesc);
+    pipeline_ = pipelineManager->CreateCubeMap();
+    pipelineManager->StateReset();
 }

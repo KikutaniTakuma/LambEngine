@@ -194,7 +194,7 @@ public:
 	/// </summary>
 	/// <param name="quaternion">Quaternion</param>
 	/// <returns></returns>
-	static [[nodiscard]] Vector3 QuaternionToEuler(const class Quaternion& quaternion);
+	static [[nodiscard]] Vector3 QuaternionToEuler(const Quaternion& quaternion);
 
 	/// <summary>
 	/// クォータニオン線形補完関数(近いものの方向に回転する)

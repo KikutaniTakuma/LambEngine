@@ -67,7 +67,7 @@ void ObbComp::UpdatePosAndOrient()
 
 void ObbComp::Draw() {
 #ifdef _DEBUG
-	const Mat4x4& viewProjection = object_.GetCamera()->GetViewProjection();
+	const Mat4x4& viewProjection = object_.GetCameraMatrix();
 
 	Line::Draw(
 		(*positions_)[0],

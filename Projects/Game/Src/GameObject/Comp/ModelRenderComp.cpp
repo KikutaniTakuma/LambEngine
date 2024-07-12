@@ -10,11 +10,9 @@ void ModelRenderComp::Init() {
 }
 
 void ModelRenderComp::Draw() {
-	const Camera& camera = *object_.GetCamera();
-
 	model_->Draw(
 		transformComp_->GetMatrix(),
-		camera.GetViewProjection(),
+		object_.GetCameraMatrix(),
 		renderDataComp_->color.GetColorRGBA(),
 		renderDataComp_->type,
 		renderDataComp_->isLighting

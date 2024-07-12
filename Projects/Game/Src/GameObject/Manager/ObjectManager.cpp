@@ -4,6 +4,8 @@
 #include "TransformCompUpdater.h"
 
 #include "GameObject/Comp/ObbPushComp.h"
+#include "GameObject/Comp/Camera3DComp.h"
+
 
 std::unique_ptr<ObjectManager> ObjectManager::instance_;
 
@@ -30,6 +32,27 @@ void ObjectManager::Finalize()
 	instance_.reset();
 }
 
+void ObjectManager::SetLevelData(Lamb::SafePtr<LevelData> levelData, Lamb::SafePtr<Camera> camera) {
+	assert(levelData.have());
+	for (auto& i : levelData->objects) {
+		this->Set(i.get());
+	}
+
+	if (not SetCamera()) {
+		SetCamera(camera);
+	}
+}
+
+const Mat4x4& ObjectManager::GetCameraMatrix() const
+{
+	return cameraComp_.have() ? cameraComp_->GetMatrix() : camera_->GetViewProjection();
+}
+
+const Vector3& ObjectManager::GetCameraPos() const
+{
+	return cameraComp_.have() ? cameraComp_->GetPos() : camera_->GetPos();
+}
+
 void ObjectManager::Set(const Lamb::SafePtr<Object>& object) {
 	if (not objects_.contains(object) and object.have()) {
 		objects_.insert(object);
@@ -45,15 +68,61 @@ void ObjectManager::Erase(const Lamb::SafePtr<Object>& object) {
 	}
 }
 
+void ObjectManager::Clear() {
+	objects_.clear();
+	obbObjects_.clear();
+
+	cameraComp_ = nullptr;
+	camera_ = nullptr;
+}
+
 void ObjectManager::SetCamera(const Lamb::SafePtr<Camera>& camera) {
+	camera_ = camera;
 	for (auto& i : objects_) {
 		i->SetCamera(camera.get());
 	}
 }
 
+bool ObjectManager::SetCamera() {
+	Lamb::SafePtr<Object> cameraObject;
+
+	for (auto& i : objects_) {
+		if (i->HasTag("Camera3D")) {
+			cameraComp_ = i->GetComp<Camera3DComp>();
+			cameraObject = i;
+			break;
+		}
+	}
+
+	if (cameraObject.empty()) {
+		return false;
+	}
+
+	for (auto& i : objects_) {
+		if (i == cameraObject) {
+			continue;
+		}
+		else if (cameraObject.have()) {
+			i->SetCamera(cameraComp_.get());
+		}
+		else {
+			i->SetCamera(cameraComp_.get());
+		}
+	}
+
+	return true;
+}
+
 void ObjectManager::Update() {
 	// すべてに関数呼び出しするのはなんか不健全なのでバッファする
 	float32_t deltaTime = Lamb::DeltaTime();
+
+	if (cameraComp_.have()) {
+		cameraComp_->Debug("camera");
+	}
+	else if (camera_.have()) {
+		camera_->Debug("camera");
+	}
 
 	// デルタタイムセット
 	for (auto& i : objects_) {
@@ -71,6 +140,7 @@ void ObjectManager::Update() {
 	}
 
 	TransformCompUpdater::GetInstance()->UpdateMatrix();
+	TransformCompUpdater::GetInstance()->Debug();
 
 	// 当たり判定
 	for (auto i = obbObjects_.begin(); i != obbObjects_.end(); i++) {

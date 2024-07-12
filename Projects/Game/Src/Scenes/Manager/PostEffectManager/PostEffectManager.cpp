@@ -13,7 +13,6 @@ PostEffectManager::PostEffectManager():
 
 	pera_ = std::make_unique<PeraRender>();
 	pera_->Initialize("./Resources/Shaders/PostShader/PostVignetting.PS.hlsl");
-	pera_->scale = Lamb::ClientSize();
 }
 
 void PostEffectManager::Initialize() {

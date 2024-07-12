@@ -48,6 +48,5 @@ public:
 	std::unique_ptr<SkyBox> skybox_;
 	Transform transform_;
 
-	Lamb::SafePtr<class Outline> outline_;
-	std::unique_ptr<PeraRender> outlinePera_;
+	Lamb::SafePtr<struct LevelData> levelData_;
 };

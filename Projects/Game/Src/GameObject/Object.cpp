@@ -1,5 +1,6 @@
 #include "Object.h"
 #include "Utils/EngineInfo.h"
+#include "../GameObject/Comp/Camera3DComp.h"
 
 void Object::Init() {
 	/*for (auto& i : components_) {
@@ -47,4 +48,9 @@ void Object::Draw() const
 	for (auto& i : components_) {
 		i.second->Draw();
 	}
+}
+
+const Mat4x4& Object::GetCameraMatrix() const
+{
+	return cameraComp_.have() ? cameraComp_->GetMatrix() : camera_->GetViewProjection();
 }

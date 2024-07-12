@@ -213,7 +213,7 @@ Quaternion Quaternion::Normalize() const {
 		return *this;
 	}
 
-	return Quaternion{ *this } / this->Length();
+	return *this / this->Length();
 }
 
 Quaternion Quaternion::Inverce() const {
@@ -340,12 +340,12 @@ Quaternion Quaternion::EulerToQuaternion(const Vector3& euler)
 	return result.Normalize();
 }
 
-Vector3 Quaternion::QuaternionToEuler(const Quaternion& quaternion)
+Vector3 Quaternion::QuaternionToEuler(const Quaternion& q)
 {
 	Vector3 result;
 
 	// y
-	float sinp = 2.0f * (quaternion.quaternion.w * quaternion.quaternion.y - quaternion.quaternion.z * quaternion.quaternion.x);
+	float sinp = 2.0f * (q.quaternion.w * q.quaternion.y - q.quaternion.z * q.quaternion.x);
 	if (std::abs(sinp) >= 1.0f) {
 		result.y = std::copysign(std::numbers::pi_v<float> *0.5f, sinp);
 	}
@@ -355,14 +355,14 @@ Vector3 Quaternion::QuaternionToEuler(const Quaternion& quaternion)
 
 	// zとx
 	if (std::abs(sinp) < 1.0f - static_cast<float>(10e-5)) {
-		result.z = std::atan2f(2.0f * (quaternion.quaternion.w * quaternion.quaternion.z + quaternion.quaternion.x * quaternion.quaternion.y), 1.0f - 2.0f * (quaternion.quaternion.y * quaternion.quaternion.y + quaternion.quaternion.z * quaternion.quaternion.z));
-		result.x = std::atan2f(2.0f * (quaternion.quaternion.w * quaternion.quaternion.x + quaternion.quaternion.y * quaternion.quaternion.z), 1.0f - 2.0f * (quaternion.quaternion.x * quaternion.quaternion.x + quaternion.quaternion.y * quaternion.quaternion.y));
+		result.z = std::atan2f(2.0f * (q.quaternion.w * q.quaternion.z + q.quaternion.x * q.quaternion.y), 1.0f - 2.0f * (q.quaternion.y * q.quaternion.y + q.quaternion.z * q.quaternion.z));
+		result.x = std::atan2f(2.0f * (q.quaternion.w * q.quaternion.x + q.quaternion.y * q.quaternion.z), 1.0f - 2.0f * (q.quaternion.x * q.quaternion.x + q.quaternion.y * q.quaternion.y));
 	}
 	else {
 		result.z = std::atan2f(
 			-2.0f *
-			(quaternion.quaternion.x * quaternion.quaternion.y - quaternion.quaternion.w * quaternion.quaternion.z),
-			quaternion.quaternion.w * quaternion.quaternion.w + quaternion.quaternion.x * quaternion.quaternion.x - quaternion.quaternion.y * quaternion.quaternion.y - quaternion.quaternion.z * quaternion.quaternion.z
+			(q.quaternion.x * q.quaternion.y - q.quaternion.w * q.quaternion.z),
+			q.quaternion.w * q.quaternion.w + q.quaternion.x * q.quaternion.x - q.quaternion.y * q.quaternion.y - q.quaternion.z * q.quaternion.z
 		);
 		result.x = 0.0f;
 	}

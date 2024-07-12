@@ -8,7 +8,7 @@ struct GaussianBlurState{
     int32_t kernelSize;
 };
 
-ConstantBuffer<GaussianBlurState> kGaussianBlurState : register(b2);
+ConstantBuffer<GaussianBlurState> kGaussianBlurState : register(b1);
 
 float32_t gauss(float32_t x, float32_t y, float32_t sigma){
     float32_t exponent = -(x * x + y* y) * rcp(2.0f * sigma * sigma);

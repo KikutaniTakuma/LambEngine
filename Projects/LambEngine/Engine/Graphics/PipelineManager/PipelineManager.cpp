@@ -26,7 +26,12 @@ void PipelineManager::Finalize() {
 	Lamb::AddLog("Finalize PipelineManager succeeded");
 }
 
-void PipelineManager::CreateRootSgnature(const RootSignature::Desc& desc, bool isTexture)
+PipelineManager* const PipelineManager::GetInstance()
+{
+	return instance_.get();
+}
+
+RootSignature* PipelineManager::CreateRootSgnature(const RootSignature::Desc& desc, bool isTexture)
 {
 	auto IsSame = [&desc, &isTexture](const std::unique_ptr<RootSignature>& rootSignature_) {
 		return rootSignature_->IsSame(desc, isTexture);
@@ -39,97 +44,62 @@ void PipelineManager::CreateRootSgnature(const RootSignature::Desc& desc, bool i
 
 		rootSignature->Create(desc, isTexture);
 
-		instance_->rootSignature_ = rootSignature.get();
-
 		instance_->rootSignatures_.push_back(std::move(rootSignature));
+
+		return instance_->rootSignatures_.back().get();
 	}
 	else {
-		instance_->rootSignature_ = rootSignatureItr->get();
+		return rootSignatureItr->get();
 	}
 }
 
-void PipelineManager::SetRootSgnature(RootSignature* rootSignature) {
-	instance_->rootSignature_ = rootSignature;
+void PipelineManager::SetDesc(const Pipeline::Desc& desc) {
+	pipelineDesc_ = desc;
 }
 
-void PipelineManager::SetVertexInput(std::string semanticName, uint32_t semanticIndex, DXGI_FORMAT format, uint32_t inputSlot) {
-	instance_->vertexInputStates_.push_back({ semanticName, semanticIndex, format,inputSlot });
-}
-void PipelineManager::SetShader(const Shader& shader) {
-	instance_->shader_ = shader;
-}
-
-void PipelineManager::SetState(
-	Pipeline::Blend blend,
-	Pipeline::SolidState solidState,
-	Pipeline::CullMode cullMode,
-	D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType,
-	uint32_t numRenderTarget
-) {
-	instance_->blend_ = std::clamp(blend, Pipeline::Blend::None, Pipeline::Blend(Pipeline::Blend::BlendTypeNum - 1));
-	instance_->cullMode_ = cullMode;
-	instance_->solidState_ = solidState;
-	instance_->topologyType_ = topologyType;
-	instance_->numRenderTarget_ = numRenderTarget;
-}
-
-void PipelineManager::IsDepth(bool isDepth_) {
-	instance_->isDepth_ = isDepth_;
-}
-
-Pipeline* const PipelineManager::Create(bool isCubeMap) {
-	auto IsSmae = [](const std::unique_ptr<Pipeline>& pipeline) {
-		bool issame = pipeline->IsSame(
-			instance_->shader_,
-			instance_->blend_,
-			instance_->cullMode_,
-			instance_->solidState_,
-			instance_->topologyType_,
-			instance_->numRenderTarget_,
-			instance_->rootSignature_->Get(),
-			instance_->isDepth_
-		);
-
-		return issame;
+Pipeline* const PipelineManager::Create() {
+	auto IsSmae = [this](const std::unique_ptr<Pipeline>& pipeline) {
+			return pipeline->IsSame(pipelineDesc_);
 		};
 
 	auto pipelineItr = std::find_if(instance_->pipelines_.begin(), instance_->pipelines_.end(), IsSmae);
 
 	if (pipelineItr == instance_->pipelines_.end()) {
 		auto pipeline = std::make_unique<Pipeline>();
-		pipeline->SetShader(instance_->shader_);
-		for (auto& i : instance_->vertexInputStates_) {
-			pipeline->SetVertexInput(std::get<0>(i), std::get<1>(i), std::get<2>(i), std::get<3>(i));
-		}
-		if (isCubeMap) {
-			pipeline->CreateCubeMap(
-				*instance_->rootSignature_,
-				instance_->blend_,
-				instance_->cullMode_,
-				instance_->solidState_,
-				instance_->topologyType_,
-				instance_->numRenderTarget_
-			);
-		}
-		else {
-			pipeline->Create(
-				*instance_->rootSignature_,
-				instance_->blend_,
-				instance_->cullMode_,
-				instance_->solidState_,
-				instance_->topologyType_,
-				instance_->numRenderTarget_,
-				instance_->isDepth_
-			);
-		}
+		pipeline->Create(pipelineDesc_);
 
-		if (!pipeline->graphicsPipelineState_) {
+		if (not pipeline->graphicsPipelineState_) {
 			return nullptr;
 		}
 
 		instance_->pipelines_.push_back(std::move(pipeline));
 
-		return instance_->pipelines_.rbegin()->get();
+		return instance_->pipelines_.back().get();
+	}
+	else {
+		return pipelineItr->get();
+	}
+}
+
+Pipeline* const PipelineManager::CreateCubeMap()
+{
+	auto IsSmae = [this](const std::unique_ptr<Pipeline>& pipeline) {
+		return pipeline->IsSame(pipelineDesc_);
+		};
+
+	auto pipelineItr = std::find_if(instance_->pipelines_.begin(), instance_->pipelines_.end(), IsSmae);
+
+	if (pipelineItr == instance_->pipelines_.end()) {
+		auto pipeline = std::make_unique<Pipeline>();
+		pipeline->CreateCubeMap(pipelineDesc_);
+
+		if (not pipeline->graphicsPipelineState_) {
+			return nullptr;
+		}
+
+		instance_->pipelines_.push_back(std::move(pipeline));
+
+		return instance_->pipelines_.back().get();
 	}
 	else {
 		return pipelineItr->get();
@@ -137,27 +107,11 @@ Pipeline* const PipelineManager::Create(bool isCubeMap) {
 }
 
 void PipelineManager::StateReset() {
-	instance_->rootSignature_ = nullptr;
-	instance_->shader_ = { nullptr };
-	instance_->vertexInputStates_.clear();
-	instance_->blend_ = {};
-	instance_->cullMode_ = {};
-	instance_->solidState_ = {};
-	instance_->topologyType_ = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	instance_->numRenderTarget_ = 0u;
-	instance_->isDepth_ = true;
+	pipelineDesc_ = {};
 }
 
 PipelineManager::PipelineManager() :
 	pipelines_(),
 	rootSignatures_(),
-	rootSignature_(nullptr),
-	shader_{},
-	blend_(),
-	cullMode_(),
-	solidState_(),
-	topologyType_(D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE),
-	numRenderTarget_(0u),
-	vertexInputStates_(0),
-	isDepth_(true)
+	pipelineDesc_()
 {}

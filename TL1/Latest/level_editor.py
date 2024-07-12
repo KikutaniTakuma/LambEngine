@@ -150,15 +150,14 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
 
         trans, rot, scale = object.matrix_local.decompose()
         rot = rot.to_euler()
-
         rot.x = math.degrees(rot.x)
         rot.y = math.degrees(rot.y)
         rot.z = math.degrees(rot.z)
 
         transform = dict()
-        transform["translation"] = (-trans.x, trans.z, trans.y)
-        transform["rotation"] = (rot.x, -rot.z, -rot.y)
-        transform["scaling"] = (scale.x, scale.z, scale.y)
+        transform["translation"] = (trans.x, trans.y, trans.z)
+        transform["rotation"] = (rot.x, rot.y, rot.z)
+        transform["scaling"] = (scale.x, scale.y, scale.z)
 
         json_object["transform"] = transform
 
@@ -173,9 +172,13 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
             #透視投影
             if camera_data.type == 'PERSP':
                 #fov取得
-                fov = camera_data.angle
+                sensor_width = camera_data.sensor_width
+                focal_length = camera_data.lens
+                fov_horiz = math.atan((sensor_width / 2) / focal_length)
+                fov = math.degrees(fov_horiz)
+                fov = math.radians(fov)
                 #度数法に変換
-                fov = math.degrees(fov)
+                #fov = math.degrees(fov)
 
                 json_object["camera_type"] = "Perspective"
                 json_object["fov"] = fov

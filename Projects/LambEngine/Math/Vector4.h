@@ -243,3 +243,5 @@ public:
 [[nodiscard]] Vector4 ColorLerp(const Vector4& start, const Vector4& end, float t);
 
 [[nodiscard]] uint32_t ColorLerp(uint32_t start, uint32_t end, float t);
+
+using float32_t4 = Vector4;

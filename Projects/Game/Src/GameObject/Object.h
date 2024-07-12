@@ -166,10 +166,11 @@ public:
 	void SetCamera(Camera* const camera) {
 		camera_ = camera;
 	}
-
-	const Camera* const GetCamera() const {
-		return camera_.get();
+	void SetCamera(const class Camera3DComp* camera) {
+		cameraComp_ = camera;
 	}
+
+	const Mat4x4& GetCameraMatrix() const;
 
 	const std::string& GetObjectName() const {
 		return objectName_;
@@ -185,5 +186,6 @@ protected:
 	std::string objectName_;
 
 	Lamb::SafePtr<Camera> camera_;
+	Lamb::SafePtr<const class Camera3DComp> cameraComp_;
 	float32_t deltatime_ = 0.0_f32;
 };

@@ -56,15 +56,17 @@ void RootSignature::Create(const Desc& desc, bool isTexture) {
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 	rootParamater_.clear();
-	rootParamater_.reserve(desc_.rootParameterSize);
+	rootParamater_.resize(desc_.rootParameterSize);
 	for (size_t i = 0; i < desc_.rootParameterSize; i++) {
-		std::vector<D3D12_DESCRIPTOR_RANGE> ranges = {};
+		std::vector<D3D12_DESCRIPTOR_RANGE> ranges;
 		if (desc_.rootParameter[i].ParameterType == D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE) {
+			ranges.resize(desc_.rootParameter[i].DescriptorTable.NumDescriptorRanges, D3D12_DESCRIPTOR_RANGE{});
+
 			for (uint32_t j = 0; j < desc_.rootParameter[i].DescriptorTable.NumDescriptorRanges;j++) {
-				ranges.push_back(desc_.rootParameter[i].DescriptorTable.pDescriptorRanges[j]);
+				ranges[j] = desc_.rootParameter[i].DescriptorTable.pDescriptorRanges[j];
 			}
 		}
-		rootParamater_.push_back({ desc_.rootParameter[i], ranges });
+		rootParamater_[i] = { desc_.rootParameter[i], std::move(ranges) };
 	}
 
 	std::vector<D3D12_ROOT_PARAMETER> params = {};

@@ -9,4 +9,6 @@ struct Shader {
 	struct IDxcBlob* domain = nullptr;
 	struct IDxcBlob* geometory = nullptr;
 	struct IDxcBlob* pixel = nullptr;
+
+	[[nodiscard]] bool operator==(const Shader& right) const = default;
 };
