@@ -76,7 +76,7 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
 void LevelLoader::AddTransform(nlohmann::json& data, Object& object)
 {
     Lamb::SafePtr transformComp = object.AddComp<TransformComp>();
-    QuaternionTransform transform{};
+    Transform transform{};
 
     nlohmann::json& transformData = data["transform"];
 
@@ -87,20 +87,20 @@ void LevelLoader::AddTransform(nlohmann::json& data, Object& object)
     std::string type = data["type"].get<std::string>();
 
 
-    transform.rotate.quaternion.x = -static_cast<float>(transformData["rotation"][0]);
-    transform.rotate.quaternion.y = -static_cast<float>(transformData["rotation"][2]);
-    transform.rotate.quaternion.z = -static_cast<float>(transformData["rotation"][1]);
-    transform.rotate.quaternion.w = static_cast<float>(transformData["rotation"][3]);
+    transform.rotate[0] = -static_cast<float>(transformData["rotation"][0]);
+    transform.rotate[1] = -static_cast<float>(transformData["rotation"][2]);
+    transform.rotate[2] = -static_cast<float>(transformData["rotation"][1]);
+
+    transform.rotate *= Lamb::Math::toRadian<float>;
     if (type.compare("CAMERA") == 0) {
-        transform.rotate *= Quaternion::MakeRotateXAxis(90.0f * Lamb::Math::toRadian<float>);
+        transform.rotate.x += 90.0f * Lamb::Math::toRadian<float>;
     }
-    transform.rotate = transform.rotate.Normalize();
     transform.scale[0] = static_cast<float>(transformData["scaling"][0]);
     transform.scale[1] = static_cast<float>(transformData["scaling"][2]);
     transform.scale[2] = static_cast<float>(transformData["scaling"][1]);
 
     transformComp->translate = transform.translate;
-    transformComp->rotate = transform.rotate;
+    transformComp->rotate = Quaternion::EulerToQuaternion(transform.rotate);
     transformComp->scale = transform.scale;
 
     object.SetTag("transform");
@@ -192,10 +192,11 @@ void LevelLoader::AddChildren(nlohmann::json& data, Lamb::SafePtr<LevelData> lev
             // 親をセット
             Lamb::SafePtr transform = object.GetComp<TransformComp>();
             Lamb::SafePtr parentTransform = parent.GetComp<TransformComp>();
+
             transform->SetParent(parentTransform);
         }
         // childrenがあるなら
-        if (objectData.contains("transform")) {
+        if (objectData.contains("children")) {
             AddChildren(objectData, levelData, object);
         }
     }
