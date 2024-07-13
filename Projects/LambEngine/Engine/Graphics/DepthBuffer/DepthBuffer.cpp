@@ -111,7 +111,7 @@ void DepthBuffer::CreateView(
 	);
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE DepthBuffer::GetDepthHandle() const {
+const D3D12_CPU_DESCRIPTOR_HANDLE& DepthBuffer::GetDepthHandle() const {
 	return handle_;
 }
 Texture* const DepthBuffer::GetTex() const {
