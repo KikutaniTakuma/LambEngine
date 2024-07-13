@@ -118,11 +118,11 @@ RenderTarget::~RenderTarget() {
 	rtvHeap->ReleaseView(rtvHeapHandleUint_);
 }
 
-void RenderTarget::SetThisRenderTarget() {
+void RenderTarget::SetThisRenderTarget(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
 	ChangeResourceState();
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtv(rtvHeapHandleUint_);
+	rtvHeap->SetRtv(rtvHeapHandleUint_, depthHandle);
 
 	Vector4 clearColor = { 0.0f, 0.0f, 0.0f, 0.0f };
 	rtvHeap->ClearRenderTargetView(rtvHeapHandleUint_, clearColor);
@@ -137,10 +137,10 @@ void RenderTarget::ChangeResourceState() {
 	isWrightResouceState_ = not isWrightResouceState_;
 }
 
-void RenderTarget::SetMainRenderTarget() {
+void RenderTarget::SetMainRenderTarget(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
 	ChangeResourceState();
 	
-	DirectXSwapChain::GetInstance()->SetMainRenderTarget();
+	RtvHeap::GetInstance()->SetMainRtv(depthHandle);
 }
 
 void RenderTarget::UseThisRenderTargetShaderResource() {
@@ -199,8 +199,11 @@ UINT RenderTarget::GetRtvHandleUINT() const
 	return rtvHeapHandleUint_;
 }
 
-void RenderTarget::SetRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget)
-{
+void RenderTarget::SetRenderTargets(
+	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
+	uint32_t numRenderTarget, 
+	const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
+) {
 	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
 	rendetTargets.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
@@ -218,15 +221,18 @@ void RenderTarget::SetRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtr
 	}
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtv(handles.data(), numRenderTarget);
+	rtvHeap->SetRtv(handles.data(), numRenderTarget, depthHandle);
 
 	for (auto& i : rendetTargets) {
 		rtvHeap->ClearRenderTargetView(i->rtvHeapHandleUint_, Vector4::kZero);
 	}
 }
 
-void RenderTarget::SetMainAndRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget)
-{
+void RenderTarget::SetMainAndRenderTargets(
+	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
+	uint32_t numRenderTarget, 
+	const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
+) {
 	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
 	rendetTargets.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
@@ -244,15 +250,18 @@ void RenderTarget::SetMainAndRenderTargets(Lamb::SafePtr<RenderTarget*> renderTa
 	}
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget);
+	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget, depthHandle);
 
 	for (auto& i : rendetTargets) {
 		rtvHeap->ClearRenderTargetView(i->rtvHeapHandleUint_, Vector4::kZero);
 	}
 }
 
-void RenderTarget::SetRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget)
-{
+void RenderTarget::SetRenderTargetsNoClear(
+	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
+	uint32_t numRenderTarget, 
+	const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
+) {
 	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
 	rendetTargets.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
@@ -270,11 +279,14 @@ void RenderTarget::SetRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> renderTa
 	}
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtv(handles.data(), numRenderTarget);
+	rtvHeap->SetRtv(handles.data(), numRenderTarget, depthHandle);
 }
 
-void RenderTarget::SetMainAndRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget)
-{
+void RenderTarget::SetMainAndRenderTargetsNoClear(
+	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
+	uint32_t numRenderTarget, 
+	const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
+) {
 	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
 	rendetTargets.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
@@ -292,6 +304,6 @@ void RenderTarget::SetMainAndRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> r
 	}
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget);
+	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget, depthHandle);
 }
 

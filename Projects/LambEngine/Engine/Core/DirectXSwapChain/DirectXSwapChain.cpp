@@ -94,11 +94,6 @@ void DirectXSwapChain::SetViewPort(uint32_t width, uint32_t height) {
 	commandList->RSSetScissorRects(1, &scissorRect);
 }
 
-void DirectXSwapChain::SetMainRenderTarget() {
-	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetMainRtv();
-}
-
 void DirectXSwapChain::ClearBackBuffer() {
 	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 

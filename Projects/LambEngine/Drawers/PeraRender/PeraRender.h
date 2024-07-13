@@ -36,12 +36,12 @@ public:
 public:
 	void Update();
 
-	void PreDraw();
+	void PreDraw(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 	void Draw(
 		Pipeline::Blend blend, 
-		PeraRender* pera = nullptr,
-		bool isDepth = false
+		D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle,
+		PeraRender* pera = nullptr
 	);
 
 	Texture* GetTex() const {
@@ -52,8 +52,8 @@ public:
 		peraPipelineObject_->GetRender().ChangeResourceState();
 	}
 
-	void SetMainRenderTarget() {
-		peraPipelineObject_->GetRender().SetMainRenderTarget();
+	void SetMainRenderTarget(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
+		peraPipelineObject_->GetRender().SetMainRenderTarget(depthHandle);
 	}
 
 	void Debug(const std::string& guiName);

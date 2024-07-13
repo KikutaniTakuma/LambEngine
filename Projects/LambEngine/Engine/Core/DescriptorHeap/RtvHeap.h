@@ -42,13 +42,13 @@ public:
 		IDXGISwapChain4* const swapChain
 		);
 	
-	void SetMainRtv(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	void SetMainRtv(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 public:
-	void SetRtv(uint32_t heapHandle, D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
-	void SetRtv(std::initializer_list<D3D12_CPU_DESCRIPTOR_HANDLE> heapHandles, D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
-	void SetRtv(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
-	void SetRtvAndMain(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	void SetRtv(uint32_t heapHandle, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	void SetRtv(std::initializer_list<D3D12_CPU_DESCRIPTOR_HANDLE> heapHandles, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	void SetRtv(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	void SetRtvAndMain(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 	void ClearRenderTargetView(uint32_t handle, const class Vector4& clearColor);
 

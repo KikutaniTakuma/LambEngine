@@ -42,29 +42,29 @@ void PeraRender::Update() {
 	peraPipelineObject_->color = UintToVector4(color);
 }
 
-void PeraRender::PreDraw() {
-	peraPipelineObject_->GetRender().SetThisRenderTarget();
+void PeraRender::PreDraw(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
+	peraPipelineObject_->GetRender().SetThisRenderTarget(depthHandle);
 }
 
 void PeraRender::Draw(
 	Pipeline::Blend blend, 
-	PeraRender* pera, 
-	bool isDepth
+	D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle,
+	PeraRender* pera
 ) {
 	if (!!pera) {
-		pera->PreDraw();
+		pera->PreDraw(depthHandle);
 		peraPipelineObject_->GetRender().ChangeResourceState();
 	}
 	else {
 		// 描画先をメインレンダーターゲットに変更
-		peraPipelineObject_->GetRender().SetMainRenderTarget();
+		peraPipelineObject_->GetRender().SetMainRenderTarget(depthHandle);
 	}
 
 	peraPipelineObject_->Update();
 
 	// 各種描画コマンドを積む
 	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	peraPipelineObject_->Use(blend, isDepth);
+	peraPipelineObject_->Use(blend, !!depthHandle);
 	commandList->DrawInstanced(3, 1, 0, 0);
 }
 
