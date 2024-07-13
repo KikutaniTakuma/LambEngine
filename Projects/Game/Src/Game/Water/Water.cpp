@@ -120,7 +120,8 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 
 	RenderTarget::SetMainAndRenderTargets(
 		renderTargets.data(),
-		static_cast<uint32_t>(renderTargets.size())
+		static_cast<uint32_t>(renderTargets.size()),
+		nullptr
 	);
 
 	waterSurface_->Draw(
@@ -136,9 +137,9 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 	);
 	waterSurface_->AllDraw(BlendType::kNone);
 
-	luminate_->Draw(Pipeline::None, gaussianBlurWidth_.get());
-	gaussianBlurWidth_->Draw(Pipeline::None, gaussianBlurHeight_.get());
-	gaussianBlurHeight_->Draw(Pipeline::Add);
+	luminate_->Draw(Pipeline::None, nullptr,  gaussianBlurWidth_.get());
+	gaussianBlurWidth_->Draw(Pipeline::None, nullptr, gaussianBlurHeight_.get());
+	gaussianBlurHeight_->Draw(Pipeline::Add, nullptr);
 }
 
 void Water::Debug([[maybe_unused]]const std::string& guiName){

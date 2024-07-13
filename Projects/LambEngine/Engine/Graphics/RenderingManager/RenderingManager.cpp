@@ -29,7 +29,7 @@ void RenderingManager::DrawRGB(const std::list<const RenderData*>& renderList) {
 	renderTargets[1] = &colorTexture_->GetRender();
 	renderTargets[2] = &worldPositionTexture_->GetRender();
 
-	RenderTarget::SetRenderTargets(renderTargets.data(), static_cast<uint32_t>(renderTargets.size()));
+	RenderTarget::SetRenderTargets(renderTargets.data(), static_cast<uint32_t>(renderTargets.size()), &depthStencil_->GetDepthHandle());
 
 	for (const auto& i : renderList) {
 		i->Draw();

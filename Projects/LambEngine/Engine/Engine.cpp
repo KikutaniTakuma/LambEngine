@@ -394,7 +394,7 @@ void Engine::FrameStart() {
 	ImGuiManager::GetInstance()->Start();
 
 	instance_->directXSwapChain_->ChangeBackBufferState();
-	instance_->directXSwapChain_->SetMainRenderTarget();
+	RtvHeap::GetInstance()->SetMainRtv(&instance_->depthStencil_->GetHandleCPU());
 	instance_->directXSwapChain_->ClearBackBuffer();
 
 	// ビューポート
