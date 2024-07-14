@@ -59,17 +59,32 @@ void RenderContextManager::SetIsNowThreading(bool isNowThreading) {
 	}
 }
 
-std::list<const RenderData*> RenderContextManager::GetRenderList(BlendType blend)
+std::pair<size_t, const std::list<const RenderData*>&> RenderContextManager::CreateRenderList(BlendType blend)
 {
-	std::list<const RenderData*> result;
-
+	std::pair<size_t, const std::list<const RenderData*>&> result = { 0llu, renderDataLists_[blend] };
+	size_t count = 0;
+	auto itr = renderDataLists_[blend].begin();
+	
 	for (auto& i : renderData_) {
 		if (i.second->IsDraw(blend)) {
-			result.emplace_back(i.second->GetRenderData(blend));
+			if (itr == renderDataLists_[blend].end()) {
+				break;
+			}
+			*itr = i.second->GetRenderData(blend);
+			itr++;
+			count++;
 		}
 	}
 
+	result.first = count;
+
 	return result;
+}
+
+void RenderContextManager::ResizeRenderList() {
+	for (auto& i : renderDataLists_) {
+		i.resize(renderData_.size());
+	}
 }
 
 void RenderContextManager::Draw() {
