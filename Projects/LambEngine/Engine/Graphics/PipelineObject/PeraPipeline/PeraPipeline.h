@@ -45,8 +45,6 @@ public:
 	}
 
 public:
-	Mat4x4 worldMat = Mat4x4::kIdentity;
-	Mat4x4 viewProjection = Mat4x4::kIdentity;
 	Vector4 color = Vector4::kIdentity;
 
 protected:

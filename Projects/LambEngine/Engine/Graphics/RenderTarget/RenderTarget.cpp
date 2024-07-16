@@ -204,28 +204,18 @@ void RenderTarget::SetRenderTargets(
 	uint32_t numRenderTarget, 
 	const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
 ) {
-	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
-	rendetTargets.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		rendetTargets[i] = renderTargetPtrs[i];
-	}
-
-	for (auto& i : rendetTargets) {
-		i->ChangeResourceState();
+		renderTargetPtrs[i]->ChangeResourceState();
 	}
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
 	handles.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		handles[i] = rendetTargets[i]->GetRtvHandleCPU();
+		handles[i] = renderTargetPtrs[i]->GetRtvHandleCPU();
 	}
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
 	rtvHeap->SetRtv(handles.data(), numRenderTarget, depthHandle);
-
-	for (auto& i : rendetTargets) {
-		rtvHeap->ClearRenderTargetView(i->rtvHeapHandleUint_, Vector4::kZero);
-	}
 }
 
 void RenderTarget::SetMainAndRenderTargets(
@@ -233,77 +223,37 @@ void RenderTarget::SetMainAndRenderTargets(
 	uint32_t numRenderTarget, 
 	const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
 ) {
-	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
-	rendetTargets.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		rendetTargets[i] = renderTargetPtrs[i];
-	}
-
-	for (auto& i : rendetTargets) {
-		i->ChangeResourceState();
+		renderTargetPtrs[i]->ChangeResourceState();
 	}
 
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
 	handles.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		handles[i] = rendetTargets[i]->GetRtvHandleCPU();
-	}
-
-	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget, depthHandle);
-
-	for (auto& i : rendetTargets) {
-		rtvHeap->ClearRenderTargetView(i->rtvHeapHandleUint_, Vector4::kZero);
-	}
-}
-
-void RenderTarget::SetRenderTargetsNoClear(
-	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
-	uint32_t numRenderTarget, 
-	const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
-) {
-	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
-	rendetTargets.resize(numRenderTarget);
-	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		rendetTargets[i] = renderTargetPtrs[i];
-	}
-
-	for (auto& i : rendetTargets) {
-		i->ChangeResourceState();
-	}
-
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
-	handles.resize(numRenderTarget);
-	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		handles[i] = rendetTargets[i]->GetRtvHandleCPU();
-	}
-
-	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtv(handles.data(), numRenderTarget, depthHandle);
-}
-
-void RenderTarget::SetMainAndRenderTargetsNoClear(
-	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
-	uint32_t numRenderTarget, 
-	const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
-) {
-	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
-	rendetTargets.resize(numRenderTarget);
-	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		rendetTargets[i] = renderTargetPtrs[i];
-	}
-
-	for (auto& i : rendetTargets) {
-		i->ChangeResourceState();
-	}
-
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
-	handles.resize(numRenderTarget);
-	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		handles[i] = rendetTargets[i]->GetRtvHandleCPU();
+		handles[i] = renderTargetPtrs[i]->GetRtvHandleCPU();
 	}
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
 	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget, depthHandle);
 }
+
+void RenderTarget::ResourceStateChnageRenderTargets(
+	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
+	uint32_t numRenderTarget
+) {
+	for (uint32_t i = 0; i < numRenderTarget; i++) {
+		renderTargetPtrs[i]->ChangeResourceState();
+	}
+}
+
+void RenderTarget::ClearRenderTargets(
+	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
+	uint32_t numRenderTarget
+) {
+	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
+	for (uint32_t i = 0; i < numRenderTarget; i++) {
+		rtvHeap->ClearRenderTargetView(renderTargetPtrs[i]->rtvHeapHandleUint_, Vector4::kZero);
+	}
+}
+
 

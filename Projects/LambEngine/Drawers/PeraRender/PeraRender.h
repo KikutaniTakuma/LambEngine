@@ -34,8 +34,6 @@ public:
 	void Initialize(PeraPipeline* pipelineObject);
 
 public:
-	void Update();
-
 	void PreDraw(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 	void Draw(

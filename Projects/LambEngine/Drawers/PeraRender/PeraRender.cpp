@@ -38,10 +38,6 @@ void PeraRender::Initialize(PeraPipeline* pipelineObject) {
 	ResetPipelineObject(pipelineObject);
 }
 
-void PeraRender::Update() {
-	peraPipelineObject_->color = UintToVector4(color);
-}
-
 void PeraRender::PreDraw(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
 	peraPipelineObject_->GetRender().SetThisRenderTarget(depthHandle);
 }

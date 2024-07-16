@@ -98,10 +98,6 @@ void Water::Update(const Vector3& cameraPos) {
 		}
 	);
 
-	luminate_->Update();
-	gaussianBlurWidth_->Update();
-	gaussianBlurHeight_->Update();
-
 	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 

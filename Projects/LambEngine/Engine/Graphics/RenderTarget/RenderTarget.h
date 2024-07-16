@@ -47,8 +47,8 @@ public:
 public:
 	static void SetRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 	static void SetMainAndRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
-	static void SetRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
-	static void SetMainAndRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	static void ResourceStateChnageRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	static void ClearRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
 
 private:
 	Lamb::LambPtr<ID3D12Resource> resource_;

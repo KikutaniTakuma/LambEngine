@@ -92,7 +92,7 @@ void SceneManager::Update() {
 
 	if (fade_->OutEnd()) {
 		// ロード中の描画を開始
-		load_->Start();
+		//load_->Start();
 
 #pragma region シーン切り替え
 		// 前のシーンのIDを保存
@@ -108,12 +108,15 @@ void SceneManager::Update() {
 
 #pragma region ロード中
 		scene_->Load();
+
+		RenderContextManager::GetInstance()->ResizeRenderList();
+
 		// シーンの初期化
 		scene_->Initialize();
 
 
 		// ロード中の描画を終了
-		load_->Stop();
+		//load_->Stop();
 #pragma endregion
 
 #pragma region その後の処理
@@ -135,13 +138,6 @@ void SceneManager::Draw() {
 	}
 
 	fade_->Draw(fadeCamera_.GetViewOthographics());
-}
-
-void SceneManager::AllDraw() {
-	RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
-	renderContextManager->Draw();
-	// ドローカウントリセット
-	renderContextManager->ResetDrawCount();
 }
 
 bool SceneManager::IsEnd() const {

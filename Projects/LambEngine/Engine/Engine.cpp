@@ -403,7 +403,7 @@ void Engine::FrameStart() {
 
 	// SRV用のヒープ
 	const Lamb::SafePtr cbvSrvUavDescriptorHeap = CbvSrvUavHeap::GetInstance();
-	std::array heapPtrs = { cbvSrvUavDescriptorHeap ->Get()};
+	std::array heapPtrs = { cbvSrvUavDescriptorHeap ->Get() };
 	DescriptorHeap::SetHeaps(heapPtrs.size(), heapPtrs.data());
 }
 
