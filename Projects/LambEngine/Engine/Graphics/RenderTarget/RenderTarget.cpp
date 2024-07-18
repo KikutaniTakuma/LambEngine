@@ -28,7 +28,7 @@ RenderTarget::RenderTarget() :
 	heapPropaerties.Type = D3D12_HEAP_TYPE_DEFAULT;
 	Vector4 clsValue = { 0.0f, 0.0f, 0.0f, 0.0f };
 	D3D12_CLEAR_VALUE clearValue{};
-	clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	clearValue.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	for (size_t i = 0; i < clsValue.m.size(); i++) {
 		clearValue.Color[i] = clsValue[i];
 	}
@@ -56,7 +56,7 @@ RenderTarget::RenderTarget() :
 
 	srvDesc_ = {};
 	srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	srvDesc_.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	srvDesc_.Texture2D.MipLevels = 1;
 	srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 }
