@@ -83,20 +83,27 @@ void Water::Init() {
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
 	waveData.ripplesPoint = transform.translate;
-	waveData.waveStrength = 0.17f;
+	waveData.waveStrength = 0.5f;
 	waveData.ripples = 10.0f;
 	waveData.waveSpeed = 10.0f;
-	waveData.timeAttenuation = 0.0f;
+	waveData.timeAttenuation = 0.1f;
+
+	lightRotate_ = Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>;
+
+	lightScale_ = 8.0f;
+	light_ = Light{
+			.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(lightRotate_),
+			.ligColor = Vector3::kIdentity * lightScale_,
+			.eyePos = Vector3::kZero,
+			.shinness = 42.0f
+	};
+
+	density_ = 1.3f;
 }
 
 void Water::Update(const Vector3& cameraPos) {
-	waterSurface_->SetLight(
-		Light{
-			.ligDirection = Vector3{ 1.0f,-1.0f,0.0f }.Normalize(),
-			.ligColor = Vector3::kIdentity * 15.0f,
-			.eyePos = cameraPos
-		}
-	);
+	light_.eyePos = cameraPos;
+	waterSurface_->SetLight(light_);
 
 	luminate_->Update();
 	gaussianBlurWidth_->Update();
@@ -145,6 +152,20 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
 	ImGui::DragFloat("density", &density_, 0.01f);
+
+	if (ImGui::TreeNode("Light")) {
+		lightRotate_ *= Lamb::Math::toDegree<float>;
+		ImGui::DragFloat3("lightDirection", lightRotate_.data(), 1.0f, -360.0f, 360.0f);
+		lightRotate_ *= Lamb::Math::toRadian<float>;
+		light_.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(lightRotate_);
+		light_.ligDirection = light_.ligDirection.Normalize();
+		light_.ligColor /= lightScale_;
+		ImGui::ColorEdit3("ligColor", light_.ligColor.data());
+		ImGui::DragFloat("ligColorScale", &lightScale_, 0.01f);
+		light_.ligColor *= lightScale_;
+		ImGui::DragFloat("shinness", &light_.shinness, 0.01f, 0.0f, 256.0f);
+		ImGui::TreePop();
+	}
 
 	if (ImGui::TreeNode("WaterSRT")) {
 		ImGui::DragFloat3("pos", transform.translate.data(), 0.01f);

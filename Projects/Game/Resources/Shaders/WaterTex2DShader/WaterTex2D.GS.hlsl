@@ -14,7 +14,7 @@ float32_t Waves(float32_t length, uint32_t instanceID){
 	float32_t time = kWaterData[instanceID].waveData.time;
 	float32_t timeAttenuation = kWaterData[instanceID].waveData.timeAttenuation;
 
-	return maxHeight * pow(M_E, -time * timeAttenuation) * sin(waveLength * (length - waveSpeed * time));
+	return maxHeight * pow(M_E, -time * timeAttenuation) * sin(waveLength * (length - waveSpeed * time)) * min(1.0f, max(0.0f, (waveSpeed * time- length)));
 }
 
 float32_t3 CalcNormal(float32_t3 position, float32_t delta, uint32_t instanceID){
@@ -60,7 +60,7 @@ void main(
 		// ワールドポジション計算
     	output[i].outputData.position = input[i].outputData.position;
 		output[i].outputData.worldPosition = mul(output[i].outputData.position, kWvpMat[instanceID].worldMat);
-		float32_t3 ripplesNormal = CalcNormal(output[i].outputData.worldPosition.xyz, 0.001f, instanceID);
+		float32_t3 ripplesNormal = CalcNormal(output[i].outputData.worldPosition.xyz, 0.0001f, instanceID);
 		float32_t3 tangent = NormalToTangent(input[i].outputData.normal);
 		float32_t3 binormal = CalcBinormal(input[i].outputData.normal, tangent);
 		output[i].outputData.normal = BlendNormal(input[i].outputData.normal, tangent, binormal, ripplesNormal);
@@ -77,8 +77,8 @@ void main(
 		output[i].outputData.textureID = input[i].outputData.textureID;
 		output[i].outputData.instanceID = input[i].outputData.instanceID;
 
-		float32_t3 N = normalize(mul(input[i].outputData.normal, (float32_t3x3) kWvpMat[instanceID].worldMat));
-    	float32_t3 T = normalize(mul(NormalToTangent(input[i].outputData.normal), (float32_t3x3) kWvpMat[instanceID].worldMat));
+		float32_t3 N = normalize(mul(output[i].outputData.normal, (float32_t3x3) kWvpMat[instanceID].worldMat));
+    	float32_t3 T = normalize(mul(NormalToTangent(output[i].outputData.normal), (float32_t3x3) kWvpMat[instanceID].worldMat));
     	float32_t3 B = normalize(cross(N, T));
 
 		/*float32_t3 N = normalize(mul(kWaterData[instanceID].normal, (float32_t3x3) kWvpMat[instanceID].worldMat));

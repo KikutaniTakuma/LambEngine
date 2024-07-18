@@ -18,36 +18,34 @@ PixelShaderOutPut2 main(WaterTex2DGeometoryShaderOutPut waterinput)
     float32_t4 causticsColor = textures[textureID].Sample(smp, waterinput.causticsUv + frac(CreateNoiseNoDdy(waterinput.causticsUv * 0.1f, kRandomVec, kDensity)));
     
     float32_t3 perlinNormal = CreateNormal(input.uv, kRandomVec, kDensity);
-    //float32_t3 normal = input.normal;
-    //float32_t3 tangent = NormalToTangent(normal);
-    //float32_t3 binormal = CalcBinormal(normal, tangent);
-    //float32_t3 blendNormal = BlendNormal(normal, tangent, binormal, perlinNormal);
+    float32_t3 normal = input.normal;
+    float32_t3 tangent = NormalToTangent(perlinNormal);
+    float32_t3 binormal = CalcBinormal(perlinNormal, tangent);
+    float32_t3 blendNormal = BlendNormal(perlinNormal, tangent, binormal, normal);
     
     //float32_t3 blendNormal = input.normal;
-    
-    float32_t3 blendNormal = perlinNormal;
 
 
     float32_t3 ligDirection = kLight.ligDirection;
-    ligDirection = mul(ligDirection, waterinput.tangentBasis);
+    //ligDirection = mul(ligDirection, waterinput.tangentBasis);
     
     // ディレクションライト拡散反射光
-    float32_t t = dot(blendNormal, -normalize(ligDirection));
+    float32_t t = dot(blendNormal, -ligDirection);
     t = saturate(t);
 
     float32_t3 diffDirection = kLight.ligColor * t;
     
     
     float32_t3 toEye = kLight.eyePos - input.worldPosition.xyz;
-    toEye = mul(toEye, waterinput.tangentBasis);
+    //toEye = mul(toEye, waterinput.tangentBasis);
     toEye = normalize(toEye);
     
-    float32_t3 refVec = -reflect(toEye, blendNormal);
+    float32_t3 refVec = reflect(ligDirection, blendNormal);
     refVec = normalize(refVec);
 
     t = dot(refVec, toEye);
 
-    t = pow(saturate(t), 32.0f);
+    t = pow(saturate(t), kLight.shinness);
     float32_t3 specDirection = kLight.ligColor * t;
     
     float32_t3 lig = diffDirection + specDirection;
