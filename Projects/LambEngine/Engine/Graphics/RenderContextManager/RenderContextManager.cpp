@@ -181,6 +181,9 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 	pipelineDesc.cullMode = Pipeline::CullMode::Back;
 	pipelineDesc.topologyType = (shader.hull != nullptr ? D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH : D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	pipelineDesc.numRenderTarget = numRenderTarget;
+	for (uint32_t i = 0; i < pipelineDesc.numRenderTarget; i++) {
+		pipelineDesc.rtvFormtat[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	}
 
 
 	for (size_t i = 0; i < size_t(BlendType::kNum); i++) {
@@ -281,6 +284,9 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimation
 	pipelineDesc.topologyType = (shader.hull != nullptr ? D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH : D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	pipelineDesc.numRenderTarget = numRenderTarget;
 
+	for (uint32_t i = 0; i < pipelineDesc.numRenderTarget; i++) {
+		pipelineDesc.rtvFormtat[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	}
 
 	for (size_t i = 0; i < size_t(BlendType::kNum); i++) {
 		size_t blendType = i < Pipeline::Blend::BlendTypeNum ? i : i - Pipeline::Blend::BlendTypeNum;

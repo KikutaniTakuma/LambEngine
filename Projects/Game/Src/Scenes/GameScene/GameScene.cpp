@@ -67,8 +67,8 @@ void GameScene::Update()
 
 
 	water_->Update(currentCamera_->GetPos());
-	postEffectManager_->GetPera().Debug("pera");
-	postEffectManager_->GetPera().Update();
+	/*postEffectManager_->GetPera().Debug("pera");
+	postEffectManager_->GetPera().Update();*/
 }
 
 void GameScene::Draw()

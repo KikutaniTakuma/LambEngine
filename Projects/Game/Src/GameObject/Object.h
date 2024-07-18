@@ -78,6 +78,8 @@ public:
 
 	virtual void Draw() {}
 
+	virtual void Debug([[maybe_unused]]const std::string& guiName) {};
+
 public:
 	const Object& getObject() const {
 		return object_;
@@ -105,6 +107,8 @@ public:
 	virtual void LastUpdate() override;
 
 	virtual void Draw() const;
+
+	virtual void Debug(const std::string& guiName);
 
 public:
 	void SetDeltaTime(float32_t deltatime) {

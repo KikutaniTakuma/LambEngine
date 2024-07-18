@@ -9,10 +9,13 @@
 
 #include "Drawers/Line/Line.h"
 
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
+
 void Framework::Initialize() {
 	// ライブラリ初期化
 	Engine::Initialize(initDesc_.windowName, initDesc_.windowSize, initDesc_.maxFps, initDesc_.isFullesceen);
 
+	RenderingManager::Initialize();
 
 	// 入力処理初期化
 	Input::Initialize();
@@ -26,6 +29,8 @@ void Framework::Finalize() {
 
 	// 入力関連解放
 	Input::Finalize();
+
+	RenderingManager::Finalize();
 
 	// ライブラリ終了
 	Engine::Finalize();

@@ -1,7 +1,16 @@
 #include "RenderingManager.h"
 
+
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include "Utils/EngineInfo.h"
+
+#include "Engine/Core/WindowFactory/WindowFactory.h"
+#include "Engine/Core/DirectXDevice/DirectXDevice.h"
+#include "Engine/Core/DirectXCommand/DirectXCommand.h"
+#include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
+#include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
+#include "Engine/Core/ImGuiManager/ImGuiManager.h"
+#include "Engine/Core/DescriptorHeap/RtvHeap.h"
 
 std::unique_ptr<RenderingManager> RenderingManager::instance_;
 
@@ -25,9 +34,12 @@ RenderingManager::RenderingManager() {
 	srvHeap->CreateView(*normalTexture_);
 	srvHeap->CreateView(*worldPositionTexture_);
 
-	deferredRendering_->SetNormalHandle(colorTexture_->GetHandleGPU());
-	deferredRendering_->SetColorHandle(normalTexture_->GetHandleGPU());
+	deferredRendering_->SetColorHandle(colorTexture_->GetHandleGPU());
+	deferredRendering_->SetNormalHandle(normalTexture_->GetHandleGPU());
 	deferredRendering_->SetWoprldPositionHandle(worldPositionTexture_->GetHandleGPU());
+	deferredRenderingData_.isDirectionLight = 1;
+	deferredRenderingData_.directionLight.ligColor = Vector3::kIdentity * 8.0f;
+	deferredRenderingData_.directionLight.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>);
 
 	depthStencil_ = std::make_unique<DepthBuffer>();
 	srvHeap->BookingHeapPos(1u);
@@ -40,10 +52,26 @@ RenderingManager::RenderingManager() {
 	gaussianVerticalTexture_ = std::make_unique<PeraRender>();
 
 	std::array<std::unique_ptr<GaussianBlur>, 2> gaussianPipeline = { std::make_unique<GaussianBlur>(), std::make_unique<GaussianBlur>() };
-	for (size_t i = 0; i < gaussianPipeline.size(); i++) {
-		gaussianPipeline[i]->Init();
-		gaussianPipeline_[i] = gaussianPipeline[i].release();
-	}
+	gaussianPipeline[0]->Init();
+	gaussianPipeline[0]->SetGaussianState(
+		GaussianBlur::GaussianBlurState{
+		.dir = Vector2(1.0f, 0.0f),
+		.sigma = 10.0f,
+		.kernelSize = 8,
+		}
+	);
+	gaussianPipeline_[0] = gaussianPipeline[0].release();
+
+	gaussianPipeline[1]->Init();
+	gaussianPipeline[1]->SetGaussianState(
+		GaussianBlur::GaussianBlurState{
+			.dir = Vector2(0.0f, 1.0f),
+			.sigma = 10.0f,
+			.kernelSize = 8,
+		}
+	);
+	gaussianPipeline_[1] = gaussianPipeline[1].release();
+
 	gaussianHorizontalTexture_->Initialize(gaussianPipeline_[0].get());
 	gaussianVerticalTexture_->Initialize(gaussianPipeline_[1].get());
 
@@ -74,6 +102,50 @@ void RenderingManager::Finalize(){
 Lamb::SafePtr<RenderingManager> const RenderingManager::GetInstance()
 {
 	return instance_.get();
+}
+
+void RenderingManager::FrameStart()
+{
+	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
+	directXSwapChain->ChangeBackBufferState();
+	RtvHeap::GetInstance()->SetMainRtv(&depthStencil_->GetDepthHandle());
+	depthStencil_->Clear();
+	directXSwapChain->ClearBackBuffer();
+
+	// ビューポート
+	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
+	directXSwapChain->SetViewPort(static_cast<int32_t>(clientSize.x), static_cast<int32_t>(clientSize.y));
+
+	// SRV用のヒープ
+	const Lamb::SafePtr cbvSrvUavDescriptorHeap = CbvSrvUavHeap::GetInstance();
+	std::array heapPtrs = { cbvSrvUavDescriptorHeap->Get() };
+	DescriptorHeap::SetHeaps(heapPtrs.size(), heapPtrs.data());
+}
+
+void RenderingManager::FrameEnd()
+{
+	ImGuiManager::GetInstance()->End();
+	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
+	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
+	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
+
+	directXSwapChain->ChangeBackBufferState();
+
+	// コマンドリストを確定させる
+	directXCommand->CloseCommandlist();
+
+	// GPUにコマンドリストの実行を行わせる
+	directXCommand->ExecuteCommandLists();
+
+
+	// GPUとOSに画面の交換を行うように通知する
+	directXSwapChain->SwapChainPresent();
+
+	stringOutPutManager->GmemoryCommit();
+
+	directXCommand->WaitForFinishCommnadlist();
+
+	directXCommand->ResetCommandlist();
 }
 
 void RenderingManager::Draw() {
@@ -128,6 +200,11 @@ void RenderingManager::Draw() {
 
 	// UIの描画(depth書き込まないやつ)
 	DrawUI();
+}
+
+DepthBuffer& RenderingManager::GetDepthBuffer()
+{
+	return *depthStencil_;
 }
 
 void RenderingManager::DrawRGB(std::pair<size_t, const std::list<const RenderData*>&> renderList) {

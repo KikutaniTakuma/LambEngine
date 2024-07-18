@@ -5,6 +5,11 @@
 
 #include "GameObject/Comp/ObbPushComp.h"
 #include "GameObject/Comp/Camera3DComp.h"
+#include <string>
+#ifdef _DEBUG
+#include "imgui.h"
+#endif // _DEBUG
+
 
 
 std::unique_ptr<ObjectManager> ObjectManager::instance_;
@@ -128,6 +133,16 @@ void ObjectManager::Update() {
 	for (auto& i : objects_) {
 		i->SetDeltaTime(deltaTime);
 	}
+
+#ifdef _DEBUG
+	ImGui::Begin("Objects");
+	for (size_t i = 0; auto& object : objects_) {
+		object->Debug("object_" + std::to_string(i));
+		i++;
+	}
+	ImGui::End();
+#endif // _DEBUG
+
 
 	// 最初の処理
 	for (auto& i : objects_) {

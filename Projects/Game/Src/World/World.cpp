@@ -85,6 +85,8 @@ void World::Draw() {
 
 		RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
 
+		RenderContextManager::GetInstance()->ResizeRenderList();
+
 		RenderingManager::GetInstance()->Draw();
 		
 		// ドローカウントリセット

@@ -142,3 +142,10 @@ void DepthBuffer::Barrier()
 		break;
 	}
 }
+
+void DepthBuffer::Clear()
+{
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+	commandList->ClearDepthStencilView(handle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+}

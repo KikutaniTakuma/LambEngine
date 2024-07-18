@@ -37,6 +37,8 @@ public:
 
 	void Barrier();
 
+	void Clear();
+
 	DepthBuffer::State GetCurrentState() const {
 		return currentState_;
 	}

@@ -32,9 +32,16 @@ public:
 private:
 	static std::unique_ptr<RenderingManager> instance_;
 
+public:
+	void FrameStart();
+
+	void FrameEnd();
+
 
 public:
 	void Draw();
+
+	DepthBuffer& GetDepthBuffer();
 
 private:
 	// アルファ値がないものを描画

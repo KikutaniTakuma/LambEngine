@@ -39,7 +39,7 @@ void Water::Init() {
 
 	color_ = Vector4{ 0.1f, 0.25f, 0.5f, 1.0f }.GetColorRGBA();
 
-	luminate_ = std::make_unique<PeraRender>();
+	/*luminate_ = std::make_unique<PeraRender>();
 	luminate_->Initialize("./Resources/Shaders/PostShader/PostLuminate.PS.hlsl");
 
 
@@ -78,7 +78,7 @@ void Water::Init() {
 			.sigma = 10.0f,
 			.kernelSize = 8,
 		}
-	);
+	);*/
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
@@ -111,8 +111,8 @@ void Water::Update(const Vector3& cameraPos) {
 	waveData.time += Lamb::DeltaTime();
 }
 
-void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
-	std::vector renderTargets = {
+void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera) {
+	/*std::vector renderTargets = {
 		&luminate_->GetRender()
 	};
 
@@ -125,7 +125,7 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 		renderTargets.data(),
 		static_cast<uint32_t>(renderTargets.size()),
 		nullptr
-	);
+	);*/
 
 	waterSurface_->Draw(
 		transform.GetMatrix(),
@@ -138,11 +138,11 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 		color_,
 		BlendType::kNone
 	);
-	waterSurface_->AllDraw(BlendType::kNone);
+	/*waterSurface_->AllDraw(BlendType::kNone);
 
 	luminate_->Draw(Pipeline::None, nullptr,  gaussianBlurWidth_.get());
 	gaussianBlurWidth_->Draw(Pipeline::None, nullptr, gaussianBlurHeight_.get());
-	gaussianBlurHeight_->Draw(Pipeline::Add, nullptr);
+	gaussianBlurHeight_->Draw(Pipeline::Add, nullptr);*/
 }
 
 void Water::Debug([[maybe_unused]]const std::string& guiName){
@@ -170,8 +170,8 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 		ImGui::DragFloat3("rotate", transform.rotate.data(), 0.01f);
 		ImGui::TreePop();
 	}
-	gaussianBlurObjectWidth_->Debug("gaussianBlurObjectWidth");
-	gaussianBlurObjectHeight_->Debug("gaussianBlurObjectHeight");
+	//gaussianBlurObjectWidth_->Debug("gaussianBlurObjectWidth");
+	//gaussianBlurObjectHeight_->Debug("gaussianBlurObjectHeight");
 
 	if (ImGui::TreeNode("ポリゴン分割数")) {
 		ImGui::DragInt("edgeDivision", &edgeDivision_, 0.1f, 1, 64);

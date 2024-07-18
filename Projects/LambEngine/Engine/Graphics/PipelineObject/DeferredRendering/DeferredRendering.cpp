@@ -97,7 +97,7 @@ void DeferredRendering::Init(
 	diffNormalTextureRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	diffNormalTextureRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> diffWorldPositionTextureRange = {};
-	diffWorldPositionTextureRange[0].BaseShaderRegister = 3;
+	diffWorldPositionTextureRange[0].BaseShaderRegister = 4;
 	diffWorldPositionTextureRange[0].NumDescriptors = 1;
 	diffWorldPositionTextureRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	diffWorldPositionTextureRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
@@ -155,6 +155,7 @@ void DeferredRendering::Init(
 	pipelineDesc.cullMode = Pipeline::CullMode::Back;
 	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	pipelineDesc.numRenderTarget = 1;
+	pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 
 
 	for (int32_t i = Pipeline::Blend::None; i < Pipeline::Blend::BlendTypeNum; i++) {

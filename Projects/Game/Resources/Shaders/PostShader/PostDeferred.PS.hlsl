@@ -35,20 +35,23 @@ float32_t4 main(Output input) : SV_TARGET{
     normal *= 2.0f;
     normal.xyz -= 1.0f;
     normal = normalize(normal);
-    float32_t3 diffDirection = 0;
+    float32_t4 outputColor;
 
     if(kDeferredRenderingState.isDirectionLight == 1){
-        float32_t3 ligDirection = kDeferredRenderingState.directionLightligDirection;
+        float32_t3 diffDirection;
+        float32_t3 ligDirection = kDeferredRenderingState.directionLight.ligDirection;
  
         // ディレクションライト拡散反射光
         float32_t directionStrength = dot(normal, ligDirection);
         directionStrength = saturate(directionStrength);
 
-        diffDirection = kLight.ligColor * directionStrength;
+        diffDirection = kDeferredRenderingState.directionLight.ligColor.xyz * directionStrength;
+        outputColor.rgb = color.rgb * diffDirection;
+        outputColor.rgb += 0.2f;
+    }else{
+        outputColor.rgb = color.rgb;
     }
 
-    float32_t4 outputColor = color * diffDirection;
-    outputColor.rgb += 0.2f;
     outputColor.a = 1.0f;
 
     return outputColor;

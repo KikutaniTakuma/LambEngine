@@ -19,7 +19,7 @@ void Model::Load(const std::string& fileName) {
 				.psFileName = "./Resources/Shaders/ModelShader/Model.PS.hlsl",
 			}
 		},
-		2
+		3
 	);
 
 	renderSet = renderContextManager->Get(

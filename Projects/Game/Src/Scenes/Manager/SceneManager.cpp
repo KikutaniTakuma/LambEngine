@@ -109,8 +109,6 @@ void SceneManager::Update() {
 #pragma region ロード中
 		scene_->Load();
 
-		RenderContextManager::GetInstance()->ResizeRenderList();
-
 		// シーンの初期化
 		scene_->Initialize();
 

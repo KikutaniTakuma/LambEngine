@@ -36,7 +36,7 @@ public:
 		return parent_.have();
 	}
 
-	void Debug(const std::string& guiName);
+	void Debug(const std::string& guiName) override;
 
 public:
 	Vector3 scale;
