@@ -130,6 +130,7 @@ void LevelLoader::AddCamera(nlohmann::json& data, Object& object)
         
         object.SetTag("Camera2D");
     }
+    object.SetTag("Camera");
 }
 
 void LevelLoader::AddObb(nlohmann::json& data, Object& object)

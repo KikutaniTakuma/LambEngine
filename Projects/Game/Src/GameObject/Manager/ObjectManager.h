@@ -50,8 +50,12 @@ public:
 	void Draw();
 
 private:
+	void Debug();
+
+private:
 	std::unordered_set<Lamb::SafePtr<Object>> objects_;
 	std::list<Lamb::SafePtr<class ObbPushComp>> obbObjects_;
+	std::unordered_map<std::string, bool> objectTags_;
 	Lamb::SafePtr<class Camera3DComp> cameraComp_;
 	Lamb::SafePtr<Camera> camera_;
 };

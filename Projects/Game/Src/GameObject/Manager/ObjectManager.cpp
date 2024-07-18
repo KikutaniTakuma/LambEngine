@@ -66,6 +66,9 @@ void ObjectManager::Set(const Lamb::SafePtr<Object>& object) {
 		if (object->HasComp<ObbPushComp>()) {
 			obbObjects_.push_back(object->GetComp<ObbPushComp>());
 		}
+		for (const auto& i : object->GetTags()) {
+			objectTags_.insert(std::make_pair(i, true));
+		}
 	}
 }
 
@@ -136,15 +139,8 @@ void ObjectManager::Update() {
 		i->SetDeltaTime(deltaTime);
 	}
 
-#ifdef _DEBUG
-	ImGui::Begin("Objects");
-	for (size_t i = 0; auto& object : objects_) {
-		object->Debug("object_" + std::to_string(i));
-		i++;
-	}
-	ImGui::End();
-#endif // _DEBUG
-
+	// デバッグ
+	Debug();
 
 	// 最初の処理
 	for (auto& i : objects_) {
@@ -195,4 +191,47 @@ void ObjectManager::Draw() {
 	for (auto& i : objects_) {
 		i->Draw();
 	}
+}
+
+void ObjectManager::Debug() {
+#ifdef _DEBUG
+	ImGui::Begin("Objects");
+	if (ImGui::TreeNode("sort")) {
+		if (ImGui::Button("すべての選択を解除")) {
+			for (auto& i : objectTags_) {
+				i.second = false;
+			}
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("すべてを選択")) {
+			for (auto& i : objectTags_) {
+				i.second = true;
+			}
+		}
+		for (size_t tagCount = 0, sameLineCount = 0; auto& i : objectTags_) {
+			ImGui::Checkbox(i.first.c_str(), &i.second);
+			tagCount++;
+			sameLineCount++;
+			if (sameLineCount < 3 and tagCount < objectTags_.size()) {
+				ImGui::SameLine();
+			}
+			else {
+				sameLineCount = 0;
+			}
+		}
+		ImGui::TreePop();
+	}
+
+
+	for (size_t i = 0; auto& object : objects_) {
+		for (auto& tag : objectTags_) {
+			if (object->HasTag(tag.first) and tag.second) {
+				object->Debug("object_" + std::to_string(i));
+				break;
+			}
+		}
+		i++;
+	}
+	ImGui::End();
+#endif // _DEBUG
 }

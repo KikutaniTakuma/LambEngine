@@ -134,9 +134,14 @@ public:
 		}
 	}
 
+	const std::unordered_set<std::string>& GetTags() const {
+		return tags_;
+	}
+
 	template<IsBaseIComp CompType>
 	CompType* const AddComp() {
 		auto&& key = std::string(typeid(CompType).name());
+		tags_.insert(key);
 		bool isExist = components_.contains(key);
 
 		if (not isExist) {

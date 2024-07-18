@@ -2,7 +2,6 @@
 #ifdef _DEBUG
 #include "Input/Input.h"
 #include "imgui.h"
-#include "Utils/EngineInfo.h"
 #endif // _DEBUG
 
 
@@ -46,23 +45,23 @@ void Camera3DComp::Debug([[maybe_unused]]const std::string& guiName){
 			float translateSigned = isTranslateInverse_ ? 1.0f : -1.0f;
 
 			if (not isOnImGui && isShift && isMiddle) {
-				transform_->translate.x += mouseVelocity.x * translateSpeed_ * Lamb::DeltaTime() * translateSigned;
-				transform_->translate.y += mouseVelocity.y * translateSpeed_ * Lamb::DeltaTime() * translateSigned;
+				transform_->translate.x += mouseVelocity.x * translateSpeed_ * object_.GetDeltaTime() * translateSigned;
+				transform_->translate.y += mouseVelocity.y * translateSpeed_ * object_.GetDeltaTime() * translateSigned;
 			}
 
 			if (eulerRotate_ == Vector3::kZero) {
 				eulerRotate_ = transform_->rotate.ToEuler();
 			}
-
+			
 			if (not isOnImGui && not isShift && isMiddle) {
-				eulerRotate_.x += mouseVelocity.y * rotateSpeed_ * Lamb::DeltaTime() * rotateSigned;
-				eulerRotate_.y += mouseVelocity.x * rotateSpeed_ * Lamb::DeltaTime() * rotateSigned;
+				eulerRotate_.x += mouseVelocity.y * rotateSpeed_ * object_.GetDeltaTime() * rotateSigned;
+				eulerRotate_.y += mouseVelocity.x * rotateSpeed_ * object_.GetDeltaTime() * rotateSigned;
 				transform_->eulerRotate = eulerRotate_;
 			}
 
 			float isSigned = mouse->GetWheelVelocity();
 			if (not (isSigned == 0.0f) && not isOnImGui) {
-				transform_->translate += (Vector3::kZIdentity * isSigned) * transform_->rotate * Lamb::DeltaTime();
+				transform_->translate += (Vector3::kZIdentity * isSigned) * transform_->rotate * object_.GetDeltaTime();
 			}
 		}
 
