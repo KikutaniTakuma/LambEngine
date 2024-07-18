@@ -15,7 +15,6 @@ PixelShaderOutPut3 main(VertexShaderOutput input)
     // ポジション
     output.color2 = input.worldPosition;
 
-/*
 	if(kIsLighting[input.instanceID].isLighting == 1) {
 	// ディレクションライト拡散反射光
 		float t = dot(input.normal, kLight.ligDirection);
@@ -32,6 +31,5 @@ PixelShaderOutPut3 main(VertexShaderOutput input)
 
 		output.color.xyz *= lig;
 	}
-*/
 	return output;
 }

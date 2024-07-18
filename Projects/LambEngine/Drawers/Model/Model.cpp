@@ -49,7 +49,9 @@ void Model::Draw(
 	bool isLighting
 ) {
 	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
-	renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
+	if (blend == BlendType::kNone) {
+		renderContext->SetShaderStruct(static_cast<uint32_t>(false));
+	}
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
 }
