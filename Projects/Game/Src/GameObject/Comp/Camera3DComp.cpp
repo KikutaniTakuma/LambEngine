@@ -51,8 +51,8 @@ void Camera3DComp::Debug([[maybe_unused]]const std::string& guiName){
 			}
 
 			if (not isOnImGui && not isShift && isMiddle) {
-				transform_->rotate *= Quaternion::MakeRotateYAxis(mouseVelocity.x * rotateSpeed_ * Lamb::DeltaTime() * rotateSigned);
 				transform_->rotate *= Quaternion::MakeRotateXAxis(mouseVelocity.y * rotateSpeed_ * Lamb::DeltaTime() * rotateSigned);
+				transform_->rotate *= Quaternion::MakeRotateYAxis(mouseVelocity.x * rotateSpeed_ * Lamb::DeltaTime() * rotateSigned);
 			}
 
 			float isSigned = mouse->GetWheelVelocity();

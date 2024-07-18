@@ -2,7 +2,7 @@
 
 void RenderDataComp::Init()
 {
-	type = BlendType::kNormal;
+	type = BlendType::kNone;
 	color = Vector4::kIdentity;
 	isLighting = true;
 }

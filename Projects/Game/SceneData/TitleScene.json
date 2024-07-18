@@ -2,6 +2,28 @@
     "name": "scene",
     "objects": [
         {
+            "type": "MESH",
+            "name": "Cube",
+            "transform": {
+                "translation": [
+                    0.0,
+                    0.0,
+                    2.7097723484039307
+                ],
+                "rotation": [
+                    -63.23102951049805,
+                    2.889869451522827,
+                    72.34786224365234
+                ],
+                "scaling": [
+                    0.9999999403953552,
+                    1.0,
+                    2.4985122680664062
+                ]
+            },
+            "file_name": "./Resources/Common/Cube.obj"
+        },
+        {
             "type": "LIGHT",
             "name": "Light",
             "transform": {
@@ -23,18 +45,18 @@
             }
         },
         {
-            "type": "MESH",
-            "name": "立方体",
+            "type": "CAMERA",
+            "name": "Camera",
             "transform": {
                 "translation": [
-                    0.0,
-                    0.0,
-                    0.0
+                    47.897762298583984,
+                    -46.263267517089844,
+                    17.02590560913086
                 ],
                 "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
+                    77.55931091308594,
+                    7.321152224903926e-06,
+                    46.291900634765625
                 ],
                 "scaling": [
                     1.0,
@@ -42,42 +64,11 @@
                     1.0
                 ]
             },
-            "file_name": "./Resources/Common/Cube.obj",
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
-        },
-        {
-            "type": "MESH",
-            "name": "立方体.001",
-            "transform": {
-                "translation": [
-                    -2.748439311981201,
-                    -2.126434564590454,
-                    -2.9802322387695312e-08
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "./Resources/Common/Cube.obj"
+            "camera_type": "Perspective",
+            "fov": 0.4816912699247473,
+            "aspect_ratio": 1.7777777777777777,
+            "far_clip": 1000.0,
+            "near_clip": 0.10000000149011612
         }
     ]
 }

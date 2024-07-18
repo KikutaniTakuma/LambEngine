@@ -43,6 +43,8 @@ public:
 
 	DepthBuffer& GetDepthBuffer();
 
+	void SetCameraPos(const Vector3& cameraPos);
+
 private:
 	// アルファ値がないものを描画
 	void DrawRGB(std::pair<size_t, const std::list<const RenderData*>&> renderList);

@@ -5,6 +5,8 @@
 
 #include "GameObject/Comp/ObbPushComp.h"
 #include "GameObject/Comp/Camera3DComp.h"
+
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include <string>
 #ifdef _DEBUG
 #include "imgui.h"
@@ -185,6 +187,8 @@ void ObjectManager::Update() {
 	for (auto& i : objects_) {
 		i->LastUpdate();
 	}
+
+	RenderingManager::GetInstance()->SetCameraPos(cameraComp_->GetPos());
 }
 
 void ObjectManager::Draw() {

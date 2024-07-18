@@ -4,9 +4,9 @@ static const float32_t PI = 3.14159265f;
 
 struct DirectionLight{
     float32_t3 ligDirection;
-    float32_t pad0;
+    float32_t shinness;
     float32_t3 ligColor;
-    float32_t pad1;
+    float32_t pad;
 };
 
 struct DeferredRenderingData{
@@ -38,16 +38,32 @@ float32_t4 main(Output input) : SV_TARGET{
     float32_t4 outputColor;
 
     if(kDeferredRenderingState.isDirectionLight == 1){
-        float32_t3 diffDirection;
+        float32_t3 eyePos = kDeferredRenderingState.eyePos;
         float32_t3 ligDirection = kDeferredRenderingState.directionLight.ligDirection;
+        float32_t3 ligColor = kDeferredRenderingState.directionLight.ligColor;
+        float32_t shinness = kDeferredRenderingState.directionLight.shinness;
  
         // ディレクションライト拡散反射光
-        float32_t directionStrength = dot(normal, ligDirection);
-        directionStrength = saturate(directionStrength);
+        float32_t t = dot(normal, ligDirection);
+        t = saturate(t);
 
-        diffDirection = kDeferredRenderingState.directionLight.ligColor.xyz * directionStrength;
-        diffDirection.xyz += 0.2f;
-        outputColor.rgb = color.rgb * diffDirection;
+        float32_t3 diffDirection = ligColor * t;
+
+        // 鏡面反射光
+        float32_t3 toEye = eyePos - worldPosition.xyz;
+        toEye = normalize(toEye);
+    
+        float32_t3 refVec = reflect(ligDirection, normal);
+        refVec = normalize(refVec);
+
+        t = dot(refVec, toEye);
+
+        t = pow(saturate(t), shinness);
+        float32_t3 specDirection = ligColor * t;
+    
+        float32_t3 lig = diffDirection + specDirection;
+        lig += 0.2f;
+        outputColor.rgb = color.rgb * lig;
     }else{
         outputColor.rgb = color.rgb;
     }
