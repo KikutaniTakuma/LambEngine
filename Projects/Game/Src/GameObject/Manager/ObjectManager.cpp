@@ -197,15 +197,15 @@ void ObjectManager::Debug() {
 #ifdef _DEBUG
 	ImGui::Begin("Objects");
 	if (ImGui::TreeNode("sort")) {
-		if (ImGui::Button("すべての選択を解除")) {
-			for (auto& i : objectTags_) {
-				i.second = false;
-			}
-		}
-		ImGui::SameLine();
 		if (ImGui::Button("すべてを選択")) {
 			for (auto& i : objectTags_) {
 				i.second = true;
+			}
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("すべての選択を解除")) {
+			for (auto& i : objectTags_) {
+				i.second = false;
 			}
 		}
 		for (size_t tagCount = 0, sameLineCount = 0; auto& i : objectTags_) {
