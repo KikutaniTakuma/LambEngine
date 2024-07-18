@@ -1,6 +1,7 @@
 #include "Post.hlsli"
+#include "../OutputStructs.hlsli"
 
-float32_t4 main(Output input) : SV_TARGET{
+PixelShaderOutPut2 main(Output input) {
     float32_t4 color;
 
     color = tex.Sample(smp, input.uv);
@@ -15,6 +16,9 @@ float32_t4 main(Output input) : SV_TARGET{
     color.g = t;
     color.b = t;
 
+    PixelShaderOutPut2 output;
+    output.color0 = color;
+    output.color1 = color;
 
-    return color;
+    return output;
 }

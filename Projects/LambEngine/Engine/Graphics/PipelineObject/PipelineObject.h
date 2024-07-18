@@ -32,7 +32,8 @@ public:
 		const std::string& psFileName,
 		const std::string& gsFileName,
 		const std::string& hsFileName,
-		const std::string& dsFileName
+		const std::string& dsFileName,
+		uint32_t numRendertaget
 	) = 0;
 
 protected:

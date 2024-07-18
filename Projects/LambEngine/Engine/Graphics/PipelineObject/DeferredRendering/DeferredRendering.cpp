@@ -60,7 +60,8 @@ void DeferredRendering::Init(
 	const std::string& psShader,
 	const std::string& gsFileName,
 	const std::string& hsFileName,
-	const std::string& dsFileName
+	const std::string& dsFileName,
+	uint32_t numRendertaget
 ) {
 	this->LoadShader(
 		vsShader,
@@ -140,9 +141,10 @@ void DeferredRendering::Init(
 	pipelineDesc.solidState = Pipeline::SolidState::Solid;
 	pipelineDesc.cullMode = Pipeline::CullMode::Back;
 	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	pipelineDesc.numRenderTarget = 1;
-	pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-
+	pipelineDesc.numRenderTarget = numRendertaget;
+	for (uint32_t i = 0; i < numRendertaget; i++) {
+		pipelineDesc.rtvFormtat[i] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	}
 
 	for (int32_t i = Pipeline::Blend::None; i < Pipeline::Blend::BlendTypeNum; i++) {
 		for (auto& blend : pipelineDesc.blend) {

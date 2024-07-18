@@ -25,7 +25,8 @@ public:
 		const std::string& psShader,
 		const std::string& gsFileName = {},
 		const std::string& hsFileName = {},
-		const std::string& dsFileName = {}
+		const std::string& dsFileName = {},
+		uint32_t numRendertaget = 1
 	) override;
 
 public:
