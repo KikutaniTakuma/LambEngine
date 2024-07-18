@@ -52,6 +52,9 @@ void Model::Draw(
 	if (blend == BlendType::kNone) {
 		renderContext->SetShaderStruct(static_cast<uint32_t>(false));
 	}
+	else {
+		renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
+	}
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
 }
