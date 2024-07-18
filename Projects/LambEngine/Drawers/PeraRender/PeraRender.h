@@ -30,7 +30,7 @@ public:
 	PeraRender& operator=(PeraRender&&) = delete;
 
 public:
-	void Initialize(const std::string& psFileName);
+	void Initialize(const std::string& psFileName, uint32_t numRenderTarget = 1);
 	void Initialize(PeraPipeline* pipelineObject);
 
 public:
@@ -38,8 +38,7 @@ public:
 
 	void Draw(
 		Pipeline::Blend blend, 
-		D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle,
-		PeraRender* pera = nullptr
+		D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
 	);
 
 	Texture* GetTex() const {

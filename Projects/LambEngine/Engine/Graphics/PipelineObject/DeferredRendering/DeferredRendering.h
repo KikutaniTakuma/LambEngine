@@ -32,7 +32,7 @@ public:
 		const std::string& gsFileName = {},
 		const std::string& hsFileName = {},
 		const std::string& dsFileName = {},
-		uint32_t numRendertaget = 1
+		uint32_t numRendertaget = 2
 	) override;
 
 public:

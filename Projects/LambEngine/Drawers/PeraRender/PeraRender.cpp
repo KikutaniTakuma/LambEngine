@@ -30,8 +30,8 @@ PeraRender::~PeraRender() {
 	peraPipelineObject_.reset();
 }
 
-void PeraRender::Initialize(const std::string& psFileName) {
-	peraPipelineObject_->Init("./Resources/Shaders/PostShader/Post.VS.hlsl", psFileName);
+void PeraRender::Initialize(const std::string& psFileName, uint32_t numRenderTarget) {
+	peraPipelineObject_->Init("./Resources/Shaders/PostShader/Post.VS.hlsl", psFileName, "", "", "", numRenderTarget);
 }
 
 void PeraRender::Initialize(PeraPipeline* pipelineObject) {
@@ -44,18 +44,8 @@ void PeraRender::PreDraw(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
 
 void PeraRender::Draw(
 	Pipeline::Blend blend, 
-	D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle,
-	PeraRender* pera
+	D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
 ) {
-	if (!!pera) {
-		pera->PreDraw(depthHandle);
-		peraPipelineObject_->GetRender().ChangeResourceState();
-	}
-	else {
-		// 描画先をメインレンダーターゲットに変更
-		peraPipelineObject_->GetRender().SetMainRenderTarget(depthHandle);
-	}
-
 	peraPipelineObject_->Update();
 
 	// 各種描画コマンドを積む

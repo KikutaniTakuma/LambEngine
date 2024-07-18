@@ -13,6 +13,10 @@
 #endif // _DEBUG
 
 
+void GaussianBlur::SetRtvFormt(DXGI_FORMAT format) {
+	format_ = format;
+}
+
 void GaussianBlur::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
@@ -109,7 +113,7 @@ void GaussianBlur::Init(
 	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	pipelineDesc.numRenderTarget = numRendertaget;
 	for (uint32_t i = 0; i < numRendertaget; i++) {
-		pipelineDesc.rtvFormtat[i] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		pipelineDesc.rtvFormtat[i] = format_;
 	}
 
 

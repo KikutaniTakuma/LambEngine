@@ -71,9 +71,6 @@ private:
 	// アルファ値があるものを順番を並び替える
 	void ZSrot();
 
-	// メインのレンダーターゲットをセットする
-	void SetMainRenderTarget();
-
 
 private:
 	// ディファードレンダリング用オフスクリーン

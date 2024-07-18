@@ -29,14 +29,15 @@ Texture2D<float32_t4> kColorTexture : register(t1);
 Texture2D<float32_t4> kNormalTexture : register(t2);
 Texture2D<float32_t4> kWorldPositionTexture : register(t3);
 
+// ポイントサンプラー
 SamplerState pointSmp : register(s0);
 
-PixelShaderOutPut main(Output input) {
+PixelShaderOutPut2 main(Output input) {
     float32_t4 color = kColorTexture.Sample(pointSmp, input.uv);
     float32_t4 worldPosition = kWorldPositionTexture.Sample(pointSmp, input.uv);
     float32_t3 normal = kNormalTexture.Sample(pointSmp, input.uv).xyz;
     normal = normalize(normal);
-    PixelShaderOutPut outputColor;
+    PixelShaderOutPut2 outputColor;
 
     if(kDeferredRenderingState.isDirectionLight == 1){
         float32_t3 eyePos = kDeferredRenderingState.eyePos;
@@ -64,12 +65,13 @@ PixelShaderOutPut main(Output input) {
     
         float32_t3 lig = diffDirection + specDirection;
         lig += 0.2f;
-        outputColor.color.rgb = color.rgb * lig;
+        outputColor.color0.rgb = color.rgb * lig;
     }else{
-        outputColor.color.rgb = color.rgb;
+        outputColor.color0.rgb = color.rgb;
     }
 
-    outputColor.color.a = 1.0f;
+    outputColor.color0.a = 1.0f;
+    outputColor.color1 = outputColor.color0;
 
     return outputColor;
 }

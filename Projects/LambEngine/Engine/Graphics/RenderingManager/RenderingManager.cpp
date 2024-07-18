@@ -36,7 +36,7 @@ RenderingManager::RenderingManager() {
 	deferredRendering_->SetWoprldPositionHandle(worldPositionTexture_->GetHandleGPU());
 	deferredRenderingData_.isDirectionLight = 1;
 	deferredRenderingData_.directionLight.shinness = 42.0f;
-	deferredRenderingData_.directionLight.ligColor = Vector3::kIdentity * 8.0f;
+	deferredRenderingData_.directionLight.ligColor = Vector3::kIdentity;
 	deferredRenderingData_.directionLight.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>);
 
 	depthStencil_ = std::make_unique<DepthBuffer>();
@@ -50,6 +50,7 @@ RenderingManager::RenderingManager() {
 	gaussianVerticalTexture_ = std::make_unique<PeraRender>();
 
 	std::array<std::unique_ptr<GaussianBlur>, 2> gaussianPipeline = { std::make_unique<GaussianBlur>(), std::make_unique<GaussianBlur>() };
+	gaussianPipeline[0]->SetRtvFormt(DXGI_FORMAT_R32G32B32A32_FLOAT);
 	gaussianPipeline[0]->Init();
 	gaussianPipeline[0]->SetGaussianState(
 		GaussianBlur::GaussianBlurState{
@@ -60,6 +61,7 @@ RenderingManager::RenderingManager() {
 	);
 	gaussianPipeline_[0] = gaussianPipeline[0].release();
 
+	gaussianPipeline[1]->SetRtvFormt(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	gaussianPipeline[1]->Init();
 	gaussianPipeline[1]->SetGaussianState(
 		GaussianBlur::GaussianBlurState{
@@ -190,8 +192,24 @@ void RenderingManager::Draw() {
 		renderTargets.data(),
 		static_cast<uint32_t>(renderTargets.size())
 	);
-	// メインのレンダーターゲットをセット
-	RenderTarget::SetMainAndRenderTargets(nullptr, 0, nullptr);
+
+	// メインと輝度抽出用のレンダーターゲットをセット
+	std::array<RenderTarget*, 1> luminate = {
+		&(luminateTexture_->GetRender())
+	};
+	RenderTarget::ResourceStateChnageRenderTargets(
+		luminate.data(),
+		static_cast<uint32_t>(luminate.size())
+	);
+	RenderTarget::SetMainAndRenderTargets(
+		luminate.data(),
+		static_cast<uint32_t>(luminate.size()),
+		nullptr
+	);
+	RenderTarget::ClearRenderTargets(
+		luminate.data(),
+		static_cast<uint32_t>(luminate.size())
+	);
 	DrawDefferd();
 
 	DrawPostEffect();
@@ -237,8 +255,22 @@ void RenderingManager::DrawDefferd() {
 	deferredRendering_->Draw();
 }
 
-void RenderingManager::DrawPostEffect()
-{
+void RenderingManager::DrawPostEffect() {
+	gaussianHorizontalTexture_->GetRender().SetThisRenderTarget(nullptr);
+	luminateTexture_->ChangeResourceState();
+	luminateTexture_->Draw(Pipeline::Blend::None, nullptr);
+
+	gaussianHorizontalTexture_->ChangeResourceState();
+	gaussianVerticalTexture_->GetRender().SetThisRenderTarget(nullptr);
+	gaussianHorizontalTexture_->Draw(Pipeline::Blend::Add, nullptr);
+
+	gaussianVerticalTexture_->ChangeResourceState();
+	RenderTarget::SetMainAndRenderTargets(
+		nullptr,
+		0,
+		nullptr
+	);
+	gaussianVerticalTexture_->Draw(Pipeline::Blend::Add, nullptr);
 }
 
 void RenderingManager::DrawUI()
@@ -246,9 +278,5 @@ void RenderingManager::DrawUI()
 }
 
 void RenderingManager::ZSrot()
-{
-}
-
-void RenderingManager::SetMainRenderTarget()
 {
 }

@@ -41,8 +41,11 @@ public:
 		*gaussianBlurState_ = gaussianBlurState;
 	}
 
+	void SetRtvFormt(DXGI_FORMAT format);
+
 	void Debug(const std::string& guiName);
 
 private:
 	ConstantBuffer<GaussianBlurState> gaussianBlurState_;
+	DXGI_FORMAT format_ = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 };

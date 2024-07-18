@@ -89,7 +89,7 @@ void PeraPipeline::Init(
 	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	pipelineDesc.numRenderTarget = numRendertaget;
 	for (uint32_t i = 0; i < numRendertaget; i++) {
-		pipelineDesc.rtvFormtat[i] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		pipelineDesc.rtvFormtat[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	}
 
 	for (int32_t i = Pipeline::Blend::None; i < Pipeline::Blend::BlendTypeNum; i++) {
