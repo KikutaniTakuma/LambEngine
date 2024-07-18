@@ -150,7 +150,6 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
 
         trans, rot, scale = object.matrix_local.decompose()
         rot = rot.to_euler()
-
         rot.x = math.degrees(rot.x)
         rot.y = math.degrees(rot.y)
         rot.z = math.degrees(rot.z)

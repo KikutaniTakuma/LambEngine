@@ -9,6 +9,7 @@ struct DirectionLight {
 	float32_t3 ligDirection;
 	float32_t3 ligColor;
 	float32_t3 eyePos;
+	float32_t shinness;
 	float32_t3 ptPos;
 	float32_t3 ptColor;
 	float32_t ptRange;

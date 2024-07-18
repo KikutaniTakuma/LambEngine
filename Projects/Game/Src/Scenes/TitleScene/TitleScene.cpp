@@ -104,7 +104,7 @@ void TitleScene::Draw()
 	/*cloud_->Draw();
 	skydome_->Draw(*currentCamera_);*/
 
-	water_->Draw(ObjectManager::GetInstance()->GetCameraMatrix());
+	water_->Draw(currentCamera_->GetViewProjection());
 	/*player_->Draw(
 		playerTransform_.GetMatrix(),
 		currentCamera_->GetViewProjection(),

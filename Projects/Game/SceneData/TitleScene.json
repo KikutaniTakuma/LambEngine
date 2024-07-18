@@ -23,18 +23,18 @@
             }
         },
         {
-            "type": "CAMERA",
-            "name": "Camera",
+            "type": "MESH",
+            "name": "立方体",
             "transform": {
                 "translation": [
-                    7.358891487121582,
-                    -6.825790882110596,
-                    5.198308944702148
+                    0.0,
+                    0.0,
+                    0.0
                 ],
                 "rotation": [
-                    62.359291076660156,
-                    -1.4407337403099518e-06,
-                    46.69194412231445
+                    0.0,
+                    -0.0,
+                    0.0
                 ],
                 "scaling": [
                     1.0,
@@ -42,20 +42,29 @@
                     1.0
                 ]
             },
-            "camera_type": "Perspective",
-            "fov": 0.34557520356786753,
-            "aspect_ratio": 1.7777777777777777,
-            "far_clip": 1000.0,
-            "near_clip": 0.10000000149011612
-        },
-        {
-            "type": "MESH",
-            "name": "Cube",
-            "transform": {
-                "translation": [
+            "file_name": "./Resources/Common/Cube.obj",
+            "collider": {
+                "type": "BOX",
+                "center": [
                     0.0,
                     0.0,
                     0.0
+                ],
+                "size": [
+                    2.0,
+                    2.0,
+                    2.0
+                ]
+            }
+        },
+        {
+            "type": "MESH",
+            "name": "立方体.001",
+            "transform": {
+                "translation": [
+                    -2.748439311981201,
+                    -2.126434564590454,
+                    -2.9802322387695312e-08
                 ],
                 "rotation": [
                     0.0,

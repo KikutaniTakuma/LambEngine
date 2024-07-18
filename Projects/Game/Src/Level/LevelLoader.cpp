@@ -86,21 +86,21 @@ void LevelLoader::AddTransform(nlohmann::json& data, Object& object)
 
     std::string type = data["type"].get<std::string>();
 
-    if (type.compare("CAMERA") == 0) {
-        transform.rotate[0] = -static_cast<float>(transformData["rotation"][0]) + 90.0f;
-    }
-    else {
-        transform.rotate[0] = -static_cast<float>(transformData["rotation"][0]);
-    }
 
+    transform.rotate[0] = -static_cast<float>(transformData["rotation"][0]);
     transform.rotate[1] = -static_cast<float>(transformData["rotation"][2]);
     transform.rotate[2] = -static_cast<float>(transformData["rotation"][1]);
+
+    transform.rotate *= Lamb::Math::toRadian<float>;
+    if (type.compare("CAMERA") == 0) {
+        transform.rotate.x += 90.0f * Lamb::Math::toRadian<float>;
+    }
     transform.scale[0] = static_cast<float>(transformData["scaling"][0]);
     transform.scale[1] = static_cast<float>(transformData["scaling"][2]);
     transform.scale[2] = static_cast<float>(transformData["scaling"][1]);
 
     transformComp->translate = transform.translate;
-    transformComp->rotate = transform.rotate * Lamb::Math::toRadian<float>;
+    transformComp->rotate = Quaternion::EulerToQuaternion(transform.rotate);
     transformComp->scale = transform.scale;
 
     object.SetTag("transform");
@@ -172,6 +172,7 @@ void LevelLoader::AddChildren(nlohmann::json& data, Lamb::SafePtr<LevelData> lev
                 if (objectData.contains("file_name")) {
                     Lamb::SafePtr model = object.AddComp<ModelRenderComp>();
                     model->SetFileNmae(objectData["file_name"]);
+                    model->Load();
                     object.SetTag("Model");
                 }
             }
@@ -191,10 +192,11 @@ void LevelLoader::AddChildren(nlohmann::json& data, Lamb::SafePtr<LevelData> lev
             // 親をセット
             Lamb::SafePtr transform = object.GetComp<TransformComp>();
             Lamb::SafePtr parentTransform = parent.GetComp<TransformComp>();
+
             transform->SetParent(parentTransform);
         }
         // childrenがあるなら
-        if (objectData.contains("transform")) {
+        if (objectData.contains("children")) {
             AddChildren(objectData, levelData, object);
         }
     }
