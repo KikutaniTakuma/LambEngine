@@ -8,7 +8,7 @@
 #include "Engine/Graphics/MeshManager/Mesh/Mesh.h"
 #include "Engine/Graphics/GraphicsStructs.h"
 
-class DeferredRendering final : public PeraPipeline {
+class DeferredRendering final : public PipelineObject {
 public:
 	struct DeferredRenderingData {
 		Vector3 eyePos;
@@ -27,8 +27,8 @@ public:
 
 public:
 	void Init(
-		const std::string& vsShader = "./Resources/Shaders/PostShader/Post.VS.hlsl",
-		const std::string& psShader = "./Resources/Shaders/PostShader/PostDeferred.PS.hlsl",
+		const std::string& vsShader = "./Resources/Shaders/DeferredRendering/DeferredRendering.VS.hlsl",
+		const std::string& psShader = "./Resources/Shaders/DeferredRendering/DeferredRendering.PS.hlsl",
 		const std::string& gsFileName = {},
 		const std::string& hsFileName = {},
 		const std::string& dsFileName = {}
@@ -37,7 +37,7 @@ public:
 public:
 	void Use(Pipeline::Blend blendType, bool isDepth) override;
 
-	void Update()override;
+	void Draw();
 
 	void SetDeferredRenderingData(const DeferredRenderingData& deferredRenderingData) {
 		*deferredRenderingData_ = deferredRenderingData;
@@ -60,7 +60,7 @@ public:
 private:
 	ConstantBuffer<DeferredRenderingData> deferredRenderingData_;
 	StructuredBuffer<PointLight> lights_;
-	D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle_;
-	D3D12_GPU_DESCRIPTOR_HANDLE normalTextureHandle_;
-	D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle_;
+	D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle_ = {};
+	D3D12_GPU_DESCRIPTOR_HANDLE normalTextureHandle_ = {};
+	D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle_ = {};
 };

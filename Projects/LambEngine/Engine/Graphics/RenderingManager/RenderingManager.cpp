@@ -15,11 +15,8 @@
 std::unique_ptr<RenderingManager> RenderingManager::instance_;
 
 RenderingManager::RenderingManager() {
-	deferredRenderingPera_ = std::make_unique<PeraRender>();
-	std::unique_ptr<DeferredRendering> deferredRendering = std::make_unique<DeferredRendering>();
-	deferredRendering->Init();
-	this->deferredRendering_ = deferredRendering.release();
-	deferredRenderingPera_->Initialize(deferredRendering_.get());
+	this->deferredRendering_ = std::make_unique<DeferredRendering>();
+	deferredRendering_->Init();
 
 
 	uint32_t width = uint32_t(Lamb::ClientSize().x);
@@ -193,9 +190,9 @@ void RenderingManager::Draw() {
 		renderTargets.data(),
 		static_cast<uint32_t>(renderTargets.size())
 	);
-	// 自動でセットしてくれる
+	// メインのレンダーターゲットをセット
+	RenderTarget::SetMainAndRenderTargets(nullptr, 0, nullptr);
 	DrawDefferd();
-
 
 	DrawPostEffect();
 
@@ -237,12 +234,7 @@ void RenderingManager::DrawParticle()
 void RenderingManager::DrawDefferd() {
 	deferredRendering_->SetDeferredRenderingData(deferredRenderingData_);
 
-	deferredRenderingPera_->PreDraw(nullptr);
-	deferredRenderingPera_->Draw(
-		Pipeline::Blend::None,
-		nullptr,
-		nullptr
-	);
+	deferredRendering_->Draw();
 }
 
 void RenderingManager::DrawPostEffect()

@@ -77,8 +77,7 @@ private:
 
 private:
 	// ディファードレンダリング用オフスクリーン
-	std::unique_ptr<PeraRender> deferredRenderingPera_;
-	Lamb::SafePtr<DeferredRendering> deferredRendering_;
+	std::unique_ptr<DeferredRendering> deferredRendering_;
 	DeferredRendering::DeferredRenderingData deferredRenderingData_;
 
 	// 法線書き込み用オフスクリーン
