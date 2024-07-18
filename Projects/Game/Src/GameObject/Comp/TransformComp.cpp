@@ -29,6 +29,13 @@ void TransformComp::Init()
 
 void TransformComp::UpdateMatrix()
 {
+#ifdef _DEBUG
+	if (eulerRotate == Vector3::kZero) {
+		eulerRotate = rotate.ToEuler();
+	}
+	rotate = Quaternion::EulerToQuaternion(eulerRotate);
+#endif // _DEBUG
+
 	rotate = rotate.Normalize();
 	worldMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
 
@@ -66,7 +73,9 @@ void TransformComp::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	if(ImGui::TreeNode(guiName.c_str())) {
 		ImGui::DragFloat3("scale", scale.data(), 0.01f);
-		ImGui::DragFloat4("rotate", rotate.data(), 0.01f);
+		eulerRotate *= Lamb::Math::toDegree<float32_t>;
+		ImGui::DragFloat3("rotate(Degree)", eulerRotate.data(), 0.01f);
+		eulerRotate *= Lamb::Math::toRadian<float32_t>;
 		ImGui::DragFloat3("translate", translate.data(), 0.01f);
 		rotate = rotate.Normalize();
 		for (size_t index = 0; auto & i : children_) {

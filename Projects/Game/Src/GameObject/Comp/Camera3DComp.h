@@ -67,6 +67,9 @@ private:
 	bool isTranslateInverse_ = false;
 
 	bool isDebug_ = false;
+
+	Vector3 eulerRotate_;
+
 #endif // _DEBUG
 
 };

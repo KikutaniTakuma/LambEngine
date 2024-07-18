@@ -50,9 +50,14 @@ void Camera3DComp::Debug([[maybe_unused]]const std::string& guiName){
 				transform_->translate.y += mouseVelocity.y * translateSpeed_ * Lamb::DeltaTime() * translateSigned;
 			}
 
+			if (eulerRotate_ == Vector3::kZero) {
+				eulerRotate_ = transform_->rotate.ToEuler();
+			}
+
 			if (not isOnImGui && not isShift && isMiddle) {
-				transform_->rotate *= Quaternion::MakeRotateXAxis(mouseVelocity.y * rotateSpeed_ * Lamb::DeltaTime() * rotateSigned);
-				transform_->rotate *= Quaternion::MakeRotateYAxis(mouseVelocity.x * rotateSpeed_ * Lamb::DeltaTime() * rotateSigned);
+				eulerRotate_.x += mouseVelocity.y * rotateSpeed_ * Lamb::DeltaTime() * rotateSigned;
+				eulerRotate_.y += mouseVelocity.x * rotateSpeed_ * Lamb::DeltaTime() * rotateSigned;
+				transform_->eulerRotate = eulerRotate_;
 			}
 
 			float isSigned = mouse->GetWheelVelocity();

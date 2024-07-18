@@ -157,7 +157,6 @@ void ObjectManager::Update() {
 	}
 
 	TransformCompUpdater::GetInstance()->UpdateMatrix();
-	TransformCompUpdater::GetInstance()->Debug();
 
 	// 当たり判定
 	for (auto i = obbObjects_.begin(); i != obbObjects_.end(); i++) {

@@ -42,6 +42,9 @@ public:
 	Vector3 scale;
 	Quaternion rotate;
 	Vector3 translate;
+#ifdef _DEBUG
+	Vector3 eulerRotate;
+#endif // _DEBUG
 
 private:
 	Mat4x4 worldMatrix_;

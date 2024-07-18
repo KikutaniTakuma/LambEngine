@@ -34,8 +34,6 @@ public:
 
 	void UpdateMatrix();
 
-	void Debug();
-
 private:
 	std::unordered_set<Lamb::SafePtr<TransformComp>> transformComps_;
 };

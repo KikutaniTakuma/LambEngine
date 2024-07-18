@@ -37,7 +37,7 @@ void Water::Init() {
 	waterSurface_ = std::make_unique<WaterTex2D>();
 	waterSurface_->Load();
 
-	color_ = Vector4{ 0.1f, 0.25f, 0.5f, 1.0f }.GetColorRGBA();
+	color_ = Vector4(0.3f, 0.75f, 1.0f, 1.0f).GetColorRGBA();
 
 	/*luminate_ = std::make_unique<PeraRender>();
 	luminate_->Initialize("./Resources/Shaders/PostShader/PostLuminate.PS.hlsl");
