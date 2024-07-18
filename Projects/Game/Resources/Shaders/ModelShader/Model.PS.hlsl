@@ -9,7 +9,7 @@ PixelShaderOutPut3 main(VertexShaderOutput input)
 	output.color0 = textureColor * kColor[input.instanceID].color;
 
     // 法線
-    output.color1.xyz = (input.normal + 1.0f) * 0.5f;
+    output.color1.xyz = input.normal;
 	output.color1.w = 1.0f;
 
     // ポジション

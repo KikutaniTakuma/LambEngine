@@ -4,7 +4,9 @@ static const float32_t PI = 3.14159265f;
 
 struct DirectionLight{
     float32_t3 ligDirection;
+    float32_t pad0;
     float32_t3 ligColor;
+    float32_t pad1;
 };
 
 struct DeferredRenderingData{
@@ -32,8 +34,6 @@ float32_t4 main(Output input) : SV_TARGET{
     float32_t4 color = kColorTexture.Sample(smp, input.uv);
     float32_t4 worldPosition = kWorldPositionTexture.Sample(pointSmp, input.uv);
     float32_t3 normal = kNormalTexture.Sample(pointSmp, input.uv).xyz;
-    normal *= 2.0f;
-    normal.xyz -= 1.0f;
     normal = normalize(normal);
     float32_t4 outputColor;
 
@@ -46,8 +46,8 @@ float32_t4 main(Output input) : SV_TARGET{
         directionStrength = saturate(directionStrength);
 
         diffDirection = kDeferredRenderingState.directionLight.ligColor.xyz * directionStrength;
+        diffDirection.xyz += 0.2f;
         outputColor.rgb = color.rgb * diffDirection;
-        outputColor.rgb += 0.2f;
     }else{
         outputColor.rgb = color.rgb;
     }

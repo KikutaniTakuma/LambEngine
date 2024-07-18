@@ -52,7 +52,7 @@ PixelShaderOutPut3 main(GeometoryOutPut input)
     //output.color0.xyz *= lig;
 
     // 法線
-    output.color1.xyz = (blendNormal + 1.0f) * 0.5f;
+    output.color1.xyz = blendNormal;
     output.color1.w = 1.0f;
 
     // ポジション
