@@ -15,7 +15,7 @@ const Vector3& Camera3DComp::GetPos() const
 	return transform_->translate;
 }
 
-void Camera3DComp::Debug(const std::string& guiName){
+void Camera3DComp::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
 	ImGui::DragFloat3("scale", transform_->scale.data(), 0.01f);

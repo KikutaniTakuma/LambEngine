@@ -2,10 +2,8 @@
 #include "../PerlinNoise.hlsli"
 #include "../Normal.hlsli"
 
-PixelShaderOutPut2 main(WaterTex2DGeometoryShaderOutPut waterinput)
+PixelShaderOutPut2 main(GeometoryOutPut input)
 {
-    GeometoryOutPut input = waterinput.outputData;
-
 	PixelShaderOutPut2 output;
 
     uint32_t textureID = kWaterData[input.instanceID].textureID;
@@ -15,19 +13,16 @@ PixelShaderOutPut2 main(WaterTex2DGeometoryShaderOutPut waterinput)
     const float32_t kDensity = kWaterData[input.instanceID].density;
  	float32_t noise = CreateNoise(input.uv, kRandomVec, kDensity);
     
-    float32_t4 causticsColor = textures[textureID].Sample(smp, waterinput.causticsUv + frac(CreateNoiseNoDdy(waterinput.causticsUv * 0.1f, kRandomVec, kDensity)));
+    float32_t4 causticsColor = textures[textureID].Sample(smp, input.uv * 10.0f + frac(CreateNoiseNoDdy(input.uv, kRandomVec, kDensity)));
     
     float32_t3 perlinNormal = CreateNormal(input.uv, kRandomVec, kDensity);
     float32_t3 normal = input.normal;
     float32_t3 tangent = NormalToTangent(perlinNormal);
     float32_t3 binormal = CalcBinormal(perlinNormal, tangent);
     float32_t3 blendNormal = BlendNormal(perlinNormal, tangent, binormal, normal);
-    
-    //float32_t3 blendNormal = input.normal;
 
 
     float32_t3 ligDirection = kLight.ligDirection;
-    //ligDirection = mul(ligDirection, waterinput.tangentBasis);
     
     // ディレクションライト拡散反射光
     float32_t t = dot(blendNormal, -ligDirection);
@@ -37,7 +32,6 @@ PixelShaderOutPut2 main(WaterTex2DGeometoryShaderOutPut waterinput)
     
     
     float32_t3 toEye = kLight.eyePos - input.worldPosition.xyz;
-    //toEye = mul(toEye, waterinput.tangentBasis);
     toEye = normalize(toEye);
     
     float32_t3 refVec = reflect(ligDirection, blendNormal);
@@ -52,7 +46,6 @@ PixelShaderOutPut2 main(WaterTex2DGeometoryShaderOutPut waterinput)
     
     lig.xyz += 0.2f;
     
-    //output.color0 = causticsColor + kColor[input.instanceID].color;
     output.color0 = kColor[input.instanceID].color;
     output.color0.xyz *= lig;
     output.color1 = output.color0;

@@ -62,7 +62,7 @@ void GameScene::Update()
 		currentCamera_->Update();
 	}
 #else
-	currentCamera_->Update(levelData_->player->GetTranslate());
+	currentCamera_->Update();
 #endif // DEBUG
 
 
