@@ -36,10 +36,11 @@ PixelShaderOutPut2 main(Output input) {
     float32_t4 color = kColorTexture.Sample(pointSmp, input.uv);
     float32_t4 worldPosition = kWorldPositionTexture.Sample(pointSmp, input.uv);
     float32_t3 normal = kNormalTexture.Sample(pointSmp, input.uv).xyz;
+    float32_t len = length(normal);
     normal = normalize(normal);
     PixelShaderOutPut2 outputColor;
 
-    if(kDeferredRenderingState.isDirectionLight == 1){
+    if(kDeferredRenderingState.isDirectionLight == 1 && len != 0.0f){
         float32_t3 eyePos = kDeferredRenderingState.eyePos;
         float32_t3 ligDirection = kDeferredRenderingState.directionLight.ligDirection;
         float32_t3 ligColor = kDeferredRenderingState.directionLight.ligColor;
