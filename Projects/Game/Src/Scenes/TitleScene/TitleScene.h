@@ -45,8 +45,5 @@ public:
 	class Audio* waterSE_;
 	class Audio* inGameSE_;
 
-	std::unique_ptr<SkyBox> skybox_;
-	Transform transform_;
-
 	Lamb::SafePtr<struct LevelData> levelData_;
 };
