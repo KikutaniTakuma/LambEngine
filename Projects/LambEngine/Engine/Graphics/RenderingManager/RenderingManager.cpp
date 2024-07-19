@@ -4,6 +4,8 @@
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include "Utils/EngineInfo.h"
 
+#include "Engine/Graphics/PipelineObject/Luminate/Luminate.h"
+
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
@@ -39,7 +41,7 @@ RenderingManager::RenderingManager() {
 	deferredRendering_->SetColorHandle(colorTexture_->GetHandleGPU());
 	deferredRendering_->SetNormalHandle(normalTexture_->GetHandleGPU());
 	deferredRendering_->SetWoprldPositionHandle(worldPositionTexture_->GetHandleGPU());
-	deferredRenderingData_.isDirectionLight = 0;
+	deferredRenderingData_.isDirectionLight = 1;
 	deferredRenderingData_.directionLight.shinness = 42.0f;
 	deferredRenderingData_.directionLight.ligColor = Vector3::kIdentity;
 	deferredRenderingData_.directionLight.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>);
@@ -49,32 +51,37 @@ RenderingManager::RenderingManager() {
 	srvHeap->CreateView(*depthStencil_);
 
 
+	std::unique_ptr<Luminate> luminate = std::make_unique<Luminate>();
+	luminate->Init();
+	luminate_ = luminate.release();
+	luminanceThreshold = 0.99f;
+	luminate_->SetLuminanceThreshold(luminanceThreshold);
+
 	luminateTexture_ = std::make_unique<PeraRender>();
-	luminateTexture_->Initialize("./Resources/Shaders/PostShader/PostLuminate.PS.hlsl");
+	luminateTexture_->Initialize(luminate_.get());
 	gaussianHorizontalTexture_ = std::make_unique<PeraRender>();
 	gaussianVerticalTexture_ = std::make_unique<PeraRender>();
 
 	std::array<std::unique_ptr<GaussianBlur>, 2> gaussianPipeline = { std::make_unique<GaussianBlur>(), std::make_unique<GaussianBlur>() };
 	gaussianPipeline[0]->SetRtvFormt(DXGI_FORMAT_R32G32B32A32_FLOAT);
 	gaussianPipeline[0]->Init();
-	gaussianPipeline[0]->SetGaussianState(
-		GaussianBlur::GaussianBlurState{
-		.dir = Vector2(0.0f, 0.0f),
+	gaussianBlurStateHorizontal_ = GaussianBlur::GaussianBlurState{
+		.dir = Vector2(1.0f, 0.0f),
 		.sigma = 10.0f,
 		.kernelSize = 8,
-		}
-	);
+	};
+
+	gaussianPipeline[0]->SetGaussianState(gaussianBlurStateHorizontal_);
 	gaussianPipeline_[0] = gaussianPipeline[0].release();
 
 	gaussianPipeline[1]->SetRtvFormt(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
 	gaussianPipeline[1]->Init();
-	gaussianPipeline[1]->SetGaussianState(
-		GaussianBlur::GaussianBlurState{
-			.dir = Vector2(0.0f, 0.0f),
+	gaussianBlurStateVertical_ = GaussianBlur::GaussianBlurState{
+			.dir = Vector2(0.0f, 1.0f),
 			.sigma = 10.0f,
 			.kernelSize = 8,
-		}
-	);
+	};
+	gaussianPipeline[1]->SetGaussianState(gaussianBlurStateVertical_);
 	gaussianPipeline_[1] = gaussianPipeline[1].release();
 
 	gaussianHorizontalTexture_->Initialize(gaussianPipeline_[0].get());
@@ -246,8 +253,18 @@ void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	if(ImGui::TreeNode(guiName.c_str())){
 		ImGui::Checkbox("lighting", reinterpret_cast<bool*>(&deferredRenderingData_.isDirectionLight));
-		ImGui::DragFloat("environment", &deferredRenderingData_.environmentCoefficient, 0.001f, 0.0f, 1.0f);
+		ImGui::DragFloat("environment", &deferredRenderingData_.environmentCoefficient, 0.001f, 0.0f, 5.0f);
+		if (ImGui::TreeNode("Bloom")) {
+			ImGui::DragInt("横カーネルサイズ", &gaussianBlurStateHorizontal_.kernelSize, 0.1f, 0, 128);
+			ImGui::DragInt("縦カーネルサイズ", &gaussianBlurStateVertical_.kernelSize, 0.1f, 0, 128);
+			ImGui::DragFloat("輝度しきい値", &luminanceThreshold, 0.001f, 0.0f, 2.0f);
 
+			gaussianPipeline_[0]->SetGaussianState(gaussianBlurStateHorizontal_);
+			gaussianPipeline_[1]->SetGaussianState(gaussianBlurStateVertical_);
+			luminate_->SetLuminanceThreshold(luminanceThreshold);
+
+			ImGui::TreePop();
+		}
 
 		ImGui::TreePop();
 	}

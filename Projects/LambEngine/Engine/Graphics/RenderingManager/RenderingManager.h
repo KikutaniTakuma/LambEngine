@@ -94,10 +94,16 @@ private:
 
 	// ブルームで使用する輝度抽出用オフスクリーン
 	std::unique_ptr<PeraRender> luminateTexture_;
+	Lamb::SafePtr<class Luminate> luminate_;
+	float32_t luminanceThreshold = 0.0f;
+
 	// ブルームで使用するガウシアンフィルタ(横)用オフスクリーン
 	std::unique_ptr<PeraRender> gaussianHorizontalTexture_;
 	// ブルームで使用するガウシアンフィルタ(縦)用オフスクリーン
 	std::unique_ptr<PeraRender> gaussianVerticalTexture_;
+
+	GaussianBlur::GaussianBlurState gaussianBlurStateHorizontal_;
+	GaussianBlur::GaussianBlurState gaussianBlurStateVertical_;
 
 	// ガウシアンフィルタ用パイプラインオジェクト
 	std::array<Lamb::SafePtr<GaussianBlur>, 2> gaussianPipeline_;

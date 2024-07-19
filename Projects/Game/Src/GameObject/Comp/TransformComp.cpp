@@ -74,7 +74,7 @@ void TransformComp::Debug([[maybe_unused]]const std::string& guiName) {
 	if(ImGui::TreeNode(guiName.c_str())) {
 		ImGui::DragFloat3("scale", scale.data(), 0.01f);
 		eulerRotate *= Lamb::Math::toDegree<float32_t>;
-		ImGui::DragFloat3("rotate(Degree)", eulerRotate.data(), 0.01f);
+		ImGui::DragFloat3("rotate(Degree)", eulerRotate.data(), 1.0f);
 		eulerRotate *= Lamb::Math::toRadian<float32_t>;
 		ImGui::DragFloat3("translate", translate.data(), 0.01f);
 		rotate = rotate.Normalize();

@@ -214,6 +214,9 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\DeferredRendering\DeferredRendering.cpp">
       <Filter>Engine\Graphics\PipelineObject\DeferredRendering</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\Luminate\Luminate.cpp">
+      <Filter>Engine\Graphics\PipelineObject\Luminate</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -398,6 +401,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\DeferredRendering">
       <UniqueIdentifier>{77a8e15c-2b5e-4bb5-b958-63aecea1dc16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject\Luminate">
+      <UniqueIdentifier>{c2218a0e-ba38-4d0a-beb0-7e7194492ba5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -652,6 +658,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\DeferredRendering\DeferredRendering.h">
       <Filter>Engine\Graphics\PipelineObject\DeferredRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\Luminate\Luminate.h">
+      <Filter>Engine\Graphics\PipelineObject\Luminate</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
