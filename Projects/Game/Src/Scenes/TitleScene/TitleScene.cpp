@@ -100,10 +100,6 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	skybox_->Draw(transform_.GetMatrix(), ObjectManager::GetInstance()->GetCameraMatrix(), 0xffffffff);
-	/*cloud_->Draw();
-	skydome_->Draw(*currentCamera_);*/
-
 	water_->Draw(ObjectManager::GetInstance()->GetCameraMatrix());
 	/*player_->Draw(
 		playerTransform_.GetMatrix(),
