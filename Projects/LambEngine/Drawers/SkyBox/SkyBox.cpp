@@ -113,6 +113,11 @@ void SkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t colo
     commandlist->DrawIndexedInstanced(kIndexNumber_, 1, 0, 0, 0);
 }
 
+D3D12_GPU_DESCRIPTOR_HANDLE SkyBox::GetHandle() const
+{
+    return texture_->GetHandleGPU();
+}
+
 void SkyBox::CreateGraphicsPipeline() {
     Shader shader = {};
 

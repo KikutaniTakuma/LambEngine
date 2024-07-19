@@ -48,6 +48,8 @@ public:
 	void SetCameraPos(const Vector3& cameraPos);
 	void SetCameraMatrix(const Mat4x4& camera);
 
+	void Debug(const std::string& guiName);
+
 private:
 	// アルファ値がないものを描画
 	void DrawRGB(std::pair<size_t, const std::list<const RenderData*>&> renderList);

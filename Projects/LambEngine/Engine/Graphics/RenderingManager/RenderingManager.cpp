@@ -12,6 +12,11 @@
 #include "Engine/Core/ImGuiManager/ImGuiManager.h"
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
 
+#ifdef _DEBUG
+#include "imgui.h"
+#endif // _DEBUG
+
+
 std::unique_ptr<RenderingManager> RenderingManager::instance_;
 
 RenderingManager::RenderingManager() {
@@ -34,7 +39,7 @@ RenderingManager::RenderingManager() {
 	deferredRendering_->SetColorHandle(colorTexture_->GetHandleGPU());
 	deferredRendering_->SetNormalHandle(normalTexture_->GetHandleGPU());
 	deferredRendering_->SetWoprldPositionHandle(worldPositionTexture_->GetHandleGPU());
-	deferredRenderingData_.isDirectionLight = 1;
+	deferredRenderingData_.isDirectionLight = 0;
 	deferredRenderingData_.directionLight.shinness = 42.0f;
 	deferredRenderingData_.directionLight.ligColor = Vector3::kIdentity;
 	deferredRenderingData_.directionLight.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>);
@@ -54,7 +59,7 @@ RenderingManager::RenderingManager() {
 	gaussianPipeline[0]->Init();
 	gaussianPipeline[0]->SetGaussianState(
 		GaussianBlur::GaussianBlurState{
-		.dir = Vector2(1.0f, 0.0f),
+		.dir = Vector2(0.0f, 0.0f),
 		.sigma = 10.0f,
 		.kernelSize = 8,
 		}
@@ -65,7 +70,7 @@ RenderingManager::RenderingManager() {
 	gaussianPipeline[1]->Init();
 	gaussianPipeline[1]->SetGaussianState(
 		GaussianBlur::GaussianBlurState{
-			.dir = Vector2(0.0f, 1.0f),
+			.dir = Vector2(0.0f, 0.0f),
 			.sigma = 10.0f,
 			.kernelSize = 8,
 		}
@@ -82,8 +87,10 @@ RenderingManager::RenderingManager() {
 	outlineTexture_->Initialize(outlinePipeline_.get());
 
 	skyBox_ = std::make_unique<SkyBox>();
-	skyBox_->Load("./Resources/Common/sky.dds");
+	skyBox_->Load("./Resources/Common/SkyBox/sky.dds");
 	transform_.scale *= 500.0f;
+
+	deferredRendering_->SetEnvironmentHandle(skyBox_->GetHandle());
 }
 
 RenderingManager::~RenderingManager()
@@ -233,6 +240,19 @@ void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 void RenderingManager::SetCameraMatrix(const Mat4x4& camera)
 {
 	cameraMatrix_ = camera;
+}
+
+void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {
+#ifdef _DEBUG
+	if(ImGui::TreeNode(guiName.c_str())){
+		ImGui::Checkbox("lighting", reinterpret_cast<bool*>(&deferredRenderingData_.isDirectionLight));
+		ImGui::DragFloat("environment", &deferredRenderingData_.environmentCoefficient, 0.001f, 0.0f, 1.0f);
+
+
+		ImGui::TreePop();
+	}
+#endif // _DEBUG
+
 }
 
 void RenderingManager::DrawRGB(std::pair<size_t, const std::list<const RenderData*>&> renderList) {

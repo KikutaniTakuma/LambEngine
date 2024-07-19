@@ -15,6 +15,7 @@ struct DeferredRenderingData{
     uint32_t rightNum;
     DirectionLight directionLight;
     uint32_t isDirectionLight;
+    float32_t environmentCoefficient;
 };
 
 struct PointLight {
@@ -23,28 +24,40 @@ struct PointLight {
     float32_t ptRange;
 };
 
-ConstantBuffer<DeferredRenderingData> kDeferredRenderingState : register(b0);
+ConstantBuffer<DeferredRenderingData> gDeferredRenderingState : register(b0);
 StructuredBuffer<PointLight> gPointLight : register(t0);
-Texture2D<float32_t4> kColorTexture : register(t1);
-Texture2D<float32_t4> kNormalTexture : register(t2);
-Texture2D<float32_t4> kWorldPositionTexture : register(t3);
+Texture2D<float32_t4> gColorTexture : register(t1);
+Texture2D<float32_t4> gNormalTexture : register(t2);
+Texture2D<float32_t4> gWorldPositionTexture : register(t3);
+TextureCube<float32_t4> gCubeTex : register(t4);
 
+// リニアサンプラー
+SamplerState gLinearSmp : register(s0);
 // ポイントサンプラー
-SamplerState pointSmp : register(s0);
+SamplerState gPointSmp : register(s01);
 
 PixelShaderOutPut2 main(Output input) {
-    float32_t4 color = kColorTexture.Sample(pointSmp, input.uv);
-    float32_t4 worldPosition = kWorldPositionTexture.Sample(pointSmp, input.uv);
-    float32_t3 normal = kNormalTexture.Sample(pointSmp, input.uv).xyz;
+    float32_t4 color = gColorTexture.Sample(gLinearSmp, input.uv);
+    float32_t4 worldPosition = gWorldPositionTexture.Sample(gPointSmp, input.uv);
+    float32_t3 normal = gNormalTexture.Sample(gPointSmp, input.uv).xyz;
     float32_t len = length(normal);
     normal = normalize(normal);
     PixelShaderOutPut2 outputColor;
 
-    if(kDeferredRenderingState.isDirectionLight == 1 && len != 0.0f){
-        float32_t3 eyePos = kDeferredRenderingState.eyePos;
-        float32_t3 ligDirection = kDeferredRenderingState.directionLight.ligDirection;
-        float32_t3 ligColor = kDeferredRenderingState.directionLight.ligColor;
-        float32_t shinness = kDeferredRenderingState.directionLight.shinness;
+    float32_t3 eyePos = gDeferredRenderingState.eyePos;
+
+    if(len != 0.0f){
+        float32_t3 cameraToPosition = normalize(worldPosition.xyz - eyePos);
+        float32_t3 reflectedVector = reflect(cameraToPosition, normal);
+        float32_t4 environment = gCubeTex.Sample(gLinearSmp, reflectedVector);
+
+        color.rgb += environment.rgb * gDeferredRenderingState.environmentCoefficient;
+    }
+
+    if(gDeferredRenderingState.isDirectionLight == 1 && len != 0.0f){
+        float32_t3 ligDirection = gDeferredRenderingState.directionLight.ligDirection;
+        float32_t3 ligColor = gDeferredRenderingState.directionLight.ligColor;
+        float32_t shinness = gDeferredRenderingState.directionLight.shinness;
  
         // ディレクションライト拡散反射光
         float32_t t = dot(normal, ligDirection);

@@ -15,6 +15,7 @@ public:
 		uint32_t rightNum = 0;
 		DirectionLight directionLight;
 		uint32_t isDirectionLight;
+		float32_t environmentCoefficient = 1.0f;
 	};
 public:
 	DeferredRendering() = default;
@@ -57,6 +58,9 @@ public:
 	void SetWoprldPositionHandle(D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle) {
 		worldPositionTextureHandle_ = worldPositionTextureHandle;
 	}
+	void SetEnvironmentHandle(D3D12_GPU_DESCRIPTOR_HANDLE environmentTextureHandle) {
+		environmentTextureHandle_ = environmentTextureHandle;
+	}
 
 private:
 	ConstantBuffer<DeferredRenderingData> deferredRenderingData_;
@@ -64,4 +68,5 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE normalTextureHandle_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle_ = {};
+	D3D12_GPU_DESCRIPTOR_HANDLE environmentTextureHandle_ = {};
 };

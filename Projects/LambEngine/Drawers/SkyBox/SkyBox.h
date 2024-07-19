@@ -26,6 +26,8 @@ public:
 
 	void Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color);
 
+	D3D12_GPU_DESCRIPTOR_HANDLE GetHandle() const;
+
 private:
 	void CreateGraphicsPipeline();
 

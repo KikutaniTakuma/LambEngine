@@ -198,6 +198,8 @@ void ObjectManager::Draw() {
 void ObjectManager::Debug() {
 #ifdef _DEBUG
 	ImGui::Begin("Objects");
+	RenderingManager::GetInstance()->Debug("rendeirngSetting");
+
 	if (ImGui::TreeNode("sort")) {
 		if (ImGui::Button("すべてを選択")) {
 			for (auto& i : objectTags_) {
