@@ -81,6 +81,9 @@ RenderingManager::RenderingManager() {
 	outlineTexture_ = std::make_unique<PeraRender>();
 	outlineTexture_->Initialize(outlinePipeline_.get());
 
+	skyBox_ = std::make_unique<SkyBox>();
+	skyBox_->Load("./Resources/Common/sky.dds");
+	transform_.scale *= 500.0f;
 }
 
 RenderingManager::~RenderingManager()
@@ -175,7 +178,7 @@ void RenderingManager::Draw() {
 
 	// 色だけ出力
 	RenderTarget::SetRenderTargets(
-		&renderTargets[1],
+		renderTargets.data(),
 		static_cast<uint32_t>(1),
 		&depthStencil_->GetDepthHandle()
 	);
@@ -227,6 +230,11 @@ void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 	deferredRenderingData_.eyePos = cameraPos;
 }
 
+void RenderingManager::SetCameraMatrix(const Mat4x4& camera)
+{
+	cameraMatrix_ = camera;
+}
+
 void RenderingManager::DrawRGB(std::pair<size_t, const std::list<const RenderData*>&> renderList) {
 	for (size_t index = 0; const auto& elemnt : renderList.second) {
 		elemnt->Draw();
@@ -239,6 +247,7 @@ void RenderingManager::DrawRGB(std::pair<size_t, const std::list<const RenderDat
 }
 
 void RenderingManager::DrawSkyBox() {
+	skyBox_->Draw(transform_.GetMatrix(), cameraMatrix_, 0xffffffff);
 }
 
 void RenderingManager::DrawRGBA() {

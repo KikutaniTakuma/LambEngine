@@ -183,7 +183,9 @@ void ObjectManager::Update() {
 		i->LastUpdate();
 	}
 
-	RenderingManager::GetInstance()->SetCameraPos(cameraComp_->GetPos());
+	Lamb::SafePtr renderingManager = RenderingManager::GetInstance();
+	renderingManager->SetCameraMatrix(cameraComp_->GetMatrix());
+	renderingManager->SetCameraPos(cameraComp_->GetPos());
 }
 
 void ObjectManager::Draw() {

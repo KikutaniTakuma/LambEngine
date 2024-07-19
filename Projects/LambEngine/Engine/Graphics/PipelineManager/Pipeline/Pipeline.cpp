@@ -245,7 +245,7 @@ void Pipeline::CreateCubeMap(
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 	for (uint32_t i = 0; i < desc_.numRenderTarget; i++) {
-		graphicsPipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		graphicsPipelineStateDesc.RTVFormats[i] = desc_.rtvFormtat[i];
 		graphicsPipelineStateDesc.BlendState.RenderTarget[i].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 		
 		switch (desc_.blend[i])

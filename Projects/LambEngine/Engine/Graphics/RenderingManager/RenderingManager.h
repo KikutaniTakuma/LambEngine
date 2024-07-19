@@ -8,6 +8,8 @@
 
 #include "Engine/Graphics/PipelineObject/DeferredRendering/DeferredRendering.h"
 
+#include "Drawers/SkyBox/SkyBox.h"
+
 #include <array>
 
 #include <list>
@@ -44,6 +46,7 @@ public:
 	DepthBuffer& GetDepthBuffer();
 
 	void SetCameraPos(const Vector3& cameraPos);
+	void SetCameraMatrix(const Mat4x4& camera);
 
 private:
 	// アルファ値がないものを描画
@@ -102,6 +105,13 @@ private:
 	std::unique_ptr<PeraRender> outlineTexture_;
 	// アウトライン用パイプラインオジェクト
 	Lamb::SafePtr<Outline> outlinePipeline_;
+
+	
+	// skybox
+	std::unique_ptr<SkyBox> skyBox_;
+	QuaternionTransform transform_;
+
+	Mat4x4 cameraMatrix_;
 
 
 	/// 

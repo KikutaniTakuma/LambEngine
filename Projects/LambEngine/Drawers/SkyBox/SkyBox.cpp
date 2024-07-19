@@ -160,7 +160,7 @@ void SkyBox::CreateGraphicsPipeline() {
     pipelineDesc.shader = shader;
     pipelineDesc.isDepth = false;
     pipelineDesc.blend[0] = Pipeline::None;
-    pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+    pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
     pipelineDesc.solidState = Pipeline::SolidState::Solid;
     pipelineDesc.cullMode = Pipeline::CullMode::Back;
     pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
