@@ -129,23 +129,44 @@ void Line::Debug([[maybe_unused]]const std::string& guiName) {
 }
 
 void Line::Draw(const Mat4x4& viewProjection, bool isDepth) {
-	assert(nodepthDrawCount_ < kDrawMaxNumber_);
-	if (!(nodepthDrawCount_ < kDrawMaxNumber_)) {
-		Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
+	if (isDepth) {
+		assert(depthDrawCount_ < kDrawMaxNumber_);
+		if (!(depthDrawCount_ < kDrawMaxNumber_)) {
+			Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
+		}
+
+		auto&& colorFloat = UintToVector4(color);
+
+		(*depthVertData_)[depthDrawCount_].color = colorFloat;
+
+		Vector3 scale;
+		scale.x = (end - start).Length();
+		Vector3 to = (end - start).Normalize();
+		Vector3 translate = start;
+
+		(*depthVertData_)[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+
+		depthDrawCount_++;
 	}
+	else {
+		assert(nodepthDrawCount_ < kDrawMaxNumber_);
+		if (!(nodepthDrawCount_ < kDrawMaxNumber_)) {
+			Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
+		}
 
-	auto&& colorFloat = UintToVector4(color);
+		auto&& colorFloat = UintToVector4(color);
 
-	(*nodepthVertData_)[nodepthDrawCount_].color = colorFloat;
+		(*nodepthVertData_)[nodepthDrawCount_].color = colorFloat;
 
-	Vector3 scale;
-	scale.x = (end - start).Length();
-	Vector3 to = (end - start).Normalize();
-	Vector3 translate = start;
+		Vector3 scale;
+		scale.x = (end - start).Length();
+		Vector3 to = (end - start).Normalize();
+		Vector3 translate = start;
 
-	(*nodepthVertData_)[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+		(*nodepthVertData_)[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
-	nodepthDrawCount_++;
+		nodepthDrawCount_++;
+	}
 }
 
 void Line::Draw(
@@ -155,21 +176,42 @@ void Line::Draw(
 	uint32_t color,
 	bool isDepth
 ) {
-	assert(nodepthDrawCount_ < kDrawMaxNumber_);
-	if (!(nodepthDrawCount_ < kDrawMaxNumber_)) {
-		throw Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
+	if (isDepth) {
+		assert(depthDrawCount_ < kDrawMaxNumber_);
+		if (!(depthDrawCount_ < kDrawMaxNumber_)) {
+			throw Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
+		}
+
+		auto&& colorFloat = UintToVector4(color);
+
+		(*depthVertData_)[depthDrawCount_].color = colorFloat;
+
+		Vector3 scale;
+		scale.x = (end - start).Length();
+		Vector3 to = (end - start).Normalize();
+		Vector3 translate = start;
+
+		(*depthVertData_)[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+
+		depthDrawCount_++;
 	}
+	else {
+		assert(nodepthDrawCount_ < kDrawMaxNumber_);
+		if (!(nodepthDrawCount_ < kDrawMaxNumber_)) {
+			throw Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
+		}
 
-	auto&& colorFloat = UintToVector4(color);
+		auto&& colorFloat = UintToVector4(color);
 
-	(*nodepthVertData_)[nodepthDrawCount_].color = colorFloat;
+		(*nodepthVertData_)[nodepthDrawCount_].color = colorFloat;
 
-	Vector3 scale;
-	scale.x = (end - start).Length();
-	Vector3 to = (end - start).Normalize();
-	Vector3 translate = start;
+		Vector3 scale;
+		scale.x = (end - start).Length();
+		Vector3 to = (end - start).Normalize();
+		Vector3 translate = start;
 
-	(*nodepthVertData_)[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+		(*nodepthVertData_)[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
-	nodepthDrawCount_++;
+		nodepthDrawCount_++;
+	}
 }

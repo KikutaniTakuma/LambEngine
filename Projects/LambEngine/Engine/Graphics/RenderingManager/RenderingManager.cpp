@@ -234,6 +234,9 @@ void RenderingManager::Draw() {
 	);
 	DrawDefferd();
 
+	// line深度値付きのlineを描画
+	Line::AllDraw(false);
+
 	DrawPostEffect();
 
 	// UIの描画(depth書き込まないやつ)
