@@ -4,6 +4,8 @@
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include "Utils/EngineInfo.h"
 
+#include "Drawers/Line/Line.h"
+
 #include "Engine/Graphics/PipelineObject/Luminate/Luminate.h"
 
 #include "Engine/Core/WindowFactory/WindowFactory.h"
@@ -196,6 +198,9 @@ void RenderingManager::Draw() {
 		static_cast<uint32_t>(1),
 		&depthStencil_->GetDepthHandle()
 	);
+	// line深度値付きのlineを描画
+	Line::AllDraw(true);
+
 	DrawSkyBox();
 
 	// 同じく色だけ出力
