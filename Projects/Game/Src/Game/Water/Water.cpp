@@ -39,47 +39,6 @@ void Water::Init() {
 
 	color_ = Vector4(0.1f, 0.25f, 0.5f, 1.0f).GetColorRGBA();
 
-	/*luminate_ = std::make_unique<PeraRender>();
-	luminate_->Initialize("./Resources/Shaders/PostShader/PostLuminate.PS.hlsl");
-
-
-	gaussianBlurObjectWidth_ = Lamb::MakeSafePtr<GaussianBlur>();
-	try {
-		gaussianBlurObjectWidth_->Init();
-	}
-	catch (const Lamb::Error& err) {
-		gaussianBlurObjectWidth_.reset();
-		throw err;
-	}
-	gaussianBlurWidth_ = std::make_unique<PeraRender>();
-	gaussianBlurWidth_->Initialize(gaussianBlurObjectWidth_.get());
-
-	gaussianBlurObjectHeight_ = Lamb::MakeSafePtr<GaussianBlur>();
-	try {
-		gaussianBlurObjectHeight_->Init();
-	}
-	catch (const Lamb::Error& err) {
-		gaussianBlurObjectHeight_.reset();
-		throw err;
-	}
-	gaussianBlurHeight_ = std::make_unique<PeraRender>();
-	gaussianBlurHeight_->Initialize(gaussianBlurObjectHeight_.get());
-
-	gaussianBlurObjectWidth_->SetGaussianState(
-		GaussianBlur::GaussianBlurState{
-			.dir = Vector2(1.0f, 0.0f),
-			.sigma = 10.0f,
-			.kernelSize = 8,
-		}
-	);
-	gaussianBlurObjectHeight_->SetGaussianState(
-		GaussianBlur::GaussianBlurState{
-			.dir = Vector2(0.0f, 1.0f),
-			.sigma = 10.0f,
-			.kernelSize = 8,
-		}
-	);*/
-
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
 	waveData.ripplesPoint = transform.translate;
@@ -112,21 +71,6 @@ void Water::Update(const Vector3& cameraPos) {
 }
 
 void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera) {
-	/*std::vector renderTargets = {
-		&luminate_->GetRender()
-	};
-
-	if (pera) {
-		renderTargets.push_back(&pera->GetRender());
-	}
-
-
-	RenderTarget::SetMainAndRenderTargets(
-		renderTargets.data(),
-		static_cast<uint32_t>(renderTargets.size()),
-		nullptr
-	);*/
-
 	waterSurface_->Draw(
 		transform.GetMatrix(),
 		cameraMat,
@@ -138,11 +82,6 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 		color_,
 		BlendType::kNone
 	);
-	/*waterSurface_->AllDraw(BlendType::kNone);
-
-	luminate_->Draw(Pipeline::None, nullptr,  gaussianBlurWidth_.get());
-	gaussianBlurWidth_->Draw(Pipeline::None, nullptr, gaussianBlurHeight_.get());
-	gaussianBlurHeight_->Draw(Pipeline::Add, nullptr);*/
 }
 
 void Water::Debug([[maybe_unused]]const std::string& guiName){
@@ -170,8 +109,6 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 		ImGui::DragFloat3("rotate", transform.rotate.data(), 0.01f);
 		ImGui::TreePop();
 	}
-	//gaussianBlurObjectWidth_->Debug("gaussianBlurObjectWidth");
-	//gaussianBlurObjectHeight_->Debug("gaussianBlurObjectHeight");
 
 	if (ImGui::TreeNode("ポリゴン分割数")) {
 		ImGui::DragInt("edgeDivision", &edgeDivision_, 0.1f, 1, 64);
