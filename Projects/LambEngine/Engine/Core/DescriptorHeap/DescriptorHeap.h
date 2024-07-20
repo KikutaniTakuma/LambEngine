@@ -29,7 +29,7 @@ public:
 	/// </summary>
 	/// <param name="heapIndex">取得したいハンドルのインデックス</param>
 	/// <returns>CPUハンドル</returns>
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHeapHandle(uint32_t heapIndex) {
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCpuHeapHandle(uint32_t heapIndex) const {
 		return heapHandles_[heapIndex].first;
 	}
 	/// <summary>
@@ -37,7 +37,7 @@ public:
 	/// </summary>
 	/// <param name="heapIndex">取得したいハンドルのインデックス</param>
 	/// <returns>GPUハンドル</returns>
-	virtual D3D12_GPU_DESCRIPTOR_HANDLE GetGpuHeapHandle(uint32_t heapIndex) {
+	virtual D3D12_GPU_DESCRIPTOR_HANDLE GetGpuHeapHandle(uint32_t heapIndex) const {
 		return heapHandles_[heapIndex].second;
 	}
 

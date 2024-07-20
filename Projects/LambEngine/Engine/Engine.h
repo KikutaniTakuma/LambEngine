@@ -54,8 +54,6 @@ public:
 		return instance_;
 	}
 
-	static D3D12_CPU_DESCRIPTOR_HANDLE GetDsvHandle();
-
 private:
 	std::string GetCpuName() const;
 
@@ -127,18 +125,6 @@ private:
 private:
 	class StringOutPutManager* stringOutPutManager_ = nullptr;
 
-
-	/// 
-	/// 描画関係
-	/// 
-private:
-	void InitializeDraw();
-
-public:
-	class DepthBuffer& GetDepthBuffer();
-
-private:
-	std::unique_ptr<class DepthBuffer> depthStencil_;
 
 	///
 	/// MainLoop

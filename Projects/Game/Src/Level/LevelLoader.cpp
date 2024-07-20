@@ -30,52 +30,6 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
 {
     // 全オブジェクトを走査
     for (nlohmann::json& objectData : data["objects"]) {
-        if (objectData.contains("skyblock")) {
-            levelData->skyBlocks.emplace_back(std::make_unique<SkyBlock>());
-            auto& skyBlock = levelData->skyBlocks.back();
-
-            Transform transform{};
-            if (objectData.contains("transform")) {
-
-                nlohmann::json& transformData = objectData["transform"];
-
-                for (size_t i = 0; i < transform.translate.size(); i++) {
-                    transform.translate[i] = static_cast<float>(transformData["translation"][i]);
-                }
-                for (size_t i = 0; i < transform.rotate.size(); i++) {
-                    transform.rotate[i] = static_cast<float>(transformData["rotation"][i]);
-                }
-                for (size_t i = 0; i < transform.scale.size(); i++) {
-                    transform.scale[i] = static_cast<float>(transformData["scaling"][i]);
-                }
-            }
-            skyBlock->Init(transform);
-
-            continue;
-
-        }
-        if (objectData.contains("player") and not levelData->player) {
-            levelData->player = std::make_unique<Player>();
-            Transform transform{};
-            if (objectData.contains("transform")) {
-
-                nlohmann::json& transformData = objectData["transform"];
-
-                for (size_t i = 0; i < transform.translate.size(); i++) {
-                    transform.translate[i] = static_cast<float>(transformData["translation"][i]);
-                }
-                for (size_t i = 0; i < transform.rotate.size(); i++) {
-                    transform.rotate[i] = static_cast<float>(transformData["rotation"][i]);
-                }
-                for (size_t i = 0; i < transform.scale.size(); i++) {
-                    transform.scale[i] = static_cast<float>(transformData["scaling"][i]);
-                }
-            }
-            levelData->player->Init(transform);
-
-            continue;
-        }
-
         // オブジェクトを追加
         levelData->objects.emplace_back(std::make_unique<Object>());
         Object& object = *levelData->objects.back();
@@ -95,6 +49,7 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
                 if (objectData.contains("file_name")) {
                     Lamb::SafePtr model = object.AddComp<ModelRenderComp>();
                     model->SetFileNmae(objectData["file_name"]);
+                    model->Load();
                     object.SetTag("Model");
                 }
             }
@@ -112,7 +67,7 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
             AddTransform(objectData, object);
         }
         // childrenがあるなら
-        if (objectData.contains("transform")) {
+        if (objectData.contains("children")) {
             AddChildren(objectData, levelData, object);
         }
     }
@@ -125,15 +80,24 @@ void LevelLoader::AddTransform(nlohmann::json& data, Object& object)
 
     nlohmann::json& transformData = data["transform"];
 
-    for (size_t i = 0; i < transform.translate.size(); i++) {
-        transform.translate[i] = static_cast<float>(transformData["translation"][i]);
+    transform.translate[0] = static_cast<float>(transformData["translation"][0]);
+    transform.translate[1] = static_cast<float>(transformData["translation"][2]);
+    transform.translate[2] = static_cast<float>(transformData["translation"][1]);
+
+    std::string type = data["type"].get<std::string>();
+
+
+    transform.rotate[0] = -static_cast<float>(transformData["rotation"][0]);
+    transform.rotate[1] = -static_cast<float>(transformData["rotation"][2]);
+    transform.rotate[2] = -static_cast<float>(transformData["rotation"][1]);
+
+    transform.rotate *= Lamb::Math::toRadian<float>;
+    if (type.compare("CAMERA") == 0) {
+        transform.rotate.x += 90.0f * Lamb::Math::toRadian<float>;
     }
-    for (size_t i = 0; i < transform.rotate.size(); i++) {
-        transform.rotate[i] = static_cast<float>(transformData["rotation"][i]);
-    }
-    for (size_t i = 0; i < transform.scale.size(); i++) {
-        transform.scale[i] = static_cast<float>(transformData["scaling"][i]);
-    }
+    transform.scale[0] = static_cast<float>(transformData["scaling"][0]);
+    transform.scale[1] = static_cast<float>(transformData["scaling"][2]);
+    transform.scale[2] = static_cast<float>(transformData["scaling"][1]);
 
     transformComp->translate = transform.translate;
     transformComp->rotate = Quaternion::EulerToQuaternion(transform.rotate);
@@ -153,6 +117,8 @@ void LevelLoader::AddCamera(nlohmann::json& data, Object& object)
         cameraComp->SetAspectRatio(static_cast<float32_t>(data["aspect_ratio"]));
         cameraComp->SetFarClip(static_cast<float32_t>(data["far_clip"]));
         cameraComp->SetNearClip(static_cast<float32_t>(data["near_clip"]));
+
+        object.SetTag("Camera3D");
     }
     else if (cameratype.compare("Othographic") == 0) {
         Lamb::SafePtr cameraComp = object.AddComp<Camera2DComp>();
@@ -161,7 +127,10 @@ void LevelLoader::AddCamera(nlohmann::json& data, Object& object)
         cameraComp->SetHeight(static_cast<float32_t>(data["height"]));
         cameraComp->SetFarClip(static_cast<float32_t>(data["far_clip"]));
         cameraComp->SetNearClip(static_cast<float32_t>(data["near_clip"]));
+        
+        object.SetTag("Camera2D");
     }
+    object.SetTag("Camera");
 }
 
 void LevelLoader::AddObb(nlohmann::json& data, Object& object)
@@ -204,6 +173,7 @@ void LevelLoader::AddChildren(nlohmann::json& data, Lamb::SafePtr<LevelData> lev
                 if (objectData.contains("file_name")) {
                     Lamb::SafePtr model = object.AddComp<ModelRenderComp>();
                     model->SetFileNmae(objectData["file_name"]);
+                    model->Load();
                     object.SetTag("Model");
                 }
             }
@@ -223,10 +193,11 @@ void LevelLoader::AddChildren(nlohmann::json& data, Lamb::SafePtr<LevelData> lev
             // 親をセット
             Lamb::SafePtr transform = object.GetComp<TransformComp>();
             Lamb::SafePtr parentTransform = parent.GetComp<TransformComp>();
+
             transform->SetParent(parentTransform);
         }
         // childrenがあるなら
-        if (objectData.contains("transform")) {
+        if (objectData.contains("children")) {
             AddChildren(objectData, levelData, object);
         }
     }

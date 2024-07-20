@@ -59,6 +59,34 @@ void RenderContextManager::SetIsNowThreading(bool isNowThreading) {
 	}
 }
 
+std::pair<size_t, const std::list<const RenderData*>&> RenderContextManager::CreateRenderList(BlendType blend)
+{
+	std::pair<size_t, const std::list<const RenderData*>&> result = { 0llu, renderDataLists_[blend] };
+	size_t count = 0;
+	auto itr = renderDataLists_[blend].begin();
+	
+	for (auto& i : renderData_) {
+		if (i.second->IsDraw(blend)) {
+			if (itr == renderDataLists_[blend].end()) {
+				break;
+			}
+			*itr = i.second->GetRenderData(blend);
+			itr++;
+			count++;
+		}
+	}
+
+	result.first = count;
+
+	return result;
+}
+
+void RenderContextManager::ResizeRenderList() {
+	for (auto& i : renderDataLists_) {
+		i.resize(renderData_.size());
+	}
+}
+
 void RenderContextManager::Draw() {
 	for (auto& i : renderData_) {
 		i.second->Draw();
@@ -153,6 +181,9 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 	pipelineDesc.cullMode = Pipeline::CullMode::Back;
 	pipelineDesc.topologyType = (shader.hull != nullptr ? D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH : D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	pipelineDesc.numRenderTarget = numRenderTarget;
+	for (uint32_t i = 0; i < pipelineDesc.numRenderTarget; i++) {
+		pipelineDesc.rtvFormtat[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	}
 
 
 	for (size_t i = 0; i < size_t(BlendType::kNum); i++) {
@@ -253,6 +284,9 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimation
 	pipelineDesc.topologyType = (shader.hull != nullptr ? D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH : D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	pipelineDesc.numRenderTarget = numRenderTarget;
 
+	for (uint32_t i = 0; i < pipelineDesc.numRenderTarget; i++) {
+		pipelineDesc.rtvFormtat[i] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	}
 
 	for (size_t i = 0; i < size_t(BlendType::kNum); i++) {
 		size_t blendType = i < Pipeline::Blend::BlendTypeNum ? i : i - Pipeline::Blend::BlendTypeNum;

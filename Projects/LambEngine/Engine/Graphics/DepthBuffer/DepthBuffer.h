@@ -32,10 +32,12 @@ public:
 	) override;
 	
 public:
-	D3D12_CPU_DESCRIPTOR_HANDLE GetDepthHandle() const;
+	const D3D12_CPU_DESCRIPTOR_HANDLE& GetDepthHandle() const;
 	class Texture* const GetTex() const;
 
 	void Barrier();
+
+	void Clear();
 
 	DepthBuffer::State GetCurrentState() const {
 		return currentState_;

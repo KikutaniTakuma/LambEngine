@@ -28,7 +28,8 @@ public:
 		const std::string& psShader = "./Resources/Shaders/PostShader/PostGaussian.PS.hlsl",
 		const std::string& gsFileName = {},
 		const std::string& hsFileName = {},
-		const std::string& dsFileName = {}
+		const std::string& dsFileName = {},
+		uint32_t numRendertaget = 1
 	) override;
 
 public:
@@ -40,8 +41,11 @@ public:
 		*gaussianBlurState_ = gaussianBlurState;
 	}
 
+	void SetRtvFormt(DXGI_FORMAT format);
+
 	void Debug(const std::string& guiName);
 
 private:
 	ConstantBuffer<GaussianBlurState> gaussianBlurState_;
+	DXGI_FORMAT format_ = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 };

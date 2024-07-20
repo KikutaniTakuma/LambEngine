@@ -204,3 +204,5 @@ public:
 	static const Vector2 kYIdentity;
 
 };
+
+using float32_t2 = Vector2;

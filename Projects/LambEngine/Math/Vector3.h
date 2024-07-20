@@ -245,3 +245,5 @@ struct Segment {
 [[nodiscard]] Vector3 Project(const Vector3& vec1, const Vector3& vec2);
 
 [[nodiscard]] Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
+
+using float32_t3 = Vector3;

@@ -1,8 +1,8 @@
 #include "WaterTex2D.hlsli"
 
-WaterTex2DVertexOutPut main(VertexShaderInput input,uint32_t instanceID : SV_InstanceID)
+VertexShaderOutputToHull main(VertexShaderInput input,uint32_t instanceID : SV_InstanceID)
 {
-    VertexShaderOutput output;
+    VertexShaderOutputToHull output;
 
 	output.worldPosition = input.position;
 	output.position =output.worldPosition;
@@ -12,10 +12,5 @@ WaterTex2DVertexOutPut main(VertexShaderInput input,uint32_t instanceID : SV_Ins
 	output.instanceID = instanceID;
 	output.textureID = input.textureID;
 
-	WaterTex2DVertexOutPut outputData;
-	outputData.outputData = output;
-
-    outputData.causticsUv = output.uv * 10.0f;
-
-    return outputData;
+    return output;
 }

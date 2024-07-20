@@ -14,10 +14,10 @@ public:
 		UINT heapHandle) = 0;
 
 public:
-	D3D12_CPU_DESCRIPTOR_HANDLE GetHandleCPU() const {
+	const D3D12_CPU_DESCRIPTOR_HANDLE& GetHandleCPU() const {
 		return heapHandleCPU_;
 	}
-	D3D12_GPU_DESCRIPTOR_HANDLE GetHandleGPU() const {
+	const D3D12_GPU_DESCRIPTOR_HANDLE& GetHandleGPU() const {
 		return heapHandleGPU_;
 	}
 	UINT GetHandleUINT() const {

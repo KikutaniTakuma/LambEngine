@@ -23,6 +23,7 @@
 #include "Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Core/DescriptorHeap/DsvHeap.h"
 
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "AudioManager/AudioManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
@@ -136,8 +137,6 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 
 	ImGuiManager::Initialize();
 
-	instance_->InitializeDraw();
-
 	instance_->InitializeDirectXTK();
 
 	// 各種マネージャー初期化
@@ -169,8 +168,6 @@ void Engine::Finalize() {
 
 	StringOutPutManager::Finalize();
 
-	instance_->depthStencil_.reset();
-
 	CbvSrvUavHeap::Finalize();
 	DsvHeap::Finalize();
 	RtvHeap::Finalize();
@@ -193,10 +190,6 @@ void Engine::Finalize() {
 
 bool Engine::IsFinalize() {
 	return instance_->isFinalize_;
-}
-
-D3D12_CPU_DESCRIPTOR_HANDLE Engine::GetDsvHandle() {
-	return instance_->depthStencil_->GetDepthHandle();
 }
 
 std::string Engine::GetCpuName() const {
@@ -361,24 +354,6 @@ void Engine::InitializeDirectXTK() {
 
 
 
-///
-/// 描画用
-/// 
-void Engine::InitializeDraw() {
-	depthStencil_ = std::make_unique<DepthBuffer>();
-
-	CbvSrvUavHeap* cbvSrvUavHeap = CbvSrvUavHeap::GetInstance();
-	cbvSrvUavHeap->BookingHeapPos(1u);
-	cbvSrvUavHeap->CreateView(*depthStencil_);
-}
-
-DepthBuffer& Engine::GetDepthBuffer()
-{
-	return *depthStencil_;
-}
-
-
-
 /// 
 /// MianLoop用
 /// 
@@ -393,18 +368,7 @@ void Engine::FrameStart() {
 
 	ImGuiManager::GetInstance()->Start();
 
-	instance_->directXSwapChain_->ChangeBackBufferState();
-	instance_->directXSwapChain_->SetMainRenderTarget();
-	instance_->directXSwapChain_->ClearBackBuffer();
-
-	// ビューポート
-	Vector2 clientSize = WindowFactory::GetInstance()->GetClientSize();
-	instance_->directXSwapChain_->SetViewPort(static_cast<int32_t>(clientSize.x), static_cast<int32_t>(clientSize.y));
-
-	// SRV用のヒープ
-	const Lamb::SafePtr cbvSrvUavDescriptorHeap = CbvSrvUavHeap::GetInstance();
-	std::array heapPtrs = { cbvSrvUavDescriptorHeap ->Get()};
-	DescriptorHeap::SetHeaps(heapPtrs.size(), heapPtrs.data());
+	RenderingManager::GetInstance()->FrameStart();
 }
 
 void Engine::FrameEnd() {
@@ -419,26 +383,7 @@ void Engine::FrameEnd() {
 	frameInfo->DrawFps();
 	Lamb::screenout.Draw();
 
-	ImGuiManager::GetInstance()->End();
-
-
-	instance_->directXSwapChain_->ChangeBackBufferState();
-
-	// コマンドリストを確定させる
-	instance_->directXCommand_->CloseCommandlist();
-
-	// GPUにコマンドリストの実行を行わせる
-	instance_->directXCommand_->ExecuteCommandLists();
-
-
-	// GPUとOSに画面の交換を行うように通知する
-	instance_->directXSwapChain_->SwapChainPresent();
-
-	instance_->stringOutPutManager_->GmemoryCommit();
-
-	instance_->directXCommand_->WaitForFinishCommnadlist();
-
-	instance_->directXCommand_->ResetCommandlist();
+	RenderingManager::GetInstance()->FrameEnd();
 
 	frameInfo->End();
 }

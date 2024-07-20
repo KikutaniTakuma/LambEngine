@@ -21,12 +21,12 @@ public:
 
 public:
 	// レンダーターゲットに設定する
-	void SetThisRenderTarget();
+	void SetThisRenderTarget(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 	void ChangeResourceState();
 
 	// メインレンダーターゲットに変更(RenderTarget::SetThisTarget()を使ったら必ず呼ばなければならない)
-	void SetMainRenderTarget();
+	void SetMainRenderTarget(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 	// レンダーターゲットに設定したResourceをShaderResourceとして使う
 	void UseThisRenderTargetShaderResource();
@@ -45,10 +45,10 @@ public:
 	UINT GetRtvHandleUINT() const;
 
 public:
-	static void SetRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
-	static void SetMainAndRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
-	static void SetRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
-	static void SetMainAndRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	static void SetRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	static void SetMainAndRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	static void ResourceStateChnageRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	static void ClearRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
 
 private:
 	Lamb::LambPtr<ID3D12Resource> resource_;

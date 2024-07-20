@@ -9,7 +9,7 @@
 #include "Utils/EngineInfo.h"
 #include "Engine/Engine.h"
 
-#include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
 
 #ifdef _DEBUG
 #include "imgui.h"
@@ -28,15 +28,12 @@ void Outline::Debug([[maybe_unused]] const std::string& guiName) {
 
 void Outline::ChangeDepthBufferState()
 {
-	auto& depth = Engine::GetInstance()->GetDepthBuffer();
+	auto& depth = RenderingManager::GetInstance()->GetDepthBuffer();
 	depth.Barrier();
 }
 
 void Outline::Update() {
 	*colorBuf_ = color;
-
-	wvpMat_->worldMat = worldMat;
-	wvpMat_->viewProjection = viewProjection;
 }
 
 void Outline::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -48,10 +45,10 @@ void Outline::Use(Pipeline::Blend blendType, bool isDepth) {
 	}
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
-	auto& depth = Engine::GetInstance()->GetDepthBuffer();
+	auto& depth = RenderingManager::GetInstance()->GetDepthBuffer();
 
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootDescriptorTable(1, wvpMat_.GetHandleGPU());
+	commandList->SetGraphicsRootDescriptorTable(1, colorBuf_.GetHandleGPU());
 	commandList->SetGraphicsRootDescriptorTable(2, depth.GetTex()->GetHandleGPU());
 }
 
@@ -60,7 +57,8 @@ void Outline::Init(
 	const std::string& psShader,
 	const std::string& gsFileName,
 	const std::string& hsFileName,
-	const std::string& dsFileName
+	const std::string& dsFileName,
+	uint32_t numRendertaget
 ) {
 	if (width_ == 0u) {
 		width_ = static_cast<uint32_t>(Lamb::ClientSize().x);
@@ -86,7 +84,7 @@ void Outline::Init(
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 3;
+	cbvRange[0].NumDescriptors = 2;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
@@ -127,15 +125,17 @@ void Outline::Init(
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::Desc pipelineDesc;
 	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
-	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT });
-	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
+	pipelineDesc.vsInputData.clear();
 	pipelineDesc.shader = shader_;
 	pipelineDesc.isDepth = false;
 	pipelineDesc.blend[0] = Pipeline::None;
 	pipelineDesc.solidState = Pipeline::SolidState::Solid;
 	pipelineDesc.cullMode = Pipeline::CullMode::Back;
 	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	pipelineDesc.numRenderTarget = 1;
+	pipelineDesc.numRenderTarget = numRendertaget;
+	for (uint32_t i = 0; i < numRendertaget; i++) {
+		pipelineDesc.rtvFormtat[i] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	}
 
 
 	for (int32_t i = Pipeline::Blend::None; i < Pipeline::Blend::BlendTypeNum; i++) {
@@ -154,9 +154,8 @@ void Outline::Init(
 
 	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
 
-	srvHeap->BookingHeapPos(4u);
+	srvHeap->BookingHeapPos(3u);
 	srvHeap->CreateView(*render_);
-	srvHeap->CreateView(wvpMat_);
 	srvHeap->CreateView(colorBuf_);
 	srvHeap->CreateView(outlineData_);
 
@@ -167,7 +166,6 @@ Outline::~Outline() {
 	if (render_) {
 		auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 		srvHeap->ReleaseView(render_->GetHandleUINT());
-		srvHeap->ReleaseView(wvpMat_.GetHandleUINT());
 		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
 		srvHeap->ReleaseView(outlineData_.GetHandleUINT());
 	}

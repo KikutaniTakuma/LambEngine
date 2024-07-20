@@ -9,6 +9,9 @@
 
 #include "Engine/Graphics/PipelineObject/Outline/Outline.h"
 
+#include "GameObject/Manager/ObjectManager.h"
+#include "Level/LevelLoader.h"
+
 TitleScene::TitleScene() :
 	BaseScene{ BaseScene::ID::Title }
 {
@@ -16,9 +19,8 @@ TitleScene::TitleScene() :
 
 void TitleScene::Load()
 {
-	//drawerManager_->LoadModel("./Resources/Player/Player.obj");
-	/*audioManager_->Load("./Resources/Sound/SE_Water.wav");
-	audioManager_->Load("./Resources/Sound/SE_InGame.wav");*/
+	levelData_ = LevelLoader::Load("./SceneData/TitleScene.json");
+	ObjectManager::GetInstance()->SetLevelData(levelData_, currentCamera_);
 }
 
 void TitleScene::Initialize()
@@ -57,24 +59,12 @@ void TitleScene::Initialize()
 
 	inGameSE_ = audioManager_->Get("./Resources/Sound/SE_InGame.wav");*/
 
-	skybox_ = std::make_unique<SkyBox>();
-	skybox_->Load("./Resources/Common/SkyBox/rostock_laage_airport_4k.dds");
-
-	transform_.scale *= 500.0f;
-
-	std::unique_ptr<Outline> outline = std::make_unique<Outline>();
-	outline->Init();
-	outline_ = outline.release();
-	outlinePera_ = std::make_unique<PeraRender>();
-	outlinePera_->Initialize(outline_.get());
-	outlinePera_->pos.z = 10.0f;
-
 }
 
 void TitleScene::Finalize()
 {
-	//waterSE_->Stop();
-	//inGameSE_->Stop();
+	ObjectManager::GetInstance()->Clear();
+	levelData_.reset();
 }
 
 void TitleScene::Update()
@@ -82,7 +72,7 @@ void TitleScene::Update()
 	/*cloud_->Update();
 	skydome_->Upadate();*/
 
-	currentCamera_->Debug("camera");
+	//currentCamera_->Debug("camera");
 	currentCamera_->Update();
 
 	water_->Debug("water");
@@ -96,22 +86,12 @@ void TitleScene::Update()
 	messageAlpah_ += std::numbers::pi_v<float> *0.5f * Lamb::DeltaTime();
 	startMessage_.color = static_cast<uint32_t>(255.0f * std::abs(std::cos(messageAlpah_)));
 
-	transform_.Debug("skybox");
-	transform_.translate = currentCamera_->GetPos();
-
-
-	outlinePera_->Update();
-	outline_->SetProjectionInverse(currentCamera_->GetProjection().Inverse());
-	outline_->Debug("outline");
+	ObjectManager::GetInstance()->Update();
 }
 
 void TitleScene::Draw()
 {
-	skybox_->Draw(transform_.GetMatrix(), currentCamera_->GetViewProjection(), 0xffffffff);
-	/*cloud_->Draw();
-	skydome_->Draw(*currentCamera_);*/
-
-	water_->Draw(currentCamera_->GetViewProjection(), outlinePera_.get());
+	water_->Draw(ObjectManager::GetInstance()->GetCameraMatrix());
 	/*player_->Draw(
 		playerTransform_.GetMatrix(),
 		currentCamera_->GetViewProjection(),
@@ -119,9 +99,7 @@ void TitleScene::Draw()
 		BlendType::kNormal
 	);*/
 
-	outline_->ChangeDepthBufferState();
-	outlinePera_->Draw(Camera::GetStaticViewOthographics(), Pipeline::Normal);
-	outline_->ChangeDepthBufferState();
+	ObjectManager::GetInstance()->Draw();
 
 	//sceneManager_->AllDraw();
 

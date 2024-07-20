@@ -1,12 +1,13 @@
 #include "Model.hlsli"
 
-PixelShaderOutPut main(VertexShaderOutput input)
+PixelShaderOutPut3 main(VertexShaderOutput input)
 {
-	PixelShaderOutPut output;
+	PixelShaderOutPut3 output;
 	
 	float32_t4 textureColor = textures[input.textureID].Sample(smp, input.uv);
 
-	output.color = textureColor * kColor[input.instanceID].color;
+
+	output.color0 = textureColor;
 
 	if(kIsLighting[input.instanceID].isLighting == 1) {
 	// ディレクションライト拡散反射光
@@ -22,7 +23,15 @@ PixelShaderOutPut main(VertexShaderOutput input)
 		lig.y += 0.2f;
 		lig.z += 0.2f;
 
-		output.color.xyz *= lig;
+		output.color0.xyz *= lig;
 	}
+	output.color0 *= kColor[input.instanceID].color;
+
+    // 法線
+    output.color1.xyz = input.normal;
+	output.color1.w = 1.0f;
+
+    // ポジション
+    output.color2 = input.worldPosition;
 	return output;
 }

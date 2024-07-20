@@ -151,9 +151,6 @@
     <ClCompile Include="Drawers\AnimationModel\AnimationModel.cpp">
       <Filter>Drawers\AnimationModel</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.cpp">
-      <Filter>Engine\Graphics\PipelineObject\CloudPipeline</Filter>
-    </ClCompile>
     <ClCompile Include="Transform\Transform.cpp">
       <Filter>Transform</Filter>
     </ClCompile>
@@ -171,9 +168,6 @@
     </ClCompile>
     <ClCompile Include="Drawers\Other\WaterTex2D\WaterTex2D.cpp">
       <Filter>Drawers\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.cpp">
-      <Filter>Engine\Graphics\PipelineObject\WaterPipeline</Filter>
     </ClCompile>
     <ClCompile Include="Drawers\SkyBox\SkyBox.cpp">
       <Filter>Drawers\SkyBox</Filter>
@@ -213,6 +207,15 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\PipelineObject\Outline\Outline.cpp">
       <Filter>Engine\Graphics\PipelineObject\Outline</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\RenderingManager\RenderingManager.cpp">
+      <Filter>Engine\Graphics\RenderingManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\DeferredRendering\DeferredRendering.cpp">
+      <Filter>Engine\Graphics\PipelineObject\DeferredRendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\Luminate\Luminate.cpp">
+      <Filter>Engine\Graphics\PipelineObject\Luminate</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -369,9 +372,6 @@
     <Filter Include="Drawers\AnimationModel">
       <UniqueIdentifier>{ce9b2a74-162e-42e2-9e98-2f278ed2aa76}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\PipelineObject\CloudPipeline">
-      <UniqueIdentifier>{5a6f62f6-9b81-4403-a912-610eb20e5551}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Transform">
       <UniqueIdentifier>{aa982000-c4e2-4c12-a54a-f75fa2d1c84d}</UniqueIdentifier>
     </Filter>
@@ -380,9 +380,6 @@
     </Filter>
     <Filter Include="Drawers\Other">
       <UniqueIdentifier>{5c308a47-9839-49cb-b2bf-2944c9b53af8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\PipelineObject\WaterPipeline">
-      <UniqueIdentifier>{fc36af07-3785-481d-b32c-b52965121ffe}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Graphics\Animator">
       <UniqueIdentifier>{0359fcab-3674-4f23-a03c-3ef946b211c0}</UniqueIdentifier>
@@ -398,6 +395,15 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\Outline">
       <UniqueIdentifier>{bc006d18-e8e3-4d8c-9f50-62169e38f926}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\RenderingManager">
+      <UniqueIdentifier>{5b88fac6-240c-46a7-a2e0-5c9364f4add1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject\DeferredRendering">
+      <UniqueIdentifier>{77a8e15c-2b5e-4bb5-b958-63aecea1dc16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject\Luminate">
+      <UniqueIdentifier>{c2218a0e-ba38-4d0a-beb0-7e7194492ba5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -572,9 +578,6 @@
     <ClInclude Include="Drawers\AnimationModel\AnimationModel.h">
       <Filter>Drawers\AnimationModel</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\PipelineObject\CloudPipeline\CloudPipeline.h">
-      <Filter>Engine\Graphics\PipelineObject\CloudPipeline</Filter>
-    </ClInclude>
     <ClInclude Include="Math\Matrix.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -592,9 +595,6 @@
     </ClInclude>
     <ClInclude Include="Drawers\Other\WaterTex2D\WaterTex2D.h">
       <Filter>Drawers\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\PipelineObject\WaterPipeline\WaterPipeline.h">
-      <Filter>Engine\Graphics\PipelineObject\WaterPipeline</Filter>
     </ClInclude>
     <ClInclude Include="Drawers\SkyBox\SkyBox.h">
       <Filter>Drawers\SkyBox</Filter>
@@ -652,6 +652,15 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\Outline\Outline.h">
       <Filter>Engine\Graphics\PipelineObject\Outline</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\RenderingManager\RenderingManager.h">
+      <Filter>Engine\Graphics\RenderingManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\DeferredRendering\DeferredRendering.h">
+      <Filter>Engine\Graphics\PipelineObject\DeferredRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\Luminate\Luminate.h">
+      <Filter>Engine\Graphics\PipelineObject\Luminate</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

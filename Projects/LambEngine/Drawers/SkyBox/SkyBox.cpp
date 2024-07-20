@@ -113,6 +113,11 @@ void SkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t colo
     commandlist->DrawIndexedInstanced(kIndexNumber_, 1, 0, 0, 0);
 }
 
+D3D12_GPU_DESCRIPTOR_HANDLE SkyBox::GetHandle() const
+{
+    return texture_->GetHandleGPU();
+}
+
 void SkyBox::CreateGraphicsPipeline() {
     Shader shader = {};
 
@@ -160,6 +165,7 @@ void SkyBox::CreateGraphicsPipeline() {
     pipelineDesc.shader = shader;
     pipelineDesc.isDepth = false;
     pipelineDesc.blend[0] = Pipeline::None;
+    pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
     pipelineDesc.solidState = Pipeline::SolidState::Solid;
     pipelineDesc.cullMode = Pipeline::CullMode::Back;
     pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;

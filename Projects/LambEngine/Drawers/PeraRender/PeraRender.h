@@ -30,19 +30,15 @@ public:
 	PeraRender& operator=(PeraRender&&) = delete;
 
 public:
-	void Initialize(const std::string& psFileName);
+	void Initialize(const std::string& psFileName, uint32_t numRenderTarget = 1);
 	void Initialize(PeraPipeline* pipelineObject);
 
 public:
-	void Update();
-
-	void PreDraw();
+	void PreDraw(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 	void Draw(
-		const Mat4x4& viewProjection, 
 		Pipeline::Blend blend, 
-		PeraRender* pera = nullptr,
-		bool isDepth = false
+		D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
 	);
 
 	Texture* GetTex() const {
@@ -53,8 +49,8 @@ public:
 		peraPipelineObject_->GetRender().ChangeResourceState();
 	}
 
-	void SetMainRenderTarget() {
-		peraPipelineObject_->GetRender().SetMainRenderTarget();
+	void SetMainRenderTarget(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
+		peraPipelineObject_->GetRender().SetMainRenderTarget(depthHandle);
 	}
 
 	void Debug(const std::string& guiName);
@@ -65,21 +61,8 @@ public:
 	const RenderTarget& GetRender() const;
 
 public:
-	Vector3 pos;
-	Vector3 rotate;
-	Vector3 scale;
-
-	Vector2 uvPibot;
-	Vector2 uvSize;
-
 	uint32_t color;
 
 private:
 	std::unique_ptr<PeraPipeline> peraPipelineObject_;
-
-	D3D12_VERTEX_BUFFER_VIEW peraVertexView_;
-	Lamb::LambPtr<ID3D12Resource> peraVertexResource_ = nullptr;
-
-	D3D12_INDEX_BUFFER_VIEW indexView_;
-	Lamb::LambPtr<ID3D12Resource> indexResource_;
 };

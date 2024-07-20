@@ -32,7 +32,7 @@ private:
 	void CreateHeapHandles() override;
 
 	[[deprecated("Don`t use this function")]]
-	D3D12_GPU_DESCRIPTOR_HANDLE GetGpuHeapHandle([[maybe_unused]]uint32_t heapIndex) override {
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGpuHeapHandle([[maybe_unused]]uint32_t heapIndex) const override {
 		return D3D12_GPU_DESCRIPTOR_HANDLE{};
 	}
 
@@ -42,13 +42,13 @@ public:
 		IDXGISwapChain4* const swapChain
 		);
 	
-	void SetMainRtv();
+	void SetMainRtv(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 public:
-	void SetRtv(uint32_t heapHandle, bool isDrawDepth = true);
-	void SetRtv(std::initializer_list<D3D12_CPU_DESCRIPTOR_HANDLE> heapHandles, bool isDrawDepth = true);
-	void SetRtv(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, bool isDrawDepth = true);
-	void SetRtvAndMain(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, bool isDrawDepth = true);
+	void SetRtv(uint32_t heapHandle, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	void SetRtv(std::initializer_list<D3D12_CPU_DESCRIPTOR_HANDLE> heapHandles, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	void SetRtv(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	void SetRtvAndMain(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 	void ClearRenderTargetView(uint32_t handle, const class Vector4& clearColor);
 

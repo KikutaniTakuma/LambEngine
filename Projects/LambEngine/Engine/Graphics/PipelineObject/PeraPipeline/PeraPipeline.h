@@ -8,12 +8,6 @@
 #include <memory>
 
 class PeraPipeline : public PipelineObject{
-protected:
-	struct WvpMat {
-		Mat4x4 worldMat;
-		Mat4x4 viewProjection;
-	};
-
 public:
 	PeraPipeline() = default;
 	PeraPipeline(const PeraPipeline&) = delete;
@@ -31,7 +25,8 @@ public:
 		const std::string& psShader,
 		const std::string& gsFileName = {},
 		const std::string& hsFileName = {},
-		const std::string& dsFileName = {}
+		const std::string& dsFileName = {},
+		uint32_t numRendertaget = 1
 	) override;
 
 public:
@@ -51,14 +46,11 @@ public:
 	}
 
 public:
-	Mat4x4 worldMat = Mat4x4::kIdentity;
-	Mat4x4 viewProjection = Mat4x4::kIdentity;
 	Vector4 color = Vector4::kIdentity;
 
 protected:
 	std::unique_ptr<RenderTarget> render_;
 
-	ConstantBuffer<WvpMat> wvpMat_;
 	ConstantBuffer<Vector4> colorBuf_;
 	uint32_t width_ = 0u;
 	uint32_t height_ = 0u;

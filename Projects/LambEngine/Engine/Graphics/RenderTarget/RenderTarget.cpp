@@ -12,53 +12,12 @@
 #include "Error/Error.h"
 
 RenderTarget::RenderTarget() :
-	resource_(),
-	isWrightResouceState_(false),
-	width_(static_cast<uint32_t>(WindowFactory::GetInstance()->GetClientSize().x)),
-	height_(static_cast<uint32_t>(WindowFactory::GetInstance()->GetClientSize().y)),
-	srvDesc_{},
-	rtvHeapHandle_{},
-	rtvHeapHandleUint_(0u)
+	RenderTarget(
+		static_cast<uint32_t>(WindowFactory::GetInstance()->GetClientSize().x),
+		static_cast<uint32_t>(WindowFactory::GetInstance()->GetClientSize().y)
+	)
 {
-	auto resDesc = DirectXSwapChain::GetInstance()->GetSwapchainBufferDesc();
-
-	// Resourceを生成する
-	// リソース用のヒープの設定
-	D3D12_HEAP_PROPERTIES heapPropaerties{};
-	heapPropaerties.Type = D3D12_HEAP_TYPE_DEFAULT;
-	Vector4 clsValue = { 0.0f, 0.0f, 0.0f, 0.0f };
-	D3D12_CLEAR_VALUE clearValue{};
-	clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	for (size_t i = 0; i < clsValue.m.size(); i++) {
-		clearValue.Color[i] = clsValue[i];
-	}
-
-	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
-
-
-	// 実際にリソースを作る
-	HRESULT hr = device->
-		CreateCommittedResource(
-			&heapPropaerties,
-			D3D12_HEAP_FLAG_NONE,
-			&resDesc,
-			D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
-			&clearValue,
-			IID_PPV_ARGS(resource_.GetAddressOf())
-		);
-	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<RenderTarget>("CreateCommittedResource Function Failed", ErrorPlace);
-	}
-
-	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->BookingHeapPos(1u);
-	rtvHeap->CreateView(*this);
-
-	srvDesc_ = {};
-	srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	srvDesc_.Texture2D.MipLevels = 1;
-	srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	
 }
 
 RenderTarget::RenderTarget(uint32_t width, uint32_t height) :
@@ -73,6 +32,7 @@ RenderTarget::RenderTarget(uint32_t width, uint32_t height) :
 	auto resDesc = DirectXSwapChain::GetInstance()->GetSwapchainBufferDesc();
 	resDesc.Width = width_;
 	resDesc.Height = height_;
+	resDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 
 
 	// Resourceを生成する
@@ -81,7 +41,7 @@ RenderTarget::RenderTarget(uint32_t width, uint32_t height) :
 	heapPropaerties.Type = D3D12_HEAP_TYPE_DEFAULT;
 	Vector4 clsValue = { 0.0f, 0.0f, 0.0f, 0.0f };
 	D3D12_CLEAR_VALUE clearValue{};
-	clearValue.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	clearValue.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	for (size_t i = 0; i < clsValue.m.size(); i++) {
 		clearValue.Color[i] = clsValue[i];
 	}
@@ -108,7 +68,7 @@ RenderTarget::RenderTarget(uint32_t width, uint32_t height) :
 
 	srvDesc_ = {};
 	srvDesc_.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc_.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	srvDesc_.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	srvDesc_.Texture2D.MipLevels = 1;
 	srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 }
@@ -118,11 +78,11 @@ RenderTarget::~RenderTarget() {
 	rtvHeap->ReleaseView(rtvHeapHandleUint_);
 }
 
-void RenderTarget::SetThisRenderTarget() {
+void RenderTarget::SetThisRenderTarget(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
 	ChangeResourceState();
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtv(rtvHeapHandleUint_);
+	rtvHeap->SetRtv(rtvHeapHandleUint_, depthHandle);
 
 	Vector4 clearColor = { 0.0f, 0.0f, 0.0f, 0.0f };
 	rtvHeap->ClearRenderTargetView(rtvHeapHandleUint_, clearColor);
@@ -137,10 +97,10 @@ void RenderTarget::ChangeResourceState() {
 	isWrightResouceState_ = not isWrightResouceState_;
 }
 
-void RenderTarget::SetMainRenderTarget() {
+void RenderTarget::SetMainRenderTarget(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
 	ChangeResourceState();
 	
-	DirectXSwapChain::GetInstance()->SetMainRenderTarget();
+	RtvHeap::GetInstance()->SetMainRtv(depthHandle);
 }
 
 void RenderTarget::UseThisRenderTargetShaderResource() {
@@ -180,7 +140,7 @@ void RenderTarget::CreateRTV(D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle, UINT de
 	
 	// RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
-	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+	rtvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
 	device->CreateRenderTargetView(resource_.Get(), &rtvDesc, descHeapHandle);
@@ -199,99 +159,53 @@ UINT RenderTarget::GetRtvHandleUINT() const
 	return rtvHeapHandleUint_;
 }
 
-void RenderTarget::SetRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget)
-{
-	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
-	rendetTargets.resize(numRenderTarget);
-	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		rendetTargets[i] = renderTargetPtrs[i];
-	}
-
-	for (auto& i : rendetTargets) {
-		i->ChangeResourceState();
-	}
-
+void RenderTarget::SetRenderTargets(
+	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
+	uint32_t numRenderTarget, 
+	const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
+) {
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
 	handles.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		handles[i] = rendetTargets[i]->GetRtvHandleCPU();
+		handles[i] = renderTargetPtrs[i]->GetRtvHandleCPU();
 	}
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtv(handles.data(), numRenderTarget);
-
-	for (auto& i : rendetTargets) {
-		rtvHeap->ClearRenderTargetView(i->rtvHeapHandleUint_, Vector4::kZero);
-	}
+	rtvHeap->SetRtv(handles.data(), numRenderTarget, depthHandle);
 }
 
-void RenderTarget::SetMainAndRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget)
-{
-	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
-	rendetTargets.resize(numRenderTarget);
-	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		rendetTargets[i] = renderTargetPtrs[i];
-	}
-
-	for (auto& i : rendetTargets) {
-		i->ChangeResourceState();
-	}
-
+void RenderTarget::SetMainAndRenderTargets(
+	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
+	uint32_t numRenderTarget, 
+	const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
+) {
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
 	handles.resize(numRenderTarget);
 	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		handles[i] = rendetTargets[i]->GetRtvHandleCPU();
+		handles[i] = renderTargetPtrs[i]->GetRtvHandleCPU();
 	}
 
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget);
+	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget, depthHandle);
+}
 
-	for (auto& i : rendetTargets) {
-		rtvHeap->ClearRenderTargetView(i->rtvHeapHandleUint_, Vector4::kZero);
+void RenderTarget::ResourceStateChnageRenderTargets(
+	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
+	uint32_t numRenderTarget
+) {
+	for (uint32_t i = 0; i < numRenderTarget; i++) {
+		renderTargetPtrs[i]->ChangeResourceState();
 	}
 }
 
-void RenderTarget::SetRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget)
-{
-	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
-	rendetTargets.resize(numRenderTarget);
-	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		rendetTargets[i] = renderTargetPtrs[i];
-	}
-
-	for (auto& i : rendetTargets) {
-		i->ChangeResourceState();
-	}
-
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
-	handles.resize(numRenderTarget);
-	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		handles[i] = rendetTargets[i]->GetRtvHandleCPU();
-	}
-
+void RenderTarget::ClearRenderTargets(
+	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
+	uint32_t numRenderTarget
+) {
 	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtv(handles.data(), numRenderTarget);
+	for (uint32_t i = 0; i < numRenderTarget; i++) {
+		rtvHeap->ClearRenderTargetView(renderTargetPtrs[i]->rtvHeapHandleUint_, Vector4::kZero);
+	}
 }
 
-void RenderTarget::SetMainAndRenderTargetsNoClear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget)
-{
-	std::vector<Lamb::SafePtr<RenderTarget>> rendetTargets;
-	rendetTargets.resize(numRenderTarget);
-	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		rendetTargets[i] = renderTargetPtrs[i];
-	}
-
-	for (auto& i : rendetTargets) {
-		i->ChangeResourceState();
-	}
-
-	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
-	handles.resize(numRenderTarget);
-	for (uint32_t i = 0; i < numRenderTarget; i++) {
-		handles[i] = rendetTargets[i]->GetRtvHandleCPU();
-	}
-
-	Lamb::SafePtr rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget);
-}
 

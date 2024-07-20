@@ -27,7 +27,7 @@ void Texture2D::Load()
 {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	renderContextManager->Load<Texture2DRenderContext>(kFileNames_);
+	renderContextManager->Load<Texture2DRenderContext>(kFileNames_, 3);
 
 	renderSet = renderContextManager->Get(kFileNames_);
 }

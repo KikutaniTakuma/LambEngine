@@ -45,6 +45,10 @@ public:
 		aspectRatio_ = aspectRatio;
 	}
 
+	const Vector3& GetPos() const;
+
+	void Debug(const std::string& guiNaneme) override;
+
 private:
 	Lamb::SafePtr<TransformComp> transform_;
 	float32_t fov_ = 0.0f;
@@ -53,4 +57,19 @@ private:
 	float32_t aspectRatio_ = 0.0f;
 
 	Mat4x4 cameraMatrix_ = Mat4x4::kIdentity;
+
+#ifdef _DEBUG
+	float32_t scaleSpeed_ = 0.001f;
+	float32_t rotateSpeed_ = 0.01f;
+	float32_t translateSpeed_ = 1.0f;
+
+	bool isRotateInverse_ = true;
+	bool isTranslateInverse_ = false;
+
+	bool isDebug_ = false;
+
+	Vector3 eulerRotate_;
+
+#endif // _DEBUG
+
 };

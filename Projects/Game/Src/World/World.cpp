@@ -7,6 +7,9 @@
 #include "GameObject/Manager/ObjectManager.h"
 #include "GameObject/Manager/TransformCompUpdater.h"
 
+#include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
+
 void World::Initialize() {
 	// ウィンドウ初期化オプション
 	initDesc_ = Framework::InitDesc{
@@ -80,7 +83,14 @@ void World::Draw() {
 		sceneManager_->Draw();
 		particleEditor_->Draw(sceneManager_->GetCurrentSceneCamera());
 
-		sceneManager_->AllDraw();
+		RenderContextManager* const renderContextManager = RenderContextManager::GetInstance();
+
+		RenderContextManager::GetInstance()->ResizeRenderList();
+
+		RenderingManager::GetInstance()->Draw();
+		
+		// ドローカウントリセット
+		renderContextManager->ResetDrawCount();
 	}
 	else {
 		isEnd_ = true;

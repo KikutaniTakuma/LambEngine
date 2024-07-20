@@ -51,6 +51,7 @@ public:
 		std::vector<VSInputData> vsInputData;
 		Lamb::SafePtr<RootSignature> rootSignature;
 		std::array<Pipeline::Blend, 8> blend;
+		std::array<DXGI_FORMAT, 8> rtvFormtat;
 		Pipeline::CullMode cullMode;
 		Pipeline::SolidState solidState;
 		D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType;

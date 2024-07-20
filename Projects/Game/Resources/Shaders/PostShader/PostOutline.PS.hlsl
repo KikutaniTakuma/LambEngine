@@ -5,7 +5,7 @@ struct OutlineData{
     float32_t4x4 projectionInverse;
 };
 
-ConstantBuffer<OutlineData> kOutlineData : register(b2);
+ConstantBuffer<OutlineData> kOutlineData : register(b1);
 
 Texture2D<float32_t> depthTexture : register(t1);
 SamplerState pSmp : register(s1);

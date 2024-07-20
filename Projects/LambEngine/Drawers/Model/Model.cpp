@@ -19,7 +19,7 @@ void Model::Load(const std::string& fileName) {
 				.psFileName = "./Resources/Shaders/ModelShader/Model.PS.hlsl",
 			}
 		},
-		2
+		3
 	);
 
 	renderSet = renderContextManager->Get(
@@ -49,7 +49,12 @@ void Model::Draw(
 	bool isLighting
 ) {
 	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
-	renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
+	if (blend == BlendType::kNone) {
+		renderContext->SetShaderStruct(static_cast<uint32_t>(false));
+	}
+	else {
+		renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
+	}
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
 }

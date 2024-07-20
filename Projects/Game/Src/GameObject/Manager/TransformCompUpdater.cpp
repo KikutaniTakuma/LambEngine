@@ -1,4 +1,8 @@
 #include "TransformCompUpdater.h"
+#ifdef _DEBUG
+#include "imgui.h"
+#endif // _DEBUG
+
 
 std::unique_ptr<TransformCompUpdater> TransformCompUpdater::instance_;
 
@@ -38,4 +42,10 @@ void TransformCompUpdater::UpdateMatrix() {
 	for (auto& i : transformComps_) {
 		i->UpdateMatrix();
 	}
+	for (auto& i : transformComps_) {
+		if (not i->HaveParent()) {
+			i->UpdateChildrenMatrix();
+		}
+	}
 }
+

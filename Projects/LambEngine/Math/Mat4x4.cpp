@@ -200,22 +200,36 @@ Quaternion Matrix<float,4,4>::GetRotate() const {
 }
 
 void Matrix<float,4,4>::Decompose(Vector3& scale, Quaternion& rotate, Vector3& translate) const {
+	DirectX::XMVECTOR outScale;
+	DirectX::XMVECTOR outTranslate;
+
 	DirectX::XMMatrixDecompose(
-		reinterpret_cast<DirectX::XMVECTOR*>(scale.data()),
-		reinterpret_cast<DirectX::XMVECTOR*>(rotate.data()),
-		reinterpret_cast<DirectX::XMVECTOR*>(translate.data()),
+		&outScale,
+		&rotate.m128,
+		&outTranslate,
 		this->xmMatrix_
 		);
+
+	DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(scale.data()), outScale);
+	DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(translate.data()), outTranslate);
 }
 
 void Matrix<float,4,4>::Decompose(Vector3& scale, Vector3& rotate, Vector3& translate) const {
 	Quaternion quaternion;
+
+	DirectX::XMVECTOR outScale;
+	DirectX::XMVECTOR outTranslate;
+
+
 	DirectX::XMMatrixDecompose(
-		reinterpret_cast<DirectX::XMVECTOR*>(scale.data()),
-		reinterpret_cast<DirectX::XMVECTOR*>(quaternion.data()),
-		reinterpret_cast<DirectX::XMVECTOR*>(translate.data()),
+		&outScale,
+		&quaternion.m128,
+		&outTranslate,
 		this->xmMatrix_
 	);
+
+	DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(scale.data()), outScale);
+	DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(translate.data()), outTranslate);
 
 	rotate = Quaternion::QuaternionToEuler(quaternion);
 }

@@ -44,6 +44,9 @@ private:
 	int32_t edgeDivision_ = 64;
 	int32_t insideDivision_ = 64;
 	WaterTex2D::WaveData waveData;
+	Light light_;
+	float32_t lightScale_ = 0.0f;
+	Vector3 lightRotate_;
 
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectWidth_;
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectHeight_;
