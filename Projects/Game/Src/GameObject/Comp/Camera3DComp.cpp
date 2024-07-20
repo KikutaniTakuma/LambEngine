@@ -54,7 +54,7 @@ void Camera3DComp::Debug([[maybe_unused]]const std::string& guiName){
 			}
 			
 			if (not isOnImGui && not isShift && isMiddle) {
-				eulerRotate_.x += mouseVelocity.y * rotateSpeed_ * object_.GetDeltaTime() * rotateSigned;
+				eulerRotate_.x -= mouseVelocity.y * rotateSpeed_ * object_.GetDeltaTime() * rotateSigned;
 				eulerRotate_.y += mouseVelocity.x * rotateSpeed_ * object_.GetDeltaTime() * rotateSigned;
 				transform_->eulerRotate = eulerRotate_;
 			}
