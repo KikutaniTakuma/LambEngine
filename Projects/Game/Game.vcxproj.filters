@@ -89,6 +89,105 @@
     <ClCompile Include="Src\GameObject\Comp\ObbPushComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\Customize\Customize.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\CustomizeCamera\CustomizeCamera.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\DebugCamera\DebugCamera.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\FixedCamera\FixedCamera.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\FollowCamera\FollowCamera.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GoalCamera\GoalCamera.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GoalManager\Goal\Goal.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\GoalManager\GoalManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Minimap\Minimap.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Player\Player.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\StageManager\StageManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\StartArea\StartArea.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\WhirlpoolManager\Whirlpool\Whirlpool.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\WhirlpoolManager\WhirlpoolManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\WindManager\Wind\Wind.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\WindManager\WindManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\WindParticle\WindNode\WindNode.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\WindParticle\WindParticle.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\BlockManager\Block\Block.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\BlockManager\BlockManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\BulletManager\Bullet\Bullet.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\BulletManager\BulletManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\CameraManager\CameraManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\ChargeCamera\ChargeCamera.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Cloud\Cloud.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\CollisionManager\Collider\Collider.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\CollisionManager\Collision\Collision.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\CollisionManager\CollisionManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\CollisionManager\Obb\Obb.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\CollisionManager\Plane\Plane.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Game\Cursor\Cursor.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scenes\CustomizeScene\CustomizeScene.cpp">
+      <Filter>Scenes\CustomizeScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Scenes\SelectStageScene\SelectStageScene.cpp">
+      <Filter>Scenes\SelectStageScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -153,6 +252,12 @@
     </Filter>
     <Filter Include="GameObject\Manager">
       <UniqueIdentifier>{2795ad23-5238-41cd-b501-ec1d9cd1431c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\CustomizeScene">
+      <UniqueIdentifier>{d8c5177b-21f7-4b91-98ca-1324ffba5273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\SelectStageScene">
+      <UniqueIdentifier>{556332c1-31a6-4666-84a8-e20f74bdc308}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +350,111 @@
     </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\ObbPushComp.h">
       <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Customize\Customize.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\CustomizeCamera\CustomizeCamera.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\DebugCamera\DebugCamera.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\FixedCamera\FixedCamera.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\FollowCamera\FollowCamera.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GoalCamera\GoalCamera.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GoalManager\Goal\Goal.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\GoalManager\GoalManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Minimap\Minimap.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Player\Player.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\StageManager\StageManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\StartArea\StartArea.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\WhirlpoolManager\Whirlpool\Whirlpool.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\WhirlpoolManager\WhirlpoolManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\WindManager\Wind\Wind.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\WindManager\WindManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\WindParticle\WindNode\WindNode.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\WindParticle\WindParticle.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\BlockManager\Block\Block.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\BlockManager\BlockManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\BulletManager\Bullet\Bullet.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\BulletManager\BulletManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\CameraManager\CameraManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\ChargeCamera\ChargeCamera.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Checkbox\Checkbox.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Cloud\Cloud.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\CollisionManager\AABB\AABB.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\CollisionManager\Collider\Collider.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\CollisionManager\Collision\Collision.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\CollisionManager\CollisionManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\CollisionManager\Obb\Obb.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\CollisionManager\Plane\Plane.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Cursor\Cursor.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scenes\CustomizeScene\CustomizeScene.h">
+      <Filter>Scenes\CustomizeScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scenes\SelectStageScene\SelectStageScene.h">
+      <Filter>Scenes\SelectStageScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
