@@ -36,13 +36,13 @@ SamplerState gLinearSmp : register(s0);
 // ポイントサンプラー
 SamplerState gPointSmp : register(s01);
 
-PixelShaderOutPut2 main(Output input) {
+PixelShaderOutPut main(Output input) {
     float32_t4 color = gColorTexture.Sample(gLinearSmp, input.uv);
     float32_t4 worldPosition = gWorldPositionTexture.Sample(gPointSmp, input.uv);
     float32_t3 normal = gNormalTexture.Sample(gPointSmp, input.uv).xyz;
     float32_t len = length(normal);
     normal = normalize(normal);
-    PixelShaderOutPut2 outputColor;
+    PixelShaderOutPut outputColor;
 
     float32_t3 eyePos = gDeferredRenderingState.eyePos;
 
@@ -79,13 +79,12 @@ PixelShaderOutPut2 main(Output input) {
     
         float32_t3 lig = diffDirection + specDirection;
         lig += 0.2f;
-        outputColor.color0.rgb = color.rgb * lig;
+        outputColor.color.rgb = color.rgb * lig;
     }else{
-        outputColor.color0.rgb = color.rgb;
+        outputColor.color.rgb = color.rgb;
     }
 
-    outputColor.color0.a = 1.0f;
-    outputColor.color1 = outputColor.color0;
+    outputColor.color.a = 1.0f;
 
     return outputColor;
 }

@@ -13,10 +13,6 @@
 #endif // _DEBUG
 
 
-void GaussianBlur::SetRtvFormt(DXGI_FORMAT format) {
-	format_ = format;
-}
-
 void GaussianBlur::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
@@ -49,10 +45,7 @@ void GaussianBlur::Use(Pipeline::Blend blendType, bool isDepth) {
 void GaussianBlur::Init(
 	const std::string& vsShader,
 	const std::string& psShader,
-	const std::string& gsFileName,
-	const std::string& hsFileName,
-	const std::string& dsFileName,
-	uint32_t numRendertaget
+	std::initializer_list<DXGI_FORMAT> formtats
 ) {
 	if (width_ == 0u) {
 		width_ = static_cast<uint32_t>(Lamb::ClientSize().x);
@@ -65,10 +58,7 @@ void GaussianBlur::Init(
 
 	this->LoadShader(
 		vsShader,
-		psShader,
-		gsFileName,
-		hsFileName,
-		dsFileName
+		psShader
 	);
 
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> renderRange = {};
@@ -111,9 +101,13 @@ void GaussianBlur::Init(
 	pipelineDesc.solidState = Pipeline::SolidState::Solid;
 	pipelineDesc.cullMode = Pipeline::CullMode::Back;
 	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	pipelineDesc.numRenderTarget = numRendertaget;
-	for (uint32_t i = 0; i < numRendertaget; i++) {
-		pipelineDesc.rtvFormtat[i] = format_;
+	pipelineDesc.numRenderTarget = uint32_t(formtats.size());
+	for (uint32_t count = 0; const auto & i : formtats) {
+		pipelineDesc.rtvFormtat[count] = i;
+		count++;
+		if (8 <= count) {
+			break;
+		}
 	}
 
 

@@ -23,10 +23,7 @@ public:
 	virtual void Init(
 		const std::string& vsShader,
 		const std::string& psShader,
-		const std::string& gsFileName = {},
-		const std::string& hsFileName = {},
-		const std::string& dsFileName = {},
-		uint32_t numRendertaget = 1
+		std::initializer_list<DXGI_FORMAT> formtats = {DXGI_FORMAT_R32G32B32A32_FLOAT}
 	) override;
 
 public:

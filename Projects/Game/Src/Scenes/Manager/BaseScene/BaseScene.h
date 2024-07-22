@@ -11,7 +11,6 @@
 
 #include "Utils/SafePtr.h"
 #include "Utils/Flg.h"
-#include "../PostEffectManager/PostEffectManager.h"
 
 #include <memory>
 
@@ -68,8 +67,6 @@ protected:
 	StringOutPutManager* stringOutPutManager_;
 
 	BaseScene::ID sceneID_;
-
-	PostEffectManager* postEffectManager_;
 
 	AnimationManager* animationManager_;
 

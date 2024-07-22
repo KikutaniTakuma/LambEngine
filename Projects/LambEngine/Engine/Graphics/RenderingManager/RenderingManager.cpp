@@ -53,6 +53,13 @@ RenderingManager::RenderingManager() {
 	srvHeap->CreateView(*depthStencil_);
 
 
+	rgbaTexture_ = std::make_unique<PeraRender>();
+	rgbaTexture_->Initialize("./Resources/Shaders/PostShader/PostNone2.PS.hlsl", {
+			DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+			DXGI_FORMAT_R32G32B32A32_FLOAT
+		}
+	);
+
 	std::unique_ptr<Luminate> luminate = std::make_unique<Luminate>();
 	luminate->Init();
 	luminate_ = luminate.release();
@@ -65,7 +72,6 @@ RenderingManager::RenderingManager() {
 	gaussianVerticalTexture_ = std::make_unique<PeraRender>();
 
 	std::array<std::unique_ptr<GaussianBlur>, 2> gaussianPipeline = { std::make_unique<GaussianBlur>(), std::make_unique<GaussianBlur>() };
-	gaussianPipeline[0]->SetRtvFormt(DXGI_FORMAT_R32G32B32A32_FLOAT);
 	gaussianPipeline[0]->Init();
 	gaussianBlurStateHorizontal_ = GaussianBlur::GaussianBlurState{
 		.dir = Vector2(1.0f, 0.0f),
@@ -76,8 +82,11 @@ RenderingManager::RenderingManager() {
 	gaussianPipeline[0]->SetGaussianState(gaussianBlurStateHorizontal_);
 	gaussianPipeline_[0] = gaussianPipeline[0].release();
 
-	gaussianPipeline[1]->SetRtvFormt(DXGI_FORMAT_R8G8B8A8_UNORM_SRGB);
-	gaussianPipeline[1]->Init();
+	gaussianPipeline[1]->Init(
+		"./Resources/Shaders/PostShader/Post.VS.hlsl",
+		"./Resources/Shaders/PostShader/PostGaussian.PS.hlsl",
+		{ DXGI_FORMAT_R8G8B8A8_UNORM_SRGB }
+	);
 	gaussianBlurStateVertical_ = GaussianBlur::GaussianBlurState{
 			.dir = Vector2(0.0f, 1.0f),
 			.sigma = 10.0f,
@@ -170,13 +179,15 @@ void RenderingManager::FrameEnd()
 void RenderingManager::Draw() {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
+	/// ====================================================================================
+
 	// 色、法線、ワールドポジション用レンダーターゲットをセット
 	std::array<RenderTarget*, 3> renderTargets;
 	renderTargets[0] = colorTexture_.get();
 	renderTargets[1] = normalTexture_.get();
 	renderTargets[2] = worldPositionTexture_.get();
 
-	RenderTarget::ResourceStateChnageRenderTargets(
+	RenderTarget::ResourceStateChangeRenderTargets(
 		renderTargets.data(), 
 		static_cast<uint32_t>(renderTargets.size())
 	);
@@ -192,6 +203,8 @@ void RenderingManager::Draw() {
 
 	DrawRGB(renderContextManager->CreateRenderList(BlendType::kNone));
 
+	/// ====================================================================================
+
 	// 色だけ出力
 	RenderTarget::SetRenderTargets(
 		renderTargets.data(),
@@ -203,23 +216,61 @@ void RenderingManager::Draw() {
 
 	DrawSkyBox();
 
-	// 同じく色だけ出力
-	DrawRGBA();
+	RGBALists rgbaList = {
+		renderContextManager->CreateRenderList(BlendType::kNormal),
+		renderContextManager->CreateRenderList(BlendType::kAdd),
+		renderContextManager->CreateRenderList(BlendType::kSub),
+		renderContextManager->CreateRenderList(BlendType::kMul)
+	};
 
-	// 加算とか？
-	// DrawParticle();
+	/// ====================================================================================
+
+	// ZSort(アルファ値付きなのでソート)
+	ZSrot(rgbaList);
+
+	// メインと輝度抽出用のレンダーターゲットをセット
+	std::array<RenderTarget*, 1> rgbaTextureRenderTarget = {
+		&(rgbaTexture_->GetRender())
+	};
+	RenderTarget::ResourceStateChangeRenderTargets(
+		rgbaTextureRenderTarget.data(),
+		static_cast<uint32_t>(rgbaTextureRenderTarget.size())
+	);
+	RenderTarget::SetRenderTargets(
+		rgbaTextureRenderTarget.data(),
+		static_cast<uint32_t>(rgbaTextureRenderTarget.size()),
+		&depthStencil_->GetDepthHandle()
+	);
+	RenderTarget::ClearRenderTargets(
+		rgbaTextureRenderTarget.data(),
+		static_cast<uint32_t>(rgbaTextureRenderTarget.size())
+	);
 
 	// リソースをテクスチャとして扱えるようにする
-	RenderTarget::ResourceStateChnageRenderTargets(
+	RenderTarget::ResourceStateChangeRenderTargets(
 		renderTargets.data(),
 		static_cast<uint32_t>(renderTargets.size())
 	);
+
+	DrawDefferd();
+
+	// Defferdでライティングした後に描画
+	DrawRGBA(rgbaList);
+
+	RenderTarget::ResourceStateChangeRenderTargets(
+		rgbaTextureRenderTarget.data(),
+		static_cast<uint32_t>(rgbaTextureRenderTarget.size())
+	);
+
+
+	/// ====================================================================================
+
 
 	// メインと輝度抽出用のレンダーターゲットをセット
 	std::array<RenderTarget*, 1> luminate = {
 		&(luminateTexture_->GetRender())
 	};
-	RenderTarget::ResourceStateChnageRenderTargets(
+	RenderTarget::ResourceStateChangeRenderTargets(
 		luminate.data(),
 		static_cast<uint32_t>(luminate.size())
 	);
@@ -232,15 +283,25 @@ void RenderingManager::Draw() {
 		luminate.data(),
 		static_cast<uint32_t>(luminate.size())
 	);
-	DrawDefferd();
 
-	// line深度値付きのlineを描画
-	Line::AllDraw(false);
+	rgbaTexture_->Draw(Pipeline::None, nullptr);
+
+	/// ====================================================================================
 
 	DrawPostEffect();
 
+	/// ====================================================================================
+
+	NoDepthLists nodepthLists = {
+		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNone),
+		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNormal),
+		renderContextManager->CreateRenderList(BlendType::kUnenableDepthAdd),
+		renderContextManager->CreateRenderList(BlendType::kUnenableDepthSub),
+		renderContextManager->CreateRenderList(BlendType::kUnenableDepthMul)
+	};
+
 	// UIの描画(depth書き込まないやつ)
-	DrawUI();
+	DrawNoDepth(nodepthLists);
 }
 
 DepthBuffer& RenderingManager::GetDepthBuffer()
@@ -280,27 +341,33 @@ void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {
 
 }
 
-void RenderingManager::DrawRGB(std::pair<size_t, const std::list<const RenderData*>&> renderList) {
-	for (size_t index = 0; const auto& elemnt : renderList.second) {
-		elemnt->Draw();
-		index++;
+void RenderingManager::DrawRGB(std::pair<size_t, const std::list<RenderData*>&> renderList) {
+	for (size_t index = 0; const auto& element : renderList.second) {
 		if (renderList.first <= index) {
 			break;
 		}
+		element->DataSet();
+		element->Draw();
+		index++;
 	}
-
 }
 
 void RenderingManager::DrawSkyBox() {
 	skyBox_->Draw(transform_.GetMatrix(), cameraMatrix_, 0xffffffff);
 }
 
-void RenderingManager::DrawRGBA() {
-	
-}
+void RenderingManager::DrawRGBA(const RGBALists& rgbaList) {
+	for (auto& list : rgbaList) {
+		for (size_t count = 0; auto& element : list.second) {
+			if (list.first <= count) {
+				break;
+			}
 
-void RenderingManager::DrawParticle()
-{
+			element->Draw();
+
+			count++;
+		}
+	}
 }
 
 void RenderingManager::DrawDefferd() {
@@ -327,10 +394,36 @@ void RenderingManager::DrawPostEffect() {
 	gaussianVerticalTexture_->Draw(Pipeline::Blend::Add, nullptr);
 }
 
-void RenderingManager::DrawUI()
+void RenderingManager::DrawNoDepth(const NoDepthLists& nodepthList)
 {
+	for (auto& list : nodepthList) {
+		for (size_t count = 0; auto & element : list.second) {
+			if (list.first <= count) {
+				break;
+			}
+
+			element->SetLight(deferredRenderingData_.directionLight);
+			element->SetCameraPos(deferredRenderingData_.eyePos);
+			element->Draw();
+
+			count++;
+		}
+	}
 }
 
-void RenderingManager::ZSrot()
-{
+void RenderingManager::ZSrot(const RGBALists& rgbaList) {
+	for (auto& list : rgbaList) {
+		for (size_t count = 0; auto& element : list.second) {
+			if (list.first <= count) {
+				break;
+			}
+
+			element->ZSort();
+			element->SetLight(deferredRenderingData_.directionLight);
+			element->SetCameraPos(deferredRenderingData_.eyePos);
+			element->DataSet();
+
+			count++;
+		}
+	}
 }

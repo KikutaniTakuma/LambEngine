@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <array>
+#include <initializer_list>
 
 #include "Engine/Graphics/PipelineObject/PeraPipeline/PeraPipeline.h"
 
@@ -30,11 +31,11 @@ public:
 	PeraRender& operator=(PeraRender&&) = delete;
 
 public:
-	void Initialize(const std::string& psFileName, uint32_t numRenderTarget = 1);
+	void Initialize(const std::string& psFileName, std::initializer_list<DXGI_FORMAT> formtats);
 	void Initialize(PeraPipeline* pipelineObject);
 
 public:
-	void PreDraw(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	void PreDraw(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 	void Draw(
 		Pipeline::Blend blend, 

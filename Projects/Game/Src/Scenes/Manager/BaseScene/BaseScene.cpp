@@ -16,7 +16,6 @@ BaseScene::BaseScene(BaseScene::ID sceneID) :
 	frameInfo_(nullptr),
 	input_(nullptr),
 	stringOutPutManager_(nullptr),
-	postEffectManager_(nullptr),
 	sceneID_(sceneID),
 	camera_(std::make_unique<Camera>()),
 	currentCamera_(camera_.get())
@@ -34,8 +33,6 @@ void BaseScene::SceneInitialize(SceneManager* sceneManager) {
 	stringOutPutManager_ = StringOutPutManager::GetInstance();
 
 	input_ = Input::GetInstance();
-
-	postEffectManager_ = PostEffectManager::GetInstance();
 
 	animationManager_ = AnimationManager::GetInstance();
 }

@@ -44,7 +44,7 @@ RenderTarget::RenderTarget(uint32_t width, uint32_t height) :
 	clearValue.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	for (size_t i = 0; i < clsValue.m.size(); i++) {
 		clearValue.Color[i] = clsValue[i];
-	}
+	} 
 
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 
@@ -189,7 +189,7 @@ void RenderTarget::SetMainAndRenderTargets(
 	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget, depthHandle);
 }
 
-void RenderTarget::ResourceStateChnageRenderTargets(
+void RenderTarget::ResourceStateChangeRenderTargets(
 	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
 	uint32_t numRenderTarget
 ) {

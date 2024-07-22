@@ -30,15 +30,15 @@ PeraRender::~PeraRender() {
 	peraPipelineObject_.reset();
 }
 
-void PeraRender::Initialize(const std::string& psFileName, uint32_t numRenderTarget) {
-	peraPipelineObject_->Init("./Resources/Shaders/PostShader/Post.VS.hlsl", psFileName, "", "", "", numRenderTarget);
+void PeraRender::Initialize(const std::string& psFileName, std::initializer_list<DXGI_FORMAT> formtats) {
+	peraPipelineObject_->Init("./Resources/Shaders/PostShader/Post.VS.hlsl", psFileName, formtats);
 }
 
 void PeraRender::Initialize(PeraPipeline* pipelineObject) {
 	ResetPipelineObject(pipelineObject);
 }
 
-void PeraRender::PreDraw(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
+void PeraRender::PreDraw(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
 	peraPipelineObject_->GetRender().SetThisRenderTarget(depthHandle);
 }
 
