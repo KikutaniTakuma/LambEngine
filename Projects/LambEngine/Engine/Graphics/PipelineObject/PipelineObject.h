@@ -18,10 +18,7 @@ public:
 protected:
 	void LoadShader(
 		const std::string& vsFileName,
-		const std::string& psFileName,
-		const std::string& gsFileName,
-		const std::string& hsFileName,
-		const std::string& dsFileName
+		const std::string& psFileName
 	);
 
 public:
@@ -30,10 +27,7 @@ public:
 	virtual void Init(
 		const std::string& vsFileName, 
 		const std::string& psFileName,
-		const std::string& gsFileName,
-		const std::string& hsFileName,
-		const std::string& dsFileName,
-		uint32_t numRendertaget
+		std::initializer_list<DXGI_FORMAT> formtats = { DXGI_FORMAT_R32G32B32A32_FLOAT }
 	) = 0;
 
 protected:

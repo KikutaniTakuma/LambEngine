@@ -15,6 +15,10 @@
 #include <list>
 
 class RenderingManager {
+private:
+	using RGBALists = std::array<std::pair<size_t, const std::list<RenderData*>&>, 4>;
+	using NoDepthLists = std::array<std::pair<size_t, const std::list<RenderData*>&>, 5>;
+
 public:
 	RenderingManager();
 	RenderingManager(const RenderingManager&) = delete;
@@ -52,16 +56,13 @@ public:
 
 private:
 	// アルファ値がないものを描画
-	void DrawRGB(std::pair<size_t, const std::list<const RenderData*>&> renderList);
+	void DrawRGB(std::pair<size_t, const std::list<RenderData*>&> renderList);
 
 	// cubemapの描画
 	void DrawSkyBox();
 
 	// アルファ値があるものを描画
-	void DrawRGBA();
-
-	// パーティクルの描画
-	void DrawParticle();
+	void DrawRGBA(const RGBALists& rgbaList);
 
 	// ディファード描画
 	void DrawDefferd();
@@ -70,11 +71,12 @@ private:
 	void DrawPostEffect();
 
 	// UIの描画
-	void DrawUI();
+	void DrawNoDepth(const NoDepthLists& nodepthList);
 
 private:
+
 	// アルファ値があるものを順番を並び替える
-	void ZSrot();
+	void ZSrot(const RGBALists& rgbaList);
 
 
 private:
@@ -88,6 +90,9 @@ private:
 	std::unique_ptr<RenderTarget> colorTexture_;
 	// ワールドポジション書き込み用オフスクリーン
 	std::unique_ptr<RenderTarget> worldPositionTexture_;
+
+	// ライティング後のrgbaテクスチャを描画
+	std::unique_ptr<PeraRender> rgbaTexture_;
 
 	// 深度値(法線書き込みと色書き込み、アウトラインで使用する)
 	std::unique_ptr<DepthBuffer> depthStencil_;

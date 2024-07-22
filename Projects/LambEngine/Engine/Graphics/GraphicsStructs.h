@@ -162,6 +162,14 @@ struct ShaderData {
     StructuredBuffer<T> shaderStruct;
 };
 
+template<class T>
+struct DrawData {
+    float depth;
+    WVPMatrix wvpMatrix;
+    Vector4 color;
+    T shaderStruct;
+};
+
 struct ShaderFileNames {
     std::string vsFileName;
     std::string psFileName;

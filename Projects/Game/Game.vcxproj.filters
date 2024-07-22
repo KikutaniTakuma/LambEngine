@@ -71,9 +71,6 @@
     <ClCompile Include="Src\Game\Player\Player.cpp">
       <Filter>Game\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Scenes\Manager\PostEffectManager\PostEffectManager.cpp">
-      <Filter>Scenes\Manager\PostEffectManager</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Game\Coin\Coin.cpp">
       <Filter>Game\Coin</Filter>
     </ClCompile>
@@ -287,9 +284,6 @@
     </ClInclude>
     <ClInclude Include="Src\Game\Player\Player.h">
       <Filter>Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Scenes\Manager\PostEffectManager\PostEffectManager.h">
-      <Filter>Scenes\Manager\PostEffectManager</Filter>
     </ClInclude>
     <ClInclude Include="Src\Game\Coin\Coin.h">
       <Filter>Game\Coin</Filter>

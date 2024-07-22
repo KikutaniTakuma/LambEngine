@@ -59,17 +59,11 @@ void DeferredRendering::Use(Pipeline::Blend blendType, bool isDepth) {
 void DeferredRendering::Init(
 	const std::string& vsShader,
 	const std::string& psShader,
-	const std::string& gsFileName,
-	const std::string& hsFileName,
-	const std::string& dsFileName,
-	uint32_t numRendertaget
+	std::initializer_list<DXGI_FORMAT> formtats
 ) {
 	this->LoadShader(
 		vsShader,
-		psShader,
-		gsFileName,
-		hsFileName,
-		dsFileName
+		psShader
 	);
 
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
@@ -155,9 +149,14 @@ void DeferredRendering::Init(
 	pipelineDesc.solidState = Pipeline::SolidState::Solid;
 	pipelineDesc.cullMode = Pipeline::CullMode::Back;
 	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	pipelineDesc.numRenderTarget = numRendertaget;
-	pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	pipelineDesc.rtvFormtat[1] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	pipelineDesc.numRenderTarget = uint32_t(formtats.size());
+	for (uint32_t count = 0; const auto & i : formtats) {
+		pipelineDesc.rtvFormtat[count] = i;
+		count++;
+		if (8 <= count) {
+			break;
+		}
+	}
 
 	for (int32_t i = Pipeline::Blend::None; i < Pipeline::Blend::BlendTypeNum; i++) {
 		for (auto& blend : pipelineDesc.blend) {

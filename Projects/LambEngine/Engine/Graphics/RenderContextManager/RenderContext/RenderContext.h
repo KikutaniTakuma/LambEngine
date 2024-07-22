@@ -9,6 +9,7 @@
 #include <concepts>
 #include <array>
 #include <memory>
+#include <algorithm>
 
 
 class BaseRenderContext {
@@ -38,6 +39,10 @@ public:
     virtual void SetWVPMatrix(const WVPMatrix& matrix) = 0;
     virtual void SetColor(const Vector4& color) = 0;
     virtual void SetLight(const Light& light) = 0;
+    virtual void ZSort() = 0;
+    virtual void DataSet() = 0;
+
+
 
 public:
     void AddDrawCount() {
@@ -91,6 +96,8 @@ public:
         shaderData_.wvpMatrix.Create(bufferSize);
         shaderData_.color.Create(bufferSize);
         shaderData_.shaderStruct.Create(bufferSize);
+
+        drawData_.resize(bufferSize);
 
 
         pipeline_ = nullptr;
@@ -173,15 +180,15 @@ public:
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        shaderData_.wvpMatrix[drawCount_].worldMat = mesh_->node.loacalMatrix * matrix.worldMat;
-        shaderData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
+        drawData_[drawCount_].wvpMatrix.worldMat = mesh_->node.loacalMatrix * matrix.worldMat;
+        drawData_[drawCount_].wvpMatrix.cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        shaderData_.color[drawCount_] = color;
+        drawData_[drawCount_].color = color;
     }
     inline void SetLight(const Light& light) override {
         *shaderData_.light = light;
@@ -190,12 +197,43 @@ public:
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
-        shaderData_.shaderStruct[drawCount_] = data;
+        drawData_[drawCount_].shaderStruct = data;
+    }
+
+    inline void ZSort() override {
+        // 1以下ならソートする必要ないので早期リターン
+        if (drawCount_ <= 1) {
+            return;
+        }
+        
+        
+        // 正規化デバイス座標系にしてその深度値を入れる
+        for (uint32_t i = 0; i < drawCount_; i++) {
+            Mat4x4&& ndcMatrix = drawData_[i].wvpMatrix.worldMat * drawData_[i].wvpMatrix.cameraMat;
+            drawData_[i].depth = ndcMatrix.GetTranslate().z;
+        }
+        // 描画をする部分だけソート
+        auto endItr = drawData_.begin() + drawCount_;
+        // 深度値でソート(大きい順。奥から描画していくため)
+        std::sort(drawData_.begin(), endItr, [](const DrawData<T>& left, const DrawData<T>& right) {
+            return left.depth > right.depth;
+            }
+        );
+
+    }
+
+    inline void DataSet() override {
+        for (uint32_t i = 0; i < drawCount_; i++) {
+            shaderData_.wvpMatrix[i] = std::move(drawData_[i].wvpMatrix);
+            shaderData_.color[i] = std::move(drawData_[i].color);
+            shaderData_.shaderStruct[i] = std::move(drawData_[i].shaderStruct);
+        }
     }
 
 
 private:
     ShaderData<T> shaderData_;
+    std::vector<DrawData<T>> drawData_;
 };
 
 template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
@@ -207,6 +245,8 @@ public:
         shaderData_.wvpMatrix.Create(bufferSize);
         shaderData_.color.Create(bufferSize);
         shaderData_.shaderStruct.Create(bufferSize);
+
+        drawData_.resize(bufferSize);
 
 
         pipeline_ = nullptr;
@@ -302,15 +342,15 @@ public:
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        shaderData_.wvpMatrix[drawCount_].worldMat = matrix.worldMat;
-        shaderData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
+        drawData_[drawCount_].wvpMatrix.worldMat = matrix.worldMat;
+        drawData_[drawCount_].wvpMatrix.cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        shaderData_.color[drawCount_] = color;
+        drawData_[drawCount_].color = color;
     }
     inline void SetLight(const Light& light) override {
         *shaderData_.light = light;
@@ -319,12 +359,42 @@ public:
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
-        shaderData_.shaderStruct[drawCount_] = data;
+        drawData_[drawCount_].shaderStruct = data;
+    }
+
+    inline void ZSort() override {
+        // 1以下ならソートする必要ないので早期リターン
+        if (drawCount_ <= 1) {
+            return;
+        }
+
+
+        // 正規化デバイス座標系にしてその深度値を入れる
+        for (uint32_t i = 0; i < drawCount_; i++) {
+            Mat4x4&& ndcMatrix = drawData_[i].wvpMatrix.worldMat * drawData_[i].wvpMatrix.cameraMat;
+            drawData_[i].depth = ndcMatrix.GetTranslate().z;
+        }
+        // 描画をする部分だけソート
+        auto endItr = drawData_.begin() + drawCount_;
+        // 深度値でソート(大きい順。奥から描画していくため)
+        std::sort(drawData_.begin(), endItr, [](const DrawData<T>& left, const DrawData<T>& right) {
+            return left.depth > right.depth;
+            }
+        );
+    }
+
+    inline void DataSet() override {
+        for (uint32_t i = 0; i < drawCount_; i++) {
+            shaderData_.wvpMatrix[i] = std::move(drawData_[i].wvpMatrix);
+            shaderData_.color[i] = std::move(drawData_[i].color);
+            shaderData_.shaderStruct[i] = std::move(drawData_[i].shaderStruct);
+        }
     }
 
 
 private:
     ShaderData<T> shaderData_;
+    std::vector<DrawData<T>> drawData_;
 
     SkinCluster* skinCluster_;
 };
@@ -352,7 +422,7 @@ public:
         renderDatas_[blend].reset(renderData);
     }
 
-    const RenderData* const GetRenderData(BlendType blend) const {
+    RenderData* const GetRenderData(BlendType blend) const {
         return renderDatas_[blend].get();
     }
     bool IsDraw(BlendType blend) const {
@@ -376,6 +446,12 @@ public:
     inline void DrawAndResetDrawCount() {
         Draw();
         ResetDrawCount();
+    }
+
+    inline void DataSet() {
+        for (auto& i : renderDatas_) {
+            i->DataSet();
+        }
     }
 
 public:

@@ -170,7 +170,7 @@ public:
 
 	void SetIsNowThreading(bool isNowThreading);
 public:
-	std::pair<size_t, const std::list<const RenderData*>&> CreateRenderList(BlendType blend);
+	std::pair<size_t, const std::list<RenderData*>&> CreateRenderList(BlendType blend);
 	void ResizeRenderList();
 	
 	void Draw();
@@ -188,5 +188,5 @@ private:
 	std::unordered_map<Key, std::unique_ptr<RenderSet>> threadRenderData_;
 	bool isNowThreading_ = false;
 
-	std::array<std::list<const RenderData*>, BlendType::kNum> renderDataLists_;
+	std::array<std::list<RenderData*>, BlendType::kNum> renderDataLists_;
 };

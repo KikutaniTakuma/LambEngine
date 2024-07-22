@@ -26,6 +26,7 @@ PixelShaderOutPut3 main(VertexShaderOutput input)
 		output.color0.xyz *= lig;
 	}
 	output.color0 *= kColor[input.instanceID].color;
+	output.color0.a = pow(output.color0.a, rcp(2.2f));
 
     // 法線
     output.color1.xyz = input.normal;
