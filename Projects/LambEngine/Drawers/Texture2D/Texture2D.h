@@ -7,6 +7,21 @@
 /// </summary>
 class Texture2D : public BaseDrawer {
 public:
+	struct Data {
+		Mat4x4 worldMatrix = Mat4x4::kIdentity;
+		Mat4x4 uvTransform = Mat4x4::kIdentity;
+		Mat4x4 camera = Mat4x4::kIdentity;
+		uint32_t textureID = 0;
+		uint32_t color = 0xffffffff;
+		BlendType blend = BlendType::kNone;
+	};
+	struct Instance {
+		QuaternionTransform transform;
+		uint32_t textureID = 0;
+		uint32_t color = 0xffffffff;
+	};
+
+public:
 	static constexpr uint32_t kMaxDrawCount = 1024u;
 
 private:
@@ -40,6 +55,7 @@ public:
 		uint32_t color, 
 		BlendType blend
 	);
+	void Draw(const Texture2D::Data& data);
 
 	void AllDraw();
 };
