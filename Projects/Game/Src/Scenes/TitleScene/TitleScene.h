@@ -20,6 +20,8 @@ public:
 	TitleScene& operator=(TitleScene &&) = delete;
 
 public:
+	void Load() override;
+
 	void Initialize() override;
 
 	void Finalize() override;
@@ -29,18 +31,21 @@ public:
 	void Draw() override;
 
 private:
+	Lamb::SafePtr<Texture2D> tex2D_;
+
 	std::unique_ptr<Camera> staticCamera_;
-	std::unique_ptr<Texture2D> title_;
+	std::unique_ptr<Texture2D::Instance> title_;
 	std::unique_ptr<Cursor> cursor_;
 
 	class Water* water_;
 
 	// 仮
-	std::unique_ptr<Texture2D> titleString_;
+	std::unique_ptr<Texture2D::Instance> titleString_;
 
 	// hud(仮)
-	std::unique_ptr<Texture2D> hud_;
-	std::unique_ptr<Texture2D> hudShadow_;
+	std::unique_ptr<Texture2D::Instance> hud_;
+	std::unique_ptr<Texture2D::Instance> hudShadow_;
+	Vector2 hudShadowScale_;
 
 	// 点滅速度
 	float blinkingSpeed_;
@@ -48,8 +53,10 @@ private:
 	float blinking_;
 
 	// 舟のモデル
-	std::unique_ptr<Model> ship_;
-	std::unique_ptr<Model> screw_;
+	Lamb::SafePtr<Model> ship_;
+	std::unique_ptr<Model::Instance> shipInstance_;
+	Lamb::SafePtr<Model> screw_;
+	Lamb::SafePtr<Model::Instance> screwInstance_;
 
 	float screwRotate_;
 	float screwRotateSpeed_;
@@ -69,8 +76,8 @@ private:
 	float sceneChangeRotateBasis_;
 	float sceneChangeRotateSpeed_;
 
-	std::unique_ptr<Easeing> easing_;
-	std::unique_ptr<Easeing> volumeEasing_;
+	std::unique_ptr<Easeing> easeing_;
+	std::unique_ptr<Easeing> volumeEaseing_;
 
 	class Audio* seaSE_ = nullptr;
 	class Audio* moveShipSE_ = nullptr;

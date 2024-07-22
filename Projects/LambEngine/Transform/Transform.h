@@ -33,5 +33,14 @@ struct QuaternionTransform {
 	QuaternionTransform& operator=(const QuaternionTransform&) = default;
 	QuaternionTransform& operator=(QuaternionTransform&&) = default;
 
-	Mat4x4 GetMatrix() const;
+	void SetParent(const QuaternionTransform* parent);
+
+	const Mat4x4& GetMatrix() const;
+
+	void CalcMatrix();
+
+private:
+	const QuaternionTransform* parent_;
+
+	Mat4x4 worldMatrix_;
 };

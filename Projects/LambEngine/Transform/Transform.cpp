@@ -36,7 +36,19 @@ void Transform::Debug([[maybe_unused]]const std::string& guiName) {
 #endif // _DEBUG
 }
 
-Mat4x4 QuaternionTransform::GetMatrix() const
+void QuaternionTransform::SetParent(const QuaternionTransform* parent) {
+	parent_ = parent;
+}
+
+const Mat4x4& QuaternionTransform::GetMatrix() const
 {
-	return Mat4x4::MakeAffin(scale, rotate, translate);
+	return worldMatrix_;
+}
+
+void QuaternionTransform::CalcMatrix() {
+	worldMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
+
+	if (parent_) {
+		worldMatrix_ *= parent_->worldMatrix_;
+	}
 }

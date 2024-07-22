@@ -5,10 +5,15 @@
 #include "imgui.h"
 #include "Input/Input.h"
 
+#include "Drawers/DrawerManager.h"
+#include "Math/MathCommon.h"
+
 void Cursor::Initialize() {
-	cursor_ = std::make_unique<Texture2D>();
-	cursor_->LoadTexture("./Resources/cursor.png");
-	cursor_->scale = { 32.0f,32.0f };
+	DrawerManager::GetInstance()->LoadTexture("./Resources/cursor.png");
+
+	tex2D_ = DrawerManager::GetInstance()->GetTexture2D();
+	cursor_->textureID = DrawerManager::GetInstance()->GetTexture("./Resources/cursor.png");
+	cursor_->transform.scale = { 32.0f,32.0f };
 	offset_ = { 13.0f,-17.0f };
 	time_ = 0;
 }
@@ -22,26 +27,40 @@ void Cursor::Update() {
 	auto mouse = Input::GetInstance()->GetMouse();
 	static uint32_t kMaxTime = 3;
 	if (mouse->Pushed(Mouse::Button::Left) || mouse->LongPush(Mouse::Button::Left)) {
-		cursor_->rotate.z = -15.0f * std::numbers::pi_v<float> / 180.0f;
+		cursor_->transform.rotate = Quaternion::MakeRotateZAxis(-15.0f * Lamb::Math::toDegree<float>);
 		time_ = kMaxTime;
 	}
 	if (time_ <= 0) {
-		cursor_->rotate.z = 0;
+		cursor_->transform.rotate = Quaternion::MakeRotateZAxis(0.0f);
 	}
 	else {
 		time_--;
 	}
-	cursor_->pos = ChangeCursorToTexturePos();
-	cursor_->pos += offset_;
-	cursor_->Update();
+	cursor_->transform.translate = ChangeCursorToTexturePos();
+	cursor_->transform.translate += offset_;
+	cursor_->transform.CalcMatrix();
 }
 
 void Cursor::Draw(const Camera& camera) {
-	cursor_->Draw(camera.GetOthographics(), Pipeline::Normal, false, false);
+	tex2D_->Draw(
+		cursor_->transform.GetMatrix(),
+		Mat4x4::kIdentity,
+		camera.GetViewOthographics(),
+		cursor_->textureID,
+		cursor_->color,
+		BlendType::kUnenableDepthNone
+	);
 }
 
-void Cursor::Draw(const Mat4x4& cameracameraMat) {
-	cursor_->Draw(cameracameraMat, Pipeline::Normal, false, false);
+void Cursor::Draw(const Mat4x4& cameraMat) {
+	tex2D_->Draw(
+		cursor_->transform.GetMatrix(),
+		Mat4x4::kIdentity,
+		cameraMat,
+		cursor_->textureID,
+		cursor_->color,
+		BlendType::kUnenableDepthNone
+	);
 }
 
 Vector2 Cursor::ChangeCursorToTexturePos() {

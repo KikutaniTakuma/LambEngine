@@ -1,6 +1,6 @@
 #include "TitleScene.h"
 #include "Game/Water/Water.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Utils/EngineInfo.h"
 #include "Game/Cloud/Cloud.h"
 #include "AudioManager/AudioManager.h"
 #include "Game/StageManager/StageManager.h"
@@ -15,6 +15,18 @@
 
 TitleScene::TitleScene() : BaseScene(BaseScene::ID::Title) {}
 
+void TitleScene::Load() {
+    drawerManager_->LoadTexture("./Resources/OutGame/title.png");
+    drawerManager_->LoadTexture("./Resources/OutGame/titleLogo.png");
+    drawerManager_->LoadTexture("./Resources/OutGame/a.png");
+    drawerManager_->LoadTexture("./Resources/cursor.png");
+    drawerManager_->LoadModel("./Resources/Player/titlePlayer.obj");
+    drawerManager_->LoadModel("./Resources/Player/screw.obj");
+
+    audioManager_->Load("./Resources/Sound/sea.wav");
+    audioManager_->Load("./Resources/Sound/move.wav");
+}
+
 void TitleScene::Initialize() {
     StageManager::ResetIsGoal();
     StageManager::SetStage(0);
@@ -22,50 +34,46 @@ void TitleScene::Initialize() {
     staticCamera_.reset(new Camera{});
     staticCamera_->Update();
 
-    camera_->offset.y = 2.0f;
-    camera_->offset.z = -21.0f;
-    camera_->rotate.x = 0.07f;
+    currentCamera_->offset.y = 2.0f;
+    currentCamera_->offset.z = -21.0f;
+    currentCamera_->rotate.x = 0.07f;
 
-    title_ = std::make_unique<Texture2D>();
-    title_->LoadTexture("./Resources/OutGame/title.png");
-    title_->scale = { 1280.0f, 720.0f };
+    tex2D_ = drawerManager_->GetTexture2D();
+
+    title_ = std::make_unique<Texture2D::Instance>();
+    title_->textureID = drawerManager_->GetTexture("./Resources/OutGame/title.png");
+    title_->transform.scale = { 1280.0f, 720.0f };
+
     water_ = Water::GetInstance();
 
-    titleString_.reset(new Texture2D{});
-    titleString_->LoadTexture("./Resources/OutGame/titleLogo.png");
-    titleString_->isSameTexSize = true;
-    titleString_->texScalar = 1.2f;
+    titleString_ = std::make_unique<Texture2D::Instance>();
+    titleString_->textureID = drawerManager_->GetTexture("./Resources/OutGame/titleLogo.png");
+    titleString_->transform.scale = TextureManager::GetInstance()->GetTexture("./Resources/OutGame/titleLogo.png")->getSize() * 1.2f;
+    titleString_->transform.translate = { 0.0f, 180.0f };
 
-    //titleString_->scale = Vector2::identity * 3.0f;
-    titleString_->pos = { 0.0f, 180.0f };
-
-    hud_.reset(new Texture2D{});
-    hud_->LoadTexture("./Resources/OutGame/a.png");
-    hud_->isSameTexSize = true;
-    hud_->texScalar = 0.36f;
+    hud_ = std::make_unique<Texture2D::Instance>();
+    hud_->textureID = drawerManager_->GetTexture("./Resources/OutGame/a.png");
+    hud_->transform.scale = TextureManager::GetInstance()->GetTexture("./Resources/OutGame/a.png")->getSize() * 0.36f;
     hud_->color = 0xFFFFFFFFu;
-    hud_->scale = Vector2::identity * 2.0f;
-    hud_->pos = { 0.0f, -240.0f };
+    hud_->transform.translate = { 0.0f, -240.0f };
 
-    hudShadow_.reset(new Texture2D{});
-    hudShadow_->LoadTexture("./Resources/OutGame/a.png");
-    hudShadow_->isSameTexSize = true;
-    hudShadow_->texScalar = hud_->texScalar;
+    hudShadow_ = std::make_unique<Texture2D::Instance>();
+    hudShadow_->textureID = drawerManager_->GetTexture("./Resources/OutGame/a.png");
+    hudShadowScale_ = TextureManager::GetInstance()->GetTexture("./Resources/OutGame/a.png")->getSize();
+    hudShadow_->transform.scale = hudShadowScale_ * 0.36f;
     hudShadow_->color = hud_->color;
-    hudShadow_->scale = hud_->scale;
-    hudShadow_->pos = hud_->pos;
 
     blinkingSpeed_ = std::numbers::pi_v<float> *0.5f;
     blinking_ = 0.0f;
 
-    ship_.reset(new Model{ "./Resources/Player/titlePlayer.obj" });
-    ship_->pos.y = 0.06f;
-    ship_->pos.z = 100.0f;
-    shipPos_ = ship_->pos;
-    ship_->rotate.y = std::numbers::pi_v<float> *0.5f;
-    screw_.reset(new Model{ "./Resources/Player/screw.obj" });
-    screw_->SetParent(ship_.get());
-    screw_->pos.z = -3.0f;
+    ship_ = drawerManager_->GetModel("./Resources/Player/titlePlayer.obj");
+    shipInstance_->transform.translate.y = 0.06f;
+    shipInstance_->transform.translate.z = 100.0f;
+    shipPos_ = shipInstance_->transform.translate;
+    shipInstance_->transform.rotate = Quaternion::MakeRotateYAxis(std::numbers::pi_v<float> *0.5f);
+    screw_ = drawerManager_->GetModel("./Resources/Player/screw.obj");
+    shipInstance_->transform.SetParent(&shipInstance_->transform);
+    shipInstance_->transform.translate.z = -3.0f;
     screwRotate_ = 0.0f;
     screwRotateSpeed_ = std::numbers::pi_v<float>;
 
@@ -74,23 +82,17 @@ void TitleScene::Initialize() {
     swaying_ = 0.0f;
     swayingSpeed_ = std::numbers::pi_v<float> *1.0f;
 
-    skydome_ = std::make_unique<Skydome>();
-    skydome_->Initialize();
-
-    cloud_ = Cloud::GetInstance();
-    skydome_->SetTexture(cloud_->GetTex());
-
     isSceneChange_ = false;
     sceneChangeRotateBasis_ = 0.22f;
     sceneChangeRotateSpeed_ = rotateSpeed_ * 5.0f;
 
-    easing_.reset(new Easing{});
-    volumeEasing_.reset(new Easing{});
+    easeing_ = std::make_unique<Easeing>();
+    volumeEaseing_ = std::make_unique<Easeing>();
 
-    seaSE_ = audioManager_->LoadWav("./Resources/Sound/sea.wav", true);
-    seaSE_->Start(0.05f);
+    seaSE_ = audioManager_->Get("./Resources/Sound/sea.wav");
+    seaSE_->Start(0.05f, true);
 
-    moveShipSE_ = audioManager_->LoadWav("./Resources/Sound/move.wav", true);
+    moveShipSE_ = audioManager_->Get("./Resources/Sound/move.wav");
 
     moveShipSEVolume_ = { 0.4f, 0.02f };
 
@@ -105,40 +107,36 @@ void TitleScene::Finalize() {
 
 void TitleScene::Update() {
     cursor_->Update();
-    rotate_ += (isSceneChange_ ? easing_->Get(rotateSpeed_, sceneChangeRotateSpeed_) : rotateSpeed_) * Lamb::DeltaTime();
+    rotate_ += (isSceneChange_ ? easeing_->Get(rotateSpeed_, sceneChangeRotateSpeed_) : rotateSpeed_) * Lamb::DeltaTime();
     swaying_ += swayingSpeed_ * Lamb::DeltaTime();
 
-    rotateMatrix_.RotateY(rotate_);
-    ship_->pos = ((shipPos_ - water_->pos) * rotateMatrix_) + water_->pos;
-    ship_->pos.y = std::abs(std::cos(swaying_)) * 0.05f;
-    ship_->rotate.y = std::numbers::pi_v<float> *0.5f + rotate_;
+    rotateMatrix_ = Quaternion::MakeRotateYAxis(rotate_).GetMatrix();
+    shipInstance_->transform.translate = ((shipPos_ - water_->transform.translate) * rotateMatrix_) + water_->transform.translate;
+    shipInstance_->transform.translate.y = std::abs(std::cos(swaying_)) * 0.05f;
+    shipInstance_->transform.rotate = Quaternion::MakeRotateYAxis(std::numbers::pi_v<float> *0.5f + rotate_);
 
     screwRotate_ += screwRotateSpeed_ * Lamb::DeltaTime();
 
-    screw_->rotate.x = screwRotate_;
+    screwInstance_->transform.rotate = Quaternion::MakeRotateXAxis(screwRotate_);
 
-    camera_->rotate.y = rotate_;
+    currentCamera_->rotate.y = rotate_;
 
-    ship_->Debug("ship");
-    ship_->Update();
-    screw_->Update();
+    shipInstance_->transform.CalcMatrix();
+    screwInstance_->transform.CalcMatrix();
 
-    camera_->Debug("タイトルカメラ");
+    currentCamera_->Debug("タイトルカメラ");
     if (!isSceneChange_) {
-        Vector3 posTmp = ship_->pos;
+        Vector3 posTmp = shipInstance_->transform.translate;
         posTmp.y = 0.0f;
-        camera_->Update(posTmp);
+        currentCamera_->Update(posTmp);
     }
 
-    title_->Update();
+    title_->transform.CalcMatrix();
 
-    water_->Update(camera_->GetPos());
+    water_->Update(currentCamera_->GetPos());
 
-    titleString_->Debug("タイトル");
-    hud_->Debug("HUD");
-    titleString_->Update();
-    hud_->Update();
-    hudShadow_->Update();
+    titleString_->transform.CalcMatrix();
+    hud_->transform.CalcMatrix();
 
     blinking_ += blinkingSpeed_ * Lamb::DeltaTime();
     if (blinking_ >= 0.8f) {
@@ -146,24 +144,22 @@ void TitleScene::Update() {
     }
     //hud_->color = 0xFFFFFF00u + static_cast<uint32_t>(255.0f * std::abs(std::sin(blinking_)));
     hudShadow_->color = 0xFFFFFFFFu - static_cast<uint32_t>(255.0f * (blinking_ / 0.8f));
-    hudShadow_->texScalar = 0.36f + 0.18f * blinking_;
-
-    skydome_->Update();
-    cloud_->Update();
+    hudShadow_->transform.scale = hudShadowScale_ * (0.36f + 0.18f * blinking_);
+    hudShadow_->transform.CalcMatrix();
 
     if (!isSceneChange_ &&
         Input::GetInstance()->GetMouse()->Pushed(Mouse::Button::Left)) {
         isSceneChange_ = true;
         sceneChangeRotate_ = rotate_;
-        easing_->Start(false, 0.2f, Easing::OutQuad);
-        volumeEasing_->Start(false, 1.2f, Easing::InSine);
+        easeing_->Start(false, 0.2f, Easeing::OutQuad);
+        volumeEaseing_->Start(false, 1.2f, Easeing::InSine);
 
-        moveShipSE_->Start(moveShipSEVolume_.first);
+        moveShipSE_->Start(moveShipSEVolume_.first, true);
         seaSE_->SetVolume(0.1f);
     }
 
     if (isSceneChange_) {
-        moveShipSE_->SetVolume(volumeEasing_->Get(moveShipSEVolume_.first, moveShipSEVolume_.second));
+        moveShipSE_->SetVolume(volumeEaseing_->Get(moveShipSEVolume_.first, moveShipSEVolume_.second));
     }
 
     //#ifdef _DEBUG
@@ -174,27 +170,57 @@ void TitleScene::Update() {
     //		ImGui::End();
     //#endif // _DEBUG
     if (isSceneChange_ && sceneChangeRotateBasis_ <= (rotate_ - sceneChangeRotate_)) {
-        SceneManager::GetInstance()->SceneChange(BaseScene::ID::StageSelect);
+        sceneManager_->SceneChange(BaseScene::ID::StageSelect);
     }
 
-    volumeEasing_->Update();
-    easing_->Update();
+    volumeEaseing_->Update();
+    easeing_->Update();
 }
 
 void TitleScene::Draw() {
-    cloud_->Draw();
-    skydome_->Draw(*camera_);
-    water_->Draw(camera_->GetViewProjection());
+    water_->Draw(currentCamera_->GetViewProjection());
 
-    ship_->Draw(camera_->GetViewProjection(), camera_->GetPos());
-    screw_->Draw(camera_->GetViewProjection(), camera_->GetPos());
+    ship_->Draw(
+        shipInstance_->transform.GetMatrix(), 
+        currentCamera_->GetViewProjection(), 
+        shipInstance_->color,
+        BlendType::kNone,
+        shipInstance_->isLighting
+        );
+    screw_->Draw(
+        screwInstance_->transform.GetMatrix(),
+        currentCamera_->GetViewProjection(),
+        screwInstance_->color,
+        BlendType::kNone,
+        screwInstance_->isLighting
+    );
 
 
     // hud系
-    titleString_->Draw(staticCamera_->GetViewOthographics());
-    hudShadow_->Draw(staticCamera_->GetViewOthographics());
-    hud_->Draw(staticCamera_->GetViewOthographics());
-    //title_->Draw(camera_->GetViewOthographics(), Pipeline::Normal, false);
+    tex2D_->Draw(
+        titleString_->transform.GetMatrix(),
+        Mat4x4::kIdentity,
+        staticCamera_->GetViewOthographics(),
+        titleString_->textureID,
+        titleString_->color,
+        BlendType::kUnenableDepthNone
+    );
+    tex2D_->Draw(
+        hudShadow_->transform.GetMatrix(),
+        Mat4x4::kIdentity,
+        staticCamera_->GetViewOthographics(),
+        hudShadow_->textureID,
+        hudShadow_->color,
+        BlendType::kUnenableDepthNone
+    );
+    tex2D_->Draw(
+        hud_->transform.GetMatrix(),
+        Mat4x4::kIdentity,
+        staticCamera_->GetViewOthographics(),
+        hud_->textureID,
+        hud_->color,
+        BlendType::kUnenableDepthNone
+    );
 
     cursor_->Draw(staticCamera_->GetViewOthographics());
 }

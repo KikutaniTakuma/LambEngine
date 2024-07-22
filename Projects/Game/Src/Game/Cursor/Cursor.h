@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "Drawers/Texture2D/Texture2D.h"
-#include "Utils/Camera/Camera.h"
+#include "Camera/Camera.h"
 
 class Cursor {
 public:
@@ -17,7 +17,8 @@ public:
 private:
 	Vector2 ChangeCursorToTexturePos();
 
-	std::unique_ptr<Texture2D> cursor_;
+	Lamb::SafePtr<Texture2D> tex2D_;
+	std::unique_ptr<Texture2D::Instance> cursor_;
 
 	uint32_t time_;
 
