@@ -44,9 +44,6 @@
     <ClCompile Include="Src\Camera\DebugCamera\DebugCamera.cpp">
       <Filter>Camera\DebugCamera</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Scenes\Manager\PostEffectManager\PostEffectManager.cpp">
-      <Filter>Scenes\Manager\PostEffectManager</Filter>
-    </ClCompile>
     <ClCompile Include="Src\GameObject\Object.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
@@ -238,9 +235,6 @@
     <Filter Include="Camera\DebugCamera">
       <UniqueIdentifier>{ed4f98cb-62c8-411f-9815-e88decbfbcdc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\Manager\PostEffectManager">
-      <UniqueIdentifier>{30aad260-62a3-477d-8d94-72db07877da4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameObject">
       <UniqueIdentifier>{e5c92456-0708-4165-9d68-847d8014d2ff}</UniqueIdentifier>
     </Filter>
@@ -302,9 +296,6 @@
     </ClInclude>
     <ClInclude Include="Src\Camera\DebugCamera\DebugCamera.h">
       <Filter>Camera\DebugCamera</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Scenes\Manager\PostEffectManager\PostEffectManager.h">
-      <Filter>Scenes\Manager\PostEffectManager</Filter>
     </ClInclude>
     <ClInclude Include="Src\GameObject\Object.h">
       <Filter>GameObject</Filter>
