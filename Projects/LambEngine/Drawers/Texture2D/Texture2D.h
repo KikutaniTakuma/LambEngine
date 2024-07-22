@@ -15,6 +15,11 @@ public:
 		uint32_t color = 0xffffffff;
 		BlendType blend = BlendType::kNone;
 	};
+	struct Instance {
+		QuaternionTransform transform;
+		uint32_t textureID = 0;
+		uint32_t color = 0xffffffff;
+	};
 
 public:
 	static constexpr uint32_t kMaxDrawCount = 1024u;
