@@ -38,7 +38,8 @@ public:
     virtual void SetPipeline(Pipeline* const pipeline) = 0;
     virtual void SetWVPMatrix(const WVPMatrix& matrix) = 0;
     virtual void SetColor(const Vector4& color) = 0;
-    virtual void SetLight(const Light& light) = 0;
+    virtual void SetLight(const DirectionLight& light) = 0;
+    virtual void SetCameraPos(const Vector3& cameraPos) = 0;
     virtual void ZSort() = 0;
     virtual void DataSet() = 0;
 
@@ -106,8 +107,9 @@ public:
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
 
-        descriptorHeap->BookingHeapPos(4);
+        descriptorHeap->BookingHeapPos(5);
         descriptorHeap->CreateView(shaderData_.light);
+        descriptorHeap->CreateView(shaderData_.eyePos);
         descriptorHeap->CreateView(shaderData_.wvpMatrix);
         descriptorHeap->CreateView(shaderData_.color);
         descriptorHeap->CreateView(shaderData_.shaderStruct);
@@ -119,6 +121,7 @@ public:
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
 
         descriptorHeap->ReleaseView(shaderData_.light.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.eyePos.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.wvpMatrix.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.color.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.shaderStruct.GetHandleUINT());
@@ -190,8 +193,11 @@ public:
 
         drawData_[drawCount_].color = color;
     }
-    inline void SetLight(const Light& light) override {
+    inline void SetLight(const DirectionLight& light) override {
         *shaderData_.light = light;
+    }
+    void SetCameraPos(const Vector3& cameraPos) {
+        *shaderData_.eyePos = cameraPos;
     }
     inline void SetShaderStruct(const T& data) {
         if (bufferSize <= drawCount_) {
@@ -255,8 +261,9 @@ public:
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
 
-        descriptorHeap->BookingHeapPos(4);
+        descriptorHeap->BookingHeapPos(5);
         descriptorHeap->CreateView(shaderData_.light);
+        descriptorHeap->CreateView(shaderData_.eyePos);
         descriptorHeap->CreateView(shaderData_.wvpMatrix);
         descriptorHeap->CreateView(shaderData_.color);
         descriptorHeap->CreateView(shaderData_.shaderStruct);
@@ -268,6 +275,7 @@ public:
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
 
         descriptorHeap->ReleaseView(shaderData_.light.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.eyePos.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.wvpMatrix.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.color.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.shaderStruct.GetHandleUINT());
@@ -352,8 +360,11 @@ public:
 
         drawData_[drawCount_].color = color;
     }
-    inline void SetLight(const Light& light) override {
+    inline void SetLight(const DirectionLight& light) override {
         *shaderData_.light = light;
+    }
+    void SetCameraPos(const Vector3& cameraPos) {
+        *shaderData_.eyePos = cameraPos;
     }
     inline void SetShaderStruct(const T& data) {
         if (bufferSize <= drawCount_) {

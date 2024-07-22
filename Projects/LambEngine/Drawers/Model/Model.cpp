@@ -31,14 +31,6 @@ void Model::Load(const std::string& fileName) {
 			}
 		}
 	);
-
-	SetLight(
-		Light{
-			.ligDirection{-Vector3::kYIdentity},
-			.pad0{},
-			.ligColor{ Vector3::kIdentity },
-		}
-	);
 }
 
 void Model::Draw(

@@ -10,23 +10,34 @@ PixelShaderOutPut3 main(VertexShaderOutput input)
 	output.color0 = textureColor;
 
 	if(kIsLighting[input.instanceID].isLighting == 1) {
-	// ディレクションライト拡散反射光
-		float t = dot(input.normal, kLight.ligDirection);
+		float32_t3 ligDirection = kLight.ligDirection;
+        float32_t3 ligColor = kLight.ligColor;
+        float32_t shinness = kLight.shinness;
+		float32_t3 eyePos = kCameraPos.pos;
 
-		t *= -1.0f;
-		t = (t + abs(t)) * 0.5f;
+		// ディレクションライト拡散反射光
+        float32_t t = dot(input.normal, ligDirection);
+        t = saturate(t);
 
-		float3 diffDirection = kLight.ligColor * t;
+        float32_t3 diffDirection = ligColor * t;
 
-		float3 lig = diffDirection;
-		lig.x += 0.2f;
-		lig.y += 0.2f;
-		lig.z += 0.2f;
+		// 鏡面反射光
+        float32_t3 toEye = eyePos - input.worldPosition.xyz;
+        toEye = normalize(toEye);
+    
+        float32_t3 refVec = reflect(ligDirection, input.normal);
+        refVec = normalize(refVec);
 
-		output.color0.xyz *= lig;
+        t = dot(refVec, toEye);
+
+        t = pow(saturate(t), shinness);
+        float32_t3 specDirection = ligColor * t;
+    
+        float32_t3 lig = diffDirection + specDirection;
+        lig += 0.2f;
+        output.color0.rgb *= lig;
 	}
 	output.color0 *= kColor[input.instanceID].color;
-	output.color0.a = pow(output.color0.a, rcp(2.2f));
 
     // 法線
     output.color1.xyz = input.normal;

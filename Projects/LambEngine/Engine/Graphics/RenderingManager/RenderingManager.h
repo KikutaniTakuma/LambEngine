@@ -70,7 +70,7 @@ private:
 	// ポストエフェクトを描画する
 	void DrawPostEffect();
 
-	// UIの描画
+	// 深度値を使わないものの描画
 	void DrawNoDepth(const NoDepthLists& nodepthList);
 
 private:

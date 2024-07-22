@@ -402,6 +402,8 @@ void RenderingManager::DrawNoDepth(const NoDepthLists& nodepthList)
 				break;
 			}
 
+			element->SetLight(deferredRenderingData_.directionLight);
+			element->SetCameraPos(deferredRenderingData_.eyePos);
 			element->Draw();
 
 			count++;
@@ -417,6 +419,8 @@ void RenderingManager::ZSrot(const RGBALists& rgbaList) {
 			}
 
 			element->ZSort();
+			element->SetLight(deferredRenderingData_.directionLight);
+			element->SetCameraPos(deferredRenderingData_.eyePos);
 			element->DataSet();
 
 			count++;

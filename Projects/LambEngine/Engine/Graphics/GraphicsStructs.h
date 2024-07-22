@@ -156,7 +156,8 @@ struct Light {
 
 template<class T>
 struct ShaderData {
-    ConstantBuffer<Light> light;
+    ConstantBuffer<DirectionLight> light;
+    ConstantBuffer<Vector3> eyePos;
     StructuredBuffer<WVPMatrix> wvpMatrix;
     StructuredBuffer<Vector4> color;
     StructuredBuffer<T> shaderStruct;
