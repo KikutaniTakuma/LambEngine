@@ -4,6 +4,17 @@
 #include "imgui.h"
 #endif // _DEBUG
 
+#ifdef _DEBUG
+const std::array<std::pair<std::string, ImGuizmo::OPERATION>, 5> TransformComp::kGuizmoMode_ = {
+	std::make_pair<std::string, ImGuizmo::OPERATION>("TRANSLATE", ImGuizmo::TRANSLATE ),
+	std::make_pair<std::string, ImGuizmo::OPERATION>("ROTATE", ImGuizmo::ROTATE ),
+	std::make_pair<std::string, ImGuizmo::OPERATION>("SCALE", ImGuizmo::SCALE ),
+	std::make_pair<std::string, ImGuizmo::OPERATION>("SCALEU", ImGuizmo::SCALEU ),
+	std::make_pair<std::string, ImGuizmo::OPERATION>("UNIVERSAL", ImGuizmo::UNIVERSAL )
+};
+#endif // _DEBUG
+
+
 
 TransformComp::TransformComp(Object* const object):
 	IComp(object),
@@ -69,9 +80,35 @@ void TransformComp::SetParent(Lamb::SafePtr<TransformComp>& parent)
 	}
 }
 
-void TransformComp::Debug([[maybe_unused]]const std::string& guiName) {
+void TransformComp::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef _DEBUG
-	if(ImGui::TreeNode(guiName.c_str())) {
+	ImGuizmo::SetID(guizmoID_);
+	// コンボボックスを使ってenumの値を選択する
+	if (ImGui::BeginCombo("BlendType", kGuizmoMode_[guimoType_].first.c_str()))
+	{
+		for (uint32_t count = 0; auto& i : kGuizmoMode_)
+		{
+			bool isSelected = (guimoType_ == count);
+			if (ImGui::Selectable(i.first.c_str(), isSelected))
+			{
+				guimoType_ = count;
+			}
+			if (isSelected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+			count++;
+		}
+		ImGui::EndCombo();
+	}
+
+	if (ImGuizmo::Manipulate(view_->data(), projection_->data(), kGuizmoMode_[guimoType_].second, ImGuizmo::WORLD, worldMatrix_.data())) {
+		worldMatrix_.Decompose(scale, eulerRotate, translate);
+		TransformCompUpdater::GetInstance()->SetCurretnGuizmoID(guizmoID_);
+	}
+
+	if (ImGui::TreeNode(guiName.c_str())) {
+
 		ImGui::DragFloat3("scale", scale.data(), 0.01f);
 		eulerRotate *= Lamb::Math::toDegree<float32_t>;
 		ImGui::DragFloat3("rotate(Degree)", eulerRotate.data(), 1.0f);
@@ -87,4 +124,18 @@ void TransformComp::Debug([[maybe_unused]]const std::string& guiName) {
 	}
 #endif // _DEBUG
 
+}
+
+void TransformComp::SetViewMatrix(const Mat4x4* view)
+{
+	view_ = view;
+}
+
+void TransformComp::SetProjectionMatrix(const Mat4x4* projection)
+{
+	projection_ = projection;
+}
+
+void TransformComp::SetGuizmoID(uint32_t id) {
+	guizmoID_ = id;
 }

@@ -11,6 +11,7 @@
 #include "imgui.h"
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"
+#include "ImGuizmo.h"
 
 #include "Utils/SafeDelete.h"
 
@@ -64,6 +65,13 @@ ImGuiManager::ImGuiManager() {
 		descriptorHeap->GetGpuHeapHandle(useHandle)
 	);
 
+	ImGuizmo::SetOrthographic(false);
+	Vector2 size = WindowFactory::GetInstance()->GetClientSize();
+	ImGuizmo::SetRect(
+		0, 0, size.x, size.y
+	);
+	ImGuizmo::SetImGuiContext(ImGui::GetCurrentContext());
+
 	descriptorHeap->UseThisPosition(useHandle);
 
 	Lamb::AddLog("Initialize ImGuiManager succeeded");
@@ -84,6 +92,8 @@ void ImGuiManager::Start() {
 	ImGui_ImplDX12_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+
+	ImGuizmo::BeginFrame();
 #endif // _DEBUG
 }
 

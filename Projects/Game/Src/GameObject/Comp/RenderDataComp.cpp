@@ -16,7 +16,7 @@ void RenderDataComp::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
         // コンボボックスを使ってenumの値を選択する
-        if (ImGui::BeginCombo("Enum", kBlendTypeStrs[static_cast<uint32_t>(type)].c_str()))
+        if (ImGui::BeginCombo("BlendType", kBlendTypeStrs[static_cast<uint32_t>(type)].c_str()))
         {
             for (uint32_t i = 0; i < static_cast<uint32_t>(BlendType::kNum); ++i)
             {
