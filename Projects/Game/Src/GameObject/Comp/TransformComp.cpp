@@ -40,13 +40,6 @@ void TransformComp::Init()
 
 void TransformComp::UpdateMatrix()
 {
-#ifdef _DEBUG
-	if (eulerRotate == Vector3::kZero) {
-		eulerRotate = rotate.ToEuler();
-	}
-	rotate = Quaternion::EulerToQuaternion(eulerRotate);
-#endif // _DEBUG
-
 	rotate = rotate.Normalize();
 	worldMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
 
@@ -82,7 +75,6 @@ void TransformComp::SetParent(Lamb::SafePtr<TransformComp>& parent)
 
 void TransformComp::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef _DEBUG
-	ImGuizmo::SetID(guizmoID_);
 	// コンボボックスを使ってenumの値を選択する
 	if (ImGui::BeginCombo("BlendType", kGuizmoMode_[guimoType_].first.c_str()))
 	{
@@ -102,19 +94,28 @@ void TransformComp::Debug([[maybe_unused]] const std::string& guiName) {
 		ImGui::EndCombo();
 	}
 
+	ImGuizmo::SetID(guizmoID_);
 	if (ImGuizmo::Manipulate(view_->data(), projection_->data(), kGuizmoMode_[guimoType_].second, ImGuizmo::WORLD, worldMatrix_.data())) {
-		worldMatrix_.Decompose(scale, eulerRotate, translate);
+		worldMatrix_.Decompose(scale, rotate, translate);
+		rotate = rotate.Normalize();
 		TransformCompUpdater::GetInstance()->SetCurretnGuizmoID(guizmoID_);
 	}
 
 	if (ImGui::TreeNode(guiName.c_str())) {
-
 		ImGui::DragFloat3("scale", scale.data(), 0.01f);
+
+		if (eulerRotate == Vector3::kZero) {
+			eulerRotate = rotate.ToEuler();
+		}
 		eulerRotate *= Lamb::Math::toDegree<float32_t>;
 		ImGui::DragFloat3("rotate(Degree)", eulerRotate.data(), 1.0f);
 		eulerRotate *= Lamb::Math::toRadian<float32_t>;
-		ImGui::DragFloat3("translate", translate.data(), 0.01f);
+
+		rotate = Quaternion::EulerToQuaternion(eulerRotate);
 		rotate = rotate.Normalize();
+
+
+		ImGui::DragFloat3("translate", translate.data(), 0.01f);
 		for (size_t index = 0; auto & i : children_) {
 			i->Debug("children_" + std::to_string(index));
 			index++;
