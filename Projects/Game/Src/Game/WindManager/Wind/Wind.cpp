@@ -1,24 +1,23 @@
 #include "Wind.h"
 
-#include "Utils/Camera/Camera.h"
+#include "Camera/Camera.h"
 #include "Game/CollisionManager/Collision/Collision.h"
 #include "Game/Player/Player.h"
+
+#include "Drawers/DrawerManager.h"
 
 static const double PI = 3.14159265358979323846;
 
 Wind::Wind() {
-	model_ = std::make_unique<Model>();
-	model_->LoadObj("./Resources/Block/Block.obj");
-	debugArrowModel_ = std::make_unique<Model>();
-	debugArrowModel_->LoadObj("./Resources/DebugArrow/DebugArrow.obj");
+	DrawerManager::GetInstance()->LoadModel("./Resources/Block/Block.obj");
+	model_ = DrawerManager::GetInstance()->GetModel("./Resources/Block/Block.obj");
+	modelInstance_ = std::make_unique<Model::Instance>();
 }
 
 void Wind::Initialize(const Vector3& scale, const Vector3& rotate, const Vector3& pos, const Vector3& vector) {
-	model_->scale = scale;
-	model_->rotate = rotate;
-	model_->pos = pos;
-	debugArrowModel_->SetParent(model_.get());
-	debugArrowModel_->pos;
+	modelInstance_->transform.scale = scale;
+	modelInstance_->transform.rotate = Quaternion::EulerToQuaternion(rotate);
+	modelInstance_->transform.translate = pos;
 	float angle = 0.0f;
 	Vector3 from = { 0.0f,0.0f,1.0f };
 	Vector3 to = vector;
@@ -37,16 +36,14 @@ void Wind::Initialize(const Vector3& scale, const Vector3& rotate, const Vector3
 	else {
 		angle = std::acosf(dot);
 	}
-	debugArrowModel_->rotate.y = angle;
 	vector_ = vector;
 	Collider::SetColliderType(Collider::Type::kTrriger);
 	Collider::SetColliderAttribute(Collider::Attribute::kOther);
-	Collider::InitializeCollision(model_->scale, model_->rotate, model_->pos);
+	Collider::InitializeCollision(modelInstance_->transform.scale, modelInstance_->transform.rotate, modelInstance_->transform.translate);
 }
 
 void Wind::ResourceUpdate() {
-	model_->Update();
-	debugArrowModel_->Update();
+	modelInstance_->transform.CalcMatrix();
 }
 
 void Wind::Update() {
@@ -69,10 +66,9 @@ void Wind::Update() {
 	else {
 		angle = std::acosf(dot);
 	}
-	debugArrowModel_->rotate.y = angle;
 	ResourceUpdate();
 	color_.at(0) = Vector4ToUint(Vector4::kIdentity);
-	Collider::UpdateCollision(model_->rotate, model_->pos);
+	Collider::UpdateCollision(modelInstance_->transform.rotate, modelInstance_->transform.translate);
 }
 
 void Wind::Draw(const Camera& camera) {
@@ -85,25 +81,25 @@ void Wind::Draw(const Camera& camera) {
 }
 
 void Wind::SetScale(const Vector3& scale) {
-	model_->scale = scale;
+	modelInstance_->transform.scale = scale;
 	Collider::SetCollisionScale(scale);
-	Collider::UpdateCollision(model_->rotate, model_->pos);
+	Collider::UpdateCollision(modelInstance_->transform.rotate, modelInstance_->transform.translate);
 }
 
 void Wind::SetRotate(const Vector3& rotate) {
-	model_->rotate = rotate;
-	Collider::UpdateCollision(model_->rotate, model_->pos);
+	modelInstance_->transform.rotate = rotate;
+	Collider::UpdateCollision(modelInstance_->transform.rotate, modelInstance_->transform.translate);
 }
 
 void Wind::SetPosition(const Vector3& pos) {
-	model_->pos = pos;
-	Collider::UpdateCollision(model_->rotate, model_->pos);
+	modelInstance_->transform.translate = pos;
+	Collider::UpdateCollision(modelInstance_->transform.rotate, modelInstance_->transform.translate);
 }
 
 void Wind::OnCollision(Collider* collider, uint32_t myIndex, uint32_t pairIndex) {
 	if (collider->GetColliderAttribute(pairIndex) == Collider::Attribute::kPlayer &&
 		Collision::IsCollision(obb_.at(myIndex), collider->GetOBB(pairIndex))) {
-		color_.at(myIndex) = Vector4ToUint(Vector4::kZIndentity);
+		color_.at(myIndex) = Vector4ToUint(Vector4::kZIdentity);
 		player_->SetWindDirection(vector_);
 	}
 }

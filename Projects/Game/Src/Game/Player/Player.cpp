@@ -89,7 +89,7 @@ Player::Player() {
 
 	Collider::SetColliderType(Collider::Type::kCollion);
 	Collider::SetColliderAttribute(Collider::Attribute::kPlayer);
-	Collider::InitializeCollision(body_->scale, body_->rotate, body_->pos);
+	Collider::InitializeCollision(body_->scale, body_->transform.rotate, body_->transform.translate);
 	Collider::SetCollisionScale(Vector3(1.5f * 0.5f, 10.0f, 2.5f * 0.5f));
 
 	waterBubble_.reset(new Particle{});
@@ -179,8 +179,8 @@ void Player::Initialize() {
 	deathPosition_ = {};
 	deathPlayerPosition_ = {};
 	deathScale_ = {};
-	body_->rotate = { 0.0f,0.0f,0.0f };
-	body_->pos = { 0.0f,0.0f,0.0f };
+	body_->transform.rotate = { 0.0f,0.0f,0.0f };
+	body_->transform.translate = { 0.0f,0.0f,0.0f };
 	prePlayerPos_ = {};
 	velocity_ = 0.0f;
 	windVelocity_ = 0.0f;
@@ -208,8 +208,8 @@ void Player::Initialize() {
 	chargeDuration_ = 0.0f;
 	size_ = 0.0f;
 	preStick_ = {};
-	end_ = -Vector3::kXIndentity;
-	start_ = Vector3::kXIndentity;
+	end_ = -Vector3::kXIdentity;
+	start_ = Vector3::kXIdentity;
 
 	easingCount_ = 4.0f;
 	deathAnimationEasingCount_ = 3.0f;
@@ -288,7 +288,7 @@ void Player::Update() {
 
 		Sound();
 
-		UpdateCollision(body_->rotate, body_->pos);
+		UpdateCollision(body_->transform.rotate, body_->transform.translate);
 
 		NumberUpdate();
 
@@ -831,8 +831,8 @@ void Player::Move() {
 			vector = { std::cos(currentAngle_ * std::numbers::pi_v<float> / 180.0f),0.0f,std::sin(currentAngle_ * std::numbers::pi_v<float> / 180.0f) };
 			// 自機の回転	
 			UpdateRotate(vector);
-			prePlayerPos_ = body_->pos;
-			body_->pos += ((vector_ * velocity_) + (windVector_ * windVelocity_) + (cannonVector_ * cannonVelocity_)) * Lamb::DeltaTime();
+			prePlayerPos_ = body_->transform.translate;
+			body_->transform.translate += ((vector_ * velocity_) + (windVector_ * windVelocity_) + (cannonVector_ * cannonVelocity_)) * Lamb::DeltaTime();
 		}
 
 	}
@@ -868,8 +868,8 @@ void Player::UpdateRotate(const Vector3& vector) {
 	else {
 		angle = std::acosf(dot);
 	}
-	angle = LerpShortAngle(body_->rotate.y, angle, floatParameter_.at(FloatParameter::kTurnSpeed));
-	body_->rotate.y = angle;
+	angle = LerpShortAngle(body_->transform.rotate.y, angle, floatParameter_.at(FloatParameter::kTurnSpeed));
+	body_->transform.rotate.y = angle;
 	vector_ = { std::sin(angle),0.0f,std::cos(angle) };
 	vector_.Normalize();
 
@@ -905,8 +905,8 @@ void Player::Charge() {
 		// 2.スティックの動きが左回転か
 		// 3.スティックが線より回転してるか
 		if (Lamb::Between(startAndStickCos, chargeDuration_, 1.0f)
-			&& stickPreStickCorss == Vector3::kZIndentity
-			&& stickStartCorss == Vector3::kZIndentity
+			&& stickPreStickCorss == Vector3::kZIdentity
+			&& stickStartCorss == Vector3::kZIdentity
 			) {
 			// Quaternion版のDirToDirで回転
 			start_ *= Quaternion::DirectionToDirection(start_.Normalize(), mouse.Normalize());
@@ -978,7 +978,7 @@ void Player::CannonUpdate() {
 				power_ >= sumPower) {
 
 				// エミッタのポジション
-				Vector3 emitterPos = cannon->pos + body_->pos;
+				Vector3 emitterPos = cannon->pos + body_->transform.translate;
 
 				// 大砲のパーティクル発生
 				(*cannonParticleItr_)->ParticleStart(emitterPos);
@@ -1426,8 +1426,8 @@ void Player::WindUpdate() {
 
 void Player::GoalUpdate() {
 	Vector3 offset = (Vector3(0.0f, 0.0f, 1.0f) * Mat4x4::MakeRotateY(goal_.rotate.y)).Normalize() * goal_.scale.z * 2.0f;
-	body_->pos = positionEasing_.Get(goalPlayerPos_, goal_.pos + offset);
-	body_->rotate.y = rotateEasing_.Get(goalPlayerRotate_, LerpShortAngle(goalPlayerRotate_, goal_.rotate.y));
+	body_->transform.translate = positionEasing_.Get(goalPlayerPos_, goal_.pos + offset);
+	body_->transform.rotate.y = rotateEasing_.Get(goalPlayerRotate_, LerpShortAngle(goalPlayerRotate_, goal_.rotate.y));
 	screw_->rotate.x -= 1.0f;
 	positionEasing_.Update();
 	rotateEasing_.Update();
@@ -1438,7 +1438,7 @@ void Player::GoalUpdate() {
 
 void Player::NumberUpdate() {
 	float sum = ((velocity_)+(windVelocity_)+(cannonVelocity_));
-	if (std::fabs(body_->pos.Length() - prePlayerPos_.Length()) <= 0.05f) {
+	if (std::fabs(body_->transform.translate.Length() - prePlayerPos_.Length()) <= 0.05f) {
 		tensPlace_->uvPibot = { 0.0f * 0.1f, 1.0f };
 		oneRank_->uvPibot = { 0.0f * 0.1f, 1.0f };
 	}
@@ -1463,7 +1463,7 @@ void Player::ParticleUpdate() {
 	waterBubble_->speedScale = velocity_ * 0.01f;
 
 
-	if (particleStartSpeed_ <= (body_->pos - prePlayerPos_).Length()) {
+	if (particleStartSpeed_ <= (body_->transform.translate - prePlayerPos_).Length()) {
 		if (!waterBubble_->GetIsParticleStart()) {
 			waterBubble_->ParticleStart();
 		}
@@ -1471,7 +1471,7 @@ void Player::ParticleUpdate() {
 	else {
 		waterBubble_->ParticleStop();
 	}
-	waterBubble_->emitterPos = body_->pos + emitterOffset_ * Mat4x4::MakeRotate(body_->rotate);
+	waterBubble_->emitterPos = body_->transform.translate + emitterOffset_ * Mat4x4::MakeRotate(body_->transform.rotate);
 }
 
 void Player::DeathUpdate() {
@@ -1502,9 +1502,9 @@ void Player::DeathUpdate() {
 	}
 
 	//angle;
-	body_->pos.x = deathPosition_.x + deathScale_.x * std::cos(time + angle);
-	body_->pos.z = deathPosition_.z + deathScale_.z * std::sin(time + angle);
-	body_->rotate.y += 0.01f;
+	body_->transform.translate.x = deathPosition_.x + deathScale_.x * std::cos(time + angle);
+	body_->transform.translate.z = deathPosition_.z + deathScale_.z * std::sin(time + angle);
+	body_->transform.rotate.y += 0.01f;
 	deathScale_.x = std::lerp(deathScale_.x, 0.0f, 0.001f);
 	deathScale_.z = std::lerp(deathScale_.z, 0.0f, 0.001f);
 	deathTexture_->color = Vector4ToUint(deathAnimationEasing_.Get({ 1.0f,1.0f,1.0f,0.0f }, { 1.0f,1.0f,1.0f,1.0f }));
@@ -1785,8 +1785,8 @@ void Player::Debug() {
 
 	ImGui::DragFloat2("deathTexture", &deathTexture_->pos.x, 0.1f);
 	ImGui::DragFloat("Magnification", &magnification_, 0.1f);
-	ImGui::DragFloat3("Pos", &body_->pos.x, 0.1f);
-	ImGui::DragFloat3("rotate", &body_->rotate.x, 0.1f);
+	ImGui::DragFloat3("Pos", &body_->transform.translate.x, 0.1f);
+	ImGui::DragFloat3("rotate", &body_->transform.rotate.x, 0.1f);
 	ImGui::DragFloat("Weight", &weight_, 1.0f, 0.0f);
 	ImGui::DragFloat("Power", &power_, 1.0f, 0.0f);
 	ImGui::DragFloat("Velocity", &velocity_, 1.0f, 0.0f);
@@ -1827,16 +1827,16 @@ void Player::ApplyGlobalVariable() {
 }
 
 void Player::OnCollision(Collider* collider, uint32_t myIndex, uint32_t pairIndex) {
-	color_.at(myIndex) = Vector4ToUint(Vector4::kYIndentity);
+	color_.at(myIndex) = Vector4ToUint(Vector4::kYIdentity);
 	Vector3 pushVector{};
-	Vector3 prePosVector = prePlayerPos_ - body_->pos;
+	Vector3 prePosVector = prePlayerPos_ - body_->transform.translate;
 	prePosVector.Normalize();
 	if (collider->GetColliderType(pairIndex) == Collider::Type::kCollion &&
 		collider->GetColliderAttribute(pairIndex) == Collider::Attribute::kOther &&
 		Collision::IsCollision(obb_.at(myIndex), collider->GetOBB(pairIndex), pushVector)) {
-		body_->pos += pushVector;
-		UpdateCollision(body_->rotate, body_->pos);
-		color_.at(myIndex) = Vector4ToUint(Vector4::kXIndentity);
+		body_->transform.translate += pushVector;
+		UpdateCollision(body_->transform.rotate, body_->transform.translate);
+		color_.at(myIndex) = Vector4ToUint(Vector4::kXIdentity);
 	}
 }
 

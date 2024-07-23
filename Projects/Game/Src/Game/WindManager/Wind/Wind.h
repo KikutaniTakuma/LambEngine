@@ -17,18 +17,18 @@ public:
 	void Draw(const Camera& camera);
 
 	void SetPlayer(Player* player) { player_ = player; }
-	const Vector3& GetScale() { return model_->scale; }
+	const Vector3& GetScale() { return modelInstance_->transform.scale; }
 	void SetScale(const Vector3& scale);
-	const Vector3& GetRotate() { return model_->rotate; }
+	const Quaternion& GetRotate() { return modelInstance_->transform.rotate; }
 	void SetRotate(const Vector3& rotate);
-	const Vector3& GetPosition() { return model_->pos; }
+	const Vector3& GetPosition() { return modelInstance_->transform.translate; }
 	void SetPosition(const Vector3& pos);
 	const Vector3& GetVector() { return vector_; }
 	void SetVector(const Vector3& vector) { vector_ = vector; }
 private:
 	void OnCollision(Collider* collider, uint32_t myIndex, uint32_t pairIndex) override;
-	std::unique_ptr<Model> model_;
-	std::unique_ptr<Model> debugArrowModel_;
+	Lamb::SafePtr<Model> model_;
+	std::unique_ptr<Model::Instance> modelInstance_;
 
 	Player* player_;
 

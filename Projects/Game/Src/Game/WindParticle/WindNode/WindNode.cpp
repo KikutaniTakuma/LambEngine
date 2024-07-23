@@ -1,7 +1,7 @@
 #include "WindNode.h"
 #include "Drawers/Line/Line.h"
-#include "Utils/Camera/Camera.h"
-#include "Utils/EngineInfo/EngineInfo.h"
+#include "Camera/Camera.h"
+#include "Utils/EngineInfo.h"
 
 #include <numbers>
 

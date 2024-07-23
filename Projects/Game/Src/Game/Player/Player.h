@@ -73,9 +73,9 @@ public:
 	void DebugTileMap();
 
 	const Vector3& GetDeathPos()const { return deathPlayerPosition_; }
-	const Vector3& GetPosition() const { return body_->pos; }
-	const Vector3& GetRotate() const { return body_->rotate; }
-	const Vector3& GetScale() const { return body_->scale; }
+	const Vector3& GetPosition() const { return body_->transform.translate; }
+	const Quaternion& GetRotate() const { return body_->transform.rotate; }
+	const Vector3& GetScale() const { return body_->transform.scale; }
 	void SetSailTexturesColor(const Vector4& color);
 	void SetCannonTexturesColor(const Vector4& color);
 	void SetLoopCannonTexturesColor(const Vector4& color);
@@ -128,7 +128,7 @@ public:
 		goal_.pos = pos;
 	}
 	// PlayerInfo
-	Model* GetBody() { return body_.get(); }
+	Model* GetBody() { return bodyModel_.get(); }
 
 	Texture2D* GetSailTextures(int32_t index) { return sailsTextures_.at(index).get(); }
 	Texture2D* GetCannonsTextures(int32_t index) { return cannonsTextures_.at(index).get(); }
@@ -264,18 +264,22 @@ private:
 	float LerpShortAngle(float a, float b);
 
 	const Camera* camera_;
-	std::unique_ptr<Model> body_;
-	std::unique_ptr<Model> screw_;
-	std::vector< std::unique_ptr<Model> >barrels_;
+	Lamb::SafePtr<Model> bodyModel_;
+	std::unique_ptr<Model::Instance> body_;
+	Lamb::SafePtr<Model> screwModel_;
+	std::unique_ptr<Model::Instance> screw_;
+	std::vector<std::unique_ptr<Model>> barrels_;
 	std::vector<std::unique_ptr<Model>> bones_;
 	std::vector<std::unique_ptr<Model>> sails_;
-	std::vector<std::unique_ptr<Texture2D>> sailsIntervalTextures_;
+	std::vector<std::unique_ptr<Texture2D::Instance>> sailsIntervalTextures_;
 	std::vector<Interval> sailsIntervals_;
-	std::vector<std::unique_ptr<Model>> cannons_;
-	std::vector<std::unique_ptr<Texture2D>> cannonsIntervalTextures_;
+	std::unique_ptr<Model> cannonModel_;
+	std::vector<std::unique_ptr<Model::Instance>> cannons_;
+	std::vector<std::unique_ptr<Texture2D::Instance>> cannonsIntervalTextures_;
 	std::vector<Interval> cannonIntervals_;
-	std::vector<std::unique_ptr<Model>> loopCannons_;
-	std::vector<std::unique_ptr<Texture2D>> loopCannonsIntervalTextures_;
+	std::unique_ptr<Model> loopCannonsModel_;
+	std::vector<std::unique_ptr<Model::Instance>> loopCannons_;
+	std::vector<std::unique_ptr<Texture2D::Instance>> loopCannonsIntervalTextures_;
 	std::vector<Interval> loopCannonIntervals_;
 	// オブジェクトごとの間隔
 	Vector2 setObjectDistance_;
@@ -288,21 +292,21 @@ private:
 
 	float magnification_;
 
-	std::vector<std::unique_ptr<Texture2D>> sailNumbers_;
-	std::vector<std::unique_ptr<Texture2D>> cannonNumbers_;
-	std::vector<std::unique_ptr<Texture2D>> loopCannonNumbers_;
+	std::vector<std::unique_ptr<Texture2D::Instance>> sailNumbers_;
+	std::vector<std::unique_ptr<Texture2D::Instance>> cannonNumbers_;
+	std::vector<std::unique_ptr<Texture2D::Instance>> loopCannonNumbers_;
 
 	float numberSize_;
 
-	std::unique_ptr<Texture2D> maxPowerGauge_;
-	std::unique_ptr<Texture2D> scheme_;
-	std::unique_ptr<Texture2D> currentPowerGauge_;
-	std::unique_ptr<Texture2D> departure_;
-	std::unique_ptr<Texture2D> chargeUI_;
-	std::unique_ptr<Texture2D> powerUI_;
-	std::unique_ptr<Texture2D> goalText_;
-	std::unique_ptr<Texture2D> goText_;
-	std::unique_ptr<Texture2D> stageNames_;
+	std::unique_ptr<Texture2D::Instance> maxPowerGauge_;
+	std::unique_ptr<Texture2D::Instance> scheme_;
+	std::unique_ptr<Texture2D::Instance> currentPowerGauge_;
+	std::unique_ptr<Texture2D::Instance> departure_;
+	std::unique_ptr<Texture2D::Instance> chargeUI_;
+	std::unique_ptr<Texture2D::Instance> powerUI_;
+	std::unique_ptr<Texture2D::Instance> goalText_;
+	std::unique_ptr<Texture2D::Instance> goText_;
+	std::unique_ptr<Texture2D::Instance> stageNames_;
 
 	// go
 	Easeing goEasing_;
@@ -352,7 +356,7 @@ private:
 	bool isCharge_;
 	// チャージする中心点
 	Vector2 chargeAnchorPoint_;
-	std::unique_ptr<Texture2D> chargeAnchorPointTexture_;
+	std::unique_ptr<Texture2D::Instance> chargeAnchorPointTexture_;
 
 	// 大砲
 	Vector3 cannonVector_;
@@ -369,11 +373,11 @@ private:
 
 	// タイルマップ
 	Vector2 tileMapOffset_;
-	std::array<std::array<std::unique_ptr<Texture2D>, width_>, height_> tileMapTexture_;
-	std::array<std::array<std::unique_ptr<Texture2D>, width_>, height_> tileMapLuggageTexture_;
-	std::vector<std::unique_ptr<Texture2D>> cannonsTextures_;
-	std::vector<std::unique_ptr<Texture2D>> loopCannonsTextures_;
-	std::vector<std::unique_ptr<Texture2D>> sailsTextures_;
+	std::array<std::array<std::unique_ptr<Texture2D::Instance>, width_>, height_> tileMapTexture_;
+	std::array<std::array<std::unique_ptr<Texture2D::Instance>, width_>, height_> tileMapLuggageTexture_;
+	std::vector<std::unique_ptr<Texture2D::Instance>> cannonsTextures_;
+	std::vector<std::unique_ptr<Texture2D::Instance>> loopCannonsTextures_;
+	std::vector<std::unique_ptr<Texture2D::Instance>> sailsTextures_;
 	std::array<std::array<MapData, width_>, height_> tileMap_;
 	std::vector<int> sailFlag_;
 	int32_t sailCount_;
@@ -389,9 +393,9 @@ private:
 	Easeing rotateEasing_;
 
 	// 速度描画
-	std::unique_ptr<Texture2D> tensPlace_;
-	std::unique_ptr<Texture2D> oneRank_;
-	std::unique_ptr<Texture2D> kmTexture_;
+	std::unique_ptr<Texture2D::Instance> tensPlace_;
+	std::unique_ptr<Texture2D::Instance> oneRank_;
+	std::unique_ptr<Texture2D::Instance> kmTexture_;
 
 	Vector2 velocityTexturePos_;
 	float velocityTextureInterval_;

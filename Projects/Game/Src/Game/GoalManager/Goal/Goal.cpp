@@ -171,7 +171,7 @@ void Goal::OnCollision(Collider* collider, uint32_t myIndex, uint32_t pairIndex)
 		player_->SetGoalPlayerRotate(player_->GetRotate().y);
 		CameraManager::GetInstance()->SetType(CameraManager::Type::kGoal);
 		CameraManager::GetInstance()->GetGoalCamera()->SetStartCamera(camera_->pos, camera_->rotate);
-		color_.at(myIndex) = Vector4ToUint(Vector4::kXIndentity);
+		color_.at(myIndex) = Vector4ToUint(Vector4::kXIdentity);
 		isParticleStart_ = true;
 	}
 	else if (
@@ -182,7 +182,7 @@ void Goal::OnCollision(Collider* collider, uint32_t myIndex, uint32_t pairIndex)
 		player_->SetVelocity(subtractionVelocity_);
 		player_->SetCannonVelocity(subtractionCannonVelocity_);
 		player_->SetSailVelocity(subtractionSailVelocity_);
-		color_.at(myIndex) = Vector4ToUint(Vector4::kXIndentity);
+		color_.at(myIndex) = Vector4ToUint(Vector4::kXIdentity);
 		isHit_ = true;
 	}
 }

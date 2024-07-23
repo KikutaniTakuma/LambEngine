@@ -1,6 +1,6 @@
 #include "WindParticle.h"
-#include "Utils/Random/Random.h"
-#include "Utils/Camera/Camera.h"
+#include "Utils/Random.h"
+#include "Camera/Camera.h"
 
 void WindParticle::Initialize(
 	const Vector3& pos,

@@ -8,7 +8,7 @@
 
 #include "Game/Player/Player.h"
 #include "Game/StageManager/StageManager.h"
-#include "Utils/Camera/Camera.h"
+#include "Camera/Camera.h"
 
 WindManager::WindManager() {}
 

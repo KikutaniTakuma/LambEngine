@@ -12,8 +12,11 @@ public:
 	void ResourceUpdate();
 	void Draw(const Camera& camera);
 private:
-	std::unique_ptr<Model> start_;
-	std::unique_ptr<Model> leftBeach_;
-	std::unique_ptr<Model> rightBeach_;
+	Lamb::SafePtr<Model> start_;
+	std::unique_ptr<Model::Instance> startInstance_;
+	Lamb::SafePtr<Model> leftBeach_;
+	std::unique_ptr<Model::Instance> leftBeachInstance_;
+	Lamb::SafePtr<Model> rightBeach_;
+	std::unique_ptr<Model::Instance> rightBeachInstance_;
 
 };

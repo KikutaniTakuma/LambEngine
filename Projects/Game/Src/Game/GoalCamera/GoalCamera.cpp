@@ -4,7 +4,7 @@
 
 #include "imgui.h"
 
-#include "Utils/Camera/Camera.h"
+#include "Camera/Camera.h"
 
 void GoalCamera::Initialize() {
 	Mat4x4 goalRotateY = Mat4x4::MakeRotateY(goal_.rotate.y);

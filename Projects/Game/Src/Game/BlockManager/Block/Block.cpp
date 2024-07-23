@@ -64,10 +64,10 @@ void Block::SetRotate(const Vector3& rotate) {
 }
 
 void Block::OnCollision(Collider* collider, uint32_t myIndex, uint32_t pairIndex) {
-	color_.at(myIndex) = Vector4ToUint(Vector4::kYIndentity);
+	color_.at(myIndex) = Vector4ToUint(Vector4::kYIdentity);
 	if (collider->GetColliderAttribute(pairIndex) == Collider::Attribute::kPlayer &&
 		Collision::IsCollision(obb_.at(myIndex), collider->GetOBB(pairIndex))) {
-		color_.at(myIndex) = Vector4ToUint(Vector4::kXIndentity);
+		color_.at(myIndex) = Vector4ToUint(Vector4::kXIdentity);
 		if (!hitFlag_) {
 			hitBlockSound_->Start(0.1f);
 			player_->SetVelocity(subtractionVelocity_);

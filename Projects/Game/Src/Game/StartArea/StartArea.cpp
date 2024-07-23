@@ -4,31 +4,37 @@
 
 #include "imgui.h"
 
-#include "Utils/Camera/Camera.h"	
+#include "Camera/Camera.h"	
 #include "Game/StageManager/StageManager.h"
+#include "Drawers/DrawerManager.h"
 
 void StartArea::Initialize() {
-	start_ = std::make_unique<Model>();
-	start_->LoadObj("./Resources/DebugArrow/DebugGoal.obj");
-	leftBeach_ = std::make_unique<Model>();
-	leftBeach_->LoadObj("./Resources/InGame/Models/beach.obj");
-	rightBeach_ = std::make_unique<Model>();
-	rightBeach_->LoadObj("./Resources/InGame/Models/beach.obj");
-	start_->scale = { 10.0f ,10.0f ,10.0f };
-	start_->rotate.y = 180.0f * std::numbers::pi_v<float> / 180.0f;
-	start_->pos;
-	leftBeach_->pos.x += start_->scale.x * 0.5f;
-	rightBeach_->pos.x -= start_->scale.x * 0.5f;
-	leftBeach_->SetParent(start_.get());
-	rightBeach_->SetParent(start_.get());
+	Lamb::SafePtr drawerManager = DrawerManager::GetInstance();
+	drawerManager->LoadModel("./Resources/DebugArrow/DebugGoal.obj");
+	drawerManager->LoadModel("./Resources/InGame/Models/beach.obj");
+
+	start_ = drawerManager->GetModel("./Resources/DebugArrow/DebugGoal.obj");
+	leftBeach_ = drawerManager->GetModel("./Resources/InGame/Models/beach.obj");
+	rightBeach_ = drawerManager->GetModel("./Resources/InGame/Models/beach.obj");
+
+	startInstance_ = std::make_unique<Model::Instance>();
+	leftBeachInstance_ = std::make_unique<Model::Instance>();
+	rightBeachInstance_ = std::make_unique<Model::Instance>();
+	startInstance_->transform.scale = { 10.0f ,10.0f ,10.0f };
+	startInstance_->transform.rotate = Quaternion::MakeRotateXAxis(180.0f * Lamb::Math::toRadian<float>);
+	startInstance_->transform.translate;
+	leftBeachInstance_->transform.translate.x += startInstance_->transform.scale.x * 0.5f;
+	rightBeachInstance_->transform.translate.x -= startInstance_->transform.scale.x * 0.5f;
+	leftBeachInstance_->transform.SetParent(&startInstance_->transform);
+	rightBeachInstance_->transform.SetParent(&startInstance_->transform);
 }
 
 void StartArea::Update() {
 #ifdef _DEBUG
 	ImGui::Begin("Start");
-	ImGui::DragFloat3("scale", &start_->scale.x, 0.1f);
-	ImGui::DragFloat3("rotate", &start_->rotate.x, 0.1f);
-	ImGui::DragFloat3("pos", &start_->pos.x, 0.1f);
+	ImGui::DragFloat3("scale", startInstance_->transform.scale.data(), 0.1f);
+	ImGui::DragFloat4("rotate", startInstance_->transform.rotate.data(), 0.1f);
+	ImGui::DragFloat3("pos", startInstance_->transform.translate.data(), 0.1f);
 	ImGui::End();
 #endif // _DEBUG
 
@@ -36,15 +42,30 @@ void StartArea::Update() {
 }
 
 void StartArea::ResourceUpdate() {
-	start_->Update();
-	leftBeach_->Update();
-	rightBeach_->Update();
+	startInstance_->transform.CalcMatrix();
+	leftBeachInstance_->transform.CalcMatrix();
+	rightBeachInstance_->transform.CalcMatrix();
 }
 
 void StartArea::Draw(const Camera& camera) {
 	if (StageManager::GetStage() != 9) {
-		start_->Draw(camera.GetViewProjection(), camera.GetPos());
-		leftBeach_->Draw(camera.GetViewProjection(), camera.GetPos());
-		rightBeach_->Draw(camera.GetViewProjection(), camera.GetPos());
+		start_->Draw(
+			startInstance_->transform.GetMatrix(),
+			camera.GetViewProjection(),
+			startInstance_->color,
+			BlendType::kNormal
+		);
+		leftBeach_->Draw(
+			leftBeachInstance_->transform.GetMatrix(),
+			camera.GetViewProjection(),
+			leftBeachInstance_->color,
+			BlendType::kNormal
+		);
+		rightBeach_->Draw(
+			rightBeachInstance_->transform.GetMatrix(),
+			camera.GetViewProjection(),
+			rightBeachInstance_->color,
+			BlendType::kNormal
+		);
 	}
 }
