@@ -15,6 +15,7 @@
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "Engine/Core/ImGuiManager/ImGuiManager.h"
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
+#include "Utils/HSV.h"
 
 #ifdef _DEBUG
 #include "imgui.h"
@@ -59,6 +60,8 @@ RenderingManager::RenderingManager() {
 			DXGI_FORMAT_R32G32B32A32_FLOAT
 		}
 	);
+	Vector4 rgba = rgbaTexture_->color;
+	hsv = RGBToHSV({ rgba.color.r,rgba.color.g,rgba.color.b });
 
 	std::unique_ptr<Luminate> luminate = std::make_unique<Luminate>();
 	luminate->Init();
@@ -325,6 +328,16 @@ void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {
 	if(ImGui::TreeNode(guiName.c_str())){
 		ImGui::Checkbox("lighting", reinterpret_cast<bool*>(&deferredRenderingData_.isDirectionLight));
 		ImGui::DragFloat("environment", &deferredRenderingData_.environmentCoefficient, 0.001f, 0.0f, 5.0f);
+		if (ImGui::TreeNode("hsv")) {
+			ImGui::DragFloat("h", &hsv.h, 0.1f, 0.0f, 360.0f);
+			ImGui::DragFloat("s", &hsv.s, 0.001f, 0.0f, 1.0f);
+			ImGui::DragFloat("v", &hsv.v, 0.001f, 0.0f, 1.0f);
+			Vector3 rgb = HSVToRGB(hsv);
+			Vector4 rgba = { rgb, 1.0f };
+			ImGui::Text("%.4f, %.4f, %.4f", rgb.r, rgb.g, rgb.b);
+			rgbaTexture_->color = rgba.GetColorRGBA();
+			ImGui::TreePop();
+		}
 		if (ImGui::TreeNode("Bloom")) {
 			ImGui::DragInt("横カーネルサイズ", &gaussianBlurStateHorizontal_.kernelSize, 0.1f, 0, 128);
 			ImGui::DragInt("縦カーネルサイズ", &gaussianBlurStateVertical_.kernelSize, 0.1f, 0, 128);
