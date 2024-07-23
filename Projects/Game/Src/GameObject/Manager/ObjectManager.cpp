@@ -127,13 +127,6 @@ void ObjectManager::Update() {
 	// すべてに関数呼び出しするのはなんか不健全なのでバッファする
 	float32_t deltaTime = Lamb::DeltaTime();
 
-	if (cameraComp_.have()) {
-		cameraComp_->Debug("camera");
-	}
-	else if (camera_.have()) {
-		camera_->Debug("camera");
-	}
-
 	// デルタタイムセット
 	for (auto& i : objects_) {
 		i->SetDeltaTime(deltaTime);
