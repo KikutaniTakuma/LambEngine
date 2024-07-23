@@ -214,9 +214,9 @@ void Player::Initialize() {
 	easingCount_ = 4.0f;
 	deathAnimationEasingCount_ = 3.0f;
 
-	positionEasing_.Start(false, easingCount_, Easing::InSine);
-	rotateEasing_.Start(false, easingCount_ * 0.5f, Easing::InSine);
-	deathAnimationEasing_.Start(false, deathAnimationEasingCount_ * 0.5f, Easing::InSine);
+	positionEasing_.Start(false, easingCount_, Easeing::InSine);
+	rotateEasing_.Start(false, easingCount_ * 0.5f, Easeing::InSine);
+	deathAnimationEasing_.Start(false, deathAnimationEasingCount_ * 0.5f, Easeing::InSine);
 
 	for (auto& sailInterval : sailsIntervals_) {
 		sailInterval.count = 0;
@@ -262,7 +262,7 @@ void Player::Initialize() {
 	cannonParticleItr_ = cannonParticle_.begin();
 
 	deathTexture_->color = Vector4ToUint({ 1.0f,1.0f,1.0f,0.0f });
-	goEasing_.Start(false, 1.5f, Easing::InSine);
+	goEasing_.Start(false, 1.5f, Easeing::InSine);
 
 	isToCustomizeScene_ = false;
 }

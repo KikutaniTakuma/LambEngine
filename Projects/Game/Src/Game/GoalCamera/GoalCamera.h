@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Math/Vector3.h"
-#include "Utils/Easing/Easing.h"
+#include "Utils/Easeing.h"
 
 class Camera;
 class GoalCamera {
@@ -39,6 +39,6 @@ private:
 	Vector3 offset_;
 	Vector3 rotateOffset_;
 	float easingCount_;
-	Easing rotateEasing_;
-	Easing translateEasing_;
+	Easeing rotateEasing_;
+	Easeing translateEasing_;
 };

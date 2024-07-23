@@ -33,10 +33,10 @@ void ChargeCamera::Initialize() {
 	customizeToChargeRotate_.time = 1;
 
 	if (!easingTranslateData_.empty()) {
-		easingTranslateData_.front().easing.Start(false, easingTranslateData_.front().time, Easing::InSine);
+		easingTranslateData_.front().easing.Start(false, easingTranslateData_.front().time, Easeing::InSine);
 	}
 	if (!easingRotateData_.empty()) {
-		easingRotateData_.front().easing.Start(false, easingRotateData_.front().time, Easing::InSine);
+		easingRotateData_.front().easing.Start(false, easingRotateData_.front().time, Easeing::InSine);
 	}
 	isSceneChange_ = true;
 
@@ -108,8 +108,8 @@ void ChargeCamera::SetStartCamera(const Vector3& pos, const Vector3& rotate) {
 	customizeToChargeRotate_.start = rotate;
 	customizeToChargeRotate_.end = LerpShortAngle(rotate, customizeToChargeRotate_.end);
 
-	customizeToChargeTranslate_.easing.Start(false, customizeToChargeTranslate_.time, Easing::InSine);
-	customizeToChargeRotate_.easing.Start(false, customizeToChargeRotate_.time, Easing::InSine);
+	customizeToChargeTranslate_.easing.Start(false, customizeToChargeTranslate_.time, Easeing::InSine);
+	customizeToChargeRotate_.easing.Start(false, customizeToChargeRotate_.time, Easeing::InSine);
 	isSceneChange_ = true;
 	Reset();
 }
@@ -149,10 +149,10 @@ void ChargeCamera::Reset() {
 		easingRotateData.isUsed = false;
 	}
 	if (!easingTranslateData_.empty()) {
-		easingTranslateData_.front().easing.Start(false, easingTranslateData_.front().time, Easing::InSine);
+		easingTranslateData_.front().easing.Start(false, easingTranslateData_.front().time, Easeing::InSine);
 	}
 	if (!easingRotateData_.empty()) {
-		easingRotateData_.front().easing.Start(false, easingRotateData_.front().time, Easing::InSine);
+		easingRotateData_.front().easing.Start(false, easingRotateData_.front().time, Easeing::InSine);
 	}
 	customizeToChargeTranslate_.isUsed = false;
 	customizeToChargeRotate_.isUsed = false;

@@ -64,13 +64,13 @@ void SelectStageScene::Initialize() {
     left_->LoadTexture("./Resources/OutGame/triangle.png");
     left_->scale = { 55.0f, 55.0f };
     left_->pos = { -20.0f, 0.0f, 0.0f };
-    leftEasing_.Start(false, 0.1f, Easing::OutSine);
+    leftEasing_.Start(false, 0.1f, Easeing::OutSine);
     right_ = std::make_unique<Texture2D>();
     right_->LoadTexture("./Resources/OutGame/triangle.png");
     right_->scale = { 55.0f, 55.0f };
     right_->pos = { 570.0f, 0.0f, 0.0f };
     right_->rotate.z = 3.14f;
-    rightEasing_.Start(false, 0.1f, Easing::OutSine);
+    rightEasing_.Start(false, 0.1f, Easeing::OutSine);
 
     stageImage_ = std::make_unique<Texture2D>();
     stageImage_->LoadTexture("./Resources/OutGame/stageImage/stageImage.png");
@@ -172,7 +172,7 @@ void SelectStageScene::Update() {
 
     // どこ海イージング
     if (!whichSeaEasing_.GetIsActive()) {
-        whichSeaEasing_.Start(false, 0.5f, Easing::OutSine);
+        whichSeaEasing_.Start(false, 0.5f, Easeing::OutSine);
     }
 
     // イージングUpdate
@@ -234,7 +234,7 @@ void SelectStageScene::Update() {
             // Xの方がでかい
             if (std::fabs(gamepad->GetStick(Gamepad::Stick::LEFT_X)) > std::fabs(gamepad->GetStick(Gamepad::Stick::LEFT_Y))) {
                 if (gamepad->GetStick(Gamepad::Stick::LEFT_X) > 0.0f) {
-                    rightEasing_.Start(false, 0.2f, Easing::OutSine);
+                    rightEasing_.Start(false, 0.2f, Easeing::OutSine);
                     if (stageIndex_ >= StageManager::kMaxStageCount - 1) {
                         stageIndex_ = 0;
                     }
@@ -243,7 +243,7 @@ void SelectStageScene::Update() {
                     }
                 }
                 else {
-                    leftEasing_.Start(false, 0.2f, Easing::OutSine);
+                    leftEasing_.Start(false, 0.2f, Easeing::OutSine);
                     if (stageIndex_ <= 0) {
                         stageIndex_ = StageManager::kMaxStageCount - 1;
                     }
@@ -255,7 +255,7 @@ void SelectStageScene::Update() {
         }
         if (mouse->Pushed(Mouse::Button::Left) &&
             right_->Collision(ChangeMouseToTexture())) {
-            rightEasing_.Start(false, 0.2f, Easing::OutSine);
+            rightEasing_.Start(false, 0.2f, Easeing::OutSine);
             changeStageSE_->Start(0.05f);
             if (stageIndex_ >= StageManager::kMaxStageCount - 1) {
                 stageIndex_ = 0;
@@ -267,7 +267,7 @@ void SelectStageScene::Update() {
         if (mouse->Pushed(Mouse::Button::Left) &&
             left_->Collision(ChangeMouseToTexture())) {
             changeStageSE_->Start(0.05f);
-            leftEasing_.Start(false, 0.2f, Easing::OutSine);
+            leftEasing_.Start(false, 0.2f, Easeing::OutSine);
             if (stageIndex_ <= 0) {
                 stageIndex_ = StageManager::kMaxStageCount - 1;
             }

@@ -12,7 +12,7 @@
 #include "GlobalVariables/GlobalVariables.h"
 #include "Math/Mat4x4.h"
 #include "Math/Vector3.h"
-#include "Utils/Easing/Easing.h"
+#include "Utils/Easeing.h"
 
 class Camera;
 class Player :public Collider {
@@ -305,7 +305,7 @@ private:
 	std::unique_ptr<Texture2D> stageNames_;
 
 	// go
-	Easing goEasing_;
+	Easeing goEasing_;
 
 	Vector3 vector_;
 
@@ -385,8 +385,8 @@ private:
 	Vector3 goalPlayerPos_;
 	float goalPlayerRotate_;
 	float easingCount_;
-	Easing positionEasing_;
-	Easing rotateEasing_;
+	Easeing positionEasing_;
+	Easeing rotateEasing_;
 
 	// 速度描画
 	std::unique_ptr<Texture2D> tensPlace_;
@@ -408,7 +408,7 @@ private:
 	Vector3 deathPosition_;
 	Vector3 deathPlayerPosition_;
 	Vector3 deathScale_;
-	Easing deathAnimationEasing_;
+	Easeing deathAnimationEasing_;
 	float deathAnimationEasingCount_;
 	std::unique_ptr<Texture2D> deathTexture_;
 #pragma region GlobalVariables

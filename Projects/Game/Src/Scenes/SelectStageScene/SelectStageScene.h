@@ -6,7 +6,7 @@
 #include "Drawers/Particle/Particle.h"
 #include "Drawers/StringOut/StringOut.h"
 #include "GlobalVariables/GlobalVariables.h"
-#include "Utils/Easing/Easing.h"
+#include "Utils/Easeing.h"
 #include "Game/Cursor/Cursor.h"
 #include "Game/Skydome/Skydome.h"
 
@@ -63,10 +63,10 @@ private:
 
     // イージング
     // どこの海を制する？
-    Easing whichSeaEasing_;
+    Easeing whichSeaEasing_;
     // 三角矢印
-    Easing leftEasing_;
-    Easing rightEasing_;
+    Easeing leftEasing_;
+    Easeing rightEasing_;
 
     // 仮で配置
     uint32_t stageIndex_;

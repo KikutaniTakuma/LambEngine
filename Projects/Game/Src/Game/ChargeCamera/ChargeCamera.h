@@ -2,7 +2,7 @@
 #include <vector>
 
 #include "Math/Vector3.h"
-#include "Utils/Easing/Easing.h"
+#include "Utils/Easeing.h"
 
 
 class Camera;
@@ -15,7 +15,7 @@ private:
 		Vector3 end;
 		float time;
 		bool isUsed;
-		Easing easing;
+		Easeing easing;
 	};
 public:
 	ChargeCamera();
