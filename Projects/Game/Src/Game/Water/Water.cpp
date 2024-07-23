@@ -37,70 +37,31 @@ void Water::Init() {
 	waterSurface_ = std::make_unique<WaterTex2D>();
 	waterSurface_->Load();
 
-	color_ = Vector4{ 0.1f, 0.25f, 0.5f, 1.0f }.GetColorRGBA();
-
-	luminate_ = std::make_unique<PeraRender>();
-	luminate_->Initialize("./Resources/Shaders/PostShader/PostLuminate.PS.hlsl");
-
-
-	gaussianBlurObjectWidth_ = Lamb::MakeSafePtr<GaussianBlur>();
-	try {
-		gaussianBlurObjectWidth_->Init();
-	}
-	catch (const Lamb::Error& err) {
-		gaussianBlurObjectWidth_.reset();
-		throw err;
-	}
-	gaussianBlurWidth_ = std::make_unique<PeraRender>();
-	gaussianBlurWidth_->Initialize(gaussianBlurObjectWidth_.get());
-
-	gaussianBlurObjectHeight_ = Lamb::MakeSafePtr<GaussianBlur>();
-	try {
-		gaussianBlurObjectHeight_->Init();
-	}
-	catch (const Lamb::Error& err) {
-		gaussianBlurObjectHeight_.reset();
-		throw err;
-	}
-	gaussianBlurHeight_ = std::make_unique<PeraRender>();
-	gaussianBlurHeight_->Initialize(gaussianBlurObjectHeight_.get());
-
-	gaussianBlurObjectWidth_->SetGaussianState(
-		GaussianBlur::GaussianBlurState{
-			.dir = Vector2(1.0f, 0.0f),
-			.sigma = 10.0f,
-			.kernelSize = 8,
-		}
-	);
-	gaussianBlurObjectHeight_->SetGaussianState(
-		GaussianBlur::GaussianBlurState{
-			.dir = Vector2(0.0f, 1.0f),
-			.sigma = 10.0f,
-			.kernelSize = 8,
-		}
-	);
+	color_ = Vector4(0.1f, 0.25f, 0.5f, 1.0f).GetColorRGBA();
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
 	waveData.ripplesPoint = transform.translate;
-	waveData.waveStrength = 0.17f;
+	waveData.waveStrength = 0.5f;
 	waveData.ripples = 10.0f;
 	waveData.waveSpeed = 10.0f;
-	waveData.timeAttenuation = 0.0f;
+	waveData.timeAttenuation = 0.1f;
+
+	lightRotate_ = Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>;
+
+	lightScale_ = 8.0f;
+	light_ = Light{
+			.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(lightRotate_),
+			.ligColor = Vector3::kIdentity * lightScale_,
+			.eyePos = Vector3::kZero,
+			.shinness = 42.0f
+	};
+
+	density_ = 1.3f;
 }
 
 void Water::Update(const Vector3& cameraPos) {
-	waterSurface_->SetLight(
-		Light{
-			.ligDirection = Vector3{ 1.0f,-1.0f,0.0f }.Normalize(),
-			.ligColor = Vector3::kIdentity * 15.0f,
-			.eyePos = cameraPos
-		}
-	);
-
-	luminate_->Update();
-	gaussianBlurWidth_->Update();
-	gaussianBlurHeight_->Update();
+	light_.eyePos = cameraPos;
 
 	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
@@ -108,21 +69,7 @@ void Water::Update(const Vector3& cameraPos) {
 	waveData.time += Lamb::DeltaTime();
 }
 
-void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
-	std::vector renderTargets = {
-		&luminate_->GetRender()
-	};
-
-	if (pera) {
-		renderTargets.push_back(&pera->GetRender());
-	}
-
-
-	RenderTarget::SetMainAndRenderTargets(
-		renderTargets.data(),
-		static_cast<uint32_t>(renderTargets.size())
-	);
-
+void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera) {
 	waterSurface_->Draw(
 		transform.GetMatrix(),
 		cameraMat,
@@ -134,11 +81,6 @@ void Water::Draw(const Mat4x4& cameraMat, PeraRender* const pera) {
 		color_,
 		BlendType::kNone
 	);
-	waterSurface_->AllDraw(BlendType::kNone);
-
-	luminate_->Draw(Pipeline::None, gaussianBlurWidth_.get());
-	gaussianBlurWidth_->Draw(Pipeline::None, gaussianBlurHeight_.get());
-	gaussianBlurHeight_->Draw(Pipeline::Add);
 }
 
 void Water::Debug([[maybe_unused]]const std::string& guiName){
@@ -146,14 +88,26 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	ImGui::Begin(guiName.c_str());
 	ImGui::DragFloat("density", &density_, 0.01f);
 
+	if (ImGui::TreeNode("Light")) {
+		lightRotate_ *= Lamb::Math::toDegree<float>;
+		ImGui::DragFloat3("lightDirection", lightRotate_.data(), 1.0f, -360.0f, 360.0f);
+		lightRotate_ *= Lamb::Math::toRadian<float>;
+		light_.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(lightRotate_);
+		light_.ligDirection = light_.ligDirection.Normalize();
+		light_.ligColor /= lightScale_;
+		ImGui::ColorEdit3("ligColor", light_.ligColor.data());
+		ImGui::DragFloat("ligColorScale", &lightScale_, 0.01f);
+		light_.ligColor *= lightScale_;
+		ImGui::DragFloat("shinness", &light_.shinness, 0.01f, 0.0f, 256.0f);
+		ImGui::TreePop();
+	}
+
 	if (ImGui::TreeNode("WaterSRT")) {
 		ImGui::DragFloat3("pos", transform.translate.data(), 0.01f);
 		ImGui::DragFloat3("scale", transform.scale.data(), 0.01f);
 		ImGui::DragFloat3("rotate", transform.rotate.data(), 0.01f);
 		ImGui::TreePop();
 	}
-	gaussianBlurObjectWidth_->Debug("gaussianBlurObjectWidth");
-	gaussianBlurObjectHeight_->Debug("gaussianBlurObjectHeight");
 
 	if (ImGui::TreeNode("ポリゴン分割数")) {
 		ImGui::DragInt("edgeDivision", &edgeDivision_, 0.1f, 1, 64);

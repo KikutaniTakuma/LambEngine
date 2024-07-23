@@ -59,17 +59,32 @@ void RenderContextManager::SetIsNowThreading(bool isNowThreading) {
 	}
 }
 
-std::list<const RenderData*> RenderContextManager::GetRenderList(BlendType blend)
+std::pair<size_t, const std::list<RenderData*>&> RenderContextManager::CreateRenderList(BlendType blend)
 {
-	std::list<const RenderData*> result;
-
+	std::pair<size_t, const std::list<RenderData*>&> result = { 0llu, renderDataLists_[blend] };
+	size_t count = 0;
+	auto itr = renderDataLists_[blend].begin();
+	
 	for (auto& i : renderData_) {
 		if (i.second->IsDraw(blend)) {
-			result.emplace_back(i.second->GetRenderData(blend));
+			if (itr == renderDataLists_[blend].end()) {
+				break;
+			}
+			*itr = i.second->GetRenderData(blend);
+			itr++;
+			count++;
 		}
 	}
 
+	result.first = count;
+
 	return result;
+}
+
+void RenderContextManager::ResizeRenderList() {
+	for (auto& i : renderDataLists_) {
+		i.resize(renderData_.size());
+	}
 }
 
 void RenderContextManager::Draw() {
@@ -108,7 +123,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 
 
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
-	cbvRange[0].NumDescriptors = 1;
+	cbvRange[0].NumDescriptors = 2;
 	cbvRange[0].BaseShaderRegister = 0;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
@@ -172,6 +187,15 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 		size_t blendType = i < Pipeline::Blend::BlendTypeNum ? i : i - Pipeline::Blend::BlendTypeNum;
 
 		pipelineDesc.isDepth = i < Pipeline::Blend::BlendTypeNum;
+		for (uint32_t renderCount = 0; renderCount < pipelineDesc.numRenderTarget; renderCount++) {
+			if (pipelineDesc.isDepth) {
+				pipelineDesc.rtvFormtat[renderCount] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			}
+			else {
+				pipelineDesc.rtvFormtat[renderCount] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+			}
+		}
+		
 		for (uint32_t blendIndex = 0; blendIndex < pipelineDesc.numRenderTarget; blendIndex++) {
 			pipelineDesc.blend[blendIndex] = Pipeline::Blend(blendType);
 		}
@@ -193,7 +217,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimation
 
 
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
-	cbvRange[0].NumDescriptors = 1;
+	cbvRange[0].NumDescriptors = 2;
 	cbvRange[0].BaseShaderRegister = 0;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
@@ -266,11 +290,20 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimation
 	pipelineDesc.topologyType = (shader.hull != nullptr ? D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH : D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE);
 	pipelineDesc.numRenderTarget = numRenderTarget;
 
-
 	for (size_t i = 0; i < size_t(BlendType::kNum); i++) {
 		size_t blendType = i < Pipeline::Blend::BlendTypeNum ? i : i - Pipeline::Blend::BlendTypeNum;
 
 		pipelineDesc.isDepth = i < Pipeline::Blend::BlendTypeNum;
+
+		for (uint32_t renderCount = 0; renderCount < pipelineDesc.numRenderTarget; renderCount++) {
+			if (pipelineDesc.isDepth) {
+				pipelineDesc.rtvFormtat[renderCount] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			}
+			else {
+				pipelineDesc.rtvFormtat[renderCount] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+			}
+		}
+
 		for (uint32_t blendIndex = 0; blendIndex < pipelineDesc.numRenderTarget; blendIndex++) {
 			pipelineDesc.blend[blendIndex] = Pipeline::Blend(blendType);
 		}

@@ -8,13 +8,14 @@
 #include "Engine/Graphics/MeshManager/Mesh/Mesh.h"
 #include "Engine/Graphics/GraphicsStructs.h"
 
-class DeferredRendering final : public PeraPipeline {
+class DeferredRendering final : public PipelineObject {
 public:
 	struct DeferredRenderingData {
 		Vector3 eyePos;
 		uint32_t rightNum = 0;
 		DirectionLight directionLight;
 		uint32_t isDirectionLight;
+		float32_t environmentCoefficient = 1.0f;
 	};
 public:
 	DeferredRendering() = default;
@@ -27,17 +28,15 @@ public:
 
 public:
 	void Init(
-		const std::string& vsShader = "./Resources/Shaders/PostShader/Post.VS.hlsl",
-		const std::string& psShader = "./Resources/Shaders/PostShader/PostDeferred.PS.hlsl",
-		const std::string& gsFileName = {},
-		const std::string& hsFileName = {},
-		const std::string& dsFileName = {}
+		const std::string& vsShader = "./Resources/Shaders/DeferredRendering/DeferredRendering.VS.hlsl",
+		const std::string& psShader = "./Resources/Shaders/DeferredRendering/DeferredRendering.PS.hlsl",
+		std::initializer_list<DXGI_FORMAT> formtats = { DXGI_FORMAT_R32G32B32A32_FLOAT }
 	) override;
 
 public:
 	void Use(Pipeline::Blend blendType, bool isDepth) override;
 
-	void Update()override;
+	void Draw();
 
 	void SetDeferredRenderingData(const DeferredRenderingData& deferredRenderingData) {
 		*deferredRenderingData_ = deferredRenderingData;
@@ -56,11 +55,15 @@ public:
 	void SetWoprldPositionHandle(D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle) {
 		worldPositionTextureHandle_ = worldPositionTextureHandle;
 	}
+	void SetEnvironmentHandle(D3D12_GPU_DESCRIPTOR_HANDLE environmentTextureHandle) {
+		environmentTextureHandle_ = environmentTextureHandle;
+	}
 
 private:
 	ConstantBuffer<DeferredRenderingData> deferredRenderingData_;
 	StructuredBuffer<PointLight> lights_;
-	D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle_;
-	D3D12_GPU_DESCRIPTOR_HANDLE normalTextureHandle_;
-	D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle_;
+	D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle_ = {};
+	D3D12_GPU_DESCRIPTOR_HANDLE normalTextureHandle_ = {};
+	D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle_ = {};
+	D3D12_GPU_DESCRIPTOR_HANDLE environmentTextureHandle_ = {};
 };

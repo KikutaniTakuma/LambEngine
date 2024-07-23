@@ -9,6 +9,7 @@
 #include <concepts>
 #include <array>
 #include <memory>
+#include <algorithm>
 
 
 class BaseRenderContext {
@@ -37,7 +38,12 @@ public:
     virtual void SetPipeline(Pipeline* const pipeline) = 0;
     virtual void SetWVPMatrix(const WVPMatrix& matrix) = 0;
     virtual void SetColor(const Vector4& color) = 0;
-    virtual void SetLight(const Light& light) = 0;
+    virtual void SetLight(const DirectionLight& light) = 0;
+    virtual void SetCameraPos(const Vector3& cameraPos) = 0;
+    virtual void ZSort() = 0;
+    virtual void DataSet() = 0;
+
+
 
 public:
     void AddDrawCount() {
@@ -92,6 +98,8 @@ public:
         shaderData_.color.Create(bufferSize);
         shaderData_.shaderStruct.Create(bufferSize);
 
+        drawData_.resize(bufferSize);
+
 
         pipeline_ = nullptr;
         drawCount_ = 0u;
@@ -99,11 +107,18 @@ public:
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
 
-        descriptorHeap->BookingHeapPos(4);
+        descriptorHeap->BookingHeapPos(5);
         descriptorHeap->CreateView(shaderData_.light);
+        descriptorHeap->CreateView(shaderData_.eyePos);
         descriptorHeap->CreateView(shaderData_.wvpMatrix);
         descriptorHeap->CreateView(shaderData_.color);
         descriptorHeap->CreateView(shaderData_.shaderStruct);
+
+        shaderData_.wvpMatrix.OffWright();
+        shaderData_.color.OffWright();
+        shaderData_.shaderStruct.OffWright();
+        shaderData_.light.OffWright(); 
+        shaderData_.eyePos.OffWright();
 
         typeID_ = (typeid(RenderContext<T, bufferSize>).name());
     }
@@ -112,6 +127,7 @@ public:
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
 
         descriptorHeap->ReleaseView(shaderData_.light.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.eyePos.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.wvpMatrix.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.color.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.shaderStruct.GetHandleUINT());
@@ -173,29 +189,75 @@ public:
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        shaderData_.wvpMatrix[drawCount_].worldMat = mesh_->node.loacalMatrix * matrix.worldMat;
-        shaderData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
+        drawData_[drawCount_].wvpMatrix.worldMat = mesh_->node.loacalMatrix * matrix.worldMat;
+        drawData_[drawCount_].wvpMatrix.cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        shaderData_.color[drawCount_] = color;
+        drawData_[drawCount_].color = color;
     }
-    inline void SetLight(const Light& light) override {
+    inline void SetLight(const DirectionLight& light) override {
+        shaderData_.light.OnWright();
         *shaderData_.light = light;
+        shaderData_.light.OffWright(); 
+    }
+    inline void SetCameraPos(const Vector3& cameraPos) {
+        shaderData_.eyePos.OnWright();
+        *shaderData_.eyePos = cameraPos;
+        shaderData_.eyePos.OffWright();
     }
     inline void SetShaderStruct(const T& data) {
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
-        shaderData_.shaderStruct[drawCount_] = data;
+        drawData_[drawCount_].shaderStruct = data;
+    }
+
+    inline void ZSort() override {
+        // 1以下ならソートする必要ないので早期リターン
+        if (drawCount_ <= 1) {
+            return;
+        }
+        
+        
+        // 正規化デバイス座標系にしてその深度値を入れる
+        for (uint32_t i = 0; i < drawCount_; i++) {
+            Mat4x4&& ndcMatrix = drawData_[i].wvpMatrix.worldMat * drawData_[i].wvpMatrix.cameraMat;
+            drawData_[i].depth = ndcMatrix.GetTranslate().z;
+        }
+        // 描画をする部分だけソート
+        auto endItr = drawData_.begin() + drawCount_;
+        // 深度値でソート(大きい順。奥から描画していくため)
+        std::sort(drawData_.begin(), endItr, [](const DrawData<T>& left, const DrawData<T>& right) {
+            return left.depth > right.depth;
+            }
+        );
+
+    }
+
+    inline void DataSet() override {
+        shaderData_.wvpMatrix.OnWright();
+        shaderData_.color.OnWright();
+        shaderData_.shaderStruct.OnWright();
+
+        for (uint32_t i = 0; i < drawCount_; i++) {
+            shaderData_.wvpMatrix[i] = std::move(drawData_[i].wvpMatrix);
+            shaderData_.color[i] = std::move(drawData_[i].color);
+            shaderData_.shaderStruct[i] = std::move(drawData_[i].shaderStruct);
+        }
+
+        shaderData_.wvpMatrix.OffWright();
+        shaderData_.color.OffWright();
+        shaderData_.shaderStruct.OffWright();
     }
 
 
 private:
     ShaderData<T> shaderData_;
+    std::vector<DrawData<T>> drawData_;
 };
 
 template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
@@ -208,6 +270,8 @@ public:
         shaderData_.color.Create(bufferSize);
         shaderData_.shaderStruct.Create(bufferSize);
 
+        drawData_.resize(bufferSize);
+
 
         pipeline_ = nullptr;
         drawCount_ = 0u;
@@ -215,11 +279,18 @@ public:
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
 
-        descriptorHeap->BookingHeapPos(4);
+        descriptorHeap->BookingHeapPos(5);
         descriptorHeap->CreateView(shaderData_.light);
+        descriptorHeap->CreateView(shaderData_.eyePos);
         descriptorHeap->CreateView(shaderData_.wvpMatrix);
         descriptorHeap->CreateView(shaderData_.color);
         descriptorHeap->CreateView(shaderData_.shaderStruct);
+
+        shaderData_.wvpMatrix.OffWright();
+        shaderData_.color.OffWright();
+        shaderData_.shaderStruct.OffWright();
+        shaderData_.light.OffWright();
+        shaderData_.eyePos.OffWright();
 
         typeID_ = (typeid(SkinRenderContext<T, bufferSize>).name());
     }
@@ -228,6 +299,7 @@ public:
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
 
         descriptorHeap->ReleaseView(shaderData_.light.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.eyePos.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.wvpMatrix.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.color.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.shaderStruct.GetHandleUINT());
@@ -302,29 +374,74 @@ public:
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        shaderData_.wvpMatrix[drawCount_].worldMat = matrix.worldMat;
-        shaderData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
+        drawData_[drawCount_].wvpMatrix.worldMat = matrix.worldMat;
+        drawData_[drawCount_].wvpMatrix.cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        shaderData_.color[drawCount_] = color;
+        drawData_[drawCount_].color = color;
     }
-    inline void SetLight(const Light& light) override {
+    inline void SetLight(const DirectionLight& light) override {
+        shaderData_.light.OnWright();
         *shaderData_.light = light;
+        shaderData_.light.OffWright();
+    }
+    inline void SetCameraPos(const Vector3& cameraPos) {
+        shaderData_.eyePos.OnWright();
+        *shaderData_.eyePos = cameraPos;
+        shaderData_.eyePos.OffWright();
     }
     inline void SetShaderStruct(const T& data) {
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
-        shaderData_.shaderStruct[drawCount_] = data;
+        drawData_[drawCount_].shaderStruct = data;
+    }
+
+    inline void ZSort() override {
+        // 1以下ならソートする必要ないので早期リターン
+        if (drawCount_ <= 1) {
+            return;
+        }
+
+
+        // 正規化デバイス座標系にしてその深度値を入れる
+        for (uint32_t i = 0; i < drawCount_; i++) {
+            Mat4x4&& ndcMatrix = drawData_[i].wvpMatrix.worldMat * drawData_[i].wvpMatrix.cameraMat;
+            drawData_[i].depth = ndcMatrix.GetTranslate().z;
+        }
+        // 描画をする部分だけソート
+        auto endItr = drawData_.begin() + drawCount_;
+        // 深度値でソート(大きい順。奥から描画していくため)
+        std::sort(drawData_.begin(), endItr, [](const DrawData<T>& left, const DrawData<T>& right) {
+            return left.depth > right.depth;
+            }
+        );
+    }
+
+    inline void DataSet() override {
+        shaderData_.wvpMatrix.OnWright();
+        shaderData_.color.OnWright();
+        shaderData_.shaderStruct.OnWright();
+
+        for (uint32_t i = 0; i < drawCount_; i++) {
+            shaderData_.wvpMatrix[i] = std::move(drawData_[i].wvpMatrix);
+            shaderData_.color[i] = std::move(drawData_[i].color);
+            shaderData_.shaderStruct[i] = std::move(drawData_[i].shaderStruct);
+        }
+
+        shaderData_.wvpMatrix.OffWright();
+        shaderData_.color.OffWright();
+        shaderData_.shaderStruct.OffWright();
     }
 
 
 private:
     ShaderData<T> shaderData_;
+    std::vector<DrawData<T>> drawData_;
 
     SkinCluster* skinCluster_;
 };
@@ -352,7 +469,7 @@ public:
         renderDatas_[blend].reset(renderData);
     }
 
-    const RenderData* const GetRenderData(BlendType blend) const {
+    RenderData* const GetRenderData(BlendType blend) const {
         return renderDatas_[blend].get();
     }
     bool IsDraw(BlendType blend) const {
@@ -376,6 +493,12 @@ public:
     inline void DrawAndResetDrawCount() {
         Draw();
         ResetDrawCount();
+    }
+
+    inline void DataSet() {
+        for (auto& i : renderDatas_) {
+            i->DataSet();
+        }
     }
 
 public:

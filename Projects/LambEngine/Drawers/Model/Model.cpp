@@ -19,7 +19,7 @@ void Model::Load(const std::string& fileName) {
 				.psFileName = "./Resources/Shaders/ModelShader/Model.PS.hlsl",
 			}
 		},
-		2
+		3
 	);
 
 	renderSet = renderContextManager->Get(
@@ -29,14 +29,6 @@ void Model::Load(const std::string& fileName) {
 				.vsFileName = "./Resources/Shaders/ModelShader/Model.VS.hlsl",
 				.psFileName = "./Resources/Shaders/ModelShader/Model.PS.hlsl",
 			}
-		}
-	);
-
-	SetLight(
-		Light{
-			.ligDirection{-Vector3::kYIdentity},
-			.pad0{},
-			.ligColor{ Vector3::kIdentity },
 		}
 	);
 }
@@ -49,9 +41,26 @@ void Model::Draw(
 	bool isLighting
 ) {
 	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
-	renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
+	if (blend == BlendType::kNone) {
+		renderContext->SetShaderStruct(static_cast<uint32_t>(false));
+	}
+	else {
+		renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
+	}
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
+}
+
+void Model::Draw(const Data& data) {
+	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(data.blend);
+	if (data.blend == BlendType::kNone) {
+		renderContext->SetShaderStruct(static_cast<uint32_t>(false));
+	}
+	else {
+		renderContext->SetShaderStruct(static_cast<uint32_t>(data.isLighting));
+	}
+
+	BaseDrawer::Draw(data.worldMatrix, data.camera, data.color, data.blend);
 }
 
 const Node& Model::GetNode() const

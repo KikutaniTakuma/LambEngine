@@ -38,11 +38,6 @@ public:
 	void SetViewPort(uint32_t width, uint32_t height);
 
 	/// <summary>
-	/// メインレンダーターゲットにセットする
-	/// </summary>
-	void SetMainRenderTarget();
-
-	/// <summary>
 	/// バックバッファのクリア
 	/// </summary>
 	void ClearBackBuffer();

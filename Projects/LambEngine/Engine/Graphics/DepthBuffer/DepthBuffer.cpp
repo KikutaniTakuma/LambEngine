@@ -111,7 +111,7 @@ void DepthBuffer::CreateView(
 	);
 }
 
-D3D12_CPU_DESCRIPTOR_HANDLE DepthBuffer::GetDepthHandle() const {
+const D3D12_CPU_DESCRIPTOR_HANDLE& DepthBuffer::GetDepthHandle() const {
 	return handle_;
 }
 Texture* const DepthBuffer::GetTex() const {
@@ -141,4 +141,11 @@ void DepthBuffer::Barrier()
 	default:
 		break;
 	}
+}
+
+void DepthBuffer::Clear()
+{
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+	commandList->ClearDepthStencilView(handle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 }

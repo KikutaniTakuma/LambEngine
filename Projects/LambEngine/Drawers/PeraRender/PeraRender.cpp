@@ -30,41 +30,27 @@ PeraRender::~PeraRender() {
 	peraPipelineObject_.reset();
 }
 
-void PeraRender::Initialize(const std::string& psFileName) {
-	peraPipelineObject_->Init("./Resources/Shaders/PostShader/Post.VS.hlsl", psFileName);
+void PeraRender::Initialize(const std::string& psFileName, std::initializer_list<DXGI_FORMAT> formtats) {
+	peraPipelineObject_->Init("./Resources/Shaders/PostShader/Post.VS.hlsl", psFileName, formtats);
 }
 
 void PeraRender::Initialize(PeraPipeline* pipelineObject) {
 	ResetPipelineObject(pipelineObject);
 }
 
-void PeraRender::Update() {
-	peraPipelineObject_->color = UintToVector4(color);
-}
-
-void PeraRender::PreDraw() {
-	peraPipelineObject_->GetRender().SetThisRenderTarget();
+void PeraRender::PreDraw(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
+	peraPipelineObject_->GetRender().SetThisRenderTarget(depthHandle);
 }
 
 void PeraRender::Draw(
 	Pipeline::Blend blend, 
-	PeraRender* pera, 
-	bool isDepth
+	D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
 ) {
-	if (!!pera) {
-		pera->PreDraw();
-		peraPipelineObject_->GetRender().ChangeResourceState();
-	}
-	else {
-		// 描画先をメインレンダーターゲットに変更
-		peraPipelineObject_->GetRender().SetMainRenderTarget();
-	}
-
 	peraPipelineObject_->Update();
 
 	// 各種描画コマンドを積む
 	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	peraPipelineObject_->Use(blend, isDepth);
+	peraPipelineObject_->Use(blend, !!depthHandle);
 	commandList->DrawInstanced(3, 1, 0, 0);
 }
 

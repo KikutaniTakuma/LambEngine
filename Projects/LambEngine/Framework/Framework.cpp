@@ -9,10 +9,14 @@
 
 #include "Drawers/Line/Line.h"
 
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
+#include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+
 void Framework::Initialize() {
 	// ライブラリ初期化
 	Engine::Initialize(initDesc_.windowName, initDesc_.windowSize, initDesc_.maxFps, initDesc_.isFullesceen);
 
+	RenderingManager::Initialize();
 
 	// 入力処理初期化
 	Input::Initialize();
@@ -26,6 +30,8 @@ void Framework::Finalize() {
 
 	// 入力関連解放
 	Input::Finalize();
+
+	RenderingManager::Finalize();
 
 	// ライブラリ終了
 	Engine::Finalize();
@@ -75,8 +81,6 @@ void Framework::Execution() {
 			// 描画処理
 			this->Draw();
 
-			Line::AllDraw();
-
 			// フレーム終了処理
 			Engine::FrameEnd();
 		}
@@ -88,4 +92,15 @@ void Framework::Execution() {
 		Lamb::ErrorLog(err.what(), __func__);
 	}
 	this->Finalize();
+}
+
+void Framework::Draw() {
+	const Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
+
+	renderContextManager->ResizeRenderList();
+
+	RenderingManager::GetInstance()->Draw();
+
+	// ドローカウントリセット
+	renderContextManager->ResetDrawCount();
 }

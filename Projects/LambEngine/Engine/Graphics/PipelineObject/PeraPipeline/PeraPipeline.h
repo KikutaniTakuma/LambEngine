@@ -23,9 +23,7 @@ public:
 	virtual void Init(
 		const std::string& vsShader,
 		const std::string& psShader,
-		const std::string& gsFileName = {},
-		const std::string& hsFileName = {},
-		const std::string& dsFileName = {}
+		std::initializer_list<DXGI_FORMAT> formtats = {DXGI_FORMAT_R32G32B32A32_FLOAT}
 	) override;
 
 public:
@@ -45,8 +43,6 @@ public:
 	}
 
 public:
-	Mat4x4 worldMat = Mat4x4::kIdentity;
-	Mat4x4 viewProjection = Mat4x4::kIdentity;
 	Vector4 color = Vector4::kIdentity;
 
 protected:

@@ -78,6 +78,8 @@ public:
 
 	virtual void Draw() {}
 
+	virtual void Debug([[maybe_unused]]const std::string& guiName) {};
+
 public:
 	const Object& getObject() const {
 		return object_;
@@ -106,6 +108,8 @@ public:
 
 	virtual void Draw() const;
 
+	virtual void Debug(const std::string& guiName);
+
 public:
 	void SetDeltaTime(float32_t deltatime) {
 		deltatime_ = deltatime;
@@ -130,9 +134,14 @@ public:
 		}
 	}
 
+	const std::unordered_set<std::string>& GetTags() const {
+		return tags_;
+	}
+
 	template<IsBaseIComp CompType>
 	CompType* const AddComp() {
 		auto&& key = std::string(typeid(CompType).name());
+		tags_.insert(key);
 		bool isExist = components_.contains(key);
 
 		if (not isExist) {

@@ -31,14 +31,6 @@ void AnimationModel::Load(const std::string& fileName) {
 		}
 	);
 
-	SetLight(
-		Light{
-			.ligDirection{-Vector3::kYIdentity},
-			.pad0{},
-			.ligColor{ Vector3::kIdentity },
-		}
-	);
-
 
 	animator_.reset();
 	animator_ = std::make_unique<Animator>();

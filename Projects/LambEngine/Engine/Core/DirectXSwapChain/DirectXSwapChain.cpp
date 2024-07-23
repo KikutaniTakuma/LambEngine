@@ -94,18 +94,7 @@ void DirectXSwapChain::SetViewPort(uint32_t width, uint32_t height) {
 	commandList->RSSetScissorRects(1, &scissorRect);
 }
 
-void DirectXSwapChain::SetMainRenderTarget() {
-	RtvHeap* const rtvHeap = RtvHeap::GetInstance();
-	rtvHeap->SetMainRtv();
-}
-
 void DirectXSwapChain::ClearBackBuffer() {
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-
-
-	auto dsvH = Engine::GetDsvHandle();
-	commandList->ClearDepthStencilView(dsvH, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-
 	UINT backBufferIndex = swapChain_->GetCurrentBackBufferIndex();
 
 	// 指定した色で画面全体をクリアする

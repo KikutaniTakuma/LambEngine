@@ -26,9 +26,7 @@ public:
 	void Init(
 		const std::string& vsShader = "./Resources/Shaders/PostShader/Post.VS.hlsl",
 		const std::string& psShader = "./Resources/Shaders/PostShader/PostOutline.PS.hlsl",
-		const std::string& gsFileName = {},
-		const std::string& hsFileName = {},
-		const std::string& dsFileName = {}
+		std::initializer_list<DXGI_FORMAT> formtats = { DXGI_FORMAT_R32G32B32A32_FLOAT }
 	) override;
 
 public:

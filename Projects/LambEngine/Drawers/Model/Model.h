@@ -6,6 +6,20 @@
 /// </summary>
 class Model : public BaseDrawer {
 public:
+	struct Data {
+		Mat4x4 worldMatrix = Mat4x4::kIdentity;
+		Mat4x4 camera = Mat4x4::kIdentity;
+		uint32_t color = 0xffffffff;
+		BlendType blend = BlendType::kNone;
+		bool isLighting = true;
+	};
+	struct Instance {
+		QuaternionTransform transform;
+		uint32_t color = 0xffffffff;
+		bool isLighting = true;
+	};
+
+public:
 	Model() = default;
 	Model(const std::string& fileName);
 	Model(const Model&) = default;
@@ -25,6 +39,8 @@ public:
 		BlendType blend,
 		bool isLighting = true
 	);
+
+	void Draw(const Data& data);
 
 public:
 	const Node& GetNode() const;

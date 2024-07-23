@@ -157,6 +157,7 @@
     <ClCompile Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\DeferredRendering\DeferredRendering.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\GaussianBlur\GaussianBlur.cpp" />
+    <ClCompile Include="Engine\Graphics\PipelineObject\Luminate\Luminate.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\Outline\Outline.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\PipelineObject.cpp" />
@@ -236,6 +237,7 @@
     <ClInclude Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\DeferredRendering\DeferredRendering.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\GaussianBlur\GaussianBlur.h" />
+    <ClInclude Include="Engine\Graphics\PipelineObject\Luminate\Luminate.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\Outline\Outline.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\PipelineObject.h" />

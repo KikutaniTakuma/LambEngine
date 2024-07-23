@@ -1,18 +1,21 @@
 #include "Texture2D.hlsli"
 
-PixelShaderOutPut main(VertexShaderOutput input)
+PixelShaderOutPut3 main(VertexShaderOutput input)
 {
-	PixelShaderOutPut output;
+	PixelShaderOutPut3 output;
 
     uint32_t textureID = kTexture2DData[input.instanceID].textureID;
 	
 	float32_t4 textureColor = textures[textureID].Sample(smp, input.uv);
 
-	output.color = textureColor * kColor[input.instanceID].color;
+	output.color0 = textureColor * kColor[input.instanceID].color;
 
-	if(output.color.a == 0.0f){
-		discard;
-	}
+    // 法線
+    output.color1.xyz = input.normal;
+    output.color1.w = 1.0f;
+
+    // ポジション
+    output.color2 = input.worldPosition;
     
 	return output;
 }

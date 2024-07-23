@@ -110,6 +110,23 @@ enum BlendType {
     kNum
 };
 
+#ifdef _DEBUG
+static const std::array<std::string, BlendType::kNum> kBlendTypeStrs = {
+    "kNone",
+
+    "kNormal",
+    "kAdd",
+    "kSub",
+    "kMul",
+
+    "kUnenableDepthNone",
+    "kUnenableDepthNormal",
+    "kUnenableDepthAdd",
+    "kUnenableDepthSub",
+    "kUnenableDepthMul",
+};
+#endif // _DEBUG
+
 struct PointLight {
     Vector3 ptPos;
     float pad3;
@@ -119,17 +136,18 @@ struct PointLight {
 
 struct DirectionLight {
     Vector3 ligDirection = -Vector3::kYIdentity;
-    float pad0;
+    float shinness = 1.0f;
     Vector3 ligColor = Vector3::kIdentity;
-    float pad1;
+    float pad0 = 0.0f;
 };
 
 struct Light {
     Vector3 ligDirection = -Vector3::kYIdentity;
     float pad0;
     Vector3 ligColor = Vector3::kIdentity;
-    Vector3 eyePos;
     float pad2;
+    Vector3 eyePos;
+    float shinness;
     Vector3 ptPos;
     float pad3;
     Vector3 ptColor;
@@ -138,10 +156,19 @@ struct Light {
 
 template<class T>
 struct ShaderData {
-    ConstantBuffer<Light> light;
+    ConstantBuffer<DirectionLight> light;
+    ConstantBuffer<Vector3> eyePos;
     StructuredBuffer<WVPMatrix> wvpMatrix;
     StructuredBuffer<Vector4> color;
     StructuredBuffer<T> shaderStruct;
+};
+
+template<class T>
+struct DrawData {
+    float depth;
+    WVPMatrix wvpMatrix;
+    Vector4 color;
+    T shaderStruct;
 };
 
 struct ShaderFileNames {

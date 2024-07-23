@@ -107,7 +107,7 @@ void Pipeline::Create(
 	// 書き込むRTVの情報
 	graphicsPipelineStateDesc.NumRenderTargets = desc_.numRenderTarget;
 	for (uint32_t i = 0; i < desc_.numRenderTarget; ++i) {
-		graphicsPipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		graphicsPipelineStateDesc.RTVFormats[i] = desc_.rtvFormtat[i];
 	}
 	// 利用するトポロジ(形状)のタイプ
 	graphicsPipelineStateDesc.PrimitiveTopologyType = desc_.topologyType;
@@ -245,7 +245,7 @@ void Pipeline::CreateCubeMap(
 	graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 	for (uint32_t i = 0; i < desc_.numRenderTarget; i++) {
-		graphicsPipelineStateDesc.RTVFormats[i] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		graphicsPipelineStateDesc.RTVFormats[i] = desc_.rtvFormtat[i];
 		graphicsPipelineStateDesc.BlendState.RenderTarget[i].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 		
 		switch (desc_.blend[i])
@@ -333,6 +333,7 @@ bool Pipeline::Desc::operator==(const Pipeline::Desc& right) const {
 	return this->shader == right.shader
 		and this->vsInputData == right.vsInputData
 		and this->blend == right.blend
+		and this->rtvFormtat == right.rtvFormtat
 		and this->cullMode == right.cullMode
 		and this->solidState == right.solidState
 		and this->topologyType == right.topologyType

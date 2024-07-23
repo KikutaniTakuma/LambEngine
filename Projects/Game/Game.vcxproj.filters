@@ -71,9 +71,6 @@
     <ClCompile Include="Src\Game\Player\Player.cpp">
       <Filter>Game\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Scenes\Manager\PostEffectManager\PostEffectManager.cpp">
-      <Filter>Scenes\Manager\PostEffectManager</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Game\Coin\Coin.cpp">
       <Filter>Game\Coin</Filter>
     </ClCompile>
@@ -196,9 +193,6 @@
     <Filter Include="Game\Player">
       <UniqueIdentifier>{dc376baf-7d16-46b1-a3ef-b258172c0b20}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scenes\Manager\PostEffectManager">
-      <UniqueIdentifier>{30aad260-62a3-477d-8d94-72db07877da4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Coin">
       <UniqueIdentifier>{b499dd18-c71b-43fe-b48e-a5f00311c7c4}</UniqueIdentifier>
     </Filter>
@@ -287,9 +281,6 @@
     </ClInclude>
     <ClInclude Include="Src\Game\Player\Player.h">
       <Filter>Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Scenes\Manager\PostEffectManager\PostEffectManager.h">
-      <Filter>Scenes\Manager\PostEffectManager</Filter>
     </ClInclude>
     <ClInclude Include="Src\Game\Coin\Coin.h">
       <Filter>Game\Coin</Filter>

@@ -22,24 +22,24 @@ private:
 private:
 	static constexpr uint16_t kVertexNum = 2u;
 	static constexpr uint16_t kDrawMaxNumber_ = 4096u;
-	static uint32_t indexCount_;
+	static uint32_t depthDrawCount_;
+	static uint32_t nodepthDrawCount_;
 
 public:
 	static void Initialize();
 
 	static void Finalize();
 
-	static void AllDraw();
-
-private:
-	static void ResetDrawCount();
+	static void AllDraw(bool isDepth);
 
 private:
 	static Shader shader_;
 
-	static Lamb::SafePtr<class Pipeline> pipeline_;
+	static Lamb::SafePtr<class Pipeline> depthPipeline_;
+	static Lamb::SafePtr<class Pipeline> nodepthPipeline_;
 
-	static std::unique_ptr<StructuredBuffer<VertxData>> vertData_;
+	static std::unique_ptr<StructuredBuffer<VertxData>> depthVertData_;
+	static std::unique_ptr<StructuredBuffer<VertxData>> nodepthVertData_;
 
 public:
 	Line();
@@ -53,9 +53,15 @@ public:
 public:
 	void Debug(const std::string& guiName);
 
-	void Draw(const Mat4x4& viewProjection);
+	void Draw(const Mat4x4& viewProjection, bool isDepth = false);
 
-	static void Draw(const Vector3& start, const Vector3& end, const Mat4x4& viewProjection, uint32_t color);
+	static void Draw(
+		const Vector3& start, 
+		const Vector3& end,
+		const Mat4x4& viewProjection, 
+		uint32_t color = 0xffffffff, 
+		bool isDepth = false
+	);
 
 public:
 	Vector3 start;

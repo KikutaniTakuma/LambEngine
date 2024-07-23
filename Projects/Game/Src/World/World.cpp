@@ -2,8 +2,6 @@
 #include "Editor/ParticleEditor/ParticleEditor.h"
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "../Game/Water/Water.h"
-#include "../Game/Cloud/Cloud.h"
-
 #include "GameObject/Manager/ObjectManager.h"
 #include "GameObject/Manager/TransformCompUpdater.h"
 
@@ -80,7 +78,7 @@ void World::Draw() {
 		sceneManager_->Draw();
 		particleEditor_->Draw(sceneManager_->GetCurrentSceneCamera());
 
-		sceneManager_->AllDraw();
+		Framework::Draw();
 	}
 	else {
 		isEnd_ = true;

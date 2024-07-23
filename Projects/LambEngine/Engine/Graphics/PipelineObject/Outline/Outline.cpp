@@ -9,7 +9,7 @@
 #include "Utils/EngineInfo.h"
 #include "Engine/Engine.h"
 
-#include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
 
 #ifdef _DEBUG
 #include "imgui.h"
@@ -28,7 +28,7 @@ void Outline::Debug([[maybe_unused]] const std::string& guiName) {
 
 void Outline::ChangeDepthBufferState()
 {
-	auto& depth = Engine::GetInstance()->GetDepthBuffer();
+	auto& depth = RenderingManager::GetInstance()->GetDepthBuffer();
 	depth.Barrier();
 }
 
@@ -45,7 +45,7 @@ void Outline::Use(Pipeline::Blend blendType, bool isDepth) {
 	}
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
-	auto& depth = Engine::GetInstance()->GetDepthBuffer();
+	auto& depth = RenderingManager::GetInstance()->GetDepthBuffer();
 
 	render_->UseThisRenderTargetShaderResource();
 	commandList->SetGraphicsRootDescriptorTable(1, colorBuf_.GetHandleGPU());
@@ -55,9 +55,7 @@ void Outline::Use(Pipeline::Blend blendType, bool isDepth) {
 void Outline::Init(
 	const std::string& vsShader,
 	const std::string& psShader,
-	const std::string& gsFileName,
-	const std::string& hsFileName,
-	const std::string& dsFileName
+	std::initializer_list<DXGI_FORMAT> formtats
 ) {
 	if (width_ == 0u) {
 		width_ = static_cast<uint32_t>(Lamb::ClientSize().x);
@@ -70,10 +68,7 @@ void Outline::Init(
 
 	this->LoadShader(
 		vsShader,
-		psShader,
-		gsFileName,
-		hsFileName,
-		dsFileName
+		psShader
 	);
 
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> renderRange = {};
@@ -131,7 +126,14 @@ void Outline::Init(
 	pipelineDesc.solidState = Pipeline::SolidState::Solid;
 	pipelineDesc.cullMode = Pipeline::CullMode::Back;
 	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-	pipelineDesc.numRenderTarget = 1;
+	pipelineDesc.numRenderTarget = uint32_t(formtats.size());
+	for (uint32_t count = 0; const auto & i : formtats) {
+		pipelineDesc.rtvFormtat[count] = i;
+		count++;
+		if (8 <= count) {
+			break;
+		}
+	}
 
 
 	for (int32_t i = Pipeline::Blend::None; i < Pipeline::Blend::BlendTypeNum; i++) {

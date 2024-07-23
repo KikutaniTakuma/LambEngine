@@ -36,12 +36,15 @@ public:
 		return parent_.have();
 	}
 
-	void Debug(const std::string& guiName);
+	void Debug(const std::string& guiName) override;
 
 public:
 	Vector3 scale;
 	Quaternion rotate;
 	Vector3 translate;
+#ifdef _DEBUG
+	Vector3 eulerRotate;
+#endif // _DEBUG
 
 private:
 	Mat4x4 worldMatrix_;
