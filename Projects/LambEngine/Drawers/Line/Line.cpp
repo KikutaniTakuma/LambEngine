@@ -53,12 +53,12 @@ void Line::Initialize() {
 	pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	pipelineDesc.isDepth = true;
 	pipelineManager->SetDesc(pipelineDesc);
-	nodepthPipeline_ = pipelineManager->Create();
+	depthPipeline_ = pipelineManager->Create();
 
 	pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	pipelineDesc.isDepth = false;
 	pipelineManager->SetDesc(pipelineDesc);
-	depthPipeline_ = pipelineManager->Create();
+	nodepthPipeline_ = pipelineManager->Create();
 
 	pipelineManager->StateReset();
 
