@@ -7,11 +7,30 @@
 
 void Camera3DComp::Init() {
 	transform_ = object_.AddComp<decltype(transform_)::type>();
+	viewMatrix_ = transform_->GetMatrix().Inverse();
+	fov_ = 0.45f;
+	aspectRatio_ = 720.0f / 1280.0f;
+	nearClip_ = 0.1f;
+	farClip_ = 1000.0f;
+
+	projectionMatrix_ = Mat4x4::MakePerspectiveFov(fov_, aspectRatio_, nearClip_, farClip_);
 }
 
 void Camera3DComp::LastUpdate()
 {
-	cameraMatrix_ = transform_->GetMatrix().Inverse() * Mat4x4::MakePerspectiveFov(fov_, aspectRatio_, nearClip_, farClip_);
+	viewMatrix_ = transform_->GetMatrix().Inverse();
+	projectionMatrix_ = Mat4x4::MakePerspectiveFov(fov_, aspectRatio_, nearClip_, farClip_);
+	cameraMatrix_ = viewMatrix_ * projectionMatrix_;
+}
+
+const Mat4x4& Camera3DComp::GetViewMatrix() const
+{
+	return viewMatrix_;
+}
+
+const Mat4x4& Camera3DComp::GetProjectionMatrix() const
+{
+	return projectionMatrix_;
 }
 
 const Vector3& Camera3DComp::GetPos() const

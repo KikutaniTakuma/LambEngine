@@ -274,6 +274,7 @@
     <ClInclude Include="Utils\ExecutionLog.h" />
     <ClInclude Include="Utils\FileUtils.h" />
     <ClInclude Include="Utils\Flg.h" />
+    <ClInclude Include="Utils\HSV.h" />
     <ClInclude Include="Utils\Random.h" />
     <ClInclude Include="Utils\SafeDelete.h" />
     <ClInclude Include="Utils\SafePtr.h" />

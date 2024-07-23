@@ -3,7 +3,7 @@
 
 PixelShaderOutPut main(Output input) {
     PixelShaderOutPut output;
-    output.color =  tex.Sample(smp, input.uv);
+    output.color =  tex.Sample(smp, input.uv) * kColor.color;
 
     return output;
 }

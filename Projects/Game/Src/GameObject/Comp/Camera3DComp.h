@@ -21,6 +21,9 @@ public:
 	const Mat4x4& GetMatrix() const {
 		return cameraMatrix_;
 	}
+	const Mat4x4& GetViewMatrix() const;
+	const Mat4x4& GetProjectionMatrix() const;
+
 
 public:
 	TransformComp& GetTransformComp() {
@@ -57,6 +60,8 @@ private:
 	float32_t aspectRatio_ = 0.0f;
 
 	Mat4x4 cameraMatrix_ = Mat4x4::kIdentity;
+	Mat4x4 viewMatrix_ = Mat4x4::kIdentity;
+	Mat4x4 projectionMatrix_ = Mat4x4::kIdentity;
 
 #ifdef _DEBUG
 	float32_t scaleSpeed_ = 0.001f;

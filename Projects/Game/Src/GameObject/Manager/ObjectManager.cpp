@@ -48,6 +48,8 @@ void ObjectManager::SetLevelData(Lamb::SafePtr<LevelData> levelData, Lamb::SafeP
 	if (not SetCamera()) {
 		SetCamera(camera);
 	}
+
+	TransformCompUpdater::GetInstance()->SetCameraMatrix(&cameraComp_->GetViewMatrix(), &cameraComp_->GetProjectionMatrix());
 }
 
 const Mat4x4& ObjectManager::GetCameraMatrix() const
@@ -133,7 +135,12 @@ void ObjectManager::Update() {
 	}
 
 	// デバッグ
+#ifdef _DEBUG
+	TransformCompUpdater::GetInstance()->UpdateMatrix();
+	cameraComp_->LastUpdate();
 	Debug();
+#endif // _DEBUG
+
 
 	// 最初の処理
 	for (auto& i : objects_) {
