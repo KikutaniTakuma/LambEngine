@@ -99,7 +99,7 @@ FrameInfo::~FrameInfo() {
 	Lamb::AddLog(std::format("Play time : {} {} {}", h,m,s));
 
 	Lamb::AddLog(std::format("Average Fps : {:.2f}", avgFps));
-	if (std::chrono::duration_cast<std::chrono::seconds>(end - gameStartTime_) > std::chrono::seconds(1)) {
+	if (std::chrono::duration_cast<std::chrono::seconds>(end - gameStartTime_) > frameDataDuration_) {
 		Lamb::AddLog(std::format("Max Fps : {:.2f}", maxFps_));
 		Lamb::AddLog(std::format("Min Fps : {:.2f}", minFps_));
 	}
@@ -147,7 +147,7 @@ void FrameInfo::End() {
 	auto nowTime = std::chrono::steady_clock::now();
 	reference_ = nowTime;
 
-	if (std::chrono::duration_cast<std::chrono::seconds>(frameDataDurationStartTime_ - nowTime) < frameDataDuration_) {
+	if (frameDataDuration_ < std::chrono::duration_cast<std::chrono::seconds>(nowTime - frameDataDurationStartTime_)) {
 		frameDataDurationStartTime_ = nowTime;
 		frameDatas_.push(fps_);
 
@@ -169,7 +169,9 @@ void FrameInfo::End() {
 void FrameInfo::StartFrameInfo() {
 	if (not isStartFrameInfo_) {
 		isStartFrameInfo_ = true;
-		frameDataDurationStartTime_ = std::chrono::steady_clock::now();
+		auto nowTime = std::chrono::steady_clock::now();
+		gameStartTime_ = nowTime;
+		frameDataDurationStartTime_ = nowTime;
 	}
 }
 

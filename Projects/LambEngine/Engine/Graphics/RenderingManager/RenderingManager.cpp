@@ -302,6 +302,8 @@ void RenderingManager::Draw() {
 
 	// UIの描画(depth書き込まないやつ)
 	DrawNoDepth(nodepthLists);
+	// line深度値なしのlineを描画
+	Line::AllDraw(false);
 }
 
 DepthBuffer& RenderingManager::GetDepthBuffer()

@@ -114,6 +114,12 @@ public:
         descriptorHeap->CreateView(shaderData_.color);
         descriptorHeap->CreateView(shaderData_.shaderStruct);
 
+        shaderData_.wvpMatrix.OffWright();
+        shaderData_.color.OffWright();
+        shaderData_.shaderStruct.OffWright();
+        shaderData_.light.OffWright(); 
+        shaderData_.eyePos.OffWright();
+
         typeID_ = (typeid(RenderContext<T, bufferSize>).name());
     }
     ~RenderContext() {
@@ -194,10 +200,14 @@ public:
         drawData_[drawCount_].color = color;
     }
     inline void SetLight(const DirectionLight& light) override {
+        shaderData_.light.OnWright();
         *shaderData_.light = light;
+        shaderData_.light.OffWright(); 
     }
-    void SetCameraPos(const Vector3& cameraPos) {
+    inline void SetCameraPos(const Vector3& cameraPos) {
+        shaderData_.eyePos.OnWright();
         *shaderData_.eyePos = cameraPos;
+        shaderData_.eyePos.OffWright();
     }
     inline void SetShaderStruct(const T& data) {
         if (bufferSize <= drawCount_) {
@@ -229,11 +239,19 @@ public:
     }
 
     inline void DataSet() override {
+        shaderData_.wvpMatrix.OnWright();
+        shaderData_.color.OnWright();
+        shaderData_.shaderStruct.OnWright();
+
         for (uint32_t i = 0; i < drawCount_; i++) {
             shaderData_.wvpMatrix[i] = std::move(drawData_[i].wvpMatrix);
             shaderData_.color[i] = std::move(drawData_[i].color);
             shaderData_.shaderStruct[i] = std::move(drawData_[i].shaderStruct);
         }
+
+        shaderData_.wvpMatrix.OffWright();
+        shaderData_.color.OffWright();
+        shaderData_.shaderStruct.OffWright();
     }
 
 
@@ -267,6 +285,12 @@ public:
         descriptorHeap->CreateView(shaderData_.wvpMatrix);
         descriptorHeap->CreateView(shaderData_.color);
         descriptorHeap->CreateView(shaderData_.shaderStruct);
+
+        shaderData_.wvpMatrix.OffWright();
+        shaderData_.color.OffWright();
+        shaderData_.shaderStruct.OffWright();
+        shaderData_.light.OffWright();
+        shaderData_.eyePos.OffWright();
 
         typeID_ = (typeid(SkinRenderContext<T, bufferSize>).name());
     }
@@ -361,10 +385,14 @@ public:
         drawData_[drawCount_].color = color;
     }
     inline void SetLight(const DirectionLight& light) override {
+        shaderData_.light.OnWright();
         *shaderData_.light = light;
+        shaderData_.light.OffWright();
     }
-    void SetCameraPos(const Vector3& cameraPos) {
+    inline void SetCameraPos(const Vector3& cameraPos) {
+        shaderData_.eyePos.OnWright();
         *shaderData_.eyePos = cameraPos;
+        shaderData_.eyePos.OffWright();
     }
     inline void SetShaderStruct(const T& data) {
         if (bufferSize <= drawCount_) {
@@ -395,11 +423,19 @@ public:
     }
 
     inline void DataSet() override {
+        shaderData_.wvpMatrix.OnWright();
+        shaderData_.color.OnWright();
+        shaderData_.shaderStruct.OnWright();
+
         for (uint32_t i = 0; i < drawCount_; i++) {
             shaderData_.wvpMatrix[i] = std::move(drawData_[i].wvpMatrix);
             shaderData_.color[i] = std::move(drawData_[i].color);
             shaderData_.shaderStruct[i] = std::move(drawData_[i].shaderStruct);
         }
+
+        shaderData_.wvpMatrix.OffWright();
+        shaderData_.color.OffWright();
+        shaderData_.shaderStruct.OffWright();
     }
 
 
