@@ -134,6 +134,9 @@
     <ClCompile Include="Src\GameObject\GameComp\PlayerComp.cpp">
       <Filter>GameObject\GameComp</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\JsonComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -368,6 +371,9 @@
     </ClInclude>
     <ClInclude Include="Src\GameObject\GameComp\PlayerComp.h">
       <Filter>GameObject\GameComp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\JsonComp.h">
+      <Filter>GameObject\Comp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
