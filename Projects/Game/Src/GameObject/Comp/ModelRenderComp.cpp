@@ -11,7 +11,7 @@ void ModelRenderComp::Init() {
 
 void ModelRenderComp::Draw() {
 	model_->Draw(
-		transformComp_->GetMatrix(),
+		transformComp_->GetWorldMatrix(),
 		object_.GetCameraMatrix(),
 		renderDataComp_->color.GetColorRGBA(),
 		renderDataComp_->type,

@@ -49,7 +49,7 @@ void ObbComp::Event() {
 
 void ObbComp::UpdatePosAndOrient()
 {
-	const Mat4x4& worldMatrix = transformComp_->GetMatrix();
+	const Mat4x4& worldMatrix = transformComp_->GetWorldMatrix();
 
 	for (size_t i = 0; i < localPositions_->size(); i++) {
 		positions_->at(i) = (center + localPositions_->at(i) * scale) * worldMatrix;
@@ -155,7 +155,7 @@ void ObbComp::Draw() {
 		color_
 	);
 
-	const Mat4x4& worldMatrix = transformComp_->GetMatrix();
+	const Mat4x4& worldMatrix = transformComp_->GetWorldMatrix();
 	for (size_t i = 0llu; i < orientations_->size(); i++) {
 		Line::Draw(
 			transformComp_->translate,

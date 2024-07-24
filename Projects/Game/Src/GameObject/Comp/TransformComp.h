@@ -23,8 +23,12 @@ public:
 
 	void SetParent(Lamb::SafePtr<TransformComp>& parent);
 
-	const Mat4x4& GetMatrix() const {
+	const Mat4x4& GetWorldMatrix() const {
 		return worldMatrix_;
+	}
+
+	Mat4x4 GetLocalMatrix() const {
+		return Mat4x4::MakeAffin(scale, rotate, translate);
 	}
 
 	bool IsRootTransForm() const {

@@ -7,5 +7,5 @@ void Camera2DComp::Init()
 
 void Camera2DComp::LastUpdate()
 {
-	cameraMatrix_ = transform_->GetMatrix().Inverse() * Mat4x4::MakeOrthographic(width_, height_, nearClip_, farClip_);
+	cameraMatrix_ = transform_->GetWorldMatrix().Inverse() * Mat4x4::MakeOrthographic(width_, height_, nearClip_, farClip_);
 }
