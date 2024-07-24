@@ -3,6 +3,9 @@
 #include "Transform/Transform.h"
 
 #include <unordered_set>
+#ifdef _DEBUG
+#include "ImGuizmo.h"
+#endif // _DEBUG
 
 
 class TransformComp : public IComp {
@@ -38,6 +41,13 @@ public:
 
 	void Debug(const std::string& guiName) override;
 
+#ifdef _DEBUG
+	void SetViewMatrix(const Mat4x4* view);
+	void SetProjectionMatrix(const Mat4x4* projection);
+	void SetGuizmoID(uint32_t id);
+#endif // _DEBUG
+
+
 public:
 	Vector3 scale;
 	Quaternion rotate;
@@ -47,6 +57,15 @@ public:
 #endif // _DEBUG
 
 private:
+#ifdef _DEBUG
+	Lamb::SafePtr<const Mat4x4> view_;
+	Lamb::SafePtr<const Mat4x4> projection_;
+	uint32_t guizmoID_ = 0;
+	uint32_t guimoType_ = 0;
+
+	static const std::array<std::pair<std::string, ImGuizmo::OPERATION>, 5> kGuizmoMode_;
+
+#endif // _DEBUG
 	Mat4x4 worldMatrix_;
 	Lamb::SafePtr<TransformComp> parent_;
 	std::unordered_set<Lamb::SafePtr<TransformComp>> children_;

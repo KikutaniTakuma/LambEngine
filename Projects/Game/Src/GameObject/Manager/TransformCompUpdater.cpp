@@ -28,6 +28,8 @@ void TransformCompUpdater::Finalize()
 
 void TransformCompUpdater::Set(const Lamb::SafePtr<class TransformComp>& transformComp) {
 	if (not transformComps_.contains(transformComp)) {
+		transformComp->SetGuizmoID(setID);
+		setID++;
 		transformComps_.insert(transformComp);
 	}
 }
@@ -47,5 +49,22 @@ void TransformCompUpdater::UpdateMatrix() {
 			i->UpdateChildrenMatrix();
 		}
 	}
+}
+
+void TransformCompUpdater::SetCameraMatrix(const Mat4x4* view, const Mat4x4* projection) {
+	for (auto& i : transformComps_) {
+		i->SetViewMatrix(view);
+		i->SetProjectionMatrix(projection);
+	}
+}
+
+void TransformCompUpdater::SetCurretnGuizmoID(uint32_t currentGuizmoID)
+{
+	currentGuizmoID_ = currentGuizmoID;
+}
+
+uint32_t TransformCompUpdater::GetGuizmoID() const
+{
+	return currentGuizmoID_;
 }
 

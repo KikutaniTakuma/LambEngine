@@ -208,14 +208,17 @@ public:
 	union {
 		float x;
 		float r;
+		float h;
 	};
 	union {
 		float y;
 		float g;
+		float s;
 	};
 	union {
 		float z;
 		float b;
+		float v;
 	};
 
 

@@ -93,6 +93,7 @@ private:
 
 	// ライティング後のrgbaテクスチャを描画
 	std::unique_ptr<PeraRender> rgbaTexture_;
+	Vector3 hsv;
 
 	// 深度値(法線書き込みと色書き込み、アウトラインで使用する)
 	std::unique_ptr<DepthBuffer> depthStencil_;

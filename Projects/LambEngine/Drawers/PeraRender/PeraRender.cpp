@@ -46,6 +46,7 @@ void PeraRender::Draw(
 	Pipeline::Blend blend, 
 	D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
 ) {
+	peraPipelineObject_->color = color;
 	peraPipelineObject_->Update();
 
 	// 各種描画コマンドを積む
