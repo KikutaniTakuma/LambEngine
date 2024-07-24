@@ -5,42 +5,58 @@
 
 #include "Game/CollisionManager/Collision/Collision.h"
 #include "Game/Player/Player.h"
-#include "Utils/Camera/Camera.h"
+#include "Camera/Camera.h"
 #include "Game/CameraManager/CameraManager.h"
-#include "Utils/EngineInfo/EngineInfo.h"
-#include "Utils/Random/Random.h"
+#include "Utils/EngineInfo.h"
+#include "Utils/Random.h"
+#include "Drawers/DrawerManager.h"
 
+#ifdef _DEBUG
 #include "imgui.h"
+#endif // _DEBUG
+
 
 
 Goal::Goal() {
-	goal_ = std::make_unique<Model>();
-	goal_->LoadObj("./Resources/DebugArrow/DebugGoal.obj");
-	leftBeach_ = std::make_unique<Model>();
-	leftBeach_->LoadObj("./Resources/InGame/Models/beach.obj");
-	rightBeach_ = std::make_unique<Model>();
-	rightBeach_->LoadObj("./Resources/InGame/Models/beach.obj");
+	Lamb::SafePtr draweManager = DrawerManager::GetInstance();
+	draweManager->LoadModel("./Resources/DebugArrow/DebugGoal.obj");
+	draweManager->LoadModel("./Resources/InGame/Models/beach.obj");
+
+	goal_ = draweManager->GetModel("./Resources/DebugArrow/DebugGoal.obj");
+	leftBeach_ = draweManager->GetModel("./Resources/InGame/Models/beach.obj");
+	rightBeach_ = draweManager->GetModel("./Resources/InGame/Models/beach.obj");
+
+	AudioManager::GetInstance()->Load("./Resources/Sound/fireworkSE.wav");
+
+	goalInstance_ = std::make_unique<Model::Instance>();
+	leftBeachInstance_ = std::make_unique<Model::Instance>();
+	rightBeachInstance_ = std::make_unique<Model::Instance>();
+
 	overSize_ = 4.0f;
 }
 
 void Goal::Initialize(const Vector3& scale, const Vector3& rotate, const Vector3& pos) {
-	goal_->scale = scale;
-	goal_->rotate = rotate;
-	goal_->pos = pos;
-	leftBeach_->pos.x += goal_->scale.x * 0.5f;
-	rightBeach_->pos.x -= goal_->scale.x * 0.5f;
-	leftBeach_->SetParent(goal_.get());
-	rightBeach_->SetParent(goal_.get());
+	goalInstance_->transform.scale = scale;
+	goalInstance_->transform.rotate = Quaternion::EulerToQuaternion(rotate);
+	goalInstance_->transform.translate = pos;
+	leftBeachInstance_->transform.translate.x += goalInstance_->transform.scale.x * 0.5f;
+	rightBeachInstance_->transform.translate.x -= goalInstance_->transform.scale.x * 0.5f;
+	leftBeachInstance_->transform.SetParent(&goalInstance_->transform);
+	rightBeachInstance_->transform.SetParent(&goalInstance_->transform);
+
+	leftBeachInstance_->transform.CalcMatrix();
+	rightBeachInstance_->transform.CalcMatrix();
+
 	ResourceUpdate();
 	Collider::SetColliderType(Collider::Type::kTrriger);
 	Collider::SetColliderAttribute(Collider::Attribute::kOther);
-	Mat4x4 tmp = Mat4x4::MakeRotateY(goal_->rotate.y);
-	Collider::InitializeCollision({ goal_->scale }, goal_->rotate, goal_->pos + (Vector3{ 0.0f,0.0f,goal_->scale.z } * tmp));
-	tmp = leftBeach_->GetWorldMatrix();
+	Mat4x4 tmp = Mat4x4::MakeRotateY(goalInstance_->transform.rotate.ToEuler().y);
+	Collider::InitializeCollision({ goalInstance_->transform.scale }, goalInstance_->transform.rotate, goalInstance_->transform.translate + (Vector3{ 0.0f,0.0f,goalInstance_->transform.scale.z } * tmp));
+	tmp = leftBeachInstance_->transform.GetMatrix();
 	Collider::SetColliderType(Collider::Type::kCollion);
 	Collider::SetColliderAttribute(Collider::Attribute::kOther);
 	Collider::InitializeCollision({ scale.x * overSize_ ,scale.y,scale.z }, MakeEulerAngle(tmp), { tmp[3][0],tmp[3][1],tmp[3][2] });
-	tmp = rightBeach_->GetWorldMatrix();
+	tmp = rightBeachInstance_->transform.GetMatrix();
 	Collider::SetColliderType(Collider::Type::kCollion);
 	Collider::SetColliderAttribute(Collider::Attribute::kOther);
 	Collider::InitializeCollision({ scale.x * overSize_,scale.y,scale.z }, MakeEulerAngle(tmp), { tmp[3][0],tmp[3][1],tmp[3][2] });
@@ -57,13 +73,13 @@ void Goal::Initialize(const Vector3& scale, const Vector3& rotate, const Vector3
 	particleCoolTimeRange_.first = 0.4f;
 	particleCoolTimeRange_.second = 0.6f;
 
-	emitterRange_.first =  -goal_->scale * 0.4f + goal_->pos;
-	emitterRange_.second  = goal_->scale * 0.4f + goal_->pos;
+	emitterRange_.first =  -goalInstance_->transform.scale * 0.4f + goalInstance_->transform.translate;
+	emitterRange_.second  = goalInstance_->transform.scale * 0.4f + goalInstance_->transform.translate;
 
 	emitterRange_.first.y = 5.0f;
 	emitterRange_.second.y = 8.0f;
 
-	fireworkSound_ = AudioManager::GetInstance()->LoadWav("./Resources/Sound/fireworkSE.wav", false);
+	fireworkSound_ = AudioManager::GetInstance()->Get("./Resources/Sound/fireworkSE.wav");
 
 	subtractionVelocity_ = -2.5f;
 	subtractionCannonVelocity_ = -30.0f;
@@ -71,9 +87,9 @@ void Goal::Initialize(const Vector3& scale, const Vector3& rotate, const Vector3
 }
 
 void Goal::ResourceUpdate() {
-	goal_->Update();
-	leftBeach_->Update();
-	rightBeach_->Update();
+	goalInstance_->transform.CalcMatrix();
+	leftBeachInstance_->transform.CalcMatrix();
+	rightBeachInstance_->transform.CalcMatrix();
 }
 
 void Goal::Update() {
@@ -90,7 +106,10 @@ void Goal::Update() {
 }
 
 void Goal::Draw(const Camera& camera) {
-	goal_->Draw(camera.GetViewProjection(), camera.GetPos());
+	goal_->Draw(
+		camera.GetViewProjection(), 
+		camera.GetPos()
+	);
 	leftBeach_->Draw(camera.GetViewProjection(), camera.GetPos());
 	rightBeach_->Draw(camera.GetViewProjection(), camera.GetPos());
 
@@ -104,22 +123,22 @@ void Goal::Draw(const Camera& camera) {
 }
 
 void Goal::SetScale(const Vector3& scale) {
-	goal_->scale = scale;
+	goalInstance_->transform.scale = scale;
 	ResourceUpdate();
-	Collider::SetCollisionScale(goal_->scale, 0);
+	Collider::SetCollisionScale(goalInstance_->transform.scale, 0);
 	Collider::SetCollisionScale({ scale.x * overSize_, scale.y, scale.z }, 1);
 	Collider::SetCollisionScale({ scale.x * overSize_ , scale.y, scale.z }, 2);
 	UpdateCollision();
 }
 
 void Goal::SetRotate(const Vector3& rotate) {
-	goal_->rotate = rotate;
+	goalInstance_->transform.rotate = rotate;
 	ResourceUpdate();
 	UpdateCollision();
 }
 
 void Goal::SetPosition(const Vector3& pos) {
-	goal_->pos = pos;
+	goalInstance_->transform.translate = pos;
 	ResourceUpdate();
 	UpdateCollision();
 }
@@ -137,7 +156,7 @@ void Goal::ParticleUpdate()
 				
 				// 音鳴らす
 				fireworkSound_->Stop();
-				fireworkSound_->Start(0.5f);
+				fireworkSound_->Start(0.5f, false);
 				break;
 			}
 		}
@@ -168,7 +187,7 @@ void Goal::OnCollision(Collider* collider, uint32_t myIndex, uint32_t pairIndex)
 		player_->SetIsGoal(true);
 		player_->SetIsStart(false);
 		player_->SetGoalPlayerPos(player_->GetPosition());
-		player_->SetGoalPlayerRotate(player_->GetRotate().y);
+		player_->SetGoalPlayerRotate(player_->GetRotate());
 		CameraManager::GetInstance()->SetType(CameraManager::Type::kGoal);
 		CameraManager::GetInstance()->GetGoalCamera()->SetStartCamera(camera_->pos, camera_->rotate);
 		color_.at(myIndex) = Vector4ToUint(Vector4::kXIdentity);
@@ -188,12 +207,12 @@ void Goal::OnCollision(Collider* collider, uint32_t myIndex, uint32_t pairIndex)
 }
 
 void Goal::UpdateCollision() {
-	Mat4x4 tmp = Mat4x4::MakeRotateY(goal_->rotate.y);
-	Collider::UpdateCollision(goal_->rotate, goal_->pos + (Vector3{ 0.0f,0.0f,goal_->scale.z }*tmp), 0);
-	tmp = leftBeach_->GetWorldMatrix();
-	Collider::UpdateCollision(MakeEulerAngle(tmp), { tmp[3][0],tmp[3][1],tmp[3][2] }, 1);
-	tmp = rightBeach_->GetWorldMatrix();
-	Collider::UpdateCollision(MakeEulerAngle(tmp), { tmp[3][0],tmp[3][1],tmp[3][2] }, 2);
+	Mat4x4 tmp = Mat4x4::MakeRotateY(goalInstance_->transform.rotate.y);
+	Collider::UpdateCollision(goalInstance_->transform.rotate, goalInstance_->transform.translate + (Vector3{ 0.0f,0.0f,goalInstance_->transform.scale.z }*tmp), 0);
+	tmp = leftBeachInstance_->transform.GetMatrix();
+	Collider::UpdateCollision(tmp.GetRotate(), tmp.GetTranslate(), 1);
+	tmp = rightBeachInstance_->transform.GetMatrix();
+	Collider::UpdateCollision(tmp.GetRotate(), tmp.GetTranslate(), 2);
 }
 
 Vector3 Goal::MakeEulerAngle(const Mat4x4& mat) {

@@ -19,11 +19,11 @@ public:
 	void Draw(const Camera& camera);
 
 	void SetPlayer(Player* player) { player_ = player; }
-	const Vector3& GetScale() { return goal_->scale; }
+	const Vector3& GetScale() { return goalInstance_->transform.scale; }
 	void SetScale(const Vector3& scale);
-	const Vector3& GetRotate() { return goal_->rotate; }
+	const Quaternion& GetRotate() { return goalInstance_->transform.rotate; }
 	void SetRotate(const Vector3& rotate);
-	const Vector3& GetPosition() { return goal_->pos; }
+	const Vector3& GetPosition() { return goalInstance_->transform.translate; }
 	void SetPosition(const Vector3& pos);
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
@@ -37,9 +37,12 @@ private:
 	Vector3 MakeEulerAngle(const Mat4x4& mat);
 	float overSize_;
 	Player* player_;
-	std::unique_ptr<Model> goal_;
-	std::unique_ptr<Model> leftBeach_;
-	std::unique_ptr<Model> rightBeach_;
+	Lamb::SafePtr<Model> goal_;
+	std::unique_ptr<Model::Instance> goalInstance_;
+	Lamb::SafePtr<Model> leftBeach_;
+	std::unique_ptr<Model::Instance> leftBeachInstance_;
+	Lamb::SafePtr<Model> rightBeach_;
+	std::unique_ptr<Model::Instance> rightBeachInstance_;
 	Camera* camera_;
 	Vector3 pos_;
 
