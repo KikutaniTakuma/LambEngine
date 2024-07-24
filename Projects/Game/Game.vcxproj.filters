@@ -122,6 +122,18 @@
     <ClCompile Include="Src\GameObject\Comp\SceneChangeComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\ChildrenObjectComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\CsvDataComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\GameComp\CustomizeComp.cpp">
+      <Filter>GameObject\GameComp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\GameComp\PlayerComp.cpp">
+      <Filter>GameObject\GameComp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -216,6 +228,9 @@
     </Filter>
     <Filter Include="Game\Manager">
       <UniqueIdentifier>{66e69158-e7eb-4378-bcd3-bc17939d8612}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\GameComp">
+      <UniqueIdentifier>{2a763632-eaec-4f7e-9876-f077f915962c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -341,6 +356,18 @@
     </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\SceneChangeComp.h">
       <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\ChildrenObjectComp.h">
+      <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\CsvDataComp.h">
+      <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\GameComp\CustomizeComp.h">
+      <Filter>GameObject\GameComp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\GameComp\PlayerComp.h">
+      <Filter>GameObject\GameComp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
