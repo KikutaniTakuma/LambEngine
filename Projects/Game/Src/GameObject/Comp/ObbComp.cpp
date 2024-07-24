@@ -22,9 +22,9 @@ std::unique_ptr<std::array<const Vector3, 8>> ObbComp::localPositions_ = std::ma
 );
 std::unique_ptr<std::array<const Vector3, 3>> ObbComp::localOrientations_ = std::make_unique<std::array<const Vector3, 3>>(
 	std::array<const Vector3, 3>{
-		Vector3(1.0f, 0.0f, 0.0f),
-		Vector3(0.0f, 1.0f, 0.0f),
-		Vector3(0.0f, 0.0f, 1.0f)
+		Vector3::kXIdentity,
+		Vector3::kYIdentity,
+		Vector3::kZIdentity
 	}
 );
 
@@ -55,8 +55,10 @@ void ObbComp::UpdatePosAndOrient()
 		positions_->at(i) = (center + localPositions_->at(i) * scale) * worldMatrix;
 	}
 
+	Quaternion&& rotate = worldMatrix.GetRotate();
+
 	for (size_t i = 0; i < localOrientations_->size(); i++) {
-		orientations_->at(i) = localOrientations_->at(i) * transformComp_->rotate;
+		orientations_->at(i) = localOrientations_->at(i) * rotate;
 	}
 
 	isCollision_ = false;
