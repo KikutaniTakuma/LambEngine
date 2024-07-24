@@ -22,10 +22,7 @@ void ObbPushComp::Collision(Lamb::SafePtr<ObbComp> other) {
 		}
 	}
 	else {
-		Vector3 pushvector;
-		if (other->IsCollision(obbComp_.get(), pushvector)) {
-			obbComp_->GetTransformComp().translate += pushvector;
-		}
+		bool isCollision = other->IsCollision(obbComp_.get());
 	}
 }
 
