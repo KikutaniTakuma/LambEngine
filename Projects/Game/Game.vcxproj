@@ -134,6 +134,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp" />
     <ClCompile Include="Src\GameObject\Comp\Camera2DComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\Camera3DComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\EventComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\FallComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\InputJump.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ModelRenderComp.cpp" />
@@ -141,6 +142,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\Comp\ObbComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ObbPushComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\RenderDataComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\SceneChangeComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\TransformComp.cpp" />
     <ClCompile Include="Src\GameObject\Manager\ObjectManager.cpp" />
     <ClCompile Include="Src\GameObject\Manager\TransformCompUpdater.cpp" />
@@ -175,6 +177,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h" />
     <ClInclude Include="Src\GameObject\Comp\Camera2DComp.h" />
     <ClInclude Include="Src\GameObject\Comp\Camera3DComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\EventComp.h" />
     <ClInclude Include="Src\GameObject\Comp\FallComp.h" />
     <ClInclude Include="Src\GameObject\Comp\InputJump.h" />
     <ClInclude Include="Src\GameObject\Comp\InputMoveComp.h" />
@@ -182,6 +185,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\Comp\ObbComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ObbPushComp.h" />
     <ClInclude Include="Src\GameObject\Comp\RenderDataComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\SceneChangeComp.h" />
     <ClInclude Include="Src\GameObject\Comp\TransformComp.h" />
     <ClInclude Include="Src\GameObject\Manager\ObjectManager.h" />
     <ClInclude Include="Src\GameObject\Manager\TransformCompUpdater.h" />
