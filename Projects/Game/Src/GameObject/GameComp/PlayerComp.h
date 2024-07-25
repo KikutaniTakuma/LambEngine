@@ -6,7 +6,7 @@ public:
 
 	~PlayerComp() = default;
 
-private:
+public:
 	void Init() override;
 	void Finalize() override;
 
@@ -18,4 +18,8 @@ private:
 	void LastUpdate() override;
 
 	void Draw() override;
+
+private:
+	Lamb::SafePtr<class ChildrenObjectComp> item_;
+	Lamb::SafePtr<class CsvDataComp> itemData_;
 };
