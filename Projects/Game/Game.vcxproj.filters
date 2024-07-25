@@ -161,6 +161,9 @@
     <ClCompile Include="Src\GameObject\Comp\SpriteRenderDataComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\SpriteRenderComp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -421,6 +424,9 @@
       <Filter>GameObject\GameComp</Filter>
     </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\SpriteRenderDataComp.h">
+      <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\SpriteRenderComp.h">
       <Filter>GameObject\Comp</Filter>
     </ClInclude>
   </ItemGroup>
