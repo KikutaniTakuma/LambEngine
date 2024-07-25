@@ -146,6 +146,15 @@
     <ClCompile Include="Src\GameObject\GameComp\LoopCannonComp.cpp">
       <Filter>GameObject\GameComp</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\GameComp\SailComp.cpp">
+      <Filter>GameObject\GameComp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\GameComp\WindComp.cpp">
+      <Filter>GameObject\GameComp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\GameComp\WindNodeComp.cpp">
+      <Filter>GameObject\GameComp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -391,6 +400,15 @@
       <Filter>GameObject\GameComp</Filter>
     </ClInclude>
     <ClInclude Include="Src\GameObject\GameComp\LoopCannonComp.h">
+      <Filter>GameObject\GameComp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\GameComp\SailComp.h">
+      <Filter>GameObject\GameComp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\GameComp\WindComp.h">
+      <Filter>GameObject\GameComp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\GameComp\WindNodeComp.h">
       <Filter>GameObject\GameComp</Filter>
     </ClInclude>
   </ItemGroup>

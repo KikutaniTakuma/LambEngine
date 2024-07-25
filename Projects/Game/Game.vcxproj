@@ -152,6 +152,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\GameComp\ItemComp.cpp" />
     <ClCompile Include="Src\GameObject\GameComp\LoopCannonComp.cpp" />
     <ClCompile Include="Src\GameObject\GameComp\PlayerComp.cpp" />
+    <ClCompile Include="Src\GameObject\GameComp\SailComp.cpp" />
+    <ClCompile Include="Src\GameObject\GameComp\WindComp.cpp" />
+    <ClCompile Include="Src\GameObject\GameComp\WindNodeComp.cpp" />
     <ClCompile Include="Src\GameObject\Manager\ObjectManager.cpp" />
     <ClCompile Include="Src\GameObject\Manager\TransformCompUpdater.cpp" />
     <ClCompile Include="Src\GameObject\Object.cpp" />
@@ -203,6 +206,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\GameComp\ItemComp.h" />
     <ClInclude Include="Src\GameObject\GameComp\LoopCannonComp.h" />
     <ClInclude Include="Src\GameObject\GameComp\PlayerComp.h" />
+    <ClInclude Include="Src\GameObject\GameComp\SailComp.h" />
+    <ClInclude Include="Src\GameObject\GameComp\WindComp.h" />
+    <ClInclude Include="Src\GameObject\GameComp\WindNodeComp.h" />
     <ClInclude Include="Src\GameObject\Manager\ObjectManager.h" />
     <ClInclude Include="Src\GameObject\Manager\TransformCompUpdater.h" />
     <ClInclude Include="Src\GameObject\Object.h" />
