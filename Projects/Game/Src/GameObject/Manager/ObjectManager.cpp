@@ -155,16 +155,7 @@ void ObjectManager::Update() {
 	TransformCompUpdater::GetInstance()->UpdateMatrix();
 
 	// 当たり判定
-	for (auto i = obbObjects_.begin(); i != obbObjects_.end(); i++) {
-		// 二重forで全部と当たり判定を取ると同じ組み合わせで2回当たり判定をとってしまうので
-		// 2番目のループで1ループの値で初期化する
-		for (auto j = i; j != obbObjects_.end(); j++) {
-			if (j == i) {
-				continue;
-			}
-			(*i)->Collision(&(*j)->GetObbComp());
-		}
-	}
+	Collision();
 
 	TransformCompUpdater::GetInstance()->UpdateMatrix();
 
@@ -192,6 +183,23 @@ void ObjectManager::Draw() {
 	// 描画処理
 	for (auto& i : objects_) {
 		i->Draw();
+	}
+}
+
+void ObjectManager::Collision() {
+	// 当たり判定(押し出し)
+	for (auto i = obbObjects_.begin(); i != obbObjects_.end(); i++) {
+		// 二重forで全部と当たり判定を取ると同じ組み合わせで2回当たり判定をとってしまうので
+		// 2番目のループで1ループの値で初期化する
+		for (auto j = i; j != obbObjects_.end(); j++) {
+			if (j == i) {
+				continue;
+			}
+			// 当たり判定(押し出し)
+			(*i)->Collision(&(*j)->GetObbComp());
+			// 当たり判定(押し出さない)
+			(*i)->GetObbComp().CollisionHasTag(&(*j)->GetObbComp());
+		}
 	}
 }
 

@@ -13,7 +13,6 @@ public:
 	void Collision(Lamb::SafePtr<ObbComp> other);
 
 	// 押し出すタグ
-	// なければ""をいれて
 	void SetPushTag(const std::string& pushTag);
 	void ErasePushTag(const std::string& pushTag);
 

@@ -349,6 +349,22 @@ bool ObbComp::IsCollision(ObbComp* const other, Vector3& pushVector)
 	return true;
 }
 
+bool ObbComp::CollisionHasTag(ObbComp* const other) {
+	bool hasTag = false;
+	for (auto& i : collisionTags_) {
+		if (other->getObject().HasTag(i)) {
+			hasTag = true;
+			break;
+		}
+	}
+
+	if (hasTag) {
+		return IsCollision(other);
+	}
+
+	return false;
+}
+
 TransformComp& ObbComp::GetTransformComp()
 {
 	return *transformComp_;
@@ -357,4 +373,16 @@ TransformComp& ObbComp::GetTransformComp()
 const TransformComp& ObbComp::GetTransformComp() const
 {
 	return *transformComp_;
+}
+
+void ObbComp::SetCollisionTag(const std::string& collisionTag) {
+	if (not collisionTags_.contains(collisionTag)) {
+		collisionTags_.insert(collisionTag);
+	}
+}
+
+void ObbComp::EraseCollisionTag(const std::string& collisionTag) {
+	if (collisionTags_.contains(collisionTag)) {
+		collisionTags_.erase(collisionTag);
+	}
 }

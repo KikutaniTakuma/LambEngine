@@ -50,6 +50,8 @@ public:
 	void Draw();
 
 private:
+	void Collision();
+
 	void Debug();
 
 private:

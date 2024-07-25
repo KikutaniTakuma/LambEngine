@@ -30,8 +30,13 @@ public:
 	[[nodiscard]] bool IsCollision(ObbComp* const other);
 	[[nodiscard]] bool IsCollision(ObbComp* const other, Vector3& pushVector);
 
+	bool CollisionHasTag(ObbComp* const other);
+
 	TransformComp& GetTransformComp();
 	const TransformComp& GetTransformComp() const;
+
+	void SetCollisionTag(const std::string& collisionTag);
+	void EraseCollisionTag(const std::string& collisionTag);
 
 public:
 	Vector3 scale = Vector3::kIdentity;
@@ -40,6 +45,8 @@ public:
 
 private:
 	Lamb::SafePtr<TransformComp> transformComp_;
+
+	std::unordered_set<std::string> collisionTags_;
 
 #ifdef _DEBUG
 private:
