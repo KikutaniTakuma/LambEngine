@@ -9,8 +9,9 @@ public:
 
 public:
 	void Init() override;
+	void Finalize() override;
 
-	void AddObject(Object* object);
+	void AddObject(std::unique_ptr<Object>&& object);
 	void EraseObject(Object* object);
 
 	void FirstUpdate() override;
@@ -25,8 +26,8 @@ public:
 	void Draw() override;
 
 public:
-	const std::unordered_set<Lamb::SafePtr<Object>>& GetObjects() const;
+	const std::unordered_set<std::unique_ptr<Object>>& GetObjects() const;
 
 private:
-	std::unordered_set<Lamb::SafePtr<Object>> objects_;
+	std::unordered_set<std::unique_ptr<Object>> objects_;
 };

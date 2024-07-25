@@ -1,17 +1,18 @@
 #include "ChildrenObjectComp.h"
 
-const std::unordered_set<Lamb::SafePtr<Object>>& ChildrenObjectComp::GetObjects() const
-{
-	// TODO: return ステートメントをここに挿入します
-}
+
 
 void ChildrenObjectComp::Init() {
 
 }
 
-void ChildrenObjectComp::AddObject(Object* object) {
+void ChildrenObjectComp::Finalize() {
+	objects_.clear();
+}
+
+void ChildrenObjectComp::AddObject(std::unique_ptr<Object>&& object) {
 	// nullなら早期リターン
-	if (object == nullptr) {
+	if (not object) {
 		return;
 	}
 	if (not objects_.contains(object)) {
@@ -19,10 +20,14 @@ void ChildrenObjectComp::AddObject(Object* object) {
 	}
 }
 
-void ChildrenObjectComp::EraseObject(Object* object)
-{
-	if (objects_.contains(object)) {
-		objects_.erase(object);
+void ChildrenObjectComp::EraseObject(Object* object) {
+	auto itr = std::find_if(objects_.begin(), objects_.end(), 
+		[&object](const std::unique_ptr<Object>& element)->bool {
+			return object == element.get();
+		}
+	);
+	if (itr != objects_.end()) {
+		objects_.erase(itr);
 	}
 }
 
@@ -60,5 +65,10 @@ void ChildrenObjectComp::Draw() {
 	for (auto& i : objects_) {
 		i->Draw();
 	}
+}
+
+const std::unordered_set<std::unique_ptr<Object>>& ChildrenObjectComp::GetObjects() const
+{
+	return objects_;
 }
 
