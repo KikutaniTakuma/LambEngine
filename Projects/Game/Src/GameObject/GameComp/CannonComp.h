@@ -5,7 +5,7 @@ public:
 	~CannonComp() = default;
 
 public:
-	void FirstUpdate() override;
+	void Event() override;
 
 	void SetFireKeyTime(float32_t fireKeyTime);
 	void SetStrength(float32_t strength);

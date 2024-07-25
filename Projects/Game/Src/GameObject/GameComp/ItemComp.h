@@ -7,12 +7,16 @@ public:
 	virtual ~ItemComp() = default;
 
 public:
+	void Init() override;
+
 	void Start();
 
-	float32_t GetVelocity() const;
+	Vector3 GetVelocity() const;
 
 protected:
 	float32_t velocity_ = 0;
 
-	Lamb::Flg isStart;
+	Lamb::Flg isStart_;
+
+	Lamb::SafePtr<class TransformComp> transform_;
 };

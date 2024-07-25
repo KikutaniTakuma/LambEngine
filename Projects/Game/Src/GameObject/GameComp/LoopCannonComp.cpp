@@ -1,13 +1,16 @@
 #include "LoopCannonComp.h"
 
-void LoopCannonComp::FirstUpdate() {
-	if (isStart) {
+void LoopCannonComp::Event() {
+	if (isStart_) {
 		time_ += object_.GetDeltaTime();
 	}
 
 	if (fireKeyTime_ <= time_) {
 		time_ = 0.0f;
 		velocity_ = strength_;
+	}
+	else {
+		velocity_ = 0.0f;
 	}
 }
 

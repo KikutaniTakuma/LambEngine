@@ -1,10 +1,16 @@
 #include "ItemComp.h"
 
-void ItemComp::Start() {
-	isStart = true;
+#include "../Comp/TransformComp.h"
+
+void ItemComp::Init() {
+	transform_ = object_.AddComp<TransformComp>();
 }
 
-float32_t ItemComp::GetVelocity() const
+void ItemComp::Start() {
+	isStart_ = true;
+}
+
+Vector3 ItemComp::GetVelocity() const
 {
-	return velocity_;
+	return (Vector3::kXIdentity * transform_->rotate) * velocity_;
 }

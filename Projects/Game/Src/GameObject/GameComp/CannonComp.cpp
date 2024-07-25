@@ -1,13 +1,16 @@
 #include "CannonComp.h"
 
-void CannonComp::FirstUpdate() {
-	if (isStart and not isFire_) {
+void CannonComp::Event() {
+	if (isStart_ and not isFire_) {
 		time_ += object_.GetDeltaTime();
 	}
 
 	if (not isFire_ and fireKeyTime_ <= time_) {
 		isFire_ = true;
 		velocity_ = strength_;
+	}
+	else {
+		velocity_ = 0.0f;
 	}
 }
 
