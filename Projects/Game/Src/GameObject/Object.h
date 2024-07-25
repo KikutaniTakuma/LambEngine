@@ -2,6 +2,7 @@
 #include "Camera/Camera.h"
 #include "Math/MathCommon.h"
 #include "Utils/SafePtr.h"
+#include "Utils/Flg.h"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -126,6 +127,10 @@ public:
 
 	[[nodiscard]] bool HasTag(const std::string& tag) const {
 		return tags_.contains(tag);
+	}
+	template<IsBaseIComp Name>
+	[[nodiscard]] bool HasTag(const std::string& tag) const {
+		return tags_.contains(typeid(Name).name());
 	}
 
 	void EraseTag(const std::string& tag) {
