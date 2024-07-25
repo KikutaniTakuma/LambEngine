@@ -6,7 +6,7 @@ class EventComp : public IComp {
 public:
 	using IComp::IComp;
 
-	~EventComp() = default;
+	virtual ~EventComp() = default;
 
 	virtual void Init() override;
 
