@@ -137,6 +137,15 @@
     <ClCompile Include="Src\GameObject\Comp\JsonComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\GameComp\CannonComp.cpp">
+      <Filter>GameObject\GameComp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\GameComp\ItemComp.cpp">
+      <Filter>GameObject\GameComp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\GameComp\LoopCannonComp.cpp">
+      <Filter>GameObject\GameComp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -374,6 +383,15 @@
     </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\JsonComp.h">
       <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\GameComp\CannonComp.h">
+      <Filter>GameObject\GameComp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\GameComp\ItemComp.h">
+      <Filter>GameObject\GameComp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\GameComp\LoopCannonComp.h">
+      <Filter>GameObject\GameComp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
