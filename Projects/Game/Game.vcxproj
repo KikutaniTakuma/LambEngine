@@ -146,6 +146,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\Comp\ObbPushComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\RenderDataComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\SceneChangeComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\SpriteRenderDataComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\TransformComp.cpp" />
     <ClCompile Include="Src\GameObject\GameComp\CannonComp.cpp" />
     <ClCompile Include="Src\GameObject\GameComp\CustomizeComp.cpp" />
@@ -153,6 +154,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\GameComp\LoopCannonComp.cpp" />
     <ClCompile Include="Src\GameObject\GameComp\PlayerComp.cpp" />
     <ClCompile Include="Src\GameObject\GameComp\SailComp.cpp" />
+    <ClCompile Include="Src\GameObject\GameComp\WhirlpoolsComp.cpp" />
     <ClCompile Include="Src\GameObject\GameComp\WindComp.cpp" />
     <ClCompile Include="Src\GameObject\GameComp\WindNodeComp.cpp" />
     <ClCompile Include="Src\GameObject\Manager\ObjectManager.cpp" />
@@ -200,6 +202,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\Comp\ObbPushComp.h" />
     <ClInclude Include="Src\GameObject\Comp\RenderDataComp.h" />
     <ClInclude Include="Src\GameObject\Comp\SceneChangeComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\SpriteRenderDataComp.h" />
     <ClInclude Include="Src\GameObject\Comp\TransformComp.h" />
     <ClInclude Include="Src\GameObject\GameComp\CannonComp.h" />
     <ClInclude Include="Src\GameObject\GameComp\CustomizeComp.h" />
@@ -207,6 +210,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\GameComp\LoopCannonComp.h" />
     <ClInclude Include="Src\GameObject\GameComp\PlayerComp.h" />
     <ClInclude Include="Src\GameObject\GameComp\SailComp.h" />
+    <ClInclude Include="Src\GameObject\GameComp\WhirlpoolsComp.h" />
     <ClInclude Include="Src\GameObject\GameComp\WindComp.h" />
     <ClInclude Include="Src\GameObject\GameComp\WindNodeComp.h" />
     <ClInclude Include="Src\GameObject\Manager\ObjectManager.h" />
