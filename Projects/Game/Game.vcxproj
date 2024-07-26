@@ -145,7 +145,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\Comp\InputMoveComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ObbComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ObbPushComp.cpp" />
-    <ClCompile Include="Src\GameObject\Comp\RenderDataComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\ModelRenderDataComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\SceneChangeComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\SpriteRenderComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\SpriteRenderDataComp.cpp" />
@@ -203,7 +203,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\Comp\ModelRenderComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ObbComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ObbPushComp.h" />
-    <ClInclude Include="Src\GameObject\Comp\RenderDataComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\ModelRenderDataComp.h" />
     <ClInclude Include="Src\GameObject\Comp\SceneChangeComp.h" />
     <ClInclude Include="Src\GameObject\Comp\SpriteRenderComp.h" />
     <ClInclude Include="Src\GameObject\Comp\SpriteRenderDataComp.h" />

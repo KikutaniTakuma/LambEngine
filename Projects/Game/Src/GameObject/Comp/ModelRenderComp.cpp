@@ -1,13 +1,13 @@
 #include "ModelRenderComp.h"
 #include "Drawers/DrawerManager.h"
-#include "RenderDataComp.h"
+#include "ModelRenderDataComp.h"
 
 #include "TransformComp.h"
 #include "CameraComp.h"
 
 void ModelRenderComp::Init() {
 	transformComp_ = object_.AddComp<TransformComp>();
-	renderDataComp_ = object_.AddComp<RenderDataComp>();
+	renderDataComp_ = object_.AddComp<ModelRenderDataComp>();
 }
 
 void ModelRenderComp::Draw(CameraComp* cameraComp) {

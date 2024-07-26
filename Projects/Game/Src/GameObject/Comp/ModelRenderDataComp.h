@@ -3,11 +3,11 @@
 #include "Drawers/Model/Model.h"
 
 
-class RenderDataComp : public IComp {
+class ModelRenderDataComp : public IComp {
 public:
 	using IComp::IComp;
 
-	~RenderDataComp() = default;
+	~ModelRenderDataComp() = default;
 
 	void Init() override;
 

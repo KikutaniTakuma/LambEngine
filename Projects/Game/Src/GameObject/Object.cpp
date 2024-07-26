@@ -116,7 +116,7 @@ bool Object::DebugAddComp() {
 		DebugAdd<InputJump>();
 		DebugAdd<InputMoveComp>();
 		DebugAdd<ModelRenderComp>();
-		DebugAdd<RenderDataComp>();
+		DebugAdd<ModelRenderDataComp>();
 		DebugAdd<ObbComp>();
 		DebugAdd<ObbPushComp>();
 		DebugAdd<SceneChangeComp>();

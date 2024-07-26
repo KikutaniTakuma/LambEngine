@@ -1,18 +1,18 @@
-#include "RenderDataComp.h"
+#include "ModelRenderDataComp.h"
 
 #ifdef _DEBUG
 #include "imgui.h"
 #endif // _DEBUG
 
 
-void RenderDataComp::Init()
+void ModelRenderDataComp::Init()
 {
 	type = BlendType::kNone;
 	color = Vector4::kIdentity;
 	isLighting = true;
 }
 
-void RenderDataComp::Debug([[maybe_unused]]const std::string& guiName) {
+void ModelRenderDataComp::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
         // コンボボックスを使ってenumの値を選択する

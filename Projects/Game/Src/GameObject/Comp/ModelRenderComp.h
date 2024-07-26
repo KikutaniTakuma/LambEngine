@@ -24,7 +24,7 @@ private:
 
 	Lamb::SafePtr<Model> model_;
 
-	Lamb::SafePtr<class RenderDataComp> renderDataComp_;
+	Lamb::SafePtr<class ModelRenderDataComp> renderDataComp_;
 
 	Lamb::SafePtr<class TransformComp> transformComp_;
 };

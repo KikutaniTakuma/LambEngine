@@ -80,7 +80,7 @@
     <ClCompile Include="Src\GameObject\Comp\ModelRenderComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
-    <ClCompile Include="Src\GameObject\Comp\RenderDataComp.cpp">
+    <ClCompile Include="Src\GameObject\Comp\ModelRenderDataComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
     <ClCompile Include="Src\GameObject\Comp\TransformComp.cpp">
@@ -345,7 +345,7 @@
     <ClInclude Include="Src\GameObject\Comp\ModelRenderComp.h">
       <Filter>GameObject\Comp</Filter>
     </ClInclude>
-    <ClInclude Include="Src\GameObject\Comp\RenderDataComp.h">
+    <ClInclude Include="Src\GameObject\Comp\ModelRenderDataComp.h">
       <Filter>GameObject\Comp</Filter>
     </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\TransformComp.h">
