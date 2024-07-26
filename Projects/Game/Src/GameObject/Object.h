@@ -60,6 +60,7 @@ public:
 
 // 前方宣言
 class Object;
+class CameraComp;
 
 class IComp : public GameFlow {
 public:
@@ -85,7 +86,7 @@ public:
 	virtual void Update() override {}
 	virtual void LastUpdate() override {}
 
-	virtual void Draw() {}
+	virtual void Draw([[maybe_unused]] CameraComp*) {}
 
 	virtual void Debug([[maybe_unused]]const std::string& guiName) {};
 
@@ -101,7 +102,6 @@ protected:
 template<class T>
 concept IsBaseIComp = std::is_base_of_v<IComp, T>;
 
-class CameraComp;
 
 class Object : public GameFlow {
 public:
@@ -117,7 +117,7 @@ public:
 	virtual void Update() override;
 	virtual void LastUpdate() override;
 
-	virtual void Draw() const;
+	virtual void Draw([[maybe_unused]] CameraComp* cameraComp) const;
 
 	virtual void Debug(const std::string& guiName);
 
@@ -198,16 +198,6 @@ public:
 		return components_.contains(key);
 	}
 
-
-	void SetCamera(const CameraComp* camera) {
-		cameraComp_ = camera;
-	}
-	const CameraComp* GetCameraComp() const {
-		return cameraComp_.get();
-	}
-
-	const Mat4x4& GetCameraMatrix() const;
-
 	const std::string& GetObjectName() const {
 		return objectName_;
 	}
@@ -220,7 +210,5 @@ protected:
 	std::unordered_map<std::string, std::unique_ptr<IComp>> components_;
 	std::unordered_set<std::string> tags_;
 	std::string objectName_;
-
-	Lamb::SafePtr<const CameraComp> cameraComp_;
 	float32_t deltatime_ = 0.0_f32;
 };

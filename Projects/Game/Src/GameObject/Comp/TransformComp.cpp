@@ -95,13 +95,13 @@ void TransformComp::Debug([[maybe_unused]] const std::string& guiName) {
 		ImGui::EndCombo();
 	}
 
-	ImGuizmo::SetID(guizmoID_);
+	/*ImGuizmo::SetID(guizmoID_);
 	const auto& camera = *object_.GetCameraComp();
 	if (ImGuizmo::Manipulate(camera.GetViewMatrix().data(), camera.GetToNdcMatrix().data(), kGuizmoMode_[guimoType_].second, ImGuizmo::WORLD, worldMatrix_.data())) {
 		worldMatrix_.Decompose(scale, rotate, translate);
 		rotate = rotate.Normalize();
 		TransformCompUpdater::GetInstance()->SetCurretnGuizmoID(guizmoID_);
-	}
+	}*/
 
 	if (ImGui::TreeNode(guiName.c_str())) {
 		ImGui::DragFloat3("scale", scale.data(), 0.01f);

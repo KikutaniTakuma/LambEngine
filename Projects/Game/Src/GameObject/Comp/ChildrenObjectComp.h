@@ -22,7 +22,7 @@ public:
 	void Update() override;
 	void LastUpdate() override;
 
-	void Draw() override;
+	void Draw(CameraComp* cameraComp) override;
 
 	void Debug(const std::string& guiName) override;
 

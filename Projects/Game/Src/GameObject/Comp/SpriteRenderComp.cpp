@@ -4,6 +4,7 @@
 #include "Drawers/Texture2D/Texture2D.h"
 
 #include "TransformComp.h"
+#include "CameraComp.h"
 
 void SpriteRenderComp::Init() {
 	transformComp_ = object_.AddComp<TransformComp>();
@@ -12,11 +13,11 @@ void SpriteRenderComp::Init() {
 	tex2D_ = DrawerManager::GetInstance()->GetTexture2D();
 }
 
-void SpriteRenderComp::Draw() {
+void SpriteRenderComp::Draw(CameraComp* cameraComp) {
 	tex2D_->Draw(
 		transformComp_->GetWorldMatrix(),
 		renderDataComp_->uvTransform.GetMatrix(),
-		object_.GetCameraMatrix(),
+		cameraComp->GetCameraMatrix(),
 		renderDataComp_->texHandle,
 		renderDataComp_->color.GetColorRGBA(),
 		renderDataComp_->type

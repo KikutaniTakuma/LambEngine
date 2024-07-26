@@ -9,12 +9,12 @@ public:
 
 	~Camera2DComp() = default;
 
-	void Init() override;
+	void Init();
 
-	void LastUpdate() override;
+	void LastUpdate();
 
 public:
-	const Mat4x4& GetToNdcMatrix() const override;
+	const Mat4x4& GetToNdcMatrix() const;
 
 public:
 	void SetWidth(float32_t width) {

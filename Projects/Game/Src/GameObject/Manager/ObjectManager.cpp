@@ -97,29 +97,10 @@ void ObjectManager::Clear() {
 }
 
 bool ObjectManager::SetCamera() {
-	Lamb::SafePtr<Object> cameraObject;
-
 	for (auto& i : objects_) {
 		if (i->HasTag("Camera3D")) {
 			cameraComp_ = i->GetComp<Camera3DComp>();
-			cameraObject = i.get();
 			break;
-		}
-	}
-
-	if (cameraObject.empty()) {
-		return false;
-	}
-
-	for (auto& i : objects_) {
-		if (i.get() == cameraObject.get()) {
-			continue;
-		}
-		else if (cameraObject.have()) {
-			i->SetCamera(cameraComp_.get());
-		}
-		else {
-			i->SetCamera(cameraComp_.get());
 		}
 	}
 
@@ -183,7 +164,7 @@ void ObjectManager::Update() {
 void ObjectManager::Draw() {
 	// 描画処理
 	for (auto& i : objects_) {
-		i->Draw();
+		i->Draw(cameraComp_.get());
 	}
 }
 
@@ -236,7 +217,6 @@ void ObjectManager::Debug() {
 	}
 	if (ImGui::Button("AddObject")) {
 		auto newObject = std::make_unique<Object>();
-		newObject->SetCamera(cameraComp_.get());
 		objects_.insert(std::move(newObject));
 	}
 

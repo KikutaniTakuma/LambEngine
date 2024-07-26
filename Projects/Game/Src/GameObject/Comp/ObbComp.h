@@ -24,7 +24,7 @@ public:
 	/// </summary>
 	void UpdatePosAndOrient();
 
-	void Draw() override;
+	void Draw(CameraComp* cameraComp) override;
 
 	bool IsCollision(Vector3 pos, float radius);
 	bool IsCollision(ObbComp* const other);

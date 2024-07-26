@@ -10,7 +10,7 @@ public:
 
 	void Init() override;
 
-	void Draw() override;
+	void Draw(CameraComp* cameraComp) override;
 
 	void Load(const std::string& fileName);
 

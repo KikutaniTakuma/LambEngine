@@ -9,12 +9,12 @@ public:
 
 	~Camera3DComp() = default;
 
-	void Init() override;
+	void Init();
 
-	void LastUpdate() override;
+	void LastUpdate();
 
 public:
-	const Mat4x4& GetToNdcMatrix() const override;
+	const Mat4x4& GetToNdcMatrix() const;
 
 public:
 	void SetFov(float32_t fov) {
@@ -34,7 +34,7 @@ public:
 
 	const Vector3& GetPos() const;
 
-	void Debug(const std::string& guiNaneme) override;
+	void Debug(const std::string& guiNaneme);
 
 private:
 	float32_t fov_ = 0.0f;

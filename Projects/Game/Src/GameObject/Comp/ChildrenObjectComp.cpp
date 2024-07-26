@@ -67,9 +67,9 @@ void ChildrenObjectComp::LastUpdate() {
 	}
 }
 
-void ChildrenObjectComp::Draw() {
+void ChildrenObjectComp::Draw(CameraComp* cameraComp) {
 	for (auto& i : objects_) {
-		i->Draw();
+		i->Draw(cameraComp);
 	}
 }
 

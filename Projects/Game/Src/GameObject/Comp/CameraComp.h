@@ -9,8 +9,7 @@ public:
 	virtual ~CameraComp() = default;
 
 public:
-	virtual void Init() override;
-	virtual void LastUpdate() override {};
+	void Init() override;
 
 	const Mat4x4& GetCameraMatrix() const {
 		return cameraMatrix_;

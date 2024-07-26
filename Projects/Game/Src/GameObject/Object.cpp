@@ -73,10 +73,10 @@ void Object::LastUpdate()
 	}
 }
 
-void Object::Draw() const
+void Object::Draw([[maybe_unused]] CameraComp* cameraComp) const
 {
 	for (auto& i : components_) {
-		i.second->Draw();
+		i.second->Draw(cameraComp);
 	}
 }
 
@@ -138,9 +138,4 @@ bool Object::DebugAddComp() {
 #endif // _DEBUG
 
 	return false;
-}
-
-const Mat4x4& Object::GetCameraMatrix() const
-{
-	return cameraComp_->GetCameraMatrix();
 }

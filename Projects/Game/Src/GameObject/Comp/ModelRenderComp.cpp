@@ -3,16 +3,17 @@
 #include "RenderDataComp.h"
 
 #include "TransformComp.h"
+#include "CameraComp.h"
 
 void ModelRenderComp::Init() {
 	transformComp_ = object_.AddComp<TransformComp>();
 	renderDataComp_ = object_.AddComp<RenderDataComp>();
 }
 
-void ModelRenderComp::Draw() {
+void ModelRenderComp::Draw(CameraComp* cameraComp) {
 	model_->Draw(
 		transformComp_->GetWorldMatrix(),
-		object_.GetCameraMatrix(),
+		cameraComp->GetCameraMatrix(),
 		renderDataComp_->color.GetColorRGBA(),
 		renderDataComp_->type,
 		renderDataComp_->isLighting

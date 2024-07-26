@@ -1,6 +1,7 @@
 #include "ObbComp.h"
 #include <climits>
 #include <algorithm>
+#include "CameraComp.h"
 
 #ifdef _DEBUG
 #include "Drawers/Line/Line.h"
@@ -68,9 +69,9 @@ void ObbComp::UpdatePosAndOrient()
 #endif // _DEBUG
 }
 
-void ObbComp::Draw() {
+void ObbComp::Draw(CameraComp* cameraComp) {
 #ifdef _DEBUG
-	const Mat4x4& viewProjection = object_.GetCameraMatrix();
+	const Mat4x4& viewProjection = cameraComp->GetCameraMatrix();
 
 	Line::Draw(
 		(*positions_)[0],
