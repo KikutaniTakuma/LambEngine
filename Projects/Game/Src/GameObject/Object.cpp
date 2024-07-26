@@ -14,7 +14,7 @@
 #include "Comp/ModelRenderComp.h"
 #include "Comp/ObbComp.h"
 #include "Comp/ObbPushComp.h"
-#include "Comp/RenderDataComp.h"
+#include "Comp/ModelRenderDataComp.h"
 #include "Comp/SceneChangeComp.h"
 #include "Comp/SpriteRenderComp.h"
 #include "Comp/SpriteRenderDataComp.h"
