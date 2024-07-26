@@ -20,7 +20,7 @@ TitleScene::TitleScene() :
 void TitleScene::Load()
 {
 	levelData_ = LevelLoader::Load("./SceneData/TitleScene.json");
-	ObjectManager::GetInstance()->SetLevelData(levelData_, currentCamera_);
+	ObjectManager::GetInstance()->SetLevelData(levelData_);
 }
 
 void TitleScene::Initialize()

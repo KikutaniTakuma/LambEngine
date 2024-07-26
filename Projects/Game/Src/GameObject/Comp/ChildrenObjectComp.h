@@ -11,11 +11,10 @@ public:
 	void Init() override;
 	void Finalize() override;
 
-	void AddObject(std::unique_ptr<Object>&& object);
+	void AddObject(Lamb::SafePtr<Object> object);
 	void EraseObject(Object* object);
 
 	void FirstUpdate() override;
-	void Update() override;
 
 	void Move() override;
 
@@ -24,6 +23,8 @@ public:
 	void LastUpdate() override;
 
 	void Draw() override;
+
+	void Debug(const std::string& guiName) override;
 
 public:
 	const std::unordered_set<std::unique_ptr<Object>>& GetObjects() const;

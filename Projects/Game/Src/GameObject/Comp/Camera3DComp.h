@@ -1,15 +1,11 @@
 #pragma once
 
-#pragma once
-
-#include "../Object.h"
-
-#include "TransformComp.h"
+#include "CameraComp.h"
 
 
-class Camera3DComp : public IComp {
+class Camera3DComp : public CameraComp {
 public:
-	using IComp::IComp;
+	using CameraComp::CameraComp;
 
 	~Camera3DComp() = default;
 
@@ -18,20 +14,8 @@ public:
 	void LastUpdate() override;
 
 public:
-	const Mat4x4& GetMatrix() const {
-		return cameraMatrix_;
-	}
-	const Mat4x4& GetViewMatrix() const;
-	const Mat4x4& GetProjectionMatrix() const;
+	const Mat4x4& GetToNdcMatrix() const override;
 
-
-public:
-	TransformComp& GetTransformComp() {
-		return *transform_;
-	}
-	const TransformComp& GetTransformComp() const {
-		return *transform_;
-	}
 public:
 	void SetFov(float32_t fov) {
 		fov_ = fov;
@@ -53,14 +37,11 @@ public:
 	void Debug(const std::string& guiNaneme) override;
 
 private:
-	Lamb::SafePtr<TransformComp> transform_;
 	float32_t fov_ = 0.0f;
 	float32_t farClip_ = 0.0f;
 	float32_t nearClip_ = 0.0f;
 	float32_t aspectRatio_ = 0.0f;
 
-	Mat4x4 cameraMatrix_ = Mat4x4::kIdentity;
-	Mat4x4 viewMatrix_ = Mat4x4::kIdentity;
 	Mat4x4 projectionMatrix_ = Mat4x4::kIdentity;
 
 #ifdef _DEBUG

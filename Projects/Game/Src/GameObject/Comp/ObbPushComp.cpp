@@ -22,7 +22,7 @@ void ObbPushComp::Collision(Lamb::SafePtr<ObbComp> other) {
 		}
 	}
 	else {
-		bool isCollision = other->IsCollision(obbComp_.get());
+		other->IsCollision(obbComp_.get());
 	}
 }
 

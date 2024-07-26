@@ -19,13 +19,11 @@ private:
 	/// <summary>
 	/// 範囲内に入っているか
 	/// </summary>
-	/// <param name="minRange">範囲の最小値</param>
-	/// <param name="maxRange">範囲の最大値</param>
+	/// <param name="min">範囲の最小値</param>
+	/// <param name="max">範囲の最大値</param>
 	/// <returns>入っていたらtrue</returns>
 	bool IsInRange(
-		const Vector3& pos,
-		const Vector3& minRange,
-		const Vector3& maxRange
+		const Vector3& pos, const Vector3& min, const Vector3& max
 	);
 
 public:

@@ -1,6 +1,7 @@
 #include "TransformComp.h"
 #include "../Manager/TransformCompUpdater.h"
 #ifdef _DEBUG
+#include "CameraComp.h"
 #include "imgui.h"
 #endif // _DEBUG
 
@@ -95,7 +96,8 @@ void TransformComp::Debug([[maybe_unused]] const std::string& guiName) {
 	}
 
 	ImGuizmo::SetID(guizmoID_);
-	if (ImGuizmo::Manipulate(view_->data(), projection_->data(), kGuizmoMode_[guimoType_].second, ImGuizmo::WORLD, worldMatrix_.data())) {
+	const auto& camera = *object_.GetCameraComp();
+	if (ImGuizmo::Manipulate(camera.GetViewMatrix().data(), camera.GetToNdcMatrix().data(), kGuizmoMode_[guimoType_].second, ImGuizmo::WORLD, worldMatrix_.data())) {
 		worldMatrix_.Decompose(scale, rotate, translate);
 		rotate = rotate.Normalize();
 		TransformCompUpdater::GetInstance()->SetCurretnGuizmoID(guizmoID_);
@@ -125,16 +127,6 @@ void TransformComp::Debug([[maybe_unused]] const std::string& guiName) {
 	}
 #endif // _DEBUG
 
-}
-
-void TransformComp::SetViewMatrix(const Mat4x4* view)
-{
-	view_ = view;
-}
-
-void TransformComp::SetProjectionMatrix(const Mat4x4* projection)
-{
-	projection_ = projection;
 }
 
 void TransformComp::SetGuizmoID(uint32_t id) {

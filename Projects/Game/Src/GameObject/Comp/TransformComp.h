@@ -46,8 +46,6 @@ public:
 	void Debug(const std::string& guiName) override;
 
 #ifdef _DEBUG
-	void SetViewMatrix(const Mat4x4* view);
-	void SetProjectionMatrix(const Mat4x4* projection);
 	void SetGuizmoID(uint32_t id);
 #endif // _DEBUG
 
@@ -62,8 +60,6 @@ public:
 
 private:
 #ifdef _DEBUG
-	Lamb::SafePtr<const Mat4x4> view_;
-	Lamb::SafePtr<const Mat4x4> projection_;
 	uint32_t guizmoID_ = 0;
 	uint32_t guimoType_ = 0;
 

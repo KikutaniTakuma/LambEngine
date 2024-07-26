@@ -19,7 +19,7 @@ void WindComp::Init() {
 
 		windNodeComp_.insert(windNode);
 
-		childrenComp_->AddObject(std::move(addObject));
+		childrenComp_->AddObject(addObject.release());
 	}
 
 	lengthRange_.first = 1.0f;
@@ -69,6 +69,10 @@ void WindComp::FirstUpdate() {
 				i->Start();
 
 				count++;
+			}
+
+			if (appearNum <= count) {
+				break;
 			}
 		}
 	}

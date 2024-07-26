@@ -1,15 +1,11 @@
 #pragma once
 
-#pragma once
-
-#include "../Object.h"
-
-#include "TransformComp.h"
+#include "CameraComp.h"
 
 
-class Camera2DComp : public IComp {
+class Camera2DComp : public CameraComp {
 public:
-	using IComp::IComp;
+	using CameraComp::CameraComp;
 
 	~Camera2DComp() = default;
 
@@ -18,17 +14,8 @@ public:
 	void LastUpdate() override;
 
 public:
-	const Mat4x4& GetMatrix() const {
-		return cameraMatrix_;
-	}
+	const Mat4x4& GetToNdcMatrix() const override;
 
-public:
-	TransformComp& GetTransformComp() {
-		return *transform_;
-	}
-	const TransformComp& GetTransformComp() const {
-		return *transform_;
-	}
 public:
 	void SetWidth(float32_t width) {
 		width_ = width;
@@ -45,11 +32,11 @@ public:
 	}
 
 private:
-	Lamb::SafePtr<TransformComp> transform_;
 	float32_t width_ = 0.0f;
 	float32_t height_ = 0.0f;
 	float32_t farClip_ = 0.0f;
 	float32_t nearClip_ = 0.0f;
 
 	Mat4x4 cameraMatrix_ = Mat4x4::kIdentity;
+	Mat4x4 othographicMatrix_ = Mat4x4::kIdentity;
 };

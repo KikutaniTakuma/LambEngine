@@ -6,8 +6,8 @@
 
 
 void Camera3DComp::Init() {
-	transform_ = object_.AddComp<decltype(transform_)::type>();
-	viewMatrix_ = transform_->GetWorldMatrix().Inverse();
+	CameraComp::Init();
+
 	fov_ = 0.45f;
 	aspectRatio_ = 720.0f / 1280.0f;
 	nearClip_ = 0.1f;
@@ -23,12 +23,7 @@ void Camera3DComp::LastUpdate()
 	cameraMatrix_ = viewMatrix_ * projectionMatrix_;
 }
 
-const Mat4x4& Camera3DComp::GetViewMatrix() const
-{
-	return viewMatrix_;
-}
-
-const Mat4x4& Camera3DComp::GetProjectionMatrix() const
+const Mat4x4& Camera3DComp::GetToNdcMatrix() const
 {
 	return projectionMatrix_;
 }

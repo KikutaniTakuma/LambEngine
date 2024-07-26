@@ -6,7 +6,10 @@ public:
 
 	};
 
+
 public:
+	using ItemComp::ItemComp;
+
 	~SailComp() = default;
 
 public:

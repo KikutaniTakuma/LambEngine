@@ -40,6 +40,7 @@ void ObbComp::Init()
 
 void ObbComp::FirstUpdate()
 {
+	currentCollisionTag_ = "";
 	UpdatePosAndOrient();
 }
 
@@ -178,7 +179,11 @@ bool ObbComp::IsCollision(Vector3 pos, float radius)
 		-transformComp_->scale * 0.5f // 右上奥
 	};
 
-	pos *= Mat4x4::MakeAffin(Vector3::kIdentity, transformComp_->rotate, transformComp_->translate).Inverse();
+	const Mat4x4& worldMatrix = transformComp_->GetWorldMatrix();
+	Quaternion&& rotate = worldMatrix.GetRotate();
+	Vector3&& translate = worldMatrix.GetTranslate();
+
+	pos *= Mat4x4::MakeAffin(Vector3::kIdentity, rotate, translate).Inverse();
 
 	Vector3 closestPoint = {
 		std::clamp(pos.x, positions[min].x,positions[max].x),
@@ -353,6 +358,7 @@ bool ObbComp::CollisionHasTag(ObbComp* const other) {
 	bool hasTag = false;
 	for (auto& i : collisionTags_) {
 		if (other->getObject().HasTag(i)) {
+			currentCollisionTag_ = i;
 			hasTag = true;
 			break;
 		}
@@ -385,4 +391,18 @@ void ObbComp::EraseCollisionTag(const std::string& collisionTag) {
 	if (collisionTags_.contains(collisionTag)) {
 		collisionTags_.erase(collisionTag);
 	}
+}
+
+void ObbComp::Debug([[maybe_unused]]const std::string& guiName) {
+#ifdef _DEBUG
+	if (ImGui::TreeNode(guiName.c_str())) {
+		ImGui::DragFloat3("scale", scale.data(), 0.01f);
+		ImGui::DragFloat3("center", center.data(), 0.01f);
+		ImGui::TreePop();
+	}
+#endif // _DEBUG
+}
+
+const std::string& ObbComp::GetCurrentCollisionTag() const {
+	return currentCollisionTag_;
 }

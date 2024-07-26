@@ -5,6 +5,8 @@
 
 class SceneChangeComp : public EventComp {
 public:
+	using EventComp::EventComp;
+
 	~SceneChangeComp() = default;
 
 public:

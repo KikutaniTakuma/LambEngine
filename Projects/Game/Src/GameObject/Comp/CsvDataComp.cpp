@@ -26,7 +26,7 @@ void CsvDataComp::Debug([[maybe_unused]] const std::string& guiName) {
 		if (ImGui::TreeNode("Data")) {
 			for (const auto& line : csvData_) {
 				for (auto element = line.begin(); element != line.end(); element++) {
-					ImGui::Text("%d, ", element);
+					ImGui::Text("%d, ", *element);
 					if (element != line.rbegin().base()) {
 						ImGui::SameLine();
 					}

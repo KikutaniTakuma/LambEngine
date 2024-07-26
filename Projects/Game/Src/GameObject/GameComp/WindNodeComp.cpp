@@ -44,9 +44,9 @@ void WindNodeComp::Draw() {
 	}
 }
 
-bool WindNodeComp::IsInRange(const Vector3& pos, const Vector3& minRange, const Vector3& maxRange)
+bool WindNodeComp::IsInRange(const Vector3& pos, const Vector3& min, const Vector3& max)
 {
-	return (minRange.x <= pos.x && pos.x <= maxRange.x) &&
-		(minRange.y <= pos.y && pos.y <= maxRange.y) &&
-		(minRange.z <= pos.z && pos.z <= maxRange.z);
+	return (min.x <= pos.x && pos.x <= max.x) &&
+		(min.y <= pos.y && pos.y <= max.y) &&
+		(min.z <= pos.z && pos.z <= max.z);
 }

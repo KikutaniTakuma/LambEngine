@@ -2,6 +2,8 @@
 #include "ItemComp.h"
 class CannonComp : public ItemComp {
 public:
+	using ItemComp::ItemComp;
+
 	~CannonComp() = default;
 
 public:

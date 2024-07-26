@@ -51,13 +51,6 @@ void TransformCompUpdater::UpdateMatrix() {
 	}
 }
 
-void TransformCompUpdater::SetCameraMatrix(const Mat4x4* view, const Mat4x4* projection) {
-	for (auto& i : transformComps_) {
-		i->SetViewMatrix(view);
-		i->SetProjectionMatrix(projection);
-	}
-}
-
 void TransformCompUpdater::SetCurretnGuizmoID(uint32_t currentGuizmoID)
 {
 	currentGuizmoID_ = currentGuizmoID;

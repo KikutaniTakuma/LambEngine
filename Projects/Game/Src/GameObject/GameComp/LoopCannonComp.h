@@ -2,6 +2,8 @@
 #include "ItemComp.h"
 class LoopCannonComp : public ItemComp {
 public:
+	using ItemComp::ItemComp;
+
 	~LoopCannonComp() = default;
 
 public:

@@ -26,9 +26,9 @@ public:
 
 	void Draw() override;
 
-	[[nodiscard]] bool IsCollision(Vector3 pos, float radius);
-	[[nodiscard]] bool IsCollision(ObbComp* const other);
-	[[nodiscard]] bool IsCollision(ObbComp* const other, Vector3& pushVector);
+	bool IsCollision(Vector3 pos, float radius);
+	bool IsCollision(ObbComp* const other);
+	bool IsCollision(ObbComp* const other, Vector3& pushVector);
 
 	bool CollisionHasTag(ObbComp* const other);
 
@@ -37,6 +37,10 @@ public:
 
 	void SetCollisionTag(const std::string& collisionTag);
 	void EraseCollisionTag(const std::string& collisionTag);
+
+	void Debug(const std::string& guiName);
+
+	const std::string& GetCurrentCollisionTag() const;
 
 public:
 	Vector3 scale = Vector3::kIdentity;
@@ -61,6 +65,8 @@ private:
 	std::unique_ptr<std::array<Vector3, 3>> orientations_;
 
 	Lamb::Flg isCollision_;
+
+	std::string currentCollisionTag_;
 
 	/// <summary>
 	/// ゲッター
