@@ -100,7 +100,7 @@ public:
 	/// </summary>
 	/// <param name="type">ボタンタイプ</param>
 	/// <returns>1:押された 0:押されてない</returns>
-	bool LongPushed(Button type);
+	bool LongPush(Button type);
 
 	/// <summary>
 	/// ボタンを離した瞬間かを取得

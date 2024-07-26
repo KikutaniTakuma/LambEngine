@@ -132,6 +132,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\Camera\Camera.cpp" />
     <ClCompile Include="Src\Camera\DebugCamera\DebugCamera.cpp" />
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\BurttonComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\Camera2DComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\Camera3DComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\CameraComp.cpp" />
@@ -190,6 +191,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\Camera\Camera.h" />
     <ClInclude Include="Src\Camera\DebugCamera\DebugCamera.h" />
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h" />
+    <ClInclude Include="Src\GameObject\Comp\BurttonComp.h" />
     <ClInclude Include="Src\GameObject\Comp\Camera2DComp.h" />
     <ClInclude Include="Src\GameObject\Comp\Camera3DComp.h" />
     <ClInclude Include="Src\GameObject\Comp\CameraComp.h" />

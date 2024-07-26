@@ -41,7 +41,7 @@ public:
 
 	 bool Pushed(Mouse::Button button);
 	 bool LongPush(Mouse::Button button);
-	 bool Releaed(Mouse::Button button);
+	 bool Released(Mouse::Button button);
 
 	/// <summary>
 	/// 何かしらのキーが押された、またはマウスが動いた、ホイールを動かした

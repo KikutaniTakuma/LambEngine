@@ -107,7 +107,7 @@ bool Mouse::LongPush(Mouse::Button button) {
 	return false;
 }
 
-bool Mouse::Releaed(Mouse::Button button) {
+bool Mouse::Released(Mouse::Button button) {
 	if (!initalizeSucceeded_) {
 		return false;
 	}
