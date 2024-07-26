@@ -7,8 +7,12 @@ class SpriteRenderDataComp : public IComp {
 public:
 	enum class Offset{
 		kMiddle,
-		kLeftUpper,
-		kRightUpper,
+		kUp,
+		kUnder,
+		kLeft,
+		kRight,
+		kLeftUp,
+		kRightUp,
 		kLeftUnder,
 		kRightUnder,
 

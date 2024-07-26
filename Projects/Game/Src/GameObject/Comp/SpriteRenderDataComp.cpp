@@ -9,8 +9,12 @@
 #ifdef _DEBUG
 const std::array<std::string, uint32_t(SpriteRenderDataComp::Offset::kNum)> SpriteRenderDataComp::kComboEnum_ = {
     "kMiddle",
-    "kLeftUpper",
-    "kRightUpper",
+    "kUp",
+    "kUnder",
+    "kLeft",
+    "kRight",
+    "kLeftUp",
+    "kRightUp",
     "kLeftUnder",
     "kRightUnder"
 };
@@ -18,6 +22,10 @@ const std::array<std::string, uint32_t(SpriteRenderDataComp::Offset::kNum)> Spri
 
 const std::array<Mat4x4, uint32_t(SpriteRenderDataComp::Offset::kNum)> SpriteRenderDataComp::kOffsetMatrix = {
     Mat4x4::MakeTranslate(Vector3::kZero),
+    Mat4x4::MakeTranslate(Vector3(0.0f, -1.0f, 0.0f) * 0.5f),
+    Mat4x4::MakeTranslate(Vector3(0.0f, 1.0f, 0.0f) * 0.5f),
+    Mat4x4::MakeTranslate(Vector3(1.0f, 0.0f, 0.0f) * 0.5f),
+    Mat4x4::MakeTranslate(Vector3(-1.0f, 0.0f, 0.0f) * 0.5f),
     Mat4x4::MakeTranslate(Vector3(1.0f, -1.0f, 0.0f) * 0.5f),
     Mat4x4::MakeTranslate(Vector3(-1.0f, -1.0f, 0.0f) * 0.5f),
     Mat4x4::MakeTranslate(Vector3(1.0f, 1.0f, 0.0f) * 0.5f),
@@ -92,9 +100,9 @@ void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
         ImGui::ColorEdit4("color", color.data());
         ImGui::NewLine();
         ImGui::Text("uv");
-        ImGui::DragFloat3("scale", uvTransform.scale.data());
-        ImGui::DragFloat3("rotate", euler_.data());
-        ImGui::DragFloat3("translate", uvTransform.translate.data());
+        ImGui::DragFloat3("scale", uvTransform.scale.data(), 0.001f);
+        ImGui::DragFloat3("rotate", euler_.data(), 0.001f);
+        ImGui::DragFloat3("translate", uvTransform.translate.data(), 0.001f);
 
         if (euler_ == Vector3::kZero) {
             euler_ = uvTransform.rotate.ToEuler();
@@ -102,11 +110,6 @@ void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
         uvTransform.rotate = Quaternion::EulerToQuaternion(euler_);
 
         ImGui::Text("texture %s", fileName.c_str());
-        if (ImGui::Button("ファイル読み込み")) {
-            Lamb::SafePtr textureManager = TextureManager::GetInstance();
-            textureManager->LoadTexture(fileName);
-            texHandle = textureManager->GetHandle(fileName);
-        }
 
         if (ImGui::Button("ファイルパス再読み込み")) {
             size_t size = filePaths_.size();
@@ -117,10 +120,13 @@ void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
             filePaths_.insert(filePaths_.end(), bmp.begin(), bmp.end());
         }
 
-        if (ImGui::TreeNode("テクスチャ")) {
+        if (ImGui::TreeNode("テクスチャ読み込み")) {
             for (auto itr = filePaths_.begin(); itr != filePaths_.end(); itr++) {
                 if (ImGui::Button(itr->string().c_str())) {
                     fileName = itr->string();
+                    Lamb::SafePtr textureManager = TextureManager::GetInstance();
+                    textureManager->LoadTexture(fileName);
+                    texHandle = textureManager->GetHandle(fileName);
                 }
             }
             ImGui::TreePop();
