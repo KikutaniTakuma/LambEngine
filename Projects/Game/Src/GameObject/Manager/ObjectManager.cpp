@@ -18,7 +18,7 @@ std::unique_ptr<ObjectManager> ObjectManager::instance_;
 
 ObjectManager::~ObjectManager()
 {
-	instance_.reset();
+	Clear();
 }
 
 ObjectManager* const ObjectManager::GetInstance()
@@ -39,32 +39,35 @@ void ObjectManager::Finalize()
 	instance_.reset();
 }
 
-void ObjectManager::SetLevelData(Lamb::SafePtr<LevelData> levelData, Lamb::SafePtr<Camera> camera) {
+void ObjectManager::SetLevelData(Lamb::SafePtr<LevelData> levelData) {
 	assert(levelData.have());
 	for (auto& i : levelData->objects) {
-		this->Set(i.get());
+		this->Set(i);
 	}
 
-	if (not SetCamera()) {
-		SetCamera(camera);
-	}
-
-	TransformCompUpdater::GetInstance()->SetCameraMatrix(&cameraComp_->GetViewMatrix(), &cameraComp_->GetProjectionMatrix());
+	SetCamera();
 }
 
 const Mat4x4& ObjectManager::GetCameraMatrix() const
 {
-	return cameraComp_.have() ? cameraComp_->GetMatrix() : camera_->GetViewProjection();
+	return cameraComp_->GetCameraMatrix();
 }
 
 const Vector3& ObjectManager::GetCameraPos() const
 {
-	return cameraComp_.have() ? cameraComp_->GetPos() : camera_->GetPos();
+	return cameraComp_->GetTransformComp().translate;
 }
 
 void ObjectManager::Set(const Lamb::SafePtr<Object>& object) {
-	if (not objects_.contains(object) and object.have()) {
-		objects_.insert(object);
+	auto itr = std::find_if(
+		objects_.begin(), objects_.end(),
+		[&object](const std::unique_ptr<Object>& element)->bool {
+			return object.get() == element.get();
+		}
+	);
+
+	if (itr ==  objects_.end() and object.have()) {
+		objects_.insert(std::unique_ptr<Object>(object.get()));
 		if (object->HasComp<ObbPushComp>()) {
 			obbObjects_.push_back(object->GetComp<ObbPushComp>());
 		}
@@ -75,8 +78,14 @@ void ObjectManager::Set(const Lamb::SafePtr<Object>& object) {
 }
 
 void ObjectManager::Erase(const Lamb::SafePtr<Object>& object) {
-	if (objects_.contains(object)) {
-		objects_.erase(object);
+	auto itr = std::find_if(
+		objects_.begin(), objects_.end(),
+		[&object](const std::unique_ptr<Object>& element)->bool {
+			return object.get() == element.get();
+		}
+	);
+	if (itr != objects_.end()) {
+		objects_.erase(itr);
 	}
 }
 
@@ -85,14 +94,6 @@ void ObjectManager::Clear() {
 	obbObjects_.clear();
 
 	cameraComp_ = nullptr;
-	camera_ = nullptr;
-}
-
-void ObjectManager::SetCamera(const Lamb::SafePtr<Camera>& camera) {
-	camera_ = camera;
-	for (auto& i : objects_) {
-		i->SetCamera(camera.get());
-	}
 }
 
 bool ObjectManager::SetCamera() {
@@ -101,7 +102,7 @@ bool ObjectManager::SetCamera() {
 	for (auto& i : objects_) {
 		if (i->HasTag("Camera3D")) {
 			cameraComp_ = i->GetComp<Camera3DComp>();
-			cameraObject = i;
+			cameraObject = i.get();
 			break;
 		}
 	}
@@ -111,7 +112,7 @@ bool ObjectManager::SetCamera() {
 	}
 
 	for (auto& i : objects_) {
-		if (i == cameraObject) {
+		if (i.get() == cameraObject.get()) {
 			continue;
 		}
 		else if (cameraObject.have()) {
@@ -175,8 +176,8 @@ void ObjectManager::Update() {
 	}
 
 	Lamb::SafePtr renderingManager = RenderingManager::GetInstance();
-	renderingManager->SetCameraMatrix(cameraComp_->GetMatrix());
-	renderingManager->SetCameraPos(cameraComp_->GetPos());
+	renderingManager->SetCameraMatrix(cameraComp_->GetCameraMatrix());
+	renderingManager->SetCameraPos(cameraComp_->GetTransformComp().translate);
 }
 
 void ObjectManager::Draw() {
@@ -233,16 +234,49 @@ void ObjectManager::Debug() {
 		}
 		ImGui::TreePop();
 	}
+	if (ImGui::Button("AddObject")) {
+		auto newObject = std::make_unique<Object>();
+		newObject->SetCamera(cameraComp_.get());
+		objects_.insert(std::move(newObject));
+	}
 
-
-	for (size_t i = 0; auto& object : objects_) {
+	size_t objectCount = 0;
+	bool isErase = false;
+	for (auto itr = objects_.begin(); itr != objects_.end(); itr++) {
 		for (auto& tag : objectTags_) {
-			if (object->HasTag(tag.first) and tag.second) {
-				object->Debug("object_" + std::to_string(i));
+			if (((*itr)->HasTag(tag.first) and tag.second) or (*itr)->GetTags().empty()) {
+				bool isCamera = (*itr)->HasComp<Camera3DComp>();
+				bool isButton = isCamera ? false : ImGui::Button("erase object");
+				if (not isButton) {
+					if (not isCamera) { ImGui::SameLine(); }
+					(*itr)->Debug("object_" + std::to_string(objectCount));
+				}
+				objectCount++;
+
+				if (isButton) {
+					if ((*itr)->HasComp<ObbPushComp>()) {
+						auto obbComp = (*itr)->GetComp<ObbPushComp>();
+						auto obbCompItr = std::find_if(
+							obbObjects_.begin(),
+							obbObjects_.end(),
+							[&obbComp](const Lamb::SafePtr<ObbPushComp>& element)->bool {
+								return obbComp == element.get();
+							}
+						);
+						obbObjects_.erase(obbCompItr);
+					}
+					
+					objects_.erase(itr);
+					isErase = true;
+					break;
+				}
+				
 				break;
 			}
 		}
-		i++;
+		if (isErase) {
+			break;
+		}
 	}
 	ImGui::End();
 #endif // _DEBUG

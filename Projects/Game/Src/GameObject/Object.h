@@ -1,8 +1,11 @@
 #pragma once
-#include "Camera/Camera.h"
 #include "Math/MathCommon.h"
 #include "Utils/SafePtr.h"
 #include "Utils/Flg.h"
+#include "Math/Mat4x4.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math/Vector4.h"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -10,6 +13,11 @@
 #include <memory>
 #include <type_traits>
 #include <string>
+
+#ifdef _DEBUG
+#include "imgui.h"
+#endif // _DEBUG
+
 
 /// 1シーンの流れ
 /// ロード
@@ -93,6 +101,8 @@ protected:
 template<class T>
 concept IsBaseIComp = std::is_base_of_v<IComp, T>;
 
+class CameraComp;
+
 class Object : public GameFlow {
 public:
 	Object() = default;
@@ -110,6 +120,18 @@ public:
 	virtual void Draw() const;
 
 	virtual void Debug(const std::string& guiName);
+
+	bool DebugAddComp();
+
+private:
+	template<IsBaseIComp Comp>
+	void DebugAdd() {
+#ifdef _DEBUG
+		if (ImGui::Button((std::string("Add ") + typeid(Comp).name()).c_str())) {
+			AddComp<Comp>();
+		}
+#endif // _DEBUG
+	}
 
 public:
 	void SetDeltaTime(float32_t deltatime) {
@@ -177,11 +199,11 @@ public:
 	}
 
 
-	void SetCamera(Camera* const camera) {
-		camera_ = camera;
-	}
-	void SetCamera(const class Camera3DComp* camera) {
+	void SetCamera(const CameraComp* camera) {
 		cameraComp_ = camera;
+	}
+	const CameraComp* GetCameraComp() const {
+		return cameraComp_.get();
 	}
 
 	const Mat4x4& GetCameraMatrix() const;
@@ -199,7 +221,6 @@ protected:
 	std::unordered_set<std::string> tags_;
 	std::string objectName_;
 
-	Lamb::SafePtr<Camera> camera_;
-	Lamb::SafePtr<const class Camera3DComp> cameraComp_;
+	Lamb::SafePtr<const CameraComp> cameraComp_;
 	float32_t deltatime_ = 0.0_f32;
 };

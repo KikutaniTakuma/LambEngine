@@ -7,6 +7,6 @@
 #include "Game/SkyBlock/SkyBlock.h"
 
 struct LevelData {
-	std::vector<std::unique_ptr<Object>> objects;
+	std::vector<Lamb::SafePtr<Object>> objects;
 	std::string name;
 };

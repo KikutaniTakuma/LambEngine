@@ -31,7 +31,7 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
     // 全オブジェクトを走査
     for (nlohmann::json& objectData : data["objects"]) {
         // オブジェクトを追加
-        levelData->objects.emplace_back(std::make_unique<Object>());
+        levelData->objects.emplace_back(Lamb::MakeSafePtr<Object>());
         Object& object = *levelData->objects.back();
 
         // オブジェクトの名前を設定
@@ -155,7 +155,7 @@ void LevelLoader::AddChildren(nlohmann::json& data, Lamb::SafePtr<LevelData> lev
     // 全childlenを走査
     for (nlohmann::json& objectData : data["children"]) {
         // オブジェクトを追加
-        levelData->objects.emplace_back(std::make_unique<Object>());
+        levelData->objects.emplace_back(Lamb::MakeSafePtr<Object>());
         Object& object = *levelData->objects.back();
 
         // オブジェクトの名前を設定
