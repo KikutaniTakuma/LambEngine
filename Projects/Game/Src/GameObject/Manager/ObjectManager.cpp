@@ -4,7 +4,7 @@
 #include "TransformCompUpdater.h"
 
 #include "GameObject/Comp/ObbPushComp.h"
-#include "GameObject/Comp/Camera3DComp.h"
+#include "GameObject/Comp/CameraComp.h"
 
 #include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include <string>
@@ -98,8 +98,8 @@ void ObjectManager::Clear() {
 
 bool ObjectManager::SetCamera() {
 	for (auto& i : objects_) {
-		if (i->HasTag("Camera3D")) {
-			cameraComp_ = i->GetComp<Camera3DComp>();
+		if (i->HasTag("Camera")) {
+			cameraComp_ = i->GetComp<CameraComp>();
 			break;
 		}
 	}
@@ -121,6 +121,7 @@ void ObjectManager::Update() {
 	TransformCompUpdater::GetInstance()->UpdateMatrix();
 	cameraComp_->LastUpdate();
 	Debug();
+	TransformCompUpdater::GetInstance()->Guizmo(cameraComp_.get());
 #endif // _DEBUG
 
 
@@ -225,7 +226,7 @@ void ObjectManager::Debug() {
 	for (auto itr = objects_.begin(); itr != objects_.end(); itr++) {
 		for (auto& tag : objectTags_) {
 			if (((*itr)->HasTag(tag.first) and tag.second) or (*itr)->GetTags().empty()) {
-				bool isCamera = (*itr)->HasComp<Camera3DComp>();
+				bool isCamera = (*itr)->HasComp<CameraComp>();
 				bool isButton = isCamera ? false : ImGui::Button("erase object");
 				if (not isButton) {
 					if (not isCamera) { ImGui::SameLine(); }

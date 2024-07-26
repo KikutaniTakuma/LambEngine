@@ -1,5 +1,6 @@
 #include "WindNodeComp.h"
 #include "Drawers/Line/Line.h"
+#include "../Comp/CameraComp.h"
 
 void WindNodeComp::Start() {
 	isActive_ = true;
@@ -32,12 +33,12 @@ void WindNodeComp::Move() {
 	}
 }
 
-void WindNodeComp::Draw() {
+void WindNodeComp::Draw(CameraComp* cameraComp) {
 	if (isActive_) {
 		Line::Draw(
 			start,
 			end,
-			object_.GetCameraMatrix(),
+			cameraComp->GetCameraMatrix(),
 			std::numeric_limits<uint32_t>::max(),
 			true
 		);

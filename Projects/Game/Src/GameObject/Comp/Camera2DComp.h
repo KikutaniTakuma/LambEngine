@@ -1,17 +1,17 @@
 #pragma once
 
-#include "CameraComp.h"
+#include "../Object.h"
 
 
-class Camera2DComp : public CameraComp {
+class Camera2DComp : public IComp {
 public:
-	using CameraComp::CameraComp;
+	using IComp::IComp;
 
 	~Camera2DComp() = default;
 
 	void Init();
 
-	void LastUpdate();
+	void Update();
 
 public:
 	const Mat4x4& GetToNdcMatrix() const;
@@ -32,11 +32,12 @@ public:
 	}
 
 private:
+	Lamb::SafePtr<class CameraComp> cameraComp_;
+
 	float32_t width_ = 0.0f;
 	float32_t height_ = 0.0f;
 	float32_t farClip_ = 0.0f;
 	float32_t nearClip_ = 0.0f;
 
-	Mat4x4 cameraMatrix_ = Mat4x4::kIdentity;
 	Mat4x4 othographicMatrix_ = Mat4x4::kIdentity;
 };

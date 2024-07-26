@@ -13,7 +13,7 @@ public:
 
 	void Move()override;
 
-	void Draw() override;
+	void Draw(CameraComp* cameraComp) override;
 
 private:
 	/// <summary>

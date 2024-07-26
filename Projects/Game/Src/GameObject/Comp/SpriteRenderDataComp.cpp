@@ -17,11 +17,11 @@ const std::array<std::string, uint32_t(SpriteRenderDataComp::Offset::kNum)> Spri
 #endif // _DEBUG
 
 const std::array<Mat4x4, uint32_t(SpriteRenderDataComp::Offset::kNum)> SpriteRenderDataComp::kOffsetMatrix = {
-    Mat4x4::kIdentity,
-    Mat4x4::MakeTranslate(Vector3(-1.0f, 1.0f, 0.0f) * 0.5f),
-    Mat4x4::MakeTranslate(Vector3(1.0f, 1.0f, 0.0f) * 0.5f),
+    Mat4x4::MakeTranslate(Vector3::kZero),
+    Mat4x4::MakeTranslate(Vector3(1.0f, -1.0f, 0.0f) * 0.5f),
     Mat4x4::MakeTranslate(Vector3(-1.0f, -1.0f, 0.0f) * 0.5f),
-    Mat4x4::MakeTranslate(Vector3(1.0f, -1.0f, 0.0f) * 0.5f)
+    Mat4x4::MakeTranslate(Vector3(1.0f, 1.0f, 0.0f) * 0.5f),
+    Mat4x4::MakeTranslate(Vector3(-1.0f, 1.0f, 0.0f) * 0.5f)
 };
 
 void SpriteRenderDataComp::Init() {
@@ -29,20 +29,23 @@ void SpriteRenderDataComp::Init() {
     color = Vector4::kIdentity;
     fileName = TextureManager::kWhiteTexturePath;
 
+
+#ifdef _DEBUG
     filePaths_ = Lamb::GetFilePathFormDir("./", ".png");
     auto bmp = Lamb::GetFilePathFormDir("./", ".bmp");
     filePaths_.insert(filePaths_.end(), bmp.begin(), bmp.end());
-
     euler_ = uvTransform.rotate.ToEuler();
+#endif // _DEBUG
 
     texHandle = 0;
 }
 
-#ifdef _DEBUG
 void SpriteRenderDataComp::FirstUpdate() {
+#ifdef _DEBUG
     uvTransform.rotate = Quaternion::EulerToQuaternion(euler_);
-}
 #endif // _DEBUG
+    offsetTransform_ = kOffsetMatrix[static_cast<uint32_t>(offsetType)];
+}
 
 void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
 {
@@ -98,7 +101,14 @@ void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
         }
         uvTransform.rotate = Quaternion::EulerToQuaternion(euler_);
 
-        if (ImGui::Button("再読み込み")) {
+        ImGui::Text("texture %s", fileName.c_str());
+        if (ImGui::Button("ファイル読み込み")) {
+            Lamb::SafePtr textureManager = TextureManager::GetInstance();
+            textureManager->LoadTexture(fileName);
+            texHandle = textureManager->GetHandle(fileName);
+        }
+
+        if (ImGui::Button("ファイルパス再読み込み")) {
             size_t size = filePaths_.size();
             filePaths_.clear();
             filePaths_.reserve(size);
@@ -107,19 +117,13 @@ void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
             filePaths_.insert(filePaths_.end(), bmp.begin(), bmp.end());
         }
 
-        for (auto itr = filePaths_.begin(); itr != filePaths_.end(); itr++) {
-            bool isButton = ImGui::Button("Load");
-            if (itr != filePaths_.rbegin().base()) {
-                ImGui::SameLine();
+        if (ImGui::TreeNode("テクスチャ")) {
+            for (auto itr = filePaths_.begin(); itr != filePaths_.end(); itr++) {
+                if (ImGui::Button(itr->string().c_str())) {
+                    fileName = itr->string();
+                }
             }
-            ImGui::Text("%s", itr->string().c_str());
-
-            if (isButton) {
-                fileName = itr->string();
-                Lamb::SafePtr textureManager = TextureManager::GetInstance();
-                textureManager->LoadTexture(fileName);
-                texHandle = textureManager->GetHandle(fileName);
-            }
+            ImGui::TreePop();
         }
 
 
@@ -127,4 +131,9 @@ void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
 	}
 #endif // _DEBUG
 
+}
+
+const Mat4x4& SpriteRenderDataComp::GetOffsetMatrix() const
+{
+    return offsetTransform_;
 }

@@ -47,6 +47,8 @@ public:
 
 #ifdef _DEBUG
 	void SetGuizmoID(uint32_t id);
+
+	void Guizmo(class CameraComp* cameraComp);
 #endif // _DEBUG
 
 
@@ -63,9 +65,14 @@ private:
 	uint32_t guizmoID_ = 0;
 	uint32_t guimoType_ = 0;
 
+	bool isGuizmo_ = false;
+	bool isDebug_ = false;
+
 	static const std::array<std::pair<std::string, ImGuizmo::OPERATION>, 5> kGuizmoMode_;
 
 #endif // _DEBUG
+
+
 	Mat4x4 worldMatrix_;
 	Lamb::SafePtr<TransformComp> parent_;
 	std::unordered_set<Lamb::SafePtr<TransformComp>> children_;

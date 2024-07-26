@@ -37,6 +37,11 @@ public:
 	void SetCurretnGuizmoID(uint32_t currentGuizmoID);
 	uint32_t GetGuizmoID() const;
 
+#ifdef _DEBUG
+	void Guizmo(CameraComp* cameraComp);
+#endif // _DEBUG
+
+
 private:
 	std::unordered_set<Lamb::SafePtr<TransformComp>> transformComps_;
 	uint32_t currentGuizmoID_;

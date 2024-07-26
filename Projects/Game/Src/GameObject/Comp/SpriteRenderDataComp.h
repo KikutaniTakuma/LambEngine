@@ -30,12 +30,12 @@ public:
 
 	void Init() override;
 
-#ifdef _DEBUG
 	void FirstUpdate() override;
-#endif // _DEBUG
 
 
 	void Debug(const std::string& guiName) override;
+
+	const Mat4x4& GetOffsetMatrix() const;
 
 public:
 	BlendType type;

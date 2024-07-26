@@ -28,6 +28,6 @@ void PlayerComp::LastUpdate()
 {
 }
 
-void PlayerComp::Draw()
-{
+void PlayerComp::Draw([[maybe_unused]]CameraComp* cameraComp) {
+
 }

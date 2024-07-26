@@ -39,11 +39,9 @@ void TransformComp::Init()
 	
 }
 
-void TransformComp::UpdateMatrix()
-{
+void TransformComp::UpdateMatrix() {
 	rotate = rotate.Normalize();
 	worldMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
-
 }
 
 void TransformComp::UpdateChildrenMatrix() {
@@ -76,39 +74,40 @@ void TransformComp::SetParent(Lamb::SafePtr<TransformComp>& parent)
 
 void TransformComp::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef _DEBUG
-	// コンボボックスを使ってenumの値を選択する
-	if (ImGui::BeginCombo("BlendType", kGuizmoMode_[guimoType_].first.c_str()))
-	{
-		for (uint32_t count = 0; auto& i : kGuizmoMode_)
+	if (ImGui::TreeNode((guiName + " Guizmo").c_str())) {
+		// コンボボックスを使ってenumの値を選択する
+		if (ImGui::BeginCombo("BlendType", kGuizmoMode_[guimoType_].first.c_str()))
 		{
-			bool isSelected = (guimoType_ == count);
-			if (ImGui::Selectable(i.first.c_str(), isSelected))
+			for (uint32_t count = 0; auto & i : kGuizmoMode_)
 			{
-				guimoType_ = count;
+				bool isSelected = (guimoType_ == count);
+				if (ImGui::Selectable(i.first.c_str(), isSelected))
+				{
+					guimoType_ = count;
+				}
+				if (isSelected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+				count++;
 			}
-			if (isSelected)
-			{
-				ImGui::SetItemDefaultFocus();
-			}
-			count++;
+			ImGui::EndCombo();
 		}
-		ImGui::EndCombo();
+		isGuizmo_ = true;
+		isDebug_ = false;
+
+		ImGui::TreePop();
 	}
-
-	/*ImGuizmo::SetID(guizmoID_);
-	const auto& camera = *object_.GetCameraComp();
-	if (ImGuizmo::Manipulate(camera.GetViewMatrix().data(), camera.GetToNdcMatrix().data(), kGuizmoMode_[guimoType_].second, ImGuizmo::WORLD, worldMatrix_.data())) {
-		worldMatrix_.Decompose(scale, rotate, translate);
-		rotate = rotate.Normalize();
-		TransformCompUpdater::GetInstance()->SetCurretnGuizmoID(guizmoID_);
-	}*/
-
-	if (ImGui::TreeNode(guiName.c_str())) {
-		ImGui::DragFloat3("scale", scale.data(), 0.01f);
-
-		if (eulerRotate == Vector3::kZero) {
+	else if (ImGui::TreeNode(guiName.c_str())) {
+		if (not isDebug_) {
 			eulerRotate = rotate.ToEuler();
 		}
+		isDebug_ = true;
+		isGuizmo_ = false;
+
+		ImGui::DragFloat3("scale", scale.data(), 0.01f);
+
+
 		eulerRotate *= Lamb::Math::toDegree<float32_t>;
 		ImGui::DragFloat3("rotate(Degree)", eulerRotate.data(), 1.0f);
 		eulerRotate *= Lamb::Math::toRadian<float32_t>;
@@ -125,10 +124,30 @@ void TransformComp::Debug([[maybe_unused]] const std::string& guiName) {
 
 		ImGui::TreePop();
 	}
+	else {
+		isDebug_ = false;
+		isGuizmo_ = false;
+	}
 #endif // _DEBUG
 
 }
 
+#ifdef _DEBUG
 void TransformComp::SetGuizmoID(uint32_t id) {
 	guizmoID_ = id;
 }
+
+void TransformComp::Guizmo(CameraComp* cameraComp) {
+	if (isGuizmo_) {
+		ImGuizmo::SetID(guizmoID_);
+		const Mat4x4& view = cameraComp->GetViewMatrix();
+		const Mat4x4& ndc = cameraComp->GetToNdcMatrix();
+		if (ImGuizmo::Manipulate(view.data(), ndc.data(), kGuizmoMode_[guimoType_].second, ImGuizmo::WORLD, worldMatrix_.data())) {
+			worldMatrix_.Decompose(scale, rotate, translate);
+			/*rotate = rotate.Normalize();
+			eulerRotate = rotate.ToEuler();*/
+			TransformCompUpdater::GetInstance()->SetCurretnGuizmoID(guizmoID_);
+		}
+	}
+}
+#endif // _DEBUG

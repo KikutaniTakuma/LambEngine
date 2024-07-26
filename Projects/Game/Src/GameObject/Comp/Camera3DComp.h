@@ -1,17 +1,17 @@
 #pragma once
 
-#include "CameraComp.h"
+#include "../Object.h"
 
 
-class Camera3DComp : public CameraComp {
+class Camera3DComp : public IComp {
 public:
-	using CameraComp::CameraComp;
+	using IComp::IComp;
 
 	~Camera3DComp() = default;
 
-	void Init();
+	void Init() override;
 
-	void LastUpdate();
+	void Update() override;
 
 public:
 	const Mat4x4& GetToNdcMatrix() const;
@@ -32,30 +32,14 @@ public:
 		aspectRatio_ = aspectRatio;
 	}
 
-	const Vector3& GetPos() const;
-
-	void Debug(const std::string& guiNaneme);
-
 private:
+	Lamb::SafePtr<class CameraComp> cameraComp_;
+
 	float32_t fov_ = 0.0f;
 	float32_t farClip_ = 0.0f;
 	float32_t nearClip_ = 0.0f;
 	float32_t aspectRatio_ = 0.0f;
 
 	Mat4x4 projectionMatrix_ = Mat4x4::kIdentity;
-
-#ifdef _DEBUG
-	float32_t scaleSpeed_ = 0.001f;
-	float32_t rotateSpeed_ = 0.3f;
-	float32_t translateSpeed_ = 1.5f;
-
-	bool isRotateInverse_ = true;
-	bool isTranslateInverse_ = false;
-
-	bool isDebug_ = true;
-
-	Vector3 eulerRotate_;
-
-#endif // _DEBUG
 
 };

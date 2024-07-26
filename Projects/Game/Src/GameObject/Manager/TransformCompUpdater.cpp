@@ -1,5 +1,6 @@
 #include "TransformCompUpdater.h"
 #ifdef _DEBUG
+#include "../Comp/CameraComp.h"
 #include "imgui.h"
 #endif // _DEBUG
 
@@ -60,4 +61,12 @@ uint32_t TransformCompUpdater::GetGuizmoID() const
 {
 	return currentGuizmoID_;
 }
+
+#ifdef _DEBUG
+void TransformCompUpdater::Guizmo(CameraComp* cameraComp) {
+	for (auto& i : transformComps_) {
+		i->Guizmo(cameraComp);
+	}
+}
+#endif // _DEBUG
 

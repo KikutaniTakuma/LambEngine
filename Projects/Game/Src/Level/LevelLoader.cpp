@@ -3,6 +3,7 @@
 #include "GameObject/Comp/TransformComp.h"
 #include "GameObject/Comp/ObbComp.h"
 #include "GameObject/Comp/ObbPushComp.h"
+#include "GameObject/Comp/CameraComp.h"
 #include "GameObject/Comp/Camera2DComp.h"
 #include "GameObject/Comp/Camera3DComp.h"
 
@@ -110,6 +111,7 @@ void LevelLoader::AddCamera(nlohmann::json& data, Object& object)
 {
 
     std::string cameratype = data["camera_type"].get<std::string>();
+    object.AddComp<CameraComp>();
 
     if (cameratype.compare("Perspective") == 0) {
         Lamb::SafePtr cameraComp = object.AddComp<Camera3DComp>();

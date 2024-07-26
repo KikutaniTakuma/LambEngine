@@ -36,14 +36,6 @@ public:
 
 public:
 	class Water* water_;
-	StringOut str_;
-	std::unique_ptr<Camera> uiCamera_;
-
-	StringOut startMessage_;
-	float messageAlpah_;
-
-	class Audio* waterSE_;
-	class Audio* inGameSE_;
 
 	Lamb::SafePtr<struct LevelData> levelData_;
 };
