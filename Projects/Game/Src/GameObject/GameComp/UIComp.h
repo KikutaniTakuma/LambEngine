@@ -1,0 +1,16 @@
+#include "../Object.h"
+class UIComp : public IComp {
+public:
+	using IComp::IComp;
+
+	~UIComp() = default;
+
+public:
+	void Init() override;
+
+	void Event() override;
+
+
+private:
+	Lamb::SafePtr<class ChildrenObjectComp> userInterface_;
+};

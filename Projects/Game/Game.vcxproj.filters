@@ -170,6 +170,9 @@
     <ClCompile Include="Src\GameObject\Comp\BurttonComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\GameComp\UIComp.cpp">
+      <Filter>GameObject\GameComp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -440,6 +443,9 @@
     </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\BurttonComp.h">
       <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\GameComp\UIComp.h">
+      <Filter>GameObject\GameComp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
