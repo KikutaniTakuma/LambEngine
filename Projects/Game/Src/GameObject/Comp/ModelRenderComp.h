@@ -15,16 +15,15 @@ public:
 
 	void Load();
 
-	void SetFileNmae(const std::string& fileName) {
-		fileName_ = fileName;
-	}
-
+	void Debug(const std::string& guiName) override;
 private:
-	std::string fileName_;
-
 	Lamb::SafePtr<Model> model_;
 
 	Lamb::SafePtr<class ModelRenderDataComp> renderDataComp_;
 
 	Lamb::SafePtr<class TransformComp> transformComp_;
+
+#ifdef _DEBUG
+	std::vector<std::filesystem::path> filePaths_;
+#endif // _DEBUG
 };

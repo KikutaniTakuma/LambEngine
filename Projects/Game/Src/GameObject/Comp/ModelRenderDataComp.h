@@ -11,10 +11,9 @@ public:
 
 	void Init() override;
 
-	void Debug(const std::string& guiName) override;
-
 public:
 	BlendType type;
 	Vector4 color;
 	bool isLighting;
+	std::string fileName;
 };

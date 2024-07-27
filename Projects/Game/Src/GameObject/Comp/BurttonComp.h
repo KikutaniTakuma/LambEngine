@@ -18,7 +18,7 @@ public:
 
 public:
 	Gamepad::Button gButton = Gamepad::Button::A;
-	size_t keyButton = DIK_SPACE;
+	uint8_t keyButton = DIK_SPACE;
 	Mouse::Button mButton = Mouse::Button::Left;
 
 private:

@@ -58,4 +58,6 @@ private:
 	std::list<Lamb::SafePtr<class ObbPushComp>> obbObjects_;
 	std::unordered_map<std::string, bool> objectTags_;
 	Lamb::SafePtr<class CameraComp> cameraComp_;
+
+	Lamb::SafePtr<LevelData> levelData_;
 };
