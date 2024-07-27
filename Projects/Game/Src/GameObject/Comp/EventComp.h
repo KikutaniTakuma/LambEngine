@@ -12,6 +12,8 @@ public:
 
 	virtual void Event() override;
 
+	void Save(nlohmann::json& json) override;
+
 protected:
 	Lamb::SafePtr<class ObbComp> obbComp;
 	Lamb::Flg isEvent;

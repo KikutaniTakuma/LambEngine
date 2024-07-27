@@ -7,16 +7,18 @@ public:
 
 	~CsvDataComp() = default;
 
-#ifdef _DEBUG
 	void Init() override;
-#endif // _DEBUG
 
-	void Load(const std::string& fileName);
+	void Load();
 
 	const std::vector<std::vector<int32_t>>& GetCsvData() const;
 
 	void Debug(const std::string& guiName);
 
+	void Save(nlohmann::json& json) override;
+
+public:
+	std::string fileName;
 private:
 	std::vector<std::vector<int32_t>> csvData_;
 

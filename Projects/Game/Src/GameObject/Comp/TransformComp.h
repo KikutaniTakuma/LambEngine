@@ -51,6 +51,7 @@ public:
 	void Guizmo(class CameraComp* cameraComp);
 #endif // _DEBUG
 
+	void Save(nlohmann::json& json) override;
 
 public:
 	Vector3 scale;

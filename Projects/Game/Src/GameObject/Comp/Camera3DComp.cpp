@@ -18,6 +18,14 @@ void Camera3DComp::Update() {
 	cameraComp_->SetNdcMatix(projectionMatrix_);
 }
 
+void Camera3DComp::Save(nlohmann::json& json) {
+	SetCompName<Camera3DComp>(json);
+	json["fov"] = fov_;
+	json["aspectRatio"] = aspectRatio_;
+	json["nearClip"] = nearClip_;
+	json["farClip"] = farClip_;
+}
+
 const Mat4x4& Camera3DComp::GetToNdcMatrix() const
 {
 	return projectionMatrix_;

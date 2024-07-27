@@ -1,11 +1,11 @@
 #include "../Object.h"
 #include "Input/Input.h"
 
-class BurttonComp : public IComp {
+class ButtonComp : public IComp {
 public:
 	using IComp::IComp;
 
-	~BurttonComp() = default;
+	~ButtonComp() = default;
 
 public:
 	void Init() override;
@@ -15,6 +15,8 @@ public:
 	const Lamb::Flg& Pushed();
 	const Lamb::Flg& LongPushed();
 	const Lamb::Flg& Released();
+
+	void Save(nlohmann::json& json) override;
 
 public:
 	Gamepad::Button gButton = Gamepad::Button::A;

@@ -13,6 +13,7 @@
 #include <memory>
 #include <type_traits>
 #include <string>
+#include "json.hpp"
 
 #ifdef _DEBUG
 #include "imgui.h"
@@ -60,7 +61,11 @@ public:
 
 // 前方宣言
 class Object;
-class CameraComp;
+class CameraComp; 
+class IComp;
+
+template<class T>
+concept IsBaseIComp = std::is_base_of_v<IComp, T>;
 
 class IComp : public GameFlow {
 public:
@@ -90,6 +95,14 @@ public:
 
 	virtual void Debug([[maybe_unused]]const std::string& guiName) {};
 
+	virtual void Save(nlohmann::json& json) = 0;
+
+	template<IsBaseIComp Comp>
+	void SetCompName(nlohmann::json& json) {
+		json["CompName"] = typeid(Comp).name();
+	}
+
+
 public:
 	const Object& getObject() const {
 		return object_;
@@ -98,10 +111,6 @@ public:
 protected:
 	Object& object_;
 };
-
-template<class T>
-concept IsBaseIComp = std::is_base_of_v<IComp, T>;
-
 
 class Object : public GameFlow {
 public:
@@ -122,6 +131,8 @@ public:
 	virtual void Debug(const std::string& guiName);
 
 	bool DebugAddComp();
+
+	void Save([[maybe_unused]] nlohmann::json& json);
 
 private:
 	template<IsBaseIComp Comp>

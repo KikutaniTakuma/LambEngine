@@ -23,6 +23,8 @@ public:
 		return *obbComp_;
 	}
 
+	void Save(nlohmann::json& json) override;
+
 private:
 	std::unordered_set<std::string> pushTags_;
 	Lamb::SafePtr<ObbComp> obbComp_;

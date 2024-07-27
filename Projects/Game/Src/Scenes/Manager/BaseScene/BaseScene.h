@@ -19,11 +19,15 @@ class BaseScene {
 
 public:
 	enum class ID {
-		Result,
 		Title,
-		StageSelect,
 		Game,
+		StageSelect,
+		Result,
+
+		kNum
 	};
+
+	static std::array<std::string, static_cast<uint32_t>(ID::kNum)> kSceneStrings;
 
 public:
 	BaseScene(BaseScene::ID sceneID);
@@ -81,3 +85,6 @@ protected:
 	Lamb::Flg isDebug_;
 #endif // _DEBUG
 };
+
+template<class T>
+concept IsBasedBaseScene = std::is_base_of_v<BaseScene, T>;

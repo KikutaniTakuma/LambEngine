@@ -404,6 +404,22 @@ void ObbComp::Debug([[maybe_unused]]const std::string& guiName) {
 #endif // _DEBUG
 }
 
+void ObbComp::Save(nlohmann::json& json) {
+	SetCompName<ObbComp>(json);
+	json["scale"] = nlohmann::json::array();
+	for (auto& i :scale) {
+		json["scale"].push_back(i);
+	}
+	json["center"] = nlohmann::json::array();
+	for (auto& i : center) {
+		json["center"].push_back(i);
+	}
+	json["collsiionTags"] = nlohmann::json::array();
+	for (auto& i : collisionTags_) {
+		json["collsiionTags"].push_back(i);
+	}
+}
+
 const std::string& ObbComp::GetCurrentCollisionTag() const {
 	return currentCollisionTag_;
 }

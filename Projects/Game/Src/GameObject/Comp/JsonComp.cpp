@@ -6,14 +6,18 @@
 #endif // _DEBUG
 
 
-#ifdef _DEBUG
 void JsonCmop::Init() {
+#ifdef _DEBUG
 	filePaths_ = Lamb::GetFilePathFormDir("./", ".json");
-}
 #endif // _DEBUG
+	Load();
+}
 
-void JsonCmop::Load(const std::string& fileName)
+void JsonCmop::Load()
 {
+	if (fileName.empty()) {
+		return;
+	}
 	jsonData_ = Lamb::LoadJson(fileName);
 }
 
@@ -38,7 +42,8 @@ void JsonCmop::Debug([[maybe_unused]]const std::string& guiName) {
 			ImGui::Text("%s", i.string().c_str());
 
 			if (isLoad) {
-				Load(i.string().c_str());
+				fileName = i.string().c_str();
+				Load();
 			}
 		}
 
@@ -46,4 +51,10 @@ void JsonCmop::Debug([[maybe_unused]]const std::string& guiName) {
 	}
 
 #endif // _DEBUG
+}
+
+void JsonCmop::Save(nlohmann::json& json)
+{
+	SetCompName<JsonCmop>(json);
+	json["fileName"] = fileName;
 }

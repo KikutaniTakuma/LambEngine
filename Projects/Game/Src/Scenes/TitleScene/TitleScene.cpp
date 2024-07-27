@@ -19,8 +19,8 @@ TitleScene::TitleScene() :
 
 void TitleScene::Load()
 {
-	levelData_ = LevelLoader::Load("./SceneData/TitleScene.json");
-	ObjectManager::GetInstance()->SetLevelData(levelData_);
+	Lamb::SafePtr levelData = LevelLoader::Load("./SceneData/TitleScene.json");
+	ObjectManager::GetInstance()->SetLevelData<TitleScene>(levelData);
 }
 
 void TitleScene::Initialize()
@@ -35,7 +35,6 @@ void TitleScene::Initialize()
 void TitleScene::Finalize()
 {
 	ObjectManager::GetInstance()->Clear();
-	levelData_.reset();
 }
 
 void TitleScene::Update()

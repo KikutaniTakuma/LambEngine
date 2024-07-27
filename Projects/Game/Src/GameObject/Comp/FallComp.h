@@ -25,6 +25,8 @@ public:
 		return isFall_;
 	}
 
+	void Save(nlohmann::json& json) override;
+
 public:
 	float32_t gravity = 9.8_f32;
 

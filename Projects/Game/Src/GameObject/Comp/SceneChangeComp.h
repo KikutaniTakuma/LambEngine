@@ -17,6 +17,8 @@ public:
 	void SetNextScene(BaseScene::ID nextID);
 	void SetSceneManager(class SceneManager* sceneManager);
 
+	void Save(nlohmann::json& json) override;
+
 private:
 	BaseScene::ID nextID_ = BaseScene::ID::Title;
 	Lamb::SafePtr<class SceneManager> sceneManager_;

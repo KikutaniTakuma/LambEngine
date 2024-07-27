@@ -1,4 +1,5 @@
 #include "LevelLoader.h"
+#include "GameObject/Comp/ButtonComp.h"
 #include "GameObject/Comp/CameraComp.h"
 #include "GameObject/Comp/Camera3DComp.h"
 #include "GameObject/Comp/Camera2DComp.h"
@@ -6,7 +7,6 @@
 #include "GameObject/Comp/CsvDataComp.h"
 #include "GameObject/Comp/EventComp.h"
 #include "GameObject/Comp/FallComp.h"
-#include "GameObject/Comp/InputJump.h"
 #include "GameObject/Comp/InputMoveComp.h"
 #include "GameObject/Comp/JsonComp.h"
 #include "GameObject/Comp/ModelRenderComp.h"

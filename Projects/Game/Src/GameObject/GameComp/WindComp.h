@@ -14,6 +14,8 @@ public:
 
 	Vector3 GetDirection() const;
 
+	void Save(nlohmann::json& json) override;
+
 private:
 	Lamb::SafePtr<class ChildrenObjectComp> childrenComp_;
 	std::unordered_set<Lamb::SafePtr<class WindNodeComp>> windNodeComp_;

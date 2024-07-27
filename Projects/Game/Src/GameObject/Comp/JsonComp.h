@@ -8,18 +8,20 @@ public:
 
 	~JsonCmop() = default;
 
-#ifdef _DEBUG
 	void Init() override;
-#endif // _DEBUG
 
 
-	void Load(const std::string& fileName);
+	void Load();
 
 	nlohmann::json& GetJsonData();
 	const nlohmann::json& GetJsonData() const;
 
 	void Debug(const std::string& guiName);
 
+	void Save(nlohmann::json& json) override;
+
+public:
+	std::string fileName;
 
 private:
 	nlohmann::json jsonData_;

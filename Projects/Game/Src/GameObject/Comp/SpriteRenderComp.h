@@ -14,6 +14,8 @@ public:
 
 	void Load(const std::string& fileName);
 
+	void Save(nlohmann::json& json) override;
+
 private:
 	Lamb::SafePtr<class Texture2D> tex2D_;
 

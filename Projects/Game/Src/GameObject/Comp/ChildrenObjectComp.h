@@ -26,6 +26,8 @@ public:
 
 	void Debug(const std::string& guiName) override;
 
+	void Save(nlohmann::json& json) override;
+
 public:
 	const std::unordered_set<std::unique_ptr<Object>>& GetObjects() const;
 

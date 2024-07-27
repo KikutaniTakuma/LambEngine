@@ -8,3 +8,8 @@ void EventComp::Init() {
 void EventComp::Event() {
 	isEvent = obbComp->GetIsCollision();
 }
+
+void EventComp::Save(nlohmann::json& json)
+{
+	SetCompName<EventComp>(json);
+}

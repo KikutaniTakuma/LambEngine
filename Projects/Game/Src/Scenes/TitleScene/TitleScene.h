@@ -36,6 +36,4 @@ public:
 
 public:
 	class Water* water_;
-
-	Lamb::SafePtr<struct LevelData> levelData_;
 };

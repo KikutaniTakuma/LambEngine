@@ -97,6 +97,17 @@ void ChildrenObjectComp::Debug([[maybe_unused]]const std::string& guiName) {
 #endif // _DEBUG
 }
 
+void ChildrenObjectComp::Save(nlohmann::json& json) {
+	SetCompName<ChildrenObjectComp>(json);
+
+	json["Children"] = nlohmann::json::array();
+
+	for (auto& i : objects_) {
+		json["Children"].push_back(nlohmann::json::object());
+		i->Save(json["Children"].back());
+	}
+}
+
 const std::unordered_set<std::unique_ptr<Object>>& ChildrenObjectComp::GetObjects() const
 {
 	return objects_;

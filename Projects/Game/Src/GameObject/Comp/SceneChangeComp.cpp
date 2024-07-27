@@ -21,3 +21,9 @@ void SceneChangeComp::SetSceneManager(SceneManager* sceneManager)
 {
 	sceneManager_ = sceneManager;
 }
+
+void SceneChangeComp::Save(nlohmann::json& json)
+{
+	SetCompName<SceneChangeComp>(json);
+	json["nextID"] = BaseScene::kSceneStrings[size_t(nextID_)];
+}

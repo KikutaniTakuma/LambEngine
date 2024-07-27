@@ -10,6 +10,7 @@ public:
 
 	void Event() override;
 
+	void Save(nlohmann::json& json) override;
 
 private:
 	Lamb::SafePtr<class ChildrenObjectComp> userInterface_;

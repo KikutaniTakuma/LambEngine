@@ -12,6 +12,9 @@
 #include "imgui.h"
 #endif // _DEBUG
 
+#include "json.hpp"
+#include <fstream>
+
 
 
 std::unique_ptr<ObjectManager> ObjectManager::instance_;
@@ -37,15 +40,6 @@ void ObjectManager::Initialize() {
 void ObjectManager::Finalize()
 {
 	instance_.reset();
-}
-
-void ObjectManager::SetLevelData(Lamb::SafePtr<LevelData> levelData) {
-	assert(levelData.have());
-	for (auto& i : levelData->objects) {
-		this->Set(i);
-	}
-
-	SetCamera();
 }
 
 const Mat4x4& ObjectManager::GetCameraMatrix() const
@@ -189,6 +183,15 @@ void ObjectManager::Collision() {
 void ObjectManager::Debug() {
 #ifdef _DEBUG
 	ImGui::Begin("Objects");
+	if (ImGui::Button("保存")) {
+		Save();
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("ロード")) {
+		Load();
+	}
+
+
 	RenderingManager::GetInstance()->Debug("RendeirngSetting");
 
 	if (ImGui::TreeNode("sort")) {
@@ -261,4 +264,40 @@ void ObjectManager::Debug() {
 	}
 	ImGui::End();
 #endif // _DEBUG
+}
+
+void ObjectManager::Save() {
+	nlohmann::json root;
+	root = nlohmann::json::object();
+
+	// シーンを名前
+	root["scene"] = currentScene_;
+	// オブジェクト
+	root["objects"] = nlohmann::json::array();
+
+	for (auto& i : objects_) {
+		// オブジェクト毎に追加
+		root["objects"].push_back(nlohmann::json::object());
+
+		// 今追加したjso::objectを渡す
+		// 内部のコンポーネントを出力していく
+		i->Save(root["objects"].back());
+	}
+
+	std::ofstream outputFile("./SceneData" + currentScene_ + ".json");
+	if (outputFile.is_open()) {
+		outputFile << std::setw(4) << root << std::endl;
+		outputFile.close();
+	}
+	else {
+#ifdef _DEBUG
+		assert(!"file can not open");
+#else
+		throw Lamb::Error::Code<ObjectManager>("file can not open", ErrorPlace);
+#endif // _DEBUG
+	}
+}
+
+void ObjectManager::Load()
+{
 }

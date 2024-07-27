@@ -15,6 +15,8 @@ public:
 
 	void Draw(CameraComp* cameraComp) override;
 
+	void Save(nlohmann::json& json) override;
+
 private:
 	/// <summary>
 	/// 範囲内に入っているか

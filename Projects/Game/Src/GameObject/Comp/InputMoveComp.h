@@ -12,6 +12,8 @@ public:
 
 	void FirstUpdate() override;
 
+	void Save(nlohmann::json& json) override;
+
 	
 public:
 	void SetSpeed(float32_t speed) {

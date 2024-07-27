@@ -20,6 +20,8 @@ public:
 	void SetOpenKeyTime(float32_t openKeyTime);
 	void SetStrength(float32_t strength);
 
+	void Save(nlohmann::json& json) override;
+
 private:
 	Lamb::Flg isOpen_;
 	float32_t time_ = 0.0f;

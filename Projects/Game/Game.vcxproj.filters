@@ -104,9 +104,6 @@
     <ClCompile Include="Src\GameObject\Comp\InputMoveComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
-    <ClCompile Include="Src\GameObject\Comp\InputJump.cpp">
-      <Filter>GameObject\Comp</Filter>
-    </ClCompile>
     <ClCompile Include="Src\GameObject\Manager\TransformCompUpdater.cpp">
       <Filter>GameObject\Manager</Filter>
     </ClCompile>
@@ -167,7 +164,7 @@
     <ClCompile Include="Src\GameObject\Comp\CameraComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
-    <ClCompile Include="Src\GameObject\Comp\BurttonComp.cpp">
+    <ClCompile Include="Src\GameObject\Comp\ButtonComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
     <ClCompile Include="Src\GameObject\GameComp\UIComp.cpp">
@@ -378,9 +375,6 @@
     <ClInclude Include="Src\GameObject\Comp\InputMoveComp.h">
       <Filter>GameObject\Comp</Filter>
     </ClInclude>
-    <ClInclude Include="Src\GameObject\Comp\InputJump.h">
-      <Filter>GameObject\Comp</Filter>
-    </ClInclude>
     <ClInclude Include="Src\GameObject\Manager\TransformCompUpdater.h">
       <Filter>GameObject\Manager</Filter>
     </ClInclude>
@@ -441,7 +435,7 @@
     <ClInclude Include="Src\GameObject\Comp\CameraComp.h">
       <Filter>GameObject\Comp</Filter>
     </ClInclude>
-    <ClInclude Include="Src\GameObject\Comp\BurttonComp.h">
+    <ClInclude Include="Src\GameObject\Comp\ButtonComp.h">
       <Filter>GameObject\Comp</Filter>
     </ClInclude>
     <ClInclude Include="Src\GameObject\GameComp\UIComp.h">

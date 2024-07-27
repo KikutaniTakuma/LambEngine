@@ -19,6 +19,8 @@ public:
 
 	void Draw(CameraComp* cameraComp) override;
 
+	void Save(nlohmann::json& json) override;
+
 private:
 	Lamb::SafePtr<class ChildrenObjectComp> item_;
 	Lamb::SafePtr<class CsvDataComp> itemData_;

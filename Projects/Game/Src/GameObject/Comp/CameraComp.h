@@ -13,6 +13,8 @@ public:
 
 	void LastUpdate() override;
 
+	void Save(nlohmann::json& json) override;
+
 	const Mat4x4& GetCameraMatrix() const {
 		return cameraMatrix_;
 	}

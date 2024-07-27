@@ -1,6 +1,7 @@
 #include "Object.h"
 #include "Utils/EngineInfo.h"
 #ifdef _DEBUG
+#include "Comp/ButtonComp.h"
 #include "Comp/CameraComp.h"
 #include "Comp/Camera3DComp.h"
 #include "Comp/Camera2DComp.h"
@@ -8,7 +9,6 @@
 #include "Comp/CsvDataComp.h"
 #include "Comp/EventComp.h"
 #include "Comp/FallComp.h"
-#include "Comp/InputJump.h"
 #include "Comp/InputMoveComp.h"
 #include "Comp/JsonComp.h"
 #include "Comp/ModelRenderComp.h"
@@ -106,6 +106,7 @@ void Object::Debug([[maybe_unused]] const std::string& guiName) {
 bool Object::DebugAddComp() {
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Comps")) {
+		DebugAdd<ButtonComp>();
 		DebugAdd<Camera2DComp>();
 		DebugAdd<Camera3DComp>();
 		DebugAdd<ChildrenObjectComp>();
@@ -113,7 +114,6 @@ bool Object::DebugAddComp() {
 		DebugAdd<JsonCmop>();
 		DebugAdd<EventComp>();
 		DebugAdd<FallComp>();
-		DebugAdd<InputJump>();
 		DebugAdd<InputMoveComp>();
 		DebugAdd<ModelRenderComp>();
 		DebugAdd<ModelRenderDataComp>();
@@ -139,3 +139,13 @@ bool Object::DebugAddComp() {
 
 	return false;
 }
+
+void Object::Save(nlohmann::json& json) {
+	json["type"] = "Object";
+	json["Comps"] = nlohmann::json::array();
+	for(auto& comp : this->components_) {
+		json["Comps"].push_back(nlohmann::json::object());
+		comp.second->Save(json["Comps"].back());
+	}
+}
+

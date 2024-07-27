@@ -151,3 +151,20 @@ void TransformComp::Guizmo(CameraComp* cameraComp) {
 	}
 }
 #endif // _DEBUG
+
+void TransformComp::Save(nlohmann::json& json)
+{
+	SetCompName<TransformComp>(json);
+	json["scale"] = nlohmann::json::array();
+	for (auto& i : scale) {
+		json["scale"].push_back(i);
+	}
+	json["rotate"] = nlohmann::json::array();
+	for (auto& i : rotate) {
+		json["rotate"].push_back(i);
+	}
+	json["translate"] = nlohmann::json::array();
+	for (auto& i : translate) {
+		json["translate"].push_back(i);
+	}
+}

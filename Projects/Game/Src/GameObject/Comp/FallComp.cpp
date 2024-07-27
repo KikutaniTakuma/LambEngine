@@ -14,3 +14,8 @@ void FallComp::Stop() {
 	isFall_ = false;
 	fallTime_ = 0.0_f32;
 }
+
+void FallComp::Save(nlohmann::json& json) {
+	SetCompName<FallComp>(json);
+	json["gravity"] = gravity;
+}

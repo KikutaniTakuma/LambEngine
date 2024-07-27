@@ -13,6 +13,8 @@ public:
 
 	void Update();
 
+	void Save(nlohmann::json& json) override;
+
 public:
 	const Mat4x4& GetToNdcMatrix() const;
 
@@ -24,11 +26,11 @@ public:
 		height_ = height;
 	}
 
-	void SetFarClip(float32_t farClip) {
-		farClip_ = farClip;
-	}
 	void SetNearClip(float32_t nearClip) {
 		nearClip_ = nearClip;
+	}
+	void SetFarClip(float32_t farClip) {
+		farClip_ = farClip;
 	}
 
 private:
@@ -36,8 +38,8 @@ private:
 
 	float32_t width_ = 0.0f;
 	float32_t height_ = 0.0f;
-	float32_t farClip_ = 0.0f;
 	float32_t nearClip_ = 0.0f;
+	float32_t farClip_ = 0.0f;
 
 	Mat4x4 othographicMatrix_ = Mat4x4::kIdentity;
 };

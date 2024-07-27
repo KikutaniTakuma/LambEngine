@@ -1,28 +1,35 @@
-#include "BurttonComp.h"
+#include "ButtonComp.h"
 
-void BurttonComp::Init() {
+void ButtonComp::Init() {
 	gamePad_ = Gamepad::GetInstance();
 	keyInput_ = KeyInput::GetInstance();
 	mouse_ = Mouse::GetInstance();
 }
 
-void BurttonComp::FirstUpdate() {
+void ButtonComp::FirstUpdate() {
 	isPushed_ = gamePad_->Pushed(gButton) or keyInput_->Pushed(keyButton) or mouse_->Pushed(mButton);
 	isLongPushed_ = gamePad_->LongPush(gButton) or keyInput_->LongPush(keyButton) or mouse_->LongPush(mButton);
 	isReleased_ = gamePad_->Released(gButton) or keyInput_->Released(keyButton) or mouse_->Released(mButton);
 }
 
-const Lamb::Flg& BurttonComp::Pushed()
+const Lamb::Flg& ButtonComp::Pushed()
 {
 	return isPushed_;
 }
 
-const Lamb::Flg& BurttonComp::LongPushed()
+const Lamb::Flg& ButtonComp::LongPushed()
 {
 	return isLongPushed_;
 }
 
-const Lamb::Flg& BurttonComp::Released()
+const Lamb::Flg& ButtonComp::Released()
 {
 	return isReleased_;
+}
+
+void ButtonComp::Save(nlohmann::json& json) {
+	SetCompName<ButtonComp>(json);
+	json["Gamepad"] = int32_t(gButton);
+	json["key"] = int32_t(keyButton);
+	json["Gamepad"] = int32_t(mButton);
 }

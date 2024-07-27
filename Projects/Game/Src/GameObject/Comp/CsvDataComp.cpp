@@ -5,14 +5,19 @@
 #include "imgui.h"
 #endif // _DEBUG
 
-#ifdef _DEBUG
 void CsvDataComp::Init()
 {
+#ifdef _DEBUG
 	filePaths_ = Lamb::GetFilePathFormDir("./", ".csv");
-}
 #endif // _DEBUG
 
-void CsvDataComp::Load(const std::string& fileName) {
+	Load();
+}
+
+void CsvDataComp::Load() {
+	if (fileName.empty()) {
+		return;
+	}
 	csvData_ = Lamb::LoadCsv(fileName);
 }
 
@@ -46,7 +51,8 @@ void CsvDataComp::Debug([[maybe_unused]] const std::string& guiName) {
 			ImGui::Text("%s", i.string().c_str());
 
 			if (isLoad) {
-				Load(i.string().c_str());
+				fileName = i.string().c_str();
+				Load();
 			}
 		}
 
@@ -54,4 +60,10 @@ void CsvDataComp::Debug([[maybe_unused]] const std::string& guiName) {
 	}
 
 #endif // _DEBUG
+}
+
+void CsvDataComp::Save(nlohmann::json& json)
+{
+	SetCompName<CsvDataComp>(json);
+	json["fileName"] = fileName;
 }

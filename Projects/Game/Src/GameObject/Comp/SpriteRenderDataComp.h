@@ -19,10 +19,8 @@ public:
 		kNum
 	};
 
-#ifdef _DEBUG
 private:
-	static const std::array<std::string, uint32_t(Offset::kNum)> kComboEnum_;
-#endif // _DEBUG
+	static const std::array<std::string, uint32_t(Offset::kNum)> kOffsetEnumString_;
 
 public:
 	static const std::array<Mat4x4, uint32_t(Offset::kNum)> kOffsetMatrix;
@@ -40,6 +38,8 @@ public:
 	void Debug(const std::string& guiName) override;
 
 	const Mat4x4& GetOffsetMatrix() const;
+
+	void Save(nlohmann::json& json) override;
 
 public:
 	BlendType type;

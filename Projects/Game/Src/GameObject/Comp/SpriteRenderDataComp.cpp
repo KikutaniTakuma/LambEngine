@@ -7,7 +7,7 @@
 #endif // _DEBUG
 
 #ifdef _DEBUG
-const std::array<std::string, uint32_t(SpriteRenderDataComp::Offset::kNum)> SpriteRenderDataComp::kComboEnum_ = {
+const std::array<std::string, uint32_t(SpriteRenderDataComp::Offset::kNum)> SpriteRenderDataComp::kOffsetEnumString_ = {
     "kMiddle",
     "kUp",
     "kUnder",
@@ -78,12 +78,12 @@ void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
         }
 
         // コンボボックスを使ってenumの値を選択する
-        if (ImGui::BeginCombo("Offset", kComboEnum_[static_cast<uint32_t>(offsetType)].c_str()))
+        if (ImGui::BeginCombo("Offset", kOffsetEnumString_[static_cast<uint32_t>(offsetType)].c_str()))
         {
             for (uint32_t i = 0; i < static_cast<uint32_t>(Offset::kNum); ++i)
             {
                 bool isSelected = (offsetType == static_cast<Offset>(i));
-                if (ImGui::Selectable(kComboEnum_[i].c_str(), isSelected))
+                if (ImGui::Selectable(kOffsetEnumString_[i].c_str(), isSelected))
                 {
                     offsetType = static_cast<Offset>(i);
                 }
@@ -142,4 +142,17 @@ void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
 const Mat4x4& SpriteRenderDataComp::GetOffsetMatrix() const
 {
     return offsetTransform_;
+}
+
+void SpriteRenderDataComp::Save(nlohmann::json& json)
+{
+    SetCompName<SpriteRenderDataComp>(json);
+
+    json["BlendType"] = kBlendTypeStrs[size_t(type)];
+    json["color"] = nlohmann::json::array();
+    for (auto& i : color) {
+        json["color"].push_back(i);
+    }
+    json["offsetType"] = kOffsetEnumString_[size_t(offsetType)];
+    json["fileName"] = fileName;
 }

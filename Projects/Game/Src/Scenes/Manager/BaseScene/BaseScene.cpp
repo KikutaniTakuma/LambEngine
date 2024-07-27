@@ -5,6 +5,13 @@
 #endif // _DEBUG
 
 
+std::array<std::string, static_cast<uint32_t>(BaseScene::ID::kNum)> BaseScene::kSceneStrings = {
+	"Title",
+	"Game",
+	"StageSelect",
+	"Result"
+};
+
 BaseScene::BaseScene(BaseScene::ID sceneID) :
 #ifdef _DEBUG
 	debugCamera_(std::make_unique<DebugCamera>()),

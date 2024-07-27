@@ -12,6 +12,8 @@ public:
 	void SetFireKeyTime(float32_t fireKeyTime);
 	void SetStrength(float32_t strength);
 
+	void Save(nlohmann::json& json) override;
+
 private:
 	Lamb::Flg isFire_;
 	float32_t time_ = 0.0f;
