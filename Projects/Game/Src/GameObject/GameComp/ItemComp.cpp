@@ -14,3 +14,8 @@ Vector3 ItemComp::GetVelocity() const
 {
 	return (Vector3::kXIdentity * transform_->rotate) * velocity_;
 }
+
+void ItemComp::Save(nlohmann::json& json)
+{
+	SetCompName<ItemComp>(json);
+}

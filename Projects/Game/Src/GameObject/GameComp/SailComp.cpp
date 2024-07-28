@@ -32,3 +32,9 @@ void SailComp::SetOpenKeyTime(float32_t openKeyTime)
 void SailComp::SetStrength(float32_t strength) {
 	strength_ = strength;
 }
+
+void SailComp::Save(nlohmann::json& json) {
+	SetCompName<SailComp>(json);
+	json["openKeyTime"] = openKeyTime_;
+	json["strength"] = strength_;
+}

@@ -183,6 +183,8 @@ void ObjectManager::Collision() {
 void ObjectManager::Debug() {
 #ifdef _DEBUG
 	ImGui::Begin("Objects");
+	sceneNames_.resize(32);
+	ImGui::InputText("fileName .json", sceneNames_.data(), sceneNames_.size());
 	if (ImGui::Button("保存")) {
 		Save();
 	}
@@ -270,8 +272,16 @@ void ObjectManager::Save() {
 	nlohmann::json root;
 	root = nlohmann::json::object();
 
+	std::string fileName;
+	for (auto& i : sceneNames_) {
+		if (i == '\0') {
+			break;
+		}
+		fileName += i;
+	}
+
 	// シーンを名前
-	root["scene"] = currentScene_;
+	root["scene"] = fileName;
 	// オブジェクト
 	root["objects"] = nlohmann::json::array();
 
@@ -284,7 +294,7 @@ void ObjectManager::Save() {
 		i->Save(root["objects"].back());
 	}
 
-	std::ofstream outputFile("./SceneData" + currentScene_ + ".json");
+	std::ofstream outputFile("./SceneData/" + fileName + ".json");
 	if (outputFile.is_open()) {
 		outputFile << std::setw(4) << root << std::endl;
 		outputFile.close();

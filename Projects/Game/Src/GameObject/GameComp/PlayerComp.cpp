@@ -31,3 +31,8 @@ void PlayerComp::LastUpdate()
 void PlayerComp::Draw([[maybe_unused]]CameraComp* cameraComp) {
 
 }
+
+void PlayerComp::Save(nlohmann::json& json)
+{
+	SetCompName<PlayerComp>(json);
+}

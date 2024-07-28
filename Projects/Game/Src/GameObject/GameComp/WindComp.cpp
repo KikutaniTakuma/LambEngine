@@ -82,3 +82,31 @@ Vector3 WindComp::GetDirection() const
 {
 	return (direction_ * obbComp_->GetObbComp().GetTransformComp().rotate).Normalize();
 }
+
+void WindComp::Save(nlohmann::json& json)
+{
+	SetCompName<WindComp>(json);
+	json["positionRange"] = nlohmann::json::array();
+	json["positionRange"].push_back(nlohmann::json::array());
+	json["positionRange"].push_back(nlohmann::json::array());
+	for (auto& i : positionRange_.first) {
+		json["positionRange"][0].push_back(i);
+	}
+	for (auto& i : positionRange_.second) {
+		json["positionRange"][1].push_back(i);
+	}
+
+	json["lengthRange"] = nlohmann::json::array();
+	json["lengthRange"].push_back(lengthRange_.first);
+	json["lengthRange"].push_back(lengthRange_.second);
+
+	json["speedRange"] = nlohmann::json::array();
+	json["speedRange"].push_back(speedRange_.first);
+	json["speedRange"].push_back(speedRange_.second);
+
+	json["appearNumberRange"] = nlohmann::json::array();
+	json["appearNumberRange"].push_back(appearNumberRange_.first);
+	json["appearNumberRange"].push_back(appearNumberRange_.second);
+
+	json["appearNum"] = appearNum_;
+}

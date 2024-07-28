@@ -75,5 +75,6 @@ private:
 	Lamb::SafePtr<class CameraComp> cameraComp_;
 
 	std::unordered_map<std::string, std::unique_ptr<LevelData>> levelDatas_;
+	std::string sceneNames_;
 	std::string currentScene_;
 };

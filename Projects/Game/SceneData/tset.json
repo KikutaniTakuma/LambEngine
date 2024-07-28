@@ -1,0 +1,294 @@
+{
+    "objects": [
+        {
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/Common/Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.00324326753616333,
+                        -0.44712722301483154,
+                        -0.2797190845012665,
+                        0.8496022820472717
+                    ],
+                    "scale": [
+                        1.0,
+                        2.2344017028808594,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/Common/Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.12176398932933807,
+                        -0.8748835921287537,
+                        -0.4344503879547119,
+                        0.17608274519443512
+                    ],
+                    "scale": [
+                        1.0,
+                        2.2344017028808594,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        8.779454231262207,
+                        4.607855796813965,
+                        3.4205446243286133
+                    ]
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.16907574236392975,
+                        -0.7663795351982117,
+                        -0.27217137813568115,
+                        0.5567752122879028
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        4.076245307922363,
+                        5.903861999511719,
+                        1.0054539442062378
+                    ]
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/Common/Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.8410722017288208,
+                        -0.061060331761837006,
+                        -0.40609458088874817,
+                        0.35207465291023254
+                    ],
+                    "scale": [
+                        0.9999999403953552,
+                        2.2344017028808594,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        0.0,
+                        4.972753047943115,
+                        -10.978775024414063
+                    ]
+                },
+                {
+                    "CompName": "class ObbComp",
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "collsiionTags": [],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ]
+                },
+                {
+                    "CompName": "class ObbPushComp",
+                    "pushTags": []
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "CompName": "class CameraComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.20997297763824463,
+                        -0.3857799470424652,
+                        0.09062841534614563,
+                        0.8937962651252747
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        25.654666900634766,
+                        18.758060455322266,
+                        -24.854534149169922
+                    ]
+                },
+                {
+                    "CompName": "class Camera3DComp",
+                    "aspectRatio": 1.7777777910232544,
+                    "farClip": 1000.0,
+                    "fov": 0.38657084107398987,
+                    "nearClip": 0.10000000149011612
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/Common/Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.24208363890647888,
+                        0.7629680633544922,
+                        0.4996466040611267,
+                        0.3311023414134979
+                    ],
+                    "scale": [
+                        1.0,
+                        2.2344017028808594,
+                        1.0
+                    ],
+                    "translate": [
+                        -2.354613780975342,
+                        0.0,
+                        -5.334699630737305
+                    ]
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/Common/Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.24208363890647888,
+                        0.7629680633544922,
+                        0.4996466040611267,
+                        0.3311023414134979
+                    ],
+                    "scale": [
+                        1.0,
+                        2.2344017028808594,
+                        1.0
+                    ],
+                    "translate": [
+                        5.9372639656066895,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "CompName": "class ObbComp",
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "collsiionTags": [],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ]
+                },
+                {
+                    "CompName": "class ObbPushComp",
+                    "pushTags": []
+                }
+            ],
+            "type": "Object"
+        }
+    ],
+    "scene": "tset"
+}
