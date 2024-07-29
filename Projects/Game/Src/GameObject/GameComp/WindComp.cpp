@@ -110,3 +110,24 @@ void WindComp::Save(nlohmann::json& json)
 
 	json["appearNum"] = appearNum_;
 }
+
+void WindComp::Load(nlohmann::json& json)
+{
+	for (size_t i = 0; i < json["positionRange"][0].size(); i++) {
+		positionRange_.first[i] = json["positionRange"][0][i].get<float32_t>();
+	}
+	for (size_t i = 0; i < json["positionRange"][1].size(); i++) {
+		positionRange_.second[i] = json["positionRange"][1][i].get<float32_t>();
+	}
+
+	lengthRange_.first = json["lengthRange"][0].get<float32_t>();
+	lengthRange_.second = json["lengthRange"][1].get<float32_t>();
+
+	speedRange_.first = json["speedRange"][0].get<float32_t>();
+	speedRange_.second = json["speedRange"][1].get<float32_t>();
+
+	appearNumberRange_.first = static_cast<uint32_t>(json["appearNumberRange"][0].get<int32_t>());
+	appearNumberRange_.second = static_cast<uint32_t>(json["appearNumberRange"][1].get<int32_t>());
+
+	appearNum_ = static_cast<uint32_t>(json["appearNum"].get<int32_t>());
+}

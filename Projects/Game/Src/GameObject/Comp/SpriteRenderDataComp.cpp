@@ -156,3 +156,28 @@ void SpriteRenderDataComp::Save(nlohmann::json& json)
     json["offsetType"] = kOffsetEnumString_[size_t(offsetType)];
     json["fileName"] = fileName;
 }
+
+void SpriteRenderDataComp::Load(nlohmann::json& json)
+{
+    std::string&& blendType = json["BlendType"].get<std::string>();
+    for (size_t count = 0; const auto & i : kBlendTypeStrs) {
+        if (blendType == i) {
+            type = BlendType(count);
+            break;
+        }
+        count++;
+    }
+
+    for (size_t i = 0; i < json["color"].size(); i++) {
+        color[i] = json["color"][0];
+    }
+    std::string&& offsetTypeStr = json["offsetType"].get<std::string>();
+    for (size_t count = 0; const auto & i : kOffsetEnumString_) {
+        if (offsetTypeStr == i) {
+            offsetType = Offset(count);
+            break;
+        }
+        count++;
+    }
+    fileName = json["fileName"].get<std::string>();
+}

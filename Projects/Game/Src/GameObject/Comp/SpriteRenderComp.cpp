@@ -24,13 +24,16 @@ void SpriteRenderComp::Draw(CameraComp* cameraComp) {
 	);
 }
 
-void SpriteRenderComp::Load(const std::string& fileName) {
-	renderDataComp_->fileName = fileName;
+void SpriteRenderComp::Load() {
 	renderDataComp_->texHandle = TextureManager::GetInstance()->GetHandle(renderDataComp_->fileName);
 }
 
 void SpriteRenderComp::Save(nlohmann::json& json)
 {
 	SetCompName<SpriteRenderComp>(json);
+}
+
+void SpriteRenderComp::Load([[maybe_unused]]nlohmann::json& json)
+{
 }
 

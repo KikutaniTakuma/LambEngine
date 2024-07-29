@@ -14,6 +14,7 @@ public:
 	Vector3 GetVelocity() const;
 
 	virtual void Save(nlohmann::json& json) override;
+	virtual void Load(nlohmann::json& json) override;
 
 protected:
 	float32_t velocity_ = 0;

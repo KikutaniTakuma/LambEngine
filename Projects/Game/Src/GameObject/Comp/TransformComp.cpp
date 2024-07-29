@@ -168,3 +168,16 @@ void TransformComp::Save(nlohmann::json& json)
 		json["translate"].push_back(i);
 	}
 }
+
+void TransformComp::Load(nlohmann::json& json)
+{
+	for (size_t i = 0; i < json["scale"].size(); i++) {
+		scale[i] = json["scale"][i];
+	}
+	for (size_t i = 0; i < json["rotate"].size(); i++) {
+		rotate.m[i] = json["rotate"][i];
+	}
+	for (size_t i = 0; i < json["translate"].size(); i++) {
+		translate[i] = json["translate"][i];
+	}
+}

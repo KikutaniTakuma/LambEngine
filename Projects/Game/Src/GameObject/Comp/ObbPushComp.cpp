@@ -46,3 +46,12 @@ void ObbPushComp::Save(nlohmann::json& json)
 		json["pushTags"].push_back(i);
 	}
 }
+
+void ObbPushComp::Load(nlohmann::json& json)
+{
+	pushTags_.clear();
+	pushTags_.reserve(json["pushTags"].size());
+	for (size_t i = 0; i < json["pushTags"].size(); i++) {
+		pushTags_.insert(json["pushTags"][i].get<std::string>());
+	}
+}

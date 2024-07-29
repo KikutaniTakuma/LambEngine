@@ -18,6 +18,13 @@ void Camera2DComp::Save(nlohmann::json& json) {
 	json["farClip"] = farClip_;
 }
 
+void Camera2DComp::Load(nlohmann::json& json) {
+	width_ = json["width"].get<float32_t>();
+	height_ = json["height"].get<float32_t>();
+	nearClip_ = json["nearClip"].get<float32_t>();
+	farClip_ = json["farClip"].get<float32_t>();
+}
+
 const Mat4x4& Camera2DComp::GetToNdcMatrix() const
 {
 	return othographicMatrix_;

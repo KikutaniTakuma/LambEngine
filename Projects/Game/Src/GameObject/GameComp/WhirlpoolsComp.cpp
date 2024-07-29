@@ -40,3 +40,9 @@ void WhirlpoolsComp::Save(nlohmann::json& json)
 	json["pathThroughSpeed"] = pathThroughSpeed_;
 	json["rotateSpeed"] = rotateSpeed_;
 }
+
+void WhirlpoolsComp::Load(nlohmann::json& json)
+{
+	pathThroughSpeed_ = json["pathThroughSpeed"].get<float32_t>();
+	rotateSpeed_ = json["rotateSpeed"].get<float32_t>();
+}

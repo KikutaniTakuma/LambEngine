@@ -24,6 +24,7 @@ public:
 	}
 
 	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 private:
 	std::unordered_set<std::string> pushTags_;

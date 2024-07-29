@@ -38,3 +38,9 @@ void SailComp::Save(nlohmann::json& json) {
 	json["openKeyTime"] = openKeyTime_;
 	json["strength"] = strength_;
 }
+
+void SailComp::Load(nlohmann::json& json)
+{
+	openKeyTime_ = json["openKeyTime"].get<float32_t>();
+	strength_ = json["strength"].get<float32_t>();
+}

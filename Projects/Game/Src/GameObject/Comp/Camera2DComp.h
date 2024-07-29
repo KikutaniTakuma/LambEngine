@@ -14,6 +14,7 @@ public:
 	void Update();
 
 	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 public:
 	const Mat4x4& GetToNdcMatrix() const;

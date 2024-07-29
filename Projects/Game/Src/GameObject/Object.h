@@ -96,6 +96,7 @@ public:
 	virtual void Debug([[maybe_unused]]const std::string& guiName) {};
 
 	virtual void Save(nlohmann::json& json) = 0;
+	virtual void Load(nlohmann::json& json) = 0;
 
 	template<IsBaseIComp Comp>
 	void SetCompName(nlohmann::json& json) {
@@ -132,7 +133,8 @@ public:
 
 	bool DebugAddComp();
 
-	void Save([[maybe_unused]] nlohmann::json& json);
+	void Save(nlohmann::json& json);
+	void Load(nlohmann::json& compData);
 
 private:
 	template<IsBaseIComp Comp>
@@ -189,6 +191,17 @@ public:
 
 		return static_cast<CompType*>(components_.at(key).get());
 	}
+
+	void AddComps(nlohmann::json& compData);
+
+	template<IsBaseIComp CompType>
+	void AddAndLoadComp(const std::string& className, nlohmann::json& compData) {
+		if (className == typeid(CompType).name()) {
+			auto comp = AddComp<CompType>();
+			comp->Load(compData);
+		}
+	}
+
 
 	template<IsBaseIComp CompType>
 	[[nodiscard]]CompType* const GetComp() const {

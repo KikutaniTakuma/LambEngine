@@ -420,6 +420,21 @@ void ObbComp::Save(nlohmann::json& json) {
 	}
 }
 
+void ObbComp::Load(nlohmann::json& json)
+{
+	for (size_t i = 0; i < json["scale"].size(); i++) {
+		scale[i] = json["scale"][i].get<float32_t>();
+	}
+	for (size_t i = 0; i < json["center"].size(); i++) {
+		center[i] = json["center"][i].get<float32_t>();
+	}
+	collisionTags_.clear();
+	collisionTags_.reserve(json["collsiionTags"].size());
+	for (size_t i = 0; i < json["collsiionTags"].size(); i++) {
+		collisionTags_.insert(json["collsiionTags"][i].get<std::string>());
+	}
+}
+
 const std::string& ObbComp::GetCurrentCollisionTag() const {
 	return currentCollisionTag_;
 }

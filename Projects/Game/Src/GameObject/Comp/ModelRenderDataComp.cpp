@@ -21,3 +21,21 @@ void ModelRenderDataComp::Save(nlohmann::json& json)
 	json["fileName"] = fileName;
 }
 
+void ModelRenderDataComp::Load(nlohmann::json& json)
+{
+	std::string&& blendType = json["BlendType"].get<std::string>();
+	for (size_t count = 0; const auto& i : kBlendTypeStrs) {
+		if (blendType == i) {
+			type = BlendType(count);
+			break;
+		}
+		count++;
+	}
+
+	for (size_t i = 0; i < json["color"].size(); i++) {
+		color[i] = json["color"][0];
+	}
+	isLighting = json["isLighting"].get<bool>();
+	fileName = json["fileName"].get<std::string>();
+}
+

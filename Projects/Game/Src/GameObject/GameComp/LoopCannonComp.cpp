@@ -28,3 +28,9 @@ void LoopCannonComp::Save(nlohmann::json& json)
 	json["fireKeyTime"] = fireKeyTime_;
 	json["strength"] = strength_;
 }
+
+void LoopCannonComp::Load(nlohmann::json& json)
+{
+	fireKeyTime_ = json["fireKeyTime"].get<float32_t>();
+	strength_ = json["strength"].get<float32_t>();
+}

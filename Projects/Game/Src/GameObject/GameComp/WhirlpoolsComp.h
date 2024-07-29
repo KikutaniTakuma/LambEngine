@@ -18,6 +18,7 @@ public:
 	void Debug(const std::string& guiName) override; 
 
 	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 private:
 	Lamb::SafePtr<class TransformComp> transformComp_;

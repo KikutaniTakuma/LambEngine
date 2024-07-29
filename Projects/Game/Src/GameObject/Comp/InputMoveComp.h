@@ -13,6 +13,7 @@ public:
 	void FirstUpdate() override;
 
 	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 	
 public:

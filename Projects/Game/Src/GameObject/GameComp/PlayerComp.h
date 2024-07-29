@@ -20,6 +20,7 @@ public:
 	void Draw(CameraComp* cameraComp) override;
 
 	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 private:
 	Lamb::SafePtr<class ChildrenObjectComp> item_;

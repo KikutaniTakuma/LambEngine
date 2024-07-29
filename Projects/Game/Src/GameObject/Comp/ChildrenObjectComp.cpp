@@ -108,6 +108,17 @@ void ChildrenObjectComp::Save(nlohmann::json& json) {
 	}
 }
 
+void ChildrenObjectComp::Load(nlohmann::json& json) {
+	objects_.clear();
+	for (auto& object : json["Children"]) {
+		if (object["type"].get<std::string>() == "Object") {
+			auto newObject = std::make_unique<Object>();
+			newObject->Load(object["Comps"]);
+			AddObject(newObject.get());
+		}
+	}
+}
+
 const std::unordered_set<std::unique_ptr<Object>>& ChildrenObjectComp::GetObjects() const
 {
 	return objects_;

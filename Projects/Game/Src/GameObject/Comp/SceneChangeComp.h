@@ -18,6 +18,7 @@ public:
 	void SetSceneManager(class SceneManager* sceneManager);
 
 	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 private:
 	BaseScene::ID nextID_ = BaseScene::ID::Title;

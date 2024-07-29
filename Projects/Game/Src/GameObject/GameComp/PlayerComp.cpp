@@ -36,3 +36,7 @@ void PlayerComp::Save(nlohmann::json& json)
 {
 	SetCompName<PlayerComp>(json);
 }
+
+void PlayerComp::Load([[maybe_unused]]nlohmann::json& json)
+{
+}

@@ -6,14 +6,14 @@
 #endif // _DEBUG
 
 
-void JsonCmop::Init() {
+void JsonComp::Init() {
 #ifdef _DEBUG
 	filePaths_ = Lamb::GetFilePathFormDir("./", ".json");
 #endif // _DEBUG
 	Load();
 }
 
-void JsonCmop::Load()
+void JsonComp::Load()
 {
 	if (fileName.empty()) {
 		return;
@@ -21,15 +21,15 @@ void JsonCmop::Load()
 	jsonData_ = Lamb::LoadJson(fileName);
 }
 
-nlohmann::json& JsonCmop::GetJsonData() {
+nlohmann::json& JsonComp::GetJsonData() {
 	return jsonData_;
 }
 
-const nlohmann::json& JsonCmop::GetJsonData() const {
+const nlohmann::json& JsonComp::GetJsonData() const {
 	return jsonData_;
 }
 
-void JsonCmop::Debug([[maybe_unused]]const std::string& guiName) {
+void JsonComp::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
 		if (ImGui::Button("再読み込み")) {
@@ -53,8 +53,13 @@ void JsonCmop::Debug([[maybe_unused]]const std::string& guiName) {
 #endif // _DEBUG
 }
 
-void JsonCmop::Save(nlohmann::json& json)
+void JsonComp::Save(nlohmann::json& json)
 {
-	SetCompName<JsonCmop>(json);
+	SetCompName<JsonComp>(json);
 	json["fileName"] = fileName;
+}
+
+void JsonComp::Load(nlohmann::json& json)
+{
+	fileName = json["fileName"].get<std::string>();
 }

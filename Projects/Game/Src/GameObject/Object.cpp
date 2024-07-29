@@ -111,7 +111,7 @@ bool Object::DebugAddComp() {
 		DebugAdd<Camera3DComp>();
 		DebugAdd<ChildrenObjectComp>();
 		DebugAdd<CsvDataComp>();
-		DebugAdd<JsonCmop>();
+		DebugAdd<JsonComp>();
 		DebugAdd<EventComp>();
 		DebugAdd<FallComp>();
 		DebugAdd<InputMoveComp>();
@@ -147,5 +147,60 @@ void Object::Save(nlohmann::json& json) {
 		json["Comps"].push_back(nlohmann::json::object());
 		comp.second->Save(json["Comps"].back());
 	}
+}
+
+void Object::Load(nlohmann::json& compData) {
+	// コンポーネントを追加
+	for (auto& comp : compData) {
+		AddComps(comp);
+	}
+
+	if (HasComp<ModelRenderComp>()) {
+		auto comp = GetComp<ModelRenderComp>();
+		comp->Load();
+	}
+	if (HasComp<SpriteRenderComp>()) {
+		auto comp = GetComp<SpriteRenderComp>();
+		comp->Load();
+	}
+	if (HasComp<JsonComp>()) {
+		auto comp = GetComp<JsonComp>();
+		comp->Load();
+	}
+	if (HasComp<CsvDataComp>()) {
+		auto comp = GetComp<CsvDataComp>();
+		comp->Load();
+	}
+}
+
+void Object::AddComps(nlohmann::json& compData)
+{
+	std::string compName = compData["CompName"].get<std::string>();
+
+	AddAndLoadComp<ButtonComp>(compName, compData);
+	AddAndLoadComp<Camera2DComp>(compName, compData);
+	AddAndLoadComp<Camera3DComp>(compName, compData);
+	AddAndLoadComp<ChildrenObjectComp>(compName, compData);
+	AddAndLoadComp<CsvDataComp>(compName, compData);
+	AddAndLoadComp<JsonComp>(compName, compData);
+	AddAndLoadComp<EventComp>(compName, compData);
+	AddAndLoadComp<FallComp>(compName, compData);
+	AddAndLoadComp<InputMoveComp>(compName, compData);
+	AddAndLoadComp<ModelRenderComp>(compName, compData);
+	AddAndLoadComp<ModelRenderDataComp>(compName, compData);
+	AddAndLoadComp<ObbComp>(compName, compData);
+	AddAndLoadComp<ObbPushComp>(compName, compData);
+	AddAndLoadComp<SceneChangeComp>(compName, compData);
+	AddAndLoadComp<SpriteRenderComp>(compName, compData);
+	AddAndLoadComp<SpriteRenderDataComp>(compName, compData);
+	AddAndLoadComp<TransformComp>(compName, compData);
+	AddAndLoadComp<CannonComp>(compName, compData);
+	AddAndLoadComp<ItemComp>(compName, compData);
+	AddAndLoadComp<LoopCannonComp>(compName, compData);
+	AddAndLoadComp<PlayerComp>(compName, compData);
+	AddAndLoadComp<SailComp>(compName, compData);
+	AddAndLoadComp<WhirlpoolsComp>(compName, compData);
+	AddAndLoadComp<WindComp>(compName, compData);
+	AddAndLoadComp<WindNodeComp>(compName, compData);
 }
 

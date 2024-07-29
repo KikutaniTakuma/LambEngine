@@ -26,6 +26,13 @@ void Camera3DComp::Save(nlohmann::json& json) {
 	json["farClip"] = farClip_;
 }
 
+void Camera3DComp::Load(nlohmann::json& json) {
+	fov_ = json["fov"].get<float32_t>();
+	aspectRatio_ = json["aspectRatio"].get<float32_t>();
+	nearClip_ = json["nearClip"].get<float32_t>();
+	farClip_ = json["farClip"].get<float32_t>();
+}
+
 const Mat4x4& Camera3DComp::GetToNdcMatrix() const
 {
 	return projectionMatrix_;

@@ -50,6 +50,10 @@ void WindNodeComp::Save(nlohmann::json& json)
 	SetCompName<WindNodeComp>(json);
 }
 
+void WindNodeComp::Load([[maybe_unused]]nlohmann::json& json)
+{
+}
+
 bool WindNodeComp::IsInRange(const Vector3& pos, const Vector3& min, const Vector3& max)
 {
 	return (min.x <= pos.x && pos.x <= max.x) &&

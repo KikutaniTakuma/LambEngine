@@ -13,6 +13,7 @@ public:
 	void SetStrength(float32_t strength);
 
 	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 private:
 	float32_t time_ = 0.0f;

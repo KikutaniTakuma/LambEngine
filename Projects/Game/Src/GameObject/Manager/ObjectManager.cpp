@@ -11,10 +11,9 @@
 #ifdef _DEBUG
 #include "imgui.h"
 #endif // _DEBUG
-
-#include "json.hpp"
 #include <fstream>
 
+#include "Utils/FileUtils.h"
 
 
 std::unique_ptr<ObjectManager> ObjectManager::instance_;
@@ -35,6 +34,8 @@ void ObjectManager::Initialize() {
 	}
 
 	instance_.reset(new ObjectManager());
+
+	instance_->levelDataFilePathes_ = Lamb::GetFilePathFormDir("./SceneData/", ".json");
 }
 
 void ObjectManager::Finalize()
@@ -103,7 +104,7 @@ void ObjectManager::Clear() {
 
 bool ObjectManager::SetCamera() {
 	for (auto& i : objects_) {
-		if (i->HasTag("Camera")) {
+		if (i->HasComp<CameraComp>()) {
 			cameraComp_ = i->GetComp<CameraComp>();
 			break;
 		}
@@ -194,14 +195,23 @@ void ObjectManager::Collision() {
 void ObjectManager::Debug() {
 #ifdef _DEBUG
 	ImGui::Begin("Objects");
-	sceneNames_.resize(32);
-	ImGui::InputText("fileName .json", sceneNames_.data(), sceneNames_.size());
+	inputSceneName_.resize(32);
+	ImGui::InputText("fileName .json", inputSceneName_.data(), inputSceneName_.size());
 	if (ImGui::Button("保存")) {
 		Save();
 	}
-	ImGui::SameLine();
-	if (ImGui::Button("ロード")) {
-		Load();
+	ImGui::Text("current scene : %s", currentScene_.c_str());
+	if (ImGui::Button("ファイルパス再読み込み")) {
+		levelDataFilePathes_ = Lamb::GetFilePathFormDir("./SceneData/", ".json");
+	}
+	if (ImGui::TreeNode("ロード")) {
+		for (auto& i : levelDataFilePathes_) {
+			if (ImGui::Button(i.string().c_str())) {
+				Load(i.string());
+			}
+		}
+
+		ImGui::TreePop();
 	}
 
 
@@ -284,7 +294,7 @@ void ObjectManager::Save() {
 	root = nlohmann::json::object();
 
 	std::string fileName;
-	for (auto& i : sceneNames_) {
+	for (auto& i : inputSceneName_) {
 		if (i == '\0') {
 			break;
 		}
@@ -319,6 +329,28 @@ void ObjectManager::Save() {
 	}
 }
 
-void ObjectManager::Load()
-{
+void ObjectManager::Load(const std::string& jsonFileName) {
+	auto jsonFile = Lamb::LoadJson(jsonFileName);
+
+	currentScene_ = jsonFile["scene"].get<std::string>();
+	levelDatas_[currentScene_] = std::make_unique<LevelData>();
+	LevelData& levelData = *levelDatas_[currentScene_];
+	levelData.name = currentScene_;
+	levelData.objects.reserve(jsonFile["objects"].size());
+	
+	// オブジェクトを追加
+	for (auto& objectData : jsonFile["objects"]) {
+		if (objectData["type"].get<std::string>() == "Object") {
+			levelData.objects.push_back(Lamb::MakeSafePtr<Object>());
+			Object& object = *levelData.objects.back();
+			object.Load(objectData["Comps"]);
+		}
+	}
+
+	// オブジェクトをセット
+	for (auto& i : levelDatas_[currentScene_]->objects) {
+		this->Set(i);
+	}
+
+	SetCamera();
 }

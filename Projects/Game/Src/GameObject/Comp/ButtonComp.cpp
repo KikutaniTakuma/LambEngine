@@ -33,3 +33,10 @@ void ButtonComp::Save(nlohmann::json& json) {
 	json["key"] = int32_t(keyButton);
 	json["Gamepad"] = int32_t(mButton);
 }
+
+void ButtonComp::Load(nlohmann::json& json)
+{
+	gButton = Gamepad::Button(json["Gamepad"].get<int32_t>());
+	keyButton = uint8_t(json["key"].get<int32_t>());
+	mButton = Mouse::Button(json["Gamepad"].get<int32_t>());
+}

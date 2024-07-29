@@ -91,3 +91,7 @@ void ModelRenderComp::Save(nlohmann::json& json)
 {
     SetCompName<ModelRenderComp>(json);
 }
+
+void ModelRenderComp::Load([[maybe_unused]]nlohmann::json& json)
+{
+}

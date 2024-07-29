@@ -15,6 +15,10 @@ void CameraComp::Save(nlohmann::json& json)
 	SetCompName<CameraComp>(json);
 }
 
+void CameraComp::Load([[maybe_unused]]nlohmann::json& json)
+{
+}
+
 const Mat4x4& CameraComp::GetViewMatrix() const
 {
 	return viewMatrix_;

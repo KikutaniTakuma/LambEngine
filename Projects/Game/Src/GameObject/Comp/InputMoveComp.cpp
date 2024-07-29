@@ -42,3 +42,8 @@ void InputMoveComp::Save(nlohmann::json& json)
 	SetCompName<InputMoveComp>(json);
 	json["speed"] = speed_;
 }
+
+void InputMoveComp::Load(nlohmann::json& json)
+{
+	speed_ = json["speed"].get<float32_t>();
+}

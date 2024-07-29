@@ -15,6 +15,7 @@ public:
 	Vector3 GetDirection() const;
 
 	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 private:
 	Lamb::SafePtr<class ChildrenObjectComp> childrenComp_;

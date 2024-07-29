@@ -19,3 +19,8 @@ void FallComp::Save(nlohmann::json& json) {
 	SetCompName<FallComp>(json);
 	json["gravity"] = gravity;
 }
+
+void FallComp::Load(nlohmann::json& json)
+{
+	gravity = json["gravity"].get<float32_t>();
+}

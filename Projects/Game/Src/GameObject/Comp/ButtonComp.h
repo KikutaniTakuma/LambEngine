@@ -17,6 +17,7 @@ public:
 	const Lamb::Flg& Released();
 
 	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 public:
 	Gamepad::Button gButton = Gamepad::Button::A;

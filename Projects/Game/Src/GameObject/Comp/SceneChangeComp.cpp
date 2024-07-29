@@ -27,3 +27,14 @@ void SceneChangeComp::Save(nlohmann::json& json)
 	SetCompName<SceneChangeComp>(json);
 	json["nextID"] = BaseScene::kSceneStrings[size_t(nextID_)];
 }
+
+void SceneChangeComp::Load(nlohmann::json& json)
+{
+	std::string&& id = json["nextID"].get<std::string>();
+	for (size_t count = 0; BaseScene::kSceneStrings.size(); count++) {
+		if (id == BaseScene::kSceneStrings[count]) {
+			nextID_ = BaseScene::ID(count);
+			break;
+		}
+	}
+}

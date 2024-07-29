@@ -56,7 +56,8 @@ private:
 
 	void Save();
 
-	void Load();
+public:
+	void Load(const std::string& jsonFileName);
 
 private:
 	std::unordered_set<std::unique_ptr<Object>> objects_;
@@ -65,6 +66,10 @@ private:
 	Lamb::SafePtr<class CameraComp> cameraComp_;
 
 	std::unordered_map<std::string, std::unique_ptr<LevelData>> levelDatas_;
-	std::string sceneNames_;
+	std::string inputSceneName_;
 	std::string currentScene_;
+#ifdef _DEBUG
+	std::vector<std::filesystem::path> levelDataFilePathes_;
+#endif // _DEBUG
+
 };

@@ -1,188 +1,294 @@
 {
-    "name": "scene",
     "objects": [
         {
-            "type": "MESH",
-            "name": "Cube",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    14.159912109375,
-                    29.550127029418945,
-                    51.76131057739258
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    2.2344017028808594
-                ]
-            },
-            "file_name": "./Resources/Common/Cube.obj"
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/Common/Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.00324326753616333,
+                        -0.44712722301483154,
+                        -0.2797190845012665,
+                        0.8496022820472717
+                    ],
+                    "scale": [
+                        1.0,
+                        2.2344017028808594,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ],
+            "type": "Object"
         },
         {
-            "type": "LIGHT",
-            "name": "Light",
-            "transform": {
-                "translation": [
-                    4.076245307922363,
-                    1.0054539442062378,
-                    5.903861999511719
-                ],
-                "rotation": [
-                    37.26104736328125,
-                    3.1637091636657715,
-                    106.93632507324219
-                ],
-                "scaling": [
-                    1.0,
-                    0.9999999403953552,
-                    1.0
-                ]
-            }
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/Common/Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.12176398932933807,
+                        -0.8748835921287537,
+                        -0.4344503879547119,
+                        0.17608274519443512
+                    ],
+                    "scale": [
+                        1.0,
+                        2.2344017028808594,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        8.779454231262207,
+                        4.607855796813965,
+                        3.4205446243286133
+                    ]
+                }
+            ],
+            "type": "Object"
         },
         {
-            "type": "CAMERA",
-            "name": "Camera",
-            "transform": {
-                "translation": [
-                    25.654666900634766,
-                    -24.854534149169922,
-                    18.758060455322266
-                ],
-                "rotation": [
-                    63.559303283691406,
-                    3.3033534236892592e-06,
-                    46.69194412231445
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "camera_type": "Perspective",
-            "fov": 0.38657083810084364,
-            "aspect_ratio": 1.7777777777777777,
-            "far_clip": 1000.0,
-            "near_clip": 0.10000000149011612
+            "Comps": [
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.16907574236392975,
+                        -0.7663795351982117,
+                        -0.27217137813568115,
+                        0.5567752122879028
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        4.076245307922363,
+                        5.903861999511719,
+                        1.0054539442062378
+                    ]
+                }
+            ],
+            "type": "Object"
         },
         {
-            "type": "MESH",
-            "name": "Cube.001",
-            "transform": {
-                "translation": [
-                    5.9372639656066895,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    67.32962036132812,
-                    5.738112449645996,
-                    -136.9051055908203
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    2.2344017028808594
-                ]
-            },
-            "file_name": "./Resources/Common/Cube.obj",
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/Common/Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.8410722017288208,
+                        -0.061060331761837006,
+                        -0.40609458088874817,
+                        0.35207465291023254
+                    ],
+                    "scale": [
+                        0.9999999403953552,
+                        2.2344017028808594,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        0.0,
+                        4.972753047943115,
+                        -10.978775024414063
+                    ]
+                },
+                {
+                    "CompName": "class ObbComp",
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "collsiionTags": [],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ]
+                },
+                {
+                    "CompName": "class ObbPushComp",
+                    "pushTags": []
+                }
+            ],
+            "type": "Object"
         },
         {
-            "type": "MESH",
-            "name": "Cube.002",
-            "transform": {
-                "translation": [
-                    -2.354613780975342,
-                    -5.334699630737305,
-                    0.0
-                ],
-                "rotation": [
-                    67.32962036132812,
-                    5.738112449645996,
-                    -136.9051055908203
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    2.2344017028808594
-                ]
-            },
-            "file_name": "./Resources/Common/Cube.obj"
+            "Comps": [
+                {
+                    "CompName": "class CameraComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.20997297763824463,
+                        -0.3857799470424652,
+                        0.09062841534614563,
+                        0.8937962651252747
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        25.654666900634766,
+                        18.758060455322266,
+                        -24.854534149169922
+                    ]
+                },
+                {
+                    "CompName": "class Camera3DComp",
+                    "aspectRatio": 1.7777777910232544,
+                    "farClip": 1000.0,
+                    "fov": 0.38657084107398987,
+                    "nearClip": 0.10000000149011612
+                }
+            ],
+            "type": "Object"
         },
         {
-            "type": "MESH",
-            "name": "Cube.003",
-            "transform": {
-                "translation": [
-                    8.779454231262207,
-                    3.4205446243286133,
-                    4.607855796813965
-                ],
-                "rotation": [
-                    45.83250045776367,
-                    31.693265914916992,
-                    143.5555419921875
-                ],
-                "scaling": [
-                    1.0,
-                    0.9999999403953552,
-                    2.2344017028808594
-                ]
-            },
-            "file_name": "./Resources/Common/Cube.obj"
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/Common/Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.24208363890647888,
+                        0.7629680633544922,
+                        0.4996466040611267,
+                        0.3311023414134979
+                    ],
+                    "scale": [
+                        1.0,
+                        2.2344017028808594,
+                        1.0
+                    ],
+                    "translate": [
+                        -2.354613780975342,
+                        0.0,
+                        -5.334699630737305
+                    ]
+                }
+            ],
+            "type": "Object"
         },
         {
-            "type": "MESH",
-            "name": "Cube.004",
-            "transform": {
-                "translation": [
-                    0.0,
-                    -10.978775024414062,
-                    4.972753047943115
-                ],
-                "rotation": [
-                    140.07138061523438,
-                    -13.82468318939209,
-                    56.58852767944336
-                ],
-                "scaling": [
-                    0.9999999403953552,
-                    0.9999999403953552,
-                    2.2344017028808594
-                ]
-            },
-            "file_name": "./Resources/Common/Cube.obj",
-            "collider": {
-                "type": "BOX",
-                "center": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "size": [
-                    2.0,
-                    2.0,
-                    2.0
-                ]
-            }
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/Common/Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.24208363890647888,
+                        0.7629680633544922,
+                        0.4996466040611267,
+                        0.3311023414134979
+                    ],
+                    "scale": [
+                        1.0,
+                        2.2344017028808594,
+                        1.0
+                    ],
+                    "translate": [
+                        5.9372639656066895,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "CompName": "class ObbComp",
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "collsiionTags": [],
+                    "scale": [
+                        2.0,
+                        2.0,
+                        2.0
+                    ]
+                },
+                {
+                    "CompName": "class ObbPushComp",
+                    "pushTags": []
+                }
+            ],
+            "type": "Object"
         }
-    ]
+    ],
+    "scene": "tset"
 }

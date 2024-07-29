@@ -67,3 +67,8 @@ void CsvDataComp::Save(nlohmann::json& json)
 	SetCompName<CsvDataComp>(json);
 	json["fileName"] = fileName;
 }
+
+void CsvDataComp::Load(nlohmann::json& json)
+{
+	fileName = json["fileName"].get<std::string>();
+}

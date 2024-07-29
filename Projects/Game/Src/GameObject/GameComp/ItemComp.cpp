@@ -19,3 +19,7 @@ void ItemComp::Save(nlohmann::json& json)
 {
 	SetCompName<ItemComp>(json);
 }
+
+void ItemComp::Load([[maybe_unused]]nlohmann::json& json)
+{
+}
