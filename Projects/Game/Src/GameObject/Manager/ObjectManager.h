@@ -33,17 +33,7 @@ private:
 	static std::unique_ptr<ObjectManager> instance_;
 
 public:
-	template<IsBasedBaseScene Scene>
-	void SetLevelData(Lamb::SafePtr<LevelData> levelData) {
-		assert(levelData.have());
-		currentScene_ = typeid(Scene).name();
-		levelDatas_[currentScene_].reset(levelData.get());
-		for (auto& i : levelDatas_[currentScene_]->objects) {
-			this->Set(i);
-		}
-
-		SetCamera();
-	}
+	void SetLevelData(Lamb::SafePtr<LevelData> levelData);
 
 	const Mat4x4& GetCameraMatrix() const;
 	const Vector3& GetCameraPos() const;

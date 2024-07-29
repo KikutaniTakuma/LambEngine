@@ -42,6 +42,17 @@ void ObjectManager::Finalize()
 	instance_.reset();
 }
 
+void ObjectManager::SetLevelData(Lamb::SafePtr<LevelData> levelData) {
+	assert(levelData.have());
+	currentScene_ = levelData->name;
+	levelDatas_[currentScene_].reset(levelData.get());
+	for (auto& i : levelDatas_[currentScene_]->objects) {
+		this->Set(i);
+	}
+
+	SetCamera();
+}
+
 const Mat4x4& ObjectManager::GetCameraMatrix() const
 {
 	return cameraComp_->GetCameraMatrix();
