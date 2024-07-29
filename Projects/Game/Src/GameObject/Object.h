@@ -57,6 +57,10 @@ public:
 /// 	using IComp::IComp;
 /// 
 /// 	~DerivedComp() = default;
+///		
+/// public:
+///		void Save(nlohmann::json& json) override;
+///		void Load(nlohmann::json& json) override;
 /// };
 
 // 前方宣言
