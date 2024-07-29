@@ -219,7 +219,7 @@ void RenderingManager::Draw() {
 
 	DrawSkyBox();
 
-	RGBALists rgbaList = {
+	RenderDataLists rgbaList = {
 		renderContextManager->CreateRenderList(BlendType::kNormal),
 		renderContextManager->CreateRenderList(BlendType::kAdd),
 		renderContextManager->CreateRenderList(BlendType::kSub),
@@ -295,7 +295,17 @@ void RenderingManager::Draw() {
 
 	/// ====================================================================================
 
-	NoDepthLists nodepthLists = {
+	ZSrot(
+		RenderDataLists{
+		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNone),
+		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNormal),
+		renderContextManager->CreateRenderList(BlendType::kUnenableDepthAdd),
+		renderContextManager->CreateRenderList(BlendType::kUnenableDepthSub),
+		renderContextManager->CreateRenderList(BlendType::kUnenableDepthMul)
+		}
+	);
+
+	RenderDataLists nodepthLists = {
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNone),
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNormal),
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthAdd),
@@ -371,7 +381,7 @@ void RenderingManager::DrawSkyBox() {
 	skyBox_->Draw(transform_.GetMatrix(), cameraMatrix_, 0xffffffff);
 }
 
-void RenderingManager::DrawRGBA(const RGBALists& rgbaList) {
+void RenderingManager::DrawRGBA(const RenderDataLists& rgbaList) {
 	for (auto& list : rgbaList) {
 		for (size_t count = 0; auto& element : list.second) {
 			if (list.first <= count) {
@@ -409,7 +419,7 @@ void RenderingManager::DrawPostEffect() {
 	gaussianVerticalTexture_->Draw(Pipeline::Blend::Add, nullptr);
 }
 
-void RenderingManager::DrawNoDepth(const NoDepthLists& nodepthList)
+void RenderingManager::DrawNoDepth(const RenderDataLists& nodepthList)
 {
 	for (auto& list : nodepthList) {
 		for (size_t count = 0; auto & element : list.second) {
@@ -419,6 +429,7 @@ void RenderingManager::DrawNoDepth(const NoDepthLists& nodepthList)
 
 			element->SetLight(deferredRenderingData_.directionLight);
 			element->SetCameraPos(deferredRenderingData_.eyePos);
+			element->DataSet();
 			element->Draw();
 
 			count++;
@@ -426,7 +437,7 @@ void RenderingManager::DrawNoDepth(const NoDepthLists& nodepthList)
 	}
 }
 
-void RenderingManager::ZSrot(const RGBALists& rgbaList) {
+void RenderingManager::ZSrot(const RenderDataLists& rgbaList) {
 	for (auto& list : rgbaList) {
 		for (size_t count = 0; auto& element : list.second) {
 			if (list.first <= count) {

@@ -10,14 +10,11 @@
 
 #include "Drawers/SkyBox/SkyBox.h"
 
-#include <array>
-
 #include <list>
 
 class RenderingManager {
 private:
-	using RGBALists = std::array<std::pair<size_t, const std::list<RenderData*>&>, 4>;
-	using NoDepthLists = std::array<std::pair<size_t, const std::list<RenderData*>&>, 5>;
+	using RenderDataLists = std::vector<std::pair<size_t, const std::list<RenderData*>&>>;
 
 public:
 	RenderingManager();
@@ -62,7 +59,7 @@ private:
 	void DrawSkyBox();
 
 	// アルファ値があるものを描画
-	void DrawRGBA(const RGBALists& rgbaList);
+	void DrawRGBA(const RenderDataLists& rgbaList);
 
 	// ディファード描画
 	void DrawDefferd();
@@ -71,12 +68,12 @@ private:
 	void DrawPostEffect();
 
 	// 深度値を使わないものの描画
-	void DrawNoDepth(const NoDepthLists& nodepthList);
+	void DrawNoDepth(const RenderDataLists& nodepthList);
 
 private:
 
 	// アルファ値があるものを順番を並び替える
-	void ZSrot(const RGBALists& rgbaList);
+	void ZSrot(const RenderDataLists& rgbaList);
 
 
 private:
