@@ -126,7 +126,11 @@ void ObjectManager::Update() {
 #ifdef _DEBUG
 	TransformCompUpdater::GetInstance()->UpdateMatrix();
 	cameraComp_->LastUpdate();
+	isLoad_ = false;
 	Debug();
+	if (isLoad_) {
+		return;
+	}
 	TransformCompUpdater::GetInstance()->Guizmo(cameraComp_.get());
 #endif // _DEBUG
 
@@ -169,6 +173,10 @@ void ObjectManager::Update() {
 }
 
 void ObjectManager::Draw() {
+	if (isLoad_) {
+		return;
+	}
+
 	// 描画処理
 	for (auto& i : objects_) {
 		i->Draw(cameraComp_.get());
@@ -208,6 +216,11 @@ void ObjectManager::Debug() {
 		for (auto& i : levelDataFilePathes_) {
 			if (ImGui::Button(i.string().c_str())) {
 				Load(i.string());
+				ImGui::TreePop();
+				ImGui::End();
+
+				isLoad_ = true;
+				return;
 			}
 		}
 
@@ -218,6 +231,13 @@ void ObjectManager::Debug() {
 	RenderingManager::GetInstance()->Debug("RendeirngSetting");
 
 	if (ImGui::TreeNode("sort")) {
+		for (auto& object : objects_) {
+			for (const auto& i : object->GetTags()) {
+				if (not objectTags_.contains(i)) {
+					objectTags_.insert(std::make_pair(i, true));
+				}
+			}
+		}
 		if (ImGui::Button("すべてを選択")) {
 			for (auto& i : objectTags_) {
 				i.second = true;
@@ -330,10 +350,15 @@ void ObjectManager::Save() {
 }
 
 void ObjectManager::Load(const std::string& jsonFileName) {
+	objects_.clear();
+	obbObjects_.clear();
+	objectTags_.clear();
+	cameraComp_ = nullptr;
+
 	auto jsonFile = Lamb::LoadJson(jsonFileName);
 
 	currentScene_ = jsonFile["scene"].get<std::string>();
-	levelDatas_[currentScene_] = std::make_unique<LevelData>();
+	levelDatas_[currentScene_].reset(new LevelData());
 	LevelData& levelData = *levelDatas_[currentScene_];
 	levelData.name = currentScene_;
 	levelData.objects.reserve(jsonFile["objects"].size());

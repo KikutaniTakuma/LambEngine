@@ -11,6 +11,8 @@ public:
 public:
 	void Start();
 
+	void Init()override;
+
 	void Move()override;
 
 	void Draw(CameraComp* cameraComp) override;
@@ -58,7 +60,7 @@ public:
 
 private:
 	// 最初のイージング
-	Easeing ease_;
+	std::unique_ptr<Easeing> ease_;
 
 private:
 	bool isActive_;

@@ -53,6 +53,22 @@ void WindComp::Init() {
 }
 
 void WindComp::FirstUpdate() {
+	positionRange_.first = transformComp_->translate - transformComp_->scale;
+	positionRange_.second = transformComp_->translate + transformComp_->scale;
+
+	if (direction_.z == 1.0f) {
+		positionRange_.second.z = positionRange_.first.z;
+	}
+	else if (direction_.z == -1.0f) {
+		positionRange_.first.z = positionRange_.second.z;
+	}
+	else if (direction_.x == 1.0f) {
+		positionRange_.second.x = positionRange_.first.x;
+	}
+	else if (direction_.x == -1.0f) {
+		positionRange_.first.x = positionRange_.second.x;
+	}
+
 	// 生成するか
 	if (Lamb::Random(appearFrequencyRange_.first, appearFrequencyRange_.second) < appearNum_) {
 		//生成する数

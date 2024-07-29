@@ -110,11 +110,12 @@ void ChildrenObjectComp::Save(nlohmann::json& json) {
 
 void ChildrenObjectComp::Load(nlohmann::json& json) {
 	objects_.clear();
-	for (auto& object : json["Children"]) {
-		if (object["type"].get<std::string>() == "Object") {
-			auto newObject = std::make_unique<Object>();
-			newObject->Load(object["Comps"]);
-			AddObject(newObject.get());
+	auto& childrenJson = json["Children"];
+	for (size_t i = 0; i < childrenJson.size(); i++) {
+		if (childrenJson[i]["type"].get<std::string>() == "Object") {
+			auto newObject = Lamb::MakeSafePtr<Object>();
+			newObject->Load(childrenJson[i]["Comps"]);
+			AddObject(newObject);
 		}
 	}
 }

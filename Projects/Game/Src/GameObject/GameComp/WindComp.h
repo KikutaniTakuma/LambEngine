@@ -26,7 +26,7 @@ private:
 
 private:
 	// 風の向き(デフォルトはZ方向)
-	Vector3 direction_ = Vector3::kXIdentity;
+	Vector3 direction_ = Vector3::kZIdentity;
 
 
 private:

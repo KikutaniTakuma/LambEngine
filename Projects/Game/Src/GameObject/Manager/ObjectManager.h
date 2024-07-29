@@ -70,6 +70,7 @@ private:
 	std::string currentScene_;
 #ifdef _DEBUG
 	std::vector<std::filesystem::path> levelDataFilePathes_;
+	bool isLoad_ = false;
 #endif // _DEBUG
 
 };

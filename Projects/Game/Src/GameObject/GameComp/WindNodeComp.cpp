@@ -4,7 +4,11 @@
 
 void WindNodeComp::Start() {
 	isActive_ = true;
-	ease_.Start(false, 1.0f);
+	ease_->Start(false, 1.0f);
+}
+
+void WindNodeComp::Init() {
+	ease_ = std::make_unique<Easeing>();
 }
 
 void WindNodeComp::Move() {
@@ -12,11 +16,11 @@ void WindNodeComp::Move() {
 		// 方向に速度を足して移動
 		start += direction * speed * object_.GetDeltaTime();
 
-		if (ease_.GetIsActive()) {
+		if (ease_->GetIsActive()) {
 			// 長さをイージング
-			end = start + direction * ease_.Get(0.0f, length);
+			end = start + direction * ease_->Get(0.0f, length);
 			// イージング更新
-			ease_.Update();
+			ease_->Update();
 		}
 		else {
 			// lineの終わりをディレクションを元に計算
@@ -40,7 +44,7 @@ void WindNodeComp::Draw(CameraComp* cameraComp) {
 			end,
 			cameraComp->GetCameraMatrix(),
 			std::numeric_limits<uint32_t>::max(),
-			true
+			false
 		);
 	}
 }
