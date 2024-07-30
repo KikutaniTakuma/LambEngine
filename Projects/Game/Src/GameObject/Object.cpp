@@ -26,7 +26,7 @@
 #include "GameComp/LoopCannonComp.h"
 #include "GameComp/PlayerComp.h"
 #include "GameComp/SailComp.h"
-#include "GameComp/UIComp.h"
+#include "GameComp/UIDrawComp.h"
 #include "GameComp/WhirlpoolsComp.h"
 #include "GameComp/WindComp.h"
 #include "GameComp/WindNodeComp.h"
@@ -129,7 +129,7 @@ bool Object::DebugAddComp() {
 		DebugAdd<LoopCannonComp>();
 		DebugAdd<PlayerComp>();
 		DebugAdd<SailComp>();
-		DebugAdd<UIComp>();
+		DebugAdd<UIDrawComp>();
 		DebugAdd<WhirlpoolsComp>();
 		DebugAdd<WindComp>();
 		DebugAdd<WindNodeComp>();
@@ -201,7 +201,7 @@ void Object::AddComps(nlohmann::json& compData)
 	AddAndLoadComp<LoopCannonComp>(compName, compData);
 	AddAndLoadComp<PlayerComp>(compName, compData);
 	AddAndLoadComp<SailComp>(compName, compData);
-	AddAndLoadComp<UIComp>(compName, compData);
+	AddAndLoadComp<UIDrawComp>(compName, compData);
 	AddAndLoadComp<WhirlpoolsComp>(compName, compData);
 	AddAndLoadComp<WindComp>(compName, compData);
 	AddAndLoadComp<WindNodeComp>(compName, compData);

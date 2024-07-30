@@ -167,7 +167,7 @@
     <ClCompile Include="Src\GameObject\Comp\ButtonComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
-    <ClCompile Include="Src\GameObject\GameComp\UIComp.cpp">
+    <ClCompile Include="Src\GameObject\GameComp\UIDrawComp.cpp">
       <Filter>GameObject\GameComp</Filter>
     </ClCompile>
     <ClCompile Include="Src\GameObject\Comp\QuadComp.cpp">
@@ -441,7 +441,7 @@
     <ClInclude Include="Src\GameObject\Comp\ButtonComp.h">
       <Filter>GameObject\Comp</Filter>
     </ClInclude>
-    <ClInclude Include="Src\GameObject\GameComp\UIComp.h">
+    <ClInclude Include="Src\GameObject\GameComp\UIDrawComp.h">
       <Filter>GameObject\GameComp</Filter>
     </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\QuadComp.h">

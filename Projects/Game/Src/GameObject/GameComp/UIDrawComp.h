@@ -1,9 +1,9 @@
 #include "../Object.h"
-class UIComp : public IComp {
+class UIDrawComp : public IComp {
 public:
 	using IComp::IComp;
 
-	~UIComp() = default;
+	~UIDrawComp() = default;
 
 public:
 	void Init() override;
