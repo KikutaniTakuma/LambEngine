@@ -12,6 +12,8 @@ public:
 
 	// xyのみ
 	bool IsCollision(const Vector2& pos);
+	// マウスカーソルの位置との当たり判定
+	bool IsCollisionMouse(const Mat4x4& view, const Mat4x4& ndc);
 
 	void Save(nlohmann::json& json) override;
 	void Load(nlohmann::json& json) override;
