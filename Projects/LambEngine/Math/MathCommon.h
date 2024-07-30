@@ -13,6 +13,8 @@ namespace Lamb {
 
 		float LengthSQ(const std::initializer_list<float>& data);
 		float Length(const std::initializer_list<float>& data);
+
+		float LerpShortAngle(float a, float b, float t);
 	}
 }
 
