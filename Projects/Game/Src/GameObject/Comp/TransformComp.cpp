@@ -143,9 +143,12 @@ void TransformComp::Guizmo(CameraComp* cameraComp) {
 		const Mat4x4& view = cameraComp->GetViewMatrix();
 		const Mat4x4& ndc = cameraComp->GetToNdcMatrix();
 		if (ImGuizmo::Manipulate(view.data(), ndc.data(), kGuizmoMode_[guimoType_].second, ImGuizmo::WORLD, worldMatrix_.data())) {
-			worldMatrix_.Decompose(scale, rotate, translate);
-			/*rotate = rotate.Normalize();
-			eulerRotate = rotate.ToEuler();*/
+			if (parent_) {
+				(worldMatrix_ * parent_->worldMatrix_.Inverse()).Decompose(scale, rotate, translate);
+			}
+			else {
+				worldMatrix_.Decompose(scale, rotate, translate);
+			}
 			TransformCompUpdater::GetInstance()->SetCurretnGuizmoID(guizmoID_);
 		}
 	}
