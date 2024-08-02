@@ -11,6 +11,15 @@ namespace Lamb {
 		template<std::floating_point Floating>
 		constexpr Floating toDegree = static_cast <Floating>(180.0 / std::numbers::pi_v<double>);
 
+		template<std::floating_point Floating>
+		constexpr Floating ToRadian(Floating degree) {
+			return std::fmod(degree, 360.0f) * toRadian<Floating>;
+		}
+		template<std::floating_point Floating>
+		constexpr Floating ToDegree(Floating radian) {
+			return std::fmod(radian, 2.0f * std::numbers::pi_v<Floating>) * toDegree<Floating>;
+		}
+
 		float LengthSQ(const std::initializer_list<float>& data);
 		float Length(const std::initializer_list<float>& data);
 
