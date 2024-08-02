@@ -51,7 +51,7 @@ private:
 };
 
 D3D12_STATIC_SAMPLER_DESC CreateLinearSampler(uint32_t shaderRegister = 0);
-D3D12_STATIC_SAMPLER_DESC CreateBorderLessSampler(uint32_t shaderRegister = 0);
+D3D12_STATIC_SAMPLER_DESC CreateBorderSampler(uint32_t shaderRegister = 0);
 D3D12_STATIC_SAMPLER_DESC CreatePointSampler(uint32_t shaderRegister = 0);
 
 bool operator==(const D3D12_STATIC_SAMPLER_DESC& left, const D3D12_STATIC_SAMPLER_DESC& right);

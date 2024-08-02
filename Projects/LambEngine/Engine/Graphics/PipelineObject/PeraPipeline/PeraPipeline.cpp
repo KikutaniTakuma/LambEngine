@@ -70,7 +70,7 @@ void PeraPipeline::Init(
 	desc.rootParameter = rootParameter.data();
 	desc.rootParameterSize = rootParameter.size();
 	desc.samplerDeacs.push_back(
-		CreateBorderLessSampler()
+		CreateBorderSampler()
 	);
 
 	auto pipelineManager = PipelineManager::GetInstance();
