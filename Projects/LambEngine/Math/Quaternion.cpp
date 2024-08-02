@@ -335,7 +335,7 @@ Quaternion Quaternion::EulerToQuaternion(const Vector3& euler)
 {
 	Quaternion result;
 
-	result.m128 = DirectX::XMQuaternionRotationRollPitchYawFromVector({ euler.x, euler.y, euler.z });
+	result.m128 = DirectX::XMQuaternionRotationRollPitchYaw(euler.x, euler.y, euler.z);
 
 	return result.Normalize();
 }
@@ -344,28 +344,24 @@ Vector3 Quaternion::QuaternionToEuler(const Quaternion& q)
 {
 	Vector3 result;
 
-	// y
+	// Z軸回りの回転
+	float sinZcosp = 2.0f * (q.quaternion.w * q.quaternion.x + q.quaternion.y * q.quaternion.z);
+	float cosZcosp = 1.0f - 2.0f * (q.quaternion.x * q.quaternion.x + q.quaternion.y * q.quaternion.y);
+	result.z = std::atan2f(sinZcosp, cosZcosp);
+
+	// X軸回りの回転
 	float sinp = 2.0f * (q.quaternion.w * q.quaternion.y - q.quaternion.z * q.quaternion.x);
 	if (std::abs(sinp) >= 1.0f) {
-		result.y = std::copysign(std::numbers::pi_v<float> *0.5f, sinp);
+		result.x = std::copysign(std::numbers::pi_v<float> * 0.5f, sinp); // 90度 (クランプ)
 	}
-	else {
-		result.y = std::asin(sinp);
+	else{
+		result.x = std::asin(sinp);
 	}
 
-	// zとx
-	if (std::abs(sinp) < 1.0f - static_cast<float>(10e-5)) {
-		result.z = std::atan2f(2.0f * (q.quaternion.w * q.quaternion.z + q.quaternion.x * q.quaternion.y), 1.0f - 2.0f * (q.quaternion.y * q.quaternion.y + q.quaternion.z * q.quaternion.z));
-		result.x = std::atan2f(2.0f * (q.quaternion.w * q.quaternion.x + q.quaternion.y * q.quaternion.z), 1.0f - 2.0f * (q.quaternion.x * q.quaternion.x + q.quaternion.y * q.quaternion.y));
-	}
-	else {
-		result.z = std::atan2f(
-			-2.0f *
-			(q.quaternion.x * q.quaternion.y - q.quaternion.w * q.quaternion.z),
-			q.quaternion.w * q.quaternion.w + q.quaternion.x * q.quaternion.x - q.quaternion.y * q.quaternion.y - q.quaternion.z * q.quaternion.z
-		);
-		result.x = 0.0f;
-	}
+	// Y軸回りの回転
+	float sinYcosp = 2.0f * (q.quaternion.w * q.quaternion.z + q.quaternion.x * q.quaternion.y);
+	float cosYcosp = 1.0f - 2.0f * (q.quaternion.y * q.quaternion.y + q.quaternion.z * q.quaternion.z);
+	result.y = std::atan2f(sinYcosp, cosYcosp);
 
 	return result;
 }
