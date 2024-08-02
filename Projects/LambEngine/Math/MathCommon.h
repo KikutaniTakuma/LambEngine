@@ -2,6 +2,7 @@
 #include <numbers>
 #include <limits>
 #include <initializer_list>
+#include <cmath>
 
 namespace Lamb {
 	namespace Math {
