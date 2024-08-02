@@ -11,7 +11,7 @@ public:
 	void Init() override;
 
 
-	void Load();
+	void Load() override;
 
 	nlohmann::json& GetJsonData();
 	const nlohmann::json& GetJsonData() const;

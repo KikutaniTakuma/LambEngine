@@ -9,7 +9,7 @@ public:
 
 	void Init() override;
 
-	void Load();
+	void Load() override;
 
 	const std::vector<std::vector<int32_t>>& GetCsvData() const;
 

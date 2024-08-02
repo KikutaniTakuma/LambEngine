@@ -157,21 +157,8 @@ void Object::Load(nlohmann::json& compData) {
 		AddComps(comp);
 	}
 
-	if (HasComp<ModelRenderComp>()) {
-		auto comp = GetComp<ModelRenderComp>();
-		comp->Load();
-	}
-	if (HasComp<SpriteRenderComp>()) {
-		auto comp = GetComp<SpriteRenderComp>();
-		comp->Load();
-	}
-	if (HasComp<JsonComp>()) {
-		auto comp = GetComp<JsonComp>();
-		comp->Load();
-	}
-	if (HasComp<CsvDataComp>()) {
-		auto comp = GetComp<CsvDataComp>();
-		comp->Load();
+	for (auto& i : components_) {
+		i.second->Load();
 	}
 }
 

@@ -85,6 +85,8 @@ public:
 	IComp& operator=(IComp&&) = delete;
 
 public:
+	virtual void Load() {}
+
 	virtual void Init() {}
 	virtual void Finalize() {}
 

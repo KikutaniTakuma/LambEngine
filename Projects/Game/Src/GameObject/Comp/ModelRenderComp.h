@@ -13,7 +13,7 @@ public:
 
 	void Draw(CameraComp* cameraComp) override;
 
-	void Load();
+	void Load() override;
 
 	void Debug(const std::string& guiName) override;
 

@@ -1,9 +1,10 @@
 #include "ChildrenObjectComp.h"
+#include "TransformComp.h"
 
 
 
 void ChildrenObjectComp::Init() {
-
+	transformComp_ = object_.AddComp<TransformComp>();
 }
 
 void ChildrenObjectComp::Finalize() {
@@ -21,8 +22,14 @@ void ChildrenObjectComp::AddObject(Lamb::SafePtr<Object> object) {
 		}
 	);
 
+	// なかったら追加
 	if (itr == objects_.end()) {
 		objects_.insert(std::unique_ptr<Object>(object.get()));
+
+		// トランスフォームコンポーネントを持っていたら親子関係を結ぶ
+		if (object->HasComp<TransformComp>()) {
+			object->GetComp<TransformComp>()->SetParent(transformComp_);
+		}
 	}
 }
 
@@ -32,6 +39,7 @@ void ChildrenObjectComp::EraseObject(Object* object) {
 			return object == element.get();
 		}
 	);
+	// あったら削除
 	if (itr != objects_.end()) {
 		objects_.erase(itr);
 	}
@@ -88,9 +96,18 @@ void ChildrenObjectComp::Debug([[maybe_unused]]const std::string& guiName) {
 				objects_.erase(itr);
 				break;
 			}
+			ImGui::SameLine();
 			(*itr)->Debug("object_" + std::to_string(objectCount));
+
+			// トランスフォームコンポーネントを持っていたら親子関係を結ぶ
+			if ((*itr)->HasComp<TransformComp>() && object_.HasComp<TransformComp>()) {
+				(*itr)->GetComp<TransformComp>()->SetParent(transformComp_);
+			}
+
 			objectCount++;
 		}
+
+
 
 		ImGui::TreePop();
 	}

@@ -34,4 +34,5 @@ public:
 
 private:
 	std::unordered_set<std::unique_ptr<Object>> objects_;
+	Lamb::SafePtr<class TransformComp> transformComp_;
 };

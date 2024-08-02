@@ -21,7 +21,7 @@ public:
 	void UpdateChildrenMatrix();
 	void UpdateParentMatrix();
 
-	void SetParent(Lamb::SafePtr<TransformComp>& parent);
+	void SetParent(Lamb::SafePtr<TransformComp> parent);
 
 	const Mat4x4& GetWorldMatrix() const {
 		return worldMatrix_;

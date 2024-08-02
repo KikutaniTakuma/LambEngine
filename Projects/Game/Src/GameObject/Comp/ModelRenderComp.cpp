@@ -13,19 +13,23 @@ void ModelRenderComp::Init() {
 	transformComp_ = object_.AddComp<TransformComp>();
 	renderDataComp_ = object_.AddComp<ModelRenderDataComp>();
 
+#ifdef _DEBUG
     filePaths_ = Lamb::GetFilePathFormDir("./", ".obj");
     auto bmp = Lamb::GetFilePathFormDir("./", ".gltf");
     filePaths_.insert(filePaths_.end(), bmp.begin(), bmp.end());
+#endif // _DEBUG
 }
 
 void ModelRenderComp::Draw(CameraComp* cameraComp) {
-	model_->Draw(
-		transformComp_->GetWorldMatrix(),
-		cameraComp->GetCameraMatrix(),
-		renderDataComp_->color.GetColorRGBA(),
-		renderDataComp_->type,
-		renderDataComp_->isLighting
-	);
+    if (model_.have()) {
+        model_->Draw(
+            transformComp_->GetWorldMatrix(),
+            cameraComp->GetCameraMatrix(),
+            renderDataComp_->color.GetColorRGBA(),
+            renderDataComp_->type,
+            renderDataComp_->isLighting
+        );
+    }
 }
 
 void ModelRenderComp::Load() {
@@ -60,7 +64,7 @@ void ModelRenderComp::Debug([[maybe_unused]]const std::string& guiName) {
             ImGui::Checkbox("Lighting", &renderDataComp_->isLighting);
         }
 
-        ImGui::Text("texture %s", renderDataComp_->fileName.c_str());
+        ImGui::Text("モデル %s", renderDataComp_->fileName.c_str());
 
         if (ImGui::Button("ファイルパス再読み込み")) {
             size_t size = filePaths_.size();

@@ -7,6 +7,7 @@
 #include "GameObject/Comp/CameraComp.h"
 
 #include "Engine/Graphics/RenderingManager/RenderingManager.h"
+#include "Engine/Core/WindowFactory/WindowFactory.h"
 #include <string>
 #ifdef _DEBUG
 #include "imgui.h"
@@ -321,6 +322,36 @@ void ObjectManager::Save() {
 		fileName += i;
 	}
 
+	std::string filePath = "./SceneData/" + fileName + ".json";
+	auto windowHandle = WindowFactory::GetInstance()->GetHwnd();
+
+	if (std::filesystem::exists(filePath)) {
+		
+
+		int32_t button = MessageBoxA(
+			windowHandle,
+			("this file exists. -> " + filePath + "\nDo you want to overwrite?").c_str(), "ObjectManager",
+			MB_YESNOCANCEL | MB_APPLMODAL | MB_ICONINFORMATION
+		);
+
+		if (button == IDCANCEL) {
+			return;
+		}
+		else if (button == IDNO) {
+			fileName += "_";
+			filePath = "./SceneData/" + fileName + ".json";
+
+			if (MessageBoxA(
+				windowHandle,
+				("Would you like to save it as " + filePath + " ?").c_str(), "ObjectManager",
+				MB_OKCANCEL | MB_APPLMODAL | MB_ICONINFORMATION
+			) == IDCANCEL
+				) {
+				return;
+			}
+		}
+	}
+
 	// シーンを名前
 	root["scene"] = fileName;
 	// オブジェクト
@@ -339,6 +370,12 @@ void ObjectManager::Save() {
 	if (outputFile.is_open()) {
 		outputFile << std::setw(4) << root << std::endl;
 		outputFile.close();
+
+		MessageBoxA(
+			windowHandle,
+			"Save file succeeded", "ObjectManager",
+			MB_OK | MB_APPLMODAL | MB_ICONINFORMATION
+		);
 	}
 	else {
 #ifdef _DEBUG
@@ -378,4 +415,10 @@ void ObjectManager::Load(const std::string& jsonFileName) {
 	}
 
 	SetCamera();
+
+	MessageBoxA(
+		WindowFactory::GetInstance()->GetHwnd(),
+		("Load " + jsonFileName + " succeeded").c_str(), "ObjectManager",
+		MB_OK | MB_APPLMODAL | MB_ICONINFORMATION
+	);
 }
