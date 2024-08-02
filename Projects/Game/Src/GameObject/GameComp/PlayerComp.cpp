@@ -90,8 +90,7 @@ void PlayerComp::Draw([[maybe_unused]]CameraComp* cameraComp) {
 
 }
 
-void PlayerComp::Save(nlohmann::json& json)
-{
+void PlayerComp::Save(nlohmann::json& json) {
 	SetCompName<PlayerComp>(json);
     json["param"] = nlohmann::json::array();
     for (auto& i : floatParameter_) {
@@ -105,11 +104,10 @@ void PlayerComp::Load(nlohmann::json& json) {
     }
 }
 
-void PlayerComp::UpdateRotate(const Vector3& direction)
-{
+void PlayerComp::UpdateRotate(const Vector3& direction) {
     float angle = 0.0f;
     Vector3 from = { 0.0f,0.0f,1.0f };
-    Vector3 to = direction_;
+    Vector3 to = direction;
     float dot = from.Dot(to);
     Vector2 Vector2From = { from.x ,from.z };
     Vector2 Vector2To = { to.x ,to.z };
@@ -117,7 +115,7 @@ void PlayerComp::UpdateRotate(const Vector3& direction)
         angle = 0.0f;
     }
     else if (dot <= -1.0f) {
-        angle = 180.0f * std::numbers::pi_v<float> / 180.0f;
+        angle = Lamb::Math::ToRadian(180.0f);
     }
     else if (Vector2From.Cross(Vector2To) > 0) {
         angle = -std::acosf(dot);
@@ -128,5 +126,5 @@ void PlayerComp::UpdateRotate(const Vector3& direction)
     angle = Lamb::Math::LerpShortAngle(transformComp_->rotate.ToEuler().y, angle, floatParameter_.at(FloatParameter::kTurnSpeed));
     transformComp_->rotate = Quaternion::MakeRotateYAxis(angle);
     direction_ = { std::sin(angle),0.0f,std::cos(angle) };
-    direction_.Normalize();
+    direction_ = direction_.Normalize();
 }
