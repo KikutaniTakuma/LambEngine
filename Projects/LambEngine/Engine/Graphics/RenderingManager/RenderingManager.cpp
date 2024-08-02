@@ -214,7 +214,7 @@ void RenderingManager::Draw() {
 		static_cast<uint32_t>(1),
 		&depthStencil_->GetDepthHandle()
 	);
-	// line深度値付きのlineを描画
+	// 深度値付きのlineを描画
 	Line::AllDraw(true);
 
 	DrawSkyBox();
@@ -231,7 +231,7 @@ void RenderingManager::Draw() {
 	// ZSort(アルファ値付きなのでソート)
 	ZSrot(rgbaList);
 
-	// メインと輝度抽出用のレンダーターゲットをセット
+	// 色書き込み用のレンダーターゲットをセット
 	std::array<RenderTarget*, 1> rgbaTextureRenderTarget = {
 		&(rgbaTexture_->GetRender())
 	};
@@ -295,16 +295,6 @@ void RenderingManager::Draw() {
 
 	/// ====================================================================================
 
-	ZSrot(
-		RenderDataLists{
-		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNone),
-		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNormal),
-		renderContextManager->CreateRenderList(BlendType::kUnenableDepthAdd),
-		renderContextManager->CreateRenderList(BlendType::kUnenableDepthSub),
-		renderContextManager->CreateRenderList(BlendType::kUnenableDepthMul)
-		}
-	);
-
 	RenderDataLists nodepthLists = {
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNone),
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNormal),
@@ -313,9 +303,11 @@ void RenderingManager::Draw() {
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthMul)
 	};
 
+	ZSrot(nodepthLists);
+
 	// UIの描画(depth書き込まないやつ)
 	DrawNoDepth(nodepthLists);
-	// line深度値なしのlineを描画
+	// 深度値なしのlineを描画
 	Line::AllDraw(false);
 }
 
@@ -429,7 +421,6 @@ void RenderingManager::DrawNoDepth(const RenderDataLists& nodepthList)
 
 			element->SetLight(deferredRenderingData_.directionLight);
 			element->SetCameraPos(deferredRenderingData_.eyePos);
-			element->DataSet();
 			element->Draw();
 
 			count++;
