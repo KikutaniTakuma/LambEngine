@@ -55,3 +55,29 @@ void ObbPushComp::Load(nlohmann::json& json)
 		pushTags_.insert(json["pushTags"][i].get<std::string>());
 	}
 }
+
+void ObbPushComp::Debug([[maybe_unused]]const std::string& guiName)
+{
+#ifdef _DEBUG
+	if(ImGui::TreeNode(guiName.c_str())) {
+		inputTag_.resize(32);
+		ImGui::InputText(
+			"タグ",
+			inputTag_.data(),
+			inputTag_.size()
+		);
+		if (ImGui::Button("タグ追加")) {
+			std::string addtag;
+			for (auto& i : inputTag_) {
+				if (i == '\0') {
+					break;
+				}
+				addtag.push_back(i);
+			}
+			pushTags_.insert(addtag);
+		}
+
+		ImGui::TreePop();
+	}
+#endif // _DEBUG
+}

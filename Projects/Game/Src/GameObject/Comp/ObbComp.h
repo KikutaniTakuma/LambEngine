@@ -58,11 +58,12 @@ private:
 #ifdef _DEBUG
 private:
 	uint32_t color_;
+	std::string inputTag_;
 #endif // _DEBUG
 
 private:
-	static std::unique_ptr<std::array<const Vector3, 8>> localPositions_;
-	static std::unique_ptr<std::array<const Vector3, 3>> localOrientations_;
+	static std::array<const Vector3, 8> localPositions_;
+	static std::array<const Vector3, 3> localOrientations_;
 private:
 	std::unique_ptr<std::array<Vector3, 8>> positions_;
 	std::unique_ptr<std::array<Vector3, 3>> orientations_;

@@ -122,10 +122,10 @@ void ObjectManager::Update() {
 	for (auto& i : objects_) {
 		i->SetDeltaTime(deltaTime);
 	}
+	TransformCompUpdater::GetInstance()->UpdateMatrix();
 
 	// デバッグ
 #ifdef _DEBUG
-	TransformCompUpdater::GetInstance()->UpdateMatrix();
 	cameraComp_->LastUpdate();
 	isLoad_ = false;
 	Debug();

@@ -8,9 +8,9 @@
 #endif // _DEBUG
 
 
-std::unique_ptr<std::array<const Vector3, 8>> ObbComp::localPositions_ = std::make_unique<std::array<const Vector3, 8>>(
-	std::array<const Vector3, 8>{
-		Vector3(-0.5f, -0.5f, -0.5f), // 左下手前
+std::array<const Vector3, 8> ObbComp::localPositions_ =
+std::array<const Vector3, 8>{
+	Vector3(-0.5f, -0.5f, -0.5f), // 左下手前
 		Vector3(-0.5f, -0.5f, +0.5f), // 左下奥
 		Vector3(+0.5f, -0.5f, -0.5f), // 右下手前
 		Vector3(+0.5f, -0.5f, +0.5f), // 右下奥
@@ -19,15 +19,12 @@ std::unique_ptr<std::array<const Vector3, 8>> ObbComp::localPositions_ = std::ma
 		Vector3(-0.5f, +0.5f, +0.5f), // 左上奥
 		Vector3(+0.5f, +0.5f, -0.5f), // 右上手前
 		Vector3(+0.5f, +0.5f, +0.5f)  // 右上奥
-	}
-);
-std::unique_ptr<std::array<const Vector3, 3>> ObbComp::localOrientations_ = std::make_unique<std::array<const Vector3, 3>>(
-	std::array<const Vector3, 3>{
-		Vector3::kXIdentity,
-		Vector3::kYIdentity,
-		Vector3::kZIdentity
-	}
-);
+};
+std::array<const Vector3, 3> ObbComp::localOrientations_ = {
+		Vector3(1.0f, 0.0f, 0.0f),
+		Vector3(0.0f, 1.0f, 0.0f),
+		Vector3(0.0f, 0.0f, 1.0f)
+};
 
 void ObbComp::Init()
 {
@@ -43,6 +40,10 @@ void ObbComp::FirstUpdate()
 {
 	currentCollisionTag_ = "";
 	UpdatePosAndOrient();
+#ifdef _DEBUG
+	color_ = std::numeric_limits<uint32_t>::max();
+#endif // _DEBUG
+	isCollision_ = false;
 }
 
 void ObbComp::Event() {
@@ -53,20 +54,15 @@ void ObbComp::UpdatePosAndOrient()
 {
 	const Mat4x4& worldMatrix = transformComp_->GetWorldMatrix();
 
-	for (size_t i = 0; i < localPositions_->size(); i++) {
-		positions_->at(i) = (center + localPositions_->at(i) * scale) * worldMatrix;
+	for (size_t i = 0; i < localPositions_.size(); i++) {
+		positions_->at(i) = (center + localPositions_.at(i) * scale) * worldMatrix;
 	}
 
 	Quaternion&& rotate = worldMatrix.GetRotate();
 
-	for (size_t i = 0; i < localOrientations_->size(); i++) {
-		orientations_->at(i) = localOrientations_->at(i) * rotate;
+	for (size_t i = 0; i < localOrientations_.size(); i++) {
+		orientations_->at(i) = localOrientations_.at(i) * rotate;
 	}
-
-	isCollision_ = false;
-#ifdef _DEBUG
-	color_ = std::numeric_limits<uint32_t>::max();
-#endif // _DEBUG
 }
 
 void ObbComp::Draw(CameraComp* cameraComp) {
@@ -161,9 +157,9 @@ void ObbComp::Draw(CameraComp* cameraComp) {
 	for (size_t i = 0llu; i < orientations_->size(); i++) {
 		Line::Draw(
 			transformComp_->translate,
-			localOrientations_->at(i) * 0.5f * worldMatrix,
+			localOrientations_.at(i) * 0.5f * worldMatrix,
 			viewProjection,
-			Vector4{ localOrientations_->at(i), 1.0f }.GetColorRGBA()
+			Vector4{ localOrientations_.at(i), 1.0f }.GetColorRGBA()
 		);
 	}
 #endif // _DEBUG
@@ -397,8 +393,25 @@ void ObbComp::EraseCollisionTag(const std::string& collisionTag) {
 void ObbComp::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
+		inputTag_.resize(32);
 		ImGui::DragFloat3("scale", scale.data(), 0.01f);
 		ImGui::DragFloat3("center", center.data(), 0.01f);
+		ImGui::Text("current collision tag : %s", currentCollisionTag_.c_str());
+		ImGui::InputText(
+			"タグ",
+			inputTag_.data(),
+			inputTag_.size()
+		);
+		if (ImGui::Button("タグ追加")) {
+			std::string addtag;
+			for (auto& i : inputTag_) {
+				if (i == '\0') {
+					break;
+				}
+				addtag.push_back(i);
+			}
+			collisionTags_.insert(addtag);
+		}
 		ImGui::TreePop();
 	}
 #endif // _DEBUG
