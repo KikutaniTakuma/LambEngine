@@ -7,7 +7,7 @@
 #include <cmath>
 #include <numbers>
 
-const std::array<std::string, size_t(Easeing::Type::kNum)> kEaseingTypeString_ = {
+const std::array<std::string, size_t(Easeing::Type::kNum)> Easeing::kEaseingTypeString_ = {
 		"None",
 
 		"InSine",
