@@ -61,9 +61,7 @@ public:
 	};
 
 private:
-#ifdef _DEBUG
 	static const std::array<std::string, size_t(Type::kNum)> kEaseingTypeString_;
-#endif // _DEBUG
 
 
 public:

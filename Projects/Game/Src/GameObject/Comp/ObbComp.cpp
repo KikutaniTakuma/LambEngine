@@ -65,7 +65,7 @@ void ObbComp::UpdatePosAndOrient()
 	}
 }
 
-void ObbComp::Draw(CameraComp* cameraComp) {
+void ObbComp::Draw([[maybe_unused]]CameraComp* cameraComp) {
 #ifdef _DEBUG
 	const Mat4x4& viewProjection = cameraComp->GetCameraMatrix();
 

@@ -1,6 +1,5 @@
 #include "Object.h"
 #include "Utils/EngineInfo.h"
-#ifdef _DEBUG
 #include "Comp/ButtonComp.h"
 #include "Comp/CameraComp.h"
 #include "Comp/Camera3DComp.h"
@@ -31,9 +30,6 @@
 #include "GameComp/WhirlpoolsComp.h"
 #include "GameComp/WindComp.h"
 #include "GameComp/WindNodeComp.h"
-
-#endif // _DEBUG
-
 void Object::Init() {
 	/*for (auto& i : components_) {
 		i.second->Init();

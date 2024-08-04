@@ -36,7 +36,9 @@ void ObjectManager::Initialize() {
 
 	instance_.reset(new ObjectManager());
 
+#ifdef _DEBUG
 	instance_->levelDataFilePathes_ = Lamb::GetFilePathFormDir("./SceneData/", ".json");
+#endif // _DEBUG
 }
 
 void ObjectManager::Finalize()
@@ -176,9 +178,11 @@ void ObjectManager::Update() {
 }
 
 void ObjectManager::Draw() {
+#ifdef _DEBUG
 	if (isLoad_) {
 		return;
 	}
+#endif // _DEBUG
 
 	// 描画処理
 	for (auto& i : objects_) {

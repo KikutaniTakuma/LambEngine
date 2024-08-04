@@ -29,7 +29,9 @@ void TransformCompUpdater::Finalize()
 
 void TransformCompUpdater::Set(const Lamb::SafePtr<class TransformComp>& transformComp) {
 	if (not transformComps_.contains(transformComp)) {
+#ifdef _DEBUG
 		transformComp->SetGuizmoID(setID);
+#endif // _DEBUG
 		setID++;
 		transformComps_.insert(transformComp);
 	}

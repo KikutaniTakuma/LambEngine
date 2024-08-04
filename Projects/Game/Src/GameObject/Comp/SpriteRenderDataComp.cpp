@@ -6,7 +6,6 @@
 #include "Utils/FileUtils.h"
 #endif // _DEBUG
 
-#ifdef _DEBUG
 const std::array<std::string, uint32_t(SpriteRenderDataComp::Offset::kNum)> SpriteRenderDataComp::kOffsetEnumString_ = {
     "kMiddle",
     "kUp",
@@ -18,7 +17,6 @@ const std::array<std::string, uint32_t(SpriteRenderDataComp::Offset::kNum)> Spri
     "kLeftUnder",
     "kRightUnder"
 };
-#endif // _DEBUG
 
 const std::array<Mat4x4, uint32_t(SpriteRenderDataComp::Offset::kNum)> SpriteRenderDataComp::kOffsetMatrix = {
     Mat4x4::MakeTranslate(Vector3::kZero),
