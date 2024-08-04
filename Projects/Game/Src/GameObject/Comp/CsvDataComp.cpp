@@ -10,8 +10,6 @@ void CsvDataComp::Init()
 #ifdef _DEBUG
 	filePaths_ = Lamb::GetFilePathFormDir("./", ".csv");
 #endif // _DEBUG
-
-	Load();
 }
 
 void CsvDataComp::Load() {
@@ -71,4 +69,9 @@ void CsvDataComp::Save(nlohmann::json& json)
 void CsvDataComp::Load(nlohmann::json& json)
 {
 	fileName = json["fileName"].get<std::string>();
+}
+
+const std::vector<int32_t>& CsvDataComp::at(size_t index) const
+{
+	return csvData_[index];
 }

@@ -45,6 +45,10 @@ void ChildrenObjectComp::EraseObject(Object* object) {
 	}
 }
 
+void ChildrenObjectComp::ClearObjects() {
+	objects_.clear();
+}
+
 void ChildrenObjectComp::FirstUpdate() {
 	for (auto& i : objects_) {
 		i->FirstUpdate();

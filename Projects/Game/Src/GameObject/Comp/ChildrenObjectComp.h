@@ -14,6 +14,8 @@ public:
 	void AddObject(Lamb::SafePtr<Object> object);
 	void EraseObject(Object* object);
 
+	void ClearObjects();
+
 	void FirstUpdate() override;
 
 	void Move() override;

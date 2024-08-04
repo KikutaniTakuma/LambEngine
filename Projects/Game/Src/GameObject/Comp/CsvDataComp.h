@@ -18,6 +18,8 @@ public:
 	void Save(nlohmann::json& json) override;
 	void Load(nlohmann::json& json) override;
 
+	const std::vector<int32_t>& at(size_t index) const;
+
 public:
 	std::string fileName;
 private:
