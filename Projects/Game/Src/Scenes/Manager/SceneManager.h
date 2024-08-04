@@ -21,6 +21,15 @@ public:
 	SceneManager& operator=(SceneManager&&) = delete;
 
 public:
+	static void Initialize();
+	static void InstanceReset();
+
+	static SceneManager* const GetInstance();
+
+private:
+	static std::unique_ptr<SceneManager> instance_;
+public:
+
 	void Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID);
 	void Finalize();
 

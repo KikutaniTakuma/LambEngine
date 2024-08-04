@@ -1,6 +1,5 @@
 #pragma once
 #include "Camera/Camera.h"
-#include "Camera/DebugCamera/DebugCamera.h"
 
 #include "Drawers/DrawerManager.h"
 #include "AudioManager/AudioManager.h"
@@ -19,11 +18,15 @@ class BaseScene {
 
 public:
 	enum class ID {
-		Result,
 		Title,
-		StageSelect,
 		Game,
+		StageSelect,
+		Result,
+
+		kNum
 	};
+
+	static std::array<std::string, static_cast<uint32_t>(ID::kNum)> kSceneStrings;
 
 public:
 	BaseScene(BaseScene::ID sceneID);
@@ -75,9 +78,7 @@ private:
 
 protected:
 	Lamb::SafePtr<Camera> currentCamera_;
-
-#ifdef _DEBUG
-	std::unique_ptr<DebugCamera> debugCamera_;
-	Lamb::Flg isDebug_;
-#endif // _DEBUG
 };
+
+template<class T>
+concept IsBasedBaseScene = std::is_base_of_v<BaseScene, T>;

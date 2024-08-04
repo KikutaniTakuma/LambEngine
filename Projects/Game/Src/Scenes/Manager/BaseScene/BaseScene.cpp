@@ -5,11 +5,14 @@
 #endif // _DEBUG
 
 
+std::array<std::string, static_cast<uint32_t>(BaseScene::ID::kNum)> BaseScene::kSceneStrings = {
+	"Title",
+	"Game",
+	"StageSelect",
+	"Result"
+};
+
 BaseScene::BaseScene(BaseScene::ID sceneID) :
-#ifdef _DEBUG
-	debugCamera_(std::make_unique<DebugCamera>()),
-	isDebug_(false),
-#endif // _DEBUG
 	sceneManager_(nullptr),
 	drawerManager_(nullptr),
 	audioManager_(nullptr),
@@ -39,18 +42,7 @@ void BaseScene::SceneInitialize(SceneManager* sceneManager) {
 
 void BaseScene::ChangeCamera()
 {
-#ifdef _DEBUG
-	ImGui::Begin("SceneCamera");
-	if (ImGui::Checkbox("debug", isDebug_.data())) {
-		currentCamera_ = isDebug_ ? debugCamera_.get() : camera_.get();
-		if (isDebug_.OnEnter()) {
-			debugCamera_->pos = camera_->pos;
-			debugCamera_->rotate = camera_->rotate;
-			debugCamera_->scale = camera_->scale;
-		}
-	}
-	ImGui::End();
-#endif // _DEBUG
+
 }
 
 const Camera& BaseScene::GetCamera() const

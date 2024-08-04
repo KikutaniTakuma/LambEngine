@@ -1,15 +1,16 @@
 #include "ObbComp.h"
 #include <climits>
 #include <algorithm>
+#include "CameraComp.h"
 
 #ifdef _DEBUG
 #include "Drawers/Line/Line.h"
 #endif // _DEBUG
 
 
-std::unique_ptr<std::array<const Vector3, 8>> ObbComp::localPositions_ = std::make_unique<std::array<const Vector3, 8>>(
-	std::array<const Vector3, 8>{
-		Vector3(-0.5f, -0.5f, -0.5f), // 左下手前
+std::array<const Vector3, 8> ObbComp::localPositions_ =
+std::array<const Vector3, 8>{
+	Vector3(-0.5f, -0.5f, -0.5f), // 左下手前
 		Vector3(-0.5f, -0.5f, +0.5f), // 左下奥
 		Vector3(+0.5f, -0.5f, -0.5f), // 右下手前
 		Vector3(+0.5f, -0.5f, +0.5f), // 右下奥
@@ -18,15 +19,12 @@ std::unique_ptr<std::array<const Vector3, 8>> ObbComp::localPositions_ = std::ma
 		Vector3(-0.5f, +0.5f, +0.5f), // 左上奥
 		Vector3(+0.5f, +0.5f, -0.5f), // 右上手前
 		Vector3(+0.5f, +0.5f, +0.5f)  // 右上奥
-	}
-);
-std::unique_ptr<std::array<const Vector3, 3>> ObbComp::localOrientations_ = std::make_unique<std::array<const Vector3, 3>>(
-	std::array<const Vector3, 3>{
+};
+std::array<const Vector3, 3> ObbComp::localOrientations_ = {
 		Vector3(1.0f, 0.0f, 0.0f),
 		Vector3(0.0f, 1.0f, 0.0f),
 		Vector3(0.0f, 0.0f, 1.0f)
-	}
-);
+};
 
 void ObbComp::Init()
 {
@@ -40,7 +38,12 @@ void ObbComp::Init()
 
 void ObbComp::FirstUpdate()
 {
+	currentCollisionTag_ = "";
 	UpdatePosAndOrient();
+#ifdef _DEBUG
+	color_ = std::numeric_limits<uint32_t>::max();
+#endif // _DEBUG
+	isCollision_ = false;
 }
 
 void ObbComp::Event() {
@@ -49,25 +52,22 @@ void ObbComp::Event() {
 
 void ObbComp::UpdatePosAndOrient()
 {
-	const Mat4x4& worldMatrix = transformComp_->GetMatrix();
+	const Mat4x4& worldMatrix = transformComp_->GetWorldMatrix();
 
-	for (size_t i = 0; i < localPositions_->size(); i++) {
-		positions_->at(i) = (center + localPositions_->at(i) * scale) * worldMatrix;
+	for (size_t i = 0; i < localPositions_.size(); i++) {
+		positions_->at(i) = (center + localPositions_.at(i) * scale) * worldMatrix;
 	}
 
-	for (size_t i = 0; i < localOrientations_->size(); i++) {
-		orientations_->at(i) = localOrientations_->at(i) * transformComp_->rotate;
-	}
+	Quaternion&& rotate = worldMatrix.GetRotate();
 
-	isCollision_ = false;
-#ifdef _DEBUG
-	color_ = std::numeric_limits<uint32_t>::max();
-#endif // _DEBUG
+	for (size_t i = 0; i < localOrientations_.size(); i++) {
+		orientations_->at(i) = localOrientations_.at(i) * rotate;
+	}
 }
 
-void ObbComp::Draw() {
+void ObbComp::Draw(CameraComp* cameraComp) {
 #ifdef _DEBUG
-	const Mat4x4& viewProjection = object_.GetCameraMatrix();
+	const Mat4x4& viewProjection = cameraComp->GetCameraMatrix();
 
 	Line::Draw(
 		(*positions_)[0],
@@ -153,13 +153,13 @@ void ObbComp::Draw() {
 		color_
 	);
 
-	const Mat4x4& worldMatrix = transformComp_->GetMatrix();
+	const Mat4x4& worldMatrix = transformComp_->GetWorldMatrix();
 	for (size_t i = 0llu; i < orientations_->size(); i++) {
 		Line::Draw(
 			transformComp_->translate,
-			localOrientations_->at(i) * 0.5f * worldMatrix,
+			localOrientations_.at(i) * 0.5f * worldMatrix,
 			viewProjection,
-			Vector4{ localOrientations_->at(i), 1.0f }.GetColorRGBA()
+			Vector4{ localOrientations_.at(i), 1.0f }.GetColorRGBA()
 		);
 	}
 #endif // _DEBUG
@@ -176,7 +176,11 @@ bool ObbComp::IsCollision(Vector3 pos, float radius)
 		-transformComp_->scale * 0.5f // 右上奥
 	};
 
-	pos *= Mat4x4::MakeAffin(Vector3::kIdentity, transformComp_->rotate, transformComp_->translate).Inverse();
+	const Mat4x4& worldMatrix = transformComp_->GetWorldMatrix();
+	Quaternion&& rotate = worldMatrix.GetRotate();
+	Vector3&& translate = worldMatrix.GetTranslate();
+
+	pos *= Mat4x4::MakeAffin(Vector3::kIdentity, rotate, translate).Inverse();
 
 	Vector3 closestPoint = {
 		std::clamp(pos.x, positions[min].x,positions[max].x),
@@ -347,6 +351,23 @@ bool ObbComp::IsCollision(ObbComp* const other, Vector3& pushVector)
 	return true;
 }
 
+bool ObbComp::CollisionHasTag(ObbComp* const other) {
+	bool hasTag = false;
+	for (auto& i : collisionTags_) {
+		if (other->getObject().HasTag(i)) {
+			currentCollisionTag_ = i;
+			hasTag = true;
+			break;
+		}
+	}
+
+	if (hasTag) {
+		return IsCollision(other);
+	}
+
+	return false;
+}
+
 TransformComp& ObbComp::GetTransformComp()
 {
 	return *transformComp_;
@@ -355,4 +376,78 @@ TransformComp& ObbComp::GetTransformComp()
 const TransformComp& ObbComp::GetTransformComp() const
 {
 	return *transformComp_;
+}
+
+void ObbComp::SetCollisionTag(const std::string& collisionTag) {
+	if (not collisionTags_.contains(collisionTag)) {
+		collisionTags_.insert(collisionTag);
+	}
+}
+
+void ObbComp::EraseCollisionTag(const std::string& collisionTag) {
+	if (collisionTags_.contains(collisionTag)) {
+		collisionTags_.erase(collisionTag);
+	}
+}
+
+void ObbComp::Debug([[maybe_unused]]const std::string& guiName) {
+#ifdef _DEBUG
+	if (ImGui::TreeNode(guiName.c_str())) {
+		inputTag_.resize(32);
+		ImGui::DragFloat3("scale", scale.data(), 0.01f);
+		ImGui::DragFloat3("center", center.data(), 0.01f);
+		ImGui::Text("current collision tag : %s", currentCollisionTag_.c_str());
+		ImGui::InputText(
+			"タグ",
+			inputTag_.data(),
+			inputTag_.size()
+		);
+		if (ImGui::Button("タグ追加")) {
+			std::string addtag;
+			for (auto& i : inputTag_) {
+				if (i == '\0') {
+					break;
+				}
+				addtag.push_back(i);
+			}
+			collisionTags_.insert(addtag);
+		}
+		ImGui::TreePop();
+	}
+#endif // _DEBUG
+}
+
+void ObbComp::Save(nlohmann::json& json) {
+	SaveCompName(json);
+	json["scale"] = nlohmann::json::array();
+	for (auto& i :scale) {
+		json["scale"].push_back(i);
+	}
+	json["center"] = nlohmann::json::array();
+	for (auto& i : center) {
+		json["center"].push_back(i);
+	}
+	json["collsiionTags"] = nlohmann::json::array();
+	for (auto& i : collisionTags_) {
+		json["collsiionTags"].push_back(i);
+	}
+}
+
+void ObbComp::Load(nlohmann::json& json)
+{
+	for (size_t i = 0; i < json["scale"].size(); i++) {
+		scale[i] = json["scale"][i].get<float32_t>();
+	}
+	for (size_t i = 0; i < json["center"].size(); i++) {
+		center[i] = json["center"][i].get<float32_t>();
+	}
+	collisionTags_.clear();
+	collisionTags_.reserve(json["collsiionTags"].size());
+	for (size_t i = 0; i < json["collsiionTags"].size(); i++) {
+		collisionTags_.insert(json["collsiionTags"][i].get<std::string>());
+	}
+}
+
+const std::string& ObbComp::GetCurrentCollisionTag() const {
+	return currentCollisionTag_;
 }

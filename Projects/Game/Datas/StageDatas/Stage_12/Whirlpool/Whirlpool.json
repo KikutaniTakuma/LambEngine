@@ -1,0 +1,96 @@
+{
+    "Whirlpool": {
+        "objectData": {
+            "Whirlpool:0": {
+                "gameOverSpeed": 15.0,
+                "position": [
+                    -11.0,
+                    0.0,
+                    50.0
+                ],
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    15.0,
+                    1.0,
+                    15.0
+                ]
+            },
+            "Whirlpool:1": {
+                "gameOverSpeed": 15.0,
+                "position": [
+                    0.0,
+                    0.0,
+                    90.0
+                ],
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    12.0,
+                    1.0,
+                    12.0
+                ]
+            },
+            "Whirlpool:2": {
+                "gameOverSpeed": 15.0,
+                "position": [
+                    -27.75,
+                    0.0,
+                    87.0
+                ],
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    7.5,
+                    1.0,
+                    7.5
+                ]
+            },
+            "Whirlpool:3": {
+                "gameOverSpeed": 15.0,
+                "position": [
+                    27.5,
+                    0.0,
+                    66.75
+                ],
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    12.0,
+                    1.0,
+                    12.0
+                ]
+            },
+            "Whirlpool:4": {
+                "gameOverSpeed": 15.0,
+                "position": [
+                    18.0,
+                    0.0,
+                    34.75
+                ],
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    10.0,
+                    1.0,
+                    10.0
+                ]
+            }
+        }
+    }
+}

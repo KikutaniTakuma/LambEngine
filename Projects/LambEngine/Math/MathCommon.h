@@ -2,6 +2,7 @@
 #include <numbers>
 #include <limits>
 #include <initializer_list>
+#include <cmath>
 
 namespace Lamb {
 	namespace Math {
@@ -11,8 +12,24 @@ namespace Lamb {
 		template<std::floating_point Floating>
 		constexpr Floating toDegree = static_cast <Floating>(180.0 / std::numbers::pi_v<double>);
 
+		template<std::floating_point Floating>
+		constexpr Floating ToRadian(Floating degree) {
+			return std::fmod(degree, 360.0f) * toRadian<Floating>;
+		}
+		template<std::floating_point Floating>
+		constexpr Floating ToDegree(Floating radian) {
+			return std::fmod(radian, 2.0f * std::numbers::pi_v<Floating>) * toDegree<Floating>;
+		}
+
 		float LengthSQ(const std::initializer_list<float>& data);
 		float Length(const std::initializer_list<float>& data);
+
+		float LerpShortAngle(float a, float b, float t);
+	}
+
+	template<typename T>
+	bool Between(const T& num, const T& min, const T& max) {
+		return min <= num && num <= max;
 	}
 }
 

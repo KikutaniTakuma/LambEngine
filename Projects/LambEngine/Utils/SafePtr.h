@@ -2,6 +2,10 @@
 #include <utility>
 #include "Error/Error.h"
 #include "SafeDelete.h"
+#ifdef _DEBUG
+#include <cassert>
+#endif // _DEBUG
+
 
 namespace Lamb {
 	/// <summary>
@@ -76,40 +80,65 @@ namespace Lamb {
 
 		T* operator->()  {
 			if (empty()) [[unlikely]] {
+#ifdef _DEBUG
+				assert(!"nullptr access");
+#else
 				NullPointerException(ErrorPlace);
+#endif // _DEBUG
 			}
 			return ptr_;
 		}
 		T* const operator->() const  {
 			if (empty()) [[unlikely]] {
+#ifdef _DEBUG
+				assert(!"nullptr access");
+#else
 				NullPointerException(ErrorPlace);
+#endif // _DEBUG
 			}
 			return ptr_;
 		}
 
 		T& operator*()  {
 			if (empty()) [[unlikely]] {
+#ifdef _DEBUG
+				assert(!"nullptr access");
+#else
 				NullPointerException(ErrorPlace);
+#endif // _DEBUG
 			}
 			return *ptr_;
 		}
 
 		T& operator*() const  {
 			if (empty()) [[unlikely]] {
+#ifdef _DEBUG
+				assert(!"nullptr access");
+#else
 				NullPointerException(ErrorPlace);
+#endif // _DEBUG
 			}
 			return *ptr_;
 		}
 
 		T& operator[](size_t index)  {
 			if (empty()) [[unlikely]] {
+#ifdef _DEBUG
+				assert(!"nullptr access");
+#else
 				NullPointerException(ErrorPlace);
+#endif // _DEBUG
 			}
 			return (ptr_[index]);
 		}
 		T& operator[](size_t index) const  {
 			if (empty()) [[unlikely]] {
+#ifdef _DEBUG
+				assert(!"nullptr access");
+#else
 				NullPointerException(ErrorPlace);
+#endif // _DEBUG
+
 			}
 			return (ptr_[index]);
 		}

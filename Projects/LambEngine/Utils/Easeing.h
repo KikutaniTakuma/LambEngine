@@ -14,6 +14,59 @@
 /// </summary>
 class Easeing {
 public:
+	enum class Type{
+		kNone,
+
+		kInSine,
+		kOutSine,
+		kInOutSine,
+
+		kInQuad,
+		kOutQuad,
+		kInOutQuad,
+
+		kInCubic,
+		kOutCubic,
+		kInOutCubic,
+
+		kInQuart,
+		kOutQuart,
+		kInOutQuart,
+
+		kInQuint,
+		kOutQuint,
+		kInOutQuint,
+
+		kInExpo,
+		kOutExpo,
+		kInOutExpo,
+
+		kInCirc,
+		kOutCirc,
+		kInOutCirc,
+
+		kInBack,
+		kOutBack,
+		kInOutBack,
+
+		kInElastic,
+		kOutElastic,
+		kInOutElastic,
+
+		kInBounce,
+		kOutBounce,
+		kInOutBounce,
+
+		kNum
+	};
+
+private:
+#ifdef _DEBUG
+	static const std::array<std::string, size_t(Type::kNum)> kEaseingTypeString_;
+#endif // _DEBUG
+
+
+public:
 	Easeing();
 	Easeing(const Easeing& right) = default;
 	Easeing(Easeing&& right) noexcept = default;
@@ -37,9 +90,7 @@ public:
 	void Start(
 		bool isLoop,
 		float easeTime,
-		std::function<float(float)> ease = [](float t) {
-			return t;
-		}
+		Type type = Type::kNone
 	);
 	
 	/// <summary>
@@ -69,23 +120,23 @@ public:
 	template<typename T>
 	T Get(const T& start, const T& end) {
 		static_assert(!std::is_pointer<T>::value, "Do not use pointer types");
-		return static_cast<T>(std::lerp<T>(start, end, ease_(t_)));
+		return static_cast<T>(std::lerp<T>(start, end, GetTypeT()));
 	}
 
 	Vector2 Get(const Vector2& start, const Vector2& end) {
-		return Vector2::Lerp(start, end, ease_(t_));
+		return Vector2::Lerp(start, end, GetTypeT());
 	}
 
 	Vector3 Get(const Vector3& start, const Vector3& end) {
-		return Vector3::Lerp(start, end, ease_(t_));
+		return Vector3::Lerp(start, end, GetTypeT());
 	}
 
 	Vector4 Get(const Vector4& start, const Vector4& end) {
-		return ColorLerp(start, end, ease_(t_));
+		return ColorLerp(start, end, GetTypeT());
 	}
 
 	float GetT() const {
-		return ease_(t_);
+		return GetTypeT();
 	}
 
 	void Debug(const std::string& debugName);
@@ -107,20 +158,20 @@ public:
 		return isActive_;
 	}
 
+	void SetType(Type type);
+
 private:
-#ifdef _DEBUG
-	int32_t easeType_;
-	float easeTime_;
-#endif // _DEBUG
-
-	std::function<float(float)> ease_;
-
 	Lamb::Flg isActive_;
 	Lamb::Flg isLoop_;
 
 	float t_;
 
 	float spdT_;
+
+	Type type_ = Type::kNone;
+
+public:
+	float GetTypeT() const;
 
 public:
 	template<std::integral IsInt>

@@ -2,6 +2,7 @@
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include "Utils/SafePtr.h"
+#include "../DrawerManager.h"
 
 #ifdef _DEBUG
 #include "Utils/FileUtils.h"
@@ -70,4 +71,33 @@ void Texture2D::Draw(const Texture2D::Data& data) {
 void Texture2D::AllDraw() {
 	renderSet->Draw();
 	renderSet->ResetDrawCount();
+}
+
+void Tex2DInstance::Load(const std::string& fileName) {
+	Lamb::SafePtr drawerManager = DrawerManager::GetInstance();
+	drawerManager->LoadTexture(fileName);
+	tex_ = TextureManager::GetInstance()->GetTexture(fileName);
+	tex2D_ = drawerManager->GetTexture2D();
+}
+
+void Tex2DInstance::Draw(const Mat4x4& cameraMat)
+{
+	if (tex2D_.have()) {
+		tex2D_->Draw(
+			Mat4x4::MakeAffin(scale, rotate, pos),
+			Mat4x4::MakeAffin(Vector3(uvSize, 1.0f), Vector3::kZero, Vector3(uvPibot, 0.0f)),
+			cameraMat,
+			tex_->GetHandleUINT(),
+			color,
+			blend
+		);
+	}
+}
+
+bool Tex2DInstance::Collision(const Vector3& otherPos)
+{
+	Vector3 min = pos - (scale * 0.5f);
+	Vector3 max = pos + (scale * 0.5f);
+
+	return (min.x < otherPos.x and otherPos.x < max.x) and (min.y < otherPos.y and otherPos.y < max.y);
 }

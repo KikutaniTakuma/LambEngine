@@ -107,7 +107,7 @@ bool Mouse::LongPush(Mouse::Button button) {
 	return false;
 }
 
-bool Mouse::Releaed(Mouse::Button button) {
+bool Mouse::Released(Mouse::Button button) {
 	if (!initalizeSucceeded_) {
 		return false;
 	}
@@ -172,6 +172,12 @@ Vector2 Mouse::GetPos() {
 	Vector2 pos{ static_cast<float>(p.x),static_cast<float>(p.y) };
 
 	return pos;
+}
+
+void Mouse::SetPos(const Vector2& pos) {
+	static WindowFactory* const window = WindowFactory::GetInstance();
+	Vector2 windowPos = window->GetPos();
+	SetCursorPos(static_cast<int>(pos.x + windowPos.x), static_cast<int>(pos.y + windowPos.y));
 }
 
 void Mouse::Show(bool flg) {

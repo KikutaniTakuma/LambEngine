@@ -1,0 +1,12 @@
+{
+    "Object": {
+        "objectData": {
+            "Cannon": {
+                "Max": 1
+            },
+            "Sail": {
+                "Max": 0
+            }
+        }
+    }
+}

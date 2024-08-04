@@ -53,14 +53,14 @@ public:
 public:
 	void Debug(const std::string& guiName);
 
-	void Draw(const Mat4x4& viewProjection, bool isDepth = false);
+	void Draw(const Mat4x4& viewProjection, bool isDepth = true);
 
 	static void Draw(
 		const Vector3& start, 
 		const Vector3& end,
 		const Mat4x4& viewProjection, 
 		uint32_t color = 0xffffffff, 
-		bool isDepth = false
+		bool isDepth = true
 	);
 
 public:

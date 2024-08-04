@@ -11,20 +11,23 @@ public:
 
 	void Init() override;
 
-	void Draw() override;
+	void Draw(CameraComp* cameraComp) override;
 
-	void Load();
+	void Load() override;
 
-	void SetFileNmae(const std::string& fileName) {
-		fileName_ = fileName;
-	}
+	void Debug(const std::string& guiName) override;
+
+	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 private:
-	std::string fileName_;
-
 	Lamb::SafePtr<Model> model_;
 
-	Lamb::SafePtr<class RenderDataComp> renderDataComp_;
+	Lamb::SafePtr<class ModelRenderDataComp> renderDataComp_;
 
 	Lamb::SafePtr<class TransformComp> transformComp_;
+
+#ifdef _DEBUG
+	std::vector<std::filesystem::path> filePaths_;
+#endif // _DEBUG
 };

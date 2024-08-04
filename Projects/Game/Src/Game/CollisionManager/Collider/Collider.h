@@ -1,8 +1,11 @@
 #pragma once
 #include "Math/Vector3.h"
 #include "Math/Mat4x4.h"
+#include "../AABB/AABB.h"
+#include "../Obb/Obb.h"
 #include "Drawers/Line/Line.h"
-#include "Utils/Flg.h"
+
+#include <vector>
 #include <bitset>
 #include <memory>
 
@@ -11,68 +14,62 @@
 /// </summary>
 class Collider {
 public:
-	Collider();
-	Collider(const Collider&) = default;
-	Collider(Collider&&) noexcept = default;
-	~Collider() = default;
+	enum Type {
+		kTrriger,
+		kCollion,
 
-	Collider& operator=(const Collider&) = default;
-	Collider& operator=(Collider&&) noexcept = default;
+		kTypeCount,
+	};
 
-public:
-	void UpdateCollision();
+	enum Attribute {
+		kPlayer,
+		kPlayerBullet,
+		kOther,
 
-	/// <summary>
-	/// ある一点が当たっているか
-	/// </summary>
-	/// <param name="pos">一点</param>
-	/// <returns>当たっていたらtrue</returns>
-	bool IsCollision(const Vector3& pos);
+		kAttributeCount,
+	};
 
-	/// <summary>
-	/// 引数に取ったコライダーが当たっていたら引数側のコライダーを押し出す
-	/// </summary>
-	/// <param name="other">他のコライダー</param>
-	/// <returns>当たっていたらtrue</returns>
-	bool CollisionExtrusion(Collider& other);
+	void InitializeCollision(const Vector3& scale, const Vector3& rotate, const Vector3& pos);
 
-	bool CollisionPush(Collider& other);
+	void UpdateCollision(const Vector3& rotate, const Vector3& pos, uint32_t index = 0);
 
-	void DebugDraw(const Mat4x4& viewProjection);
+	virtual void OnCollision(Collider* collider, uint32_t myIndex, uint32_t pairIndex) = 0;
 
-	void Debug(const std::string& guiName);
+	void DebugDraw(const Mat4x4& viewProjection, uint32_t index = 0);
 
-	void SetType(uint32_t type);
+	void Debug(const std::string& guiName, uint32_t index = 0);
 
-	bool Filter(const Collider& other) const;
+	void SetCollisionScale(const Vector3& aabb, uint32_t index = 0);
 
-	bool OnEnter() const{
-		return flg_.OnEnter();
-	}
+	const AABB& GetAABB(uint32_t index = 0) const { return aabb_.at(index); }
 
-	bool OnStay() const {
-		return flg_.OnStay();
-	}
+	const OBB& GetOBB(uint32_t index = 0)const { return obb_.at(index); }
 
-	bool OnExit() const {
-		return flg_.OnExit();
-	}
+	void SetCollisionColor(uint32_t color) { color_.emplace_back(color); }
+	void SetCollisionColor(uint32_t color,uint32_t index) { color_.at(index) = color; }
 
-	//void Adjusment(Collider& other, const Vector3& moveVec);
+	void SetColliderType(const Type& type) { colliderType_.emplace_back(type); }
 
-public:
-	Vector3 scale_;
-	Vector3 collisionPos_;
+	const Type& GetColliderType(uint32_t index = 0) const { return colliderType_.at(index); }
 
+	void SetColliderAttribute(const Attribute& type) { colliderAttribute_.emplace_back(type); }
+
+	const Attribute& GetColliderAttribute(uint32_t index = 0) const { return colliderAttribute_.at(index); }
+
+	uint32_t GetColliderSize() { return uint32_t(aabb_.size()); }
 protected:
-	Vector3 max_;
-	Vector3 min_;
+	std::vector<Vector3>aabbMin_;
+	std::vector<Vector3>aabbMax_;
+	std::vector<Vector3>obbSize_;
 
-	uint32_t color_;
+	std::vector<AABB>aabb_;
+	std::vector<OBB>obb_;
 
-	std::array<std::unique_ptr<Line>, 12> lines_;
+	std::vector<uint32_t> color_;
 
-	std::bitset<32> types_;
+	std::vector<Type> colliderType_;
 
-	Lamb::Flg flg_;
+	std::vector<Attribute> colliderAttribute_;
+
+	std::vector<std::array<std::unique_ptr<Line>, 12>> lines_;
 };

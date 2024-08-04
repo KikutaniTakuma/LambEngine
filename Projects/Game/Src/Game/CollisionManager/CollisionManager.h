@@ -1,11 +1,17 @@
 #pragma once
 #include <list>
 
+#include "../CollisionManager/AABB/AABB.h"
+
 /// <summary>
 /// コリジョンマネージャー
 /// </summary>
 class CollisionManager {
-
+private:
+	struct ColliderInfo {
+		class Collider* collider;
+		uint32_t index;
+	};
 
 public:
 	CollisionManager() = default;
@@ -17,10 +23,11 @@ public:
 	CollisionManager& operator=(CollisionManager&&) = delete;
 
 public:
-	void SetCollider(class Collider* collider);
+	void SetCollider(class Collider* collider,uint32_t index);
 
 	void Update();
 
 private:
-	std::list<class Collider*> colliders_;
+	bool BroadPhase(ColliderInfo* a, ColliderInfo* b);
+	std::list<ColliderInfo*> colliders_;
 };

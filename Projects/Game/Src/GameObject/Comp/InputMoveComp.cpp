@@ -36,3 +36,14 @@ void InputMoveComp::FirstUpdate()
 
 	moveVector_ = direction_ * speed_;
 }
+
+void InputMoveComp::Save(nlohmann::json& json)
+{
+	SaveCompName(json);
+	json["speed"] = speed_;
+}
+
+void InputMoveComp::Load(nlohmann::json& json)
+{
+	speed_ = json["speed"].get<float32_t>();
+}

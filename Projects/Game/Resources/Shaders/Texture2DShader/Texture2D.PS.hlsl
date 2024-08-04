@@ -7,6 +7,9 @@ PixelShaderOutPut3 main(VertexShaderOutput input)
     uint32_t textureID = kTexture2DData[input.instanceID].textureID;
 	
 	float32_t4 textureColor = textures[textureID].Sample(smp, input.uv);
+    if(textureColor.w < 0.1f){
+        discard;
+    }
 
 	output.color0 = textureColor * kColor[input.instanceID].color;
 

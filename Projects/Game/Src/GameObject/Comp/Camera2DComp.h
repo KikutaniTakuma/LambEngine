@@ -1,10 +1,6 @@
 #pragma once
 
-#pragma once
-
 #include "../Object.h"
-
-#include "TransformComp.h"
 
 
 class Camera2DComp : public IComp {
@@ -13,22 +9,16 @@ public:
 
 	~Camera2DComp() = default;
 
-	void Init() override;
+	void Init();
 
-	void LastUpdate() override;
+	void Update();
 
-public:
-	const Mat4x4& GetMatrix() const {
-		return cameraMatrix_;
-	}
+	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 public:
-	TransformComp& GetTransformComp() {
-		return *transform_;
-	}
-	const TransformComp& GetTransformComp() const {
-		return *transform_;
-	}
+	const Mat4x4& GetToNdcMatrix() const;
+
 public:
 	void SetWidth(float32_t width) {
 		width_ = width;
@@ -37,19 +27,20 @@ public:
 		height_ = height;
 	}
 
-	void SetFarClip(float32_t farClip) {
-		farClip_ = farClip;
-	}
 	void SetNearClip(float32_t nearClip) {
 		nearClip_ = nearClip;
 	}
+	void SetFarClip(float32_t farClip) {
+		farClip_ = farClip;
+	}
 
 private:
-	Lamb::SafePtr<TransformComp> transform_;
+	Lamb::SafePtr<class CameraComp> cameraComp_;
+
 	float32_t width_ = 0.0f;
 	float32_t height_ = 0.0f;
-	float32_t farClip_ = 0.0f;
 	float32_t nearClip_ = 0.0f;
+	float32_t farClip_ = 0.0f;
 
-	Mat4x4 cameraMatrix_ = Mat4x4::kIdentity;
+	Mat4x4 othographicMatrix_ = Mat4x4::kIdentity;
 };

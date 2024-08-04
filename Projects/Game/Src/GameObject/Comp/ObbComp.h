@@ -24,14 +24,26 @@ public:
 	/// </summary>
 	void UpdatePosAndOrient();
 
-	void Draw() override;
+	void Draw(CameraComp* cameraComp) override;
 
-	[[nodiscard]] bool IsCollision(Vector3 pos, float radius);
-	[[nodiscard]] bool IsCollision(ObbComp* const other);
-	[[nodiscard]] bool IsCollision(ObbComp* const other, Vector3& pushVector);
+	bool IsCollision(Vector3 pos, float radius);
+	bool IsCollision(ObbComp* const other);
+	bool IsCollision(ObbComp* const other, Vector3& pushVector);
+
+	bool CollisionHasTag(ObbComp* const other);
 
 	TransformComp& GetTransformComp();
 	const TransformComp& GetTransformComp() const;
+
+	void SetCollisionTag(const std::string& collisionTag);
+	void EraseCollisionTag(const std::string& collisionTag);
+
+	void Debug(const std::string& guiName);
+
+	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
+
+	const std::string& GetCurrentCollisionTag() const;
 
 public:
 	Vector3 scale = Vector3::kIdentity;
@@ -41,19 +53,24 @@ public:
 private:
 	Lamb::SafePtr<TransformComp> transformComp_;
 
+	std::unordered_set<std::string> collisionTags_;
+
 #ifdef _DEBUG
 private:
 	uint32_t color_;
+	std::string inputTag_;
 #endif // _DEBUG
 
 private:
-	static std::unique_ptr<std::array<const Vector3, 8>> localPositions_;
-	static std::unique_ptr<std::array<const Vector3, 3>> localOrientations_;
+	static std::array<const Vector3, 8> localPositions_;
+	static std::array<const Vector3, 3> localOrientations_;
 private:
 	std::unique_ptr<std::array<Vector3, 8>> positions_;
 	std::unique_ptr<std::array<Vector3, 3>> orientations_;
 
 	Lamb::Flg isCollision_;
+
+	std::string currentCollisionTag_;
 
 	/// <summary>
 	/// ゲッター

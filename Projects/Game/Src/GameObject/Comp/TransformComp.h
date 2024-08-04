@@ -21,10 +21,14 @@ public:
 	void UpdateChildrenMatrix();
 	void UpdateParentMatrix();
 
-	void SetParent(Lamb::SafePtr<TransformComp>& parent);
+	void SetParent(Lamb::SafePtr<TransformComp> parent);
 
-	const Mat4x4& GetMatrix() const {
+	const Mat4x4& GetWorldMatrix() const {
 		return worldMatrix_;
+	}
+
+	Mat4x4 GetLocalMatrix() const {
+		return Mat4x4::MakeAffin(scale, rotate, translate);
 	}
 
 	bool IsRootTransForm() const {
@@ -42,11 +46,13 @@ public:
 	void Debug(const std::string& guiName) override;
 
 #ifdef _DEBUG
-	void SetViewMatrix(const Mat4x4* view);
-	void SetProjectionMatrix(const Mat4x4* projection);
 	void SetGuizmoID(uint32_t id);
+
+	void Guizmo(class CameraComp* cameraComp);
 #endif // _DEBUG
 
+	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
 
 public:
 	Vector3 scale;
@@ -58,14 +64,17 @@ public:
 
 private:
 #ifdef _DEBUG
-	Lamb::SafePtr<const Mat4x4> view_;
-	Lamb::SafePtr<const Mat4x4> projection_;
 	uint32_t guizmoID_ = 0;
 	uint32_t guimoType_ = 0;
+
+	bool isGuizmo_ = false;
+	bool isDebug_ = false;
 
 	static const std::array<std::pair<std::string, ImGuizmo::OPERATION>, 5> kGuizmoMode_;
 
 #endif // _DEBUG
+
+
 	Mat4x4 worldMatrix_;
 	Lamb::SafePtr<TransformComp> parent_;
 	std::unordered_set<Lamb::SafePtr<TransformComp>> children_;

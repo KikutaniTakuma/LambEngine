@@ -38,7 +38,7 @@ bool Gamepad::Pushed(Button type) {
 	return GetButton(type) && !GetPreButton(type);
 }
 
-bool Gamepad::LongPushed(Button type) {
+bool Gamepad::LongPush(Button type) {
 	return GetButton(type) && GetPreButton(type);
 }
 

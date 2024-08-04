@@ -13,7 +13,6 @@ public:
 	void Collision(Lamb::SafePtr<ObbComp> other);
 
 	// 押し出すタグ
-	// なければ""をいれて
 	void SetPushTag(const std::string& pushTag);
 	void ErasePushTag(const std::string& pushTag);
 
@@ -24,7 +23,16 @@ public:
 		return *obbComp_;
 	}
 
+	void Save(nlohmann::json& json) override;
+	void Load(nlohmann::json& json) override;
+
+	void Debug(const std::string& guiName) override;
+
 private:
 	std::unordered_set<std::string> pushTags_;
 	Lamb::SafePtr<ObbComp> obbComp_;
+#ifdef _DEBUG
+	std::string inputTag_;
+#endif // _DEBUG
+
 };

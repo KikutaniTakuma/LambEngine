@@ -1,7 +1,11 @@
 #pragma once
-#include "Camera/Camera.h"
 #include "Math/MathCommon.h"
 #include "Utils/SafePtr.h"
+#include "Utils/Flg.h"
+#include "Math/Mat4x4.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Math/Vector4.h"
 
 #include <unordered_map>
 #include <unordered_set>
@@ -9,6 +13,12 @@
 #include <memory>
 #include <type_traits>
 #include <string>
+#include "json.hpp"
+
+#ifdef _DEBUG
+#include "imgui.h"
+#endif // _DEBUG
+
 
 /// 1シーンの流れ
 /// ロード
@@ -47,10 +57,19 @@ public:
 /// 	using IComp::IComp;
 /// 
 /// 	~DerivedComp() = default;
+///		
+/// public:
+///		void Save(nlohmann::json& json) override;
+///		void Load(nlohmann::json& json) override;
 /// };
 
 // 前方宣言
 class Object;
+class CameraComp; 
+class IComp;
+
+template<class T>
+concept IsBaseIComp = std::is_base_of_v<IComp, T>;
 
 class IComp : public GameFlow {
 public:
@@ -66,6 +85,8 @@ public:
 	IComp& operator=(IComp&&) = delete;
 
 public:
+	virtual void Load() {}
+
 	virtual void Init() {}
 	virtual void Finalize() {}
 
@@ -76,9 +97,18 @@ public:
 	virtual void Update() override {}
 	virtual void LastUpdate() override {}
 
-	virtual void Draw() {}
+	virtual void Draw([[maybe_unused]] CameraComp*) {}
 
 	virtual void Debug([[maybe_unused]]const std::string& guiName) {};
+
+	virtual void Save(nlohmann::json& json) = 0;
+	virtual void Load(nlohmann::json& json) = 0;
+
+	template<IsBaseIComp Comp>
+	void SetCompName(nlohmann::json& json) {
+		json["CompName"] = typeid(Comp).name();
+	}
+
 
 public:
 	const Object& getObject() const {
@@ -89,8 +119,10 @@ protected:
 	Object& object_;
 };
 
-template<class T>
-concept IsBaseIComp = std::is_base_of_v<IComp, T>;
+#ifndef SaveCompName
+#define SaveCompName(json) IComp::SetCompName<std::remove_reference_t<decltype(*this)>>(json)
+#endif // !SaveCompName
+
 
 class Object : public GameFlow {
 public:
@@ -106,9 +138,24 @@ public:
 	virtual void Update() override;
 	virtual void LastUpdate() override;
 
-	virtual void Draw() const;
+	virtual void Draw([[maybe_unused]] CameraComp* cameraComp) const;
 
 	virtual void Debug(const std::string& guiName);
+
+	bool DebugAddComp();
+
+	void Save(nlohmann::json& json);
+	void Load(nlohmann::json& compData);
+
+private:
+	template<IsBaseIComp Comp>
+	void DebugAdd() {
+#ifdef _DEBUG
+		if (ImGui::Button((std::string("Add ") + typeid(Comp).name()).c_str())) {
+			AddComp<Comp>();
+		}
+#endif // _DEBUG
+	}
 
 public:
 	void SetDeltaTime(float32_t deltatime) {
@@ -126,6 +173,10 @@ public:
 
 	[[nodiscard]] bool HasTag(const std::string& tag) const {
 		return tags_.contains(tag);
+	}
+	template<IsBaseIComp Name>
+	[[nodiscard]] bool HasTag(const std::string& tag) const {
+		return tags_.contains(typeid(Name).name());
 	}
 
 	void EraseTag(const std::string& tag) {
@@ -152,6 +203,17 @@ public:
 		return static_cast<CompType*>(components_.at(key).get());
 	}
 
+	void AddComps(nlohmann::json& compData);
+
+	template<IsBaseIComp CompType>
+	void AddAndLoadComp(const std::string& className, nlohmann::json& compData) {
+		if (className == typeid(CompType).name()) {
+			auto comp = AddComp<CompType>();
+			comp->Load(compData);
+		}
+	}
+
+
 	template<IsBaseIComp CompType>
 	[[nodiscard]]CompType* const GetComp() const {
 		auto&& key = std::string(typeid(CompType).name());
@@ -171,16 +233,6 @@ public:
 		return components_.contains(key);
 	}
 
-
-	void SetCamera(Camera* const camera) {
-		camera_ = camera;
-	}
-	void SetCamera(const class Camera3DComp* camera) {
-		cameraComp_ = camera;
-	}
-
-	const Mat4x4& GetCameraMatrix() const;
-
 	const std::string& GetObjectName() const {
 		return objectName_;
 	}
@@ -193,8 +245,5 @@ protected:
 	std::unordered_map<std::string, std::unique_ptr<IComp>> components_;
 	std::unordered_set<std::string> tags_;
 	std::string objectName_;
-
-	Lamb::SafePtr<Camera> camera_;
-	Lamb::SafePtr<const class Camera3DComp> cameraComp_;
 	float32_t deltatime_ = 0.0_f32;
 };

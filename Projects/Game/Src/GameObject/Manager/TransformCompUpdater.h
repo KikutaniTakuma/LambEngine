@@ -34,10 +34,13 @@ public:
 
 	void UpdateMatrix();
 
-	void SetCameraMatrix(const Mat4x4* view, const Mat4x4* projection);
-
 	void SetCurretnGuizmoID(uint32_t currentGuizmoID);
 	uint32_t GetGuizmoID() const;
+
+#ifdef _DEBUG
+	void Guizmo(CameraComp* cameraComp);
+#endif // _DEBUG
+
 
 private:
 	std::unordered_set<Lamb::SafePtr<TransformComp>> transformComps_;

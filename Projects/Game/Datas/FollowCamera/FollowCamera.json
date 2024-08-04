@@ -1,0 +1,22 @@
+{
+    "FollowCamera": {
+        "CameraMoveDelay": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "CameraRotateDelay": [
+            1.0,
+            1.0
+        ],
+        "CameraSpeed": [
+            0.019999999552965164,
+            0.029999999329447746
+        ],
+        "Offset": [
+            0.0,
+            0.0,
+            -40.0
+        ]
+    }
+}

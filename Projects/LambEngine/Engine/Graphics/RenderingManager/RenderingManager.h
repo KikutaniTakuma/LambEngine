@@ -10,14 +10,11 @@
 
 #include "Drawers/SkyBox/SkyBox.h"
 
-#include <array>
-
 #include <list>
 
 class RenderingManager {
 private:
-	using RGBALists = std::array<std::pair<size_t, const std::list<RenderData*>&>, 4>;
-	using NoDepthLists = std::array<std::pair<size_t, const std::list<RenderData*>&>, 5>;
+	using RenderDataLists = std::vector<std::pair<size_t, const std::list<RenderData*>&>>;
 
 public:
 	RenderingManager();
@@ -51,6 +48,7 @@ public:
 
 	void SetCameraPos(const Vector3& cameraPos);
 	void SetCameraMatrix(const Mat4x4& camera);
+	void SetHsv(const Vector3& hsv);
 
 	void Debug(const std::string& guiName);
 
@@ -62,7 +60,7 @@ private:
 	void DrawSkyBox();
 
 	// アルファ値があるものを描画
-	void DrawRGBA(const RGBALists& rgbaList);
+	void DrawRGBA(const RenderDataLists& rgbaList);
 
 	// ディファード描画
 	void DrawDefferd();
@@ -71,12 +69,12 @@ private:
 	void DrawPostEffect();
 
 	// 深度値を使わないものの描画
-	void DrawNoDepth(const NoDepthLists& nodepthList);
+	void DrawNoDepth(const RenderDataLists& nodepthList);
 
 private:
 
 	// アルファ値があるものを順番を並び替える
-	void ZSrot(const RGBALists& rgbaList);
+	void ZSrot(const RenderDataLists& rgbaList);
 
 
 private:
@@ -93,7 +91,7 @@ private:
 
 	// ライティング後のrgbaテクスチャを描画
 	std::unique_ptr<PeraRender> rgbaTexture_;
-	Vector3 hsv;
+	Vector3 hsv_;
 
 	// 深度値(法線書き込みと色書き込み、アウトラインで使用する)
 	std::unique_ptr<DepthBuffer> depthStencil_;

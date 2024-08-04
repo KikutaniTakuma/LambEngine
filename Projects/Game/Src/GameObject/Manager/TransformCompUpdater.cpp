@@ -1,5 +1,6 @@
 #include "TransformCompUpdater.h"
 #ifdef _DEBUG
+#include "../Comp/CameraComp.h"
 #include "imgui.h"
 #endif // _DEBUG
 
@@ -51,13 +52,6 @@ void TransformCompUpdater::UpdateMatrix() {
 	}
 }
 
-void TransformCompUpdater::SetCameraMatrix(const Mat4x4* view, const Mat4x4* projection) {
-	for (auto& i : transformComps_) {
-		i->SetViewMatrix(view);
-		i->SetProjectionMatrix(projection);
-	}
-}
-
 void TransformCompUpdater::SetCurretnGuizmoID(uint32_t currentGuizmoID)
 {
 	currentGuizmoID_ = currentGuizmoID;
@@ -67,4 +61,12 @@ uint32_t TransformCompUpdater::GetGuizmoID() const
 {
 	return currentGuizmoID_;
 }
+
+#ifdef _DEBUG
+void TransformCompUpdater::Guizmo(CameraComp* cameraComp) {
+	for (auto& i : transformComps_) {
+		i->Guizmo(cameraComp);
+	}
+}
+#endif // _DEBUG
 

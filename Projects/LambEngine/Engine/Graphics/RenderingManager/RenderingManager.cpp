@@ -61,12 +61,12 @@ RenderingManager::RenderingManager() {
 		}
 	);
 	Vector4 rgba = rgbaTexture_->color;
-	hsv = RGBToHSV({ rgba.color.r,rgba.color.g,rgba.color.b });
+	hsv_ = RGBToHSV({ rgba.color.r,rgba.color.g,rgba.color.b });
 
 	std::unique_ptr<Luminate> luminate = std::make_unique<Luminate>();
 	luminate->Init();
 	luminate_ = luminate.release();
-	luminanceThreshold = 0.99f;
+	luminanceThreshold = 1.2f;
 	luminate_->SetLuminanceThreshold(luminanceThreshold);
 
 	luminateTexture_ = std::make_unique<PeraRender>();
@@ -214,12 +214,12 @@ void RenderingManager::Draw() {
 		static_cast<uint32_t>(1),
 		&depthStencil_->GetDepthHandle()
 	);
-	// line深度値付きのlineを描画
+	// 深度値付きのlineを描画
 	Line::AllDraw(true);
 
 	DrawSkyBox();
 
-	RGBALists rgbaList = {
+	RenderDataLists rgbaList = {
 		renderContextManager->CreateRenderList(BlendType::kNormal),
 		renderContextManager->CreateRenderList(BlendType::kAdd),
 		renderContextManager->CreateRenderList(BlendType::kSub),
@@ -231,7 +231,7 @@ void RenderingManager::Draw() {
 	// ZSort(アルファ値付きなのでソート)
 	ZSrot(rgbaList);
 
-	// メインと輝度抽出用のレンダーターゲットをセット
+	// 色書き込み用のレンダーターゲットをセット
 	std::array<RenderTarget*, 1> rgbaTextureRenderTarget = {
 		&(rgbaTexture_->GetRender())
 	};
@@ -295,7 +295,7 @@ void RenderingManager::Draw() {
 
 	/// ====================================================================================
 
-	NoDepthLists nodepthLists = {
+	RenderDataLists nodepthLists = {
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNone),
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthNormal),
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthAdd),
@@ -303,9 +303,11 @@ void RenderingManager::Draw() {
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthMul)
 	};
 
+	ZSrot(nodepthLists);
+
 	// UIの描画(depth書き込まないやつ)
 	DrawNoDepth(nodepthLists);
-	// line深度値なしのlineを描画
+	// 深度値なしのlineを描画
 	Line::AllDraw(false);
 }
 
@@ -316,11 +318,20 @@ DepthBuffer& RenderingManager::GetDepthBuffer()
 
 void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 	deferredRenderingData_.eyePos = cameraPos;
+	transform_.translate = cameraPos;
 }
 
 void RenderingManager::SetCameraMatrix(const Mat4x4& camera)
 {
 	cameraMatrix_ = camera;
+}
+
+void RenderingManager::SetHsv(const Vector3& hsv)
+{
+	hsv_ = hsv;
+	Vector3 rgb = HSVToRGB(hsv_);
+	Vector4 rgba = { rgb, 1.0f };
+	rgbaTexture_->color = rgba.GetColorRGBA();
 }
 
 void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {
@@ -329,10 +340,10 @@ void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {
 		ImGui::Checkbox("lighting", reinterpret_cast<bool*>(&deferredRenderingData_.isDirectionLight));
 		ImGui::DragFloat("environment", &deferredRenderingData_.environmentCoefficient, 0.001f, 0.0f, 5.0f);
 		if (ImGui::TreeNode("hsv")) {
-			ImGui::DragFloat("h", &hsv.h, 0.1f, 0.0f, 360.0f);
-			ImGui::DragFloat("s", &hsv.s, 0.001f, 0.0f, 1.0f);
-			ImGui::DragFloat("v", &hsv.v, 0.001f, 0.0f, 1.0f);
-			Vector3 rgb = HSVToRGB(hsv);
+			ImGui::DragFloat("h", &hsv_.h, 0.1f, 0.0f, 360.0f);
+			ImGui::DragFloat("s", &hsv_.s, 0.001f, 0.0f, 1.0f);
+			ImGui::DragFloat("v", &hsv_.v, 0.001f, 0.0f, 1.0f);
+			Vector3 rgb = HSVToRGB(hsv_);
 			Vector4 rgba = { rgb, 1.0f };
 			ImGui::Text("%.4f, %.4f, %.4f", rgb.r, rgb.g, rgb.b);
 			rgbaTexture_->color = rgba.GetColorRGBA();
@@ -371,7 +382,7 @@ void RenderingManager::DrawSkyBox() {
 	skyBox_->Draw(transform_.GetMatrix(), cameraMatrix_, 0xffffffff);
 }
 
-void RenderingManager::DrawRGBA(const RGBALists& rgbaList) {
+void RenderingManager::DrawRGBA(const RenderDataLists& rgbaList) {
 	for (auto& list : rgbaList) {
 		for (size_t count = 0; auto& element : list.second) {
 			if (list.first <= count) {
@@ -409,7 +420,7 @@ void RenderingManager::DrawPostEffect() {
 	gaussianVerticalTexture_->Draw(Pipeline::Blend::Add, nullptr);
 }
 
-void RenderingManager::DrawNoDepth(const NoDepthLists& nodepthList)
+void RenderingManager::DrawNoDepth(const RenderDataLists& nodepthList)
 {
 	for (auto& list : nodepthList) {
 		for (size_t count = 0; auto & element : list.second) {
@@ -419,6 +430,7 @@ void RenderingManager::DrawNoDepth(const NoDepthLists& nodepthList)
 
 			element->SetLight(deferredRenderingData_.directionLight);
 			element->SetCameraPos(deferredRenderingData_.eyePos);
+			element->DataSet();
 			element->Draw();
 
 			count++;
@@ -426,7 +438,7 @@ void RenderingManager::DrawNoDepth(const NoDepthLists& nodepthList)
 	}
 }
 
-void RenderingManager::ZSrot(const RGBALists& rgbaList) {
+void RenderingManager::ZSrot(const RenderDataLists& rgbaList) {
 	for (auto& list : rgbaList) {
 		for (size_t count = 0; auto& element : list.second) {
 			if (list.first <= count) {

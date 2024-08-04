@@ -1,0 +1,17 @@
+./Resources/skydome/skydome.png
+./Resources/OutGame/stageSelect.png
+./Resources/Player/body.png
+./Resources/white2x2.png
+./Resources/Water/caustics_01.bmp
+./Resources/Player/bone.png
+./Resources/InGame/customizeCannon.png
+./Resources/InGame/customizeSail.png
+./Resources/tileMap.png
+./Resources/Block/block.png
+./Resources/uiImage.png
+./Resources/InGame/departure.png
+./Resources/DebugArrow/DebugWall.png
+./Resources/DebugArrow/DebugGoal.png
+./Resources/DebugArrow/DebugArrow.png
+./Resources\ball.png
+./Resources/OutGame/result.png

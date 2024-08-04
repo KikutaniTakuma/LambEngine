@@ -29,9 +29,9 @@ Water* const Water::GetInstance()
 
 void Water::Init() {
 	transform.translate.y = -0.1f;
-	transform.translate.z = 0.0f;
-	transform.scale.x = 200.0f;
-	transform.scale.y = 200.0f;
+	transform.translate.z = 100.0f;
+	transform.scale.x = 400.0f;
+	transform.scale.y = 400.0f;
 	transform.rotate.x = 1.57f;
 
 	waterSurface_ = std::make_unique<WaterTex2D>();
@@ -41,11 +41,11 @@ void Water::Init() {
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
-	waveData.ripplesPoint = transform.translate;
-	waveData.waveStrength = 0.5f;
-	waveData.ripples = 10.0f;
-	waveData.waveSpeed = 10.0f;
-	waveData.timeAttenuation = 0.1f;
+	waveData_.ripplesPoint = transform.translate;
+	waveData_.waveStrength = 0.5f;
+	waveData_.ripples = 10.0f;
+	waveData_.waveSpeed = 10.0f;
+	waveData_.timeAttenuation = 0.1f;
 
 	lightRotate_ = Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>;
 
@@ -66,10 +66,14 @@ void Water::Update(const Vector3& cameraPos) {
 	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 
-	waveData.time += Lamb::DeltaTime();
+	waveData_.time += Lamb::DeltaTime();
 }
 
 void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera) {
+	Transform drawTransform_ = transform;
+	drawTransform_.scale *= 0.5f;
+	drawTransform_.translate += drawTransform_.scale * 0.5f;
+
 	waterSurface_->Draw(
 		transform.GetMatrix(),
 		cameraMat,
@@ -77,7 +81,48 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 		density_,
 		edgeDivision_,
 		insideDivision_,
-		waveData,
+		waveData_,
+		color_,
+		BlendType::kNone
+	);
+
+	drawTransform_.translate -= drawTransform_.scale * 0.5f;
+	waterSurface_->Draw(
+		transform.GetMatrix(),
+		cameraMat,
+		randomVec_,
+		density_,
+		edgeDivision_,
+		insideDivision_,
+		waveData_,
+		color_,
+		BlendType::kNone
+	);
+
+	drawTransform_.translate.x += drawTransform_.scale.x * 0.5f;
+	drawTransform_.translate.z -= drawTransform_.scale.z * 0.5f;
+	waterSurface_->Draw(
+		transform.GetMatrix(),
+		cameraMat,
+		randomVec_,
+		density_,
+		edgeDivision_,
+		insideDivision_,
+		waveData_,
+		color_,
+		BlendType::kNone
+	);
+
+	drawTransform_.translate.x -= drawTransform_.scale.x * 0.5f;
+	drawTransform_.translate.z += drawTransform_.scale.z * 0.5f;
+	waterSurface_->Draw(
+		transform.GetMatrix(),
+		cameraMat,
+		randomVec_,
+		density_,
+		edgeDivision_,
+		insideDivision_,
+		waveData_,
 		color_,
 		BlendType::kNone
 	);
@@ -116,16 +161,21 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	}
 
 	if (ImGui::TreeNode("Wave")) {
-		ImGui::DragFloat("波の高さm", &waveData.waveStrength, 0.01f);
-		ImGui::DragFloat("波長", &waveData.ripples, 0.001f);
-		ImGui::DragFloat("波の速度m/s", &waveData.waveSpeed, 0.001f);
-		ImGui::DragFloat("時間s", &waveData.time, 0.01f);
-		ImGui::DragFloat("時間減衰", &waveData.timeAttenuation, 0.01f);
-		ImGui::DragFloat3("波源", waveData.ripplesPoint.data(), 0.01f);
+		ImGui::DragFloat("波の高さm", &waveData_.waveStrength, 0.01f);
+		ImGui::DragFloat("波長", &waveData_.ripples, 0.001f);
+		ImGui::DragFloat("波の速度m/s", &waveData_.waveSpeed, 0.001f);
+		ImGui::DragFloat("時間s", &waveData_.time, 0.01f);
+		ImGui::DragFloat("時間減衰", &waveData_.timeAttenuation, 0.01f);
+		ImGui::DragFloat3("波源", waveData_.ripplesPoint.data(), 0.01f);
 
 		ImGui::TreePop();
 	}
 
 	ImGui::End();
 #endif // _DEBUG
+}
+
+void Water::SetWaveData(const WaterTex2D::WaveData& waveData)
+{
+	waveData_ = waveData;
 }

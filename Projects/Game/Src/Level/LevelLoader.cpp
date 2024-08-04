@@ -1,10 +1,32 @@
 #include "LevelLoader.h"
+#include "GameObject/Comp/ButtonComp.h"
+#include "GameObject/Comp/CameraComp.h"
+#include "GameObject/Comp/Camera3DComp.h"
+#include "GameObject/Comp/Camera2DComp.h"
+#include "GameObject/Comp/ChildrenObjectComp.h"
+#include "GameObject/Comp/CsvDataComp.h"
+#include "GameObject/Comp/EventComp.h"
+#include "GameObject/Comp/FallComp.h"
+#include "GameObject/Comp/InputMoveComp.h"
+#include "GameObject/Comp/JsonComp.h"
 #include "GameObject/Comp/ModelRenderComp.h"
-#include "GameObject/Comp/TransformComp.h"
 #include "GameObject/Comp/ObbComp.h"
 #include "GameObject/Comp/ObbPushComp.h"
-#include "GameObject/Comp/Camera2DComp.h"
-#include "GameObject/Comp/Camera3DComp.h"
+#include "GameObject/Comp/ModelRenderDataComp.h"
+#include "GameObject/Comp/SceneChangeComp.h"
+#include "GameObject/Comp/SpriteRenderComp.h"
+#include "GameObject/Comp/SpriteRenderDataComp.h"
+#include "GameObject/Comp/TransformComp.h"
+
+#include "GameObject/GameComp/CannonComp.h"
+#include "GameObject/GameComp/CustomizeComp.h"
+#include "GameObject/GameComp/ItemComp.h"
+#include "GameObject/GameComp/LoopCannonComp.h"
+#include "GameObject/GameComp/PlayerComp.h"
+#include "GameObject/GameComp/SailComp.h"
+#include "GameObject/GameComp/WhirlpoolsComp.h"
+#include "GameObject/GameComp/WindComp.h"
+#include "GameObject/GameComp/WindNodeComp.h"
 
 LevelData* LevelLoader::Load(const std::string& fileName)
 {
@@ -31,7 +53,7 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
     // 全オブジェクトを走査
     for (nlohmann::json& objectData : data["objects"]) {
         // オブジェクトを追加
-        levelData->objects.emplace_back(std::make_unique<Object>());
+        levelData->objects.emplace_back(Lamb::MakeSafePtr<Object>());
         Object& object = *levelData->objects.back();
 
         // オブジェクトの名前を設定
@@ -48,7 +70,8 @@ void LevelLoader::AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> leve
             if (type.compare("MESH") == 0) {
                 if (objectData.contains("file_name")) {
                     Lamb::SafePtr model = object.AddComp<ModelRenderComp>();
-                    model->SetFileNmae(objectData["file_name"]);
+                    Lamb::SafePtr modelData = object.AddComp<ModelRenderDataComp>();
+                    modelData->fileName = objectData["file_name"];
                     model->Load();
                     object.SetTag("Model");
                 }
@@ -110,6 +133,7 @@ void LevelLoader::AddCamera(nlohmann::json& data, Object& object)
 {
 
     std::string cameratype = data["camera_type"].get<std::string>();
+    object.AddComp<CameraComp>();
 
     if (cameratype.compare("Perspective") == 0) {
         Lamb::SafePtr cameraComp = object.AddComp<Camera3DComp>();
@@ -155,7 +179,7 @@ void LevelLoader::AddChildren(nlohmann::json& data, Lamb::SafePtr<LevelData> lev
     // 全childlenを走査
     for (nlohmann::json& objectData : data["children"]) {
         // オブジェクトを追加
-        levelData->objects.emplace_back(std::make_unique<Object>());
+        levelData->objects.emplace_back(Lamb::MakeSafePtr<Object>());
         Object& object = *levelData->objects.back();
 
         // オブジェクトの名前を設定
@@ -172,7 +196,8 @@ void LevelLoader::AddChildren(nlohmann::json& data, Lamb::SafePtr<LevelData> lev
             if (type.compare("MESH") == 0) {
                 if (objectData.contains("file_name")) {
                     Lamb::SafePtr model = object.AddComp<ModelRenderComp>();
-                    model->SetFileNmae(objectData["file_name"]);
+                    Lamb::SafePtr modelData = object.AddComp<ModelRenderDataComp>();
+                    modelData->fileName = objectData["file_name"];
                     model->Load();
                     object.SetTag("Model");
                 }

@@ -110,7 +110,6 @@ enum BlendType {
     kNum
 };
 
-#ifdef _DEBUG
 static const std::array<std::string, BlendType::kNum> kBlendTypeStrs = {
     "kNone",
 
@@ -125,7 +124,6 @@ static const std::array<std::string, BlendType::kNum> kBlendTypeStrs = {
     "kUnenableDepthSub",
     "kUnenableDepthMul",
 };
-#endif // _DEBUG
 
 struct PointLight {
     Vector3 ptPos;

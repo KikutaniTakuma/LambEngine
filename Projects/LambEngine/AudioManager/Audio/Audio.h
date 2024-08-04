@@ -59,7 +59,7 @@ public:
 		return isStart_;
 	}
 
-	void SetAudio(float volume);
+	void SetVolume(float volume);
 
 	void Debug(const std::string& guiName);
 

@@ -158,6 +158,15 @@ void WindowFactory::Fullscreen() {
 	}
 }
 
+void WindowFactory::UpdateCurrentPos()
+{
+	RECT rect;
+
+	GetWindowRect(hwnd_, &rect);
+
+	pos_ = { static_cast<float>(rect.left),static_cast<float>(rect.top) };
+}
+
 bool WindowFactory::IsThisWindowaActive() const {
 	HWND currentActiveWindow = GetForegroundWindow();
 
@@ -174,4 +183,9 @@ Vector2 WindowFactory::GetWindowSize() const {
 
 const Vector2& WindowFactory::GetClientSize() const {
 	return clientSize_;
+}
+
+const Vector2& WindowFactory::GetPos() const
+{
+	return pos_;
 }
