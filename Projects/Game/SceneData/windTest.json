@@ -49,14 +49,14 @@
                     ],
                     "positionRange": [
                         [
-                            -1.0,
-                            -1.0,
-                            -1.0
+                            -10.0,
+                            0.0,
+                            -10.0
                         ],
                         [
-                            -1.0,
-                            1.0,
-                            1.0
+                            10.0,
+                            20.0,
+                            -10.0
                         ]
                     ],
                     "speedRange": [
@@ -4166,24 +4166,6 @@
                     "CompName": "class ChildrenObjectComp"
                 },
                 {
-                    "CompName": "class ObbComp",
-                    "center": [
-                        0.0,
-                        0.0,
-                        0.0
-                    ],
-                    "collsiionTags": [],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ]
-                },
-                {
-                    "CompName": "class ObbPushComp",
-                    "pushTags": []
-                },
-                {
                     "CompName": "class TransformComp",
                     "rotate": [
                         0.0,
@@ -4201,6 +4183,24 @@
                         10.0,
                         0.0
                     ]
+                },
+                {
+                    "CompName": "class ObbComp",
+                    "center": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "collsiionTags": [],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                {
+                    "CompName": "class ObbPushComp",
+                    "pushTags": []
                 }
             ],
             "type": "Object"

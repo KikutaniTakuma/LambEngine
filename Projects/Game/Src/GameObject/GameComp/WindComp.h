@@ -1,6 +1,6 @@
 #include "../Object.h"
 class WindComp : public IComp {
-	static constexpr size_t kMaxWindowNodeSize_ = 512;
+	static constexpr size_t kMaxWindowNodeSize_ = 128;
 
 public:
 	using IComp::IComp;
