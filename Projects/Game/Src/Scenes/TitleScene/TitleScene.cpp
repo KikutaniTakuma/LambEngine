@@ -135,7 +135,7 @@ void TitleScene::Update() {
     waveData_.ripplesPoint = ship_->pos;
     waveData_.time += Lamb::DeltaTime();
     waveData_.waveStrength = 0.2f;
-    waveData_.ripples = 10.0f;
+    waveData_.ripples = 20.0f;
     waveData_.waveSpeed = 2.0f;
     waveData_.timeAttenuation = 0.0f;
 

@@ -9,6 +9,8 @@
 #include "Utils/Easeing.h"
 #include "Game/Cursor/Cursor.h"
 
+#include "Drawers/Other/WaterTex2D/WaterTex2D.h"
+
 
 class SelectStageScene : public BaseScene {
 public:
@@ -92,5 +94,7 @@ private:
 
     float screwRotate_;
     float screwRotateSpeed_;
+
+    WaterTex2D::WaveData waveData_;
 
 };

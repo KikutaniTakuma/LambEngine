@@ -21,6 +21,7 @@
 #include "Game/WhirlpoolManager/WhirlpoolManager.h"
 #include "Game/Water/Water.h"
 #include "Game/Cursor/Cursor.h"
+#include "Drawers/Other/WaterTex2D/WaterTex2D.h"
 
 class GameScene : public BaseScene {
 public:
@@ -78,4 +79,6 @@ public:
 
 	class Audio* customizeBGM_ = nullptr;
 	class Audio* seaSE_ = nullptr;
+
+	WaterTex2D::WaveData waveData_;
 };

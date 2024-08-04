@@ -227,7 +227,15 @@ void GameScene::Update() {
 	CameraManager::GetInstance()->Update(player_->GetPosition(), player_->GetRotate());
 
 	water_->Debug("Water");
-	water_->Update(currentCamera_->pos);
+	waveData_.ripplesPoint = player_->GetPosition();
+	waveData_.time += Lamb::DeltaTime();
+	waveData_.waveStrength = 0.3f;
+	waveData_.ripples = 20.0f;
+	waveData_.waveSpeed = 2.0f;
+	waveData_.timeAttenuation = 0.0f;
+
+	water_->Update(currentCamera_->GetPos());
+	water_->SetWaveData(waveData_);
 
 
 	if (player_->GetIsGoal()) {

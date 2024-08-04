@@ -163,7 +163,15 @@ void SelectStageScene::Update() {
 
     screw_->Update();
 
-    water_->Update(camera3D_->GetPos());
+    waveData_.ripplesPoint = ship_->pos;
+    waveData_.time += Lamb::DeltaTime();
+    waveData_.waveStrength = 0.2f;
+    waveData_.ripples = 10.0f;
+    waveData_.waveSpeed = 2.0f;
+    waveData_.timeAttenuation = 0.0f;
+
+    water_->Update(currentCamera_->GetPos());
+    water_->SetWaveData(waveData_);
 #pragma endregion
 
 
