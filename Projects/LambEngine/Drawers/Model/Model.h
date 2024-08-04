@@ -46,3 +46,34 @@ public:
 	const Node& GetNode() const;
 	const ModelData& GetModelData() const;
 };
+
+class ModelInstance {
+public:
+	ModelInstance() = default;
+	~ModelInstance() = default;
+
+public:
+	void Load(const std::string& fileName);
+	
+	void Update();
+
+	void Draw(const Mat4x4& cameraMat);
+
+	void SetParent(ModelInstance* parent);
+
+	const Mat4x4& GetWorldMatrix() const;
+
+public:
+	Vector3 scale = Vector3::kIdentity;
+	Vector3 rotate;
+	Vector3 pos;
+
+	uint32_t color = 0xffffffff;
+	BlendType blend = BlendType::kNone;
+	bool isLighting = true;
+
+private:
+	Lamb::SafePtr<Model> model_;
+	Lamb::SafePtr<ModelInstance> parent_;
+	Mat4x4 worldMat_ = Mat4x4::kIdentity;
+};

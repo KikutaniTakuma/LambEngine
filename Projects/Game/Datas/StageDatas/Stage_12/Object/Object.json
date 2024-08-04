@@ -1,0 +1,15 @@
+{
+    "Object": {
+        "objectData": {
+            "Cannon": {
+                "Max": 2
+            },
+            "LoopCannon": {
+                "Max": 6
+            },
+            "Sail": {
+                "Max": 0
+            }
+        }
+    }
+}

@@ -48,6 +48,7 @@ public:
 
 	void SetCameraPos(const Vector3& cameraPos);
 	void SetCameraMatrix(const Mat4x4& camera);
+	void SetHsv(const Vector3& hsv);
 
 	void Debug(const std::string& guiName);
 
@@ -90,7 +91,7 @@ private:
 
 	// ライティング後のrgbaテクスチャを描画
 	std::unique_ptr<PeraRender> rgbaTexture_;
-	Vector3 hsv;
+	Vector3 hsv_;
 
 	// 深度値(法線書き込みと色書き込み、アウトラインで使用する)
 	std::unique_ptr<DepthBuffer> depthStencil_;

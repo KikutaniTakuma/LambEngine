@@ -1,0 +1,21 @@
+{
+    "Player": {
+        "Acceleration": 3.5,
+        "AddAngle": 95.0,
+        "CannonPower": 10.0,
+        "CannonSubtractPower": 5.0,
+        "CustomizeAddPower": 0.0,
+        "Deceleration": 1.0,
+        "MaxCannonVelocity": 10.0,
+        "MaxPower": 100.0,
+        "MaxSpeed": 15.0,
+        "MaxWindVelocity": 20.0,
+        "SubtractAngle": 120.0,
+        "SubtractCannonVelocity": 5.0,
+        "SubtractPower": 4.0,
+        "SubtractWindVelocity": 8.0,
+        "TurnSpeed": 0.23999999463558197,
+        "WindDeceleration": 0.009999999776482582,
+        "WindPower": 40.0
+    }
+}

@@ -174,6 +174,12 @@ Vector2 Mouse::GetPos() {
 	return pos;
 }
 
+void Mouse::SetPos(const Vector2& pos) {
+	static WindowFactory* const window = WindowFactory::GetInstance();
+	Vector2 windowPos = window->GetPos();
+	SetCursorPos(static_cast<int>(pos.x + windowPos.x), static_cast<int>(pos.y + windowPos.y));
+}
+
 void Mouse::Show(bool flg) {
 	::ShowCursor(BOOL(flg));
 }

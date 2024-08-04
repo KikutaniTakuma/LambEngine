@@ -35,7 +35,8 @@ void World::Initialize() {
 	ObjectManager::Initialize();
 
 	// シーンマネージャー初期化
-	sceneManager_ = std::make_unique<SceneManager>();
+	SceneManager::Initialize();
+	sceneManager_ = SceneManager::GetInstance();
 
 	sceneManager_->Initialize(BaseScene::ID::Title, BaseScene::ID::Title);
 
@@ -52,7 +53,7 @@ void World::Finalize() {
 		sceneManager_->Finalize();
 	}
 
-	sceneManager_.reset();
+	SceneManager::InstanceReset();
 
 	ObjectManager::Finalize();
 	TransformCompUpdater::Finalize();

@@ -9,7 +9,7 @@
 /// </summary>
 class WaterTex2D : public BaseDrawer {
 public:
-	static constexpr uint32_t kMaxDrawCount = 1u;
+	static constexpr uint32_t kMaxDrawCount = 4u;
 
 	struct WaveData {
 		float32_t waveStrength = 5.0f;

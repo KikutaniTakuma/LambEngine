@@ -22,7 +22,7 @@ private:
 	void Draw()override;
 
 private:
-	std::unique_ptr<SceneManager> sceneManager_;
+	SceneManager* sceneManager_;
 
 	class ParticleEditor* particleEditor_ = nullptr;
 };

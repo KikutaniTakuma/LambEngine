@@ -61,12 +61,12 @@ RenderingManager::RenderingManager() {
 		}
 	);
 	Vector4 rgba = rgbaTexture_->color;
-	hsv = RGBToHSV({ rgba.color.r,rgba.color.g,rgba.color.b });
+	hsv_ = RGBToHSV({ rgba.color.r,rgba.color.g,rgba.color.b });
 
 	std::unique_ptr<Luminate> luminate = std::make_unique<Luminate>();
 	luminate->Init();
 	luminate_ = luminate.release();
-	luminanceThreshold = 0.99f;
+	luminanceThreshold = 1.2f;
 	luminate_->SetLuminanceThreshold(luminanceThreshold);
 
 	luminateTexture_ = std::make_unique<PeraRender>();
@@ -318,11 +318,20 @@ DepthBuffer& RenderingManager::GetDepthBuffer()
 
 void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 	deferredRenderingData_.eyePos = cameraPos;
+	transform_.translate = cameraPos;
 }
 
 void RenderingManager::SetCameraMatrix(const Mat4x4& camera)
 {
 	cameraMatrix_ = camera;
+}
+
+void RenderingManager::SetHsv(const Vector3& hsv)
+{
+	hsv_ = hsv;
+	Vector3 rgb = HSVToRGB(hsv_);
+	Vector4 rgba = { rgb, 1.0f };
+	rgbaTexture_->color = rgba.GetColorRGBA();
 }
 
 void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {
@@ -331,10 +340,10 @@ void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {
 		ImGui::Checkbox("lighting", reinterpret_cast<bool*>(&deferredRenderingData_.isDirectionLight));
 		ImGui::DragFloat("environment", &deferredRenderingData_.environmentCoefficient, 0.001f, 0.0f, 5.0f);
 		if (ImGui::TreeNode("hsv")) {
-			ImGui::DragFloat("h", &hsv.h, 0.1f, 0.0f, 360.0f);
-			ImGui::DragFloat("s", &hsv.s, 0.001f, 0.0f, 1.0f);
-			ImGui::DragFloat("v", &hsv.v, 0.001f, 0.0f, 1.0f);
-			Vector3 rgb = HSVToRGB(hsv);
+			ImGui::DragFloat("h", &hsv_.h, 0.1f, 0.0f, 360.0f);
+			ImGui::DragFloat("s", &hsv_.s, 0.001f, 0.0f, 1.0f);
+			ImGui::DragFloat("v", &hsv_.v, 0.001f, 0.0f, 1.0f);
+			Vector3 rgb = HSVToRGB(hsv_);
 			Vector4 rgba = { rgb, 1.0f };
 			ImGui::Text("%.4f, %.4f, %.4f", rgb.r, rgb.g, rgb.b);
 			rgbaTexture_->color = rgba.GetColorRGBA();
@@ -421,6 +430,7 @@ void RenderingManager::DrawNoDepth(const RenderDataLists& nodepthList)
 
 			element->SetLight(deferredRenderingData_.directionLight);
 			element->SetCameraPos(deferredRenderingData_.eyePos);
+			element->DataSet();
 			element->Draw();
 
 			count++;

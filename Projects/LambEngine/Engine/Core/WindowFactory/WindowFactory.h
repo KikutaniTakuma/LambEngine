@@ -65,6 +65,11 @@ public:
 	void Fullscreen();
 
 	/// <summary>
+	/// 今のWindowのポジションを更新する
+	/// </summary>
+	void UpdateCurrentPos();
+
+	/// <summary>
 	/// 今このウィンドウがアクティブかどうか
 	/// </summary>
 	/// <returns>アクティブならtrue</returns>
@@ -117,6 +122,8 @@ public:
 	/// <returns>クライアント領域</returns>
 	const Vector2& GetClientSize() const;
 
+	const Vector2& GetPos() const;
+
 /// <summary>
 /// メンバ変数
 /// </summary>
@@ -129,4 +136,5 @@ private:
 
 	bool isFullscreen_;
 	Vector2 clientSize_;
+	Vector2 pos_;
 };

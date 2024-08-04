@@ -8,6 +8,23 @@
 
 #include "imgui.h"
 
+std::unique_ptr<SceneManager> SceneManager::instance_;
+
+void SceneManager::Initialize()
+{
+	instance_ = std::make_unique<SceneManager>();
+}
+
+void SceneManager::InstanceReset()
+{
+	instance_.reset();
+}
+
+SceneManager* const SceneManager::GetInstance()
+{
+	return instance_.get();
+}
+
 void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID) {
 	finishID_ = finishID;
 	preSceneID_ = firstScene.value();

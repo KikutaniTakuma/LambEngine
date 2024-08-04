@@ -30,6 +30,8 @@ public:
 
 	void Debug(const std::string& guiName);
 
+	void SetWaveData(const WaterTex2D::WaveData& waveData);
+
 public:
 	Transform transform;
 
@@ -43,7 +45,7 @@ private:
 	float32_t density_ = 1.0f;
 	int32_t edgeDivision_ = 64;
 	int32_t insideDivision_ = 64;
-	WaterTex2D::WaveData waveData;
+	WaterTex2D::WaveData waveData_;
 	Light light_;
 	float32_t lightScale_ = 0.0f;
 	Vector3 lightRotate_;

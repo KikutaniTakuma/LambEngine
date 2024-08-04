@@ -1,6 +1,7 @@
 #include "SceneFactory.h"
 #include "Scenes/GameScene/GameScene.h"
 #include "Scenes/TitleScene/TitleScene.h"
+#include "Scenes/SelectStageScene/SelectStageScene.h"
 
 SceneFactory::SceneFactory():
 	createScene_{}
@@ -20,11 +21,11 @@ BaseScene* SceneFactory::CreateBaseScene(std::optional<BaseScene::ID> createScen
 void SceneFactory::CreateFunctions() {
 	createScene_[BaseScene::ID::Game] =
 		[]()->BaseScene* {
-		return new GameScene{};
+		return new GameScene();
 		};
 	createScene_[BaseScene::ID::Title] =
 		[]()->BaseScene* {
-		return new TitleScene{};
+		return new TitleScene();
 		};
 	createScene_[BaseScene::ID::Result] =
 		[]()->BaseScene* {
@@ -32,6 +33,6 @@ void SceneFactory::CreateFunctions() {
 		};
 	createScene_[BaseScene::ID::StageSelect] =
 		[]()->BaseScene* {
-		return nullptr;
+		return new SelectStageScene();
 		};
 }

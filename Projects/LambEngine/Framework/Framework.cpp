@@ -60,6 +60,9 @@ void Framework::Execution() {
 			// フルスクリーン化
 			window->Fullscreen();
 
+			// 今のウィンドウのポジションを更新
+			window->UpdateCurrentPos();
+
 #ifdef _DEBUG		
 			if (frameInfo->GetIsDebugStop() && frameInfo->GetIsOneFrameActive()) {
 				this->Update();

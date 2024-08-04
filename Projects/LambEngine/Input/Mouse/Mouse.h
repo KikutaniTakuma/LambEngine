@@ -55,6 +55,11 @@ public:
 	 float GetWheelVelocity();
 
 	 Vector2 GetPos();
+	 /// <summary>
+	 /// マウスの位置設定
+	 /// </summary>
+	 /// <param name="pos">ウィンドウ上のスクリーン座標</param>
+	 void SetPos(const Vector2& pos);
 
 	 void Show(bool flg);
 

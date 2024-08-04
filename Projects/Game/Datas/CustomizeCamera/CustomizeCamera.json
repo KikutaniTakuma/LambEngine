@@ -1,0 +1,19 @@
+{
+    "CustomizeCamera": {
+        "CameraMoveDelay": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Offset": [
+            0.0,
+            1.0,
+            -7.0
+        ],
+        "RotateSpeed": [
+            1.0,
+            2.0
+        ],
+        "ZoomSpeed": 2.0
+    }
+}

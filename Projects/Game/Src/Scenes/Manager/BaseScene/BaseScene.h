@@ -1,6 +1,5 @@
 #pragma once
 #include "Camera/Camera.h"
-#include "Camera/DebugCamera/DebugCamera.h"
 
 #include "Drawers/DrawerManager.h"
 #include "AudioManager/AudioManager.h"
@@ -79,11 +78,6 @@ private:
 
 protected:
 	Lamb::SafePtr<Camera> currentCamera_;
-
-#ifdef _DEBUG
-	std::unique_ptr<DebugCamera> debugCamera_;
-	Lamb::Flg isDebug_;
-#endif // _DEBUG
 };
 
 template<class T>

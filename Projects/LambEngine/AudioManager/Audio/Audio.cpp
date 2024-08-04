@@ -180,7 +180,7 @@ void Audio::Stop() {
 	isStart_ = false;
 }
 
-void Audio::SetAudio(float volume) {
+void Audio::SetVolume(float volume) {
 	volume_ = volume;
 	if (pSourceVoice_ && isStart_) {
 		pSourceVoice_->SetVolume(volume_);
@@ -191,7 +191,7 @@ void Audio::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
 	ImGui::Begin(guiName.c_str());
 	ImGui::DragFloat("volume", &volume_, 0.001f, 0.0f, 1.0f);
-	SetAudio(volume_);
+	SetVolume(volume_);
 	
 	ImGui::Checkbox("isLoop", &isLoop_);
 	if (ImGui::Button("Start")) {

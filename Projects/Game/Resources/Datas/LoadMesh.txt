@@ -1,0 +1,7 @@
+./Resources/DebugArrow/DebugWall.obj
+./Resources/Player/bone.obj
+./Resources/DebugArrow/DebugGoal.obj
+./Resources/Block/Block.obj
+./Resources/skydome/skydome.obj
+./Resources/Player/body.obj
+./Resources/DebugArrow/DebugArrow.obj

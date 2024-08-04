@@ -26,6 +26,11 @@ namespace Lamb {
 
 		float LerpShortAngle(float a, float b, float t);
 	}
+
+	template<typename T>
+	bool Between(const T& num, const T& min, const T& max) {
+		return min <= num && num <= max;
+	}
 }
 
 inline uint16_t operator""_u16(size_t i) {

@@ -11,7 +11,7 @@ namespace Lamb {
 		const std::filesystem::path& extension
 	) {
 		std::vector<std::filesystem::path> result;
-		if (!std::filesystem::exists(directoryName)) {
+		if (not std::filesystem::exists(directoryName)) {
 			return result;
 		}
 
@@ -47,7 +47,7 @@ namespace Lamb {
 		if (!(std::filesystem::path(fileName).extension() == ".csv")) {
 			throw Lamb::Error::Code<Lamb::Error::Function>("This file is not csv -> " + fileName, ErrorPlace);
 		}
-		else if (std::filesystem::exists(fileName)) {
+		if (not std::filesystem::exists(fileName)) {
 			throw Lamb::Error::Code<Lamb::Error::Function>("This file is not exists -> " + fileName, ErrorPlace);
 		}
 

@@ -1,0 +1,24 @@
+{
+    "Whirlpool": {
+        "objectData": {
+            "Whirlpool:0": {
+                "gameOverSpeed": 15.0,
+                "position": [
+                    0.0,
+                    0.0,
+                    70.0
+                ],
+                "rotate": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    12.0,
+                    1.0,
+                    12.0
+                ]
+            }
+        }
+    }
+}

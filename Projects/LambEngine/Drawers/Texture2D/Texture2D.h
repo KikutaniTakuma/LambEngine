@@ -59,3 +59,42 @@ public:
 
 	void AllDraw();
 };
+
+class Tex2DInstance {
+public:
+	Tex2DInstance() = default;
+	~Tex2DInstance() = default;
+
+public:
+	void Load(const std::string& fileName);
+
+	void Draw(const Mat4x4& cameraMat);
+
+	Vector2 GetTexSize() const {
+		if (tex_.have()) {
+			return tex_->getSize();
+		}
+		else {
+			return Vector2::kZero;
+		}
+	}
+
+	bool Collision(const Vector3& otherPos);
+
+public:
+	Vector3 scale = Vector3::kIdentity;
+	Vector3 rotate;
+	Vector3 pos;
+
+	Vector2 uvPibot;
+	Vector2 uvSize = Vector2::kIdentity;
+
+	uint32_t color = 0xffffffff;
+	BlendType blend = BlendType::kNone;
+
+private:
+	Lamb::SafePtr<Texture> tex_;
+
+private:
+	Lamb::SafePtr<Texture2D> tex2D_;
+};

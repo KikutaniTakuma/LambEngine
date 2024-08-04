@@ -1,6 +1,7 @@
 #include "Model.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include "Utils/SafePtr.h"
+#include "../DrawerManager.h"
 
 Model::Model(const std::string& fileName):
 	Model()
@@ -70,4 +71,40 @@ const Node& Model::GetNode() const
 
 const ModelData& Model::GetModelData() const {
 	return *renderSet->GetModelData();
+}
+
+void ModelInstance::Load(const std::string& fileName) {
+	DrawerManager::GetInstance()->LoadModel(fileName);
+	model_ = DrawerManager::GetInstance()->GetModel(fileName);
+}
+
+void ModelInstance::Update()
+{
+	worldMat_ = Mat4x4::MakeAffin(scale, rotate, pos);
+	if (parent_.have()) {
+		worldMat_ *= parent_->worldMat_;
+	}
+}
+
+void ModelInstance::Draw(const Mat4x4& cameraMat)
+{
+	if (model_.have()) {
+		model_->Draw(
+			worldMat_,
+			cameraMat,
+			color,
+			blend,
+			isLighting
+		);
+	}
+}
+
+void ModelInstance::SetParent(ModelInstance* parent)
+{
+	parent_ = parent;
+}
+
+const Mat4x4& ModelInstance::GetWorldMatrix() const
+{
+	return worldMat_;
 }
