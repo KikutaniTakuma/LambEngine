@@ -24,10 +24,6 @@ void SpriteRenderComp::Draw(CameraComp* cameraComp) {
 	);
 }
 
-void SpriteRenderComp::Load() {
-	renderDataComp_->texHandle = TextureManager::GetInstance()->GetHandle(renderDataComp_->fileName);
-}
-
 void SpriteRenderComp::Save(nlohmann::json& json)
 {
 	SetCompName<SpriteRenderComp>(json);

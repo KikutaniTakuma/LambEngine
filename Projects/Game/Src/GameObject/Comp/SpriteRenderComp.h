@@ -12,8 +12,6 @@ public:
 
 	void Draw(CameraComp* cameraComp) override;
 
-	void Load() override;
-
 	void Save(nlohmann::json& json) override;
 	void Load(nlohmann::json& json) override;
 

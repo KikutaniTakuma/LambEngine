@@ -168,6 +168,8 @@ void ObjectManager::Update() {
 		i->LastUpdate();
 	}
 
+	TransformCompUpdater::GetInstance()->UpdateMatrix();
+
 	Lamb::SafePtr renderingManager = RenderingManager::GetInstance();
 	renderingManager->SetCameraMatrix(cameraComp_->GetCameraMatrix());
 	renderingManager->SetCameraPos(cameraComp_->GetTransformComp().translate);
@@ -315,6 +317,7 @@ void ObjectManager::Save() {
 	root = nlohmann::json::object();
 
 	std::string fileName;
+
 	for (auto& i : inputSceneName_) {
 		if (i == '\0') {
 			break;
@@ -322,12 +325,14 @@ void ObjectManager::Save() {
 		fileName += i;
 	}
 
+	if (fileName.empty()) {
+		fileName = currentScene_;
+	}
+
 	std::string filePath = "./SceneData/" + fileName + ".json";
 	auto windowHandle = WindowFactory::GetInstance()->GetHwnd();
 
 	if (std::filesystem::exists(filePath)) {
-		
-
 		int32_t button = MessageBoxA(
 			windowHandle,
 			("this file exists. -> " + filePath + "\nDo you want to overwrite?").c_str(), "ObjectManager",
@@ -338,7 +343,7 @@ void ObjectManager::Save() {
 			return;
 		}
 		else if (button == IDNO) {
-			fileName += "_";
+			fileName += "_new";
 			filePath = "./SceneData/" + fileName + ".json";
 
 			if (MessageBoxA(
@@ -416,9 +421,11 @@ void ObjectManager::Load(const std::string& jsonFileName) {
 
 	SetCamera();
 
+#ifdef _DEBUG
 	MessageBoxA(
 		WindowFactory::GetInstance()->GetHwnd(),
 		("Load " + jsonFileName + " succeeded").c_str(), "ObjectManager",
 		MB_OK | MB_APPLMODAL | MB_ICONINFORMATION
 	);
+#endif // _DEBUG
 }

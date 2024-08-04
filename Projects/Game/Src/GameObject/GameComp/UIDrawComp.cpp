@@ -32,6 +32,7 @@ void UIDrawComp::Draw([[maybe_unused]]CameraComp* cameraComp)
 
 void UIDrawComp::Save([[maybe_unused]] nlohmann::json& json)
 {
+	SetCompName<UIDrawComp>(json);
 }
 
 void UIDrawComp::Load([[maybe_unused]] nlohmann::json& json)

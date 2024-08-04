@@ -181,3 +181,10 @@ void SpriteRenderDataComp::Load(nlohmann::json& json)
     }
     fileName = json["fileName"].get<std::string>();
 }
+
+void SpriteRenderDataComp::Load()
+{
+    Lamb::SafePtr textureManager = TextureManager::GetInstance();
+    textureManager->LoadTexture(fileName);
+    texHandle = textureManager->GetHandle(fileName);
+}

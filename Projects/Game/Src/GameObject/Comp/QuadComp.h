@@ -10,6 +10,8 @@ public:
 public:
 	void Init() override;
 
+	void FirstUpdate() override;
+
 	// xyのみ
 	bool IsCollision(const Vector2& pos);
 	// マウスカーソルの位置との当たり判定
@@ -18,6 +20,15 @@ public:
 	void Save(nlohmann::json& json) override;
 	void Load(nlohmann::json& json) override;
 
+	void Draw(CameraComp* cameraComp) override;
+
+	const Lamb::Flg& GetIsCollision() const;
+
 private:
 	Lamb::SafePtr<class TransformComp> transformComp_;
+	Lamb::Flg isCollision_;
+#ifdef _DEBUG
+	uint32_t color_ = 0xffffffff;
+#endif // _DEBUG
+
 };

@@ -12,9 +12,10 @@
 #include "Comp/InputMoveComp.h"
 #include "Comp/JsonComp.h"
 #include "Comp/ModelRenderComp.h"
+#include "Comp/ModelRenderDataComp.h"
 #include "Comp/ObbComp.h"
 #include "Comp/ObbPushComp.h"
-#include "Comp/ModelRenderDataComp.h"
+#include "Comp/QuadComp.h"
 #include "Comp/SceneChangeComp.h"
 #include "Comp/SpriteRenderComp.h"
 #include "Comp/SpriteRenderDataComp.h"
@@ -120,6 +121,7 @@ bool Object::DebugAddComp() {
 		DebugAdd<ModelRenderDataComp>();
 		DebugAdd<ObbComp>();
 		DebugAdd<ObbPushComp>();
+		DebugAdd<QuadComp>();
 		DebugAdd<SceneChangeComp>();
 		DebugAdd<SpriteRenderComp>();
 		DebugAdd<SpriteRenderDataComp>();
@@ -179,6 +181,7 @@ void Object::AddComps(nlohmann::json& compData)
 	AddAndLoadComp<ModelRenderDataComp>(compName, compData);
 	AddAndLoadComp<ObbComp>(compName, compData);
 	AddAndLoadComp<ObbPushComp>(compName, compData);
+	AddAndLoadComp<QuadComp>(compName, compData);
 	AddAndLoadComp<SceneChangeComp>(compName, compData);
 	AddAndLoadComp<SpriteRenderComp>(compName, compData);
 	AddAndLoadComp<SpriteRenderDataComp>(compName, compData);

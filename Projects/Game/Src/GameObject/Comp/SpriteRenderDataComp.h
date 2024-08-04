@@ -42,6 +42,8 @@ public:
 	void Save(nlohmann::json& json) override;
 	void Load(nlohmann::json& json) override;
 
+	void Load() override;
+
 public:
 	BlendType type;
 	Vector4 color;
