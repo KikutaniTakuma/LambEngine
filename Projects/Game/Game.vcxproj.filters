@@ -5,18 +5,6 @@
     <ClCompile Include="Src\GlobalVariables\GlobalVariables.cpp">
       <Filter>GlobalVariables</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Game\CollisionManager\CollisionManager.cpp">
-      <Filter>Game\CollisionManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\CollisionManager\Collider\Collider.cpp">
-      <Filter>Game\CollisionManager\Collider</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\CollisionManager\Obb\Obb.cpp">
-      <Filter>Game\CollisionManager\Obb</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\CollisionManager\Plane\Plane.cpp">
-      <Filter>Game\CollisionManager\Plane</Filter>
-    </ClCompile>
     <ClCompile Include="Src\World\World.cpp">
       <Filter>World</Filter>
     </ClCompile>
@@ -47,32 +35,14 @@
     <ClCompile Include="Src\Scenes\TitleScene\TitleScene.cpp">
       <Filter>Scenes\TitleScene</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Game\Cloud\Cloud.cpp">
-      <Filter>Game\Cloud</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\SkyDome\SkyDome.cpp">
-      <Filter>Game\Skydome</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Camera\Camera.cpp">
       <Filter>Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\CollisionManager\Sphere\Sphere.cpp">
-      <Filter>Game\CollisionManager\Sphere</Filter>
     </ClCompile>
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp">
       <Filter>Editor</Filter>
     </ClCompile>
     <ClCompile Include="Src\Camera\DebugCamera\DebugCamera.cpp">
       <Filter>Camera\DebugCamera</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\SkyBlock\SkyBlock.cpp">
-      <Filter>Game\SkyBlock</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\Player\Player.cpp">
-      <Filter>Game\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\Coin\Coin.cpp">
-      <Filter>Game\Coin</Filter>
     </ClCompile>
     <ClCompile Include="Src\GameObject\Object.cpp">
       <Filter>GameObject</Filter>
@@ -181,15 +151,6 @@
     <Filter Include="Game">
       <UniqueIdentifier>{e16d5b6d-612f-4477-b4d3-85f9d99b2ab8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\CollisionManager">
-      <UniqueIdentifier>{1451ec42-a15b-4d2f-8a7d-7edbc8a26e9b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\CollisionManager\Collider">
-      <UniqueIdentifier>{9e6dd177-5172-4dfe-bf41-1cfaa76118cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\CollisionManager\Obb">
-      <UniqueIdentifier>{f1b87284-7f48-48e0-946d-317f4c3da22f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="World">
       <UniqueIdentifier>{b8981fb7-5ba2-4533-897e-e706c7dc3049}</UniqueIdentifier>
     </Filter>
@@ -217,9 +178,6 @@
     <Filter Include="Editor">
       <UniqueIdentifier>{38830fbd-b2f4-43bb-85ce-ccfa08c65319}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\CollisionManager\Plane">
-      <UniqueIdentifier>{268eefac-748b-4452-b6c2-10e06349215c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Water">
       <UniqueIdentifier>{db170fba-cd99-4b05-a820-35cea969012a}</UniqueIdentifier>
     </Filter>
@@ -229,29 +187,11 @@
     <Filter Include="Scenes\TitleScene">
       <UniqueIdentifier>{33349c28-9ac6-4102-a517-2aca4afde131}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Cloud">
-      <UniqueIdentifier>{b9dbfc0b-e0eb-4bb3-b034-5e2f0dd99092}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Skydome">
-      <UniqueIdentifier>{3a7d72dd-98b1-426d-8ded-365ff6fff89b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Camera">
       <UniqueIdentifier>{31e5ecf8-6bc1-4f5a-97ce-394f3988c342}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\CollisionManager\Sphere">
-      <UniqueIdentifier>{03d14d68-3998-48a1-950b-d7aa4dec5fed}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Camera\DebugCamera">
       <UniqueIdentifier>{ed4f98cb-62c8-411f-9815-e88decbfbcdc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\SkyBlock">
-      <UniqueIdentifier>{ef39c624-d31b-4fc2-86a4-cc0366782860}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Player">
-      <UniqueIdentifier>{dc376baf-7d16-46b1-a3ef-b258172c0b20}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game\Coin">
-      <UniqueIdentifier>{b499dd18-c71b-43fe-b48e-a5f00311c7c4}</UniqueIdentifier>
     </Filter>
     <Filter Include="GameObject">
       <UniqueIdentifier>{e5c92456-0708-4165-9d68-847d8014d2ff}</UniqueIdentifier>
@@ -265,9 +205,6 @@
     <Filter Include="GameObject\Manager">
       <UniqueIdentifier>{2795ad23-5238-41cd-b501-ec1d9cd1431c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Manager">
-      <UniqueIdentifier>{66e69158-e7eb-4378-bcd3-bc17939d8612}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameObject\GameComp">
       <UniqueIdentifier>{2a763632-eaec-4f7e-9876-f077f915962c}</UniqueIdentifier>
     </Filter>
@@ -275,18 +212,6 @@
   <ItemGroup>
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h">
       <Filter>GlobalVariables</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\CollisionManager\CollisionManager.h">
-      <Filter>Game\CollisionManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\CollisionManager\Collider\Collider.h">
-      <Filter>Game\CollisionManager\Collider</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\CollisionManager\Obb\Obb.h">
-      <Filter>Game\CollisionManager\Obb</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\CollisionManager\Plane\Plane.h">
-      <Filter>Game\CollisionManager\Plane</Filter>
     </ClInclude>
     <ClInclude Include="Src\World\World.h">
       <Filter>World</Filter>
@@ -318,32 +243,14 @@
     <ClInclude Include="Src\Scenes\TitleScene\TitleScene.h">
       <Filter>Scenes\TitleScene</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Game\Cloud\Cloud.h">
-      <Filter>Game\Cloud</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\SkyDome\SkyDome.h">
-      <Filter>Game\Skydome</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Camera\Camera.h">
       <Filter>Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\CollisionManager\Sphere\Sphere.h">
-      <Filter>Game\CollisionManager\Sphere</Filter>
     </ClInclude>
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h">
       <Filter>Editor</Filter>
     </ClInclude>
     <ClInclude Include="Src\Camera\DebugCamera\DebugCamera.h">
       <Filter>Camera\DebugCamera</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\SkyBlock\SkyBlock.h">
-      <Filter>Game\SkyBlock</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\Player\Player.h">
-      <Filter>Game\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\Coin\Coin.h">
-      <Filter>Game\Coin</Filter>
     </ClInclude>
     <ClInclude Include="Src\GameObject\Object.h">
       <Filter>GameObject</Filter>
