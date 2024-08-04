@@ -17,7 +17,7 @@ Vector3 ItemComp::GetVelocity() const
 
 void ItemComp::Save(nlohmann::json& json)
 {
-	SetCompName<ItemComp>(json);
+	SaveCompName(json);
 }
 
 void ItemComp::Load([[maybe_unused]]nlohmann::json& json)

@@ -19,7 +19,7 @@ void Camera3DComp::Update() {
 }
 
 void Camera3DComp::Save(nlohmann::json& json) {
-	SetCompName<Camera3DComp>(json);
+	SaveCompName(json);
 	json["fov"] = fov_;
 	json["aspectRatio"] = aspectRatio_;
 	json["nearClip"] = nearClip_;

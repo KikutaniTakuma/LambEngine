@@ -93,7 +93,7 @@ void ModelRenderComp::Debug([[maybe_unused]]const std::string& guiName) {
 
 void ModelRenderComp::Save(nlohmann::json& json)
 {
-    SetCompName<ModelRenderComp>(json);
+    SaveCompName(json);
 }
 
 void ModelRenderComp::Load([[maybe_unused]]nlohmann::json& json)

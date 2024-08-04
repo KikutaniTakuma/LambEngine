@@ -28,7 +28,7 @@ const Lamb::Flg& ButtonComp::Released()
 }
 
 void ButtonComp::Save(nlohmann::json& json) {
-	SetCompName<ButtonComp>(json);
+	SaveCompName(json);
 	json["Gamepad"] = int32_t(gButton);
 	json["key"] = int32_t(keyButton);
 	json["Gamepad"] = int32_t(mButton);

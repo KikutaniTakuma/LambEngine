@@ -36,7 +36,7 @@ void WhirlpoolsComp::Debug([[maybe_unused]]const std::string& guiName) {
 
 void WhirlpoolsComp::Save(nlohmann::json& json)
 {
-	SetCompName<WhirlpoolsComp>(json);
+	SaveCompName(json);
 	json["pathThroughSpeed"] = pathThroughSpeed_;
 	json["rotateSpeed"] = rotateSpeed_;
 }

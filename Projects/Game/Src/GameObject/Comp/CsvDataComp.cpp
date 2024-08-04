@@ -64,7 +64,7 @@ void CsvDataComp::Debug([[maybe_unused]] const std::string& guiName) {
 
 void CsvDataComp::Save(nlohmann::json& json)
 {
-	SetCompName<CsvDataComp>(json);
+	SaveCompName(json);
 	json["fileName"] = fileName;
 }
 

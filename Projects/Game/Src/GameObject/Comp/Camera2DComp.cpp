@@ -11,7 +11,7 @@ void Camera2DComp::Update() {
 }
 
 void Camera2DComp::Save(nlohmann::json& json) {
-	SetCompName<Camera2DComp>(json);
+	SaveCompName(json);
 	json["width"] = width_;
 	json["height"] = height_;
 	json["nearClip"] = nearClip_;

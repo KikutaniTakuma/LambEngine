@@ -11,7 +11,7 @@ void EventComp::Event() {
 
 void EventComp::Save(nlohmann::json& json)
 {
-	SetCompName<EventComp>(json);
+	SaveCompName(json);
 }
 
 void EventComp::Load([[maybe_unused]]nlohmann::json& json)

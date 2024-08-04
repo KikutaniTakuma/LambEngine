@@ -26,7 +26,7 @@ void SpriteRenderComp::Draw(CameraComp* cameraComp) {
 
 void SpriteRenderComp::Save(nlohmann::json& json)
 {
-	SetCompName<SpriteRenderComp>(json);
+	SaveCompName(json);
 }
 
 void SpriteRenderComp::Load([[maybe_unused]]nlohmann::json& json)

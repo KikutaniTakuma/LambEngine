@@ -115,7 +115,7 @@ void ChildrenObjectComp::Debug([[maybe_unused]]const std::string& guiName) {
 }
 
 void ChildrenObjectComp::Save(nlohmann::json& json) {
-	SetCompName<ChildrenObjectComp>(json);
+	SaveCompName(json);
 
 	json["Children"] = nlohmann::json::array();
 

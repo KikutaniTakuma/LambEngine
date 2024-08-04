@@ -91,7 +91,7 @@ void PlayerComp::Draw([[maybe_unused]]CameraComp* cameraComp) {
 }
 
 void PlayerComp::Save(nlohmann::json& json) {
-	SetCompName<PlayerComp>(json);
+    SaveCompName(json);
     json["param"] = nlohmann::json::array();
     for (auto& i : floatParameter_) {
         json["param"].push_back(i);

@@ -157,7 +157,7 @@ void TransformComp::Guizmo(CameraComp* cameraComp) {
 
 void TransformComp::Save(nlohmann::json& json)
 {
-	SetCompName<TransformComp>(json);
+	SaveCompName(json);
 	json["scale"] = nlohmann::json::array();
 	for (auto& i : scale) {
 		json["scale"].push_back(i);

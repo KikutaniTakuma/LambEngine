@@ -11,7 +11,7 @@ void ModelRenderDataComp::Init()
 
 void ModelRenderDataComp::Save(nlohmann::json& json)
 {
-	SetCompName<ModelRenderDataComp>(json);
+	SaveCompName(json);
 	json["BlendType"] = kBlendTypeStrs[size_t(type)];
 	json["color"] = nlohmann::json::array();
 	for (auto& i : color) {

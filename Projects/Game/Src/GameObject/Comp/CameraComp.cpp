@@ -12,7 +12,7 @@ void CameraComp::LastUpdate() {
 
 void CameraComp::Save(nlohmann::json& json)
 {
-	SetCompName<CameraComp>(json);
+	SaveCompName(json);
 }
 
 void CameraComp::Load([[maybe_unused]]nlohmann::json& json)

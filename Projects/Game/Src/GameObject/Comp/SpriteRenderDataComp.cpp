@@ -146,7 +146,7 @@ const Mat4x4& SpriteRenderDataComp::GetOffsetMatrix() const
 
 void SpriteRenderDataComp::Save(nlohmann::json& json)
 {
-    SetCompName<SpriteRenderDataComp>(json);
+    SaveCompName(json);
 
     json["BlendType"] = kBlendTypeStrs[size_t(type)];
     json["color"] = nlohmann::json::array();

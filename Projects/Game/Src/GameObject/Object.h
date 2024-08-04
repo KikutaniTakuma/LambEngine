@@ -119,6 +119,11 @@ protected:
 	Object& object_;
 };
 
+#ifndef SaveCompName
+#define SaveCompName(json) IComp::SetCompName<std::remove_reference_t<decltype(*this)>>(json)
+#endif // !SaveCompName
+
+
 class Object : public GameFlow {
 public:
 	Object() = default;

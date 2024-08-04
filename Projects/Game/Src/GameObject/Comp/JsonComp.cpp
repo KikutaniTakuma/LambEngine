@@ -55,7 +55,7 @@ void JsonComp::Debug([[maybe_unused]]const std::string& guiName) {
 
 void JsonComp::Save(nlohmann::json& json)
 {
-	SetCompName<JsonComp>(json);
+	SaveCompName(json);
 	json["fileName"] = fileName;
 }
 

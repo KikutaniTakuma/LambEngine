@@ -42,8 +42,6 @@ void Object::Init() {
 
 void Object::FirstUpdate()
 {
-	float32_t deltaTime = Lamb::DeltaTime();
-	this->SetDeltaTime(deltaTime);
 	for (auto& i : components_) {
 		i.second->FirstUpdate();
 	}

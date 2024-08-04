@@ -51,7 +51,7 @@ void WindNodeComp::Draw(CameraComp* cameraComp) {
 
 void WindNodeComp::Save(nlohmann::json& json)
 {
-	SetCompName<WindNodeComp>(json);
+	SaveCompName(json);
 }
 
 void WindNodeComp::Load([[maybe_unused]]nlohmann::json& json)

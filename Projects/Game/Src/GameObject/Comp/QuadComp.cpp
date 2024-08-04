@@ -49,7 +49,7 @@ bool QuadComp::IsCollisionMouse(const Mat4x4& view, const Mat4x4& ndc) {
 
 void QuadComp::Save(nlohmann::json& json)
 {
-	SetCompName<QuadComp>(json);
+	SaveCompName(json);
 }
 
 void QuadComp::Load([[maybe_unused]]nlohmann::json& json)

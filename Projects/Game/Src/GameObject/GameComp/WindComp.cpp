@@ -35,8 +35,8 @@ void WindComp::Init() {
 	appearFrequencyRange_.second = 99;
 	appearNum_ = 2;
 
-	positionRange_.first = transformComp_->translate - transformComp_->scale;
-	positionRange_.second = transformComp_->translate + transformComp_->scale;
+	positionRange_.first = transformComp_->translate - (transformComp_->scale * 0.5f);
+	positionRange_.second = transformComp_->translate + (transformComp_->scale * 0.5f);
 
 	if (direction_.z == 1.0f) {
 		positionRange_.second.z = positionRange_.first.z;
@@ -53,8 +53,8 @@ void WindComp::Init() {
 }
 
 void WindComp::FirstUpdate() {
-	positionRange_.first = transformComp_->translate - transformComp_->scale;
-	positionRange_.second = transformComp_->translate + transformComp_->scale;
+	positionRange_.first = transformComp_->translate - (transformComp_->scale * 0.5f);
+	positionRange_.second = transformComp_->translate + (transformComp_->scale * 0.5f);
 
 	if (direction_.z == 1.0f) {
 		positionRange_.second.z = positionRange_.first.z;
@@ -101,7 +101,7 @@ Vector3 WindComp::GetDirection() const
 
 void WindComp::Save(nlohmann::json& json)
 {
-	SetCompName<WindComp>(json);
+	SaveCompName(json);
 	json["positionRange"] = nlohmann::json::array();
 	json["positionRange"].push_back(nlohmann::json::array());
 	json["positionRange"].push_back(nlohmann::json::array());

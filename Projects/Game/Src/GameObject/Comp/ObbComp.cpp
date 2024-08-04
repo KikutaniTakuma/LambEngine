@@ -418,7 +418,7 @@ void ObbComp::Debug([[maybe_unused]]const std::string& guiName) {
 }
 
 void ObbComp::Save(nlohmann::json& json) {
-	SetCompName<ObbComp>(json);
+	SaveCompName(json);
 	json["scale"] = nlohmann::json::array();
 	for (auto& i :scale) {
 		json["scale"].push_back(i);

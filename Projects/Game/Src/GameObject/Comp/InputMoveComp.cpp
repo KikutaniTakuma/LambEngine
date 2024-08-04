@@ -39,7 +39,7 @@ void InputMoveComp::FirstUpdate()
 
 void InputMoveComp::Save(nlohmann::json& json)
 {
-	SetCompName<InputMoveComp>(json);
+	SaveCompName(json);
 	json["speed"] = speed_;
 }
 

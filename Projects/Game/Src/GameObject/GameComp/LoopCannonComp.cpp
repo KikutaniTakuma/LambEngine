@@ -24,7 +24,7 @@ void LoopCannonComp::SetStrength(float32_t strength) {
 
 void LoopCannonComp::Save(nlohmann::json& json)
 {
-	SetCompName<LoopCannonComp>(json);
+	SaveCompName(json);
 	json["fireKeyTime"] = fireKeyTime_;
 	json["strength"] = strength_;
 }

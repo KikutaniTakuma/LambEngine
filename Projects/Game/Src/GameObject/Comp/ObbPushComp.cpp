@@ -40,7 +40,7 @@ void ObbPushComp::ErasePushTag(const std::string& pushTag) {
 
 void ObbPushComp::Save(nlohmann::json& json)
 {
-	SetCompName<ObbPushComp>(json);
+	SaveCompName(json);
 	json["pushTags"] = nlohmann::json::array();
 	for (auto& i : pushTags_) {
 		json["pushTags"].push_back(i);
