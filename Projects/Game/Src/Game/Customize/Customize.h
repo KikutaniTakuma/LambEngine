@@ -62,7 +62,6 @@ private:
 	Vector2 ChangeCursorToTileMap();
 	Vector2 ChangeCursorToTexturePos();
 	void Mouse();
-	void GamePad();
 	void SetObject();
 	void SetSail();
 	void SetCannon(float x, float y);
