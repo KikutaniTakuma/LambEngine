@@ -66,7 +66,7 @@ RenderingManager::RenderingManager() {
 	std::unique_ptr<Luminate> luminate = std::make_unique<Luminate>();
 	luminate->Init();
 	luminate_ = luminate.release();
-	luminanceThreshold = 1.2f;
+	luminanceThreshold = 1.4f;
 	luminate_->SetLuminanceThreshold(luminanceThreshold);
 
 	luminateTexture_ = std::make_unique<PeraRender>();
@@ -332,6 +332,12 @@ void RenderingManager::SetHsv(const Vector3& hsv)
 	Vector3 rgb = HSVToRGB(hsv_);
 	Vector4 rgba = { rgb, 1.0f };
 	rgbaTexture_->color = rgba.GetColorRGBA();
+}
+
+void RenderingManager::SetColor(const Vector4& color)
+{
+	hsv_ = RGBToHSV(color.GetVector3());
+	rgbaTexture_->color = color.GetColorRGBA();
 }
 
 void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {

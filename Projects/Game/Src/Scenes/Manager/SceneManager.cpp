@@ -31,8 +31,6 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 
 
 	fade_ = std::make_unique<Fade>();
-	fadeCamera_.pos.z = -10.0f;
-	fadeCamera_.Update();
 
 	frameInfo_ = FrameInfo::GetInstance();
 	input_ = Input::GetInstance();
@@ -148,8 +146,6 @@ void SceneManager::Draw() {
 	if (scene_) {
 		scene_->Draw();
 	}
-
-	fade_->Draw(fadeCamera_.GetViewOthographics());
 }
 
 bool SceneManager::IsEnd() const {

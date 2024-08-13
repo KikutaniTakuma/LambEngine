@@ -62,12 +62,6 @@ public:
 	/// </summary>
 	void Update();
 
-	/// <summary>
-	/// 描画関数
-	/// </summary>
-	/// <param name="viewProjection">カメラ行列</param>
-	void Draw(const Mat4x4& viewProjection);
-
 private:
 	/// <summary>
 	/// フェードインしてるか
@@ -79,9 +73,7 @@ private:
 	/// </summary>
 	Lamb::Flg isOutStart_;
 
-	Lamb::SafePtr<Texture2D> tex_;
-	std::unique_ptr<Transform> transform;
-	uint32_t color_;
+	Vector4 color_;
 
 	Easeing ease_;
 	/// <summary>

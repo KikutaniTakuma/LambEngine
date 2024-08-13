@@ -1,6 +1,7 @@
 #include "Fade.h"
 #include "Utils/EngineInfo.h"
-#include "Drawers/DrawerManager.h"
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
+#include "Utils/HSV.h"
 #include "imgui.h"
 
 #include <climits>
@@ -8,15 +9,9 @@
 Fade::Fade() :
 	isInStart_(false),
 	isOutStart_(false),
-	tex_(),
-	transform(),
-	color_(std::numeric_limits<uint32_t>::max()),
+	color_(Vector4::kIdentity),
 	fadeTime_(0.75f)
 {
-	tex_ = DrawerManager::GetInstance()->GetTexture2D();
-	transform = std::make_unique<Transform>();
-	transform->scale = Lamb::ClientSize();
-	transform->translate.z = 0.0f;
 }
 
 void Fade::OutStart() {
@@ -58,10 +53,10 @@ bool Fade::IsActive() const
 
 void Fade::Update() {
 	if (isInStart_) {
-		color_ = ColorLerp(0xff, 0x00, ease_.GetT());
+		color_ = ColorLerp(Vector4::kZero + Vector4::kWIdentity, Vector4::kIdentity, ease_.GetT());
 	}
 	else if (isOutStart_) {
-		color_ = ColorLerp(0x00, 0xff, ease_.GetT());
+		color_ = ColorLerp(Vector4::kIdentity, Vector4::kZero + Vector4::kWIdentity, ease_.GetT());
 	}
 
 	ease_.Update();
@@ -70,9 +65,10 @@ void Fade::Update() {
 		isInStart_ = false;
 		isOutStart_ = false;
 	}
-}
-void Fade::Draw([[maybe_unused]] const Mat4x4& viewProjection) {
 	if (isInStart_ || isOutStart_) {
-		tex_->Draw(transform->GetMatrix(), Mat4x4::kIdentity, viewProjection, 0u, color_, BlendType::kUnenableDepthNormal);
+		RenderingManager::GetInstance()->SetColor(color_);
+	}
+	else {
+		RenderingManager::GetInstance()->SetColor(Vector4::kIdentity);
 	}
 }

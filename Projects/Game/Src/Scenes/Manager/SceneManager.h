@@ -64,8 +64,6 @@ private:
 
 	std::unique_ptr<Fade> fade_;
 
-	Camera fadeCamera_;
-
 	class FrameInfo* frameInfo_ = nullptr;
 	Input* input_ = nullptr;
 

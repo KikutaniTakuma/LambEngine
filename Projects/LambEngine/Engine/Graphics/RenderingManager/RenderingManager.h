@@ -49,6 +49,7 @@ public:
 	void SetCameraPos(const Vector3& cameraPos);
 	void SetCameraMatrix(const Mat4x4& camera);
 	void SetHsv(const Vector3& hsv);
+	void SetColor(const Vector4& color);
 
 	void Debug(const std::string& guiName);
 
