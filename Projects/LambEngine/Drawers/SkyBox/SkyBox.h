@@ -7,7 +7,8 @@
 class SkyBox {
 public:
 	struct ShaderData {
-		Mat4x4 wvpMat;
+		Mat4x4 worldMat;
+		Mat4x4 viewProjectionMat;
 		Vector4 color;
 	};
 

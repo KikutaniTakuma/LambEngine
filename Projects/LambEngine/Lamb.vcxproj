@@ -120,6 +120,7 @@
   <ItemGroup>
     <ClCompile Include="AudioManager\AudioManager.cpp" />
     <ClCompile Include="AudioManager\Audio\Audio.cpp" />
+    <ClCompile Include="Drawers\AirSkyBox\AirSkyBox.cpp" />
     <ClCompile Include="Drawers\AnimationModel\AnimationModel.cpp" />
     <ClCompile Include="Drawers\BaseDrawer.cpp" />
     <ClCompile Include="Drawers\DrawerManager.cpp" />
@@ -196,6 +197,7 @@
   <ItemGroup>
     <ClInclude Include="AudioManager\AudioManager.h" />
     <ClInclude Include="AudioManager\Audio\Audio.h" />
+    <ClInclude Include="Drawers\AirSkyBox\AirSkyBox.h" />
     <ClInclude Include="Drawers\AnimationModel\AnimationModel.h" />
     <ClInclude Include="Drawers\BaseDrawer.h" />
     <ClInclude Include="Drawers\DrawerManager.h" />

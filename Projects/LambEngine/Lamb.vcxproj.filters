@@ -217,6 +217,9 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\Luminate\Luminate.cpp">
       <Filter>Engine\Graphics\PipelineObject\Luminate</Filter>
     </ClCompile>
+    <ClCompile Include="Drawers\AirSkyBox\AirSkyBox.cpp">
+      <Filter>Drawers\AirSkyBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -404,6 +407,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\Luminate">
       <UniqueIdentifier>{c2218a0e-ba38-4d0a-beb0-7e7194492ba5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawers\AirSkyBox">
+      <UniqueIdentifier>{ca4daa01-23b2-4a95-840d-4ee7e9337717}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -664,6 +670,9 @@
     </ClInclude>
     <ClInclude Include="Utils\HSV.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawers\AirSkyBox\AirSkyBox.h">
+      <Filter>Drawers\AirSkyBox</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

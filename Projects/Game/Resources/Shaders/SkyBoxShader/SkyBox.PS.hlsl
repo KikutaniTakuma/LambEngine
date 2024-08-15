@@ -1,5 +1,8 @@
 #include "SkyBox.hlsli"
 
+TextureCube<float32_t4> gCubeTex : register(t0);
+SamplerState smp : register(s0);
+
 PixelOutPut main(VertexOutput input)
 {
 	PixelOutPut output;

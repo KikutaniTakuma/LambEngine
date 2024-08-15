@@ -4,7 +4,8 @@ VertexOutput main(VertexInput input)
 {
     VertexOutput output;
 
-    output.position = mul(input.position, gMaterialData.wvpMat);
+    output.worldPosition = mul(input.position, gMaterialData.worlcdMat);
+    output.position = mul(output.worldPosition, gMaterialData.viewProjectionMat);
 	output.texcoord = input.position.xyz;
 
     return output;

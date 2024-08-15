@@ -1,4 +1,4 @@
-#include "SkyBox.h"
+#include "AirSkyBox.h"
 #include <array>
 #include "Math/MathCommon.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
@@ -8,24 +8,25 @@
 
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
 
-SkyBox::~SkyBox()
+AirSkyBox::~AirSkyBox()
 {
-    if (cbuffer_) {
+    if (shaderData_) {
         Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-        heap->ReleaseView(cbuffer_->GetHandleUINT());
+        heap->ReleaseView(shaderData_->GetHandleUINT());
+        heap->ReleaseView(atmosphericParams_->GetHandleUINT());
     }
 }
 
-void SkyBox::Load(const std::string& fileName) {
+void AirSkyBox::Load() {
     std::array vertexData = {
-        Vector4(  1.0f,  1.0f, -1.0f, 1.0f ),
-        Vector4(  1.0f, -1.0f, -1.0f, 1.0f ),
-        Vector4(  1.0f,  1.0f,  1.0f, 1.0f ),
-        Vector4(  1.0f, -1.0f,  1.0f, 1.0f ),
-        Vector4( -1.0f,  1.0f, -1.0f, 1.0f ),
-        Vector4( -1.0f, -1.0f, -1.0f, 1.0f ),
-        Vector4( -1.0f,  1.0f,  1.0f, 1.0f ),
-        Vector4( -1.0f, -1.0f,  1.0f, 1.0f ),
+        Vector4(1.0f,  1.0f, -1.0f, 1.0f),
+        Vector4(1.0f, -1.0f, -1.0f, 1.0f),
+        Vector4(1.0f,  1.0f,  1.0f, 1.0f),
+        Vector4(1.0f, -1.0f,  1.0f, 1.0f),
+        Vector4(-1.0f,  1.0f, -1.0f, 1.0f),
+        Vector4(-1.0f, -1.0f, -1.0f, 1.0f),
+        Vector4(-1.0f,  1.0f,  1.0f, 1.0f),
+        Vector4(-1.0f, -1.0f,  1.0f, 1.0f),
     };
 
     std::array indexData = {
@@ -72,28 +73,26 @@ void SkyBox::Load(const std::string& fileName) {
     vertexView_.StrideInBytes = static_cast<uint32_t>(sizeof(Vector4));
     vertexView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 
-    Lamb::SafePtr textureMangaer = TextureManager::GetInstance();
-    textureMangaer->LoadTexture(fileName);
-    texture_ = textureMangaer->GetTexture(fileName);
-
     Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-    if (cbuffer_) {
-        cbuffer_.reset();
-        heap->ReleaseView(cbuffer_->GetHandleUINT());
+    if (shaderData_) {
+        shaderData_.reset();
+        heap->ReleaseView(shaderData_->GetHandleUINT());
     }
 
-    cbuffer_ = std::make_unique<ConstantBuffer<ShaderData>>();
+    shaderData_ = std::make_unique<ConstantBuffer<ShaderData>>();
+    atmosphericParams_ = std::make_unique<ConstantBuffer<AtmosphericParams>>();
 
-    heap->BookingHeapPos(1u);
-    heap->CreateView(*cbuffer_);
+    heap->BookingHeapPos(2u);
+    heap->CreateView(*shaderData_);
+    heap->CreateView(*atmosphericParams_);
 
     CreateGraphicsPipeline();
 }
 
-void SkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color) {
-    (*cbuffer_)->worldMat = worldMat;
-    (*cbuffer_)->viewProjectionMat = cameraMat;
-    (*cbuffer_)->color = color;
+void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color) {
+    (*shaderData_)->worldMat = worldMat;
+    (*shaderData_)->viewProjectionMat = cameraMat;
+    (*shaderData_)->color = color;
 
     // コマンドリスト
     ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
@@ -102,9 +101,8 @@ void SkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t colo
     pipeline_->Use();
 
     // ライト構造体
-    commandlist->SetGraphicsRootDescriptorTable(0, cbuffer_->GetHandleGPU());
-    // テクスチャ
-    commandlist->SetGraphicsRootDescriptorTable(1, texture_->GetHandleGPU());
+    commandlist->SetGraphicsRootDescriptorTable(0, shaderData_->GetHandleGPU());
+    commandlist->SetGraphicsRootDescriptorTable(1, atmosphericParams_->GetHandleGPU());
 
     // 頂点バッファセット
     commandlist->IASetVertexBuffers(0, 1, &vertexView_);
@@ -114,31 +112,30 @@ void SkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t colo
     commandlist->DrawIndexedInstanced(kIndexNumber_, 1, 0, 0, 0);
 }
 
-D3D12_GPU_DESCRIPTOR_HANDLE SkyBox::GetHandle() const
+void AirSkyBox::SetAtmosphericParams(const AtmosphericParams& atmosphericParams)
 {
-    return texture_->GetHandleGPU();
+    **atmosphericParams_ = atmosphericParams;
 }
 
-void SkyBox::CreateGraphicsPipeline() {
+void AirSkyBox::CreateGraphicsPipeline() {
     Shader shader = {};
 
     ShaderManager* const shaderMaanger = ShaderManager::GetInstance();
 
 
-    shader.vertex = shaderMaanger->LoadVertexShader("./Resources/Shaders/SkyBoxShader/SkyBox.VS.hlsl");
-    shader.pixel = shaderMaanger->LoadPixelShader("./Resources/Shaders/SkyBoxShader/SkyBox.PS.hlsl");
+    shader.vertex = shaderMaanger->LoadVertexShader("./Resources/Shaders/SkyBoxShader/AirSkyBox.VS.hlsl");
+    shader.pixel = shaderMaanger->LoadPixelShader("./Resources/Shaders/SkyBoxShader/AirSkyBox.PS.hlsl");
 
     std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
     cbvRange[0].NumDescriptors = 1;
     cbvRange[0].BaseShaderRegister = 0;
     cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
     cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-
-    std::array<D3D12_DESCRIPTOR_RANGE, 1> srvRange = {};
-    srvRange[0].NumDescriptors = 1;
-    srvRange[0].BaseShaderRegister = 0;
-    srvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
-    srvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+    std::array<D3D12_DESCRIPTOR_RANGE, 1> atmosphericParamsRange = {};
+    atmosphericParamsRange[0].NumDescriptors = 1;
+    atmosphericParamsRange[0].BaseShaderRegister = 1;
+    atmosphericParamsRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
+    atmosphericParamsRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 
 
     std::array<D3D12_ROOT_PARAMETER, 2> rootPrams = {};
@@ -148,9 +145,10 @@ void SkyBox::CreateGraphicsPipeline() {
     rootPrams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
     rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootPrams[1].DescriptorTable.NumDescriptorRanges = UINT(srvRange.size());
-    rootPrams[1].DescriptorTable.pDescriptorRanges = srvRange.data();
+    rootPrams[1].DescriptorTable.NumDescriptorRanges = UINT(atmosphericParamsRange.size());
+    rootPrams[1].DescriptorTable.pDescriptorRanges = atmosphericParamsRange.data();
     rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
 
     RootSignature::Desc desc;
     desc.rootParameter = rootPrams.data();
