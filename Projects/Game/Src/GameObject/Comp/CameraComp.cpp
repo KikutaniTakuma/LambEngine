@@ -71,14 +71,11 @@ void CameraComp::Debug([[maybe_unused]] const std::string& guiName) {
 				transform_->translate.y += mouseVelocity.y * translateSpeed_ * object_.GetDeltaTime() * translateSigned;
 			}
 
-			if (eulerRotate_ == Vector3::kZero) {
-				eulerRotate_ = transform_->rotate.ToEuler();
-			}
-
 			if (not isOnImGui && not isShift && isMiddle) {
+				eulerRotate_ = Vector3::kZero;
 				eulerRotate_.x -= mouseVelocity.y * rotateSpeed_ * object_.GetDeltaTime() * rotateSigned;
 				eulerRotate_.y += mouseVelocity.x * rotateSpeed_ * object_.GetDeltaTime() * rotateSigned;
-				transform_->rotate = Quaternion::EulerToQuaternion(eulerRotate_);
+				transform_->rotate *= Quaternion::EulerToQuaternion(eulerRotate_);
 			}
 
 			float isSigned = mouse->GetWheelVelocity();

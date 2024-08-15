@@ -107,11 +107,11 @@ RenderingManager::RenderingManager() {
 	outlineTexture_ = std::make_unique<PeraRender>();
 	outlineTexture_->Initialize(outlinePipeline_.get());
 
-	skyBox_ = std::make_unique<SkyBox>();
-	skyBox_->Load("./Resources/Common/SkyBox/sky.dds");
+	skyBox_ = std::make_unique<AirSkyBox>();
+	skyBox_->Load();
 	transform_.scale *= 500.0f;
 
-	deferredRendering_->SetEnvironmentHandle(skyBox_->GetHandle());
+	//deferredRendering_->SetEnvironmentHandle(skyBox_->GetHandle());
 }
 
 RenderingManager::~RenderingManager()
@@ -182,6 +182,8 @@ void RenderingManager::FrameEnd()
 void RenderingManager::Draw() {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
+	deferredRenderingData_.directionLight.ligDirection = atmosphericParams_.lightDirection;
+
 	/// ====================================================================================
 
 	// 色、法線、ワールドポジション用レンダーターゲットをセット
@@ -216,6 +218,8 @@ void RenderingManager::Draw() {
 	);
 	// 深度値付きのlineを描画
 	Line::AllDraw(true);
+
+	skyBox_->SetAtmosphericParams(atmosphericParams_);
 
 	DrawSkyBox();
 
@@ -319,6 +323,7 @@ DepthBuffer& RenderingManager::GetDepthBuffer()
 void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 	deferredRenderingData_.eyePos = cameraPos;
 	transform_.translate = cameraPos;
+	atmosphericParams_.cameraPosition = cameraPos;
 }
 
 void RenderingManager::SetCameraMatrix(const Mat4x4& camera)
@@ -363,6 +368,15 @@ void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {
 			gaussianPipeline_[0]->SetGaussianState(gaussianBlurStateHorizontal_);
 			gaussianPipeline_[1]->SetGaussianState(gaussianBlurStateVertical_);
 			luminate_->SetLuminanceThreshold(luminanceThreshold);
+
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("AtmosphericParams")) {
+			ImGui::DragFloat("湿度", &atmosphericParams_.humidity, 0.001f, 0.0f, 1.0f);
+			ImGui::DragFloat("時間", &atmosphericTime_, 0.01f, 6.0f, 18.0f);
+			float32_t rotate = std::lerp(0.0f, 180.0f * Lamb::Math::toRadian<float>, 1.0f - (atmosphericTime_ - 6.0f) / 12.0f);
+			atmosphericParams_.lightDirection = Vector3::kXIdentity * Quaternion::MakeRotateZAxis(rotate);
 
 			ImGui::TreePop();
 		}

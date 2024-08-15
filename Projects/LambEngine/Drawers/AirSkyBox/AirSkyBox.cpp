@@ -123,7 +123,7 @@ void AirSkyBox::CreateGraphicsPipeline() {
     ShaderManager* const shaderMaanger = ShaderManager::GetInstance();
 
 
-    shader.vertex = shaderMaanger->LoadVertexShader("./Resources/Shaders/SkyBoxShader/AirSkyBox.VS.hlsl");
+    shader.vertex = shaderMaanger->LoadVertexShader("./Resources/Shaders/SkyBoxShader/SkyBox.VS.hlsl");
     shader.pixel = shaderMaanger->LoadPixelShader("./Resources/Shaders/SkyBoxShader/AirSkyBox.PS.hlsl");
 
     std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};

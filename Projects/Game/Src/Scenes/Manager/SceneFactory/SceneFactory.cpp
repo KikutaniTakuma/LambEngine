@@ -2,6 +2,7 @@
 #include "Scenes/GameScene/GameScene.h"
 #include "Scenes/TitleScene/TitleScene.h"
 #include "Scenes/SelectStageScene/SelectStageScene.h"
+#include "Scenes/TestScene/TestScene.h"
 
 SceneFactory::SceneFactory():
 	createScene_{}
@@ -34,5 +35,9 @@ void SceneFactory::CreateFunctions() {
 	createScene_[BaseScene::ID::StageSelect] =
 		[]()->BaseScene* {
 		return new SelectStageScene();
+		};
+	createScene_[BaseScene::ID::Test] =
+		[]()->BaseScene* {
+		return new TestScene();
 		};
 }

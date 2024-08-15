@@ -8,7 +8,7 @@
 
 #include "Engine/Graphics/PipelineObject/DeferredRendering/DeferredRendering.h"
 
-#include "Drawers/SkyBox/SkyBox.h"
+#include "Drawers/AirSkyBox/AirSkyBox.h"
 
 #include <list>
 
@@ -121,11 +121,12 @@ private:
 
 	
 	// skybox
-	std::unique_ptr<SkyBox> skyBox_;
+	std::unique_ptr<AirSkyBox> skyBox_;
 	QuaternionTransform transform_;
+	AirSkyBox::AtmosphericParams atmosphericParams_;
+	float32_t atmosphericTime_ = 6.0f;
 
 	Mat4x4 cameraMatrix_;
-
 
 	/// 
 	/// その他ポストエフェクトは増える

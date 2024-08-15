@@ -3,6 +3,7 @@
 #include "Math/Mat4x4.h"
 #include "Math/Vector4.h"
 #include "Math/Vector3.h"
+#include "Math/MathCommon.h"
 #include "Engine/Buffer/ConstantBuffer.h"
 
 class AirSkyBox {
@@ -10,17 +11,17 @@ public:
 	struct ShaderData {
 		Mat4x4 worldMat;
 		Mat4x4 viewProjectionMat;
-		Vector4 color;
+		Vector4 color = 0xffffffff;
 	};
 
 	struct AtmosphericParams {
 		float32_t3 cameraPosition;   // カメラの位置
-		float32_t3 lightDirection;   // 太陽光の方向（正規化ベクトル）
-		float32_t atmosphereHeight;  // 大気の高さ
-		float32_t humidity;          // 大気の湿度
-		float32_t3 rayleighScattering; // Rayleigh散乱係数
-		float32_t mieScattering;     // Mie散乱係数
-		float32_t mieG;              // Mie散乱位相関数のg値（0から1の範囲）
+		float32_t atmosphereHeight = 100000.0f;  // 大気の高さ
+		float32_t3 lightDirection = -Vector3::kXIdentity;   // 太陽光の方向（正規化ベクトル）
+		float32_t humidity = 0.166f;          // 大気の湿度
+		float32_t3 rayleighScattering = { static_cast<float32_t>(5.8e-6) ,static_cast<float32_t>(13.5e-6) ,static_cast<float32_t>(33.1e-6) }; // Rayleigh散乱係数
+		float32_t mieScattering = static_cast<float32_t>(2e-5);     // Mie散乱係数
+		float32_t mieG = 0.76f;              // Mie散乱位相関数のg値（0から1の範囲）
 	};
 
 public:

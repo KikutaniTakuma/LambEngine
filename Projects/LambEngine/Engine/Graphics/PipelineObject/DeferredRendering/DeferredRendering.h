@@ -55,9 +55,9 @@ public:
 	void SetWoprldPositionHandle(D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle) {
 		worldPositionTextureHandle_ = worldPositionTextureHandle;
 	}
-	void SetEnvironmentHandle(D3D12_GPU_DESCRIPTOR_HANDLE environmentTextureHandle) {
+	/*void SetEnvironmentHandle(D3D12_GPU_DESCRIPTOR_HANDLE environmentTextureHandle) {
 		environmentTextureHandle_ = environmentTextureHandle;
-	}
+	}*/
 
 private:
 	ConstantBuffer<DeferredRenderingData> deferredRenderingData_;

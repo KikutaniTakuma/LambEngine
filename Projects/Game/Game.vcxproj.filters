@@ -242,6 +242,9 @@
     <ClCompile Include="Src\Scenes\SelectStageScene\SelectStageScene.cpp">
       <Filter>Scenes\SelectStageScene</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Scenes\TestScene\TestScene.cpp">
+      <Filter>Scenes\TestScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -306,6 +309,9 @@
     </Filter>
     <Filter Include="Scenes\SelectStageScene">
       <UniqueIdentifier>{870be350-11c6-4517-be78-62d28a3b67d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes\TestScene">
+      <UniqueIdentifier>{509f02f8-d848-4da3-bd97-134e93acdf86}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -560,6 +566,9 @@
     </ClInclude>
     <ClInclude Include="Src\Scenes\SelectStageScene\SelectStageScene.h">
       <Filter>Scenes\SelectStageScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Scenes\TestScene\TestScene.h">
+      <Filter>Scenes\TestScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

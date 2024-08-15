@@ -29,7 +29,7 @@ StructuredBuffer<PointLight> gPointLight : register(t0);
 Texture2D<float32_t4> gColorTexture : register(t1);
 Texture2D<float32_t4> gNormalTexture : register(t2);
 Texture2D<float32_t4> gWorldPositionTexture : register(t3);
-TextureCube<float32_t4> gCubeTex : register(t4);
+//TextureCube<float32_t4> gCubeTex : register(t4);
 
 // リニアサンプラー
 SamplerState gLinearSmp : register(s0);
@@ -45,7 +45,7 @@ PixelShaderOutPut main(Output input) {
     PixelShaderOutPut outputColor;
 
     float32_t3 eyePos = gDeferredRenderingState.eyePos;
-
+/*
     if(len != 0.0f){
         float32_t3 cameraToPosition = normalize(worldPosition.xyz - eyePos);
         float32_t3 reflectedVector = reflect(cameraToPosition, normal);
@@ -53,7 +53,7 @@ PixelShaderOutPut main(Output input) {
 
         color.rgb += environment.rgb * gDeferredRenderingState.environmentCoefficient;
     }
-
+*/
     if(gDeferredRenderingState.isDirectionLight == 1 && len != 0.0f){
         float32_t3 ligDirection = gDeferredRenderingState.directionLight.ligDirection;
         float32_t3 ligColor = gDeferredRenderingState.directionLight.ligColor;

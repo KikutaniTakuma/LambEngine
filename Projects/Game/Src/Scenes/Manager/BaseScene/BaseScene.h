@@ -23,6 +23,8 @@ public:
 		StageSelect,
 		Result,
 
+		Test,
+
 		kNum
 	};
 
