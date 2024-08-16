@@ -674,5 +674,8 @@
     <ClInclude Include="Drawers\AirSkyBox\AirSkyBox.h">
       <Filter>Drawers\AirSkyBox</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Unit.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
