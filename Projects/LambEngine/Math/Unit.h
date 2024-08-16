@@ -2,13 +2,13 @@
 
 // 1メートル基準
 
-static constexpr float mm = 0.001f;
-static constexpr float cm = 0.01f;
-static constexpr float dm = 0.1f;
-static constexpr float m = 1.0f;
+static constexpr float mm  = 0.001f;
+static constexpr float cm  = 0.01f;
+static constexpr float dm  = 0.1f;
+static constexpr float m   = 1.0f;
 static constexpr float dam = 10.0f;
-static constexpr float hm = 100.0f;
-static constexpr float km = 1000.0f;
+static constexpr float hm  = 100.0f;
+static constexpr float km  = 1000.0f;
 
 inline float operator""_mm(long double i) {
 	return static_cast<float>(i) * mm;
