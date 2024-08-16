@@ -38,7 +38,7 @@ void World::Initialize() {
 	SceneManager::Initialize();
 	sceneManager_ = SceneManager::GetInstance();
 
-	sceneManager_->Initialize(BaseScene::ID::Test, BaseScene::ID::Test);
+	sceneManager_->Initialize(BaseScene::ID::Title, BaseScene::ID::Test);
 
 	ParticleEditor::Initialize();
 	particleEditor_ = ParticleEditor::GetInstance();
