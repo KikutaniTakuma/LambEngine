@@ -111,7 +111,7 @@ RenderingManager::RenderingManager() {
 	skyBox_->Load();
 	transform_.scale *= 500.0f;
 
-	atmosphericTime_ = 12.0f;
+	atmosphericTime_ = 6.0f;
 
 	//deferredRendering_->SetEnvironmentHandle(skyBox_->GetHandle());
 }
@@ -184,7 +184,7 @@ void RenderingManager::FrameEnd()
 void RenderingManager::Draw() {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	//deferredRenderingData_.directionLight.ligDirection = atmosphericParams_.lightDirection;
+	deferredRenderingData_.directionLight.ligDirection = atmosphericParams_.lightDirection;
 
 	/// ====================================================================================
 
