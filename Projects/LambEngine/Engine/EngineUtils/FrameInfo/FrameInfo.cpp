@@ -147,6 +147,18 @@ void FrameInfo::End() {
 	auto nowTime = std::chrono::steady_clock::now();
 	reference_ = nowTime;
 
+#ifdef _DEBUG
+	if (frameCount_ < frameRateData_.size()) {
+		frameRateData_[frameCount_] = static_cast<float>(fps_);
+	}
+	else {
+		for (size_t i = 0; (i + 1) < frameRateData_.size(); i++) {
+			frameRateData_[i] = static_cast<float>(frameRateData_[i + 1]);
+		}
+		frameRateData_.back() = static_cast<float>(fps_);
+	}
+#endif // _DEBUG
+
 	if (frameDataDuration_ < std::chrono::duration_cast<std::chrono::seconds>(nowTime - frameDataDurationStartTime_)) {
 		frameDataDurationStartTime_ = nowTime;
 		frameDatas_.push(fps_);
@@ -216,6 +228,7 @@ void FrameInfo::Debug() {
 	bool isThisWindowActive = WindowFactory::GetInstance()->IsThisWindowaActive();
 	ImGui::Text(std::format("This Window Active : {}", isThisWindowActive).c_str());
 	ImGui::Text("Frame rate : %3.0lf fps", fps_);
+	ImGui::PlotLines("Frame", frameRateData_.data(), static_cast<int32_t>(frameRateData_.size()));
 	ImGui::Text("Delta Time : %.4lf", deltaTime_);
 	ImGui::Text("Frame Count : %llu", frameCount_);
 	ImGui::DragFloat("fps limit", &fpsLimit, 1.0f, 1.0f, static_cast<float>(kMaxMonitorFps_));

@@ -198,6 +198,8 @@ private:
 	bool isDebugStopGame_;
 	bool isOneFrameActive_;
 	bool isFixedDeltaTime_;
+
+	std::array<float, 180> frameRateData_ = {0.0f};
 #endif // _DEBUG
 
 };
