@@ -376,9 +376,9 @@ void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {
 
 		if (ImGui::TreeNode("AtmosphericParams")) {
 			ImGui::DragFloat("湿度", &atmosphericParams_.humidity, 0.001f, 0.0f, 1.0f);
-			ImGui::DragFloat("時間", &atmosphericTime_, 0.01f, 6.0f, 18.0f);
-			float32_t rotate = std::lerp(0.0f, 180.0f * Lamb::Math::toRadian<float>, 1.0f - (atmosphericTime_ - 6.0f) / 12.0f);
-			atmosphericParams_.lightDirection = Vector3::kXIdentity * Quaternion::MakeRotateZAxis(rotate);
+			ImGui::DragFloat("時間", &atmosphericTime_, 0.01f, 0.0f, 24.0f);
+			float32_t rotate = std::lerp(0.0f, 360.0f * Lamb::Math::toRadian<float>, atmosphericTime_ / 24.0f);
+			atmosphericParams_.lightDirection = -Vector3::kYIdentity * Quaternion::MakeRotateZAxis(rotate);
 
 			ImGui::TreePop();
 		}
