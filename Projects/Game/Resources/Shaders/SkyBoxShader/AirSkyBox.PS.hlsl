@@ -42,6 +42,7 @@ PixelOutPut main(VertexOutput input)
 
 	float32_t3 worldPos = input.worldPosition.xyz;
     float32_t3 viewDirection = normalize(worldPos - gAtmosphericParams.cameraPosition);
+
     
     // カメラの高さを計算
     float32_t height = gAtmosphericParams.cameraPosition.y;
@@ -64,6 +65,9 @@ PixelOutPut main(VertexOutput input)
 
 	PixelOutPut output;
 	output.color.rgb = airColor * gMaterialData.color.xyz;
+	if(1.0f- 1.0e-5 <= dot(viewDirection, gAtmosphericParams.lightDirection)){
+		output.color.rgb = float32_t3(1.0f, 1.0f, 1.0f);
+	}
 
 	output.color.a = 1.0f;
 

@@ -38,7 +38,6 @@ public:
 	/// </summary>
 	void Start();
 
-
 	/// <summary>
 	/// フレーム終了時関数
 	/// </summary>
