@@ -64,21 +64,21 @@ PixelOutPut main(VertexOutput input)
 
 	float32_t3 v3Start = cameraPos;
 	float32_t fCameraHeight = length(cameraPos);
-	float32_t fStartAngle = dot(v3Ray, v3Start) / fCameraHeight;
+	float32_t fStartAngle = dot(v3Ray, v3Start) * rcp(fCameraHeight);
 	float32_t fStartDepth = exp(fScaleOverScaleDepth * (fInnerRadius - fCameraHeight));
 	float32_t fStartOffset = fStartDepth * Scale(fStartAngle);
  
-	float32_t fSampleLength = fFar / fSamples;
+	float32_t fSampleLength = fFar * rcp(fSamples);
 	float32_t fScaledLength = fSampleLength * fScale;
 	float32_t3 v3SampleRay = v3Ray * fSampleLength;
-	float32_t3 v3SamplePoint = v3Start + v3SampleRay * 0.5;
+	float32_t3 v3SamplePoint = v3Start + v3SampleRay * 0.5f;
  
 	float32_t3 v3FrontColor = 0.0;
 	for(int32_t n = 0; n < int32_t(fSamples); n++){
 		float32_t fHeight = length(v3SamplePoint);
 		float32_t fDepth = exp(fScaleOverScaleDepth * (fInnerRadius - fHeight));
-		float32_t fLightAngle = dot(lightDirection, v3SamplePoint) / fHeight;
-		float32_t fCameraAngle = dot(v3Ray, v3SamplePoint) / fHeight;
+		float32_t fLightAngle = dot(lightDirection, v3SamplePoint) * rcp(fHeight);
+		float32_t fCameraAngle = dot(v3Ray, v3SamplePoint) * rcp(fHeight);
 		float32_t fScatter = (fStartOffset + fDepth * (Scale(fLightAngle) - Scale(fCameraAngle)));
 		float32_t3 v3Attenuate = exp(-fScatter * (v3InvWaveLength * fKr4PI + fKm4PI));
 		v3FrontColor += v3Attenuate * (fDepth * fScaledLength);
@@ -89,11 +89,11 @@ PixelOutPut main(VertexOutput input)
 	float32_t3 c1 = v3FrontColor * fKmESun;
 	float32_t3 v3Direction = cameraPos - worldPos;
  
-	float32_t fcos = dot(lightDirection, v3Direction) / length(v3Direction);
+	float32_t fcos = dot(lightDirection, v3Direction) * rcp(length(v3Direction));
 	float32_t fcos2 = fcos * fcos;
  
 	float32_t rayleighPhase = 0.75f * (1.0f + fcos2);
-	float32_t miePhase = 1.5f * ((1.0f - g2) / (2.0f + g2)) * (1.0f + fcos2) / pow(1.0f + g2 - 2.0f * g * fcos, 1.5f);
+	float32_t miePhase = 1.5f * ((1.0f - g2) * rcp(2.0f + g2)) * (1.0f + fcos2) * rcp(pow(1.0f + g2 - 2.0f * g * fcos, 1.5f));
 
 	PixelOutPut output;
 	output.color.rgb = rayleighPhase * c0 + miePhase * c1;
