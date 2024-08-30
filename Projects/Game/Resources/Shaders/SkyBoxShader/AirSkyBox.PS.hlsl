@@ -3,10 +3,9 @@
 
 struct AtmosphericParams {
 	float32_t3 cameraPosition;   // カメラの位置
-	float32_t atmosphereHeight;  // 大気の高さ
+	float32_t pad;
 	float32_t3 lightDirection;   // 太陽光の方向（正規化ベクトル）
-	float32_t humidity;          // 大気の湿度
-	float32_t3 rayleighScattering; // Rayleigh散乱係数
+	float32_t rayleighScattering; // Rayleigh散乱係数
 	float32_t mieScattering;     // Mie散乱係数
 	float32_t mieG;              // Mie散乱位相関数のg値（0から1の範囲）
 };
@@ -15,30 +14,22 @@ ConstantBuffer<AtmosphericParams> gAtmosphericParams : register(b1);
 
 static const float32_t InnerRadius = 10000.0f;
 static const float32_t OuterRadius = 10250.0f;
- 
-static const float32_t Kr = 0.0025f;
-static const float32_t Km = 0.001f;
 
 static const float32_t fSamples = 2.0f;
  
-static const float32_t3 three_primary_colors = float32_t3(0.68f, 0.55f, 0.44f);
-static const float32_t3 v3InvWaveLength = 1.0f / pow(three_primary_colors, 4.0f);
-static const float32_t fOuterRadius = OuterRadius;
-static const float32_t fInnerRadius = InnerRadius;
-static const float32_t fESun = 20.0f;
-static const float32_t fKrESun = Kr * fESun;
-static const float32_t fKmESun = Km * fESun;
-static const float32_t fKr4PI = Kr * 4.0f * PI;
-static const float32_t fKm4PI = Km * 4.0f * PI;
-static const float32_t fScale = 1.0f / (OuterRadius - InnerRadius);
-static const float32_t fScaleDepth = 0.25f;
-static const float32_t fScaleOverScaleDepth = fScale / fScaleDepth;
-static const float32_t g = -0.999f;
-static const float32_t g2 = g * g;
+static const float32_t3 kThreePrimaryColors = float32_t3(0.68f, 0.55f, 0.44f);
+static const float32_t3 kV3InvWaveLength = 1.0f / pow(kThreePrimaryColors, 4.0f);
+static const float32_t kOuterRadius = OuterRadius;
+static const float32_t kInnerRadius = InnerRadius;
+static const float32_t kESun = 20.0f;
+
+static const float32_t kScale = 1.0f / (OuterRadius - InnerRadius);
+static const float32_t kScaleDepth = 0.25f;
+static const float32_t kScaleOverScaleDepth = kScale / kScaleDepth;
 
 float32_t Scale(float32_t fcos){
 	float32_t x = 1.0 - fcos;
-	return fScaleDepth * exp(-0.00287f + x * (0.459f + x * (3.83f + x * (-6.8f + x * 5.25f))));
+	return kScaleDepth * exp(-0.00287f + x * (0.459f + x * (3.83f + x * (-6.8f + x * 5.25f))));
 }
 
 float32_t3 IntersectionPos(float32_t3 dir, float32_t3 a, float32_t radius) {
@@ -51,10 +42,20 @@ float32_t3 IntersectionPos(float32_t3 dir, float32_t3 a, float32_t radius) {
 
 PixelOutPut main(VertexOutput input)
 {
+	const float32_t g = gAtmosphericParams.mieG;
+	const float32_t g2 = g * g;
+	const float32_t kRayleighScattering = gAtmosphericParams.rayleighScattering;
+	const float32_t kMieScattering = gAtmosphericParams.mieScattering;
+
+	const float32_t kRayleighSun = kRayleighScattering * kESun;
+	const float32_t kMieSun = kMieScattering * kESun;
+	const float32_t kRayleigh4PI = kRayleighScattering * 4.0f * PI;
+	const float32_t kMie4PI = kMieScattering * 4.0f * PI;
+
 	float32_t3 worldPos = input.worldPosition.xyz;
-	worldPos =IntersectionPos(normalize(worldPos), float3(0.0, fInnerRadius, 0.0), fOuterRadius);
+	worldPos = IntersectionPos(normalize(worldPos), float32_t3(0.0f, kInnerRadius, 0.0f), kOuterRadius);
 	float32_t3 cameraPos = gAtmosphericParams.cameraPosition;
-	cameraPos.y += fInnerRadius;
+	cameraPos.y += kInnerRadius;
     float32_t3 viewDirection = normalize(worldPos - cameraPos);
     float32_t3 lightDirection = normalize(gAtmosphericParams.lightDirection + viewDirection);
 
@@ -65,28 +66,28 @@ PixelOutPut main(VertexOutput input)
 	float32_t3 v3Start = cameraPos;
 	float32_t fCameraHeight = length(cameraPos);
 	float32_t fStartAngle = dot(v3Ray, v3Start) * rcp(fCameraHeight);
-	float32_t fStartDepth = exp(fScaleOverScaleDepth * (fInnerRadius - fCameraHeight));
+	float32_t fStartDepth = exp(kScaleOverScaleDepth * (kInnerRadius - fCameraHeight));
 	float32_t fStartOffset = fStartDepth * Scale(fStartAngle);
  
 	float32_t fSampleLength = fFar * rcp(fSamples);
-	float32_t fScaledLength = fSampleLength * fScale;
+	float32_t fScaledLength = fSampleLength * kScale;
 	float32_t3 v3SampleRay = v3Ray * fSampleLength;
 	float32_t3 v3SamplePoint = v3Start + v3SampleRay * 0.5f;
  
 	float32_t3 v3FrontColor = 0.0;
 	for(int32_t n = 0; n < int32_t(fSamples); n++){
 		float32_t fHeight = length(v3SamplePoint);
-		float32_t fDepth = exp(fScaleOverScaleDepth * (fInnerRadius - fHeight));
+		float32_t fDepth = exp(kScaleOverScaleDepth * (kInnerRadius - fHeight));
 		float32_t fLightAngle = dot(lightDirection, v3SamplePoint) * rcp(fHeight);
 		float32_t fCameraAngle = dot(v3Ray, v3SamplePoint) * rcp(fHeight);
 		float32_t fScatter = (fStartOffset + fDepth * (Scale(fLightAngle) - Scale(fCameraAngle)));
-		float32_t3 v3Attenuate = exp(-fScatter * (v3InvWaveLength * fKr4PI + fKm4PI));
+		float32_t3 v3Attenuate = exp(-fScatter * (kV3InvWaveLength * kRayleigh4PI + kMie4PI));
 		v3FrontColor += v3Attenuate * (fDepth * fScaledLength);
 		v3SamplePoint += v3SampleRay;
 	}
  
-	float32_t3 c0 = v3FrontColor * (v3InvWaveLength * fKrESun);
-	float32_t3 c1 = v3FrontColor * fKmESun;
+	float32_t3 c0 = v3FrontColor * (kV3InvWaveLength * kRayleighSun);
+	float32_t3 c1 = v3FrontColor * kMieSun;
 	float32_t3 v3Direction = cameraPos - worldPos;
  
 	float32_t fcos = dot(lightDirection, v3Direction) * rcp(length(v3Direction));
