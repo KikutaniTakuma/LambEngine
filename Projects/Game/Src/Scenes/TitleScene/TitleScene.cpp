@@ -95,6 +95,8 @@ void TitleScene::Initialize() {
 
     cursor_ = std::make_unique<Cursor>();
     cursor_->Initialize();
+
+    renderingManager_->SetTime(11.0f);
 }
 
 void TitleScene::Finalize() {
@@ -129,8 +131,8 @@ void TitleScene::Update() {
     }
 
 
-    RenderingManager::GetInstance()->SetCameraPos(currentCamera_->GetPos());
-    RenderingManager::GetInstance()->SetCameraMatrix(currentCamera_->GetViewProjection());
+    renderingManager_->SetCameraPos(currentCamera_->GetPos());
+    renderingManager_->SetCameraMatrix(currentCamera_->GetViewProjection());
 
     waveData_.ripplesPoint = ship_->pos;
     waveData_.time += Lamb::DeltaTime();

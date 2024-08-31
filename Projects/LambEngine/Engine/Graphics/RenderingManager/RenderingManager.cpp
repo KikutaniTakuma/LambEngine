@@ -114,6 +114,8 @@ RenderingManager::RenderingManager() {
 	atmosphericTime_ = 6.0f;
 
 	//deferredRendering_->SetEnvironmentHandle(skyBox_->GetHandle());
+
+	SetTime(8.0f);
 }
 
 RenderingManager::~RenderingManager()
@@ -345,6 +347,12 @@ void RenderingManager::SetColor(const Vector4& color)
 {
 	hsv_ = RGBToHSV(color.GetVector3());
 	rgbaTexture_->color = color.GetColorRGBA();
+}
+
+void RenderingManager::SetTime(float32_t time) {
+	atmosphericTime_ = time;
+	float32_t rotate = std::lerp(0.0f, 360.0f * Lamb::Math::toRadian<float>, std::fmodf(atmosphericTime_, 24.0f) / 24.0f);
+	atmosphericParams_.lightDirection = -Vector3::kYIdentity * Quaternion::MakeRotateZAxis(rotate);
 }
 
 void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {

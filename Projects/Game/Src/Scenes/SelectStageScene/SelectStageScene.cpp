@@ -139,6 +139,8 @@ void SelectStageScene::Initialize() {
     cursor_->Initialize();
 
     currentCamera_->pos.z = -10.0f;
+
+    renderingManager_->SetTime(7.0f);
 }
 
 void SelectStageScene::Finalize() {
@@ -304,7 +306,8 @@ void SelectStageScene::Update() {
     ImGui::End();
 #endif // _DEBUG
 
-   
+    renderingManager_->SetCameraPos(currentCamera_->GetPos());
+    renderingManager_->SetCameraMatrix(currentCamera_->GetViewProjection());
 }
 
 void SelectStageScene::Draw() {

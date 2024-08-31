@@ -31,7 +31,7 @@ void GameScene::Initialize() {
 
 	cursor_ = std::make_unique<Cursor>();
 
-	currentCamera_->farClip = 300.0f;
+	currentCamera_->farClip = 1000.0f;
 	currentCamera_->pos.z = -5.0f;
 	currentCamera_->pos.y = 1.1f;
 	currentCamera_->rotate.x = 0.3f;
@@ -89,6 +89,8 @@ void GameScene::Initialize() {
 	uiCamera_->Update();
 
 	cursor_->Initialize();
+
+	renderingManager_->SetTime(12.0f);
 }
 
 void GameScene::Finalize() {
@@ -220,6 +222,7 @@ void GameScene::Update() {
 		collisionManager_->Update();
 
 		player_->ResourceUpdate();
+
 	}
 
 	startArea_->Update();
@@ -242,6 +245,7 @@ void GameScene::Update() {
 		clearMessage_->pos.x -= Lamb::ClientSize().x / 2.0f * Lamb::DeltaTime();
 	}
 
+
 #ifdef _DEBUG
 	if (input_->GetInstance()->GetKey()->Pushed(DIK_TAB)) {
 		isDebug_ ^= true;
@@ -257,6 +261,9 @@ void GameScene::Update() {
 	}
 #endif // _DEBUG
 
+	renderingManager_->SetCameraPos(currentCamera_->GetPos());
+	renderingManager_->SetCameraMatrix(currentCamera_->GetViewProjection());
+	renderingManager_->Debug("randeringManager");
 }
 
 void GameScene::Draw() {

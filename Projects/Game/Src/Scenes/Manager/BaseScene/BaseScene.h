@@ -7,6 +7,7 @@
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"
 #include "Engine/Graphics/AnimationManager/AnimationManager.h"
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
 
 #include "Utils/SafePtr.h"
 #include "Utils/Flg.h"
@@ -59,21 +60,23 @@ public:
 	const class Camera& GetCamera() const;
 
 protected:
-	class SceneManager* sceneManager_;
+	Lamb::SafePtr<class SceneManager> sceneManager_;
 
-	DrawerManager* drawerManager_;
+	Lamb::SafePtr<DrawerManager> drawerManager_;
 
-	AudioManager* audioManager_;
+	Lamb::SafePtr<AudioManager> audioManager_;
 
-	FrameInfo* frameInfo_;
+	Lamb::SafePtr<FrameInfo> frameInfo_;
 
-	Input* input_;
+	Lamb::SafePtr<Input> input_;
 
-	StringOutPutManager* stringOutPutManager_;
+	Lamb::SafePtr<StringOutPutManager> stringOutPutManager_;
 
 	BaseScene::ID sceneID_;
 
-	AnimationManager* animationManager_;
+	Lamb::SafePtr<AnimationManager> animationManager_;
+
+	Lamb::SafePtr<RenderingManager> renderingManager_;
 
 private:
 	std::unique_ptr<Camera> camera_;

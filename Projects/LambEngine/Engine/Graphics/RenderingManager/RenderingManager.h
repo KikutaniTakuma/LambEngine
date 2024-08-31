@@ -51,6 +51,8 @@ public:
 	void SetHsv(const Vector3& hsv);
 	void SetColor(const Vector4& color);
 
+	void SetTime(float32_t time);
+
 	void Debug(const std::string& guiName);
 
 private:
