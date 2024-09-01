@@ -133,6 +133,7 @@ void TitleScene::Update() {
 
     renderingManager_->SetCameraPos(currentCamera_->GetPos());
     renderingManager_->SetCameraMatrix(currentCamera_->GetViewProjection());
+    renderingManager_->SetProjectionInverseMatrix(currentCamera_->GetProjection().Inverse());
 
     waveData_.ripplesPoint = ship_->pos;
     waveData_.time += Lamb::DeltaTime();

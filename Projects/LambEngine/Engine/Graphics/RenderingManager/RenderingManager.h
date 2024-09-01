@@ -48,6 +48,7 @@ public:
 
 	void SetCameraPos(const Vector3& cameraPos);
 	void SetCameraMatrix(const Mat4x4& camera);
+	void SetProjectionInverseMatrix(const Mat4x4& projectionInverce);
 	void SetHsv(const Vector3& hsv);
 	void SetColor(const Vector4& color);
 
@@ -120,6 +121,7 @@ private:
 	std::unique_ptr<PeraRender> outlineTexture_;
 	// アウトライン用パイプラインオジェクト
 	Lamb::SafePtr<Outline> outlinePipeline_;
+	float32_t weight_ = 0.0f;
 
 	
 	// skybox

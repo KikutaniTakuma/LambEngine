@@ -336,6 +336,11 @@ void RenderingManager::SetCameraMatrix(const Mat4x4& camera)
 	cameraMatrix_ = camera;
 }
 
+void RenderingManager::SetProjectionInverseMatrix(const Mat4x4& projectionInverse)
+{
+	outlinePipeline_->SetProjectionInverse(projectionInverse);
+}
+
 void RenderingManager::SetHsv(const Vector3& hsv)
 {
 	hsv_ = hsv;
@@ -387,6 +392,13 @@ void RenderingManager::Debug([[maybe_unused]]const std::string& guiName) {
 			ImGui::DragFloat("時間", &atmosphericTime_, 0.01f, 0.0f, 24.0f);
 			float32_t rotate = std::lerp(0.0f, 360.0f * Lamb::Math::toRadian<float>, atmosphericTime_ / 24.0f);
 			atmosphericParams_.lightDirection = -Vector3::kYIdentity * Quaternion::MakeRotateZAxis(rotate);
+
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Outline")) {
+			ImGui::DragFloat("アウトライン閾値", &weight_, 0.01f);
+			outlinePipeline_->SetWeight(weight_);
 
 			ImGui::TreePop();
 		}
@@ -449,6 +461,16 @@ void RenderingManager::DrawPostEffect() {
 		nullptr
 	);
 	gaussianVerticalTexture_->Draw(Pipeline::Blend::Add, nullptr);
+
+	outlinePipeline_->ChangeDepthBufferState();
+	outlineTexture_->ChangeResourceState();
+	RenderTarget::SetMainAndRenderTargets(
+		nullptr,
+		0,
+		nullptr
+	);
+	outlineTexture_->Draw(Pipeline::Blend::Normal, nullptr);
+	outlinePipeline_->ChangeDepthBufferState();
 }
 
 void RenderingManager::DrawNoDepth(const RenderDataLists& nodepthList)
