@@ -45,7 +45,7 @@ RenderingManager::RenderingManager() {
 	deferredRendering_->SetNormalHandle(normalTexture_->GetHandleGPU());
 	deferredRendering_->SetWoprldPositionHandle(worldPositionTexture_->GetHandleGPU());
 	deferredRenderingData_.isDirectionLight = 1;
-	deferredRenderingData_.environmentCoefficient = 0.6f;
+	deferredRenderingData_.environmentCoefficient = 0.2f;
 	deferredRenderingData_.directionLight.shinness = 42.0f;
 	deferredRenderingData_.directionLight.ligColor = Vector3::kIdentity;
 	deferredRenderingData_.directionLight.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>);

@@ -777,19 +777,27 @@ void Customize::Mouse() {
 			break;
 		}
 	}
-	// 回転
+	/// 回転
 	if (mouse->Pushed(Mouse::Button::Right)) {
 		if (currentType_ != Type::kCursor) {
 			pushLBRB_->Start(seVolume_, false);
 		}
-		if (angle_ == 0.0f) {
-			angle_ = 270.0f;
+		// 大砲だけ回転逆
+		if (currentType_ == Type::kCannon || currentType_ == Type::kLoopCannon) {
+			angle_ += 90.0f;
 		}
 		else {
-			angle_ -= 90.0f;
+			if (angle_ == 0.0f) {
+				angle_ = 270.0f;
+			}
+			else {
+				angle_ -= 90.0f;
+			}
 		}
 		angle_ = std::fmod(angle_, 360.0f);
 	}
+	// 消去
+
 }
 
 void Customize::SetObject() {
@@ -1155,7 +1163,7 @@ void Customize::SetSail() {
 	sailTexture->Load("./Resources/InGame/customizeSail.png");
 	sailTexture->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().x  , (ChangeCursorToTileMap().y - int(float(height_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().y ,0.0f };
 	sailTexture->scale = { player_->GetTileMapSize() * 3.0f * decisionSize_ ,player_->GetTileMapSize() * decisionSize_ };
-	sailTexture->rotate.z = angle_ * std::numbers::pi_v<float> / 180.0f;
+	sailTexture->rotate.z = -angle_ * std::numbers::pi_v<float> / 180.0f;
 	sailTexture->color = Vector4ToUint(setColor_);
 	player_->AddSailTextures(sailTexture);
 	player_->AddSailsIntervals(interval_, isLoop_);
@@ -1164,7 +1172,7 @@ void Customize::SetSail() {
 	sailIntervalTexture->Load("./Resources/white2x2.png");
 	sailIntervalTexture->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().x , (ChangeCursorToTileMap().y - int(float(height_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().y ,0.0f };
 	sailIntervalTexture->scale = { player_->GetTileMapSize() * 3.0f * decisionSize_ ,player_->GetTileMapSize() * decisionSize_ };
-	sailIntervalTexture->rotate.z = angle_ * std::numbers::pi_v<float> / 180.0f;
+	sailIntervalTexture->rotate.z = -angle_ * std::numbers::pi_v<float> / 180.0f;
 	sailIntervalTexture->color = Vector4ToUint(setIntervalTextureColor_);
 	sailIntervalTexture->uvPibot = { 0.0f,0.0f };
 	player_->AddSailsIntervalTextures(sailIntervalTexture);
@@ -1225,7 +1233,7 @@ void Customize::SetCannon(float x, float y) {
 	cannonTexture->Load("./Resources/InGame/customizeCannon.png");
 	cannonTexture->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f) + x) * player_->GetTileMapSize() + player_->GetTileMapOffset().x , (ChangeCursorToTileMap().y - int(float(height_) * 0.5f) - y) * player_->GetTileMapSize() + player_->GetTileMapOffset().y };
 	cannonTexture->scale = { player_->GetTileMapSize() * decisionSize_  ,player_->GetTileMapSize() * 2.0f * decisionSize_ };
-	cannonTexture->rotate.z = angle_ * std::numbers::pi_v<float> / 180.0f;
+	cannonTexture->rotate.z = -angle_ * std::numbers::pi_v<float> / 180.0f;
 	cannonTexture->color = Vector4ToUint(setColor_);
 	player_->AddCannonsTextures(cannonTexture);
 	player_->AddCannonsIntervals(interval_, false);
@@ -1233,7 +1241,7 @@ void Customize::SetCannon(float x, float y) {
 	cannonsIntervalTexture->Load("./Resources/white2x2.png");
 	cannonsIntervalTexture->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f) + x) * player_->GetTileMapSize() + player_->GetTileMapOffset().x , (ChangeCursorToTileMap().y - int(float(height_) * 0.5f) - y) * player_->GetTileMapSize() + player_->GetTileMapOffset().y };
 	cannonsIntervalTexture->scale = { player_->GetTileMapSize() * decisionSize_  ,player_->GetTileMapSize() * 2.0f * decisionSize_ };
-	cannonsIntervalTexture->rotate.z = angle_ * std::numbers::pi_v<float> / 180.0f;
+	cannonsIntervalTexture->rotate.z = -angle_ * std::numbers::pi_v<float> / 180.0f;
 	cannonsIntervalTexture->color = Vector4ToUint(setIntervalTextureColor_);
 	cannonsIntervalTexture->uvPibot = { 0.0f,0.0f };
 	player_->AddCannonIntervalTextures(cannonsIntervalTexture);
@@ -1304,7 +1312,7 @@ void Customize::SetLoopCannon(float x, float y) {
 	cannonTexture->Load("./Resources/InGame/customizeLoopCannon.png");
 	cannonTexture->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f) + x) * player_->GetTileMapSize() + player_->GetTileMapOffset().x , (ChangeCursorToTileMap().y - int(float(height_) * 0.5f) - y) * player_->GetTileMapSize() + player_->GetTileMapOffset().y };
 	cannonTexture->scale = { player_->GetTileMapSize() * decisionSize_ ,player_->GetTileMapSize() * 2.0f * decisionSize_ };
-	cannonTexture->rotate.z = angle_ * std::numbers::pi_v<float> / 180.0f;
+	cannonTexture->rotate.z = -angle_ * std::numbers::pi_v<float> / 180.0f;
 	cannonTexture->color = Vector4ToUint(setColor_);
 	player_->AddLoopCannonsTextures(cannonTexture);
 	player_->AddLoopCannonsIntervals(interval_, true);
@@ -1312,7 +1320,7 @@ void Customize::SetLoopCannon(float x, float y) {
 	cannonsIntervalTexture->Load("./Resources/white2x2.png");
 	cannonsIntervalTexture->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f) + x) * player_->GetTileMapSize() + player_->GetTileMapOffset().x , (ChangeCursorToTileMap().y - int(float(height_) * 0.5f) - y) * player_->GetTileMapSize() + player_->GetTileMapOffset().y };
 	cannonsIntervalTexture->scale = { player_->GetTileMapSize() * decisionSize_ ,player_->GetTileMapSize() * 2.0f * decisionSize_ };
-	cannonsIntervalTexture->rotate.z = angle_ * std::numbers::pi_v<float> / 180.0f;
+	cannonsIntervalTexture->rotate.z = -angle_ * std::numbers::pi_v<float> / 180.0f;
 	cannonsIntervalTexture->color = Vector4ToUint(setIntervalTextureColor_);
 	cannonsIntervalTexture->uvPibot = { 0.0f,0.0f };
 	player_->AddLoopCannonIntervalTextures(cannonsIntervalTexture);
@@ -1400,7 +1408,7 @@ void Customize::SetColor() {
 			cursorSailTexture_->pos = ChangeCursorToTexturePos();
 			//cursorSailTexture_->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().x,(ChangeCursorToTileMap().y - int(float(height_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().y , 0.0f };
 			cursorSailTexture_->scale = { player_->GetTileMapSize() * 3.0f, player_->GetTileMapSize() };
-			cursorSailTexture_->rotate.z = angle_ * std::numbers::pi_v<float> / 180.0f;
+			cursorSailTexture_->rotate.z = -angle_ * std::numbers::pi_v<float> / 180.0f;
 			break;
 		case Customize::kCannon:
 			cursorCannonTexture_->pos = ChangeCursorToTexturePos();
@@ -1429,7 +1437,7 @@ void Customize::SetColor() {
 			//	cursorCannonTexture_->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f) + 0.5f) * player_->GetTileMapSize() + player_->GetTileMapOffset().x,(ChangeCursorToTileMap().y - int(float(height_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().y, 0.0f };
 			//}
 			cursorCannonTexture_->scale = { player_->GetTileMapSize() , player_->GetTileMapSize() * 2.0f };
-			cursorCannonTexture_->rotate.z = angle_ * std::numbers::pi_v<float> / 180.0f;
+			cursorCannonTexture_->rotate.z = -angle_ * std::numbers::pi_v<float> / 180.0f;
 			break;
 		case Customize::kLoopCannon:
 			cursorLoopCannonTexture_->pos = ChangeCursorToTexturePos();
@@ -1458,7 +1466,7 @@ void Customize::SetColor() {
 			//	cursorLoopCannonTexture_->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f) + 0.5f) * player_->GetTileMapSize() + player_->GetTileMapOffset().x,(ChangeCursorToTileMap().y - int(float(height_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().y, 0.0f };
 			//}
 			cursorLoopCannonTexture_->scale = { player_->GetTileMapSize() , player_->GetTileMapSize() * 2.0f };
-			cursorLoopCannonTexture_->rotate.z = angle_ * std::numbers::pi_v<float> / 180.0f;
+			cursorLoopCannonTexture_->rotate.z = -angle_ * std::numbers::pi_v<float> / 180.0f;
 			break;
 		case Customize::kCursor:
 			break;
