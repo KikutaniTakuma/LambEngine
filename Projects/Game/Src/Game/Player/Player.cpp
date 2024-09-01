@@ -22,9 +22,13 @@
 
 #include "Utils/ScreenOut.h"
 
+#include "Drawers/DrawerManager.h"
+
 //std::numbers::pi_v<float>;
 
 Player::Player() {
+	tex2D_ = DrawerManager::GetInstance()->GetTexture2D();
+
 	body_ = std::make_unique<ModelInstance>();
 	screw_ = std::make_unique<ModelInstance>();
 	body_->Load("./Resources/Player/body.obj");
@@ -85,7 +89,7 @@ Player::Player() {
 	maxPowerGauge_->pos = { 430.0f,-321.0f,0.0f };
 	maxPowerGauge_->scale = { 362.0f,17.5f };
 	currentPowerGauge_->color = Vector4ToUint({ 1.0f,0.0f,0.0f,1.0f });
-	currentPowerGauge_->pos = { 430.0f,-321.0f,0.0f };
+	currentPowerGauge_->pos = { 249.0f,-321.0f,-1.0f };
 	currentPowerGauge_->scale = { 362.0f,17.5f };
 
 	departure_ = std::make_unique<Tex2DInstance>();
@@ -125,7 +129,7 @@ Player::Player() {
 	powerUI_ = std::make_unique<Tex2DInstance>();
 	powerUI_->Load("./Resources/InGame/power.png");
 	powerUI_->scale = { 460.0f,60.0f };
-	powerUI_->pos = { 395.0f,-320.0f };
+	powerUI_->pos = { 395.0f,-320.0f, 1.0f };
 
 	goalText_ = std::make_unique<Tex2DInstance>();
 	goalText_->Load("./Resources/InGame/goalText.png");
@@ -200,8 +204,6 @@ void Player::Initialize() {
 	currentAngle_ = 90.0f;
 
 	power_ = 0.0f;
-
-	currentPowerGauge_->uvPibot = { 1.0f,0.0f };
 
 	chargeCount_ = 0.0f;
 	chargeDuration_ = 0.0f;
@@ -428,8 +430,14 @@ void Player::DrawUI(const Camera& camera) {
 	if (!isCustomize_ && !isGoal_) {
 		powerUI_->blend = BlendType::kUnenableDepthNormal;
 		powerUI_->Draw(camera.GetViewOthographics());
-		currentPowerGauge_->blend = BlendType::kUnenableDepthNormal;
-		currentPowerGauge_->Draw(camera.GetViewOthographics());
+		tex2D_->Draw(
+			Mat4x4::MakeTranslate(Vector3::kXIdentity * 0.5f) * Mat4x4::MakeAffin(currentPowerGauge_->scale, currentPowerGauge_->rotate, currentPowerGauge_->pos),
+			Mat4x4::kIdentity,
+			camera.GetViewOthographics(),
+			0,
+			0xff0000ff,
+			BlendType::kUnenableDepthNormal
+		);
 		//maxPowerGauge_->Draw(camera.GetViewOthographics());
 	}
 	if (isCharge_ && !isStart_ && !isGoal_ && !isCustomize_) {
@@ -660,7 +668,7 @@ void Player::SetSailVelocity(float velocity) {
 void Player::AddPower() {
 	if (isAddPower_ && isCustomize_) {
 		float t = 1.0f - (power_ / floatParameter_.at(kMaxPower));
-		currentPowerGauge_->uvPibot.x = std::clamp(t, 0.0f, 1.0f);
+		currentPowerGauge_->scale.x = 362.0f * (1.0f - std::clamp(t, 0.0f, 1.0f));
 		chargeCount_ += floatParameter_.at(kCustomizeAddPower) * Lamb::DeltaTime();
 		power_ = chargeCount_ * std::numbers::pi_v<float>;
 		power_ = std::clamp(power_, 0.0f, floatParameter_.at(kMaxPower));
@@ -856,7 +864,7 @@ void Player::UpdateRotate(const Vector3& vector) {
 
 void Player::UpdateGauge() {
 	float t = 1.0f - (power_ / floatParameter_.at(kMaxPower));
-	currentPowerGauge_->uvPibot.x = t;
+	currentPowerGauge_->scale.x = 362.0f * (1.0f - std::clamp(t, 0.0f, 1.0f));
 }
 
 void Player::Charge() {

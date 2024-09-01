@@ -294,6 +294,8 @@ private:
 
 	float numberSize_;
 
+	Texture2D* tex2D_ = nullptr;
+
 	std::unique_ptr<Tex2DInstance> maxPowerGauge_;
 	std::unique_ptr<Tex2DInstance> scheme_;
 	std::unique_ptr<Tex2DInstance> currentPowerGauge_;
