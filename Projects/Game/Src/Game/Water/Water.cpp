@@ -57,7 +57,7 @@ void Water::Init() {
 			.shinness = 42.0f
 	};
 
-	density_ = 1.3f;
+	density_ = 1.3f * 4.0f;
 }
 
 void Water::Update(const Vector3& cameraPos) {

@@ -68,7 +68,7 @@ void DeferredRendering::Init(
 
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 1;
+	cbvRange[0].NumDescriptors = 2;
 	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
 	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> lightRange = {};
@@ -178,13 +178,15 @@ void DeferredRendering::Init(
 
 	lights_.Create(32);
 
-	srvHeap->BookingHeapPos(2u);
+	srvHeap->BookingHeapPos(3u);
 	srvHeap->CreateView(deferredRenderingData_);
+	srvHeap->CreateView(atomosphericData_);
 	srvHeap->CreateView(lights_);
 }
 
 DeferredRendering::~DeferredRendering() {
 	auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->ReleaseView(deferredRenderingData_.GetHandleUINT());
+	srvHeap->ReleaseView(atomosphericData_.GetHandleUINT());
 	srvHeap->ReleaseView(lights_.GetHandleUINT());
 }

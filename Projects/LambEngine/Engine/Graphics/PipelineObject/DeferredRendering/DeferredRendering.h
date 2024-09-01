@@ -7,6 +7,7 @@
 #include "Math/MathCommon.h"
 #include "Engine/Graphics/MeshManager/Mesh/Mesh.h"
 #include "Engine/Graphics/GraphicsStructs.h"
+#include "Drawers/AirSkyBox/AirSkyBox.h"
 
 class DeferredRendering final : public PipelineObject {
 public:
@@ -41,6 +42,9 @@ public:
 	void SetDeferredRenderingData(const DeferredRenderingData& deferredRenderingData) {
 		*deferredRenderingData_ = deferredRenderingData;
 	}
+	void SetAtmosphericParams(const AirSkyBox::AtmosphericParams& atomosphericData) {
+		*atomosphericData_ = atomosphericData;
+	}
 
 	void SetLight(const PointLight& light, size_t index);
 
@@ -61,6 +65,7 @@ public:
 
 private:
 	ConstantBuffer<DeferredRenderingData> deferredRenderingData_;
+	ConstantBuffer<AirSkyBox::AtmosphericParams> atomosphericData_;
 	StructuredBuffer<PointLight> lights_;
 	D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE normalTextureHandle_ = {};
