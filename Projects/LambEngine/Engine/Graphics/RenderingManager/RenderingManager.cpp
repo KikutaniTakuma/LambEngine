@@ -107,6 +107,7 @@ RenderingManager::RenderingManager() {
 	outlinePipeline_ = outline.release();
 	outlineTexture_ = std::make_unique<PeraRender>();
 	outlineTexture_->Initialize(outlinePipeline_.get());
+	outlinePipeline_->SetWeight(weight_);
 
 	skyBox_ = std::make_unique<AirSkyBox>();
 	skyBox_->Load();
