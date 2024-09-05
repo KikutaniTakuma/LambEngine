@@ -281,6 +281,10 @@ Vector3 Quaternion::ToEuler() const {
 	return QuaternionToEuler(*this);
 }
 
+void Quaternion::SetEuler(const Vector3& euler) {
+	*this = EulerToQuaternion(euler);
+}
+
 #pragma endregion
 /// ========================================================================
 /// ========================================================================

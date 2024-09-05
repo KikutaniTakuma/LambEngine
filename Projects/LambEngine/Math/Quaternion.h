@@ -142,7 +142,7 @@ public:
 
 	[[nodiscard]] Vector3 ToEuler() const;
 
-
+	void SetEuler(const Vector3& euler);
 
 /// <summary>
 /// 静的メンバ関数

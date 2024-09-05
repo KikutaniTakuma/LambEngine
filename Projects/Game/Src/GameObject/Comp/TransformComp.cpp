@@ -41,7 +41,7 @@ void TransformComp::Init()
 
 void TransformComp::UpdateMatrix() {
 #ifdef _DEBUG
-	rotate = Quaternion::EulerToQuaternion(eulerRotate);
+	rotate.SetEuler(eulerRotate);
 #endif // _DEBUG
 	rotate = rotate.Normalize();
 	worldMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
@@ -183,4 +183,9 @@ void TransformComp::Load(nlohmann::json& json)
 	for (size_t i = 0; i < json["translate"].size(); i++) {
 		translate[i] = json["translate"][i];
 	}
+
+#ifdef _DEBUG
+	eulerRotate = rotate.ToEuler();
+#endif // _DEBUG
+
 }
