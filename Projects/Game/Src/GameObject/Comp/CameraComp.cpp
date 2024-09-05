@@ -67,8 +67,12 @@ void CameraComp::Debug([[maybe_unused]] const std::string& guiName) {
 			float translateSigned = isTranslateInverse_ ? 1.0f : -1.0f;
 
 			if (not isOnImGui && isShift && isMiddle) {
-				transform_->translate.x += mouseVelocity.x * translateSpeed_ * object_.GetDeltaTime() * translateSigned;
-				transform_->translate.y += mouseVelocity.y * translateSpeed_ * object_.GetDeltaTime() * translateSigned;
+				Vector3 moveVector;
+				moveVector.x += mouseVelocity.x * translateSpeed_ * object_.GetDeltaTime() * translateSigned;
+				moveVector.y += mouseVelocity.y * translateSpeed_ * object_.GetDeltaTime() * translateSigned;
+
+				moveVector *= transform_->rotate;
+				transform_->translate += moveVector;
 			}
 
 			if (not isOnImGui && not isShift && isMiddle) {
