@@ -8,12 +8,11 @@ TestScene::TestScene():
 
 void TestScene::Load()
 {
-	levelData_ = LevelLoader::Load("./SceneData/Test.json");
+	objectManager_ = ObjectManager::GetInstance();
+	objectManager_->Load("./SceneData/Test.json");
 }
 
 void TestScene::Initialize() {
-	objectManager_ = ObjectManager::GetInstance();
-	objectManager_->SetLevelData(levelData_);
 }
 
 void TestScene::Finalize() {

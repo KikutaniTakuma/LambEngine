@@ -33,13 +33,13 @@ LevelData* LevelLoader::Load(const std::string& fileName)
     // jsonをロード
     auto data = Lamb::LoadJson(fileName);
 
-    // シーンの名前を取得
-    std::string name = data["name"].get<std::string>();
-
     // これがsceneのデータか
-    if (name.compare("scene") != 0) {
+    if (data.find("scene") == data.end()) {
         throw Lamb::Error::Code<Lamb::Error::Function>("this file is invalid" + fileName, ErrorPlace);
     }
+    // シーンの名前を取得
+    std::string name = data["scene"].get<std::string>();
+
 
     Lamb::SafePtr levelData = Lamb::MakeSafePtr<LevelData>();
 

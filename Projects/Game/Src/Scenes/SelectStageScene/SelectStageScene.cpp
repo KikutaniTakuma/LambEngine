@@ -140,7 +140,7 @@ void SelectStageScene::Initialize() {
 
     currentCamera_->pos.z = -10.0f;
 
-    renderingManager_->SetTime(7.0f);
+    //renderingManager_->SetTime(7.0f);
 }
 
 void SelectStageScene::Finalize() {

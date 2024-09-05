@@ -75,7 +75,7 @@ void ObjectManager::Set(const Lamb::SafePtr<Object>& object) {
 		}
 	);
 
-	if (itr ==  objects_.end() and object.have()) {
+	if (itr == objects_.end() and object.have()) {
 		objects_.insert(std::unique_ptr<Object>(object.get()));
 		if (object->HasComp<ObbPushComp>()) {
 			obbObjects_.push_back(object->GetComp<ObbPushComp>());
@@ -257,7 +257,7 @@ void ObjectManager::Debug() {
 				i.second = false;
 			}
 		}
-		for (size_t tagCount = 0, sameLineCount = 0; auto& i : objectTags_) {
+		for (size_t tagCount = 0, sameLineCount = 0; auto & i : objectTags_) {
 			ImGui::Checkbox(i.first.c_str(), &i.second);
 			tagCount++;
 			sameLineCount++;
@@ -300,12 +300,12 @@ void ObjectManager::Debug() {
 						);
 						obbObjects_.erase(obbCompItr);
 					}
-					
+
 					objects_.erase(itr);
 					isErase = true;
 					break;
 				}
-				
+
 				break;
 			}
 		}
@@ -364,6 +364,9 @@ void ObjectManager::Save() {
 
 	// シーンを名前
 	root["scene"] = fileName;
+
+	RenderingManager::GetInstance()->Save(root);
+
 	// オブジェクト
 	root["objects"] = nlohmann::json::array();
 
@@ -405,11 +408,15 @@ void ObjectManager::Load(const std::string& jsonFileName) {
 	auto jsonFile = Lamb::LoadJson(jsonFileName);
 
 	currentScene_ = jsonFile["scene"].get<std::string>();
+	if (jsonFile.find("RederingSetting") != jsonFile.end()) {
+		RenderingManager::GetInstance()->Load(jsonFile);
+	}
+
 	levelDatas_[currentScene_].reset(new LevelData());
 	LevelData& levelData = *levelDatas_[currentScene_];
 	levelData.name = currentScene_;
 	levelData.objects.reserve(jsonFile["objects"].size());
-	
+
 	// オブジェクトを追加
 	for (auto& objectData : jsonFile["objects"]) {
 		if (objectData["type"].get<std::string>() == "Object") {

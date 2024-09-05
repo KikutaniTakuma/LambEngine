@@ -90,7 +90,7 @@ void GameScene::Initialize() {
 
 	cursor_->Initialize();
 
-	renderingManager_->SetTime(12.0f);
+	//renderingManager_->SetTime(12.0f);
 }
 
 void GameScene::Finalize() {

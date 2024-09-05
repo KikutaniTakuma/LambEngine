@@ -1,74 +1,129 @@
 {
-    "name": "scene",
+    "RederingSetting": {
+        "bloom": {
+            "luminanceThreshold": 1.399999976158142,
+            "x": 8,
+            "y": 8
+        },
+        "hsv": [
+            0.0,
+            0.0,
+            1.0
+        ],
+        "isDirectionLight": true,
+        "lightRotate": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "outline": 0.0,
+        "skybox": {
+            "isDraw": true,
+            "scale": [
+                500.0,
+                500.0,
+                500.0
+            ]
+        }
+    },
     "objects": [
         {
-            "type": "MESH",
-            "name": "Cube",
-            "transform": {
-                "translation": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "rotation": [
-                    0.0,
-                    -0.0,
-                    0.0
-                ],
-                "scaling": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "file_name": "./Resources/Common/Cube.obj"
+            "Comps": [
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.015456789173185825,
+                        -0.6227983832359314,
+                        0.012308008968830109,
+                        0.7821328043937683
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        21.153745651245117,
+                        3.1890015602111816,
+                        -1.9254474639892578
+                    ]
+                },
+                {
+                    "CompName": "class Camera3DComp",
+                    "aspectRatio": 1.7777777910232544,
+                    "farClip": 1000.0,
+                    "fov": 0.4869273006916046,
+                    "nearClip": 0.10000000149011612
+                },
+                {
+                    "CompName": "class CameraComp"
+                }
+            ],
+            "type": "Object"
         },
         {
-            "type": "LIGHT",
-            "name": "Light",
-            "transform": {
-                "translation": [
-                    4.076245307922363,
-                    1.0054539442062378,
-                    5.903861999511719
-                ],
-                "rotation": [
-                    37.26104736328125,
-                    3.1637091636657715,
-                    106.93632507324219
-                ],
-                "scaling": [
-                    1.0,
-                    0.9999999403953552,
-                    1.0
-                ]
-            }
+            "Comps": [
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/Common/Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.08824073523283005,
+                        -0.22520679235458374,
+                        -0.3539837896823883,
+                        0.9034329056739807
+                    ],
+                    "scale": [
+                        0.9999998211860657,
+                        0.999999463558197,
+                        0.9999997019767761
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ],
+            "type": "Object"
         },
         {
-            "type": "CAMERA",
-            "name": "Camera",
-            "transform": {
-                "translation": [
-                    23.29557228088379,
-                    -0.05645439028739929,
-                    1.7534804344177246
-                ],
-                "rotation": [
-                    85.559326171875,
-                    -3.336886948090978e-05,
-                    89.89199829101562
-                ],
-                "scaling": [
-                    1.0,
-                    0.9999999403953552,
-                    1.0
-                ]
-            },
-            "camera_type": "Perspective",
-            "fov": 0.48692730225441255,
-            "aspect_ratio": 1.7777777777777777,
-            "far_clip": 1000.0,
-            "near_clip": 0.10000000149011612
+            "Comps": [
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        4.076245307922363,
+                        5.903861999511719,
+                        1.0054539442062378
+                    ]
+                }
+            ],
+            "type": "Object"
         }
-    ]
+    ],
+    "scene": "Test"
 }

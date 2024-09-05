@@ -96,7 +96,7 @@ void TitleScene::Initialize() {
     cursor_ = std::make_unique<Cursor>();
     cursor_->Initialize();
 
-    renderingManager_->SetTime(11.0f);
+    //renderingManager_->SetTime(11.0f);
 }
 
 void TitleScene::Finalize() {
