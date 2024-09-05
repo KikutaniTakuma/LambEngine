@@ -15,7 +15,7 @@ void CameraComp::Save(nlohmann::json& json)
 	SaveCompName(json);
 }
 
-void CameraComp::Load([[maybe_unused]]nlohmann::json& json)
+void CameraComp::Load([[maybe_unused]] nlohmann::json& json)
 {
 }
 
@@ -72,10 +72,8 @@ void CameraComp::Debug([[maybe_unused]] const std::string& guiName) {
 			}
 
 			if (not isOnImGui && not isShift && isMiddle) {
-				eulerRotate_ = Vector3::kZero;
-				eulerRotate_.x -= mouseVelocity.y * rotateSpeed_ * object_.GetDeltaTime() * rotateSigned;
-				eulerRotate_.y += mouseVelocity.x * rotateSpeed_ * object_.GetDeltaTime() * rotateSigned;
-				transform_->rotate *= Quaternion::EulerToQuaternion(eulerRotate_);
+				transform_->eulerRotate.x -= mouseVelocity.y * rotateSpeed_ * object_.GetDeltaTime() * rotateSigned;
+				transform_->eulerRotate.y += mouseVelocity.x * rotateSpeed_ * object_.GetDeltaTime() * rotateSigned;
 			}
 
 			float isSigned = mouse->GetWheelVelocity();

@@ -68,7 +68,6 @@ private:
 	uint32_t guimoType_ = 0;
 
 	bool isGuizmo_ = false;
-	bool isDebug_ = false;
 
 	static const std::array<std::pair<std::string, ImGuizmo::OPERATION>, 5> kGuizmoMode_;
 

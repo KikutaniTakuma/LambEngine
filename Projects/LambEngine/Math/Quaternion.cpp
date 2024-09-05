@@ -340,30 +340,47 @@ Quaternion Quaternion::EulerToQuaternion(const Vector3& euler)
 	return result.Normalize();
 }
 
-Vector3 Quaternion::QuaternionToEuler(const Quaternion& q)
-{
-	Vector3 result;
+// ジンバルロック状態のときのオイラー角計算（ラジアン単位）
+Vector3 ToEulerAnglesZimbalLock(float x, const Quaternion& q) {
+	// 実際にはq.quaternion.z（ジンバルロックによるY軸とZ軸のオイラー角）から計算
+	float y = 2 * (q.quaternion.x * q.quaternion.z + q.quaternion.y * q.quaternion.w);
+	float z = std::atan2(2 * (q.quaternion.x * q.quaternion.y + q.quaternion.z * q.quaternion.w), 1 - 2 * (q.quaternion.y * q.quaternion.y + q.quaternion.z * q.quaternion.z));
 
-	// Z軸回りの回転
-	float sinZcosp = 2.0f * (q.quaternion.w * q.quaternion.x + q.quaternion.y * q.quaternion.z);
-	float cosZcosp = 1.0f - 2.0f * (q.quaternion.x * q.quaternion.x + q.quaternion.y * q.quaternion.y);
-	result.z = std::atan2f(sinZcosp, cosZcosp);
+	return Vector3(x, y, z);
+}
 
-	// X軸回りの回転
-	float sinp = 2.0f * (q.quaternion.w * q.quaternion.y - q.quaternion.z * q.quaternion.x);
-	if (std::abs(sinp) >= 1.0f) {
-		result.x = std::copysign(std::numbers::pi_v<float> * 0.5f, sinp); // 90度 (クランプ)
+// クォータニオンからオイラー角を計算する（ラジアン単位）
+Vector3 Quaternion::QuaternionToEuler(const Quaternion& q) {
+	float sinX = 2 * q.quaternion.y * q.quaternion.z - 2 * q.quaternion.x * q.quaternion.w;
+	float absSinX = std::abs(sinX);
+
+	const float e = 0.001f;
+
+	// X軸回転が0度付近の場合
+	if (absSinX < e) {
+		sinX = 0.0f;
 	}
-	else{
-		result.x = std::asin(sinp);
+
+	float x = std::asin(-sinX);
+
+	// X軸回転が90度付近でジンバルロック状態の場合
+	if (std::isnan(x) || std::abs(std::abs(x) - std::numbers::pi_v<float> *0.5f) < e) {
+		x = std::copysign(std::numbers::pi_v<float> *0.5f, -sinX);
+		return ToEulerAnglesZimbalLock(x, q);
 	}
 
-	// Y軸回りの回転
-	float sinYcosp = 2.0f * (q.quaternion.w * q.quaternion.z + q.quaternion.x * q.quaternion.y);
-	float cosYcosp = 1.0f - 2.0f * (q.quaternion.y * q.quaternion.y + q.quaternion.z * q.quaternion.z);
-	result.y = std::atan2f(sinYcosp, cosYcosp);
+	// 正常な計算
+	float cosX = std::cos(x);
 
-	return result;
+	float sinY = (2.0f * q.quaternion.x * q.quaternion.z + 2.0f * q.quaternion.y * q.quaternion.w) / cosX;
+	float cosY = (2.0f * std::pow(q.quaternion.w, 2.0f) + 2.0f * std::pow(q.quaternion.z, 2.0f) - 1.0f) / cosX;
+	float y = std::atan2(sinY, cosY);
+
+	float sinZ = (2.0f * q.quaternion.x * q.quaternion.y + 2.0f * q.quaternion.z * q.quaternion.w) / cosX;
+	float cosZ = (2.0f * std::pow(q.quaternion.w, 2.0f) + 2.0f * std::pow(q.quaternion.y, 2.0f) - 1.0f) / cosX;
+	float z = std::atan2(sinZ, cosZ);
+
+	return Vector3(x, y, z);  // ラジアン単位で返す
 }
 
 Quaternion Quaternion::Slerp(Quaternion start, const Quaternion& end, float t) {
