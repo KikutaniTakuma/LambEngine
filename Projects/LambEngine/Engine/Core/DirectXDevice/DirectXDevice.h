@@ -78,7 +78,7 @@ public:
 		return incrementSAMPLER_;
 	}
 
-	ID3D12Device* const GetDevice() const {
+	ID3D12Device8* const GetDevice() const {
 		return device_.Get();
 	}
 
@@ -87,7 +87,7 @@ public:
 	}
 
 private:
-	Lamb::LambPtr<ID3D12Device> device_;
+	Lamb::LambPtr<ID3D12Device8> device_;
 	Lamb::LambPtr<IDXGIFactory7> dxgiFactory_;
 	Lamb::LambPtr<IDXGIAdapter4> useAdapter_;
 

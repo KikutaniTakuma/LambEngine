@@ -109,6 +109,27 @@ void DirectXDevice::CreateDevice() {
 	if (device_ == nullptr) {
 		throw Lamb::Error::Code<DirectXDevice>("device not found", ErrorPlace);
 	}
+
+	// shader modelの確認
+	D3D12_FEATURE_DATA_SHADER_MODEL shaderModel = { D3D_SHADER_MODEL_6_5 };
+	HRESULT hr = device_->CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL, &shaderModel, sizeof(shaderModel));
+	if (FAILED(hr) or (shaderModel.HighestShaderModel < D3D_SHADER_MODEL_6_5)) {
+		throw Lamb::Error::Code<DirectXDevice>("This device does not support", ErrorPlace);
+	}
+	else {
+		Lamb::AddLog("This device support Shader Model 6.5");
+	}
+
+	// mesh shaderが使えるか
+	D3D12_FEATURE_DATA_D3D12_OPTIONS7 features = {};
+	hr = device_->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS7, &features, sizeof(features));
+	if (FAILED(hr) or (features.MeshShaderTier == D3D12_MESH_SHADER_TIER_NOT_SUPPORTED)) {
+		throw Lamb::Error::Code<DirectXDevice>("This device does not support", ErrorPlace);
+	}
+	else {
+		Lamb::AddLog("This device support Mesh Shader");
+	}
+
 	Lamb::AddLog("Complete create D3D12Device");
 }
 
