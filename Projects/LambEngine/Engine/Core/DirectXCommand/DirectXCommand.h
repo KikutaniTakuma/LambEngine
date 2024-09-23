@@ -53,7 +53,7 @@ private:
 	void CrateFence();
 
 public:
-	ID3D12GraphicsCommandList* const GetCommandList() const {
+	ID3D12GraphicsCommandList6* const GetCommandList() const {
 		return commandList_.Get();
 	}
 
@@ -68,7 +68,7 @@ public:
 private:
 	Lamb::LambPtr<ID3D12CommandQueue> commandQueue_;
 	Lamb::LambPtr<ID3D12CommandAllocator> commandAllocator_;
-	Lamb::LambPtr<ID3D12GraphicsCommandList> commandList_;
+	Lamb::LambPtr<ID3D12GraphicsCommandList6> commandList_;
 	bool isCommandListClose_;
 
 	Lamb::LambPtr<ID3D12Fence> fence_;
