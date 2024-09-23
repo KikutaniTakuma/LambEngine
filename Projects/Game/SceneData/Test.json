@@ -1,9 +1,9 @@
 {
     "RederingSetting": {
         "bloom": {
-            "luminanceThreshold": 1.399999976158142,
-            "x": 8,
-            "y": 8
+            "luminanceThreshold": 1.0,
+            "x": 128,
+            "y": 128
         },
         "hsv": [
             0.0,
@@ -14,7 +14,7 @@
         "lightRotate": [
             0.0,
             0.0,
-            0.0
+            -2.3387410640716553
         ],
         "outline": 0.0,
         "skybox": {
@@ -27,6 +27,30 @@
         }
     },
     "objects": [
+        {
+            "Comps": [
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        4.076245307922363,
+                        5.903861999511719,
+                        1.0054539442062378
+                    ]
+                }
+            ],
+            "type": "Object"
+        },
         {
             "Comps": [
                 {
@@ -49,23 +73,20 @@
                     ]
                 },
                 {
+                    "CompName": "class CameraComp"
+                },
+                {
                     "CompName": "class Camera3DComp",
                     "aspectRatio": 1.7777777910232544,
                     "farClip": 1000.0,
                     "fov": 0.4869273006916046,
                     "nearClip": 0.10000000149011612
-                },
-                {
-                    "CompName": "class CameraComp"
                 }
             ],
             "type": "Object"
         },
         {
             "Comps": [
-                {
-                    "CompName": "class ModelRenderComp"
-                },
                 {
                     "BlendType": "kNone",
                     "CompName": "class ModelRenderDataComp",
@@ -79,12 +100,15 @@
                     "isLighting": true
                 },
                 {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        -0.08824073523283005,
+                        -0.08824075758457184,
                         -0.22520679235458374,
-                        -0.3539837896823883,
-                        0.9034329056739807
+                        -0.35398373007774353,
+                        0.9034328460693359
                     ],
                     "scale": [
                         0.9999998211860657,
@@ -95,30 +119,6 @@
                         0.0,
                         0.0,
                         0.0
-                    ]
-                }
-            ],
-            "type": "Object"
-        },
-        {
-            "Comps": [
-                {
-                    "CompName": "class TransformComp",
-                    "rotate": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        0.9999999403953552
-                    ],
-                    "translate": [
-                        4.076245307922363,
-                        5.903861999511719,
-                        1.0054539442062378
                     ]
                 }
             ],

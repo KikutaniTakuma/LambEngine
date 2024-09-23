@@ -125,6 +125,7 @@ private:
 	// アウトライン用パイプラインオジェクト
 	Lamb::SafePtr<Outline> outlinePipeline_;
 	float32_t weight_ = 0.0f;
+	bool isOutLine_ = false;
 
 
 	// skybox
