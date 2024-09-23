@@ -15,6 +15,8 @@ public:
 
 	void Init() override;
 
+	void Finalize() override;
+
 	void FirstUpdate() override;
 
 	void Event() override;
@@ -29,8 +31,9 @@ public:
 	bool IsCollision(Vector3 pos, float radius);
 	bool IsCollision(ObbComp* const other);
 	bool IsCollision(ObbComp* const other, Vector3& pushVector);
+	bool IsCollision(const Vector3& start, const Vector3& end);
 
-	bool CollisionHasTag(ObbComp* const other);
+	bool Collision(ObbComp* const other);
 
 	TransformComp& GetTransformComp();
 	const TransformComp& GetTransformComp() const;
@@ -44,6 +47,12 @@ public:
 	void Load(nlohmann::json& json) override;
 
 	const std::string& GetCurrentCollisionTag() const;
+	const std::unordered_set<std::string>& GetCollisionTagList() const {
+		return collisionTags_;
+	}
+
+	// transformのスケールの影響を受けないようにする
+	void SetEnableScaleEffect(bool isScaleEffect);
 
 public:
 	Vector3 scale = Vector3::kIdentity;
@@ -71,6 +80,8 @@ private:
 	Lamb::Flg isCollision_;
 
 	std::string currentCollisionTag_;
+
+	bool isScaleEffect_ = true;
 
 	/// <summary>
 	/// ゲッター

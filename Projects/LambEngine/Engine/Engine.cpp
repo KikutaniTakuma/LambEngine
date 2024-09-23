@@ -1,10 +1,6 @@
 #include "Engine.h"
 #include <cassert>
 #include <format>
-#include <filesystem>
-
-#include <dxgi1_6.h>
-#pragma comment(lib, "dxgi.lib")
 #include <dxgidebug.h>
 #pragma comment(lib, "dxguid.lib")
 
@@ -39,7 +35,6 @@
 
 #include "Math/Vector2.h"
 
-#include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
 #include "Utils/ScreenOut.h"
 
 #include "Error/Error.h"

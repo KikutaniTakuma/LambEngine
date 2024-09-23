@@ -15,7 +15,7 @@ public:
 		Vector3 eyePos;
 		uint32_t rightNum = 0;
 		DirectionLight directionLight;
-		uint32_t isDirectionLight;
+		uint32_t isDirectionLight = 1u;
 		float32_t environmentCoefficient = 1.0f;
 	};
 public:

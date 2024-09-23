@@ -136,6 +136,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\Editor\ParticleEditor\ParticleEditor.cpp" />
     <ClCompile Include="Src\Editor\WhirlpoolEditor\WhirlpoolEditor.cpp" />
     <ClCompile Include="Src\Editor\WindEditor\WindEditor.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\AudioComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\BgmComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ButtonComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\Camera2DComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\Camera3DComp.cpp" />
@@ -145,6 +147,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\Comp\EventComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\FallComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\JsonComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\LineCollisionComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\LineComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\LineConvertTransformComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\LineRenderComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\LineRenderDataComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ModelRenderComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\InputMoveComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ObbComp.cpp" />
@@ -152,6 +159,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\Comp\ModelRenderDataComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\QuadComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\SceneChangeComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\SpriteAnimatorComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\SpriteRenderComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\SpriteRenderDataComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\TransformComp.cpp" />
@@ -165,6 +173,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\GameComp\WhirlpoolsComp.cpp" />
     <ClCompile Include="Src\GameObject\GameComp\WindComp.cpp" />
     <ClCompile Include="Src\GameObject\GameComp\WindNodeComp.cpp" />
+    <ClCompile Include="Src\GameObject\Manager\CompCollisionManager.cpp" />
     <ClCompile Include="Src\GameObject\Manager\ObjectManager.cpp" />
     <ClCompile Include="Src\GameObject\Manager\TransformCompUpdater.cpp" />
     <ClCompile Include="Src\GameObject\Object.cpp" />
@@ -220,6 +229,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\Editor\ParticleEditor\ParticleEditor.h" />
     <ClInclude Include="Src\Editor\WhirlpoolEditor\WhirlpoolEditor.h" />
     <ClInclude Include="Src\Editor\WindEditor\WindEditor.h" />
+    <ClInclude Include="Src\GameObject\Comp\AudioComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\BgmComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ButtonComp.h" />
     <ClInclude Include="Src\GameObject\Comp\Camera2DComp.h" />
     <ClInclude Include="Src\GameObject\Comp\Camera3DComp.h" />
@@ -230,12 +241,18 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\Comp\FallComp.h" />
     <ClInclude Include="Src\GameObject\Comp\InputMoveComp.h" />
     <ClInclude Include="Src\GameObject\Comp\JsonComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\LineCollisionComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\LineComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\LineConvertTransformComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\LineRenderComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\LineRenderDataComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ModelRenderComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ObbComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ObbPushComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ModelRenderDataComp.h" />
     <ClInclude Include="Src\GameObject\Comp\QuadComp.h" />
     <ClInclude Include="Src\GameObject\Comp\SceneChangeComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\SpriteAnimatorComp.h" />
     <ClInclude Include="Src\GameObject\Comp\SpriteRenderComp.h" />
     <ClInclude Include="Src\GameObject\Comp\SpriteRenderDataComp.h" />
     <ClInclude Include="Src\GameObject\Comp\TransformComp.h" />
@@ -249,6 +266,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\GameComp\WhirlpoolsComp.h" />
     <ClInclude Include="Src\GameObject\GameComp\WindComp.h" />
     <ClInclude Include="Src\GameObject\GameComp\WindNodeComp.h" />
+    <ClInclude Include="Src\GameObject\Manager\CompCollisionManager.h" />
     <ClInclude Include="Src\GameObject\Manager\ObjectManager.h" />
     <ClInclude Include="Src\GameObject\Manager\TransformCompUpdater.h" />
     <ClInclude Include="Src\GameObject\Object.h" />

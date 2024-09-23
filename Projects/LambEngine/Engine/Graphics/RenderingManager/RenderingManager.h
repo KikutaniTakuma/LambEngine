@@ -52,6 +52,7 @@ public:
 	void SetProjectionInverseMatrix(const Mat4x4& projectionInverce);
 	void SetHsv(const Vector3& hsv);
 	void SetColor(const Vector4& color);
+	void SetIsLighting(bool isLighting);
 
 	void Debug(const std::string& guiName);
 

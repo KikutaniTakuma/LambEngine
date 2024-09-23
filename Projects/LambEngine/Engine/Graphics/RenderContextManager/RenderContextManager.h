@@ -120,6 +120,8 @@ public:
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
+
+		ResizeRenderList();
 	}
 
 	/// <summary>
@@ -171,12 +173,13 @@ public:
 	void SetIsNowThreading(bool isNowThreading);
 public:
 	std::pair<size_t, const std::list<RenderData*>&> CreateRenderList(BlendType blend);
-	void ResizeRenderList();
 	
 	void Draw();
 	void ResetDrawCount();
 
 private:
+	void ResizeRenderList();
+
 	[[nodiscard]] Shader LoadShader(const ShaderFileNames& shaderName);
 
 	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateGraphicsPipelines(Shader shader, uint32_t numRenderTarget = 1);

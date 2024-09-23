@@ -18,22 +18,29 @@
 #include "Comp/SceneChangeComp.h"
 #include "Comp/SpriteRenderComp.h"
 #include "Comp/SpriteRenderDataComp.h"
+#include "Comp/SpriteAnimatorComp.h"
 #include "Comp/TransformComp.h"
 
-#include "GameComp/CannonComp.h"
-#include "GameComp/CustomizeComp.h"
-#include "GameComp/ItemComp.h"
-#include "GameComp/LoopCannonComp.h"
-#include "GameComp/PlayerComp.h"
-#include "GameComp/SailComp.h"
-#include "GameComp/UIDrawComp.h"
-#include "GameComp/WhirlpoolsComp.h"
-#include "GameComp/WindComp.h"
-#include "GameComp/WindNodeComp.h"
+#include "Comp/LineComp.h"
+#include "Comp/LineRenderComp.h"
+#include "Comp/LineRenderDataComp.h"
+#include "Comp/LineCollisionComp.h"
+#include "Comp/LineConvertTransformComp.h"
+
+#include "Comp/AudioComp.h"
+#include "Comp/BgmComp.h"
+
+
 void Object::Init() {
 	/*for (auto& i : components_) {
 		i.second->Init();
 	}*/
+}
+
+void Object::Finalize() {
+	for (auto& i : components_) {
+		i.second->Finalize();
+	}
 }
 
 void Object::FirstUpdate()
@@ -76,32 +83,44 @@ void Object::Draw([[maybe_unused]] CameraComp* cameraComp) const
 	}
 }
 
-void Object::Debug([[maybe_unused]] const std::string& guiName) {
+void Object::Draw() const {
+	for (auto& i : components_) {
+		i.second->Draw();
+	}
+}
+
+bool Object::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
 		if (DebugAddComp()) {
 			ImGui::TreePop();
-			return;
+			return true;
 		}
 		ImGui::Text("tags : ");
+		ImGui::BeginChild(ImGui::GetID((void*)0), { 0.0f, 50.0f }, ImGuiChildFlags_AlwaysAutoResize | ImGuiChildFlags_AutoResizeX, ImGuiWindowFlags_NoTitleBar);
 		for (auto& i : tags_) {
-			ImGui::SameLine();
-			ImGui::Text("%s, ", i.c_str());
+			ImGui::Text("%s, ", i.second.c_str());
 		}
+		ImGui::EndChild();
 		if (ImGui::TreeNode("componets")) {
 			for (auto& i : components_) {
-				i.second->Debug(i.first);
+				i.second->Debug(tags_[i.first]);
 			}
 			ImGui::TreePop();
 		}
 		ImGui::TreePop();
 	}
 #endif // _DEBUG
+
+	return false;
 }
 
 bool Object::DebugAddComp() {
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Comps")) {
+		ImGui::BeginChild(ImGui::GetID((void*)0), { 0.0f, 150.0f }, ImGuiChildFlags_AlwaysAutoResize | ImGuiChildFlags_AutoResizeX, ImGuiWindowFlags_NoTitleBar);
+		DebugAdd<AudioComp>();
+		DebugAdd<BgmComp>();
 		DebugAdd<ButtonComp>();
 		DebugAdd<Camera2DComp>();
 		DebugAdd<Camera3DComp>();
@@ -119,16 +138,16 @@ bool Object::DebugAddComp() {
 		DebugAdd<SceneChangeComp>();
 		DebugAdd<SpriteRenderComp>();
 		DebugAdd<SpriteRenderDataComp>();
+		DebugAdd<SpriteAnimatorComp>();
 		DebugAdd<TransformComp>();
-		DebugAdd<CannonComp>();
-		DebugAdd<ItemComp>();
-		DebugAdd<LoopCannonComp>();
-		DebugAdd<PlayerComp>();
-		DebugAdd<SailComp>();
-		DebugAdd<UIDrawComp>();
-		DebugAdd<WhirlpoolsComp>();
-		DebugAdd<WindComp>();
-		DebugAdd<WindNodeComp>();
+		DebugAdd<LineComp>();
+		DebugAdd<LineRenderComp>();
+		DebugAdd<LineRenderDataComp>();
+		DebugAdd<LineCollisionComp>();
+		DebugAdd<LineConvertTransformComp>();
+
+		ImGui::EndChild();
+
 		ImGui::TreePop();
 
 		return true;
@@ -141,7 +160,7 @@ bool Object::DebugAddComp() {
 void Object::Save(nlohmann::json& json) {
 	json["type"] = "Object";
 	json["Comps"] = nlohmann::json::array();
-	for(auto& comp : this->components_) {
+	for (auto& comp : this->components_) {
 		json["Comps"].push_back(nlohmann::json::object());
 		comp.second->Save(json["Comps"].back());
 	}
@@ -162,6 +181,8 @@ void Object::AddComps(nlohmann::json& compData)
 {
 	std::string compName = compData["CompName"].get<std::string>();
 
+	AddAndLoadComp<AudioComp>(compName, compData);
+	AddAndLoadComp<BgmComp>(compName, compData);
 	AddAndLoadComp<ButtonComp>(compName, compData);
 	AddAndLoadComp<Camera2DComp>(compName, compData);
 	AddAndLoadComp<Camera3DComp>(compName, compData);
@@ -179,15 +200,12 @@ void Object::AddComps(nlohmann::json& compData)
 	AddAndLoadComp<SceneChangeComp>(compName, compData);
 	AddAndLoadComp<SpriteRenderComp>(compName, compData);
 	AddAndLoadComp<SpriteRenderDataComp>(compName, compData);
+	AddAndLoadComp<SpriteAnimatorComp>(compName, compData);
 	AddAndLoadComp<TransformComp>(compName, compData);
-	AddAndLoadComp<CannonComp>(compName, compData);
-	AddAndLoadComp<ItemComp>(compName, compData);
-	AddAndLoadComp<LoopCannonComp>(compName, compData);
-	AddAndLoadComp<PlayerComp>(compName, compData);
-	AddAndLoadComp<SailComp>(compName, compData);
-	AddAndLoadComp<UIDrawComp>(compName, compData);
-	AddAndLoadComp<WhirlpoolsComp>(compName, compData);
-	AddAndLoadComp<WindComp>(compName, compData);
-	AddAndLoadComp<WindNodeComp>(compName, compData);
+	AddAndLoadComp<LineComp>(compName, compData);
+	AddAndLoadComp<LineRenderComp>(compName, compData);
+	AddAndLoadComp<LineRenderDataComp>(compName, compData);
+	AddAndLoadComp<LineCollisionComp>(compName, compData);
+	AddAndLoadComp<LineConvertTransformComp>(compName, compData);
 }
 

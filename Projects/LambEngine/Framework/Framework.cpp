@@ -100,8 +100,6 @@ void Framework::Execution() {
 void Framework::Draw() {
 	const Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	renderContextManager->ResizeRenderList();
-
 	RenderingManager::GetInstance()->Draw();
 
 	// ドローカウントリセット

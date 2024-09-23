@@ -104,7 +104,7 @@ void SceneManager::Update() {
 
 	if (fade_->OutEnd()) {
 		// ロード中の描画を開始
-		//load_->Start();
+		load_->Start();
 
 #pragma region シーン切り替え
 		// 前のシーンのIDを保存
@@ -124,9 +124,8 @@ void SceneManager::Update() {
 		// シーンの初期化
 		scene_->Initialize();
 
-
 		// ロード中の描画を終了
-		//load_->Stop();
+		load_->Stop();
 #pragma endregion
 
 #pragma region その後の処理

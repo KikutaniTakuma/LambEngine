@@ -4,6 +4,7 @@
 #include "Utils/EngineInfo.h"
 #include "Drawers/DrawerManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include <climits>
 
 SceneLoad::Desc SceneLoad::setting = {};
@@ -50,6 +51,11 @@ void SceneLoad::Start()
 			BlendType::kUnenableDepthNone
 		);
 
+		RenderingManager::GetInstance()->Draw();
+
+		// ドローカウントリセット
+		renderContextManager_->ResetDrawCount();
+
 		Engine::FrameEnd();
 
 		tex2Danimator_->Start();
@@ -69,6 +75,7 @@ void SceneLoad::Stop()
 
 		tex2Danimator_->Stop();
 		renderContextManager_->SetIsNowThreading(isLoad_);
+
 		Engine::FrameStart();
 	}
 }
@@ -78,13 +85,12 @@ void SceneLoad::CreateLoad()
 	thread_ = std::make_unique<Lamb::Thread>();
 	thread_->Create(
 		[this]()->void {
-			Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 			Engine::FrameStart();
 
 			tex2Danimator_->Update();
 
 			loadTex_->Draw(
-				Mat4x4::MakeAffin(Vector3(Lamb::ClientSize(), 1.0f), Vector3::kZero, Vector3::kZero),
+				Mat4x4::MakeScale(Vector3(Lamb::ClientSize(), 1.0f)),
 				tex2Danimator_->GetUvMat4x4(),
 				cameraMatrix_,
 				textureID_,
@@ -92,11 +98,15 @@ void SceneLoad::CreateLoad()
 				BlendType::kUnenableDepthNone
 			);
 
-			renderContextManager->Draw();
+
+			renderContextManager_ = RenderContextManager::GetInstance();
+
+			RenderingManager::GetInstance()->Draw();
+
+			// ドローカウントリセット
+			renderContextManager_->ResetDrawCount();
 
 			Engine::FrameEnd();
-
-			renderContextManager->ResetDrawCount();
 		},
 		[this]()->bool { return !isLoad_; },
 		[this]()->bool { return isLoad_; }

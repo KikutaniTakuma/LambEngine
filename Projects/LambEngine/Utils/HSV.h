@@ -4,9 +4,9 @@
 #include <algorithm>
 
 inline float32_t3 RGBToHSV(float32_t3 rgb) {
-    float32_t r = rgb.r;
-    float32_t g = rgb.g;
-    float32_t b = rgb.b;
+    float32_t r = rgb.x;
+    float32_t g = rgb.y;
+    float32_t b = rgb.z;
 
     float32_t maxVal = std::max(r, std::max(g, b));
     float32_t minVal = std::min(r, std::min(g, b));
@@ -62,9 +62,9 @@ inline float32_t3 HSVToRGB(float32_t3 hsv) {
         rgb = float32_t3(c, 0, x);
     }
 
-    rgb.r += m;
-    rgb.g += m;
-    rgb.b += m;
+    rgb.x += m;
+    rgb.y += m;
+    rgb.z += m;
 
     return rgb;
 }

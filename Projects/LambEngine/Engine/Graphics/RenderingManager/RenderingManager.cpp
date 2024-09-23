@@ -184,9 +184,12 @@ void RenderingManager::FrameEnd()
 void RenderingManager::Draw() {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
+	static constexpr int32_t kHorizontal = 0;
+	static constexpr int32_t kVertical = 1;
+
 	deferredRenderingData_.directionLight.ligDirection = atmosphericParams_.lightDirection;
-	gaussianPipeline_[0]->SetGaussianState(gaussianBlurStateHorizontal_);
-	gaussianPipeline_[1]->SetGaussianState(gaussianBlurStateVertical_);
+	gaussianPipeline_[kHorizontal]->SetGaussianState(gaussianBlurStateHorizontal_);
+	gaussianPipeline_[kVertical]->SetGaussianState(gaussianBlurStateVertical_);
 	luminate_->SetLuminanceThreshold(luminanceThreshold);
 	outlinePipeline_->SetWeight(weight_);
 
@@ -359,6 +362,10 @@ void RenderingManager::SetColor(const Vector4& color)
 	rgbaTexture_->color = color.GetColorRGBA();
 }
 
+void RenderingManager::SetIsLighting(bool isLighting) {
+	deferredRenderingData_.isDirectionLight = static_cast<uint32_t>(isLighting);
+}
+
 void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
@@ -372,12 +379,12 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 
 		atmosphericParams_.lightDirection = -Vector3::kXIdentity * Quaternion::EulerToQuaternion(lightRotate_);
 		if (ImGui::TreeNode("hsv")) {
-			ImGui::DragFloat("h", &hsv_.h, 0.1f, 0.0f, 360.0f);
-			ImGui::DragFloat("s", &hsv_.s, 0.001f, 0.0f, 1.0f);
-			ImGui::DragFloat("v", &hsv_.v, 0.001f, 0.0f, 1.0f);
+			ImGui::DragFloat("h", &hsv_.x, 0.1f, 0.0f, 360.0f);
+			ImGui::DragFloat("s", &hsv_.y, 0.001f, 0.0f, 1.0f);
+			ImGui::DragFloat("v", &hsv_.z, 0.001f, 0.0f, 1.0f);
 			Vector3 rgb = HSVToRGB(hsv_);
 			Vector4 rgba = { rgb, 1.0f };
-			ImGui::Text("%.4f, %.4f, %.4f", rgb.r, rgb.g, rgb.b);
+			ImGui::Text("%.4f, %.4f, %.4f", rgb.x, rgb.y, rgb.z);
 			rgbaTexture_->color = rgba.GetColorRGBA();
 			ImGui::TreePop();
 		}

@@ -165,16 +165,8 @@ public:
 /// メンバ変数
 /// </summary>
 public:
-	union {
-		float x;
-		float first;
-		float min;
-	};
-	union {
-		float y;
-		float second;
-		float max;
-	};
+	float x;
+	float y;
 
 /// <summary>
 /// 静的関数

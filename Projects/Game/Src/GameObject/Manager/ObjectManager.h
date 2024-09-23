@@ -50,8 +50,6 @@ public:
 	void Draw();
 
 private:
-	void Collision();
-
 	void Debug();
 
 	void Save();
@@ -61,16 +59,19 @@ public:
 
 private:
 	std::unordered_set<std::unique_ptr<Object>> objects_;
-	std::list<Lamb::SafePtr<class ObbPushComp>> obbObjects_;
+	Lamb::SafePtr<class CompCollisionManager> collisionManager_;
 	std::unordered_map<std::string, bool> objectTags_;
+	std::vector<std::string> objectTagKeys_;
 	Lamb::SafePtr<class CameraComp> cameraComp_;
 
 	std::unordered_map<std::string, std::unique_ptr<LevelData>> levelDatas_;
 	std::string inputSceneName_;
-	std::string currentScene_;
+	std::string currentSceneFilePath_;
+	std::string currentSceneName_;
 #ifdef _DEBUG
 	std::vector<std::filesystem::path> levelDataFilePathes_;
 	bool isLoad_ = false;
+	bool isSelectInverse_ = false;
 #endif // _DEBUG
 
 };

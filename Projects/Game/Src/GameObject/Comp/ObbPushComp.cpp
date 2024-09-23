@@ -1,28 +1,20 @@
 #include "ObbPushComp.h"
+#include "../Manager/CompCollisionManager.h"
 
 void ObbPushComp::Init()
 {
 	obbComp_ = object_.AddComp<ObbComp>();
+	CompCollisionManager::GetInstance()->Set(this);
 }
 
-void ObbPushComp::Collision(Lamb::SafePtr<ObbComp> other) {
-	bool isPush = false;
+void ObbPushComp::Finalize() {
+	CompCollisionManager::GetInstance()->Erase(this);
+}
 
-	for (const auto& i : pushTags_) {
-		if (other->getObject().HasTag(i)) {
-			isPush = true;
-			break;
-		}
-	}
-
-	if (isPush) {
-		Vector3 pushvector;
-		if (obbComp_->IsCollision(other.get(), pushvector)) {
-			other->GetTransformComp().translate += pushvector;
-		}
-	}
-	else {
-		other->IsCollision(obbComp_.get());
+void ObbPushComp::Collision(Lamb::SafePtr<ObbPushComp> other) {
+	Vector3 pushvector;
+	if (obbComp_->IsCollision(&other->GetObbComp(), pushvector)) {
+		other->GetObbComp().GetTransformComp().translate += pushvector;
 	}
 }
 
@@ -60,6 +52,17 @@ void ObbPushComp::Debug([[maybe_unused]]const std::string& guiName)
 {
 #ifdef _DEBUG
 	if(ImGui::TreeNode(guiName.c_str())) {
+		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(250, 100), ImGuiWindowFlags_NoTitleBar);
+		for (auto& i : pushTags_) {
+			if (ImGui::Button("erase")) {
+				pushTags_.erase(i);
+				break;
+			}
+			ImGui::SameLine();
+			ImGui::Text("tag : % s", i.c_str());
+		}
+		ImGui::EndChild();
+
 		inputTag_.resize(32);
 		ImGui::InputText(
 			"タグ",
