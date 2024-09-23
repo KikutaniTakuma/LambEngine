@@ -166,6 +166,7 @@
     <ClCompile Include="Engine\Graphics\RenderingManager\RenderingManager.cpp" />
     <ClCompile Include="Engine\Graphics\RenderTarget\RenderTarget.cpp" />
     <ClCompile Include="Engine\Graphics\RootSignature\RootSignature.cpp" />
+    <ClCompile Include="Engine\Graphics\Shader\MeshShader\MeshShader.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.cpp" />
     <ClCompile Include="Engine\Graphics\Skeleton.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="Engine\EngineUtils\ResourceLoadLog\ResourceLoadLog.h" />
     <ClInclude Include="Engine\Graphics\AnimationManager\AnimationManager.h" />
     <ClInclude Include="Engine\Graphics\Animator\Animator.h" />
+    <ClInclude Include="Engine\Graphics\CreateBlendDesc.h" />
     <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h" />
     <ClInclude Include="Engine\Graphics\GraphicsStructs.h" />
     <ClInclude Include="Engine\Graphics\MeshLoader\MeshLoader.h" />
@@ -248,6 +250,7 @@
     <ClInclude Include="Engine\Graphics\RenderingManager\RenderingManager.h" />
     <ClInclude Include="Engine\Graphics\RenderTarget\RenderTarget.h" />
     <ClInclude Include="Engine\Graphics\RootSignature\RootSignature.h" />
+    <ClInclude Include="Engine\Graphics\Shader\MeshShader\MeshShader.h" />
     <ClInclude Include="Engine\Graphics\Shader\Shader.h" />
     <ClInclude Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.h" />
     <ClInclude Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.h" />

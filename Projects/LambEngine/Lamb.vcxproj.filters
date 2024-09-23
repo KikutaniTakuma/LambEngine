@@ -220,6 +220,9 @@
     <ClCompile Include="Drawers\AirSkyBox\AirSkyBox.cpp">
       <Filter>Drawers\AirSkyBox</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\Shader\MeshShader\MeshShader.cpp">
+      <Filter>Engine\Graphics\Shader\MeshShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -410,6 +413,9 @@
     </Filter>
     <Filter Include="Drawers\AirSkyBox">
       <UniqueIdentifier>{ca4daa01-23b2-4a95-840d-4ee7e9337717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Shader\MeshShader">
+      <UniqueIdentifier>{56824c3d-fcf4-40f3-af61-c665721bac0d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -676,6 +682,12 @@
     </ClInclude>
     <ClInclude Include="Math\Unit.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Shader\MeshShader\MeshShader.h">
+      <Filter>Engine\Graphics\Shader\MeshShader</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\CreateBlendDesc.h">
+      <Filter>Engine\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
