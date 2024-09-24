@@ -46,6 +46,7 @@ public:
 	[[nodiscard]] RootSignature* CreateRootSgnature(const RootSignature::Desc& desc, bool isTexture);
 
 	void SetDesc(const Pipeline::Desc& desc);
+	void SetDesc(const Pipeline::MeshDesc& desc);
 
 	/// <summary>
 	/// 設定したものでPSOの生成
@@ -57,6 +58,12 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	Pipeline* const CreateCubeMap();
+
+	/// <summary>
+	/// MeshShaderを使ったパイプラインを作成する
+	/// </summary>
+	/// <returns></returns>
+	Pipeline* const CreateMesh();
 
 	/// <summary>
 	/// Descをリセット
@@ -77,4 +84,5 @@ private:
 	std::list<std::unique_ptr<RootSignature>> rootSignatures_;
 
 	Pipeline::Desc pipelineDesc_;
+	Pipeline::MeshDesc pipelineMeshDesc_;
 };

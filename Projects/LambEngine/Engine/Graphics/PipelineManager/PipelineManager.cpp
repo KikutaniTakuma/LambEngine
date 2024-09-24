@@ -57,6 +57,11 @@ void PipelineManager::SetDesc(const Pipeline::Desc& desc) {
 	pipelineDesc_ = desc;
 }
 
+void PipelineManager::SetDesc(const Pipeline::MeshDesc& desc)
+{
+	pipelineMeshDesc_ = desc;
+}
+
 Pipeline* const PipelineManager::Create() {
 	auto IsSmae = [this](const std::unique_ptr<Pipeline>& pipeline) {
 			return pipeline->IsSame(pipelineDesc_);
@@ -92,6 +97,31 @@ Pipeline* const PipelineManager::CreateCubeMap()
 	if (pipelineItr == instance_->pipelines_.end()) {
 		auto pipeline = std::make_unique<Pipeline>();
 		pipeline->CreateCubeMap(pipelineDesc_);
+
+		if (not pipeline->graphicsPipelineState_) {
+			return nullptr;
+		}
+
+		instance_->pipelines_.push_back(std::move(pipeline));
+
+		return instance_->pipelines_.back().get();
+	}
+	else {
+		return pipelineItr->get();
+	}
+}
+
+Pipeline* const PipelineManager::CreateMesh()
+{
+	auto IsSmae = [this](const std::unique_ptr<Pipeline>& pipeline) {
+		return pipeline->IsSame(pipelineMeshDesc_);
+		};
+
+	auto pipelineItr = std::find_if(instance_->pipelines_.begin(), instance_->pipelines_.end(), IsSmae);
+
+	if (pipelineItr == instance_->pipelines_.end()) {
+		auto pipeline = std::make_unique<Pipeline>();
+		pipeline->Create(pipelineMeshDesc_);
 
 		if (not pipeline->graphicsPipelineState_) {
 			return nullptr;

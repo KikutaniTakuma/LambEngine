@@ -47,18 +47,34 @@ public:
 	};
 
 	struct Desc {
-		Shader shader;
-		std::vector<VSInputData> vsInputData;
 		Lamb::SafePtr<RootSignature> rootSignature;
-		std::array<Pipeline::Blend, 8> blend;
-		std::array<DXGI_FORMAT, 8> rtvFormtat;
-		Pipeline::CullMode cullMode;
-		Pipeline::SolidState solidState;
-		D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType;
+		std::array<Pipeline::Blend, 8> blend = {};
+		std::array<DXGI_FORMAT, 8> rtvFormtat = {};
 		uint32_t numRenderTarget = 1;
 		bool isDepth = true;
+		Pipeline::CullMode cullMode = {};
+		Pipeline::SolidState solidState = {};
+		Shader shader;
+
+		std::vector<VSInputData> vsInputData;
+		D3D12_PRIMITIVE_TOPOLOGY_TYPE topologyType = {};
 
 		[[nodiscard]] bool operator==(const Desc& right) const;
+	};
+
+	struct MeshDesc {
+		// IAがない分いろいろいらん
+
+		Lamb::SafePtr<RootSignature> rootSignature;
+		std::array<Pipeline::Blend, 8> blend = {};
+		std::array<DXGI_FORMAT, 8> rtvFormtat = {};
+		uint32_t numRenderTarget = 1;
+		bool isDepth = true;
+		Pipeline::CullMode cullMode = {};
+		Pipeline::SolidState solidState = {};
+		MeshShader shader;
+
+		[[nodiscard]] bool operator==(const MeshDesc& right) const;
 	};
 
 /// <summary>
@@ -95,11 +111,20 @@ public:
 		const Desc& desc
 	);
 
+	void Create(
+		const MeshDesc& desc
+	);
+
 	void Use() const;
 
 	bool IsSame(
 		const Desc& desc
 	);
+	bool IsSame(
+		const MeshDesc& desc
+	);
+
+	bool GetIsMesh() const;
 
 /// <summary>
 /// メンバ変数
@@ -108,5 +133,9 @@ private:
 	Lamb::LambPtr<ID3D12PipelineState> graphicsPipelineState_;
 
 	std::vector<D3D12_INPUT_ELEMENT_DESC> vertexInput_;
-	Desc desc_;
+
+	bool isMesh_ = false;
+	
+	std::unique_ptr<Desc> desc_;
+	std::unique_ptr<MeshDesc> meshDesc_;
 };
