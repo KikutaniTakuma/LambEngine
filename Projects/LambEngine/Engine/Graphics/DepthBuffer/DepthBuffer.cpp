@@ -75,7 +75,7 @@ void DepthBuffer::CreateDepthView(D3D12_CPU_DESCRIPTOR_HANDLE handle, uint32_t h
 	handle_ = handle;
 	hadleUINT_ = hadleUINT;
 
-	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
@@ -88,7 +88,7 @@ void DepthBuffer::CreateView(
 	D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
 	UINT heapHandle
 ) {
-	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 
 	device->CreateShaderResourceView(
 		depthStencilResource_.Get(),

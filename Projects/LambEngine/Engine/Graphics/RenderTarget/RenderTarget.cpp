@@ -136,7 +136,7 @@ void RenderTarget::CreateView(
 }
 
 void RenderTarget::CreateRTV(D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle, UINT descHeapHandleUINT) {
-	static ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	
 	// RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};

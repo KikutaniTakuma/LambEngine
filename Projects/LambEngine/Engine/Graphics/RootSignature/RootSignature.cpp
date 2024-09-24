@@ -98,7 +98,7 @@ void RootSignature::Create(const Desc& desc, bool isTexture) {
 	if (rootSignature_) {
 		rootSignature_.Reset();
 	}
-	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	hr = device->CreateRootSignature(0, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), IID_PPV_ARGS(rootSignature_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {

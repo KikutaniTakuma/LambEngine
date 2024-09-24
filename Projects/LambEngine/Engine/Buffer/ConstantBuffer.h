@@ -91,7 +91,7 @@ public:
 		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
 		UINT heapHandle
 	) noexcept {
-		static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
+		Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 		device->CreateConstantBufferView(&cbvDesc_, heapHandleCPU);
 		heapHandleCPU_ = heapHandleCPU;
 		heapHandleGPU_ = heapHandleGPU;

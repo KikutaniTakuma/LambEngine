@@ -137,7 +137,7 @@ void Pipeline::Create(
 		graphicsPipelineStateDesc.BlendState.RenderTarget[i] = CreateRenderTargetBlendDesc(desc_->blend[i]);
 	}
 
-	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	HRESULT hr = device->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(graphicsPipelineState_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
@@ -222,7 +222,7 @@ void Pipeline::CreateCubeMap(
 		graphicsPipelineStateDesc.BlendState.RenderTarget[i] = CreateRenderTargetBlendDesc(desc_->blend[i]);
 	}
 
-	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	HRESULT hr = device->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(graphicsPipelineState_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
@@ -306,7 +306,7 @@ void Pipeline::Create(const MeshDesc& desc) {
 	descStream.pPipelineStateSubobjectStream = &graphicsPipelineStateDesc;
 
 
-	static ID3D12Device8* device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	HRESULT hr = device->CreatePipelineState(&descStream, IID_PPV_ARGS(graphicsPipelineState_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
@@ -315,8 +315,6 @@ void Pipeline::Create(const MeshDesc& desc) {
 }
 
 void Pipeline::Use() const {
-	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
-
 	assert(graphicsPipelineState_);
 	if (!graphicsPipelineState_) {
 		throw Lamb::Error::Code<Pipeline>("GraphicsPipelineState is nullptr", ErrorPlace);

@@ -99,7 +99,7 @@ void DirectXCommand::CreateCommandQueue() {
 }
 
 void DirectXCommand::CreateCommandAllocator() {
-	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 
 	// コマンドアロケータを生成する
 	commandAllocator_ = nullptr;

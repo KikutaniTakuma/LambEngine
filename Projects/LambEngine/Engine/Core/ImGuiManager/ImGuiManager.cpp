@@ -29,7 +29,7 @@ void ImGuiManager::Finalize() {
 
 ImGuiManager::ImGuiManager() {
 #ifdef _DEBUG
-	ID3D12Device* const device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	// RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
@@ -57,7 +57,7 @@ ImGuiManager::ImGuiManager() {
 	ImGui::StyleColorsDark();
 	ImGui_ImplWin32_Init(WindowFactory::GetInstance()->GetHwnd());
 	ImGui_ImplDX12_Init(
-		device,
+		device.get(),
 		DirectXSwapChain::kBackBufferNumber_,
 		rtvDesc.Format,
 		descriptorHeap->Get(),

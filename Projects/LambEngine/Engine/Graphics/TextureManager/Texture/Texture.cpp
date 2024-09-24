@@ -151,7 +151,7 @@ DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 }
 
 ID3D12Resource* Texture::CreateTextureResource(const DirectX::TexMetadata& metaData) {
-	ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 
 	if (metaData.width == 0 || metaData.height == 0) {
 		return nullptr;
@@ -188,10 +188,10 @@ ID3D12Resource* Texture::CreateTextureResource(const DirectX::TexMetadata& metaD
 }
 
 ID3D12Resource* Texture::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages, ID3D12GraphicsCommandList* commandList) {
-	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-	DirectX::PrepareUpload(device, mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
+	DirectX::PrepareUpload(device.get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
 	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresources.size()));
 	ID3D12Resource* resource = DirectXDevice::GetInstance()->CreateBufferResuorce(intermediateSize);
 	UpdateSubresources(commandList, texture, resource, 0, 0, UINT(subresources.size()), subresources.data());
@@ -224,7 +224,7 @@ void Texture::CreateView(
 	D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
 	UINT heapHandle
 ) {
-	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	device->CreateShaderResourceView(textureResouce_.Get(), &srvDesc_, heapHandleCPU);
 
 	heapHandleCPU_ = heapHandleCPU;

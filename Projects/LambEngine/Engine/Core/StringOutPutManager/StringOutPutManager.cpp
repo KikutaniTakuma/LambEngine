@@ -39,13 +39,13 @@ StringOutPutManager::StringOutPutManager():
 	spriteBatch_{}
 {
 	// GraphicsMemory初期化
-	auto device = DirectXDevice::GetInstance()->GetDevice();
-	gmemory_.reset(new DirectX::GraphicsMemory(device));
+	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
+	gmemory_.reset(new DirectX::GraphicsMemory(device.get()));
 	Lamb::AddLog("Initialize StringOutPutManager succeeded");
 }
 
 void StringOutPutManager::LoadFont(const std::string& fontName) {
-	static ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
+	ID3D12Device* device = DirectXDevice::GetInstance()->GetDevice();
 	if (!std::filesystem::exists(std::filesystem::path(fontName))) {
 		throw Lamb::Error::Code<StringOutPutManager>("This file is not exist -> " + fontName, ErrorPlace);
 	}
