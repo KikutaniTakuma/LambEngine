@@ -1,0 +1,133 @@
+{
+    "RederingSetting": {
+        "bloom": {
+            "luminanceThreshold": 1.0,
+            "x": 128,
+            "y": 128
+        },
+        "hsv": [
+            0.0,
+            0.0,
+            1.0
+        ],
+        "isDirectionLight": false,
+        "lightRotate": [
+            0.0,
+            0.0,
+            -2.3387410640716553
+        ],
+        "outline": 0.0,
+        "outline_enable": false,
+        "skybox": {
+            "isDraw": false,
+            "scale": [
+                500.0,
+                500.0,
+                500.0
+            ]
+        }
+    },
+    "objects": [
+        {
+            "Comps": [
+                {
+                    "CompName": "class MeshShaderTestComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        1.4210831845312428e-14,
+                        -1.1920919007479824e-07,
+                        -1.192091971802256e-07,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        3.197742462158203,
+                        0.0
+                    ]
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources\\Common\\Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.03998923301696777,
+                        -0.0024979913141578436,
+                        0.00010000743350246921,
+                        0.9991970062255859
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        0.25197720527648926,
+                        3.1222856044769287,
+                        -16.869678497314453
+                    ]
+                },
+                {
+                    "CompName": "class CameraComp"
+                },
+                {
+                    "CompName": "class Camera3DComp",
+                    "aspectRatio": 1.7777777910232544,
+                    "farClip": 1000.0,
+                    "fov": 0.4869273006916046,
+                    "nearClip": 0.10000000149011612
+                }
+            ],
+            "type": "Object"
+        }
+    ],
+    "scene": "MeshShaderDrawTest"
+}

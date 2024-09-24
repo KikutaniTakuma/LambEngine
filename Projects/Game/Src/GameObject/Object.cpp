@@ -30,6 +30,8 @@
 #include "Comp/AudioComp.h"
 #include "Comp/BgmComp.h"
 
+#include "Comp/MeshShaderTestComp.h"
+
 
 void Object::Init() {
 	/*for (auto& i : components_) {
@@ -145,6 +147,7 @@ bool Object::DebugAddComp() {
 		DebugAdd<LineRenderDataComp>();
 		DebugAdd<LineCollisionComp>();
 		DebugAdd<LineConvertTransformComp>();
+		DebugAdd<MeshShaderTestComp>();
 
 		ImGui::EndChild();
 
@@ -207,5 +210,6 @@ void Object::AddComps(nlohmann::json& compData)
 	AddAndLoadComp<LineRenderDataComp>(compName, compData);
 	AddAndLoadComp<LineCollisionComp>(compName, compData);
 	AddAndLoadComp<LineConvertTransformComp>(compName, compData);
+	AddAndLoadComp<MeshShaderTestComp>(compName, compData);
 }
 
