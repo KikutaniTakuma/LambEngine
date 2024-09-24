@@ -5,10 +5,12 @@ struct MSOutput {
 	float32_t4 color : COLOR;
 };
 
-PixelShaderOutPut main(MSOutput input)
+PixelShaderOutPut3 main(MSOutput input)
 {
-	PixelShaderOutPut output;
-	output.color = input.color;
-    
+	PixelShaderOutPut3 output;
+	output.color0 = input.color;
+    output.color1 = output.color0;
+    output.color2 = output.color0;
+
 	return output;
 }

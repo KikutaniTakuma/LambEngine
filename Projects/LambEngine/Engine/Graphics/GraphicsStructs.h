@@ -185,11 +185,33 @@ struct ShaderFileNames {
     }
 };
 
+struct MeshShaderFileNames {
+    std::string asFileName;
+    std::string msFileName;
+    std::string psFileName;
+
+    [[nodiscard]] bool operator==(const MeshShaderFileNames& right) const {
+        return asFileName == right.asFileName and
+            msFileName == right.msFileName and
+            psFileName == right.psFileName;
+    }
+};
+
 struct LoadFileNames {
     std::string resourceFileName;
     ShaderFileNames shaderName;
 
     [[nodiscard]] bool operator==(const LoadFileNames& right) const {
+        return resourceFileName == right.resourceFileName &&
+            shaderName == right.shaderName;
+    }
+};
+
+struct MeshLoadFileNames {
+    std::string resourceFileName;
+    MeshShaderFileNames shaderName;
+
+    [[nodiscard]] bool operator==(const MeshLoadFileNames& right) const {
         return resourceFileName == right.resourceFileName &&
             shaderName == right.shaderName;
     }
@@ -235,6 +257,26 @@ namespace std {
                 data.shaderName.gsFileName +
                 data.shaderName.dsFileName +
                 data.shaderName.hsFileName
+                );
+
+            return result;
+        }
+
+    };
+}
+
+namespace std {
+    template<>
+    struct hash<MeshLoadFileNames> {
+    public:
+        size_t operator()(const MeshLoadFileNames& data)const {
+            size_t result{};
+
+            result = std::hash<std::string>{}(
+                data.resourceFileName +
+                data.shaderName.msFileName +
+                data.shaderName.psFileName +
+                data.shaderName.asFileName
                 );
 
             return result;

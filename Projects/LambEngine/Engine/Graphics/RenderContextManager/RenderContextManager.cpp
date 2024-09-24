@@ -47,6 +47,26 @@ RenderSet* const RenderContextManager::Get(const LoadFileNames& fileNames)
 	}
 }
 
+RenderSet* const RenderContextManager::Get(const MeshLoadFileNames& fileNames)
+{
+	auto isExist = meshRenderData_.find(fileNames);
+	if (isExist != meshRenderData_.end()) {
+		return meshRenderData_[fileNames].get();
+	}
+	else if (isExist == meshRenderData_.end() and not isNowThreading_) {
+		LoadMesh(fileNames);
+		return meshRenderData_[fileNames].get();
+	}
+	else {
+		isExist = threadMeshRenderData_.find(fileNames);
+		if (isExist == threadMeshRenderData_.end()) {
+			LoadMesh(fileNames);
+		}
+
+		return threadMeshRenderData_[fileNames].get();
+	}
+}
+
 void RenderContextManager::SetIsNowThreading(bool isNowThreading) {
 	isNowThreading_ = isNowThreading;
 
@@ -64,8 +84,19 @@ std::pair<size_t, const std::list<RenderData*>&> RenderContextManager::CreateRen
 	std::pair<size_t, const std::list<RenderData*>&> result = { 0llu, renderDataLists_[blend] };
 	size_t count = 0;
 	auto itr = renderDataLists_[blend].begin();
-	
+
 	for (auto& i : renderData_) {
+		if (i.second->IsDraw(blend)) {
+			if (itr == renderDataLists_[blend].end()) {
+				break;
+			}
+			*itr = i.second->GetRenderData(blend);
+			itr++;
+			count++;
+		}
+	}
+
+	for (auto& i : meshRenderData_) {
 		if (i.second->IsDraw(blend)) {
 			if (itr == renderDataLists_[blend].end()) {
 				break;
@@ -83,7 +114,7 @@ std::pair<size_t, const std::list<RenderData*>&> RenderContextManager::CreateRen
 
 void RenderContextManager::ResizeRenderList() {
 	for (auto& i : renderDataLists_) {
-		i.resize(renderData_.size());
+		i.resize(renderData_.size() + meshRenderData_.size());
 	}
 }
 
@@ -111,6 +142,19 @@ Shader RenderContextManager::LoadShader(const ShaderFileNames& shaderName)
 	result.geometory = shaderMaanger->LoadGeometoryShader(shaderName.gsFileName);
 	result.hull = shaderMaanger->LoadHullShader(shaderName.hsFileName);
 	result.domain = shaderMaanger->LoadDomainShader(shaderName.dsFileName);
+
+	return result;
+}
+
+MeshShader RenderContextManager::LoadMeshShader(const MeshShaderFileNames& shaderName)
+{
+	MeshShader result;
+
+	ShaderManager* const shaderMaanger = ShaderManager::GetInstance();
+
+
+	result.mesh = shaderMaanger->LoadMeshShader(shaderName.msFileName);
+	result.pixel = shaderMaanger->LoadPixelShader(shaderName.psFileName);
 
 	return result;
 }
@@ -309,6 +353,85 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimation
 		}
 		pipelineManager->SetDesc(pipelineDesc);
 		result[i] = pipelineManager->Create();
+	}
+
+
+	pipelineManager->StateReset();
+
+	return result;
+}
+
+std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateMeshShaderGraphicsPipelines(MeshShader shader, uint32_t numRenderTarget)
+{
+	std::array<Pipeline*, BlendType::kNum> result = { nullptr };
+
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
+	cbvRange[0].NumDescriptors = 1;
+	cbvRange[0].BaseShaderRegister = 0;
+	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
+	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
+
+	uint32_t baseShaderRegister = 0;
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> srvRange = {};
+	srvRange[0].NumDescriptors = 2;
+	srvRange[0].BaseShaderRegister = baseShaderRegister;
+	srvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
+	srvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	baseShaderRegister = srvRange[0].NumDescriptors;
+
+
+	std::array<D3D12_ROOT_PARAMETER, 2> rootPrams = {};
+	rootPrams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootPrams[0].DescriptorTable.NumDescriptorRanges = UINT(cbvRange.size());
+	rootPrams[0].DescriptorTable.pDescriptorRanges = cbvRange.data();
+	rootPrams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootPrams[1].DescriptorTable.NumDescriptorRanges = UINT(srvRange.size());
+	rootPrams[1].DescriptorTable.pDescriptorRanges = srvRange.data();
+	rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	RootSignature::Desc desc;
+	desc.rootParameter = rootPrams.data();
+	desc.rootParameterSize = rootPrams.size();
+	desc.samplerDeacs.push_back(
+		CreateLinearSampler()
+	);
+	desc.flag = D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS;
+	desc.flag |= D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS;
+	desc.flag |= D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS;
+	desc.flag |= D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS;
+
+
+	auto pipelineManager = PipelineManager::GetInstance();
+	Pipeline::MeshDesc pipelineDesc;
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, false);
+	pipelineDesc.shader = shader;
+	pipelineDesc.isDepth = false;
+	pipelineDesc.blend[0] = Pipeline::None;
+	pipelineDesc.solidState = Pipeline::SolidState::Solid;
+	pipelineDesc.cullMode = Pipeline::CullMode::Back;
+	pipelineDesc.numRenderTarget = numRenderTarget;
+
+
+	for (size_t i = 0; i < size_t(BlendType::kNum); i++) {
+		size_t blendType = i < Pipeline::Blend::BlendTypeNum ? i : i - Pipeline::Blend::BlendTypeNum;
+
+		pipelineDesc.isDepth = i < Pipeline::Blend::BlendTypeNum;
+		for (uint32_t renderCount = 0; renderCount < pipelineDesc.numRenderTarget; renderCount++) {
+			if (pipelineDesc.isDepth) {
+				pipelineDesc.rtvFormtat[renderCount] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+			}
+			else {
+				pipelineDesc.rtvFormtat[renderCount] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+			}
+		}
+
+		for (uint32_t blendIndex = 0; blendIndex < pipelineDesc.numRenderTarget; blendIndex++) {
+			pipelineDesc.blend[blendIndex] = Pipeline::Blend(blendType);
+		}
+		pipelineManager->SetDesc(pipelineDesc);
+		result[i] = pipelineManager->CreateMesh();
 	}
 
 

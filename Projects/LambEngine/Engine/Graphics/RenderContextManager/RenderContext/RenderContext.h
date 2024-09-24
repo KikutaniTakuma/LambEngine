@@ -1,5 +1,6 @@
 #pragma once
 #include "../../GraphicsStructs.h"
+#include "../../Shader/MeshShader/MeshShader.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
@@ -162,7 +163,6 @@ public:
         commandlist->IASetIndexBuffer(&mesh_->indexView);
         // ドローコール
         commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, 0);
-        //commandlist->DrawInstanced(mesh_->vertexNumber, drawCount_, 0, 0);
     }
     
 public:
@@ -445,6 +445,140 @@ private:
 
     SkinCluster* skinCluster_;
 };
+
+// MeshShaderテスト用
+class MeshRenderContext : public BaseRenderContext {
+public:
+    MeshRenderContext() :
+        shaderData_()
+    {
+        shaderData_.gVertices.Create(3);
+        shaderData_.gIndices.Create(1);
+
+        ///
+        /// テスト用==============================================================================
+        /// 
+
+        std::array vertexData = {
+            MSInput{ float32_t4(-0.5f, -0.5f,  0.0f, 1.0f), float32_t4(0.0f, 0.0f, 1.0f, 1.0f) },
+            MSInput{ float32_t4( 0.0f,  0.5f,  0.0f, 1.0f), float32_t4(0.0f, 1.0f, 0.0f, 1.0f) },
+            MSInput{ float32_t4( 0.5f, -0.5f,  0.0f, 1.0f), float32_t4(1.0f, 0.0f, 0.0f, 1.0f) }
+        };
+
+        std::array indexData = {
+            0u, 1u, 2u
+        };
+
+        for (size_t i = 0; i < vertexData.size(); i++) {
+            shaderData_.gVertices[i] = vertexData[i];
+        }
+        shaderData_.gIndices[0].index = indexData;
+
+        ///
+        /// =====================================================================================
+        /// 
+
+        pipeline_ = nullptr;
+        drawCount_ = 0u;
+
+        // ディスクリプタヒープ
+        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+
+        descriptorHeap->BookingHeapPos(3);
+        descriptorHeap->CreateView(shaderData_.gTransform);
+        descriptorHeap->CreateView(shaderData_.gVertices);
+        descriptorHeap->CreateView(shaderData_.gIndices);
+
+
+
+        shaderData_.gVertices.OffWright();
+        shaderData_.gIndices.OffWright();
+        shaderData_.gTransform.OffWright();
+
+        typeID_ = (typeid(MeshRenderContext).name());
+    }
+    ~MeshRenderContext() {
+        // ディスクリプタヒープ
+        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+
+        descriptorHeap->ReleaseView(shaderData_.gTransform.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.gVertices.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.gIndices.GetHandleUINT());
+    }
+
+    MeshRenderContext(const MeshRenderContext&) = delete;
+    MeshRenderContext(MeshRenderContext&&) = delete;
+
+    MeshRenderContext& operator=(const MeshRenderContext&) = delete;
+    MeshRenderContext& operator=(MeshRenderContext&&) = delete;
+
+public:
+    void Draw() const override {
+        // コマンドリスト
+        Lamb::SafePtr commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+        // パイプライン設定
+        pipeline_->Use();
+
+        // ライト構造体
+        commandlist->SetGraphicsRootDescriptorTable(0, shaderData_.gTransform.GetHandleGPU());
+        // ワールドとカメラマトリックス, 色, 各シェーダーの構造体
+        commandlist->SetGraphicsRootDescriptorTable(1, shaderData_.gVertices.GetHandleGPU());
+
+        // ドローコール
+        commandlist->DispatchMesh(1, 1, 1);
+    }
+
+public:
+    inline void SetMesh(const Mesh* const mesh) override {
+        if (!mesh) {
+            throw Lamb::Error::Code<MeshRenderContext>("mesh is nullptr", ErrorPlace);
+        }
+        mesh_ = mesh;
+    }
+    inline void SetModelData(const ModelData* const modelData) override {
+        if (!modelData) {
+            throw Lamb::Error::Code<MeshRenderContext>("modelData is nullptr", ErrorPlace);
+        }
+        modelData_ = modelData;
+    }
+    inline void SetPipeline(Pipeline* const pipeline) override {
+        if (!pipeline) {
+            throw Lamb::Error::Code<MeshRenderContext>("pipeline is nullptr", ErrorPlace);
+        }
+        pipeline_ = pipeline;
+    }
+    inline void SetWVPMatrix(const WVPMatrix& matrix) override {
+        shaderData_.gTransform.OnWright();
+        shaderData_.gTransform->world = matrix.worldMat;
+        shaderData_.gTransform->viewProjection = matrix.cameraMat;
+        shaderData_.gTransform.OffWright();
+    }
+    inline void SetColor([[maybe_unused]]const Vector4& color) override {
+        
+    }
+    inline void SetLight([[maybe_unused]] const DirectionLight& light) override {
+       
+    }
+    inline void SetCameraPos([[maybe_unused]] const Vector3& cameraPos) {
+       
+    }
+
+    inline void ZSort() override {
+
+    }
+
+    inline void DataSet() override {
+        shaderData_.gVertices.OffWright();
+        shaderData_.gIndices.OffWright();
+        shaderData_.gTransform.OffWright();
+    }
+
+
+private:
+    MeshShaderData shaderData_;
+};
+
 
 template<class T>
 concept IsBasedRenderContext =  std::is_base_of_v<BaseRenderContext, T>;

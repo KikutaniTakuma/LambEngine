@@ -223,6 +223,9 @@
     <ClCompile Include="Engine\Graphics\Shader\MeshShader\MeshShader.cpp">
       <Filter>Engine\Graphics\Shader\MeshShader</Filter>
     </ClCompile>
+    <ClCompile Include="Drawers\Other\MeshShaderTest.cpp">
+      <Filter>Drawers\Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -688,6 +691,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\CreateBlendDesc.h">
       <Filter>Engine\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawers\Other\MeshShaderTest.h">
+      <Filter>Drawers\Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

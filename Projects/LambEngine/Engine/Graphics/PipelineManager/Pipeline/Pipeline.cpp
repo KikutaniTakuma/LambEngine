@@ -320,25 +320,28 @@ void Pipeline::Use() const {
 		throw Lamb::Error::Code<Pipeline>("GraphicsPipelineState is nullptr", ErrorPlace);
 	}
 	auto commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	commandlist->SetGraphicsRootSignature(desc_->rootSignature->Get());
+	auto rootSignature = isMesh_ ? meshDesc_->rootSignature->Get() : desc_->rootSignature->Get();
+	commandlist->SetGraphicsRootSignature(rootSignature);
 	commandlist->SetPipelineState(graphicsPipelineState_.Get());
 
-	switch (desc_->topologyType)
-	{
-	case D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE:
-		commandlist->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
-		break;
-	case D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE:
-		commandlist->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		break;
-	case D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH:
-		commandlist->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
-		break;
-	default:
-	case D3D12_PRIMITIVE_TOPOLOGY_TYPE_UNDEFINED:
-	case D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT:
-		throw Lamb::Error::Code<Pipeline>("Cannot use this primitive topology type", ErrorPlace);
-		break;
+	if (not isMesh_) {
+		switch (desc_->topologyType)
+		{
+		case D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE:
+			commandlist->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_LINELIST);
+			break;
+		case D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE:
+			commandlist->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			break;
+		case D3D12_PRIMITIVE_TOPOLOGY_TYPE_PATCH:
+			commandlist->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
+			break;
+		default:
+		case D3D12_PRIMITIVE_TOPOLOGY_TYPE_UNDEFINED:
+		case D3D12_PRIMITIVE_TOPOLOGY_TYPE_POINT:
+			throw Lamb::Error::Code<Pipeline>("Cannot use this primitive topology type", ErrorPlace);
+			break;
+		}
 	}
 }
 

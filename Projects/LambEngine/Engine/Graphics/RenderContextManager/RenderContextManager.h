@@ -10,6 +10,7 @@
 class RenderContextManager final {
 private:
 	using Key = LoadFileNames;
+	using MeshKey = MeshLoadFileNames;
 
 private:
 	RenderContextManager() = default;
@@ -164,11 +165,59 @@ public:
 	}
 
 	/// <summary>
+	/// 描画に必要なものをロードしてコンテナに追加(1度追加してたら追加しない)
+	/// </summary>
+	/// <typeparam name="RenderContextType">レンダーコンテキストタイプ</typeparam>
+	/// <param name="fileNames">リソースファイル名</param>
+	/// <param name="numRenderTarget">レンダーターゲットの数</param>
+	template<IsBasedRenderContext RenderContextType = RenderContext<>>
+	void LoadMesh(const MeshLoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
+		auto isExist = meshRenderData_.find(fileNames);
+
+		if (isExist != meshRenderData_.end()) {
+			return;
+		}
+
+		auto& currentRenderData = (isNowThreading_ ? threadMeshRenderData_ : meshRenderData_);
+
+		currentRenderData.insert(std::make_pair(fileNames, std::make_unique<RenderSet>()));
+
+		RenderSet& currentRenderSet = *currentRenderData[fileNames];
+
+		MeshShader shader = LoadMeshShader(fileNames.shaderName);
+
+		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateMeshShaderGraphicsPipelines(shader, numRenderTarget);
+
+		Lamb::SafePtr meshManager = MeshManager::GetInstance();
+		meshManager->LoadModel(fileNames.resourceFileName);
+		Mesh* mesh = meshManager->GetMesh(fileNames.resourceFileName);
+		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
+
+		for (uint32_t i = 0; i < BlendType::kNum; i++) {
+			std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();
+
+			renderContext->SetMesh(mesh);
+			renderContext->SetModelData(modelData);
+			renderContext->SetPipeline(pipelines[i]);
+			currentRenderSet.Set(renderContext.release(), BlendType(i));
+		}
+
+		ResizeRenderList();
+	}
+
+	/// <summary>
 	/// リソースファイルから描画構造体を取得する(deleteしてはいけない)
 	/// </summary>
 	/// <param name="fileNames"></param>
 	/// <returns></returns>
 	[[nodiscard]] RenderSet* const Get(const LoadFileNames& fileNames);
+
+	/// <summary>
+	/// リソースファイルから描画構造体を取得する(deleteしてはいけない)
+	/// </summary>
+	/// <param name="fileNames"></param>
+	/// <returns></returns>
+	[[nodiscard]] RenderSet* const Get(const MeshLoadFileNames& fileNames);
 
 	void SetIsNowThreading(bool isNowThreading);
 public:
@@ -181,14 +230,18 @@ private:
 	void ResizeRenderList();
 
 	[[nodiscard]] Shader LoadShader(const ShaderFileNames& shaderName);
+	[[nodiscard]] MeshShader LoadMeshShader(const MeshShaderFileNames& shaderName);
 
 	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateGraphicsPipelines(Shader shader, uint32_t numRenderTarget = 1);
 	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateSkinAnimationGraphicsPipelines(Shader shader, uint32_t numRenderTarget = 1);
+	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateMeshShaderGraphicsPipelines(MeshShader shader, uint32_t numRenderTarget = 1);
 
 
 private:
 	std::unordered_map<Key, std::unique_ptr<RenderSet>> renderData_;
 	std::unordered_map<Key, std::unique_ptr<RenderSet>> threadRenderData_;
+	std::unordered_map<MeshKey, std::unique_ptr<RenderSet>> meshRenderData_;
+	std::unordered_map<MeshKey, std::unique_ptr<RenderSet>> threadMeshRenderData_;
 	bool isNowThreading_ = false;
 
 	std::array<std::list<RenderData*>, BlendType::kNum> renderDataLists_;

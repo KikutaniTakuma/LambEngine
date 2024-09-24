@@ -1,5 +1,5 @@
 struct MSInput {
-	float32_t3 position;
+	float32_t4 position;
 	float32_t4 color;
 };
 
@@ -10,17 +10,16 @@ struct MSOutput {
 
 struct TransformParam {
 	float32_t4x4 world;
-	float32_t4x4 view;
-	float32_t4x4 projection;
+	float32_t4x4 viewProjection;
 };
 
 struct IndexParam {
 	uint32_t3 index;
 };
 
+ConstantBuffer<TransformParam> gTransform : register(b0);
 StructuredBuffer<MSInput> gVertices : register(t0);
 StructuredBuffer<IndexParam> gIndices : register(t1);
-ConstantBuffer<TransformParam> gTransform : register(b0);
 
 [numthreads(64, 1, 1)]
 [outputtopology("triangle")]
@@ -40,10 +39,9 @@ void main(
 	if(groupIndex < 3) {
 		MSOutput output = (MSOutput)0;
 
-		float32_t4 localPos = float32_t4(gVertices[groupIndex].position, 1.0f);
+		float32_t4 localPos = gVertices[groupIndex].position;
 		float32_t4 worldPos = mul(localPos, gTransform.world);
-		float32_t4 viewPos = mul(worldPos, gTransform.view);
-		float32_t4 projectionPos = mul(viewPos, gTransform.projection);
+		float32_t4 projectionPos = mul(worldPos, gTransform.viewProjection);
 
 		output.position = projectionPos;
 		output.color = gVertices[groupIndex].color;

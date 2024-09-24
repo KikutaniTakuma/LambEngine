@@ -138,10 +138,12 @@ Pipeline* const PipelineManager::CreateMesh()
 
 void PipelineManager::StateReset() {
 	pipelineDesc_ = {};
+	pipelineMeshDesc_ = {};
 }
 
 PipelineManager::PipelineManager() :
 	pipelines_(),
 	rootSignatures_(),
-	pipelineDesc_()
+	pipelineDesc_(),
+	pipelineMeshDesc_()
 {}

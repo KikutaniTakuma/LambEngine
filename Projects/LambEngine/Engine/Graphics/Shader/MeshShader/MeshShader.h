@@ -3,6 +3,12 @@
 #pragma comment(lib, "d3d12.lib")
 #undef max
 #undef min
+#include "Engine/Buffer/ConstantBuffer.h" 
+#include "Engine/Buffer/StructuredBuffer.h"
+#include "Math/Vector4.h"
+#include "Math/Vector3.h"
+#include "Math/Vector2.h"
+#include "Math/Mat4x4.h"
 
 
 template<typename ValueType, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE kObjectType>
@@ -29,8 +35,8 @@ public:
 
 
 private:
-	ValueType                           value_;
 	D3D12_PIPELINE_STATE_SUBOBJECT_TYPE type_;
+	ValueType                           value_;
 };
 
 template<typename ValueType, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE kObjectType>
@@ -59,8 +65,8 @@ public:
 
 
 private:
-	ValueType                           value_;
 	D3D12_PIPELINE_STATE_SUBOBJECT_TYPE type_;
+	ValueType                           value_;
 	char pad[4];
 };
 
@@ -95,4 +101,24 @@ struct MeshShaderPipelineStateDesc {
 	SP_RT_FORMAT      RTFormat;
 	SP_DS_FORMAT      DSFormt;
 	SP_FLAGS          flags;
+};
+
+struct MSInput {
+	float32_t4 position;
+	float32_t4 color;
+};
+
+struct TransformParam {
+	float32_t4x4 world;
+	float32_t4x4 viewProjection;
+};
+
+struct IndexParam {
+	std::array<uint32_t, 3> index;
+};
+
+struct MeshShaderData {
+	StructuredBuffer<MSInput> gVertices;
+	StructuredBuffer<IndexParam> gIndices;
+	ConstantBuffer<TransformParam> gTransform;
 };
