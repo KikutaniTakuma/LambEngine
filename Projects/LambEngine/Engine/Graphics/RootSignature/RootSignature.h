@@ -15,6 +15,7 @@ public:
 		D3D12_ROOT_PARAMETER* rootParameter;
 		size_t rootParameterSize;
 		std::vector<D3D12_STATIC_SAMPLER_DESC> samplerDeacs;
+		D3D12_ROOT_SIGNATURE_FLAGS flag = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
 		bool operator==(const Desc& right) const;
 	};

@@ -53,7 +53,7 @@ void RootSignature::Create(const Desc& desc, bool isTexture) {
 
 	// RootSignatureの生成
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
-	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+	descriptionRootSignature.Flags = desc_.flag;
 
 	rootParamater_.clear();
 	rootParamater_.resize(desc_.rootParameterSize);
