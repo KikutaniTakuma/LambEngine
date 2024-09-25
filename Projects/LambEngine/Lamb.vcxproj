@@ -299,6 +299,9 @@
     <ProjectReference Include="..\ImGui\ImGui.vcxproj">
       <Project>{cce141c6-6223-414a-b5cd-00cab7e683a3}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\meshoptimizer\meshoptimizer.vcxproj">
+      <Project>{d231e82a-80a0-455e-ae3a-265c593865e9}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
