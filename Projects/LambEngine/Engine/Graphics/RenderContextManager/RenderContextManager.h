@@ -5,7 +5,7 @@
 #include <list>
 
 #include "RenderContext/RenderContext.h"
-#include "../MeshManager/MeshManager.h"
+#include "../VertexIndexDataManager/VertexIndexDataManager.h"
 
 class RenderContextManager final {
 private:

@@ -3,7 +3,7 @@
 #include "../PeraPipeline/PeraPipeline.h"
 #include "Math/Vector2.h"
 #include "Math/MathCommon.h"
-#include "Engine/Graphics/MeshManager/Mesh/Mesh.h"
+#include "Engine/Graphics/VertexIndexDataManager/VertexIndexDataManager.h"
 #include "Engine/Graphics/GraphicsStructs.h"
 
 class GaussianBlur final : public PeraPipeline {

@@ -24,7 +24,7 @@
 #include "AudioManager/AudioManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include "Engine/Graphics/AnimationManager/AnimationManager.h"
-#include "Engine/Graphics/MeshManager/MeshManager.h"
+#include "Engine/Graphics/VertexIndexDataManager/VertexIndexDataManager.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 
 #include "EngineUtils/FrameInfo/FrameInfo.h"

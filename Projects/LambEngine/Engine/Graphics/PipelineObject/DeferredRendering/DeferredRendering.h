@@ -5,7 +5,6 @@
 #include "../PeraPipeline/PeraPipeline.h"
 #include "Math/Vector2.h"
 #include "Math/MathCommon.h"
-#include "Engine/Graphics/MeshManager/Mesh/Mesh.h"
 #include "Engine/Graphics/GraphicsStructs.h"
 #include "Drawers/AirSkyBox/AirSkyBox.h"
 

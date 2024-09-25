@@ -154,8 +154,6 @@
     <ClCompile Include="Engine\Graphics\Animator\Animator.cpp" />
     <ClCompile Include="Engine\Graphics\DepthBuffer\DepthBuffer.cpp" />
     <ClCompile Include="Engine\Graphics\Meshlet\Meshlet.cpp" />
-    <ClCompile Include="Engine\Graphics\MeshLoader\MeshLoader.cpp" />
-    <ClCompile Include="Engine\Graphics\MeshManager\MeshManager.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\DeferredRendering\DeferredRendering.cpp" />
@@ -175,6 +173,8 @@
     <ClCompile Include="Engine\Graphics\Tex2DAniamtor\Tex2DAniamtor.cpp" />
     <ClCompile Include="Engine\Graphics\TextureManager\TextureManager.cpp" />
     <ClCompile Include="Engine\Graphics\TextureManager\Texture\Texture.cpp" />
+    <ClCompile Include="Engine\Graphics\VertexIndexDataLoader\VertexIndexDataLoader.cpp" />
+    <ClCompile Include="Engine\Graphics\VertexIndexDataManager\VertexIndexDataManager.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
     <ClCompile Include="Input\Gamepad\Gamepad.cpp" />
     <ClCompile Include="Input\Input.cpp" />
@@ -239,8 +239,6 @@
     <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h" />
     <ClInclude Include="Engine\Graphics\GraphicsStructs.h" />
     <ClInclude Include="Engine\Graphics\Meshlet\Meshlet.h" />
-    <ClInclude Include="Engine\Graphics\MeshLoader\MeshLoader.h" />
-    <ClInclude Include="Engine\Graphics\MeshManager\MeshManager.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\DeferredRendering\DeferredRendering.h" />
@@ -262,6 +260,8 @@
     <ClInclude Include="Engine\Graphics\Tex2DAniamtor\Tex2DAniamtor.h" />
     <ClInclude Include="Engine\Graphics\TextureManager\TextureManager.h" />
     <ClInclude Include="Engine\Graphics\TextureManager\Texture\Texture.h" />
+    <ClInclude Include="Engine\Graphics\VertexIndexDataLoader\VertexIndexDataLoader.h" />
+    <ClInclude Include="Engine\Graphics\VertexIndexDataManager\VertexIndexDataManager.h" />
     <ClInclude Include="Error\Error.h" />
     <ClInclude Include="Framework\Framework.h" />
     <ClInclude Include="Input\Gamepad\Gamepad.h" />

@@ -1,7 +1,7 @@
-#include "MeshManager.h"
+#include "VertexIndexDataManager.h"
 #include "Utils/EngineInfo.h"
 #include "Utils/SafeDelete.h"
-#include "../MeshLoader/MeshLoader.h"
+#include "../VertexIndexDataLoader/VertexIndexDataLoader.h"
 #include "Error/Error.h"
 
 Lamb::SafePtr<VertexIndexDataManager> VertexIndexDataManager::instance_ = nullptr;

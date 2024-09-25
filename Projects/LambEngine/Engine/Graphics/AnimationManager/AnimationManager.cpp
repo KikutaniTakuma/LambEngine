@@ -2,7 +2,7 @@
 #include "Error/Error.h"
 #include "Utils/SafeDelete.h"
 
-#include "../MeshLoader/MeshLoader.h"
+#include "../VertexIndexDataLoader/VertexIndexDataLoader.h"
 
 Lamb::SafePtr<AnimationManager> AnimationManager::instance_ = nullptr;
 

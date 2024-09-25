@@ -106,9 +106,6 @@
     <ClCompile Include="Engine\Graphics\TextureManager\Texture\Texture.cpp">
       <Filter>Engine\Graphics\TextureManager\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\MeshManager\MeshManager.cpp">
-      <Filter>Engine\Graphics\MeshManager</Filter>
-    </ClCompile>
     <ClCompile Include="Math\Mat4x4.cpp">
       <Filter>Math</Filter>
     </ClCompile>
@@ -138,9 +135,6 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\RenderContextManager\RenderContextManager.cpp">
       <Filter>Engine\Graphics\RenderContextManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Graphics\MeshLoader\MeshLoader.cpp">
-      <Filter>Engine\Graphics\MeshLoader</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\AnimationManager\AnimationManager.cpp">
       <Filter>Engine\Graphics\AnimationManager</Filter>
@@ -228,6 +222,12 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Meshlet\Meshlet.cpp">
       <Filter>Engine\Graphics\Meshlet</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\VertexIndexDataLoader\VertexIndexDataLoader.cpp">
+      <Filter>Engine\Graphics\VertexIndexDataLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\VertexIndexDataManager\VertexIndexDataManager.cpp">
+      <Filter>Engine\Graphics\VertexIndexDataManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -342,9 +342,6 @@
     <Filter Include="Engine\Graphics\Shader\ShaderFactory">
       <UniqueIdentifier>{5f7e1038-27c5-404e-8914-287c680dd589}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\MeshManager">
-      <UniqueIdentifier>{e3b837b9-c45b-439a-98d3-36af6cb3ea8e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\TextureManager">
       <UniqueIdentifier>{1336c590-e855-4d4f-92b9-fa2698582835}</UniqueIdentifier>
     </Filter>
@@ -371,9 +368,6 @@
     </Filter>
     <Filter Include="Engine\Graphics\RenderContextManager">
       <UniqueIdentifier>{8a28b82c-21de-47c0-ba38-a5b7a2c11e0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Graphics\MeshLoader">
-      <UniqueIdentifier>{cde4235d-86b5-4e9d-941a-d920e34c5cd3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Graphics\RenderContextManager\RenderContext">
       <UniqueIdentifier>{ed16a241-2fda-436b-96b6-6136375891f8}</UniqueIdentifier>
@@ -425,6 +419,12 @@
     </Filter>
     <Filter Include="Engine\Graphics\Meshlet">
       <UniqueIdentifier>{7778107f-7d41-4603-9bc8-e388f33bc259}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\VertexIndexDataLoader">
+      <UniqueIdentifier>{0d42c357-723e-45f3-afb6-3ea5d38c6a2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\VertexIndexDataManager">
+      <UniqueIdentifier>{527d72cc-4ef5-411b-b4d5-7174fb3ab935}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -533,9 +533,6 @@
     <ClInclude Include="Engine\Graphics\TextureManager\Texture\Texture.h">
       <Filter>Engine\Graphics\TextureManager\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\MeshManager\MeshManager.h">
-      <Filter>Engine\Graphics\MeshManager</Filter>
-    </ClInclude>
     <ClInclude Include="Math\Mat4x4.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -583,9 +580,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\RenderContextManager\RenderContextManager.h">
       <Filter>Engine\Graphics\RenderContextManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\Graphics\MeshLoader\MeshLoader.h">
-      <Filter>Engine\Graphics\MeshLoader</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\RenderContextManager\RenderContext\RenderContext.h">
       <Filter>Engine\Graphics\RenderContextManager\RenderContext</Filter>
@@ -703,6 +697,12 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Meshlet\Meshlet.h">
       <Filter>Engine\Graphics\Meshlet</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\VertexIndexDataLoader\VertexIndexDataLoader.h">
+      <Filter>Engine\Graphics\VertexIndexDataLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\VertexIndexDataManager\VertexIndexDataManager.h">
+      <Filter>Engine\Graphics\VertexIndexDataManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
