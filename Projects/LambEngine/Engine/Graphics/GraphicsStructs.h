@@ -79,7 +79,7 @@ struct ModelData {
     Node rootNode;
 };
 
-struct Mesh {
+struct VertexIndexData {
     D3D12_VERTEX_BUFFER_VIEW vertexView;
     Lamb::LambPtr<ID3D12Resource> vertexResource;
     uint32_t vertexNumber;
@@ -90,7 +90,7 @@ struct Mesh {
     uint32_t indexNumber;
     Node node;
 
-    Mesh& operator=(const Mesh&) = default;
+    VertexIndexData& operator=(const VertexIndexData&) = default;
 };
 
 enum BlendType {

@@ -404,9 +404,6 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 			if (isDrawSkyBox_) {
 				ImGui::DragFloat("environment", &deferredRenderingData_.environmentCoefficient, 0.001f, 0.0f, 5.0f);
 			}
-			else {
-				deferredRenderingData_.environmentCoefficient = 0.0f;
-			}
 			ImGui::Checkbox("SkyBox描画", &isDrawSkyBox_);
 			ImGui::DragFloat3("scale", transform_.scale.data(), 0.1f);
 			ImGui::TreePop();
@@ -445,6 +442,7 @@ void RenderingManager::Save(nlohmann::json& jsonFile) {
 	for (auto& i : transform_.scale) {
 		json["skybox"]["scale"].push_back(i);
 	}
+	json["skybox"]["environmentCoefficient"] = deferredRenderingData_.environmentCoefficient;
 	json["skybox"]["isDraw"] = isDrawSkyBox_;
 	json["outline"] = weight_;
 	json["outline_enable"] = isOutLine_;
@@ -470,6 +468,12 @@ void RenderingManager::Load(nlohmann::json& jsonFile) {
 	}
 	for (size_t i = 0; i < transform_.scale.size(); i++) {
 		transform_.scale[i] = json["skybox"]["scale"][i].get<float>();
+	}
+	if (json["skybox"]["environmentCoefficient"].is_number_float()) {
+		deferredRenderingData_.environmentCoefficient = json["skybox"]["environmentCoefficient"].get<float>();
+	}
+	else {
+		deferredRenderingData_.environmentCoefficient = 0.0f;
 	}
 	isDrawSkyBox_ = json["skybox"]["isDraw"].get<bool>();
 	weight_ = json["outline"].get<float>();

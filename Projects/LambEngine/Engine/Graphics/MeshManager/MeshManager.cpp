@@ -4,64 +4,64 @@
 #include "../MeshLoader/MeshLoader.h"
 #include "Error/Error.h"
 
-Lamb::SafePtr<MeshManager> MeshManager::instance_ = nullptr;
+Lamb::SafePtr<VertexIndexDataManager> VertexIndexDataManager::instance_ = nullptr;
 
-MeshManager* const MeshManager::GetInstance() {
+VertexIndexDataManager* const VertexIndexDataManager::GetInstance() {
 	return instance_.get();
 }
 
-MeshManager::~MeshManager() {
+VertexIndexDataManager::~VertexIndexDataManager() {
 	meshs_.clear();
 	Lamb::AddLog("Finalize MeshManager succeeded");
 }
 
-void MeshManager::Initialize() {
-	instance_.reset(new MeshManager());
+void VertexIndexDataManager::Initialize() {
+	instance_.reset(new VertexIndexDataManager());
 	if (instance_) {
 		Lamb::AddLog("Initialize MeshManager succeeded");
 	}
 	else {
-		throw Lamb::Error::Code<MeshManager>("instance is nullptr", ErrorPlace);
+		throw Lamb::Error::Code<VertexIndexDataManager>("instance is nullptr", ErrorPlace);
 	}
 }
-void MeshManager::Finalize() {
+void VertexIndexDataManager::Finalize() {
 	instance_.reset();
 }
 
-void MeshManager::LoadModel(const std::string& fileName) {
+void VertexIndexDataManager::LoadModel(const std::string& fileName) {
 	auto mesh = meshs_.find(fileName);
 
 	if (mesh == meshs_.end()) {
-		modelData_.insert(std::make_pair(fileName, std::make_unique<ModelData>(MeshLoader::LoadModel(fileName))));
+		modelData_.insert(std::make_pair(fileName, std::make_unique<ModelData>(VertexIndexDataLoader::LoadModel(fileName))));
 		meshs_.insert(std::make_pair(fileName, CreateMesh(*modelData_[fileName])));
 	}
 }
 
-Mesh* MeshManager::GetMesh(const std::string& fileName)
+VertexIndexData* VertexIndexDataManager::GetMesh(const std::string& fileName)
 {
 	auto mesh = meshs_.find(fileName);
 
 	if (mesh == meshs_.end()) {
-		throw Lamb::Error::Code<MeshManager>("This file is not loaded -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<VertexIndexDataManager>("This file is not loaded -> " + fileName, ErrorPlace);
 	}
 
 	return mesh->second.get();
 }
 
-ModelData* MeshManager::GetModelData(const std::string& fileName)
+ModelData* VertexIndexDataManager::GetModelData(const std::string& fileName)
 {
 	auto modelData = modelData_.find(fileName);
 
 	if (modelData == modelData_.end()) {
-		throw Lamb::Error::Code<MeshManager>("This file is not loaded -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<VertexIndexDataManager>("This file is not loaded -> " + fileName, ErrorPlace);
 	}
 
 	return modelData->second.get();
 }
 
-Mesh* MeshManager::CreateMesh(const ModelData& modelData)
+VertexIndexData* VertexIndexDataManager::CreateMesh(const ModelData& modelData)
 {
-	Lamb::SafePtr result = Lamb::MakeSafePtr<Mesh>();
+	Lamb::SafePtr result = Lamb::MakeSafePtr<VertexIndexData>();
 	Lamb::SafePtr directXDevice = DirectXDevice::GetInstance();
 
 

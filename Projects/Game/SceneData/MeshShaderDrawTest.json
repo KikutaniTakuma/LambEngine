@@ -19,6 +19,7 @@
         "outline": 0.0,
         "outline_enable": false,
         "skybox": {
+            "environmentCoefficient": 0.0,
             "isDraw": false,
             "scale": [
                 500.0,
@@ -58,6 +59,9 @@
         {
             "Comps": [
                 {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
                     "BlendType": "kNone",
                     "CompName": "class ModelRenderDataComp",
                     "color": [
@@ -68,9 +72,6 @@
                     ],
                     "fileName": "./Resources\\Common\\Cube.obj",
                     "isLighting": true
-                },
-                {
-                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
@@ -99,9 +100,9 @@
                 {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        0.03998923301696777,
+                        0.03998923674225807,
                         -0.0024979913141578436,
-                        0.00010000743350246921,
+                        0.00010000744077842683,
                         0.9991970062255859
                     ],
                     "scale": [

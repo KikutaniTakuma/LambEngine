@@ -27,7 +27,7 @@ void Animator::Load(const std::string& fileName) {
 	animations_ = animationManager->GetAnimations(fileName);
 }
 
-void Animator::Update(const Mesh* const mesh) {
+void Animator::Update(const VertexIndexData* const mesh) {
 	Update(mesh->node.name);
 }
 

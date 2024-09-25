@@ -12,16 +12,16 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-std::chrono::steady_clock::time_point MeshLoader::loadStartTime_;
+std::chrono::steady_clock::time_point VertexIndexDataLoader::loadStartTime_;
 
-ModelData MeshLoader::LoadModel(const std::string& fileName)
+ModelData VertexIndexDataLoader::LoadModel(const std::string& fileName)
 {
 	StartLoadTimeCount();
 
 	Assimp::Importer importer;
 	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
 	if (not scene->HasMeshes()) [[unlikely]] {
-		throw Lamb::Error::Code<MeshLoader>("This file does not have meshes -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<VertexIndexDataLoader>("This file does not have meshes -> " + fileName, ErrorPlace);
 	}
 
 	std::filesystem::path path = fileName;
@@ -39,10 +39,10 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 	for (uint32_t meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
 		Lamb::SafePtr<aiMesh> mesh = scene->mMeshes[meshIndex];
 		if (not mesh->HasNormals()) [[unlikely]] {
-			throw Lamb::Error::Code<MeshLoader>("This file does not have normal -> " + fileName, ErrorPlace);
+			throw Lamb::Error::Code<VertexIndexDataLoader>("This file does not have normal -> " + fileName, ErrorPlace);
 		}
 		if (not mesh->HasTextureCoords(0)) [[unlikely]] {
-			throw Lamb::Error::Code<MeshLoader>("This file does not have texcoord -> " + fileName, ErrorPlace);
+			throw Lamb::Error::Code<VertexIndexDataLoader>("This file does not have texcoord -> " + fileName, ErrorPlace);
 		}
 
 		// 要素数追加
@@ -67,7 +67,7 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 		for (uint32_t faceIndex = 0; faceIndex < mesh->mNumFaces; faceIndex++) {
 			aiFace& face = mesh->mFaces[faceIndex];
 			if (face.mNumIndices != 3) {
-				throw Lamb::Error::Code<MeshLoader>("face indices is not 3", ErrorPlace);
+				throw Lamb::Error::Code<VertexIndexDataLoader>("face indices is not 3", ErrorPlace);
 			}
 
 			for (uint32_t element = 0; element < face.mNumIndices; element++) {
@@ -108,7 +108,7 @@ ModelData MeshLoader::LoadModel(const std::string& fileName)
 	return result;
 }
 
-Animations* MeshLoader::LoadAnimation(const std::string& fileName)
+Animations* VertexIndexDataLoader::LoadAnimation(const std::string& fileName)
 {
 	StartLoadTimeCount();
 
@@ -116,7 +116,7 @@ Animations* MeshLoader::LoadAnimation(const std::string& fileName)
 	Assimp::Importer importer;
 	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
 	if (not (scene->mNumAnimations != 0)) [[unlikely]] {
-		throw Lamb::Error::Code<MeshLoader>("This file does not have animation -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<VertexIndexDataLoader>("This file does not have animation -> " + fileName, ErrorPlace);
 	}
 
 	result->data.resize(scene->mNumAnimations);
@@ -167,23 +167,23 @@ Animations* MeshLoader::LoadAnimation(const std::string& fileName)
 	return result.release();
 }
 
-const aiScene* MeshLoader::ReadFile(Assimp::Importer& importer, const std::string& fileName)
+const aiScene* VertexIndexDataLoader::ReadFile(Assimp::Importer& importer, const std::string& fileName)
 {
 	std::filesystem::path path = fileName;
 
 	// ファイル見つかんない
 	if (not std::filesystem::exists(path)) [[unlikely]] {
-		throw Lamb::Error::Code<MeshLoader>("This file does not find -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<VertexIndexDataLoader>("This file does not find -> " + fileName, ErrorPlace);
 	}
 	// objかgltfではない
 	if (not (path.extension() == ".obj" or path.extension() == ".gltf")) [[unlikely]] {
-		throw Lamb::Error::Code<MeshLoader>("This file does not support -> " + fileName, ErrorPlace);
+		throw Lamb::Error::Code<VertexIndexDataLoader>("This file does not support -> " + fileName, ErrorPlace);
 	}
 
 	return importer.ReadFile(fileName.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 }
 
-Node MeshLoader::ReadNode(aiNode* node)
+Node VertexIndexDataLoader::ReadNode(aiNode* node)
 {
 	Node result;
 	aiVector3D scale, translate;
@@ -205,7 +205,7 @@ Node MeshLoader::ReadNode(aiNode* node)
 	return result;
 }
 
-void MeshLoader::LoadMtl(const aiScene* scene, const std::string& directorypath, std::vector<uint32_t>& result)
+void VertexIndexDataLoader::LoadMtl(const aiScene* scene, const std::string& directorypath, std::vector<uint32_t>& result)
 {
 	std::vector<std::string> textureFileNames;
 
@@ -227,11 +227,11 @@ void MeshLoader::LoadMtl(const aiScene* scene, const std::string& directorypath,
 	}
 }
 
-void MeshLoader::StartLoadTimeCount() {
+void VertexIndexDataLoader::StartLoadTimeCount() {
 	loadStartTime_ = std::chrono::steady_clock::now();
 }
 
-void MeshLoader::EndLoadTimeCountAndAddLog(const std::string& fileName) {
+void VertexIndexDataLoader::EndLoadTimeCountAndAddLog(const std::string& fileName) {
 	auto loadEndTime = std::chrono::steady_clock::now();
 
 	auto time = std::chrono::duration_cast<std::chrono::milliseconds>(loadEndTime - loadStartTime_);

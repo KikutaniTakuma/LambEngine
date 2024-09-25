@@ -9,35 +9,35 @@
 /// <summary>
 /// メッシュを管理
 /// </summary>
-class MeshManager final {
+class VertexIndexDataManager final {
 private:
-	MeshManager() = default;
-	MeshManager(const MeshManager&) = delete;
-	MeshManager(MeshManager&&) = delete;
+	VertexIndexDataManager() = default;
+	VertexIndexDataManager(const VertexIndexDataManager&) = delete;
+	VertexIndexDataManager(VertexIndexDataManager&&) = delete;
 
-	MeshManager& operator=(const MeshManager&) = delete;
-	MeshManager& operator=(MeshManager&&) = delete;
+	VertexIndexDataManager& operator=(const VertexIndexDataManager&) = delete;
+	VertexIndexDataManager& operator=(VertexIndexDataManager&&) = delete;
 public:
-	~MeshManager();
+	~VertexIndexDataManager();
 
 public:
-	static MeshManager* const GetInstance();
+	static VertexIndexDataManager* const GetInstance();
 
 	static void Initialize();
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<MeshManager> instance_;
+	static Lamb::SafePtr<VertexIndexDataManager> instance_;
 
 public:
 	void LoadModel(const std::string& objFileName);
-	[[nodiscard]] Mesh* GetMesh(const std::string& objFileName);
+	[[nodiscard]] VertexIndexData* GetMesh(const std::string& objFileName);
 	[[nodiscard]] ModelData* GetModelData(const std::string& objFileName);
 
 private:
-	[[nodiscard]] Mesh* CreateMesh(const ModelData& modelData);
+	[[nodiscard]] VertexIndexData* CreateMesh(const ModelData& modelData);
 
 private:
-	std::unordered_map<std::string, std::unique_ptr<Mesh>> meshs_;
+	std::unordered_map<std::string, std::unique_ptr<VertexIndexData>> meshs_;
 	std::unordered_map<std::string, std::unique_ptr<ModelData>> modelData_;
 };

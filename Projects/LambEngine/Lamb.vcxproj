@@ -58,7 +58,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\;$(SolutionDir)Projects\meshoptimizer\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\;$(SolutionDir)Projects\meshoptimizer\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -153,6 +153,7 @@
     <ClCompile Include="Engine\Graphics\AnimationManager\AnimationManager.cpp" />
     <ClCompile Include="Engine\Graphics\Animator\Animator.cpp" />
     <ClCompile Include="Engine\Graphics\DepthBuffer\DepthBuffer.cpp" />
+    <ClCompile Include="Engine\Graphics\Meshlet\Meshlet.cpp" />
     <ClCompile Include="Engine\Graphics\MeshLoader\MeshLoader.cpp" />
     <ClCompile Include="Engine\Graphics\MeshManager\MeshManager.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="Engine\Graphics\CreateBlendDesc.h" />
     <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h" />
     <ClInclude Include="Engine\Graphics\GraphicsStructs.h" />
+    <ClInclude Include="Engine\Graphics\Meshlet\Meshlet.h" />
     <ClInclude Include="Engine\Graphics\MeshLoader\MeshLoader.h" />
     <ClInclude Include="Engine\Graphics\MeshManager\MeshManager.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />

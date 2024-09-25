@@ -34,7 +34,7 @@ public:
         return typeID_;
     }
 
-    virtual void SetMesh(const Mesh* const mesh) = 0;
+    virtual void SetMesh(const VertexIndexData* const mesh) = 0;
     virtual void SetModelData(const ModelData* const modelData) = 0;
     virtual void SetPipeline(Pipeline* const pipeline) = 0;
     virtual void SetWVPMatrix(const WVPMatrix& matrix) = 0;
@@ -63,7 +63,7 @@ public:
         return mesh_->node.name;
     }
 
-    const Mesh* const GetMesh() const {
+    const VertexIndexData* const GetMesh() const {
         return mesh_;
     }
 
@@ -76,7 +76,7 @@ public:
     }
 
 protected:
-    const Mesh* mesh_;
+    const VertexIndexData* mesh_;
     const ModelData* modelData_;
 
 
@@ -166,7 +166,7 @@ public:
     }
     
 public:
-    inline void SetMesh(const Mesh* const mesh) override {
+    inline void SetMesh(const VertexIndexData* const mesh) override {
         if (!mesh) {
             throw Lamb::Error::Code<RenderContext>("mesh is nullptr", ErrorPlace);
         }
@@ -345,7 +345,7 @@ public:
     }
 
 public:
-    inline void SetMesh(const Mesh* const mesh) override {
+    inline void SetMesh(const VertexIndexData* const mesh) override {
         if (!mesh) {
             throw Lamb::Error::Code<SkinRenderContext>("mesh is nullptr", ErrorPlace);
         }
@@ -530,7 +530,7 @@ public:
     }
 
 public:
-    inline void SetMesh(const Mesh* const mesh) override {
+    inline void SetMesh(const VertexIndexData* const mesh) override {
         if (!mesh) {
             throw Lamb::Error::Code<MeshRenderContext>("mesh is nullptr", ErrorPlace);
         }
@@ -661,7 +661,7 @@ public:
         return renderDatas_.front()->GetNode();
     }
 
-    const Mesh* const GetMesh() const {
+    const VertexIndexData* const GetMesh() const {
         return renderDatas_.front()->GetMesh();
     }
     const ModelData* const GetModelData() const {

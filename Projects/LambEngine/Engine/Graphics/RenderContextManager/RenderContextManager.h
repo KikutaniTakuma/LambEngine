@@ -42,9 +42,9 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader, numRenderTarget);
 
-		Lamb::SafePtr meshManager = MeshManager::GetInstance();
+		Lamb::SafePtr meshManager = VertexIndexDataManager::GetInstance();
 		meshManager->LoadModel(fileNames.resourceFileName);
-		Mesh* mesh = meshManager->GetMesh(fileNames.resourceFileName);
+		VertexIndexData* mesh = meshManager->GetMesh(fileNames.resourceFileName);
 		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
@@ -67,9 +67,9 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader, numRenderTarget);
 
-		Lamb::SafePtr meshManager = MeshManager::GetInstance();
+		Lamb::SafePtr meshManager = VertexIndexDataManager::GetInstance();
 		meshManager->LoadModel(fileNames.resourceFileName);
-		Mesh* mesh = meshManager->GetMesh(fileNames.resourceFileName);
+		VertexIndexData* mesh = meshManager->GetMesh(fileNames.resourceFileName);
 		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
@@ -108,9 +108,9 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader, numRenderTarget);
 
-		Lamb::SafePtr meshManager = MeshManager::GetInstance();
+		Lamb::SafePtr meshManager = VertexIndexDataManager::GetInstance();
 		meshManager->LoadModel(fileNames.resourceFileName);
-		Mesh* mesh = meshManager->GetMesh(fileNames.resourceFileName);
+		VertexIndexData* mesh = meshManager->GetMesh(fileNames.resourceFileName);
 		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
@@ -149,9 +149,9 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader, numRenderTarget);
 
-		Lamb::SafePtr meshManager = MeshManager::GetInstance();
+		Lamb::SafePtr meshManager = VertexIndexDataManager::GetInstance();
 		meshManager->LoadModel(fileNames.resourceFileName);
-		Mesh* mesh = meshManager->GetMesh(fileNames.resourceFileName);
+		VertexIndexData* mesh = meshManager->GetMesh(fileNames.resourceFileName);
 		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
@@ -188,9 +188,9 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateMeshShaderGraphicsPipelines(shader, numRenderTarget);
 
-		Lamb::SafePtr meshManager = MeshManager::GetInstance();
+		Lamb::SafePtr meshManager = VertexIndexDataManager::GetInstance();
 		meshManager->LoadModel(fileNames.resourceFileName);
-		Mesh* mesh = meshManager->GetMesh(fileNames.resourceFileName);
+		VertexIndexData* mesh = meshManager->GetMesh(fileNames.resourceFileName);
 		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {

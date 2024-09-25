@@ -139,7 +139,7 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	TextureManager::Initialize();
 	AudioManager::Inititalize();
 	PipelineManager::Initialize();
-	MeshManager::Initialize();
+	VertexIndexDataManager::Initialize();
 	RenderContextManager::Initialize();
 	AnimationManager::Initialize();
 
@@ -155,7 +155,7 @@ void Engine::Finalize() {
 
 	AnimationManager::Finalize();
 	RenderContextManager::Finalize();
-	MeshManager::Finalize();
+	VertexIndexDataManager::Finalize();
 	PipelineManager::Finalize();
 	AudioManager::Finalize();
 	TextureManager::Finalize();

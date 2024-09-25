@@ -18,7 +18,7 @@ public:
 public:
 	void Load(const std::string& fileName);
 
-	void Update(const Mesh* const mesh);
+	void Update(const VertexIndexData* const mesh);
 	void Update(Skeleton& skeleton);
 	void Update(const std::string& rootNodeName);
 

@@ -5,7 +5,7 @@ namespace Assimp {
 	class Importer;
 };
 
-class MeshLoader final {
+class VertexIndexDataLoader final {
 public:
 	struct IndexData {
 		uint32_t vertNum;
