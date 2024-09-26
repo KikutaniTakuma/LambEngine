@@ -25,6 +25,7 @@
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include "Engine/Graphics/AnimationManager/AnimationManager.h"
 #include "Engine/Graphics/VertexIndexDataManager/VertexIndexDataManager.h"
+#include "Engine/Graphics/Meshlet/Meshlet.h"
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 
 #include "EngineUtils/FrameInfo/FrameInfo.h"
@@ -140,6 +141,7 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	AudioManager::Inititalize();
 	PipelineManager::Initialize();
 	VertexIndexDataManager::Initialize();
+	MeshletManager::Initialize();
 	RenderContextManager::Initialize();
 	AnimationManager::Initialize();
 
@@ -155,6 +157,7 @@ void Engine::Finalize() {
 
 	AnimationManager::Finalize();
 	RenderContextManager::Finalize();
+	MeshletManager::Finalize();
 	VertexIndexDataManager::Finalize();
 	PipelineManager::Finalize();
 	AudioManager::Finalize();
