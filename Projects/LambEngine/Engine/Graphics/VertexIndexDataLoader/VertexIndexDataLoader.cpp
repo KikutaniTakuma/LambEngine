@@ -58,7 +58,7 @@ ModelData VertexIndexDataLoader::LoadModel(const std::string& fileName)
 					.pos = { -position.x,position.y,position.z, 1.0f},
 					.normal = {-normal.x,normal.y,normal.z},
 					.uv = {texcoord.x, texcoord.y},
-					.texIndex = textures.empty() ? 0 : textures[mesh->mMaterialIndex - (isGltf ? 0 : 1)]
+					.textureID = textures.empty() ? 0 : textures[mesh->mMaterialIndex - (isGltf ? 0 : 1)]
 				}
 			);
 		}
