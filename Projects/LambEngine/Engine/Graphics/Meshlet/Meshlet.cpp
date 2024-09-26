@@ -1,0 +1,164 @@
+#include "Meshlet.h"
+
+#include "../VertexIndexDataManager/VertexIndexDataManager.h"
+
+#include "meshoptimizer.h"
+
+ResMesh* MeshLoader::LoadMesh(const std::string& fileName)
+{
+	std::unique_ptr<ResMesh> mesh = std::make_unique<ResMesh>();
+
+	Lamb::SafePtr vertexIndexdDataManager = VertexIndexDataManager::GetInstance();
+
+	vertexIndexdDataManager->LoadModel(fileName);
+
+	Lamb::SafePtr<const ModelData> modelData = vertexIndexdDataManager->GetModelData(fileName);
+
+	ParseMesh(*mesh, modelData);
+
+	return mesh.release();
+}
+
+void MeshLoader::ParseMesh(ResMesh& dstMesh, Lamb::SafePtr<const ModelData> pSrcMesh) {
+	// Nullチェック
+	pSrcMesh.NullCheck(FilePlace);
+
+	// 頂点データセット
+	dstMesh.vertices = pSrcMesh->vertices;
+
+	// インデックスデータセット
+	dstMesh.indices = pSrcMesh->indices;
+
+	// 最適化
+	{
+		std::vector<uint32_t> remap(dstMesh.indices.size());
+
+		auto vertexCount = meshopt_generateVertexRemap(
+			remap.data(),
+			dstMesh.indices.data(),
+			dstMesh.indices.size(),
+			dstMesh.vertices.data(),
+			dstMesh.vertices.size(),
+			sizeof(decltype(pSrcMesh->vertices)::value_type)
+		);
+
+		std::vector<Vertex> vertices(vertexCount);
+		std::vector<uint32_t> indices(dstMesh.indices.size());
+
+		// 頂点インデックスを再マッピング
+		meshopt_remapIndexBuffer(
+			indices.data(),
+			dstMesh.indices.data(),
+			dstMesh.indices.size(),
+			remap.data()
+		);
+
+		// 頂点データを再マッピング
+		meshopt_remapVertexBuffer(
+			vertices.data(),
+			dstMesh.vertices.data(),
+			dstMesh.vertices.size(),
+			sizeof(decltype(pSrcMesh->vertices)::value_type),
+			remap.data()
+		);
+
+		
+		// メモリクリア
+		remap.clear();
+		remap.shrink_to_fit();
+
+		dstMesh.vertices.resize(vertices.size());
+		dstMesh.indices.resize(indices.size());
+
+		// 頂点キャッシュ最適化
+		meshopt_optimizeVertexCache(
+			dstMesh.indices.data(),
+			indices.data(),
+			indices.size(),
+			vertexCount
+		);
+
+		// メモリクリア
+		indices.clear();
+		indices.shrink_to_fit();
+
+		
+		// 頂点フェッチ最適化
+		meshopt_optimizeVertexFetch(
+			dstMesh.vertices.data(),
+			dstMesh.indices.data(),
+			dstMesh.indices.size(),
+			vertices.data(),
+			vertices.size(),
+			sizeof(decltype(pSrcMesh->vertices)::value_type)
+		);
+
+		// メモリクリア
+		vertices.clear();
+		vertices.shrink_to_fit();
+	}
+
+	// メッシュレット生成
+	{
+		constexpr size_t kMaxVertices = 64;
+		constexpr size_t kMaxPrimitives = 124;
+
+		size_t maxMeshlets = meshopt_buildMeshletsBound(
+			dstMesh.indices.size(),
+			kMaxVertices,
+			kMaxPrimitives
+		);
+
+		std::vector<meshopt_Meshlet> meshlets(maxMeshlets);
+
+		dstMesh.uniqueVertexIndices.resize(maxMeshlets * kMaxVertices);
+		dstMesh.primitiveIndices.resize(maxMeshlets * kMaxVertices * 3);
+
+		size_t meshletCount = meshopt_buildMeshlets(
+			meshlets.data(), 
+			dstMesh.uniqueVertexIndices.data(),
+			dstMesh.primitiveIndices.data(),
+			dstMesh.indices.data(),
+			dstMesh.indices.size(),
+			dstMesh.vertices.front().pos.data(),
+			dstMesh.vertices.size(),
+			sizeof(Vertex), 
+			kMaxVertices,
+			kMaxPrimitives,
+			0.0f
+		);
+
+		meshlets.resize(meshletCount);
+
+		const meshopt_Meshlet& last = meshlets.back();
+
+		dstMesh.uniqueVertexIndices.resize(last.vertex_offset + last.vertex_count);
+		dstMesh.primitiveIndices.resize(last.triangle_offset + ((last.triangle_count * 3 + 3) & ~3));
+		meshlets.resize(meshletCount);
+
+		dstMesh.uniqueVertexIndices.shrink_to_fit();
+		dstMesh.primitiveIndices.shrink_to_fit();
+
+		for (auto& m : meshlets) {
+			meshopt_optimizeMeshlet(
+				&dstMesh.uniqueVertexIndices[m.vertex_offset],
+				&dstMesh.primitiveIndices[m.triangle_offset],
+				m.triangle_count,
+				m.vertex_count
+			);
+		}
+
+		dstMesh.meshlets.resize(meshlets.size());
+
+		for (size_t i = 0; i < meshlets.size(); ++i) {
+			dstMesh.meshlets[i].vertexOffset = meshlets[i].vertex_offset;
+			dstMesh.meshlets[i].vertexCount = meshlets[i].vertex_count;
+			dstMesh.meshlets[i].primitiveOffset = meshlets[i].triangle_offset;
+			dstMesh.meshlets[i].primitiveCount = meshlets[i].triangle_count;
+		}
+
+		dstMesh.meshlets.shrink_to_fit();
+	}
+
+
+}
