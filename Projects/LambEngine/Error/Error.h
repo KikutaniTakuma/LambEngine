@@ -82,3 +82,7 @@ namespace Lamb {
 #define FILENAME (strrchr(__FILE__, '\\') ? strrchr(__FILE__, '\\') + 1 : __FILE__)
 #define ErrorPlace __func__, std::filesystem::path(__FILE__).filename().string(), __LINE__
 #endif // !ErrorPlace
+
+#ifndef FilePlace
+#define FilePlace ErrorPlace
+#endif // !FilePlace
