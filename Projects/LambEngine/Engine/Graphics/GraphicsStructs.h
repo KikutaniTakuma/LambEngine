@@ -35,13 +35,13 @@ struct Vertex {
     Vector2 uv;
 
     // テクスチャのインデックス
-    uint32_t texIndex = 0u;
+    uint32_t textureID = 0u;
 
     bool operator==(const Vertex& right)const {
         return pos == right.pos and
             normal == right.normal and
             uv == right.uv and
-            texIndex == right.texIndex;
+            textureID == right.textureID;
     }
     bool operator!=(const Vertex& right)const {
         return not (*this == right);
@@ -234,7 +234,7 @@ namespace std {
                 std::to_string(data.normal.z) + 
                 std::to_string(data.uv.x) + 
                 std::to_string(data.uv.y) + 
-                std::to_string(data.texIndex) 
+                std::to_string(data.textureID) 
                 );
 
             return result;
