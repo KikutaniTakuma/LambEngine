@@ -9,9 +9,6 @@ class MeshShaderTest : public BaseDrawer {
 public:
 	static constexpr uint32_t kMaxDrawCount = 1u;
 
-private:
-	static const MeshLoadFileNames kFileNames_;
-
 public:
 	MeshShaderTest();
 	MeshShaderTest(const MeshShaderTest&) = default;
@@ -22,7 +19,7 @@ public:
 	MeshShaderTest& operator=(MeshShaderTest&&) = default;
 
 public:
-	void Load();
+	void Load(const std::string& fileName);
 
 	void Draw(
 		const Mat4x4& worldMatrix, 

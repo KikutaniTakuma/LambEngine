@@ -373,7 +373,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateMeshShaderGra
 
 	uint32_t baseShaderRegister = 0;
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> srvRange = {};
-	srvRange[0].NumDescriptors = 2;
+	srvRange[0].NumDescriptors = 4;
 	srvRange[0].BaseShaderRegister = baseShaderRegister;
 	srvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
 	srvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;

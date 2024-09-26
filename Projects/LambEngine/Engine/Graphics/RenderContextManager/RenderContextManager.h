@@ -170,7 +170,6 @@ public:
 	/// <typeparam name="RenderContextType">レンダーコンテキストタイプ</typeparam>
 	/// <param name="fileNames">リソースファイル名</param>
 	/// <param name="numRenderTarget">レンダーターゲットの数</param>
-	template<IsBasedRenderContext RenderContextType = RenderContext<>>
 	void LoadMesh(const MeshLoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
 		auto isExist = meshRenderData_.find(fileNames);
 
@@ -188,16 +187,15 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateMeshShaderGraphicsPipelines(shader, numRenderTarget);
 
-		Lamb::SafePtr meshManager = VertexIndexDataManager::GetInstance();
-		meshManager->LoadModel(fileNames.resourceFileName);
-		VertexIndexData* mesh = meshManager->GetMesh(fileNames.resourceFileName);
-		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
+		Lamb::SafePtr meshManager = MeshletManager::GetInstance();
+
+		meshManager->LoadMesh(fileNames.resourceFileName);
+		auto mesh = meshManager->GetMesh(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
-			std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();
+			std::unique_ptr<MeshRenderContext> renderContext = std::make_unique<MeshRenderContext>();
 
-			renderContext->SetMesh(mesh);
-			renderContext->SetModelData(modelData);
+			renderContext->SetResMesh(mesh);
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}

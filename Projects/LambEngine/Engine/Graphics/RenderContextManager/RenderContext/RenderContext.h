@@ -1,6 +1,6 @@
 #pragma once
 #include "../../GraphicsStructs.h"
-#include "../../Shader/MeshShader/MeshShader.h"
+#include "../../Meshlet/Meshlet.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 
@@ -452,48 +452,6 @@ public:
     MeshRenderContext() :
         shaderData_()
     {
-        shaderData_.gVertices.Create(3);
-        shaderData_.gIndices.Create(1);
-
-        ///
-        /// テスト用==============================================================================
-        /// 
-
-        std::array vertexData = {
-            MSInput{ float32_t4(-0.5f, -0.5f,  0.0f, 1.0f), float32_t4(0.0f, 0.0f, 1.0f, 1.0f) },
-            MSInput{ float32_t4( 0.0f,  0.5f,  0.0f, 1.0f), float32_t4(0.0f, 1.0f, 0.0f, 1.0f) },
-            MSInput{ float32_t4( 0.5f, -0.5f,  0.0f, 1.0f), float32_t4(1.0f, 0.0f, 0.0f, 1.0f) }
-        };
-
-        std::array indexData = {
-            0u, 1u, 2u
-        };
-
-        for (size_t i = 0; i < vertexData.size(); i++) {
-            shaderData_.gVertices[i] = vertexData[i];
-        }
-        shaderData_.gIndices[0].index = indexData;
-
-        ///
-        /// =====================================================================================
-        /// 
-
-        pipeline_ = nullptr;
-        drawCount_ = 0u;
-
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
-
-        descriptorHeap->BookingHeapPos(3);
-        descriptorHeap->CreateView(shaderData_.gTransform);
-        descriptorHeap->CreateView(shaderData_.gVertices);
-        descriptorHeap->CreateView(shaderData_.gIndices);
-
-
-
-        shaderData_.gVertices.OffWright();
-        shaderData_.gIndices.OffWright();
-        shaderData_.gTransform.OffWright();
 
         typeID_ = (typeid(MeshRenderContext).name());
     }
@@ -501,9 +459,11 @@ public:
         // ディスクリプタヒープ
         CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
 
-        descriptorHeap->ReleaseView(shaderData_.gTransform.GetHandleUINT());
         descriptorHeap->ReleaseView(shaderData_.gVertices.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.gIndices.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.gUniqueVertexIndices.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.gUniquePrimitiveIndices.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.gMeshlets.GetHandleUINT());
+        descriptorHeap->ReleaseView(shaderData_.gTransform.GetHandleUINT());
     }
 
     MeshRenderContext(const MeshRenderContext&) = delete;
@@ -526,7 +486,7 @@ public:
         commandlist->SetGraphicsRootDescriptorTable(1, shaderData_.gVertices.GetHandleGPU());
 
         // ドローコール
-        commandlist->DispatchMesh(1, 1, 1);
+        commandlist->DispatchMesh(shaderData_.meshletCount, 1, 1);
     }
 
 public:
@@ -570,13 +530,69 @@ public:
 
     inline void DataSet() override {
         shaderData_.gVertices.OffWright();
-        shaderData_.gIndices.OffWright();
+        shaderData_.gUniqueVertexIndices.OffWright();
+        shaderData_.gUniquePrimitiveIndices.OffWright();
+        shaderData_.gMeshlets.OffWright();
         shaderData_.gTransform.OffWright();
     }
 
+    inline void SetResMesh(Lamb::SafePtr<ResMesh> resMesh) {
+        resMesh_ = resMesh;
+
+        resMesh_.NullCheck(FilePlace);
+
+        // ディスクリプタヒープ
+        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+
+        descriptorHeap->BookingHeapPos(5);
+
+        shaderData_.gVertices.Create(static_cast<uint32_t>(resMesh_->vertices.size()));
+        shaderData_.gUniqueVertexIndices.Create(static_cast<uint32_t>(resMesh_->uniqueVertexIndices.size()));
+        shaderData_.gUniquePrimitiveIndices.Create(static_cast<uint32_t>(resMesh_->primitiveIndices.size()));
+        shaderData_.gMeshlets.Create(static_cast<uint32_t>(resMesh_->meshlets.size()));
+
+        for (size_t count = 0; auto & vertex : resMesh_->vertices) {
+            shaderData_.gVertices[count] = vertex;
+            count++;
+        }
+
+        for (size_t count = 0; auto & index : resMesh_->uniqueVertexIndices) {
+            shaderData_.gUniqueVertexIndices[count] = index;
+            count++;
+        }
+
+        for (size_t count = 0; auto & primitiveIndex : resMesh_->primitiveIndices) {
+            shaderData_.gUniquePrimitiveIndices[count] = primitiveIndex;
+            count++;
+        }
+
+        for (size_t count = 0; auto & meshlet : resMesh_->meshlets) {
+            shaderData_.gMeshlets[count] = meshlet;
+            count++;
+        }
+
+        shaderData_.meshletCount = static_cast<uint32_t>(shaderData_.gMeshlets.size());
+
+
+        descriptorHeap->CreateView(shaderData_.gVertices);
+        descriptorHeap->CreateView(shaderData_.gUniqueVertexIndices);
+        descriptorHeap->CreateView(shaderData_.gUniquePrimitiveIndices);
+        descriptorHeap->CreateView(shaderData_.gMeshlets);
+        descriptorHeap->CreateView(shaderData_.gTransform);
+
+
+
+        shaderData_.gVertices.OffWright();
+        shaderData_.gUniqueVertexIndices.OffWright();
+        shaderData_.gUniquePrimitiveIndices.OffWright();
+        shaderData_.gMeshlets.OffWright();
+        shaderData_.gTransform.OffWright();
+    }
 
 private:
     MeshShaderData shaderData_;
+
+    Lamb::SafePtr<ResMesh> resMesh_;
 };
 
 

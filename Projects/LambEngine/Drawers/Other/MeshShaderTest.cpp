@@ -11,26 +11,26 @@
 #endif // _DEBUG
 
 
-const MeshLoadFileNames MeshShaderTest::kFileNames_ = 
-		MeshLoadFileNames{
-			.resourceFileName{"./Resources/EngineResources/Texture2D/Texture2D.obj"},
-			.shaderName{
-				.msFileName = "./Resources/Shaders/MeshShader/Simple.MS.hlsl",
-				.psFileName = "./Resources/Shaders/MeshShader/Simple.PS.hlsl"
-			}
-		};
-
 MeshShaderTest::MeshShaderTest():
 	BaseDrawer()
 {}
 
-void MeshShaderTest::Load()
+void MeshShaderTest::Load(const std::string& fileName)
 {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	renderContextManager->LoadMesh<MeshRenderContext>(kFileNames_, 3);
+	MeshLoadFileNames fileNames =
+		MeshLoadFileNames{
+			.resourceFileName = fileName,
+			.shaderName{
+				.msFileName = "./Resources/Shaders/MeshShader/Simple.MS.hlsl",
+				.psFileName = "./Resources/Shaders/MeshShader/Simple.PS.hlsl"
+			}
+	};
 
-	renderSet = renderContextManager->Get(kFileNames_);
+	renderContextManager->LoadMesh<MeshRenderContext>(fileNames, 3);
+
+	renderSet = renderContextManager->Get(fileNames);
 }
 
 void MeshShaderTest::Draw(const Mat4x4& worldMatrix, const Mat4x4& camera, BlendType blend)
