@@ -8,13 +8,22 @@ ResMesh* MeshLoader::LoadMesh(const std::string& fileName)
 {
 	std::unique_ptr<ResMesh> mesh = std::make_unique<ResMesh>();
 
-	Lamb::SafePtr vertexIndexdDataManager = VertexIndexDataManager::GetInstance();
 
+	Lamb::SafePtr vertexIndexdDataManager = VertexIndexDataManager::GetInstance();
 	vertexIndexdDataManager->LoadModel(fileName);
 
 	Lamb::SafePtr<const ModelData> modelData = vertexIndexdDataManager->GetModelData(fileName);
 
+
 	ParseMesh(*mesh, modelData);
+
+	return mesh.release();
+}
+
+ResMesh* MeshLoader::LoadMesh(Lamb::SafePtr<const ModelData> pSrcMesh)
+{
+	std::unique_ptr<ResMesh> mesh = std::make_unique<ResMesh>();
+	ParseMesh(*mesh, pSrcMesh);
 
 	return mesh.release();
 }
@@ -101,7 +110,7 @@ void MeshLoader::ParseMesh(ResMesh& dstMesh, Lamb::SafePtr<const ModelData> pSrc
 	// メッシュレット生成
 	{
 		constexpr size_t kMaxVertices = 64;
-		constexpr size_t kMaxPrimitives = 124;
+		constexpr size_t kMaxPrimitives = 126;
 
 		size_t maxMeshlets = meshopt_buildMeshletsBound(
 			dstMesh.indices.size(),
@@ -161,4 +170,33 @@ void MeshLoader::ParseMesh(ResMesh& dstMesh, Lamb::SafePtr<const ModelData> pSrc
 	}
 
 
+}
+
+std::unique_ptr<MeshletManager> MeshletManager::instance_;
+
+MeshletManager* const MeshletManager::GetInstance() {
+	return instance_.get();
+}
+
+void MeshletManager::Initialize() {
+	instance_.reset(new MeshletManager());
+}
+
+void MeshletManager::Finalize() {
+	instance_.reset();
+}
+
+void MeshletManager::LoadMesh(const std::string& fileName) {
+	if (not meshlets_.contains(fileName)) {
+		meshlets_.insert(std::make_pair(fileName, MeshLoader::LoadMesh(fileName)));
+	}
+}
+
+ResMesh* const MeshletManager::GetMesh(const std::string& fileName)
+{
+	if (meshlets_.contains(fileName)) {
+		return meshlets_[fileName].get();
+	}
+
+	return nullptr;
 }

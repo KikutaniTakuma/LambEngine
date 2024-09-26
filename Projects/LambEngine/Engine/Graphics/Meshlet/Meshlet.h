@@ -3,24 +3,9 @@
 #include <vector>
 #include <string>
 
-#include "../GraphicsStructs.h"
+#include <memory>
 
-struct ResMeshlet {
-	uint32_t vertexOffset;
-	uint32_t vertexCount;
-	uint32_t primitiveOffset;
-	uint32_t primitiveCount;
-};
-
-struct ResMesh {
-	std::vector<Vertex> vertices;
-	std::vector<uint32_t> indices;
-	uint32_t materialID;
-
-	std::vector<ResMeshlet> meshlets;
-	std::vector<uint32_t> uniqueVertexIndices;
-	std::vector<uint8_t> primitiveIndices;
-};
+#include "../Shader/MeshShader/MeshShader.h"
 
 class MeshLoader final {
 private:
@@ -36,10 +21,43 @@ private:
 
 
 public:
-	static ResMesh* LoadMesh(const std::string& fileName);
+	static [[nodiscard]] ResMesh* LoadMesh(const std::string& fileName);
+
+	static [[nodiscard]] ResMesh* LoadMesh(Lamb::SafePtr<const ModelData> pSrcMesh);
 
 	static void ParseMesh(
 		ResMesh& dstMesh, 
 		Lamb::SafePtr<const ModelData> pSrcMesh
 	);
+};
+
+class MeshletManager final {
+private:
+	MeshletManager() = default;
+	MeshletManager(const MeshletManager&) = delete;
+	MeshletManager(MeshletManager&&) = delete;
+
+	MeshletManager& operator=(const MeshletManager&) = delete;
+	MeshletManager& operator=(MeshletManager&&) = delete;
+	
+public:
+	~MeshletManager() = default;
+
+public:
+	static MeshletManager* const GetInstance();
+
+	static void Initialize();
+
+	static void Finalize();
+
+private:
+	static std::unique_ptr<MeshletManager> instance_;
+
+public:
+	void LoadMesh(const std::string& fileName);
+
+	ResMesh* const GetMesh(const std::string& fileName);
+
+private:
+	std::unordered_map<std::string, std::unique_ptr<ResMesh>> meshlets_;
 };

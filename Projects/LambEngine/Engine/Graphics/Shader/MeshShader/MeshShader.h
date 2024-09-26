@@ -10,6 +10,8 @@
 #include "Math/Vector2.h"
 #include "Math/Mat4x4.h"
 
+#include "../../GraphicsStructs.h"
+
 
 template<typename ValueType, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE kObjectType>
 class alignas(void*) StateParam {
@@ -117,8 +119,29 @@ struct IndexParam {
 	std::array<uint32_t, 3> index;
 };
 
+struct ResMeshlet {
+	uint32_t vertexOffset = 0u;
+	uint32_t vertexCount = 0u;
+	uint32_t primitiveOffset = 0u;
+	uint32_t primitiveCount = 0u;
+};
+
+struct ResMesh {
+	std::vector<Vertex> vertices;
+	std::vector<uint32_t> indices;
+	uint32_t materialID;
+
+	std::vector<ResMeshlet> meshlets;
+	std::vector<uint32_t> uniqueVertexIndices;
+	std::vector<uint8_t> primitiveIndices;
+};
+
 struct MeshShaderData {
-	StructuredBuffer<MSInput> gVertices;
-	StructuredBuffer<IndexParam> gIndices;
+	StructuredBuffer<Vertex> gVertices;
+	StructuredBuffer<uint32_t> gUniqueVertexIndices;
+	StructuredBuffer<uint8_t> gUniquePrimitiveIndices;
+	StructuredBuffer<ResMeshlet> gMeshlets;
 	ConstantBuffer<TransformParam> gTransform;
+
+	uint32_t meshletCount = 0;
 };
