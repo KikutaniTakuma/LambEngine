@@ -48,18 +48,10 @@
                         1.0
                     ],
                     "translate": [
-                        0.0,
-                        3.197742462158203,
-                        0.0
+                        0.16204190254211426,
+                        2.9225525856018066,
+                        -1.090000033378601
                     ]
-                }
-            ],
-            "type": "Object"
-        },
-        {
-            "Comps": [
-                {
-                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "BlendType": "kNone",
@@ -72,6 +64,26 @@
                     ],
                     "fileName": "./Resources\\Common\\Cube.obj",
                     "isLighting": true
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources\\Common\\Cube.obj",
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
@@ -100,9 +112,9 @@
                 {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        0.03998923674225807,
+                        0.03998924046754837,
                         -0.0024979913141578436,
-                        0.00010000744077842683,
+                        0.00010000744805438444,
                         0.9991970062255859
                     ],
                     "scale": [

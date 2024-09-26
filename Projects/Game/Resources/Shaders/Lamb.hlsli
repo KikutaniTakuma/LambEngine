@@ -33,6 +33,7 @@ struct VertexShaderInput {
 	float32_t3 normal : NORMAL0;
 	float32_t2 uv : TEXCOORD;
 	uint32_t textureID : BLENDINDICES;
+	float32_t2 pad: NORMAL1;
 };
 
 // Vertex shader out put to Rasterizer

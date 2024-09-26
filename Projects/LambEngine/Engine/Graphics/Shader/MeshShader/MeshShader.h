@@ -134,12 +134,13 @@ struct ResMesh {
 	std::vector<ResMeshlet> meshlets;
 	std::vector<uint32_t> uniqueVertexIndices;
 	std::vector<uint8_t> primitiveIndices;
+	std::vector<uint32_t> packedPrimitiveIndices;
 };
 
 struct MeshShaderData {
 	StructuredBuffer<Vertex> gVertices;
 	StructuredBuffer<uint32_t> gUniqueVertexIndices;
-	StructuredBuffer<uint8_t> gUniquePrimitiveIndices;
+	StructuredBuffer<uint32_t> gUniquePrimitiveIndices;
 	StructuredBuffer<ResMeshlet> gMeshlets;
 	ConstantBuffer<TransformParam> gTransform;
 

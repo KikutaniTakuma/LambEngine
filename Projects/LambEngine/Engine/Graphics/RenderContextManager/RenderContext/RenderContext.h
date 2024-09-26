@@ -474,6 +474,9 @@ public:
 
 public:
     void Draw() const override {
+        // ディスクリプタヒープ
+        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+        
         // コマンドリスト
         Lamb::SafePtr commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
@@ -484,6 +487,7 @@ public:
         commandlist->SetGraphicsRootDescriptorTable(0, shaderData_.gTransform.GetHandleGPU());
         // ワールドとカメラマトリックス, 色, 各シェーダーの構造体
         commandlist->SetGraphicsRootDescriptorTable(1, shaderData_.gVertices.GetHandleGPU());
+        commandlist->SetGraphicsRootDescriptorTable(2, descriptorHeap->GetGpuHeapHandle(0));
 
         // ドローコール
         commandlist->DispatchMesh(shaderData_.meshletCount, 1, 1);
@@ -541,14 +545,10 @@ public:
 
         resMesh_.NullCheck(FilePlace);
 
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
-
-        descriptorHeap->BookingHeapPos(5);
 
         shaderData_.gVertices.Create(static_cast<uint32_t>(resMesh_->vertices.size()));
         shaderData_.gUniqueVertexIndices.Create(static_cast<uint32_t>(resMesh_->uniqueVertexIndices.size()));
-        shaderData_.gUniquePrimitiveIndices.Create(static_cast<uint32_t>(resMesh_->primitiveIndices.size()));
+        shaderData_.gUniquePrimitiveIndices.Create(static_cast<uint32_t>(resMesh_->packedPrimitiveIndices.size()));
         shaderData_.gMeshlets.Create(static_cast<uint32_t>(resMesh_->meshlets.size()));
 
         for (size_t count = 0; auto & vertex : resMesh_->vertices) {
@@ -561,7 +561,7 @@ public:
             count++;
         }
 
-        for (size_t count = 0; auto & primitiveIndex : resMesh_->primitiveIndices) {
+        for (size_t count = 0; auto & primitiveIndex : resMesh_->packedPrimitiveIndices) {
             shaderData_.gUniquePrimitiveIndices[count] = primitiveIndex;
             count++;
         }
@@ -574,6 +574,10 @@ public:
         shaderData_.meshletCount = static_cast<uint32_t>(shaderData_.gMeshlets.size());
 
 
+        // ディスクリプタヒープ
+        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+
+        descriptorHeap->BookingHeapPos(5);
         descriptorHeap->CreateView(shaderData_.gVertices);
         descriptorHeap->CreateView(shaderData_.gUniqueVertexIndices);
         descriptorHeap->CreateView(shaderData_.gUniquePrimitiveIndices);

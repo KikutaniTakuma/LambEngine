@@ -218,6 +218,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 	pipelineDesc.vsInputData.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "BLENDINDICES", 0, DXGI_FORMAT_R32_UINT });
+	pipelineDesc.vsInputData.push_back({ "NORMAL", 1, DXGI_FORMAT_R32G32B32_FLOAT });
 	pipelineDesc.shader = shader;
 	pipelineDesc.isDepth = false;
 	pipelineDesc.blend[0] = Pipeline::None;
@@ -321,6 +322,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimation
 	pipelineDesc.vsInputData.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "BLENDINDICES", 0, DXGI_FORMAT_R32_UINT });
+	pipelineDesc.vsInputData.push_back({ "NORMAL", 1, DXGI_FORMAT_R32G32B32_FLOAT });
 
 	pipelineDesc.vsInputData.push_back({ "WEIGHT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1 });
 	pipelineDesc.vsInputData.push_back({ "WEIGHT", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1 });
@@ -365,6 +367,8 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateMeshShaderGra
 {
 	std::array<Pipeline*, BlendType::kNum> result = { nullptr };
 
+	auto srvHeap = CbvSrvUavHeap::GetInstance();
+
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
 	cbvRange[0].NumDescriptors = 1;
 	cbvRange[0].BaseShaderRegister = 0;
@@ -379,8 +383,14 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateMeshShaderGra
 	srvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	baseShaderRegister = srvRange[0].NumDescriptors;
 
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> texRange = {};
+	texRange[0].NumDescriptors = srvHeap->GetMaxTexture();
+	texRange[0].BaseShaderRegister = 4;
+	texRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
+	texRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 
-	std::array<D3D12_ROOT_PARAMETER, 2> rootPrams = {};
+
+	std::array<D3D12_ROOT_PARAMETER, 3> rootPrams = {};
 	rootPrams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootPrams[0].DescriptorTable.NumDescriptorRanges = UINT(cbvRange.size());
 	rootPrams[0].DescriptorTable.pDescriptorRanges = cbvRange.data();
@@ -390,6 +400,11 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateMeshShaderGra
 	rootPrams[1].DescriptorTable.NumDescriptorRanges = UINT(srvRange.size());
 	rootPrams[1].DescriptorTable.pDescriptorRanges = srvRange.data();
 	rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+	rootPrams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootPrams[2].DescriptorTable.NumDescriptorRanges = UINT(texRange.size());
+	rootPrams[2].DescriptorTable.pDescriptorRanges = texRange.data();
+	rootPrams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 	RootSignature::Desc desc;
 	desc.rootParameter = rootPrams.data();
@@ -405,9 +420,9 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateMeshShaderGra
 
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::MeshDesc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, false);
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
 	pipelineDesc.shader = shader;
-	pipelineDesc.isDepth = false;
+	pipelineDesc.isDepth =false;
 	pipelineDesc.blend[0] = Pipeline::None;
 	pipelineDesc.solidState = Pipeline::SolidState::Solid;
 	pipelineDesc.cullMode = Pipeline::CullMode::Back;

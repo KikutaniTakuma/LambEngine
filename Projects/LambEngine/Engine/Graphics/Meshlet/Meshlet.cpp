@@ -110,7 +110,7 @@ void MeshLoader::ParseMesh(ResMesh& dstMesh, Lamb::SafePtr<const ModelData> pSrc
 	// メッシュレット生成
 	{
 		constexpr size_t kMaxVertices = 64;
-		constexpr size_t kMaxPrimitives = 126;
+		constexpr size_t kMaxPrimitives = 128;
 
 		size_t maxMeshlets = meshopt_buildMeshletsBound(
 			dstMesh.indices.size(),
@@ -158,12 +158,26 @@ void MeshLoader::ParseMesh(ResMesh& dstMesh, Lamb::SafePtr<const ModelData> pSrc
 		}
 
 		dstMesh.meshlets.resize(meshlets.size());
+		uint32_t primitiveCount = 0;
 
 		for (size_t i = 0; i < meshlets.size(); ++i) {
 			dstMesh.meshlets[i].vertexOffset = meshlets[i].vertex_offset;
 			dstMesh.meshlets[i].vertexCount = meshlets[i].vertex_count;
 			dstMesh.meshlets[i].primitiveOffset = meshlets[i].triangle_offset;
 			dstMesh.meshlets[i].primitiveCount = meshlets[i].triangle_count;
+			primitiveCount += dstMesh.meshlets[i].primitiveCount;
+		}
+
+		// プリミティブインデックスをパックする
+		dstMesh.packedPrimitiveIndices.resize(primitiveCount);
+		for (size_t count = 0; auto & i : dstMesh.packedPrimitiveIndices) {
+			i = static_cast<uint32_t>(dstMesh.primitiveIndices[count + 0]);
+			i <<= 8;
+			i += static_cast<uint32_t>(dstMesh.primitiveIndices[count + 1]);
+			i <<= 8;
+			i += static_cast<uint32_t>(dstMesh.primitiveIndices[count + 2]);
+
+			count += 3;
 		}
 
 		dstMesh.meshlets.shrink_to_fit();

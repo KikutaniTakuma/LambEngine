@@ -37,6 +37,8 @@ struct Vertex {
     // テクスチャのインデックス
     uint32_t textureID = 0u;
 
+    Vector2 pad;
+
     bool operator==(const Vertex& right)const {
         return pos == right.pos and
             normal == right.normal and
