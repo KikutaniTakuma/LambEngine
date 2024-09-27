@@ -190,12 +190,13 @@ public:
 		Lamb::SafePtr meshManager = MeshletManager::GetInstance();
 
 		meshManager->LoadMesh(fileNames.resourceFileName);
-		auto mesh = meshManager->GetMesh(fileNames.resourceFileName);
+		const auto& mesh = meshManager->GetMesh(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<MeshRenderContext> renderContext = std::make_unique<MeshRenderContext>();
 
-			renderContext->SetResMesh(mesh);
+			renderContext->SetResMesh(mesh.first.get());
+			renderContext->SetMeshShaderData(mesh.second.get());
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}

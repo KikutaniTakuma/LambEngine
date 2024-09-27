@@ -4,6 +4,8 @@
 
 #include "meshoptimizer.h"
 
+#include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
+
 ResMesh* MeshLoader::LoadMesh(const std::string& fileName)
 {
 	std::unique_ptr<ResMesh> mesh = std::make_unique<ResMesh>();
@@ -202,15 +204,68 @@ void MeshletManager::Finalize() {
 
 void MeshletManager::LoadMesh(const std::string& fileName) {
 	if (not meshlets_.contains(fileName)) {
-		meshlets_.insert(std::make_pair(fileName, MeshLoader::LoadMesh(fileName)));
+		meshlets_.insert(std::make_pair(fileName, std::make_pair(MeshLoader::LoadMesh(fileName), std::make_unique<MeshShaderData>())));
+
+		auto& meshAndMeshData = meshlets_[fileName];
+
+		// ディスクリプタヒープ
+		CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
+
+		auto& resMesh = meshAndMeshData.first;
+		auto& shaderData = meshAndMeshData.second;
+
+		shaderData->gVertices.Create(static_cast<uint32_t>(resMesh->vertices.size()));
+		shaderData->gUniqueVertexIndices.Create(static_cast<uint32_t>(resMesh->uniqueVertexIndices.size()));
+		shaderData->gUniquePrimitiveIndices.Create(static_cast<uint32_t>(resMesh->packedPrimitiveIndices.size()));
+		shaderData->gMeshlets.Create(static_cast<uint32_t>(resMesh->meshlets.size()));
+
+		for (size_t count = 0; auto & vertex : resMesh->vertices) {
+			shaderData->gVertices[count] = vertex;
+			count++;
+		}
+
+		for (size_t count = 0; auto & index : resMesh->uniqueVertexIndices) {
+			shaderData->gUniqueVertexIndices[count] = index;
+			count++;
+		}
+
+		for (size_t count = 0; auto & primitiveIndex : resMesh->packedPrimitiveIndices) {
+			shaderData->gUniquePrimitiveIndices[count] = primitiveIndex;
+			count++;
+		}
+
+		for (size_t count = 0; auto & meshlet : resMesh->meshlets) {
+			shaderData->gMeshlets[count] = meshlet;
+			count++;
+		}
+
+		shaderData->meshletCount = static_cast<uint32_t>(shaderData->gMeshlets.size());
+
+
+
+		descriptorHeap->BookingHeapPos(5);
+		descriptorHeap->CreateView(shaderData->gVertices);
+		descriptorHeap->CreateView(shaderData->gUniqueVertexIndices);
+		descriptorHeap->CreateView(shaderData->gUniquePrimitiveIndices);
+		descriptorHeap->CreateView(shaderData->gMeshlets);
+		descriptorHeap->CreateView(shaderData->gTransform);
+
+
+
+		shaderData->gVertices.OffWright();
+		shaderData->gUniqueVertexIndices.OffWright();
+		shaderData->gUniquePrimitiveIndices.OffWright();
+		shaderData->gMeshlets.OffWright();
+		shaderData->gTransform.OffWright();
 	}
 }
 
-ResMesh* const MeshletManager::GetMesh(const std::string& fileName)
+const std::pair<std::unique_ptr<ResMesh>, std::unique_ptr<MeshShaderData>>& MeshletManager::GetMesh(const std::string& fileName)
 {
 	if (meshlets_.contains(fileName)) {
-		return meshlets_[fileName].get();
+		return meshlets_[fileName];
 	}
-
-	return nullptr;
+	else {
+		throw Lamb::Error::Code<MeshletManager>("not loaded meshlet", ErrorPlace);
+	}
 }

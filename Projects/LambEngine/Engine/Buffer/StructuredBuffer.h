@@ -5,6 +5,7 @@
 #include "Error/Error.h"
 #include <cassert>
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
+#include "Engine/Core/DescriptorHeap/DescriptorHeap.h"
 #include "Utils/SafePtr.h"
 
 /// <summary>
@@ -82,6 +83,13 @@ public:
 		if (isWright_) {
 			bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&data_));
 		}
+	}
+
+	void Reset(DescriptorHeap* descriptorHeap) {
+		descriptorHeap->ReleaseView(GetHandleUINT());
+
+		bufferResource_.Reset();
+		srvDesc_.Buffer.NumElements = 0;
 	}
 
 public:

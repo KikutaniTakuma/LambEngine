@@ -56,8 +56,8 @@ private:
 public:
 	void LoadMesh(const std::string& fileName);
 
-	ResMesh* const GetMesh(const std::string& fileName);
+	const std::pair<std::unique_ptr<ResMesh>, std::unique_ptr<MeshShaderData>>& GetMesh(const std::string& fileName);
 
 private:
-	std::unordered_map<std::string, std::unique_ptr<ResMesh>> meshlets_;
+	std::unordered_map<std::string, std::pair<std::unique_ptr<ResMesh>, std::unique_ptr<MeshShaderData>>> meshlets_;
 };

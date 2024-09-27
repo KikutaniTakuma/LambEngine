@@ -450,20 +450,14 @@ private:
 class MeshRenderContext : public BaseRenderContext {
 public:
     MeshRenderContext() :
-        shaderData_()
+        shaderData_(),
+        resMesh_()
     {
 
         typeID_ = (typeid(MeshRenderContext).name());
     }
     ~MeshRenderContext() {
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
-
-        descriptorHeap->ReleaseView(shaderData_.gVertices.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.gUniqueVertexIndices.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.gUniquePrimitiveIndices.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.gMeshlets.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.gTransform.GetHandleUINT());
+        
     }
 
     MeshRenderContext(const MeshRenderContext&) = delete;
@@ -484,27 +478,21 @@ public:
         pipeline_->Use();
 
         // ライト構造体
-        commandlist->SetGraphicsRootDescriptorTable(0, shaderData_.gTransform.GetHandleGPU());
+        commandlist->SetGraphicsRootDescriptorTable(0, shaderData_->gTransform.GetHandleGPU());
         // ワールドとカメラマトリックス, 色, 各シェーダーの構造体
-        commandlist->SetGraphicsRootDescriptorTable(1, shaderData_.gVertices.GetHandleGPU());
+        commandlist->SetGraphicsRootDescriptorTable(1, shaderData_->gVertices.GetHandleGPU());
         commandlist->SetGraphicsRootDescriptorTable(2, descriptorHeap->GetGpuHeapHandle(0));
 
         // ドローコール
-        commandlist->DispatchMesh(shaderData_.meshletCount, 1, 1);
+        commandlist->DispatchMesh(shaderData_->meshletCount, 1, 1);
     }
 
 public:
-    inline void SetMesh(const VertexIndexData* const mesh) override {
-        if (!mesh) {
-            throw Lamb::Error::Code<MeshRenderContext>("mesh is nullptr", ErrorPlace);
-        }
-        mesh_ = mesh;
+    inline void SetMesh([[maybe_unused]]const VertexIndexData* const mesh) override {
+       
     }
-    inline void SetModelData(const ModelData* const modelData) override {
-        if (!modelData) {
-            throw Lamb::Error::Code<MeshRenderContext>("modelData is nullptr", ErrorPlace);
-        }
-        modelData_ = modelData;
+    inline void SetModelData([[maybe_unused]]const ModelData* const modelData) override {
+        
     }
     inline void SetPipeline(Pipeline* const pipeline) override {
         if (!pipeline) {
@@ -513,10 +501,10 @@ public:
         pipeline_ = pipeline;
     }
     inline void SetWVPMatrix(const WVPMatrix& matrix) override {
-        shaderData_.gTransform.OnWright();
-        shaderData_.gTransform->world = matrix.worldMat;
-        shaderData_.gTransform->viewProjection = matrix.cameraMat;
-        shaderData_.gTransform.OffWright();
+        shaderData_->gTransform.OnWright();
+        shaderData_->gTransform->world = matrix.worldMat;
+        shaderData_->gTransform->viewProjection = matrix.cameraMat;
+        shaderData_->gTransform.OffWright();
     }
     inline void SetColor([[maybe_unused]]const Vector4& color) override {
         
@@ -533,68 +521,19 @@ public:
     }
 
     inline void DataSet() override {
-        shaderData_.gVertices.OffWright();
-        shaderData_.gUniqueVertexIndices.OffWright();
-        shaderData_.gUniquePrimitiveIndices.OffWright();
-        shaderData_.gMeshlets.OffWright();
-        shaderData_.gTransform.OffWright();
+
     }
 
     inline void SetResMesh(Lamb::SafePtr<ResMesh> resMesh) {
         resMesh_ = resMesh;
+    }
 
-        resMesh_.NullCheck(FilePlace);
-
-
-        shaderData_.gVertices.Create(static_cast<uint32_t>(resMesh_->vertices.size()));
-        shaderData_.gUniqueVertexIndices.Create(static_cast<uint32_t>(resMesh_->uniqueVertexIndices.size()));
-        shaderData_.gUniquePrimitiveIndices.Create(static_cast<uint32_t>(resMesh_->packedPrimitiveIndices.size()));
-        shaderData_.gMeshlets.Create(static_cast<uint32_t>(resMesh_->meshlets.size()));
-
-        for (size_t count = 0; auto & vertex : resMesh_->vertices) {
-            shaderData_.gVertices[count] = vertex;
-            count++;
-        }
-
-        for (size_t count = 0; auto & index : resMesh_->uniqueVertexIndices) {
-            shaderData_.gUniqueVertexIndices[count] = index;
-            count++;
-        }
-
-        for (size_t count = 0; auto & primitiveIndex : resMesh_->packedPrimitiveIndices) {
-            shaderData_.gUniquePrimitiveIndices[count] = primitiveIndex;
-            count++;
-        }
-
-        for (size_t count = 0; auto & meshlet : resMesh_->meshlets) {
-            shaderData_.gMeshlets[count] = meshlet;
-            count++;
-        }
-
-        shaderData_.meshletCount = static_cast<uint32_t>(shaderData_.gMeshlets.size());
-
-
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
-
-        descriptorHeap->BookingHeapPos(5);
-        descriptorHeap->CreateView(shaderData_.gVertices);
-        descriptorHeap->CreateView(shaderData_.gUniqueVertexIndices);
-        descriptorHeap->CreateView(shaderData_.gUniquePrimitiveIndices);
-        descriptorHeap->CreateView(shaderData_.gMeshlets);
-        descriptorHeap->CreateView(shaderData_.gTransform);
-
-
-
-        shaderData_.gVertices.OffWright();
-        shaderData_.gUniqueVertexIndices.OffWright();
-        shaderData_.gUniquePrimitiveIndices.OffWright();
-        shaderData_.gMeshlets.OffWright();
-        shaderData_.gTransform.OffWright();
+    inline void SetMeshShaderData(Lamb::SafePtr<MeshShaderData> shaderData) {
+        shaderData_ = shaderData;
     }
 
 private:
-    MeshShaderData shaderData_;
+    Lamb::SafePtr<MeshShaderData> shaderData_;
 
     Lamb::SafePtr<ResMesh> resMesh_;
 };

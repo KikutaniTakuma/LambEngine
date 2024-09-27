@@ -67,7 +67,7 @@ public:
 	/// 他のViewを解放する
 	/// </summary>
 	/// <param name="viewHandle">ビューのハンドル</param>
-	void ReleaseView(UINT viewHandle);
+	void ReleaseView(UINT viewHandle) override;
 
 public:
 	uint32_t GetMaxTexture() const;
