@@ -66,7 +66,7 @@ void Water::Update(const Vector3& cameraPos) {
 	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 
-	waveData_.time += Lamb::DeltaTime();
+	//waveData_.time += Lamb::DeltaTime();
 }
 
 void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera) {

@@ -10,11 +10,11 @@
             0.0,
             1.0
         ],
-        "isDirectionLight": true,
+        "isDirectionLight": false,
         "lightRotate": [
             0.0,
             0.0,
-            0.0
+            0.05235987901687622
         ],
         "outline": 0.0,
         "skybox": {
@@ -49,14 +49,14 @@
                     ]
                 },
                 {
+                    "CompName": "class CameraComp"
+                },
+                {
                     "CompName": "class Camera3DComp",
                     "aspectRatio": 1.7777777910232544,
                     "farClip": 1000.0,
                     "fov": 0.4869273006916046,
                     "nearClip": 0.10000000149011612
-                },
-                {
-                    "CompName": "class CameraComp"
                 }
             ],
             "type": "Object"
@@ -81,10 +81,10 @@
                 {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        -0.08824073523283005,
-                        -0.22520679235458374,
-                        -0.3539837896823883,
-                        0.9034329056739807
+                        -0.08824075758457184,
+                        -0.22520682215690613,
+                        -0.3539837598800659,
+                        0.9034328460693359
                     ],
                     "scale": [
                         0.9999998211860657,

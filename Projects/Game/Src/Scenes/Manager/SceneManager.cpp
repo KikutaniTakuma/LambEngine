@@ -51,12 +51,14 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 	sceneName_[BaseScene::ID::Game] = "Game";
 	sceneName_[BaseScene::ID::StageSelect] = "Select";
 	sceneName_[BaseScene::ID::Result] = "Result";
+	sceneName_[BaseScene::ID::Test] = "Test";
 #endif // _DEBUG
 	sceneNum_;
 	sceneNum_[BaseScene::ID::Title] = DIK_1;
 	sceneNum_[BaseScene::ID::Game] = DIK_2;
 	sceneNum_[BaseScene::ID::StageSelect] = DIK_3;
 	sceneNum_[BaseScene::ID::Result] = DIK_4;
+	sceneNum_[BaseScene::ID::Test] = DIK_5;
 
 	// テクスチャデータのアップロード
 	UploadTextureData();
