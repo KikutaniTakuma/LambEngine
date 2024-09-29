@@ -15,9 +15,35 @@ PixelShaderOutPut3 main(GeometoryOutPut input)
     float32_t3 tangent = NormalToTangent(perlinNormal);
     float32_t3 binormal = CalcBinormal(perlinNormal, tangent);
     float32_t3 blendNormal = BlendNormal(perlinNormal, tangent, binormal, normal);
+
+    float32_t3 ligDirection = kLight.ligDirection;
+    float32_t3 ligColor = kLight.ligColor;
+    float32_t shinness = kLight.shinness;
+ 
+    // ディレクションライト拡散反射光
+    float32_t t = dot(blendNormal, ligDirection);
+    t = saturate(t);
+
+    float32_t3 diffDirection = ligColor * t;
+
+    // 鏡面反射光
+    float32_t3 toEye = kCameraPos.pos - input.worldPosition.xyz;
+    toEye = normalize(toEye);
+    
+    float32_t3 refVec = reflect(ligDirection, blendNormal);
+    refVec = normalize(refVec);
+
+    t = dot(refVec, toEye);
+
+    t = pow(saturate(t), shinness);
+    float32_t3 specDirection = ligColor * t;
+    
+    float32_t3 lig = diffDirection + specDirection;
+    lig += 0.2f;
+    output.color0.rgb = clamp(kColor[input.instanceID].color.rgb /** lig*/, float32_t3(0.0f,0.0f,0.0f), float32_t3(1.0f, 1.0f, 1.0f));
     
     // 色
-    output.color0 = kColor[input.instanceID].color;
+    output.color0.w = kColor[input.instanceID].color.w;
 
     // 法線
     output.color1.xyz = blendNormal;
