@@ -14,9 +14,10 @@
         "lightRotate": [
             0.0,
             0.0,
-            -2.3387410640716553
+            0.06981316953897476
         ],
         "outline": 0.0,
+        "outline_enable": false,
         "skybox": {
             "isDraw": true,
             "scale": [
@@ -88,6 +89,9 @@
         {
             "Comps": [
                 {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
                     "BlendType": "kNone",
                     "CompName": "class ModelRenderDataComp",
                     "color": [
@@ -100,14 +104,11 @@
                     "isLighting": true
                 },
                 {
-                    "CompName": "class ModelRenderComp"
-                },
-                {
                     "CompName": "class TransformComp",
                     "rotate": [
                         -0.08824075758457184,
-                        -0.22520679235458374,
-                        -0.35398373007774353,
+                        -0.22520682215690613,
+                        -0.3539837598800659,
                         0.9034328460693359
                     ],
                     "scale": [
