@@ -366,6 +366,10 @@ void RenderingManager::SetIsLighting(bool isLighting) {
 	deferredRenderingData_.isDirectionLight = static_cast<uint32_t>(isLighting);
 }
 
+void RenderingManager::SetLightRotate(const Vector3& lightRotate) {
+	lightRotate_ = lightRotate;
+}
+
 void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
@@ -446,6 +450,7 @@ void RenderingManager::Save(nlohmann::json& jsonFile) {
 		json["skybox"]["scale"].push_back(i);
 	}
 	json["skybox"]["isDraw"] = isDrawSkyBox_;
+	json["skybox"]["environment"] = deferredRenderingData_.environmentCoefficient;
 	json["outline"] = weight_;
 	json["outline_enable"] = isOutLine_;
 }
@@ -472,6 +477,10 @@ void RenderingManager::Load(nlohmann::json& jsonFile) {
 		transform_.scale[i] = json["skybox"]["scale"][i].get<float>();
 	}
 	isDrawSkyBox_ = json["skybox"]["isDraw"].get<bool>();
+	if (json["skybox"].contains("environment")) {
+		deferredRenderingData_.environmentCoefficient = json["skybox"]["environment"].get<float>();
+	}
+
 	weight_ = json["outline"].get<float>();
 
 	if (json.contains("outline_enable")) {

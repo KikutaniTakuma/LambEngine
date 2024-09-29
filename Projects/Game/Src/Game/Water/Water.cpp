@@ -37,7 +37,7 @@ void Water::Init() {
 	waterSurface_ = std::make_unique<WaterTex2D>();
 	waterSurface_->Load();
 
-	color_ = Vector4(0.1f, 0.25f, 0.5f, 1.0f).GetColorRGBA();
+	color_ = Vector4(0.1f, 0.25f, 0.75f, 1.0f).GetColorRGBA();
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
@@ -57,7 +57,7 @@ void Water::Init() {
 			.shinness = 42.0f
 	};
 
-	density_ = 1.3f * 4.0f;
+	density_ = 1.3f * 2.0f;
 }
 
 void Water::Update(const Vector3& cameraPos) {
