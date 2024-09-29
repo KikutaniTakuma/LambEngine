@@ -1,9 +1,9 @@
 {
     "RederingSetting": {
         "bloom": {
-            "luminanceThreshold": 1.399999976158142,
-            "x": 8,
-            "y": 8
+            "luminanceThreshold": 1.0,
+            "x": 128,
+            "y": 128
         },
         "hsv": [
             0.0,
@@ -14,9 +14,10 @@
         "lightRotate": [
             0.0,
             0.0,
-            0.05235987901687622
+            0.06981316953897476
         ],
         "outline": 0.0,
+        "outline_enable": false,
         "skybox": {
             "isDraw": true,
             "scale": [
@@ -27,6 +28,30 @@
         }
     },
     "objects": [
+        {
+            "Comps": [
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        4.076245307922363,
+                        5.903861999511719,
+                        1.0054539442062378
+                    ]
+                }
+            ],
+            "type": "Object"
+        },
         {
             "Comps": [
                 {
@@ -95,30 +120,6 @@
                         0.0,
                         0.0,
                         0.0
-                    ]
-                }
-            ],
-            "type": "Object"
-        },
-        {
-            "Comps": [
-                {
-                    "CompName": "class TransformComp",
-                    "rotate": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        0.9999999403953552
-                    ],
-                    "translate": [
-                        4.076245307922363,
-                        5.903861999511719,
-                        1.0054539442062378
                     ]
                 }
             ],

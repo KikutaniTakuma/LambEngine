@@ -472,8 +472,6 @@ void ObjectManager::Load(const std::string& jsonFileName) {
 		RenderingManager::GetInstance()->Load(jsonFile);
 	}
 
-	RenderingManager::GetInstance()->SetIsLighting(false);
-
 	levelDatas_[currentSceneName_].reset(new LevelData());
 	LevelData& levelData = *levelDatas_[currentSceneName_];
 	levelData.name = currentSceneName_;
