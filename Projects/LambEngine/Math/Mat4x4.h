@@ -2,7 +2,7 @@
 
 #include <concepts>
 #include <string>
-#include "DirectXMath.h"
+#include <DirectXMath.h>
 #include <initializer_list>
 #include "Matrix.h"
 
