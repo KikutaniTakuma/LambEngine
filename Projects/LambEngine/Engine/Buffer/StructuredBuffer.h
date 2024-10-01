@@ -92,6 +92,12 @@ public:
 		srvDesc_.Buffer.NumElements = 0;
 	}
 
+	void MemCpy(const void* pSrc, size_t size) {
+		OnWright();
+		std::memcpy(data_, pSrc, size);
+		OffWright();
+	}
+
 public:
 	void OnWright() noexcept {
 		if (!isWright_) {
