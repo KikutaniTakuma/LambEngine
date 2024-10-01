@@ -17,6 +17,7 @@ public:
 public:
 	BlendType type;
 	Vector4 color;
-	bool isLighting;
+	bool isLighting = true;
 	std::string fileName;
+	bool isDraw = true;
 };

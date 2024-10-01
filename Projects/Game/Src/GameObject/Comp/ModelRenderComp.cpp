@@ -21,7 +21,7 @@ void ModelRenderComp::Init() {
 }
 
 void ModelRenderComp::Draw(CameraComp* cameraComp) {
-    if (model_.have()) {
+    if (model_.have() and renderDataComp_->isDraw) {
         model_->Draw(
             transformComp_->GetWorldMatrix(),
             cameraComp->GetCameraMatrix(),
@@ -41,6 +41,8 @@ void ModelRenderComp::Load() {
 void ModelRenderComp::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
     if (ImGui::TreeNode(guiName.c_str())) {
+        ImGui::Checkbox("描画有効", &(renderDataComp_->isDraw));
+
         // コンボボックスを使ってenumの値を選択する
         if (ImGui::BeginCombo("BlendType", kBlendTypeStrs[static_cast<uint32_t>(renderDataComp_->type)].c_str()))
         {

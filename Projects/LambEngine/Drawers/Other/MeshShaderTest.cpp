@@ -35,7 +35,9 @@ void MeshShaderTest::Load(const std::string& fileName)
 
 void MeshShaderTest::Draw(const Mat4x4& worldMatrix, const Mat4x4& camera, BlendType blend)
 {
-	BaseDrawer::Draw(worldMatrix, camera, 0, blend);
+	if (renderSet) {
+		BaseDrawer::Draw(worldMatrix, camera, 0, blend);
+	}
 }
 
 void MeshShaderTest::AllDraw() {

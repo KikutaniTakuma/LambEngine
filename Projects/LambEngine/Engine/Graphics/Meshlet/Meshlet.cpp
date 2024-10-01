@@ -76,8 +76,49 @@ void MeshLoader::ParseMesh(ResMesh& dstMesh, Lamb::SafePtr<const ModelData> pSrc
 		throw Lamb::Error::Code<MeshLoader>("DirectX::ComputeMeshlets failed", ErrorPlace);
 	}
 
+
 	// データを設定
-	dstMesh.meshlets = std::move(meshlets);
+
+	// meshletの数が1024を超えていた場合、meshletを分ける
+	if (kMaxThreadGroup < meshlets.size()) {
+		// サイズ
+		size_t divisionMeshletNum = (meshlets.size() / kMaxThreadGroup);
+		// 余り
+		size_t remainder = (meshlets.size() % kMaxThreadGroup);
+
+		if (remainder != 0) {
+			divisionMeshletNum += 1;
+		}
+
+		// 分割する分の要素を確保
+		dstMesh.meshletsArray.resize(divisionMeshletNum);
+
+		// 生成したmeshletのイテレーター
+		auto meshletsItr = meshlets.begin();
+
+		for (size_t count = 0; auto& meshletsElement : dstMesh.meshletsArray) {
+			// 最後だけ余りの数にする
+			// それ以外はThreadGroupの最大数
+			bool isLast = not (count < (divisionMeshletNum - 1));
+			size_t meshletSize = isLast ? remainder : kMaxThreadGroup;
+
+			// 要素確保
+			meshletsElement.resize(meshletSize);
+			// 代入していく
+			std::copy(meshletsItr, meshletsItr + meshletSize, meshletsElement.begin());
+
+			// メモリ最適化
+			meshletsElement.shrink_to_fit();
+
+			// イテレータを進める
+			meshletsItr = meshletsItr + meshletSize;
+			count++;
+		}
+	}
+	else {
+		dstMesh.meshletsArray.resize(1);
+		dstMesh.meshletsArray.push_back(std::move(meshlets));
+	}
 
 	dstMesh.uniqueVertexIndices.resize(uniqueVertexIB.size());
 	std::memcpy(dstMesh.uniqueVertexIndices.data(), uniqueVertexIB.data(), sizeof(uint8_t) * uniqueVertexIB.size());
@@ -120,23 +161,41 @@ void MeshletManager::LoadMesh(const std::string& fileName) {
 		auto& resMesh = meshAndMeshData.first;
 		auto& shaderData = meshAndMeshData.second;
 
+		// meshletsの数分だけ確保
+		shaderData->gMeshletsArray.resize(resMesh->meshletsArray.size());
+		// メモリを最適化
+		shaderData->gMeshletsArray.shrink_to_fit();
+
+		for (size_t i = 0; i < shaderData->gMeshletsArray.size(); i++) {
+			// SturucturedBufferを作成
+			shaderData->gMeshletsArray[i].Create(static_cast<uint32_t>(resMesh->meshletsArray[i].size()));
+
+			// 値を代入
+			shaderData->gMeshletsArray[i].MemCpy(
+				resMesh->meshletsArray[i].data(),
+				sizeof(DirectX::Meshlet) * resMesh->meshletsArray[i].size()
+			);
+		}
+
+		// SturucturedBufferを作成
 		shaderData->gVertices.Create(static_cast<uint32_t>(resMesh->vertices.size()));
 		shaderData->gUniqueVertexIndices.Create(static_cast<uint32_t>(resMesh->uniqueVertexIndices.size()));
 		shaderData->gPrimitiveIndices.Create(static_cast<uint32_t>(resMesh->primitiveIndices.size()));
-		shaderData->gMeshlets.Create(static_cast<uint32_t>(resMesh->meshlets.size()));
 
+		// 値を代入
 		shaderData->gVertices.MemCpy(resMesh->vertices.data(), sizeof(Vertex) * resMesh->vertices.size());
 		shaderData->gUniqueVertexIndices.MemCpy(resMesh->uniqueVertexIndices.data(), sizeof(uint32_t) * resMesh->uniqueVertexIndices.size());
 		shaderData->gPrimitiveIndices.MemCpy(resMesh->primitiveIndices.data(), sizeof(uint32_t) * resMesh->primitiveIndices.size());
-		shaderData->gMeshlets.MemCpy(resMesh->meshlets.data(), sizeof(DirectX::Meshlet) * resMesh->meshlets.size());
+		
+		// meshletsの数分だけ確保
+		shaderData->meshletCounts.resize(shaderData->gMeshletsArray.size());
+		// メモリを最適化
+		shaderData->meshletCounts.shrink_to_fit();
 
-		shaderData->meshletCount = static_cast<uint32_t>(shaderData->gMeshlets.size());
-
-		shaderData->gVertices.OffWright();
-		shaderData->gUniqueVertexIndices.OffWright();
-		shaderData->gPrimitiveIndices.OffWright();
-		shaderData->gMeshlets.OffWright();
-		shaderData->gTransform.OffWright();
+		// 各meshletsのサイズを代入
+		for (size_t i = 0; i < shaderData->meshletCounts.size(); i++) {
+			shaderData->meshletCounts[i] = static_cast<uint32_t>(shaderData->gMeshletsArray[i].size());
+		}
 	}
 }
 

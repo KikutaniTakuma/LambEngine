@@ -48,9 +48,9 @@
                         1.0
                     ],
                     "translate": [
-                        0.16204190254211426,
-                        2.9225525856018066,
-                        -1.090000033378601
+                        1.5,
+                        0.0,
+                        0.0
                     ]
                 },
                 {
@@ -62,7 +62,8 @@
                         1.0,
                         1.0
                     ],
-                    "fileName": "./Resources\\Common\\Ball.obj",
+                    "fileName": "./Resources\\TestModel\\Dragon.obj",
+                    "isDraw": true,
                     "isLighting": true
                 }
             ],
@@ -73,9 +74,9 @@
                 {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        0.039989251643419266,
+                        0.039989255368709564,
                         -0.0024979913141578436,
-                        0.00010000746260629967,
+                        0.00010000746988225728,
                         0.9991970062255859
                     ],
                     "scale": [
@@ -105,9 +106,6 @@
         {
             "Comps": [
                 {
-                    "CompName": "class ModelRenderComp"
-                },
-                {
                     "BlendType": "kNone",
                     "CompName": "class ModelRenderDataComp",
                     "color": [
@@ -116,8 +114,12 @@
                         1.0,
                         1.0
                     ],
-                    "fileName": "./Resources\\Common\\Cube.obj",
+                    "fileName": "./Resources\\TestModel\\Dragon.obj",
+                    "isDraw": true,
                     "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
@@ -133,7 +135,7 @@
                         1.0
                     ],
                     "translate": [
-                        0.0,
+                        -1.5,
                         0.0,
                         0.0
                     ]

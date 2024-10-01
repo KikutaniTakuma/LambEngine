@@ -19,6 +19,7 @@ void ModelRenderDataComp::Save(nlohmann::json& json)
 	}
 	json["isLighting"] = isLighting;
 	json["fileName"] = fileName;
+	json["isDraw"] = isDraw;
 }
 
 void ModelRenderDataComp::Load(nlohmann::json& json)
@@ -37,5 +38,9 @@ void ModelRenderDataComp::Load(nlohmann::json& json)
 	}
 	isLighting = json["isLighting"].get<bool>();
 	fileName = json["fileName"].get<std::string>();
+
+	if (json.contains("isDraw")) {
+		isDraw = json["isDraw"].get<bool>();
+	}
 }
 

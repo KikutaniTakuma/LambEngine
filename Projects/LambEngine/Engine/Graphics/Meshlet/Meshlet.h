@@ -8,6 +8,11 @@
 #include "../Shader/MeshShader/MeshShader.h"
 
 class MeshLoader final {
+public:
+	static constexpr size_t kMaxMeshletVertices = 64llu;
+	static constexpr size_t kMaxMeshletPrimirives = 126llu;
+	static constexpr size_t kMaxThreadGroup = 1024llu;
+
 private:
 	MeshLoader() = default;
 	~MeshLoader() = default;

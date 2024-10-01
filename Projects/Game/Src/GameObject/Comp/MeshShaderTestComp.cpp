@@ -40,20 +40,21 @@ void MeshShaderTestComp::Init() {
 
 void MeshShaderTestComp::Draw(CameraComp* cameraComp)
 {
-    if (not meshDrawer_) {
-        return;
+    if (meshDrawer_ and renderDataComp_->isDraw) {
+        meshDrawer_->Draw(
+            transform_->GetWorldMatrix(),
+            cameraComp->GetCameraMatrix(),
+            renderDataComp_->type
+        );
     }
 
-	meshDrawer_->Draw(
-		transform_->GetWorldMatrix(),
-		cameraComp->GetCameraMatrix(),
-        renderDataComp_->type
-	);
 }
 
 void MeshShaderTestComp::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
     if (ImGui::TreeNode(guiName.c_str())) {
+        ImGui::Checkbox("描画有効", &(renderDataComp_->isDraw));
+
         // コンボボックスを使ってenumの値を選択する
         if (ImGui::BeginCombo("BlendType", kBlendTypeStrs[static_cast<uint32_t>(renderDataComp_->type)].c_str()))
         {

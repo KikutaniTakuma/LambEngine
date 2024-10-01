@@ -55,8 +55,8 @@ uint32_t GetVertexIndex(Meshlet m, uint32_t localIndex)
 void main(
 	uint32_t groupThreadID : SV_GroupThreadID,
     uint32_t groupID : SV_GroupID,
-	out indices uint32_t3 tris[126],
-    out vertices MSOutput verts[64]
+    out vertices MSOutput verts[64],
+	out indices uint32_t3 tris[126]
 ){
 	Meshlet meshlet = gMeshlets[groupID];
 
