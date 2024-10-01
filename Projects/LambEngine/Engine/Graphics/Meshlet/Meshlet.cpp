@@ -66,7 +66,9 @@ void MeshLoader::ParseMesh(ResMesh& dstMesh, Lamb::SafePtr<const ModelData> pSrc
 		nullptr,
 		meshlets,
 		uniqueVertexIB,
-		primitiveIndices
+		primitiveIndices,
+		kMaxMeshletVertices, 
+		kMaxMeshletPrimirives
 	);
 
 	// 失敗したらthrowする
@@ -115,9 +117,6 @@ void MeshletManager::LoadMesh(const std::string& fileName) {
 
 		auto& meshAndMeshData = meshlets_[fileName];
 
-		// ディスクリプタヒープ
-		CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
-
 		auto& resMesh = meshAndMeshData.first;
 		auto& shaderData = meshAndMeshData.second;
 
@@ -132,17 +131,6 @@ void MeshletManager::LoadMesh(const std::string& fileName) {
 		shaderData->gMeshlets.MemCpy(resMesh->meshlets.data(), sizeof(DirectX::Meshlet) * resMesh->meshlets.size());
 
 		shaderData->meshletCount = static_cast<uint32_t>(shaderData->gMeshlets.size());
-
-
-
-		descriptorHeap->BookingHeapPos(5);
-		descriptorHeap->CreateView(shaderData->gVertices);
-		descriptorHeap->CreateView(shaderData->gUniqueVertexIndices);
-		descriptorHeap->CreateView(shaderData->gPrimitiveIndices);
-		descriptorHeap->CreateView(shaderData->gMeshlets);
-		descriptorHeap->CreateView(shaderData->gTransform);
-
-
 
 		shaderData->gVertices.OffWright();
 		shaderData->gUniqueVertexIndices.OffWright();

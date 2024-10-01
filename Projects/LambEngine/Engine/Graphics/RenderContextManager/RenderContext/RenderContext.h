@@ -477,11 +477,18 @@ public:
         // パイプライン設定
         pipeline_->Use();
 
-        // ライト構造体
-        commandlist->SetGraphicsRootDescriptorTable(0, shaderData_->gTransform.GetHandleGPU());
-        // ワールドとカメラマトリックス, 色, 各シェーダーの構造体
-        commandlist->SetGraphicsRootDescriptorTable(1, shaderData_->gVertices.GetHandleGPU());
-        commandlist->SetGraphicsRootDescriptorTable(2, descriptorHeap->GetGpuHeapHandle(0));
+        // Transform
+        commandlist->SetGraphicsRootConstantBufferView(0, shaderData_->gTransform.GetGPUVtlAdrs());
+        // gVertices
+        commandlist->SetGraphicsRootShaderResourceView(1, shaderData_->gVertices.GetGPUVtlAdrs());
+        // gUniqueVertexIndices
+        commandlist->SetGraphicsRootShaderResourceView(2, shaderData_->gUniqueVertexIndices.GetGPUVtlAdrs());
+        // gPrimitiveIndices
+        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_->gPrimitiveIndices.GetGPUVtlAdrs());
+        // gMeshlets
+        commandlist->SetGraphicsRootShaderResourceView(4, shaderData_->gMeshlets.GetGPUVtlAdrs());
+        // Textures
+        commandlist->SetGraphicsRootDescriptorTable(5, descriptorHeap->GetGpuHeapHandle(0));
 
         // ドローコール
         commandlist->DispatchMesh(shaderData_->meshletCount, 1, 1);

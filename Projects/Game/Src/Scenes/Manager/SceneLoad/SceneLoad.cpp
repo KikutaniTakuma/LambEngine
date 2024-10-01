@@ -53,9 +53,6 @@ void SceneLoad::Start()
 
 		RenderingManager::GetInstance()->Draw();
 
-		// ドローカウントリセット
-		renderContextManager_->ResetDrawCount();
-
 		Engine::FrameEnd();
 
 		tex2Danimator_->Start();
@@ -102,9 +99,6 @@ void SceneLoad::CreateLoad()
 			renderContextManager_ = RenderContextManager::GetInstance();
 
 			RenderingManager::GetInstance()->Draw();
-
-			// ドローカウントリセット
-			renderContextManager_->ResetDrawCount();
 
 			Engine::FrameEnd();
 		},

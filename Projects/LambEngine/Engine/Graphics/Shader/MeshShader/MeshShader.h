@@ -139,3 +139,6 @@ struct MeshShaderData {
 
 	uint32_t meshletCount = 0;
 };
+
+static constexpr size_t kMaxMeshletVertices = 64llu;
+static constexpr size_t kMaxMeshletPrimirives = 126llu;

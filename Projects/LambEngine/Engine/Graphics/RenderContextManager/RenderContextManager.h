@@ -221,9 +221,6 @@ public:
 	void SetIsNowThreading(bool isNowThreading);
 public:
 	std::pair<size_t, const std::list<RenderData*>&> CreateRenderList(BlendType blend);
-	
-	void Draw();
-	void ResetDrawCount();
 
 private:
 	void ResizeRenderList();

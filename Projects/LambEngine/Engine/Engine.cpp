@@ -72,8 +72,8 @@ void Engine::Debug::InitializeDebugLayer() {
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(debugController_.GetAddressOf())))) {
 		// デバッグレイヤーを有効化する
 		debugController_->EnableDebugLayer();
-		// さらにGPU側でもチェックするようにする
-		debugController_->SetEnableGPUBasedValidation(TRUE);
+		// これは重いのでFALSE
+		debugController_->SetEnableGPUBasedValidation(FALSE);
 
 		Lamb::AddLog("InitializeDebugLayer succeeded");
 	}

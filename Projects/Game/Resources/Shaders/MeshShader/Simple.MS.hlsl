@@ -28,7 +28,7 @@ struct TransformParam {
 
 ConstantBuffer<TransformParam> gTransform : register(b0);
 StructuredBuffer<MSInput> gVertices : register(t0);
-StructuredBuffer<uint32_t> gIndices : register(t1);
+StructuredBuffer<uint32_t> gUniqueVertexIndices : register(t1);
 StructuredBuffer<uint32_t> gPrimitiveIndices : register(t2);
 StructuredBuffer<Meshlet> gMeshlets : register(t3);
 
@@ -47,7 +47,7 @@ uint32_t GetVertexIndex(Meshlet m, uint32_t localIndex)
 {
     localIndex = m.vertexOffset + localIndex;
 
-	return gIndices[localIndex];
+	return gUniqueVertexIndices[localIndex];
 }
 
 [numthreads(128, 1, 1)]

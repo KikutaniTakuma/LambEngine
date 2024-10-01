@@ -215,7 +215,9 @@ void RenderingManager::Draw() {
 		static_cast<uint32_t>(renderTargets.size())
 	);
 
-	DrawRGB(renderContextManager->CreateRenderList(BlendType::kNone));
+	auto rgbRenderList = renderContextManager->CreateRenderList(BlendType::kNone);
+
+	DrawRGB(rgbRenderList);
 
 	/// ====================================================================================
 
@@ -306,6 +308,7 @@ void RenderingManager::Draw() {
 
 	/// ====================================================================================
 
+	// ポストエフェクトの描画
 	DrawPostEffect();
 
 	/// ====================================================================================
@@ -324,6 +327,36 @@ void RenderingManager::Draw() {
 	DrawNoDepth(nodepthLists);
 	// 深度値なしのlineを描画
 	Line::AllDraw(false);
+
+	/// ====================================================================================
+
+	// Drawカウントリセット
+	for (size_t count = 0; auto& i : rgbRenderList.second) {
+		if (rgbRenderList.first <= count) {
+			break;
+		}
+		i->ResetDrawCount();
+		count++;
+	}
+	for (auto& renderList : rgbaList) {
+		for (size_t count = 0; auto& i : renderList.second) {
+			if (renderList.first <= count) {
+				break;
+			}
+			i->ResetDrawCount();
+			count++;
+		}
+	}
+	for (auto& renderList : nodepthLists) {
+		for (size_t count = 0; auto& i : renderList.second) {
+			if (renderList.first <= count) {
+				break;
+			}
+			i->ResetDrawCount();
+			count++;
+		}
+	}
+
 }
 
 DepthBuffer& RenderingManager::GetDepthBuffer()

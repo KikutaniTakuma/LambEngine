@@ -47,18 +47,16 @@ RenderSet* const RenderContextManager::Get(const LoadFileNames& fileNames)
 	}
 }
 
-RenderSet* const RenderContextManager::Get(const MeshLoadFileNames& fileNames)
-{
-	auto isExist = meshRenderData_.find(fileNames);
-	if (isExist != meshRenderData_.end()) {
-		return meshRenderData_[fileNames].get();
-	}
-	else if (isExist == meshRenderData_.end() and not isNowThreading_) {
-		LoadMesh(fileNames);
+RenderSet* const RenderContextManager::Get(const MeshLoadFileNames& fileNames) {
+	if (not isNowThreading_) {
+		auto isExist = meshRenderData_.find(fileNames);
+		if (isExist == meshRenderData_.end()) {
+			LoadMesh(fileNames);
+		}
 		return meshRenderData_[fileNames].get();
 	}
 	else {
-		isExist = threadMeshRenderData_.find(fileNames);
+		auto isExist = threadMeshRenderData_.find(fileNames);
 		if (isExist == threadMeshRenderData_.end()) {
 			LoadMesh(fileNames);
 		}
@@ -115,18 +113,6 @@ std::pair<size_t, const std::list<RenderData*>&> RenderContextManager::CreateRen
 void RenderContextManager::ResizeRenderList() {
 	for (auto& i : renderDataLists_) {
 		i.resize(renderData_.size() + meshRenderData_.size());
-	}
-}
-
-void RenderContextManager::Draw() {
-	for (auto& i : renderData_) {
-		i.second->Draw();
-	}
-}
-
-void RenderContextManager::ResetDrawCount() {
-	for (auto& i : renderData_) {
-		i.second->ResetDrawCount();
 	}
 }
 
@@ -369,20 +355,6 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateMeshShaderGra
 
 	auto srvHeap = CbvSrvUavHeap::GetInstance();
 
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
-	cbvRange[0].NumDescriptors = 1;
-	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
-	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-
-	uint32_t baseShaderRegister = 0;
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> srvRange = {};
-	srvRange[0].NumDescriptors = 4;
-	srvRange[0].BaseShaderRegister = baseShaderRegister;
-	srvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
-	srvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	baseShaderRegister = srvRange[0].NumDescriptors;
-
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> texRange = {};
 	texRange[0].NumDescriptors = srvHeap->GetMaxTexture();
 	texRange[0].BaseShaderRegister = 4;
@@ -390,21 +362,37 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateMeshShaderGra
 	texRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 
 
-	std::array<D3D12_ROOT_PARAMETER, 3> rootPrams = {};
-	rootPrams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootPrams[0].DescriptorTable.NumDescriptorRanges = UINT(cbvRange.size());
-	rootPrams[0].DescriptorTable.pDescriptorRanges = cbvRange.data();
-	rootPrams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	std::array<D3D12_ROOT_PARAMETER, 6> rootPrams = {};
+	// Transform
+	rootPrams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootPrams[0].Descriptor.ShaderRegister = 0;
+	rootPrams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
 
-	rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootPrams[1].DescriptorTable.NumDescriptorRanges = UINT(srvRange.size());
-	rootPrams[1].DescriptorTable.pDescriptorRanges = srvRange.data();
-	rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	//  gVertices
+	rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	rootPrams[1].Descriptor.ShaderRegister = 0;
+	rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
 
-	rootPrams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootPrams[2].DescriptorTable.NumDescriptorRanges = UINT(texRange.size());
-	rootPrams[2].DescriptorTable.pDescriptorRanges = texRange.data();
-	rootPrams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	// gUniqueVertexIndices
+	rootPrams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	rootPrams[2].Descriptor.ShaderRegister = 1;
+	rootPrams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
+
+	// gPrimitiveIndices
+	rootPrams[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	rootPrams[3].Descriptor.ShaderRegister = 2;
+	rootPrams[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
+
+	// gMeshlets
+	rootPrams[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	rootPrams[4].Descriptor.ShaderRegister = 3;
+	rootPrams[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
+
+	// Textures
+	rootPrams[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootPrams[5].DescriptorTable.NumDescriptorRanges = UINT(texRange.size());
+	rootPrams[5].DescriptorTable.pDescriptorRanges = texRange.data();
+	rootPrams[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 	RootSignature::Desc desc;
 	desc.rootParameter = rootPrams.data();

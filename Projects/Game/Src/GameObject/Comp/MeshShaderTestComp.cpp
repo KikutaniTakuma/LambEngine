@@ -20,9 +20,6 @@ void MeshShaderTestComp::Load() {
     if (renderDataComp_->fileName.empty()) {
         return;
     }
-
-    meshDrawer_.reset();
-	meshDrawer_ = std::make_unique<MeshShaderTest>();
     meshDrawer_->Load(renderDataComp_->fileName);
 }
 
@@ -31,6 +28,8 @@ void MeshShaderTestComp::Init() {
 	transform_ = object_.AddComp<TransformComp>();
 
     renderDataComp_ = object_.AddComp<ModelRenderDataComp>();
+
+    meshDrawer_ = std::make_unique<MeshShaderTest>();
 
 #ifdef _DEBUG
     filePaths_ = Lamb::GetFilePathFormDir("./", ".obj");
@@ -52,7 +51,7 @@ void MeshShaderTestComp::Draw(CameraComp* cameraComp)
 	);
 }
 
-void MeshShaderTestComp::Debug(const std::string& guiName) {
+void MeshShaderTestComp::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef _DEBUG
     if (ImGui::TreeNode(guiName.c_str())) {
         // コンボボックスを使ってenumの値を選択する

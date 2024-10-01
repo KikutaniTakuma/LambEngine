@@ -101,7 +101,4 @@ void Framework::Draw() {
 	const Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
 	RenderingManager::GetInstance()->Draw();
-
-	// ドローカウントリセット
-	renderContextManager->ResetDrawCount();
 }
