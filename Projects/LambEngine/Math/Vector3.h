@@ -238,3 +238,5 @@ struct Segment {
 [[nodiscard]] Vector3 ClosestPoint(const Vector3& point, const Segment& segment);
 
 using float32_t3 = Vector3;
+
+void SetVector3ToDirectXXMFLOAT3(DirectX::XMFLOAT3& xmfloat3, const Vector3& vec3);

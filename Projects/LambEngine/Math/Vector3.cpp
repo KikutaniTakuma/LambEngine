@@ -201,3 +201,9 @@ Vector3 Project(const Vector3& vec1, const Vector3& vec2) {
 Vector3 ClosestPoint(const Vector3& point, const Segment& segment) {
 	return segment.origin + Project(point - segment.origin, segment.diff);
 }
+
+void SetVector3ToDirectXXMFLOAT3(DirectX::XMFLOAT3& xmfloat3, const Vector3& vec3) {
+	xmfloat3.x = vec3.x;
+	xmfloat3.y = vec3.y;
+	xmfloat3.z = vec3.z;
+}
