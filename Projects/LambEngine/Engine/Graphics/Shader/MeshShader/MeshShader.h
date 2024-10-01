@@ -12,6 +12,8 @@
 
 #include "../../GraphicsStructs.h"
 
+#include "DirectXMesh/DirectXMesh.h"
+
 
 template<typename ValueType, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE kObjectType>
 class alignas(void*) StateParam {
@@ -119,29 +121,20 @@ struct IndexParam {
 	std::array<uint32_t, 3> index;
 };
 
-struct ResMeshlet {
-	uint32_t vertexOffset = 0u;
-	uint32_t vertexCount = 0u;
-	uint32_t primitiveOffset = 0u;
-	uint32_t primitiveCount = 0u;
-};
-
 struct ResMesh {
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
-	uint32_t materialID;
 
-	std::vector<ResMeshlet> meshlets;
+	std::vector<DirectX::Meshlet> meshlets;
 	std::vector<uint32_t> uniqueVertexIndices;
-	std::vector<uint8_t> primitiveIndices;
-	std::vector<uint32_t> packedPrimitiveIndices;
+	std::vector<uint32_t> primitiveIndices;
 };
 
 struct MeshShaderData {
 	StructuredBuffer<Vertex> gVertices;
 	StructuredBuffer<uint32_t> gUniqueVertexIndices;
-	StructuredBuffer<uint32_t> gUniquePrimitiveIndices;
-	StructuredBuffer<ResMeshlet> gMeshlets;
+	StructuredBuffer<uint32_t> gPrimitiveIndices;
+	StructuredBuffer<DirectX::Meshlet> gMeshlets;
 	ConstantBuffer<TransformParam> gTransform;
 
 	uint32_t meshletCount = 0;
