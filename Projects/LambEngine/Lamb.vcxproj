@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\;$(SolutionDir)Projects\meshoptimizer\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -292,6 +292,9 @@
     <ClInclude Include="Utils\Thread.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\externals\DirectXMesh\DirectXMesh_Desktop_2022_Win10.vcxproj">
+      <Project>{6857f086-f6fe-4150-9ed7-7446f1c1c220}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\externals\DirectXTex\DirectXTex_Desktop_2022_Win10.vcxproj">
       <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
     </ProjectReference>
@@ -300,9 +303,6 @@
     </ProjectReference>
     <ProjectReference Include="..\ImGui\ImGui.vcxproj">
       <Project>{cce141c6-6223-414a-b5cd-00cab7e683a3}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\meshoptimizer\meshoptimizer.vcxproj">
-      <Project>{d231e82a-80a0-455e-ae3a-265c593865e9}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
