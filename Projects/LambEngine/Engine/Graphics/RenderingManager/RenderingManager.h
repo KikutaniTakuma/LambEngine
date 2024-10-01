@@ -54,6 +54,8 @@ public:
 	void SetColor(const Vector4& color);
 	void SetIsLighting(bool isLighting);
 	void SetLightRotate(const Vector3& lightRotate);
+	void SetBloomKernelSize(int32_t x, int32_t y);
+	void SetEnvironmentCoefficient(float32_t environmentCoefficient);
 
 	void Debug(const std::string& guiName);
 

@@ -97,6 +97,8 @@ void TitleScene::Initialize() {
     cursor_->Initialize();
 
     renderingManager_->SetLightRotate(Vector3(0.0f, 90.0f, -1.0f) * Lamb::Math::toRadian<float>);
+    renderingManager_->SetBloomKernelSize(128, 128);
+    renderingManager_->SetEnvironmentCoefficient(0.3f);
 }
 
 void TitleScene::Finalize() {

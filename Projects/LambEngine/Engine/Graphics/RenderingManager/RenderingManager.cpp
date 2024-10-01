@@ -67,7 +67,7 @@ RenderingManager::RenderingManager() {
 	std::unique_ptr<Luminate> luminate = std::make_unique<Luminate>();
 	luminate->Init();
 	luminate_ = luminate.release();
-	luminanceThreshold = 1.4f;
+	luminanceThreshold = 1.2f;
 	luminate_->SetLuminanceThreshold(luminanceThreshold);
 
 	luminateTexture_ = std::make_unique<PeraRender>();
@@ -368,6 +368,15 @@ void RenderingManager::SetIsLighting(bool isLighting) {
 
 void RenderingManager::SetLightRotate(const Vector3& lightRotate) {
 	lightRotate_ = lightRotate;
+}
+
+void RenderingManager::SetBloomKernelSize(int32_t x, int32_t y) {
+	gaussianBlurStateHorizontal_.kernelSize = x;
+	gaussianBlurStateVertical_.kernelSize = y;
+}
+
+void RenderingManager::SetEnvironmentCoefficient(float32_t environmentCoefficient) {
+	deferredRenderingData_.environmentCoefficient = environmentCoefficient;
 }
 
 void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
