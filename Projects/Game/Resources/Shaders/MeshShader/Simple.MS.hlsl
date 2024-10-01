@@ -15,10 +15,10 @@ struct MSOutput {
 };
 
 struct Meshlet {
-	uint32_t vertexOffset;
 	uint32_t vertexCount;
-	uint32_t primitiveOffset;
+	uint32_t vertexOffset;
 	uint32_t primitiveCount;
+	uint32_t primitiveOffset;
 };
 
 struct TransformParam {
@@ -32,21 +32,31 @@ StructuredBuffer<uint32_t> gIndices : register(t1);
 StructuredBuffer<uint32_t> gPrimitiveIndices : register(t2);
 StructuredBuffer<Meshlet> gMeshlets : register(t3);
 
-uint32_t3 PackedPrimitiveIndex(uint32_t packedIndex){
-	return uint32_t3(
-		(packedIndex >> 16) & 0xff,
-		(packedIndex >> 8) & 0xff,
-		(packedIndex >> 0) & 0xff
-	);
+uint32_t3 UnpackPrimitive(uint32_t primitive)
+{
+    // Unpacks a 10 bits per index triangle from a 32-bit uint.
+    return uint32_t3(primitive & 0x3ff, (primitive >> 10) & 0x3ff, (primitive >> 20) & 0x3ff);
+}
+
+uint32_t3 GetPrimitive(Meshlet m, uint32_t index)
+{
+    return UnpackPrimitive(gPrimitiveIndices[m.primitiveOffset + index]);
+}
+
+uint32_t GetVertexIndex(Meshlet m, uint32_t localIndex)
+{
+    localIndex = m.vertexOffset + localIndex;
+
+	return gIndices[localIndex];
 }
 
 [numthreads(128, 1, 1)]
 [outputtopology("triangle")]
 void main(
 	uint32_t groupThreadID : SV_GroupThreadID,
-	uint32_t groupID : SV_GroupID,
-	out vertices MSOutput verts[64],
-	out indices uint32_t3 polys[128]
+    uint32_t groupID : SV_GroupID,
+	out indices uint32_t3 tris[126],
+    out vertices MSOutput verts[64]
 ){
 	Meshlet meshlet = gMeshlets[groupID];
 
@@ -55,13 +65,11 @@ void main(
 	SetMeshOutputCounts(meshlet.vertexCount, meshlet.primitiveCount);
 
 	if(groupThreadID < meshlet.primitiveCount){
-		uint32_t primitiveIndicesIndex = meshlet.primitiveOffset + groupThreadID;
-		uint32_t packedPrimitiveIndex = gPrimitiveIndices[primitiveIndicesIndex];
-		polys[groupThreadID] = PackedPrimitiveIndex(packedPrimitiveIndex);
+		tris[groupThreadID] = GetPrimitive(meshlet, groupThreadID);
 	}
 
 	if(groupThreadID < meshlet.vertexCount) {
-		uint32_t index = gIndices[meshlet.vertexOffset + groupThreadID];
+		uint32_t index = GetVertexIndex(meshlet, groupThreadID);
 		MSInput input = gVertices[index];
 		MSOutput output = (MSOutput)0;
 
