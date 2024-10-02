@@ -15,6 +15,7 @@
 #include "DirectXMesh/DirectXMesh.h"
 
 
+// MeshShaderのパイプラインを作るためのクラス
 template<typename ValueType, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE kObjectType>
 class alignas(void*) StateParam {
 public:
@@ -43,6 +44,7 @@ private:
 	ValueType                           value_;
 };
 
+// MeshShaderのパイプラインを作るためのクラス(パディングあり)
 template<typename ValueType, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE kObjectType>
 class alignas(void*) StateParamHasPad {
 public:
@@ -71,27 +73,27 @@ public:
 private:
 	D3D12_PIPELINE_STATE_SUBOBJECT_TYPE type_;
 	ValueType                           value_;
-	char pad[4];
+	int8_t                              pad[4]; // 4バイトパディング
 };
 
 
 
 
-using SP_ROOT_SIGNATURE = StateParam<ID3D12RootSignature*,       D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_ROOT_SIGNATURE>;
-using SP_AS             = StateParam<D3D12_SHADER_BYTECODE,      D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_AS>;
-using SP_MS             = StateParam<D3D12_SHADER_BYTECODE,      D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_MS>;
-using SP_PS             = StateParam<D3D12_SHADER_BYTECODE,      D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_PS>;
-using SP_BLEND          = StateParamHasPad<D3D12_BLEND_DESC,           D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_BLEND>;
-using SP_RASTERIZER     = StateParam<D3D12_RASTERIZER_DESC,      D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_RASTERIZER>;
-using SP_DEPTH_STENCIL  = StateParam<D3D12_DEPTH_STENCIL_DESC,   D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_DEPTH_STENCIL>;
-using SP_SAMPLE_MASK    = StateParam<UINT,                       D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_SAMPLE_MASK>;
-using SP_SAMPLE_DESC    = StateParamHasPad<DXGI_SAMPLE_DESC,           D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_SAMPLE_DESC>;
-using SP_RT_FORMAT      = StateParam<D3D12_RT_FORMAT_ARRAY,      D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_RENDER_TARGET_FORMATS>;
-using SP_DS_FORMAT      = StateParam<DXGI_FORMAT,                D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_DEPTH_STENCIL_FORMAT>;
-using SP_FLAGS          = StateParam<D3D12_PIPELINE_STATE_FLAGS, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_FLAGS>;
+using SP_ROOT_SIGNATURE = StateParam<       ID3D12RootSignature*,        D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_ROOT_SIGNATURE       >;
+using SP_AS             = StateParam<       D3D12_SHADER_BYTECODE,       D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_AS                   >;
+using SP_MS             = StateParam<       D3D12_SHADER_BYTECODE,       D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_MS                   >;
+using SP_PS             = StateParam<       D3D12_SHADER_BYTECODE,       D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_PS                   >;
+using SP_BLEND          = StateParamHasPad< D3D12_BLEND_DESC,            D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_BLEND                >;
+using SP_RASTERIZER     = StateParam<       D3D12_RASTERIZER_DESC,       D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_RASTERIZER           >;
+using SP_DEPTH_STENCIL  = StateParam<       D3D12_DEPTH_STENCIL_DESC,    D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_DEPTH_STENCIL        >;
+using SP_SAMPLE_MASK    = StateParam<       UINT,                        D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_SAMPLE_MASK          >;
+using SP_SAMPLE_DESC    = StateParamHasPad< DXGI_SAMPLE_DESC,            D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_SAMPLE_DESC          >;
+using SP_RT_FORMAT      = StateParam<       D3D12_RT_FORMAT_ARRAY,       D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_RENDER_TARGET_FORMATS>;
+using SP_DS_FORMAT      = StateParam<       DXGI_FORMAT,                 D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_DEPTH_STENCIL_FORMAT >;
+using SP_FLAGS          = StateParam<       D3D12_PIPELINE_STATE_FLAGS,  D3D12_PIPELINE_STATE_SUBOBJECT_TYPE_FLAGS                >;
 
 
-
+// MeshShader用のパイプラインステート
 struct MeshShaderPipelineStateDesc {
 	SP_ROOT_SIGNATURE rootSignature;
 	SP_AS             AS;
@@ -107,35 +109,23 @@ struct MeshShaderPipelineStateDesc {
 	SP_FLAGS          flags;
 };
 
-struct MSInput {
-	float32_t4 position;
-	float32_t4 color;
-};
-
-struct TransformParam {
-	float32_t4x4 world;
-	float32_t4x4 viewProjection;
-};
-
-struct IndexParam {
-	std::array<uint32_t, 3> index;
-};
-
+// Meshletを保存した構造体
 struct ResMesh {
-	std::vector<Vertex> vertices;
-	std::vector<uint32_t> indices;
-
-	std::vector<DirectX::Meshlet> meshletsArray;
-	std::vector<uint32_t> uniqueVertexIndices;
-	std::vector<uint32_t> primitiveIndices;
+	std::vector<Vertex>           vertices; // 頂点データ
+	std::vector<uint32_t>         indices;  // インデックスデータ
+	
+	std::vector<DirectX::Meshlet> meshlets;            // メッシュレット
+	std::vector<uint32_t>         uniqueVertexIndices; // インデックスデータ
+	std::vector<uint32_t>         primitiveIndices;    // プリミティブインデックス
 };
 
+// MeshShaderで使うStructuredBufferをまとめた構造体
 struct MeshShaderData {
-	StructuredBuffer<Vertex> gVertices;
-	StructuredBuffer<uint32_t> gUniqueVertexIndices;
-	StructuredBuffer<uint32_t> gPrimitiveIndices;
-	StructuredBuffer<DirectX::Meshlet> gMeshletsArray;
-	StructuredBuffer<TransformParam> gTransform;
+	StructuredBuffer<Vertex>           gVertices;            // 頂点データ
+	StructuredBuffer<uint32_t>         gUniqueVertexIndices; // インデックスデータ
+	StructuredBuffer<uint32_t>         gPrimitiveIndices;    // プリミティブインデックス
+	StructuredBuffer<DirectX::Meshlet> gMeshlets;            // メッシュレット
+	StructuredBuffer<WVPMatrix>        gTransform;           // トランスフォーム
 
-	uint32_t meshletCount;
+	uint32_t meshletCount;                                   // メッシュレットの数
 };

@@ -484,7 +484,7 @@ public:
         // gPrimitiveIndices
         commandlist->SetGraphicsRootShaderResourceView(6, shaderData_->gPrimitiveIndices.GetGPUVtlAdrs());
         // gMeshlets
-        commandlist->SetGraphicsRootShaderResourceView(7, shaderData_->gMeshletsArray.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(7, shaderData_->gMeshlets.GetGPUVtlAdrs());
         // 色
         commandlist->SetGraphicsRootShaderResourceView(8, colors_.GetGPUVtlAdrs());
         // 各shader固有の構造体
@@ -564,8 +564,7 @@ public:
         shaderData_->gTransform.OnWright();
         colors_.OnWright();
         for (uint32_t i = 0; i < drawCount_; i++) {
-            shaderData_->gTransform[i].world = drawData_[i].wvpMatrix.worldMat;
-            shaderData_->gTransform[i].viewProjection = drawData_[i].wvpMatrix.cameraMat;
+            shaderData_->gTransform[i] = drawData_[i].wvpMatrix;
             colors_[i] = drawData_[i].color;
         }
 
