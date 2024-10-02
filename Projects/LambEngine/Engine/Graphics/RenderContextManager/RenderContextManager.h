@@ -170,6 +170,7 @@ public:
 	/// <typeparam name="RenderContextType">レンダーコンテキストタイプ</typeparam>
 	/// <param name="fileNames">リソースファイル名</param>
 	/// <param name="numRenderTarget">レンダーターゲットの数</param>
+	template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
 	void LoadMesh(const MeshLoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
 		auto isExist = meshRenderData_.find(fileNames);
 
@@ -189,11 +190,11 @@ public:
 
 		Lamb::SafePtr meshManager = MeshletManager::GetInstance();
 
-		meshManager->LoadMesh(fileNames.resourceFileName);
+		meshManager->LoadMesh(fileNames.resourceFileName, bufferSize);
 		const auto& mesh = meshManager->GetMesh(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
-			std::unique_ptr<MeshRenderContext> renderContext = std::make_unique<MeshRenderContext>();
+			std::unique_ptr<MeshRenderContext<T, bufferSize>> renderContext = std::make_unique<MeshRenderContext<T, bufferSize>>();
 
 			renderContext->SetResMesh(mesh.first.get());
 			renderContext->SetMeshShaderData(mesh.second.get());

@@ -23,7 +23,9 @@ public:
 
 	void Draw(
 		const Mat4x4& worldMatrix, 
-		const Mat4x4& camera, 
+		const Mat4x4& camera,
+		uint32_t color,
+		bool isLighting,
 		BlendType blend
 	);
 

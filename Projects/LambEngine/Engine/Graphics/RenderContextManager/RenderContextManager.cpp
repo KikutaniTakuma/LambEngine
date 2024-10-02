@@ -141,6 +141,7 @@ MeshShader RenderContextManager::LoadMeshShader(const MeshShaderFileNames& shade
 
 	result.mesh = shaderMaanger->LoadMeshShader(shaderName.msFileName);
 	result.pixel = shaderMaanger->LoadPixelShader(shaderName.psFileName);
+	result.amplification = shaderMaanger->LoadAmplificationShader(shaderName.asFileName);
 
 	return result;
 }
@@ -353,42 +354,67 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateMeshShaderGra
 
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> texRange = {};
 	texRange[0].NumDescriptors = srvHeap->GetMaxTexture();
-	texRange[0].BaseShaderRegister = 4;
+	texRange[0].BaseShaderRegister = 7;
 	texRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
 	texRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 
 
-	std::array<D3D12_ROOT_PARAMETER, 6> rootPrams = {};
-	// Transform
+	std::array<D3D12_ROOT_PARAMETER, 11> rootPrams = {};
+	// Light
 	rootPrams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootPrams[0].Descriptor.ShaderRegister = 0;
-	rootPrams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
+	rootPrams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	//  gVertices
-	rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
-	rootPrams[1].Descriptor.ShaderRegister = 0;
-	rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
+	// cameraPos
+	rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootPrams[1].Descriptor.ShaderRegister = 1;
+	rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-	// gUniqueVertexIndices
-	rootPrams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
-	rootPrams[2].Descriptor.ShaderRegister = 1;
-	rootPrams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
+	// インスタンスカウント
+	rootPrams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootPrams[2].Descriptor.ShaderRegister = 2;
+	rootPrams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_AMPLIFICATION;
 
-	// gPrimitiveIndices
+	// Transform
 	rootPrams[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
-	rootPrams[3].Descriptor.ShaderRegister = 2;
+	rootPrams[3].Descriptor.ShaderRegister = 0;
 	rootPrams[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
 
-	// gMeshlets
+	//  gVertices
 	rootPrams[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
-	rootPrams[4].Descriptor.ShaderRegister = 3;
+	rootPrams[4].Descriptor.ShaderRegister = 1;
 	rootPrams[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
 
+	// gUniqueVertexIndices
+	rootPrams[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	rootPrams[5].Descriptor.ShaderRegister = 2;
+	rootPrams[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
+
+	// gPrimitiveIndices
+	rootPrams[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	rootPrams[6].Descriptor.ShaderRegister = 3;
+	rootPrams[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
+
+	// gMeshlets
+	rootPrams[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	rootPrams[7].Descriptor.ShaderRegister = 4;
+	rootPrams[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
+
+	// 色
+	rootPrams[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	rootPrams[8].Descriptor.ShaderRegister = 5;
+	rootPrams[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	// 各shader固有のStructuredBuffer
+	rootPrams[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	rootPrams[9].Descriptor.ShaderRegister = 6;
+	rootPrams[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
 	// Textures
-	rootPrams[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootPrams[5].DescriptorTable.NumDescriptorRanges = UINT(texRange.size());
-	rootPrams[5].DescriptorTable.pDescriptorRanges = texRange.data();
-	rootPrams[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootPrams[10].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootPrams[10].DescriptorTable.NumDescriptorRanges = UINT(texRange.size());
+	rootPrams[10].DescriptorTable.pDescriptorRanges = texRange.data();
+	rootPrams[10].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 	RootSignature::Desc desc;
 	desc.rootParameter = rootPrams.data();

@@ -113,7 +113,7 @@ void MeshletManager::Finalize() {
 	instance_.reset();
 }
 
-void MeshletManager::LoadMesh(const std::string& fileName) {
+void MeshletManager::LoadMesh(const std::string& fileName, uint32_t maxDrawCount) {
 	if (not meshlets_.contains(fileName)) {
 		meshlets_.insert(std::make_pair(fileName, std::make_pair(MeshLoader::LoadMesh(fileName), std::make_unique<MeshShaderData>())));
 
@@ -122,17 +122,17 @@ void MeshletManager::LoadMesh(const std::string& fileName) {
 		auto& resMesh = meshAndMeshData.first;
 		auto& shaderData = meshAndMeshData.second;
 
-		// meshletsの数分だけ確保
-		shaderData->gMeshletsArray.Create(static_cast<uint32_t>(resMesh->meshletsArray.size()));
 
-		shaderData->gMeshletsArray.MemCpy(resMesh->meshletsArray.data(), sizeof(DirectX::Meshlet) * resMesh->meshletsArray.size());
 
 		// SturucturedBufferを作成
+		shaderData->gTransform.Create(maxDrawCount);
+		shaderData->gMeshletsArray.Create(static_cast<uint32_t>(resMesh->meshletsArray.size()));
 		shaderData->gVertices.Create(static_cast<uint32_t>(resMesh->vertices.size()));
 		shaderData->gUniqueVertexIndices.Create(static_cast<uint32_t>(resMesh->uniqueVertexIndices.size()));
 		shaderData->gPrimitiveIndices.Create(static_cast<uint32_t>(resMesh->primitiveIndices.size()));
 
 		// 値を代入
+		shaderData->gMeshletsArray.MemCpy(resMesh->meshletsArray.data(), sizeof(DirectX::Meshlet) * resMesh->meshletsArray.size());
 		shaderData->gVertices.MemCpy(resMesh->vertices.data(), sizeof(Vertex) * resMesh->vertices.size());
 		shaderData->gUniqueVertexIndices.MemCpy(resMesh->uniqueVertexIndices.data(), sizeof(uint32_t) * resMesh->uniqueVertexIndices.size());
 		shaderData->gPrimitiveIndices.MemCpy(resMesh->primitiveIndices.data(), sizeof(uint32_t) * resMesh->primitiveIndices.size());

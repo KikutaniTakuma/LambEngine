@@ -44,6 +44,8 @@ void MeshShaderTestComp::Draw(CameraComp* cameraComp)
         meshDrawer_->Draw(
             transform_->GetWorldMatrix(),
             cameraComp->GetCameraMatrix(),
+            renderDataComp_->color.GetColorRGBA(),
+            renderDataComp_->isLighting,
             renderDataComp_->type
         );
     }

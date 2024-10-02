@@ -41,6 +41,7 @@ public:
 	IDxcBlob* const LoadGeometoryShader(const std::string& fileName);
 	IDxcBlob* const LoadPixelShader(const std::string& fileName);
 
+	IDxcBlob* const LoadAmplificationShader(const std::string& fileName);
 	IDxcBlob* const LoadMeshShader(const std::string& fileName);
 
 private:
@@ -55,5 +56,6 @@ private:
 	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> geometoryShader_;
 	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> pixelShader_;
 
+	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> amplificationShader_;
 	std::unordered_map<std::string, Lamb::LambPtr<IDxcBlob>> meshShader_;
 };

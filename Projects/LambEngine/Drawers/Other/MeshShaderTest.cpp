@@ -23,8 +23,9 @@ void MeshShaderTest::Load(const std::string& fileName)
 		MeshLoadFileNames{
 			.resourceFileName = fileName,
 			.shaderName{
-				.msFileName = "./Resources/Shaders/MeshShader/Simple.MS.hlsl",
-				.psFileName = "./Resources/Shaders/MeshShader/Simple.PS.hlsl"
+				.asFileName = "./Resources/Shaders/MeshShader/MeshModel.AS.hlsl",
+				.msFileName = "./Resources/Shaders/MeshShader/MeshModel.MS.hlsl",
+				.psFileName = "./Resources/Shaders/MeshShader/MeshModel.PS.hlsl"
 			}
 	};
 
@@ -33,10 +34,23 @@ void MeshShaderTest::Load(const std::string& fileName)
 	renderSet = renderContextManager->Get(fileNames);
 }
 
-void MeshShaderTest::Draw(const Mat4x4& worldMatrix, const Mat4x4& camera, BlendType blend)
-{
+void MeshShaderTest::Draw(
+	const Mat4x4& worldMatrix, 
+	const Mat4x4& camera,
+	uint32_t color,
+	bool isLighting,
+	BlendType blend
+) {
 	if (renderSet) {
-		BaseDrawer::Draw(worldMatrix, camera, 0, blend);
+		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<MeshRenderContext<>>(blend);
+		if (blend == BlendType::kNone) {
+			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
+		}
+		else {
+			renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
+		}
+
+		BaseDrawer::Draw(worldMatrix, camera, color, blend);
 	}
 }
 

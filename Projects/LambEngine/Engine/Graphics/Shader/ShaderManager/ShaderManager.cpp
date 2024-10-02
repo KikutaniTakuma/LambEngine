@@ -101,6 +101,21 @@ IDxcBlob* const ShaderManager::LoadPixelShader(const std::string& fileName) {
 	return pixelShader_[fileName].Get();
 }
 
+IDxcBlob* const ShaderManager::LoadAmplificationShader(const std::string& fileName)
+{
+	if (fileName.empty()) {
+		return nullptr;
+	}
+
+	auto itr = amplificationShader_.find(fileName);
+	if (itr == amplificationShader_.end()) {
+		Lamb::SafePtr shader = shaderFactory_->CompileShader(ConvertString(fileName), L"as_6_5");
+		shader.NullCheck<ShaderManager>(ErrorPlace);
+		amplificationShader_.insert(std::make_pair(fileName, shader.get()));
+	}
+	return amplificationShader_[fileName].Get();
+}
+
 IDxcBlob* const ShaderManager::LoadMeshShader(const std::string& fileName)
 {
 	if (fileName.empty()) {

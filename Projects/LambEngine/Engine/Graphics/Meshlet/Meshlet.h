@@ -59,7 +59,7 @@ private:
 	static std::unique_ptr<MeshletManager> instance_;
 
 public:
-	void LoadMesh(const std::string& fileName);
+	void LoadMesh(const std::string& fileName, uint32_t maxDrawCount);
 
 	const std::pair<std::unique_ptr<ResMesh>, std::unique_ptr<MeshShaderData>>& GetMesh(const std::string& fileName);
 

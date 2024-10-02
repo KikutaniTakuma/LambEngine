@@ -135,7 +135,7 @@ struct MeshShaderData {
 	StructuredBuffer<uint32_t> gUniqueVertexIndices;
 	StructuredBuffer<uint32_t> gPrimitiveIndices;
 	StructuredBuffer<DirectX::Meshlet> gMeshletsArray;
-	ConstantBuffer<TransformParam> gTransform;
+	StructuredBuffer<TransformParam> gTransform;
 
 	uint32_t meshletCount;
 };

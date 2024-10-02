@@ -434,12 +434,16 @@ private:
 };
 
 // MeshShaderテスト用
+template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
 class MeshRenderContext : public BaseRenderContext {
 public:
     MeshRenderContext() :
         shaderData_(),
         resMesh_()
     {
+        drawData_.resize(bufferSize);
+        shaderStruct_.Create(bufferSize);
+        colors_.Create(bufferSize);
 
         typeID_ = (typeid(MeshRenderContext).name());
     }
@@ -463,18 +467,30 @@ public:
 
         // パイプライン設定
         pipeline_->Use();
+        // Light
+        commandlist->SetGraphicsRootConstantBufferView(0, light_.GetGPUVtlAdrs());
+        // cameraPos
+        commandlist->SetGraphicsRootConstantBufferView(1, eyePos_.GetGPUVtlAdrs());
+        // インスタンスカウント
+        commandlist->SetGraphicsRootConstantBufferView(2, instanceCount_.GetGPUVtlAdrs());
+
+
         // Transform
-        commandlist->SetGraphicsRootConstantBufferView(0, shaderData_->gTransform.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_->gTransform.GetGPUVtlAdrs());
         // gVertices
-        commandlist->SetGraphicsRootShaderResourceView(1, shaderData_->gVertices.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(4, shaderData_->gVertices.GetGPUVtlAdrs());
         // gUniqueVertexIndices
-        commandlist->SetGraphicsRootShaderResourceView(2, shaderData_->gUniqueVertexIndices.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(5, shaderData_->gUniqueVertexIndices.GetGPUVtlAdrs());
         // gPrimitiveIndices
-        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_->gPrimitiveIndices.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(6, shaderData_->gPrimitiveIndices.GetGPUVtlAdrs());
         // gMeshlets
-        commandlist->SetGraphicsRootShaderResourceView(4, shaderData_->gMeshletsArray.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(7, shaderData_->gMeshletsArray.GetGPUVtlAdrs());
+        // 色
+        commandlist->SetGraphicsRootShaderResourceView(8, colors_.GetGPUVtlAdrs());
+        // 各shader固有の構造体
+        commandlist->SetGraphicsRootShaderResourceView(9, shaderStruct_.GetGPUVtlAdrs());
         // Textures
-        commandlist->SetGraphicsRootDescriptorTable(5, descriptorHeap->GetGpuHeapHandle(0));
+        commandlist->SetGraphicsRootDescriptorTable(10, descriptorHeap->GetGpuHeapHandle(0));
         // ドローコール
         commandlist->DispatchMesh(shaderData_->meshletCount, 1, 1);
     }
@@ -493,27 +509,71 @@ public:
         pipeline_ = pipeline;
     }
     inline void SetWVPMatrix(const WVPMatrix& matrix) override {
-        shaderData_->gTransform.OnWright();
-        shaderData_->gTransform->world = matrix.worldMat;
-        shaderData_->gTransform->viewProjection = matrix.cameraMat;
-        shaderData_->gTransform.OffWright();
+        if (bufferSize <= drawCount_) {
+            throw Lamb::Error::Code<MeshRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
+        }
+
+        drawData_[drawCount_].wvpMatrix = matrix;
     }
-    inline void SetColor([[maybe_unused]]const Vector4& color) override {
-        
+    inline void SetColor(const Vector4& color) override {
+        if (bufferSize <= drawCount_) {
+            throw Lamb::Error::Code<MeshRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
+        }
+
+        drawData_[drawCount_].color = color;
     }
-    inline void SetLight([[maybe_unused]] const DirectionLight& light) override {
-       
+    inline void SetLight(const DirectionLight& light) override {
+        light_.OnWright();
+        *light_ = light;
+        light_.OffWright();
     }
-    inline void SetCameraPos([[maybe_unused]] const Vector3& cameraPos) {
-       
+    inline void SetCameraPos(const Vector3& cameraPos) {
+        eyePos_.OnWright();
+        *eyePos_ = cameraPos;
+        eyePos_.OffWright();
+    }
+    inline void SetShaderStruct(const T& data) {
+        if (bufferSize <= drawCount_) {
+            throw Lamb::Error::Code<MeshRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
+        }
+        drawData_[drawCount_].shaderStruct = data;
     }
 
     inline void ZSort() override {
+        // 1以下ならソートする必要ないので早期リターン
+        if (drawCount_ <= 1) {
+            return;
+        }
 
+
+        // 正規化デバイス座標系にしてその深度値を入れる
+        for (uint32_t i = 0; i < drawCount_; i++) {
+            Mat4x4&& ndcMatrix = drawData_[i].wvpMatrix.worldMat * drawData_[i].wvpMatrix.cameraMat;
+            drawData_[i].depth = ndcMatrix.GetTranslate().z;
+        }
+        // 描画をする部分だけソート
+        auto endItr = drawData_.begin() + drawCount_;
+        // 深度値でソート(大きい順。奥から描画していくため)
+        std::sort(drawData_.begin(), endItr, [](const DrawData<T>& left, const DrawData<T>& right) {
+            return left.depth > right.depth;
+            }
+        );
     }
 
     inline void DataSet() override {
+        shaderData_->gTransform.OnWright();
+        colors_.OnWright();
+        for (uint32_t i = 0; i < drawCount_; i++) {
+            shaderData_->gTransform[i].world = drawData_[i].wvpMatrix.worldMat;
+            shaderData_->gTransform[i].viewProjection = drawData_[i].wvpMatrix.cameraMat;
+            colors_[i] = drawData_[i].color;
+        }
 
+        instanceCount_.OnWright();
+        *instanceCount_ = drawCount_;
+        instanceCount_.OffWright();
+        colors_.OffWright();
+        shaderData_->gTransform.OffWright();
     }
 
     inline void SetResMesh(Lamb::SafePtr<ResMesh> resMesh) {
@@ -527,7 +587,15 @@ public:
 private:
     Lamb::SafePtr<MeshShaderData> shaderData_;
 
+    ConstantBuffer<DirectionLight> light_;
+    ConstantBuffer<Vector3> eyePos_;
+    ConstantBuffer<uint32_t> instanceCount_;
+    StructuredBuffer<T> shaderStruct_;
+    StructuredBuffer<Vector4> colors_;
+
     Lamb::SafePtr<ResMesh> resMesh_;
+
+    std::vector<DrawData<T>> drawData_;
 };
 
 
