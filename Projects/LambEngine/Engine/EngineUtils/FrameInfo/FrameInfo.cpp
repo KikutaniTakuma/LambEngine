@@ -136,7 +136,7 @@ void FrameInfo::End() {
 
 	deltaTime_ = static_cast<double>(frameTime.count()) * unitAdjustment;
 	fps_ = 1.0 / deltaTime_;
-
+	fps_ = std::min(fps_, fpsLimit_);
 
 	if (isStartFrameInfo_) {
 		maxFps_ = std::max(fps_, maxFps_);
