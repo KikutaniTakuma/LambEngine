@@ -476,22 +476,21 @@ public:
 
         // パイプライン設定
         pipeline_->Use();
+        // Transform
+        commandlist->SetGraphicsRootConstantBufferView(0, shaderData_->gTransform.GetGPUVtlAdrs());
+        // gVertices
+        commandlist->SetGraphicsRootShaderResourceView(1, shaderData_->gVertices.GetGPUVtlAdrs());
+        // gUniqueVertexIndices
+        commandlist->SetGraphicsRootShaderResourceView(2, shaderData_->gUniqueVertexIndices.GetGPUVtlAdrs());
+        // gPrimitiveIndices
+        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_->gPrimitiveIndices.GetGPUVtlAdrs());
+        // Textures
+        commandlist->SetGraphicsRootDescriptorTable(5, descriptorHeap->GetGpuHeapHandle(0));
 
         size_t maxDispatchMeshNnum = shaderData_->gMeshletsArray.size();
         for (size_t dispatchMeshCount = 0; dispatchMeshCount < maxDispatchMeshNnum; dispatchMeshCount++) {
-
-            // Transform
-            commandlist->SetGraphicsRootConstantBufferView(0, shaderData_->gTransform.GetGPUVtlAdrs());
-            // gVertices
-            commandlist->SetGraphicsRootShaderResourceView(1, shaderData_->gVertices.GetGPUVtlAdrs());
-            // gUniqueVertexIndices
-            commandlist->SetGraphicsRootShaderResourceView(2, shaderData_->gUniqueVertexIndices.GetGPUVtlAdrs());
-            // gPrimitiveIndices
-            commandlist->SetGraphicsRootShaderResourceView(3, shaderData_->gPrimitiveIndices.GetGPUVtlAdrs());
             // gMeshlets
             commandlist->SetGraphicsRootShaderResourceView(4, shaderData_->gMeshletsArray[dispatchMeshCount].GetGPUVtlAdrs());
-            // Textures
-            commandlist->SetGraphicsRootDescriptorTable(5, descriptorHeap->GetGpuHeapHandle(0));
 
             // ドローコール
             commandlist->DispatchMesh(shaderData_->meshletCounts[dispatchMeshCount], 1, 1);
