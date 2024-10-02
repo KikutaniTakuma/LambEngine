@@ -45,7 +45,7 @@
                     "isLighting": true
                 },
                 {
-                    "CompName": "class MeshShaderTestComp"
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
@@ -85,7 +85,7 @@
                     "isLighting": true
                 },
                 {
-                    "CompName": "class MeshShaderTestComp"
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
@@ -125,7 +125,7 @@
                     "isLighting": true
                 },
                 {
-                    "CompName": "class MeshShaderTestComp"
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
@@ -165,7 +165,7 @@
                     "isLighting": true
                 },
                 {
-                    "CompName": "class MeshShaderTestComp"
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
@@ -226,7 +226,7 @@
         {
             "Comps": [
                 {
-                    "CompName": "class MeshShaderTestComp"
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "BlendType": "kNone",
@@ -279,7 +279,7 @@
                     "isLighting": true
                 },
                 {
-                    "CompName": "class MeshShaderTestComp"
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
@@ -319,7 +319,7 @@
                     "isLighting": true
                 },
                 {
-                    "CompName": "class MeshShaderTestComp"
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
@@ -359,7 +359,7 @@
                     "isLighting": true
                 },
                 {
-                    "CompName": "class MeshShaderTestComp"
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
@@ -384,5 +384,5 @@
             "type": "Object"
         }
     ],
-    "scene": "MeshShaderDrawTest"
+    "scene": "DragonVertexShader"
 }
