@@ -125,7 +125,7 @@ struct ResMesh {
 	std::vector<Vertex> vertices;
 	std::vector<uint32_t> indices;
 
-	std::vector<std::vector<DirectX::Meshlet>> meshletsArray;
+	std::vector<DirectX::Meshlet> meshletsArray;
 	std::vector<uint32_t> uniqueVertexIndices;
 	std::vector<uint32_t> primitiveIndices;
 };
@@ -134,8 +134,8 @@ struct MeshShaderData {
 	StructuredBuffer<Vertex> gVertices;
 	StructuredBuffer<uint32_t> gUniqueVertexIndices;
 	StructuredBuffer<uint32_t> gPrimitiveIndices;
-	std::vector<StructuredBuffer<DirectX::Meshlet>> gMeshletsArray;
+	StructuredBuffer<DirectX::Meshlet> gMeshletsArray;
 	ConstantBuffer<TransformParam> gTransform;
 
-	std::vector<uint32_t> meshletCounts;
+	uint32_t meshletCount;
 };

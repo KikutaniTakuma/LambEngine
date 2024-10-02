@@ -471,17 +471,12 @@ public:
         commandlist->SetGraphicsRootShaderResourceView(2, shaderData_->gUniqueVertexIndices.GetGPUVtlAdrs());
         // gPrimitiveIndices
         commandlist->SetGraphicsRootShaderResourceView(3, shaderData_->gPrimitiveIndices.GetGPUVtlAdrs());
+        // gMeshlets
+        commandlist->SetGraphicsRootShaderResourceView(4, shaderData_->gMeshletsArray.GetGPUVtlAdrs());
         // Textures
         commandlist->SetGraphicsRootDescriptorTable(5, descriptorHeap->GetGpuHeapHandle(0));
-
-        size_t maxDispatchMeshNnum = shaderData_->gMeshletsArray.size();
-        for (size_t dispatchMeshCount = 0; dispatchMeshCount < maxDispatchMeshNnum; dispatchMeshCount++) {
-            // gMeshlets
-            commandlist->SetGraphicsRootShaderResourceView(4, shaderData_->gMeshletsArray[dispatchMeshCount].GetGPUVtlAdrs());
-
-            // ドローコール
-            commandlist->DispatchMesh(shaderData_->meshletCounts[dispatchMeshCount], 1, 1);
-        }
+        // ドローコール
+        commandlist->DispatchMesh(shaderData_->meshletCount, 1, 1);
     }
 
 public:
