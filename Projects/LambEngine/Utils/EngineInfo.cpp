@@ -3,6 +3,8 @@
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Engine/Engine.h"
 
+#include "Engine/Core/DirectXDevice/DirectXDevice.h"
+
 namespace Lamb {
 	float DeltaTime() {
 		static FrameInfo* const frameInfo = FrameInfo::GetInstance();
@@ -26,5 +28,8 @@ namespace Lamb {
 
 	bool IsEngineFianlize() {
 		return Engine::IsFinalize();
+	}
+	bool IsCanUseMeshShader() {
+		return DirectXDevice::GetInstance()->GetIsCanUseMeshShader();
 	}
 }

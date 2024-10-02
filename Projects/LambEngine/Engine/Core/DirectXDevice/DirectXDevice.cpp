@@ -114,22 +114,29 @@ void DirectXDevice::CreateDevice() {
 	D3D12_FEATURE_DATA_SHADER_MODEL shaderModel = { D3D_SHADER_MODEL_6_5 };
 	HRESULT hr = device_->CheckFeatureSupport(D3D12_FEATURE_SHADER_MODEL, &shaderModel, sizeof(shaderModel));
 	if (FAILED(hr) or (shaderModel.HighestShaderModel < D3D_SHADER_MODEL_6_5)) {
-		throw Lamb::Error::Code<DirectXDevice>("This device does not support", ErrorPlace);
+		Lamb::AddLog("This device does not support Shader Model 6.5");
+		isCanUseMeshShader_ = false;
 	}
 	else {
 		Lamb::AddLog("This device support Shader Model 6.5");
+		isCanUseMeshShader_ = true;
 	}
 
 	// mesh shaderが使えるか
 	D3D12_FEATURE_DATA_D3D12_OPTIONS7 features = {};
 	hr = device_->CheckFeatureSupport(D3D12_FEATURE_D3D12_OPTIONS7, &features, sizeof(features));
 	if (FAILED(hr) or (features.MeshShaderTier == D3D12_MESH_SHADER_TIER_NOT_SUPPORTED)) {
-		throw Lamb::Error::Code<DirectXDevice>("This device does not support", ErrorPlace);
+		Lamb::AddLog("This device does not support Mesh Shader");
+		isCanUseMeshShader_ = false;
 	}
 	else {
 		Lamb::AddLog("This device support Mesh Shader");
+		isCanUseMeshShader_ = true;
 	}
 
+	if (not isCanUseMeshShader_) {
+		Lamb::AddLog("Notice!! This device cannot use ""Mesh Shader""");
+	}
 	Lamb::AddLog("Complete create D3D12Device");
 }
 

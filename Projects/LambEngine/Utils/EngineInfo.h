@@ -12,4 +12,6 @@ namespace Lamb {
 	std::chrono::steady_clock::time_point ThisFrameTime();
 
 	bool IsEngineFianlize();
+
+	bool IsCanUseMeshShader();
 }

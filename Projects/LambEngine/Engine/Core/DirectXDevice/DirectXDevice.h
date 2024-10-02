@@ -59,7 +59,7 @@ public:
 	ID3D12Resource* CreateDepthStencilTextureResource(const class Vector2& size);
 
 /// <summary>
-/// ゲッター
+/// getter
 /// </summary>
 public:
 	inline UINT GetIncrementSRVCBVUAVHeap() const {
@@ -86,6 +86,10 @@ public:
 		return dxgiFactory_.Get();
 	}
 
+	bool GetIsCanUseMeshShader() const {
+		return isCanUseMeshShader_;
+	}
+
 private:
 	Lamb::LambPtr<ID3D12Device8> device_;
 	Lamb::LambPtr<IDXGIFactory7> dxgiFactory_;
@@ -95,4 +99,6 @@ private:
 	UINT incrementRTVHeap_;
 	UINT incrementDSVHeap_;
 	UINT incrementSAMPLER_;
+
+	bool isCanUseMeshShader_ = false;
 };
