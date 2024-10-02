@@ -105,16 +105,6 @@ public:
         pipeline_ = nullptr;
         drawCount_ = 0u;
 
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
-
-        descriptorHeap->BookingHeapPos(5);
-        descriptorHeap->CreateView(shaderData_.light);
-        descriptorHeap->CreateView(shaderData_.eyePos);
-        descriptorHeap->CreateView(shaderData_.wvpMatrix);
-        descriptorHeap->CreateView(shaderData_.color);
-        descriptorHeap->CreateView(shaderData_.shaderStruct);
-
         shaderData_.wvpMatrix.OffWright();
         shaderData_.color.OffWright();
         shaderData_.shaderStruct.OffWright();
@@ -123,16 +113,7 @@ public:
 
         typeID_ = (typeid(RenderContext<T, bufferSize>).name());
     }
-    ~RenderContext() {
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
-
-        descriptorHeap->ReleaseView(shaderData_.light.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.eyePos.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.wvpMatrix.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.color.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.shaderStruct.GetHandleUINT());
-    }
+    ~RenderContext() = default;
 
     RenderContext(const RenderContext&) = delete;
     RenderContext(RenderContext&&) = delete;
@@ -151,16 +132,22 @@ public:
         pipeline_->Use();
 
         // ライト構造体
-        commandlist->SetGraphicsRootDescriptorTable(0, shaderData_.light.GetHandleGPU());
-        // ワールドとカメラマトリックス, 色, 各シェーダーの構造体
-        commandlist->SetGraphicsRootDescriptorTable(1, shaderData_.wvpMatrix.GetHandleGPU());
+        commandlist->SetGraphicsRootConstantBufferView(0, shaderData_.light.GetGPUVtlAdrs());
+        // カメラポジション
+        commandlist->SetGraphicsRootConstantBufferView(1, shaderData_.eyePos.GetGPUVtlAdrs());
+        // ワールドとカメラマトリックス
+        commandlist->SetGraphicsRootShaderResourceView(2, shaderData_.wvpMatrix.GetGPUVtlAdrs());
+        // 色
+        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_.color.GetGPUVtlAdrs());
+        // shaderの固有構造体
+        commandlist->SetGraphicsRootShaderResourceView(4, shaderData_.shaderStruct.GetGPUVtlAdrs());
         // テクスチャ
-        commandlist->SetGraphicsRootDescriptorTable(2, descriptorHeap->GetGpuHeapHandle(0));
+        commandlist->SetGraphicsRootDescriptorTable(5, descriptorHeap->GetGpuHeapHandle(0));
 
         // 頂点バッファセット
-        commandlist->IASetVertexBuffers(0, 1, &mesh_->vertexView);
+        commandlist->IASetVertexBuffers(0, 1, &(mesh_->vertexView));
         // インデックスバッファセット
-        commandlist->IASetIndexBuffer(&mesh_->indexView);
+        commandlist->IASetIndexBuffer(&(mesh_->indexView));
         // ドローコール
         commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, 0);
     }
