@@ -214,9 +214,6 @@
     <ClCompile Include="Drawers\AirSkyBox\AirSkyBox.cpp">
       <Filter>Drawers\AirSkyBox</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\Shader\MeshShader\MeshShader.cpp">
-      <Filter>Engine\Graphics\Shader\MeshShader</Filter>
-    </ClCompile>
     <ClCompile Include="Drawers\Other\MeshShaderTest.cpp">
       <Filter>Drawers\Other</Filter>
     </ClCompile>

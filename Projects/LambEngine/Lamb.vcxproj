@@ -166,7 +166,6 @@
     <ClCompile Include="Engine\Graphics\RenderingManager\RenderingManager.cpp" />
     <ClCompile Include="Engine\Graphics\RenderTarget\RenderTarget.cpp" />
     <ClCompile Include="Engine\Graphics\RootSignature\RootSignature.cpp" />
-    <ClCompile Include="Engine\Graphics\Shader\MeshShader\MeshShader.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderFactory\ShaderFactory.cpp" />
     <ClCompile Include="Engine\Graphics\Shader\ShaderManager\ShaderManager.cpp" />
     <ClCompile Include="Engine\Graphics\Skeleton.cpp" />
