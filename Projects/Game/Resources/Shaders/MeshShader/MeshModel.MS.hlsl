@@ -1,36 +1,4 @@
-struct MSInput {
-	float32_t4 position;
-	float32_t3 normal;
-	float32_t2 uv;
-	uint32_t textureID;
-	float32_t2 pad;
-};
-
-struct MSOutput {
-	float32_t4 position : SV_POSITION;
-    float32_t3 normal : NORMAL;
-    float32_t4 worldPosition : POSITION1;
-    float32_t2 uv : TEXCOORD0;
-	uint32_t textureID : BLENDINDICES0;
-};
-
-struct Meshlet {
-	uint32_t vertexCount;
-	uint32_t vertexOffset;
-	uint32_t primitiveCount;
-	uint32_t primitiveOffset;
-};
-
-struct TransformParam {
-	float32_t4x4 world;
-	float32_t4x4 viewProjection;
-};
-
-ConstantBuffer<TransformParam> gTransform : register(b0);
-StructuredBuffer<MSInput> gVertices : register(t0);
-StructuredBuffer<uint32_t> gUniqueVertexIndices : register(t1);
-StructuredBuffer<uint32_t> gPrimitiveIndices : register(t2);
-StructuredBuffer<Meshlet> gMeshlets : register(t3);
+#include "../LambMesh.hlsli"
 
 uint32_t3 UnpackPrimitive(uint32_t primitive)
 {
@@ -55,10 +23,11 @@ uint32_t GetVertexIndex(Meshlet m, uint32_t localIndex)
 void main(
 	uint32_t groupThreadID : SV_GroupThreadID,
     uint32_t groupID : SV_GroupID,
+	in payload PayloadStruct meshPayload,
     out vertices MSOutput verts[64],
 	out indices uint32_t3 tris[126]
 ){
-	Meshlet meshlet = gMeshlets[groupID];
+	Meshlet meshlet = gMeshlets[meshPayload.myArbitraryData];
 
 	// スレッドグループの頂点数とプリミティブ数
 	// mainメソッド内で一回だけ呼び出し可能
@@ -74,8 +43,8 @@ void main(
 		MSOutput output = (MSOutput)0;
 
 		float32_t4 localPos = input.position;
-		float32_t4 worldPos = mul(localPos, gTransform.world);
-		float32_t4 projPos = mul(worldPos, gTransform.viewProjection);
+		float32_t4 worldPos = mul(localPos, gTransform[groupID].worldMat);
+		float32_t4 projPos = mul(worldPos, gTransform[groupID].cameraMat);
 
 		output.position = projPos;
 		output.worldPosition = worldPos;
@@ -85,5 +54,6 @@ void main(
 		output.textureID = input.textureID;
 
 		verts[groupThreadID] = output;
+		verts[groupThreadID].instanceID = groupID;
 	}
 }
