@@ -84,6 +84,7 @@ void MeshLoader::ParseMesh(ResMesh& dstMesh, Lamb::SafePtr<const ModelData> pSrc
 	dstMesh.uniqueVertexIndices.resize(uniqueVertexIB.size());
 	std::memcpy(dstMesh.uniqueVertexIndices.data(), uniqueVertexIB.data(), sizeof(uint8_t) * uniqueVertexIB.size());
 
+	// パックして値を入れる
 	dstMesh.primitiveIndices.resize(primitiveIndices.size());
 	for (size_t count = 0; auto& primitiveIndex : primitiveIndices) {
 		dstMesh.primitiveIndices[count] = primitiveIndex.i0;
