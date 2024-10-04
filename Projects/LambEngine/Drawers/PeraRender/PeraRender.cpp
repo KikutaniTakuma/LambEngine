@@ -31,7 +31,7 @@ PeraRender::~PeraRender() {
 }
 
 void PeraRender::Initialize(const std::string& psFileName, std::initializer_list<DXGI_FORMAT> formtats) {
-	peraPipelineObject_->Init("./Resources/Shaders/PostShader/Post.VS.hlsl", psFileName, formtats);
+	peraPipelineObject_->Init("./Shaders/PostShader/Post.VS.hlsl", psFileName, formtats);
 }
 
 void PeraRender::Initialize(PeraPipeline* pipelineObject) {

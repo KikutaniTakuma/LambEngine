@@ -17,8 +17,8 @@ std::unique_ptr<StructuredBuffer<Line::VertxData>> Line::depthVertData_;
 
 void Line::Initialize() {
 	Lamb::SafePtr shaderManager = ShaderManager::GetInstance();
-	shader_.vertex = shaderManager->LoadVertexShader("./Resources/Shaders/LineShader/Line.VS.hlsl");
-	shader_.pixel = shaderManager->LoadPixelShader("./Resources/Shaders/LineShader/Line.PS.hlsl");
+	shader_.vertex = shaderManager->LoadVertexShader("./Shaders/LineShader/Line.VS.hlsl");
+	shader_.pixel = shaderManager->LoadPixelShader("./Shaders/LineShader/Line.PS.hlsl");
 
 	D3D12_DESCRIPTOR_RANGE range = {};
 	range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;

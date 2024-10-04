@@ -23,8 +23,8 @@ public:
 
 public:
 	void Init(
-		const std::string& vsShader = "./Resources/Shaders/PostShader/Post.VS.hlsl",
-		const std::string& psShader = "./Resources/Shaders/PostShader/PostOutline.PS.hlsl",
+		const std::string& vsShader = "./Shaders/PostShader/Post.VS.hlsl",
+		const std::string& psShader = "./Shaders/PostShader/PostOutline.PS.hlsl",
 		std::initializer_list<DXGI_FORMAT> formtats = { DXGI_FORMAT_R8G8B8A8_UNORM_SRGB }
 	) override;
 

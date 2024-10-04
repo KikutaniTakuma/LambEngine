@@ -16,8 +16,8 @@ void Model::Load(const std::string& fileName) {
 		LoadFileNames{
 			.resourceFileName = fileName,
 			.shaderName{
-				.vsFileName = "./Resources/Shaders/ModelShader/Model.VS.hlsl",
-				.psFileName = "./Resources/Shaders/ModelShader/Model.PS.hlsl",
+				.vsFileName = "./Shaders/ModelShader/Model.VS.hlsl",
+				.psFileName = "./Shaders/ModelShader/Model.PS.hlsl",
 			}
 		},
 		3
@@ -27,8 +27,8 @@ void Model::Load(const std::string& fileName) {
 		LoadFileNames{
 			.resourceFileName = fileName,
 			.shaderName{
-				.vsFileName = "./Resources/Shaders/ModelShader/Model.VS.hlsl",
-				.psFileName = "./Resources/Shaders/ModelShader/Model.PS.hlsl",
+				.vsFileName = "./Shaders/ModelShader/Model.VS.hlsl",
+				.psFileName = "./Shaders/ModelShader/Model.PS.hlsl",
 			}
 		}
 	);
@@ -72,6 +72,12 @@ const Node& Model::GetNode() const
 const ModelData& Model::GetModelData() const {
 	return *renderSet->GetModelData();
 }
+
+
+
+/// 
+/// ==================================================================================================================
+/// 
 
 void ModelInstance::Load(const std::string& fileName) {
 	DrawerManager::GetInstance()->LoadModel(fileName);

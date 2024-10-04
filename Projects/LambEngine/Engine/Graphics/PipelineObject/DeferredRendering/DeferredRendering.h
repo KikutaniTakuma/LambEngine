@@ -28,8 +28,8 @@ public:
 
 public:
 	void Init(
-		const std::string& vsShader = "./Resources/Shaders/DeferredRendering/DeferredRendering.VS.hlsl",
-		const std::string& psShader = "./Resources/Shaders/DeferredRendering/DeferredRendering.PS.hlsl",
+		const std::string& vsShader = "./Shaders/DeferredRendering/DeferredRendering.VS.hlsl",
+		const std::string& psShader = "./Shaders/DeferredRendering/DeferredRendering.PS.hlsl",
 		std::initializer_list<DXGI_FORMAT> formtats = { DXGI_FORMAT_R32G32B32A32_FLOAT }
 	) override;
 
@@ -58,9 +58,6 @@ public:
 	void SetWoprldPositionHandle(D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle) {
 		worldPositionTextureHandle_ = worldPositionTextureHandle;
 	}
-	/*void SetEnvironmentHandle(D3D12_GPU_DESCRIPTOR_HANDLE environmentTextureHandle) {
-		environmentTextureHandle_ = environmentTextureHandle;
-	}*/
 
 private:
 	ConstantBuffer<DeferredRenderingData> deferredRenderingData_;

@@ -14,8 +14,8 @@ void AnimationModel::Load(const std::string& fileName) {
 		LoadFileNames{
 			.resourceFileName = fileName,
 			.shaderName{
-				.vsFileName = "./Resources/Shaders/ModelShader/ModelAnimation.VS.hlsl",
-				.psFileName = "./Resources/Shaders/ModelShader/Model.PS.hlsl",
+				.vsFileName = "./Shaders/ModelShader/ModelAnimation.VS.hlsl",
+				.psFileName = "./Shaders/ModelShader/Model.PS.hlsl",
 			}
 		},
 		2
@@ -25,8 +25,8 @@ void AnimationModel::Load(const std::string& fileName) {
 		LoadFileNames{
 			.resourceFileName = fileName,
 			.shaderName{
-				.vsFileName = "./Resources/Shaders/ModelShader/ModelAnimation.VS.hlsl",
-				.psFileName = "./Resources/Shaders/ModelShader/Model.PS.hlsl",
+				.vsFileName = "./Shaders/ModelShader/ModelAnimation.VS.hlsl",
+				.psFileName = "./Shaders/ModelShader/Model.PS.hlsl",
 			}
 		}
 	);

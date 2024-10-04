@@ -56,7 +56,7 @@ RenderingManager::RenderingManager() {
 
 
 	rgbaTexture_ = std::make_unique<PeraRender>();
-	rgbaTexture_->Initialize("./Resources/Shaders/PostShader/PostNone2.PS.hlsl", {
+	rgbaTexture_->Initialize("./Shaders/PostShader/PostNone2.PS.hlsl", {
 			DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
 			DXGI_FORMAT_R32G32B32A32_FLOAT
 		}
@@ -87,8 +87,8 @@ RenderingManager::RenderingManager() {
 	gaussianPipeline_[0] = gaussianPipeline[0].release();
 
 	gaussianPipeline[1]->Init(
-		"./Resources/Shaders/PostShader/Post.VS.hlsl",
-		"./Resources/Shaders/PostShader/PostGaussian.PS.hlsl",
+		"./Shaders/PostShader/Post.VS.hlsl",
+		"./Shaders/PostShader/PostGaussian.PS.hlsl",
 		{ DXGI_FORMAT_R8G8B8A8_UNORM_SRGB }
 	);
 	gaussianBlurStateVertical_ = GaussianBlur::GaussianBlurState{

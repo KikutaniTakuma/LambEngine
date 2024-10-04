@@ -23,9 +23,9 @@ void MeshShaderTest::Load(const std::string& fileName)
 		MeshLoadFileNames{
 			.resourceFileName = fileName,
 			.shaderName{
-				.asFileName = "./Resources/Shaders/MeshShader/MeshModel.AS.hlsl",
-				.msFileName = "./Resources/Shaders/MeshShader/MeshModel.MS.hlsl",
-				.psFileName = "./Resources/Shaders/MeshShader/MeshModel.PS.hlsl"
+				.asFileName = "./Shaders/MeshShader/MeshModel.AS.hlsl",
+				.msFileName = "./Shaders/MeshShader/MeshModel.MS.hlsl",
+				.psFileName = "./Shaders/MeshShader/MeshModel.PS.hlsl"
 			}
 	};
 

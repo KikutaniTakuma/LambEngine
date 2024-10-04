@@ -15,8 +15,8 @@ const LoadFileNames Texture2D::kFileNames_ =
 		LoadFileNames{
 			.resourceFileName{"./Resources/EngineResources/Texture2D/Texture2D.obj"},
 			.shaderName{
-				.vsFileName = "./Resources/Shaders/Texture2DShader/Texture2D.VS.hlsl",
-				.psFileName = "./Resources/Shaders/Texture2DShader/Texture2D.PS.hlsl"
+				.vsFileName = "./Shaders/Texture2DShader/Texture2D.VS.hlsl",
+				.psFileName = "./Shaders/Texture2DShader/Texture2D.PS.hlsl"
 			}
 		};
 

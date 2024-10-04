@@ -15,11 +15,11 @@ const LoadFileNames WaterTex2D::kFileNames_ =
 LoadFileNames{
 	.resourceFileName{"./Resources/EngineResources/Texture2D/Texture2D.obj"},
 	.shaderName = ShaderFileNames{
-		.vsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.VS.hlsl",
-		.psFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl",
-		.gsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.GS.hlsl",
-		.dsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.DS.hlsl",
-		.hsFileName = "./Resources/Shaders/WaterTex2DShader/WaterTex2D.HS.hlsl",
+		.vsFileName = "./Shaders/WaterTex2DShader/WaterTex2D.VS.hlsl",
+		.psFileName = "./Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl",
+		.gsFileName = "./Shaders/WaterTex2DShader/WaterTex2D.GS.hlsl",
+		.dsFileName = "./Shaders/WaterTex2DShader/WaterTex2D.DS.hlsl",
+		.hsFileName = "./Shaders/WaterTex2DShader/WaterTex2D.HS.hlsl",
 	}
 };
 
