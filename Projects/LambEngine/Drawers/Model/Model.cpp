@@ -1,7 +1,10 @@
 #include "Model.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include "Utils/SafePtr.h"
 #include "../DrawerManager.h"
+
+#include "Utils/EngineInfo.h"
 
 Model::Model(const std::string& fileName):
 	Model()
@@ -12,26 +15,35 @@ Model::Model(const std::string& fileName):
 void Model::Load(const std::string& fileName) {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	renderContextManager->Load(
-		LoadFileNames{
-			.resourceFileName = fileName,
-			.shaderName{
-				.vsFileName = "./Shaders/ModelShader/Model.VS.hlsl",
-				.psFileName = "./Shaders/ModelShader/Model.PS.hlsl",
-			}
-		},
-		3
-	);
-
-	renderSet = renderContextManager->Get(
-		LoadFileNames{
-			.resourceFileName = fileName,
-			.shaderName{
-				.vsFileName = "./Shaders/ModelShader/Model.VS.hlsl",
-				.psFileName = "./Shaders/ModelShader/Model.PS.hlsl",
-			}
+	LoadFileNames fileNames = {
+		.resourceFileName = fileName,
+		.shaderName{
+			.vsFileName = "./Shaders/ModelShader/Model.VS.hlsl",
+			.psFileName = "./Shaders/ModelShader/Model.PS.hlsl",
 		}
-	);
+	};
+
+	MeshLoadFileNames meshFileNames = {
+		.resourceFileName = fileName,
+		.shaderName{
+			.asFileName = "./Shaders/MeshShader/MeshModel.AS.hlsl",
+			.msFileName = "./Shaders/MeshShader/MeshModel.MS.hlsl",
+			.psFileName = "./Shaders/MeshShader/MeshModel.PS.hlsl"
+		}
+	};
+
+	// メッシュシェーダーが読み込む
+	if (Lamb::IsCanUseMeshShader()) {
+		// リソースとメッシュシェーダー読み込み
+		renderContextManager->LoadMesh(meshFileNames, 3);
+		
+		meshRenderSet = renderContextManager->Get(meshFileNames);
+	}
+
+	// リソースとシェーダー読み込み
+	renderContextManager->Load(fileNames,3);
+
+	renderSet = renderContextManager->Get(fileNames);
 }
 
 void Model::Draw(
@@ -41,24 +53,55 @@ void Model::Draw(
 	BlendType blend, 
 	bool isLighting
 ) {
-	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
-	if (blend == BlendType::kNone) {
-		renderContext->SetShaderStruct(static_cast<uint32_t>(false));
+#ifdef _DEBUG
+	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
+#endif // _DEBUG
+
+	
+	if (isUseMeshShader_ and meshRenderSet) {
+		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<>>(blend);
+		if (blend == BlendType::kNone) {
+			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
+		}
+		else {
+			renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
+		}
 	}
 	else {
-		renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
+		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
+		if (blend == BlendType::kNone) {
+			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
+		}
+		else {
+			renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
+		}
 	}
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
 }
 
 void Model::Draw(const Data& data) {
-	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(data.blend);
-	if (data.blend == BlendType::kNone) {
-		renderContext->SetShaderStruct(static_cast<uint32_t>(false));
+#ifdef _DEBUG
+	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
+#endif // _DEBUG
+
+	if (isUseMeshShader_ and meshRenderSet) {
+		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<>>(data.blend);
+		if (data.blend == BlendType::kNone) {
+			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
+		}
+		else {
+			renderContext->SetShaderStruct(static_cast<uint32_t>(data.isLighting));
+		}
 	}
 	else {
-		renderContext->SetShaderStruct(static_cast<uint32_t>(data.isLighting));
+		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(data.blend);
+		if (data.blend == BlendType::kNone) {
+			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
+		}
+		else {
+			renderContext->SetShaderStruct(static_cast<uint32_t>(data.isLighting));
+		}
 	}
 
 	BaseDrawer::Draw(data.worldMatrix, data.camera, data.color, data.blend);

@@ -59,6 +59,10 @@ public:
 	void Save(nlohmann::json& jsonFile);
 	void Load(nlohmann::json& jsonFile);
 
+	void SetIsUseMeshShader(bool isUseMesh);
+
+	bool GetIsUseMeshShader() const;
+
 private:
 	// アルファ値がないものを描画
 	void DrawRGB(std::pair<size_t, const std::list<RenderData*>&> renderList);
@@ -138,7 +142,7 @@ private:
 	Mat4x4 cameraMatrix_;
 
 	/// 
-	/// その他ポストエフェクトは増える
+	/// その他ポストエフェクトは増える予定
 	/// 
 
 	// ラジアルブラー用オフスクリーン
@@ -147,4 +151,6 @@ private:
 	// 色収差用オフスクリーン
 	//std::unique_ptr<PeraRender>radialTexture_;
 
+
+	bool isUseMesh_ = false;
 };

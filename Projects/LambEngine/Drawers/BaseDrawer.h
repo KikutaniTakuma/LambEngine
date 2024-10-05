@@ -25,5 +25,8 @@ public:
 
 protected:
 	class RenderSet* renderSet;
+	class RenderSet* meshRenderSet;
+	
+	bool isUseMeshShader_ = false;
 };
 

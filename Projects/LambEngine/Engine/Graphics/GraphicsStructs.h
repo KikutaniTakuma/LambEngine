@@ -163,7 +163,7 @@ struct ShaderData {
     StructuredBuffer<T> shaderStruct;
 };
 
-template<class T>
+template<Lamb::IsObject T>
 struct DrawData {
     float depth;
     WVPMatrix wvpMatrix;

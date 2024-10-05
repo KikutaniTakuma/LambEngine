@@ -114,6 +114,8 @@ RenderingManager::RenderingManager() {
 	transform_.scale *= 500.0f;
 
 	//deferredRendering_->SetEnvironmentHandle(skyBox_->GetHandle());
+
+	isUseMesh_ = Lamb::IsCanUseMeshShader();
 }
 
 RenderingManager::~RenderingManager()
@@ -402,6 +404,10 @@ void RenderingManager::SetIsLighting(bool isLighting) {
 void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef _DEBUG
 	if (ImGui::TreeNode(guiName.c_str())) {
+		if (Lamb::IsCanUseMeshShader()) {
+			ImGui::Checkbox("MeshShader", &isUseMesh_);
+		}
+
 		ImGui::Checkbox("lighting", reinterpret_cast<bool*>(&deferredRenderingData_.isDirectionLight));
 		lightRotate_ *= Lamb::Math::toDegree<float>;
 		ImGui::DragFloat3("ライト角度", lightRotate_.data(), 1.0f);
@@ -515,6 +521,20 @@ void RenderingManager::Load(nlohmann::json& jsonFile) {
 		isOutLine_ = json["outline_enable"].get<bool>();
 	}
 
+}
+
+void RenderingManager::SetIsUseMeshShader(bool isUseMesh) {
+	if (Lamb::IsCanUseMeshShader()) {
+		isUseMesh_ = isUseMesh;
+	}
+	else {
+		isUseMesh_ = false;
+	}
+}
+
+bool RenderingManager::GetIsUseMeshShader() const
+{
+	return isUseMesh_;
 }
 
 void RenderingManager::DrawRGB(std::pair<size_t, const std::list<RenderData*>&> renderList) {

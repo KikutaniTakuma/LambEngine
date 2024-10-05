@@ -20,20 +20,20 @@ public:
 		uint32_t textureID = 0;
 		uint32_t color = 0xffffffff;
 	};
-
-public:
-	static constexpr uint32_t kMaxDrawCount = 1024u;
-
-private:
 	struct ShaderData{
 		Mat4x4 uvTransform;
 		Vector3 pad; // <- huh?
 		uint32_t textureID = 0u;
 	};
 
+public:
+	static constexpr uint32_t kMaxDrawCount = 1024u;
+
+private:
 	using Texture2DRenderContext = RenderContext<ShaderData, kMaxDrawCount>;
 
 	static const LoadFileNames kFileNames_;
+	static const MeshLoadFileNames kMeshFileNames_;
 
 public:
 	Texture2D();

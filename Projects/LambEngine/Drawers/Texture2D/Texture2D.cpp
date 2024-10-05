@@ -3,6 +3,9 @@
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include "Utils/SafePtr.h"
 #include "../DrawerManager.h"
+#include "Utils/EngineInfo.h"
+
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
 
 #ifdef _DEBUG
 #include "Utils/FileUtils.h"
@@ -20,6 +23,15 @@ const LoadFileNames Texture2D::kFileNames_ =
 			}
 		};
 
+const MeshLoadFileNames Texture2D::kMeshFileNames_ = MeshLoadFileNames{
+	.resourceFileName{"./Resources/EngineResources/Texture2D/Texture2D.obj"},
+	.shaderName{
+		.asFileName = "./Shaders/Texture2DMeshShader/MeshTex2D.AS.hlsl",
+		.msFileName = "./Shaders/Texture2DMeshShader/MeshTex2D.MS.hlsl",
+		.psFileName = "./Shaders/Texture2DMeshShader/MeshTex2D.PS.hlsl"
+	}
+};
+
 Texture2D::Texture2D():
 	BaseDrawer()
 {}
@@ -28,6 +40,15 @@ void Texture2D::Load()
 {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
+	// メッシュシェーダーが読み込む
+	if (Lamb::IsCanUseMeshShader()) {
+		// リソースとメッシュシェーダー読み込み
+		renderContextManager->LoadMesh<Texture2D::ShaderData, Texture2D::kMaxDrawCount>(kMeshFileNames_, 3);
+
+		meshRenderSet = renderContextManager->Get(kMeshFileNames_);
+	}
+
+	// リソースとシェーダー読み込み
 	renderContextManager->Load<Texture2DRenderContext>(kFileNames_, 3);
 
 	renderSet = renderContextManager->Get(kFileNames_);
@@ -41,29 +62,63 @@ void Texture2D::Draw(
 	uint32_t color,
 	BlendType blend
 ) {
-	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
+#ifdef _DEBUG
+	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
+#endif // _DEBUG
 
-	renderContext->SetShaderStruct(
-		ShaderData{
-			.uvTransform = uvTransform,
-			.pad = Vector3::kZero,
-			.textureID = textureID
-		}
-	);
+	if (isUseMeshShader_ and meshRenderSet) {
+		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<Texture2D::ShaderData, Texture2D::kMaxDrawCount>>(blend);
+
+		renderContext->SetShaderStruct(
+			ShaderData{
+				.uvTransform = uvTransform,
+				.pad = Vector3::kZero,
+				.textureID = textureID
+			}
+		);
+	}
+	else {
+		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
+
+		renderContext->SetShaderStruct(
+			ShaderData{
+				.uvTransform = uvTransform,
+				.pad = Vector3::kZero,
+				.textureID = textureID
+			}
+		);
+	}
 
 	BaseDrawer::Draw(worldMatrix, camera, color,  blend);
 }
 
 void Texture2D::Draw(const Texture2D::Data& data) {
-	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(data.blend);
+#ifdef _DEBUG
+	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
+#endif // _DEBUG
 
-	renderContext->SetShaderStruct(
-		ShaderData{
-			.uvTransform = data.uvTransform,
-			.pad = Vector3::kZero,
-			.textureID = data.textureID
-		}
-	);
+	if (isUseMeshShader_ and meshRenderSet) {
+		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<Texture2D::ShaderData, Texture2D::kMaxDrawCount>>(data.blend);
+
+		renderContext->SetShaderStruct(
+			ShaderData{
+				.uvTransform = data.uvTransform,
+				.pad = Vector3::kZero,
+				.textureID = data.textureID
+			}
+		);
+	}
+	else {
+		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(data.blend);
+
+		renderContext->SetShaderStruct(
+			ShaderData{
+				.uvTransform = data.uvTransform,
+				.pad = Vector3::kZero,
+				.textureID = data.textureID
+			}
+		);
+	}
 
 	BaseDrawer::Draw(data.worldMatrix, data.camera, data.color, data.blend);
 }
