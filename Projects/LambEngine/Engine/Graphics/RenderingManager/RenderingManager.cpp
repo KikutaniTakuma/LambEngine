@@ -67,7 +67,7 @@ RenderingManager::RenderingManager() {
 	std::unique_ptr<Luminate> luminate = std::make_unique<Luminate>();
 	luminate->Init();
 	luminate_ = luminate.release();
-	luminanceThreshold = 1.4f;
+	luminanceThreshold = 1.2f;
 	luminate_->SetLuminanceThreshold(luminanceThreshold);
 
 	luminateTexture_ = std::make_unique<PeraRender>();
@@ -401,6 +401,19 @@ void RenderingManager::SetIsLighting(bool isLighting) {
 	deferredRenderingData_.isDirectionLight = static_cast<uint32_t>(isLighting);
 }
 
+void RenderingManager::SetLightRotate(const Vector3& lightRotate) {
+	lightRotate_ = lightRotate;
+}
+
+void RenderingManager::SetBloomKernelSize(int32_t x, int32_t y) {
+	gaussianBlurStateHorizontal_.kernelSize = x;
+	gaussianBlurStateVertical_.kernelSize = y;
+}
+
+void RenderingManager::SetEnvironmentCoefficient(float32_t environmentCoefficient) {
+	deferredRenderingData_.environmentCoefficient = environmentCoefficient;
+}
+
 void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef USE_IMGUI
 	if (ImGui::TreeNode(guiName.c_str())) {
@@ -483,6 +496,7 @@ void RenderingManager::Save(nlohmann::json& jsonFile) {
 	}
 	json["skybox"]["environmentCoefficient"] = deferredRenderingData_.environmentCoefficient;
 	json["skybox"]["isDraw"] = isDrawSkyBox_;
+	json["skybox"]["environment"] = deferredRenderingData_.environmentCoefficient;
 	json["outline"] = weight_;
 	json["outline_enable"] = isOutLine_;
 }
@@ -515,6 +529,10 @@ void RenderingManager::Load(nlohmann::json& jsonFile) {
 		deferredRenderingData_.environmentCoefficient = 0.0f;
 	}
 	isDrawSkyBox_ = json["skybox"]["isDraw"].get<bool>();
+	if (json["skybox"].contains("environment")) {
+		deferredRenderingData_.environmentCoefficient = json["skybox"]["environment"].get<float>();
+	}
+
 	weight_ = json["outline"].get<float>();
 
 	if (json.contains("outline_enable")) {

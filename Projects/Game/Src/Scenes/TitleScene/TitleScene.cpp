@@ -96,7 +96,9 @@ void TitleScene::Initialize() {
     cursor_ = std::make_unique<Cursor>();
     cursor_->Initialize();
 
-    //renderingManager_->SetTime(11.0f);
+    renderingManager_->SetLightRotate(Vector3(0.0f, 90.0f, -1.0f) * Lamb::Math::toRadian<float>);
+    renderingManager_->SetBloomKernelSize(128, 128);
+    renderingManager_->SetEnvironmentCoefficient(0.3f);
 }
 
 void TitleScene::Finalize() {
@@ -136,7 +138,7 @@ void TitleScene::Update() {
     renderingManager_->SetProjectionInverseMatrix(currentCamera_->GetProjection().Inverse());
 
     waveData_.ripplesPoint = ship_->pos;
-    waveData_.time += Lamb::DeltaTime();
+    //waveData_.time += Lamb::DeltaTime();
     waveData_.waveStrength = 0.2f;
     waveData_.ripples = 20.0f;
     waveData_.waveSpeed = 2.0f;

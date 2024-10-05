@@ -60,10 +60,11 @@ void main(
 		// ワールドポジション計算
     	output[i].position = input[i].position;
 		output[i].worldPosition = mul(output[i].position, kWvpMat[instanceID].worldMat);
-		float32_t3 ripplesNormal = CalcNormal(output[i].worldPosition.xyz, 0.0001f, instanceID);
-		float32_t3 tangent = NormalToTangent(input[i].normal);
-		float32_t3 binormal = CalcBinormal(input[i].normal, tangent);
-		output[i].normal = BlendNormal(input[i].normal, tangent, binormal, ripplesNormal);
+		//float32_t3 ripplesNormal = CalcNormal(output[i].worldPosition.xyz, 0.0001f, instanceID);
+		//float32_t3 tangent = NormalToTangent(input[i].normal);
+		//float32_t3 binormal = CalcBinormal(input[i].normal, tangent);
+		//output[i].normal = BlendNormal(input[i].normal, tangent, binormal, ripplesNormal);
+		output[i].normal = input[i].normal;
 		
 		// 波紋からの長さ
 		float32_t ripplesPointToPos = length(output[i].worldPosition.xyz - ripplesPoint);

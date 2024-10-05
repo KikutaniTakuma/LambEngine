@@ -230,7 +230,7 @@ void GameScene::Update() {
 
 	water_->Debug("Water");
 	waveData_.ripplesPoint = player_->GetPosition();
-	waveData_.time += Lamb::DeltaTime();
+	//waveData_.time += Lamb::DeltaTime();
 	waveData_.waveStrength = 0.3f;
 	waveData_.ripples = 20.0f;
 	waveData_.waveSpeed = 2.0f;

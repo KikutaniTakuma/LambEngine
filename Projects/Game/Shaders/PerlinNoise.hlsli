@@ -74,12 +74,12 @@ float32_t CreateNoiseNoDdy(float32_t2 uv, float32_t2 vec, float32_t densityScale
 
 float32_t3 CreateNormal(float32_t2 uv, float32_t2 vec, float32_t densityScale)
 {
-    float32_t heightScale = 5.0f;
+    float32_t heightScale = 25.0f;
     
-    float32_t right = CreateNoise(float32_t2(uv.x + 1.0f, uv.y), vec, densityScale) * heightScale;
-    float32_t left = CreateNoise(float32_t2(uv.x - 1.0f, uv.y), vec, densityScale) * heightScale;
-    float32_t up = CreateNoise(float32_t2(uv.x, uv.y + 1.0f), vec, densityScale) * heightScale;
-    float32_t bottom = CreateNoise(float32_t2(uv.x, uv.y - 1.0f), vec, densityScale) * heightScale;
+    float32_t right  = CreateNoise(float32_t2(uv.x + 1.0f, uv.y       ), vec, densityScale) * heightScale;
+    float32_t left   = CreateNoise(float32_t2(uv.x - 1.0f, uv.y       ), vec, densityScale) * heightScale;
+    float32_t up     = CreateNoise(float32_t2(uv.x,        uv.y + 1.0f), vec, densityScale) * heightScale;
+    float32_t bottom = CreateNoise(float32_t2(uv.x,        uv.y - 1.0f), vec, densityScale) * heightScale;
     
     float32_t dfx = right - left;
     float32_t dfy = up - bottom;
