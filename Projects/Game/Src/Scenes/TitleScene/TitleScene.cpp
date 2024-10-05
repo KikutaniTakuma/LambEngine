@@ -170,13 +170,9 @@ void TitleScene::Update() {
         moveShipSE_->SetVolume(volumeEasing_->Get(moveShipSEVolume_.first, moveShipSEVolume_.second));
     }
 
-    //#ifdef USE_DEBUG_CODE
-    //		ImGui::Begin("Title");
-    //		ImGui::DragFloat("sceneChangeRotateBasis_", &sceneChangeRotateBasis_, 0.01f);
-    //		ImGui::Checkbox("isSceneChange_", &isSceneChange_);
-    //		ImGui::Text(std::format("isChange : {}", sceneChangeRotateBasis_ <= (rotate_ - sceneChangeRotate_)).c_str());
-    //		ImGui::End();
-    //#endif // USE_DEBUG_CODE
+    #ifdef USE_DEBUG_CODE
+    renderingManager_->Debug("RenderSetting");
+    #endif // USE_DEBUG_CODE
     if (isSceneChange_ && sceneChangeRotateBasis_ <= (rotate_ - sceneChangeRotate_)) {
         SceneManager::GetInstance()->SceneChange(BaseScene::ID::StageSelect);
     }
