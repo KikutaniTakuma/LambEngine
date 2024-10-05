@@ -14,6 +14,11 @@
 
 #include "DirectXMesh/DirectXMesh.h"
 
+/// ==========================================================================================
+/// 参考書籍 : Direct3D12 ゲームグラフィックス実践ガイド
+/// https://www.amazon.co.jp/Direct3D12-%E3%82%B2%E3%83%BC%E3%83%A0%E3%82%B0%E3%83%A9%E3%83%95%E3%82%A3%E3%83%83%E3%82%AF%E3%82%B9%E5%AE%9F%E8%B7%B5%E3%82%AC%E3%82%A4%E3%83%89-Pocol/dp/4297123657/ref=sr_1_2?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&crid=1PR7D4S7HUYK9&dib=eyJ2IjoiMSJ9.JXb5uWtfduLdTkkKZ8a8dle0ix16NnZyXXe4ESKNhAJPeG6fixs668jY_eNY_EV9wXBRLP35iZtjRobAGa6cIweVx4dunLzrHnbi-U7qb2GAPkuzuoShFLogyRQUnb4bsfDwGptKCixGYe1QtQW5B8IFiImXp3qRrNQ2E6hHe0Cd3S5KxLBRnKg_U9wIhdDjPSK9PwWMMBtaLrkr9sQLo-P09CC9fgqOoJpUGGI5hIhMJ1-8rVP6LslD1_r4RtKCy9qlzId3FhA1ULOL6Zqrt-sBwqmPRT1agEv9TgflTBE.cWX7kt42MNWRyMR0Yktnm5bGVfBmxSzHHjBkpbIFQTA&dib_tag=se&keywords=direct+3d&qid=1728131902&sprefix=direct3d%2Caps%2C197&sr=8-2
+/// ==========================================================================================
+
 
 // MeshShaderのパイプラインを作るためのクラス
 template<typename ValueType, D3D12_PIPELINE_STATE_SUBOBJECT_TYPE kObjectType>
