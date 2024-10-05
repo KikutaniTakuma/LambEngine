@@ -83,6 +83,12 @@ bool Mouse::Pushed(Mouse::Button button) {
 	if (!initalizeSucceeded_) {
 		return false;
 	}
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
+
 
 	if ((mosueState_.rgbButtons[uint8_t(button)] & 0x80) &&
 		!(preMosueState_.rgbButtons[uint8_t(button)] & 0x80))
@@ -98,6 +104,12 @@ bool Mouse::LongPush(Mouse::Button button) {
 		return false;
 	}
 
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
+
 	if ((mosueState_.rgbButtons[uint8_t(button)] & 0x80) &&
 		(preMosueState_.rgbButtons[uint8_t(button)] & 0x80))
 	{
@@ -112,6 +124,12 @@ bool Mouse::Released(Mouse::Button button) {
 		return false;
 	}
 
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
+
 	if (!(mosueState_.rgbButtons[uint8_t(button)] & 0x80) &&
 		(preMosueState_.rgbButtons[uint8_t(button)] & 0x80))
 	{
@@ -122,6 +140,12 @@ bool Mouse::Released(Mouse::Button button) {
 }
 
 bool Mouse::PushAnyKey() {
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
+
 	for (size_t i = 0; i < 8; i++) {
 		if (mosueState_.rgbButtons[i] != preMosueState_.rgbButtons[i]) {
 			return true;
@@ -143,6 +167,12 @@ Vector2 Mouse::GetVelocity() {
 	if (!initalizeSucceeded_) {
 		return Vector2::kZero;
 	}
+
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return Vector2::kZero;
+	}
+#endif // USE_DEBUG_CODE
 	return { static_cast<float>(mosueState_.lX), -static_cast<float>(mosueState_.lY) };
 }
 
@@ -150,6 +180,12 @@ float Mouse::GetWheel() {
 	if (!initalizeSucceeded_) {
 		return 0.0f;
 	}
+
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return 0.0f;
+	}
+#endif // USE_DEBUG_CODE
 	return static_cast<float>(wheel_);
 }
 
@@ -157,13 +193,24 @@ float Mouse::GetWheelVelocity() {
 	if (!initalizeSucceeded_) {
 		return 0.0f;
 	}
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return 0.0f;
+	}
+#endif // USE_DEBUG_CODE
 	return static_cast<float>(mosueState_.lZ);
 }
 
 Vector2 Mouse::GetPos() {
 	if (!initalizeSucceeded_) {
-		return Vector2();
+		return Vector2::kZero;;
 	}
+
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return Vector2::kZero;;
+	}
+#endif // USE_DEBUG_CODE
 
 	POINT p{};
 	GetCursorPos(&p);

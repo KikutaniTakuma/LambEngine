@@ -4,6 +4,11 @@
 #include "Utils/ExecutionLog.h"
 #include "Error/Error.h"
 
+#ifdef USE_DEBUG_CODE
+#include "imgui.h"
+#endif // USE_DEBUG_CODE
+
+
 void KeyInput::Input() {
 	if (!initalizeSucceeded_) {
 		return;
@@ -28,6 +33,11 @@ bool KeyInput::Pushed(uint8_t keyType) {
 	if (!initalizeSucceeded_) {
 		return false;
 	}
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
 	return (key_[keyType] & 0x80) && !(preKey_[keyType] & 0x80);
 }
 bool KeyInput::LongPush(uint8_t keyType) {
@@ -40,10 +50,20 @@ bool KeyInput::Released(uint8_t keyType) {
 	if (!initalizeSucceeded_) {
 		return false;
 	}
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
 	return !(key_[keyType] & 0x80) && (preKey_[keyType] & 0x80);
 }
 
 bool KeyInput::PushAnyKey() {
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
 	return key_ != preKey_;
 }
 

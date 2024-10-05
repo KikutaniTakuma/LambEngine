@@ -27,18 +27,38 @@ void Gamepad::InputReset() {
 }
 
 bool Gamepad::GetButton(Button type) {
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
     return (state_.Gamepad.wButtons >> static_cast<short>(type)) % 2 == 1;
 }
 
 bool Gamepad::GetPreButton(Button type) {
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
 	return (preButton_ >> static_cast<short>(type)) % 2 == 1;
 }
 
 bool Gamepad::Pushed(Button type) {
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
 	return GetButton(type) && !GetPreButton(type);
 }
 
 bool Gamepad::LongPush(Button type) {
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
 	return GetButton(type) && GetPreButton(type);
 }
 
@@ -47,6 +67,11 @@ bool Gamepad::Released(Button type) {
 }
 
 bool Gamepad::PushAnyKey() {
+#ifdef USE_DEBUG_CODE
+	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
+		return false;
+	}
+#endif // USE_DEBUG_CODE
 	Gamepad* instance = Gamepad::GetInstance();
 	Vector2 leftStick = GetStick(Stick::LEFT);
 	Vector2 rightStick = GetStick(Stick::RIGHT);
