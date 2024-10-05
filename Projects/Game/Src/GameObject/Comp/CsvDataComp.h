@@ -25,7 +25,7 @@ public:
 private:
 	std::vector<std::vector<int32_t>> csvData_;
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	std::vector<std::filesystem::path> filePaths_;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 };

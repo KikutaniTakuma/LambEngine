@@ -22,9 +22,9 @@ public:
 	{
 		// バイトサイズは256アライメントする(vramを効率的に使うための仕組み)
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce((sizeof(T) + 0xff) & ~0xff);
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 		bufferResource_.SetName<ConstantBuffer>();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 		cbvDesc_.BufferLocation = bufferResource_->GetGPUVirtualAddress();
 		cbvDesc_.SizeInBytes = UINT(bufferResource_->GetDesc().Width);

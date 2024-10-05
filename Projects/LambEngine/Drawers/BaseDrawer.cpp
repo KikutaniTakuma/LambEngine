@@ -5,9 +5,9 @@
 
 #include "Utils/EngineInfo.h"
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 BaseDrawer::BaseDrawer() :

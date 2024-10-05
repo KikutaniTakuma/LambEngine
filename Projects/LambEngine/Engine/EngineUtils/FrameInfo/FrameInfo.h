@@ -62,7 +62,7 @@ public:
 	/// </summary>
 	void SwitchDarwFlg();
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	bool GetIsDebugStop() const {
 		return isDebugStopGame_;
 	}
@@ -76,7 +76,7 @@ public:
 			isOneFrameActive_ = isOneFramActive;
 		}
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 	/// <summary>
 	/// デバッグ関数
@@ -92,7 +92,7 @@ public:
 	/// </summary>
 	/// <returns>デルタタイム</returns>
 	inline float GetDelta() const {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 		if (isFixedDeltaTime_ || isDebugStopGame_) {
 			return static_cast<float>(1.0 / fpsLimit_);
 		}
@@ -193,12 +193,12 @@ private:
 	bool isStartFrameInfo_;
 	
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	bool isDebugStopGame_;
 	bool isOneFrameActive_;
 	bool isFixedDeltaTime_;
 
 	std::array<float, 180> frameRateData_ = {0.0f};
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 };

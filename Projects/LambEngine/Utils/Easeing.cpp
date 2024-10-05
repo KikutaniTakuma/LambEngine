@@ -100,7 +100,7 @@ void Easeing::Stop() {
 }
 
 void Easeing::Debug([[maybe_unused]]const std::string& debugName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ImGui::Begin(debugName.c_str());
 	if (ImGui::BeginCombo("BlendType", kEaseingTypeString_[static_cast<uint32_t>(type_)].c_str()))
 	{
@@ -129,11 +129,11 @@ void Easeing::Debug([[maybe_unused]]const std::string& debugName) {
 	}
 	ImGui::End();
 
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void Easeing::DebugTreeNode([[maybe_unused]] const std::string& debugName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(debugName.c_str())) {
 		if (ImGui::BeginCombo("BlendType", kEaseingTypeString_[static_cast<uint32_t>(type_)].c_str()))
 		{
@@ -164,7 +164,7 @@ void Easeing::DebugTreeNode([[maybe_unused]] const std::string& debugName) {
 		ImGui::TreePop();
 	}
 
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void Easeing::SetType(Type type) {

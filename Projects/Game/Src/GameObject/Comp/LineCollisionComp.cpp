@@ -24,9 +24,9 @@ bool LineCollisionComp::Collision(ObbComp* obbComp)
 {
 	// 毎フレームリセットする
 	if (not isCollision_.OnEnter()) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 		color_ = 0xffffffff;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 	}
 
 	// 当たり判定
@@ -51,9 +51,9 @@ bool LineCollisionComp::Collision(ObbComp* obbComp)
 		}
 
 		// 当たってたら色変更
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 		color_ = 0xff0000ff;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 	}
 
 	return isCollision;
@@ -74,7 +74,7 @@ void LineCollisionComp::Load([[maybe_unused]]nlohmann::json& json) {
 }
 
 void LineCollisionComp::Debug([[maybe_unused]] const std::string& guiName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
 		ImGui::Text(std::format("isCollision : {}", !!isCollision_).c_str());
 
@@ -108,7 +108,7 @@ void LineCollisionComp::Debug([[maybe_unused]] const std::string& guiName) {
 		}
 		ImGui::TreePop();
 }
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 }
 

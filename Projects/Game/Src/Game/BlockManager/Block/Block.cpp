@@ -38,14 +38,14 @@ void Block::Update() {
 
 void Block::Draw(const Camera& camera) {
 	model_->Draw(camera.GetViewProjection());
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ImGui::Begin("Block");
 	ImGui::DragFloat("Velocity", &subtractionVelocity_, 0.1f);
 	ImGui::DragFloat("CannonVelocity", &subtractionCannonVelocity_, 0.1f);
 	ImGui::DragFloat("SailVelocity", &subtractionSailVelocity_, 0.1f);
 	ImGui::End();
 	Collider::DebugDraw(camera.GetViewProjection());
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void Block::SetPosition(const Vector3& pos) {

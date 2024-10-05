@@ -37,9 +37,9 @@ public:
 	void SetCurretnGuizmoID(uint32_t currentGuizmoID);
 	uint32_t GetGuizmoID() const;
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	void Guizmo(CameraComp* cameraComp);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 private:

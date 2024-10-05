@@ -14,9 +14,9 @@ void QuadComp::Init()
 void QuadComp::FirstUpdate()
 {
 	isCollision_ = false;
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	color_ = 0xffffffff;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 	Vector2 clientSize = Lamb::ClientSize();
 	IsCollisionMouse(Mat4x4::MakeTranslate({ 0.0f, 0.0f, 10.0f }), Mat4x4::MakeOrthographic(clientSize.x, clientSize.y, 1.0f, 100.0f));
 }
@@ -38,11 +38,11 @@ bool QuadComp::IsCollisionMouse(const Mat4x4& view, const Mat4x4& ndc) {
 
 	isCollision_ = (min.x < mousePos.x and mousePos.x < max.x) and (min.y < mousePos.y and mousePos.y < max.y);
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (isCollision_) {
 		color_ = 0xff0000ff;
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 	return isCollision_.operator bool();
 }
@@ -58,7 +58,7 @@ void QuadComp::Load([[maybe_unused]]nlohmann::json& json)
 }
 
 void QuadComp::Draw([[maybe_unused]]CameraComp* cameraComp) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	Vector3 min = transformComp_->translate - (transformComp_->scale * 0.5f);
 	Vector3 max = transformComp_->translate + (transformComp_->scale * 0.5f);
 
@@ -94,7 +94,7 @@ void QuadComp::Draw([[maybe_unused]]CameraComp* cameraComp) {
 		color_,
 		false
 	);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 const Lamb::Flg& QuadComp::GetIsCollision() const

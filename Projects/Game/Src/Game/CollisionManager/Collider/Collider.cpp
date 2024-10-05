@@ -130,14 +130,14 @@ void Collider::DebugDraw(const Mat4x4& viewProjection, uint32_t index) {
 }
 
 void Collider::Debug([[maybe_unused]] const std::string& guiName, [[maybe_unused]] uint32_t index) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ImGui::Begin(guiName.c_str());
 
 	ImGui::DragFloat3("OBBCenter", &obb_.at(index).center.x, 0.01f);
 	ImGui::DragFloat3("OBBScale", &obbSize_.at(index).x, 0.01f, 0.001f, std::numeric_limits<float>::max());
 
 	ImGui::End();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void Collider::SetCollisionScale(const Vector3& size, uint32_t index) {

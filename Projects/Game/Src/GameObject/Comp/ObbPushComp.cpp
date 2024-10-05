@@ -50,7 +50,7 @@ void ObbPushComp::Load(nlohmann::json& json)
 
 void ObbPushComp::Debug([[maybe_unused]]const std::string& guiName)
 {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if(ImGui::TreeNode(guiName.c_str())) {
 		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(250, 100), ImGuiWindowFlags_NoTitleBar);
 		for (auto& i : pushTags_) {
@@ -82,5 +82,5 @@ void ObbPushComp::Debug([[maybe_unused]]const std::string& guiName)
 
 		ImGui::TreePop();
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }

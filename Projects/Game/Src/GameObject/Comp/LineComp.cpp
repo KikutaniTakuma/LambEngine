@@ -26,14 +26,14 @@ void LineComp::Load(nlohmann::json& json)
 
 void LineComp::Debug([[maybe_unused]]const std::string& guiName)
 {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if(ImGui::TreeNode(guiName.c_str())) {
 		ImGui::DragFloat3("start", start.data(), 0.01f);
 		ImGui::DragFloat3("end", end.data(), 0.01f);
 
 		ImGui::TreePop();
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 }
 

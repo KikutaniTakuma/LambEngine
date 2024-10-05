@@ -35,10 +35,10 @@ void FollowCamera::Update() {
 		// 
 		camera_->Update();
 	}
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ApplyGlobalVariable();
 	globalVariables_->Update();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void FollowCamera::UpdateRotate() {

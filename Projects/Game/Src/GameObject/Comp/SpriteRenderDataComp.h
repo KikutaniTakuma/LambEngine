@@ -57,9 +57,9 @@ private:
 	Mat4x4 offsetTransform_ = Mat4x4::kIdentity;
 
 private:
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	Vector3 euler_;
 	std::vector<std::filesystem::path> filePaths_;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 };

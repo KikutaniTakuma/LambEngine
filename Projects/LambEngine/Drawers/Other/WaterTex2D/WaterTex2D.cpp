@@ -3,11 +3,11 @@
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include "Utils/SafePtr.h"
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "Utils/FileUtils.h"
 
 #include "imgui.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 uint32_t WaterTex2D::kCausticsTextureID_ = 0u;
 

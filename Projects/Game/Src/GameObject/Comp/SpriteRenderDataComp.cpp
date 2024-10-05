@@ -1,10 +1,10 @@
 #include "SpriteRenderDataComp.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
 #include "Utils/FileUtils.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 const std::array<std::string, uint32_t(SpriteRenderDataComp::Offset::kNum)> SpriteRenderDataComp::kOffsetEnumString_ = {
     "kMiddle",
@@ -36,26 +36,26 @@ void SpriteRenderDataComp::Init() {
     fileName = TextureManager::kWhiteTexturePath;
 
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
     filePaths_ = Lamb::GetFilePathFormDir("./", ".png");
     auto bmp = Lamb::GetFilePathFormDir("./", ".bmp");
     filePaths_.insert(filePaths_.end(), bmp.begin(), bmp.end());
     euler_ = uvTransform.rotate.ToEuler();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
     texHandle = 0;
 }
 
 void SpriteRenderDataComp::FirstUpdate() {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
     uvTransform.rotate = Quaternion::EulerToQuaternion(euler_);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
     offsetTransform_ = kOffsetMatrix[static_cast<uint32_t>(offsetType)];
 }
 
 void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
 {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
         // コンボボックスを使ってenumの値を選択する
         if (ImGui::BeginCombo("BlendType", kBlendTypeStrs[static_cast<uint32_t>(type)].c_str()))
@@ -133,7 +133,7 @@ void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
 
 		ImGui::TreePop();
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 }
 

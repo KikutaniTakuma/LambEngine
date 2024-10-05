@@ -78,9 +78,9 @@ void Wind::Update() {
 void Wind::Draw([[maybe_unused]]const Camera& camera) {
 	//model_->Draw(viewProjection, cameraPos);
 	//debugArrowModel_->Draw(camera.GetViewProjection(), camera.GetPos());
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	Collider::DebugDraw(camera.GetViewProjection());
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void Wind::SetScale(const Vector3& scale) {

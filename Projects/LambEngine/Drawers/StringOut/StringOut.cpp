@@ -8,9 +8,9 @@
 
 
 StringOut::StringOut():
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	debugStr_{},
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 	format_(),
 	str_(),
@@ -149,7 +149,7 @@ void StringOut::Clear() {
 }
 
 void StringOut::Debug([[maybe_unused]]const std::string& debugName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	static Vector4 debugColor;
 	debugColor = UintToVector4(color);
 	debugStr_.resize(64);
@@ -167,7 +167,7 @@ void StringOut::Debug([[maybe_unused]]const std::string& debugName) {
 	str_ = ConvertString(debugStr_);
 
 	color = Vector4ToUint(debugColor);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void StringOut::SetFormat(const std::string& formatName) {

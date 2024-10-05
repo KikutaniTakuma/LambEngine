@@ -14,11 +14,11 @@ void Cursor::Initialize() {
 }
 
 void Cursor::Update() {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ImGui::Begin("Cursor");
 	ImGui::DragFloat2("Offset", &offset_.x);
 	ImGui::End();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 	auto mouse = Input::GetInstance()->GetMouse();
 	static uint32_t kMaxTime = 3;
 	if (mouse->Pushed(Mouse::Button::Left) || mouse->LongPush(Mouse::Button::Left)) {

@@ -3,9 +3,9 @@
 #include "Utils/EngineInfo.h"
 #include <algorithm>
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 
@@ -134,7 +134,7 @@ void Animator::Update(const std::string& rootNodeName)
 }
 
 void Animator::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ImGui::Begin(guiName.c_str());
 	if (ImGui::TreeNode("Animator")) {
 		if (ImGui::Button("Start")) {
@@ -155,7 +155,7 @@ void Animator::Debug([[maybe_unused]]const std::string& guiName) {
 		ImGui::TreePop();
 	}
 	ImGui::End();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void Animator::Start() {

@@ -123,7 +123,7 @@ void Gamepad::Vibration(float leftVibIntensity, float rightVibIntensity) {
 }
 
 void Gamepad::Debug() {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ImGui::SetNextWindowSizeConstraints({}, { 210.0f, 400.0f });
 	ImGui::Begin("Gamepad Debug");
 	if (ImGui::TreeNode("stick")) {
@@ -170,5 +170,5 @@ void Gamepad::Debug() {
 	}
 
 	ImGui::End();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }

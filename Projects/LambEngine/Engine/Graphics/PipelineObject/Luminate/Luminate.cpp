@@ -8,9 +8,9 @@
 
 #include "Utils/EngineInfo.h"
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 void Luminate::SetRtvFormt(DXGI_FORMAT format) {
@@ -18,9 +18,9 @@ void Luminate::SetRtvFormt(DXGI_FORMAT format) {
 }
 
 void Luminate::Debug() {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ImGui::DragFloat("輝度閾値", &(*luminanceThreshold_), 0.001f, 0.0f, 1.0f);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void Luminate::Update() {

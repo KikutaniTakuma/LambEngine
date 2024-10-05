@@ -13,9 +13,9 @@ public:
 	void Load(nlohmann::json& json) override;
 
 public:
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	void Init() override;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 	void Finalize() override;
 
@@ -33,7 +33,7 @@ public:
 	float volume = 0.0f;
 	bool isLoop = false;
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	std::vector<std::filesystem::path> filePaths_;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 };

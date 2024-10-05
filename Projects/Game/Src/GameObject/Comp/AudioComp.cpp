@@ -14,13 +14,13 @@ void AudioComp::Load(nlohmann::json& json) {
 	isLoop = json["isLoop"].get<bool>();
 }
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 void AudioComp::Init(){
 	filePaths_ = Lamb::GetFilePathFormDir("./", ".mp3");
 	auto wav = Lamb::GetFilePathFormDir("./", ".wav");
 	filePaths_.insert(filePaths_.end(), wav.begin(), wav.end());
 }
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 void AudioComp::Finalize() {
 	if (audio_.have()) {
@@ -34,7 +34,7 @@ void AudioComp::Load() {
 }
 
 void AudioComp::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
 		ImGui::DragFloat("音量", &volume, 0.001f, 0.0f, 1.0f);
 		ImGui::Checkbox("ループ", &isLoop);
@@ -77,7 +77,7 @@ void AudioComp::Debug([[maybe_unused]]const std::string& guiName) {
 
 		ImGui::TreePop();
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 }
 

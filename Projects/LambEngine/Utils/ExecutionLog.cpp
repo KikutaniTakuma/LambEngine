@@ -30,9 +30,9 @@ namespace Lamb {
 		const std::filesystem::path fileName = "./Log/Execution.log";
 		static bool isOpned = false;
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 		DebugLog(text);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 		if (!std::filesystem::exists(fileName.parent_path())) {

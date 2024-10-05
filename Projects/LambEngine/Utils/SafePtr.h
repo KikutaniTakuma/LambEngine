@@ -2,9 +2,9 @@
 #include <utility>
 #include "Error/Error.h"
 #include "SafeDelete.h"
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include <cassert>
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 namespace Lamb {
@@ -80,64 +80,64 @@ namespace Lamb {
 
 		T* operator->()  {
 			if (empty()) [[unlikely]] {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 				assert(!"nullptr access");
 #else
 				NullPointerException(ErrorPlace);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 			}
 			return ptr_;
 		}
 		T* const operator->() const  {
 			if (empty()) [[unlikely]] {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 				assert(!"nullptr access");
 #else
 				NullPointerException(ErrorPlace);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 			}
 			return ptr_;
 		}
 
 		T& operator*()  {
 			if (empty()) [[unlikely]] {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 				assert(!"nullptr access");
 #else
 				NullPointerException(ErrorPlace);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 			}
 			return *ptr_;
 		}
 
 		T& operator*() const  {
 			if (empty()) [[unlikely]] {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 				assert(!"nullptr access");
 #else
 				NullPointerException(ErrorPlace);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 			}
 			return *ptr_;
 		}
 
 		T& operator[](size_t index)  {
 			if (empty()) [[unlikely]] {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 				assert(!"nullptr access");
 #else
 				NullPointerException(ErrorPlace);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 			}
 			return (ptr_[index]);
 		}
 		T& operator[](size_t index) const  {
 			if (empty()) [[unlikely]] {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 				assert(!"nullptr access");
 #else
 				NullPointerException(ErrorPlace);
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 			}
 			return (ptr_[index]);

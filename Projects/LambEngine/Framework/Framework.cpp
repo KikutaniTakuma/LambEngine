@@ -63,7 +63,7 @@ void Framework::Execution() {
 			// 今のウィンドウのポジションを更新
 			window->UpdateCurrentPos();
 
-#ifdef USE_IMGUI		
+#ifdef USE_DEBUG_CODE		
 			if (frameInfo->GetIsDebugStop() && frameInfo->GetIsOneFrameActive()) {
 				this->Update();
 				frameInfo->SetIsOneFrameActive(false);

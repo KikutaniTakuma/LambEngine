@@ -1,9 +1,9 @@
 #include "WhirlpoolsComp.h"
 #include "../Comp/ObbPushComp.h"
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 void WhirlpoolsComp::Init() {
@@ -22,7 +22,7 @@ bool WhirlpoolsComp::CanPathThrough(float32_t speed)
 }
 
 void WhirlpoolsComp::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
 		rotateSpeed_ *= Lamb::Math::toDegree<float32_t>;
 		ImGui::DragFloat("rotateSpeed(Degree)", &rotateSpeed_, 0.1f, -360.0f, 360.0f);
@@ -30,7 +30,7 @@ void WhirlpoolsComp::Debug([[maybe_unused]]const std::string& guiName) {
 
 		ImGui::TreePop();
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 }
 

@@ -86,7 +86,7 @@ void ChildrenObjectComp::Draw(CameraComp* cameraComp) {
 }
 
 void ChildrenObjectComp::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
 		size_t objectCount = 0;
 		if (ImGui::Button("Add objetct")) {
@@ -115,7 +115,7 @@ void ChildrenObjectComp::Debug([[maybe_unused]]const std::string& guiName) {
 
 		ImGui::TreePop();
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void ChildrenObjectComp::Save(nlohmann::json& json) {

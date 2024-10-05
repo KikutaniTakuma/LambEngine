@@ -46,13 +46,13 @@ void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::opti
 	load_ = std::make_unique<SceneLoad>();
 
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	sceneName_[BaseScene::ID::Title] = "Title";
 	sceneName_[BaseScene::ID::Game] = "Game";
 	sceneName_[BaseScene::ID::StageSelect] = "Select";
 	sceneName_[BaseScene::ID::Result] = "Result";
 	sceneName_[BaseScene::ID::Test] = "Test";
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 	sceneNum_;
 	sceneNum_[BaseScene::ID::Title] = DIK_1;
 	sceneNum_[BaseScene::ID::Game] = DIK_2;
@@ -91,9 +91,9 @@ void SceneManager::Update() {
 
 
 	if (scene_ && !next_) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 		scene_->ChangeCamera();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 		scene_->Update();
 		Debug();
@@ -184,7 +184,7 @@ void SceneManager::Debug()
 			}
 		}
 	}
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ImGui::Begin("SceneManager");
 	if (ImGui::TreeNode("シーン変更")) {
 		for (auto& i : sceneName_) {
@@ -199,7 +199,7 @@ void SceneManager::Debug()
 	ImGui::Text((std::string("currentScene : ") + sceneName_[scene_->GetID()]).c_str());
 	ImGui::Text((std::string("preScene : ") + sceneName_[preSceneID_.value()]).c_str());
 	ImGui::End();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void SceneManager::UploadTextureData()

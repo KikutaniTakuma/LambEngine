@@ -11,18 +11,18 @@
 
 #include "Engine/Graphics/RenderingManager/RenderingManager.h"
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 void Outline::Debug([[maybe_unused]] const std::string& guiName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
 		ImGui::DragFloat("weight", &(outlineData_->weight), 0.01f, 0.0f, 1000.0f);
 		ImGui::TreePop();
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 }
 

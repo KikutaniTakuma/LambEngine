@@ -33,9 +33,9 @@ private:
 
 	void CreateDevice();
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	void InfoQueue() const;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 	void CreateHeapIncrements();
 

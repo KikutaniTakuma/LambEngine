@@ -27,7 +27,7 @@ private:
 
 	Lamb::SafePtr<class TransformComp> transformComp_;
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	std::vector<std::filesystem::path> filePaths_;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 };

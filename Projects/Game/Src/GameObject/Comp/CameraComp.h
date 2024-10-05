@@ -36,7 +36,7 @@ private:
 	Mat4x4 ndcMatrix_ = Mat4x4::kIdentity;
 
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	float32_t scaleSpeed_ = 0.001f;
 	float32_t rotateSpeed_ = 0.3f;
 	float32_t translateSpeed_ = 1.5f;
@@ -48,5 +48,5 @@ private:
 
 	Vector3 eulerRotate_;
 
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 };

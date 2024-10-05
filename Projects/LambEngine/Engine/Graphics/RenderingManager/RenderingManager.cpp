@@ -17,9 +17,9 @@
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
 #include "Utils/HSV.h"
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 std::unique_ptr<RenderingManager> RenderingManager::instance_;
@@ -415,7 +415,7 @@ void RenderingManager::SetEnvironmentCoefficient(float32_t environmentCoefficien
 }
 
 void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
 		if (Lamb::IsCanUseMeshShader()) {
 			ImGui::Checkbox("MeshShader", &isUseMesh_);
@@ -471,7 +471,7 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 
 		ImGui::TreePop();
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 }
 

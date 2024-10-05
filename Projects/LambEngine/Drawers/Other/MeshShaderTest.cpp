@@ -4,11 +4,11 @@
 #include "Utils/SafePtr.h"
 #include "../DrawerManager.h"
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "Utils/FileUtils.h"
 
 #include "imgui.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 MeshShaderTest::MeshShaderTest():

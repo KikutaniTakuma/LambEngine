@@ -25,7 +25,7 @@ private:
 	Lamb::SafePtr<class TransformComp> transform_;
 	std::unique_ptr<MeshShaderTest> meshDrawer_;
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	std::vector<std::filesystem::path> filePaths_;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 };

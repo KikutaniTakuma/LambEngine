@@ -62,9 +62,9 @@ private:
 	std::string format_;
 	std::wstring str_;
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	std::string debugStr_;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 public:

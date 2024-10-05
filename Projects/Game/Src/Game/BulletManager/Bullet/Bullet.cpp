@@ -31,9 +31,9 @@ void Bullet::ModelUpdate() {
 void Bullet::Draw(const Camera& camera) {
 	model_->Draw(camera.GetViewProjection());
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	DebugDraw(camera.GetViewProjection());
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void Bullet::SetBullet(const Vector3& position, const Vector3& vector) {

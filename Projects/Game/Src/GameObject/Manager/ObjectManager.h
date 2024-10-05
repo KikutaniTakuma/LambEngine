@@ -68,10 +68,10 @@ private:
 	std::string inputSceneName_;
 	std::string currentSceneFilePath_;
 	std::string currentSceneName_;
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	std::vector<std::filesystem::path> levelDataFilePathes_;
 	bool isLoad_ = false;
 	bool isSelectInverse_ = false;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 };

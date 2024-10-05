@@ -58,7 +58,7 @@ Particle::Particle() :
 }
 
 Particle::~Particle() {
-	//#ifdef USE_IMGUI
+	//#ifdef USE_DEBUG_CODE
 	//
 	//
 	//	for (auto i = 0llu; i < settings.size(); i++) {
@@ -116,7 +116,7 @@ Particle::~Particle() {
 	//		file << static_cast<bool>(isLoop_) << std::endl
 	//			<< tex->GetFileName();
 	//	}
-	//#endif // USE_IMGUI
+	//#endif // USE_DEBUG_CODE
 }
 
 

@@ -36,9 +36,9 @@ public:
 		bufferSize_ = bufferSize;
 
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(type) * size());
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 		bufferResource_.SetName<decltype(*this)>();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 		OnWright();

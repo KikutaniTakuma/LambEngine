@@ -36,8 +36,8 @@ public:
 private:
 	std::unordered_set<std::string> pushTags_;
 	Lamb::SafePtr<ObbComp> obbComp_;
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	std::string inputTag_;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 };

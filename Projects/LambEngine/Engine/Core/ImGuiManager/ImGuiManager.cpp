@@ -28,7 +28,7 @@ void ImGuiManager::Finalize() {
 }
 
 ImGuiManager::ImGuiManager() {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	// RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
@@ -78,7 +78,7 @@ ImGuiManager::ImGuiManager() {
 #endif // DEBUG
 }
 ImGuiManager::~ImGuiManager() {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
@@ -88,17 +88,17 @@ ImGuiManager::~ImGuiManager() {
 }
 
 void ImGuiManager::Start() {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ImGui_ImplDX12_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
 	ImGuizmo::BeginFrame();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void ImGuiManager::End() {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	// ImGui描画
 	ImGui::Render();

@@ -59,7 +59,7 @@ private:
 
 	void HardwareLog() const;
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	///
 	/// Debug用
 	/// 

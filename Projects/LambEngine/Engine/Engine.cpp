@@ -45,7 +45,7 @@
 
 
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 Engine::Debug Engine::debugLayer_;
 
 Engine::Debug::Debug() :
@@ -82,7 +82,7 @@ void Engine::Debug::InitializeDebugLayer() {
 	}
 }
 
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 /// 
 /// 各種初期化処理
@@ -110,7 +110,7 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	// Window生成
 	WindowFactory::GetInstance()->Create(windowTitle, static_cast<int32_t>(windowSize.x), static_cast<int32_t>(windowSize.y), isFullscreen);
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	// DebugLayer有効化
 	debugLayer_.InitializeDebugLayer();
 #endif

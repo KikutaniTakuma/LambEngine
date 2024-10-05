@@ -158,9 +158,9 @@ void GameScene::Update() {
 	if (player_->GetIsCustomize()) {
 		customize_->Update();
 		player_->AddPower();
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 		player_->DebugTileMap();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 		player_->ResourceUpdate();
 		blockManager_->ResourceUpdate();
 		goalManager_->ResourceUpdate();
@@ -245,7 +245,7 @@ void GameScene::Update() {
 	}
 
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (input_->GetInstance()->GetKey()->Pushed(DIK_TAB)) {
 		isDebug_ ^= true;
 		if (isDebug_) {
@@ -258,7 +258,7 @@ void GameScene::Update() {
 	if (isDebug_) {
 		editorManager_->Update();
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 	renderingManager_->SetCameraPos(currentCamera_->GetPos());
 	renderingManager_->SetCameraMatrix(currentCamera_->GetViewProjection());
@@ -288,11 +288,11 @@ void GameScene::Draw() {
 		clearMessage_->blend = BlendType::kUnenableDepthNormal;
 		clearMessage_->Draw(uiCamera_->GetViewOthographics());
 	}
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (isDebug_) {
 		editorManager_->Draw(*currentCamera_);
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 	if (!CameraManager::GetInstance()->GetFollowCamera()->IsUsedCamera()) {
 		cursor_->Draw(*currentCamera_);
 	}

@@ -50,9 +50,9 @@ void Whirlpool::Draw(const Camera& camera) {
 	//model_->Draw(camera.GetViewProjection(), camera.GetPos());
 	//debugModel_->Draw(camera.GetViewProjection(), camera.GetPos());
 	whirlpool_->Draw(camera.GetViewProjection());
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	Collider::DebugDraw(camera.GetViewProjection());
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void Whirlpool::SetScale(const Vector3& scale) {

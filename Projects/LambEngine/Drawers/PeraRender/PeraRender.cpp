@@ -75,11 +75,11 @@ const RenderTarget& PeraRender::GetRender() const
 }
 
 void PeraRender::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	ImGui::Begin(guiName.c_str());
 	ImGui::ColorEdit4("color", peraPipelineObject_->color.m.data());
 
 	color = Vector4ToUint(peraPipelineObject_->color);
 	ImGui::End();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }

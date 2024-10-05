@@ -4,9 +4,9 @@
 #include <algorithm>
 #include "CameraComp.h"
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "Drawers/Line/Line.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 std::array<const Vector3, 8> ObbComp::localPositions_ =
@@ -33,9 +33,9 @@ void ObbComp::Init()
 	transformComp_ = object_.AddComp<TransformComp>();
 	positions_ = std::make_unique<std::array<Vector3, 8>>();
 	orientations_ = std::make_unique<std::array<Vector3, 3>>();
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	color_ = std::numeric_limits<uint32_t>::max();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void ObbComp::Finalize() {
@@ -46,9 +46,9 @@ void ObbComp::FirstUpdate()
 {
 	currentCollisionTag_ = "";
 	UpdatePosAndOrient();
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	color_ = std::numeric_limits<uint32_t>::max();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void ObbComp::Event() {
@@ -82,7 +82,7 @@ void ObbComp::UpdatePosAndOrient()
 }
 
 void ObbComp::Draw([[maybe_unused]] CameraComp* cameraComp) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	const Mat4x4& viewProjection = cameraComp->GetCameraMatrix();
 
 	Line::Draw(
@@ -189,7 +189,7 @@ void ObbComp::Draw([[maybe_unused]] CameraComp* cameraComp) {
 			Vector4{ localOrientations_.at(i), 1.0f }.GetColorRGBA()
 		);
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 bool ObbComp::IsCollision(Vector3 pos, float radius)
@@ -227,9 +227,9 @@ bool ObbComp::IsCollision(Vector3 pos, float radius)
 
 	if (distance <= radius) {
 		isCollision_ = true;
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 		color_ = 0xff0000ff;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 		return true;
 	}
@@ -306,10 +306,10 @@ bool ObbComp::IsCollision(ObbComp* const other)
 	isCollision_ = true;
 	other->isCollision_ = true;
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	color_ = 0xff0000ff;
 	other->color_ = 0xff0000ff;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 	return true;
 }
@@ -403,10 +403,10 @@ bool ObbComp::IsCollision(ObbComp* const other, Vector3& pushVector)
 
 	isCollision_ = true;
 	other->isCollision_ = true;
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	color_ = 0xff0000ff;
 	other->color_ = 0xff0000ff;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 	return true;
 }
@@ -471,9 +471,9 @@ bool ObbComp::IsCollision(const Vector3& start, const Vector3& end)
 
 	if (tMin <= tMax and (Lamb::Between(tMin, 0.0f, 1.0f) and Lamb::Between(tMax, 0.0f, 1.0f))) {
 		isCollision_ = true;
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 		color_ = 0xff0000ff;
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 		return true;
 	}
 
@@ -509,7 +509,7 @@ void ObbComp::EraseCollisionTag(const std::string& collisionTag) {
 }
 
 void ObbComp::Debug([[maybe_unused]] const std::string& guiName) {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
 
 		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(250, 100), ImGuiWindowFlags_NoTitleBar);
@@ -545,7 +545,7 @@ void ObbComp::Debug([[maybe_unused]] const std::string& guiName) {
 		}
 		ImGui::TreePop();
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void ObbComp::Save(nlohmann::json& json) {

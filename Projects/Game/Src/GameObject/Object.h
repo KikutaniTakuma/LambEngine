@@ -15,9 +15,9 @@
 #include <string>
 #include "json.hpp"
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 
 /// 1シーンの流れ
@@ -153,11 +153,11 @@ public:
 private:
 	template<IsBaseIComp Comp>
 	void DebugAdd() {
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 		if (ImGui::Button((std::string("Add ") + typeid(Comp).name()).c_str())) {
 			AddComp<Comp>();
 		}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 	}
 
 public:

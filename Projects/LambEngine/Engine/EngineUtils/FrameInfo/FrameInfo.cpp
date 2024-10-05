@@ -1,8 +1,8 @@
 #include "FrameInfo.h"
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Utils/ExecutionLog.h"
@@ -21,11 +21,11 @@
 
 FrameInfo::FrameInfo() :
 	kMaxMonitorFps_(GetMainMonitorFramerate()),
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	isDebugStopGame_(false),
 	isOneFrameActive_(false),
 	isFixedDeltaTime_(false),
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 	frameStartTime_(),
 	deltaTime_(0.0),
 	fps_(0.0),
@@ -147,7 +147,7 @@ void FrameInfo::End() {
 	auto nowTime = std::chrono::steady_clock::now();
 	reference_ = nowTime;
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	if (frameCount_ < frameRateData_.size()) {
 		frameRateData_[frameCount_] = static_cast<float>(fps_);
 	}
@@ -157,7 +157,7 @@ void FrameInfo::End() {
 		}
 		frameRateData_.back() = static_cast<float>(fps_);
 	}
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 
 	if (frameDataDuration_ < std::chrono::duration_cast<std::chrono::seconds>(nowTime - frameDataDurationStartTime_)) {
 		frameDataDurationStartTime_ = nowTime;
@@ -211,7 +211,7 @@ void FrameInfo::SetFpsLimit(double fpsLimit) {
 void FrameInfo::Debug() {
 	this->SwitchDarwFlg();
 
-#ifdef USE_IMGUI
+#ifdef USE_DEBUG_CODE
 	static float fpsLimit = static_cast<float>(fpsLimit_);
 	fpsLimit = static_cast<float>(fpsLimit_);
 
@@ -248,7 +248,7 @@ void FrameInfo::Debug() {
 		ImGui::TreePop();
 	}
 	ImGui::End();
-#endif // USE_IMGUI
+#endif // USE_DEBUG_CODE
 }
 
 void FrameInfo::SetGameSpeedScale(float gameSpeedSccale) {
