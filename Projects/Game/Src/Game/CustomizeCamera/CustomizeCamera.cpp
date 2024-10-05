@@ -38,10 +38,10 @@ void CustomizeCamera::Update() {
 		// 
 		camera_->Update();
 	}
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ApplyGlobalVariable();
 	globalVariables_->Update();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void CustomizeCamera::Reset() {

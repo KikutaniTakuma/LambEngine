@@ -59,7 +59,7 @@ void SpriteAnimatorComp::LastUpdate() {
 }
 
 void SpriteAnimatorComp::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (ImGui::TreeNode(guiName.c_str())) {
 		ImGui::DragFloat2("startPos", startPos_.data(), 0.001f);
 		ImGui::Checkbox("isLoop", &isLoop_);
@@ -84,7 +84,7 @@ void SpriteAnimatorComp::Debug([[maybe_unused]]const std::string& guiName) {
 		DirectionInverse(isDirectionInverse_);
 		ImGui::TreePop();
 	}
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void SpriteAnimatorComp::Start() {

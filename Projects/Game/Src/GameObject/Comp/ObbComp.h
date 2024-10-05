@@ -64,11 +64,11 @@ private:
 
 	std::unordered_set<std::string> collisionTags_;
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 private:
 	uint32_t color_;
 	std::string inputTag_;
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 private:
 	static std::array<const Vector3, 8> localPositions_;

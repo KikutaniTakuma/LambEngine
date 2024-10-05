@@ -8,20 +8,20 @@
 
 #include "Utils/EngineInfo.h"
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 void GaussianBlur::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (ImGui::TreeNode(guiName.c_str())) {
 		ImGui::DragInt("kernel", &gaussianBlurState_->kernelSize, 0.1f, 0, 128);
 		ImGui::DragFloat2("dir", gaussianBlurState_->dir.data(), 1.0f, 0.0f, 1.0f);
 		ImGui::DragFloat("sigma", &gaussianBlurState_->sigma, 0.01f, 0.0f, 1000.0f);
 		ImGui::TreePop();
 	}
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }
 

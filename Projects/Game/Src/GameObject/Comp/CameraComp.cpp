@@ -42,7 +42,7 @@ void CameraComp::SetNdcMatix(const Mat4x4& ndc) {
 }
 
 void CameraComp::Debug([[maybe_unused]] const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (ImGui::TreeNode(guiName.c_str())) {
 		ImGui::Checkbox("Debug Mode", &isDebug_);
 
@@ -88,5 +88,5 @@ void CameraComp::Debug([[maybe_unused]] const std::string& guiName) {
 
 		ImGui::TreePop();
 	}
-#endif // _DEBUG
+#endif // USE_IMGUI
 }

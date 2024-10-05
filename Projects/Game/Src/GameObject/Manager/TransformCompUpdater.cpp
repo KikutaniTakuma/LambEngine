@@ -1,8 +1,8 @@
 #include "TransformCompUpdater.h"
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "../Comp/CameraComp.h"
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 std::unique_ptr<TransformCompUpdater> TransformCompUpdater::instance_;
@@ -29,9 +29,9 @@ void TransformCompUpdater::Finalize()
 
 void TransformCompUpdater::Set(const Lamb::SafePtr<class TransformComp>& transformComp) {
 	if (not transformComps_.contains(transformComp)) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 		transformComp->SetGuizmoID(setID);
-#endif // _DEBUG
+#endif // USE_IMGUI
 		setID++;
 		transformComps_.insert(transformComp);
 	}
@@ -64,11 +64,11 @@ uint32_t TransformCompUpdater::GetGuizmoID() const
 	return currentGuizmoID_;
 }
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 void TransformCompUpdater::Guizmo(CameraComp* cameraComp) {
 	for (auto& i : transformComps_) {
 		i->Guizmo(cameraComp);
 	}
 }
-#endif // _DEBUG
+#endif // USE_IMGUI
 

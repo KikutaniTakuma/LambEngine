@@ -185,7 +185,7 @@ void Mouse::Show(bool flg) {
 }
 
 void Mouse::Debug() {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin("Mouse Debug");
 	ImGui::Text("Left          : %d", LongPush(Mouse::Button::Left));
 	ImGui::Text("Midle         : %d", LongPush(Mouse::Button::Middle));
@@ -200,5 +200,5 @@ void Mouse::Debug() {
 	ImGui::Text("Wheel         : %.0f", GetWheel());
 	ImGui::Text("WheelVelocity : %.0f", GetWheelVelocity());
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }

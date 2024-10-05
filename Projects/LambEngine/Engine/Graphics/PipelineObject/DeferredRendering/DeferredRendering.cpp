@@ -8,9 +8,9 @@
 
 #include "Utils/EngineInfo.h"
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 void DeferredRendering::SetLight(const PointLight& light, size_t index)
@@ -19,9 +19,9 @@ void DeferredRendering::SetLight(const PointLight& light, size_t index)
 }
 
 void DeferredRendering::Debug([[maybe_unused]] const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }
 

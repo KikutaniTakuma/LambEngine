@@ -1,9 +1,9 @@
 #pragma once
 #include <type_traits>
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "Utils/ConvertString.h"
 #include <typeinfo>
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 struct IUnknown;
@@ -224,7 +224,7 @@ namespace Lamb {
 
 		template<class ClassName>
 		void SetName() {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 			if constexpr (std::is_base_of_v<ID3D12Object, T>) {
 				if (ptr_) {
 					std::wstring resourceName = ConvertString(
@@ -233,7 +233,7 @@ namespace Lamb {
 					ptr_->SetName(resourceName.c_str());
 				}
 			}
-#endif // _DEBUG
+#endif // USE_IMGUI
 		}
 
 

@@ -1,8 +1,8 @@
 #include "BaseScene.h"
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 std::array<std::string, static_cast<uint32_t>(BaseScene::ID::kNum)> BaseScene::kSceneStrings = {

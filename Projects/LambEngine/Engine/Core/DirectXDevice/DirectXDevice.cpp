@@ -54,7 +54,7 @@ DirectXDevice::DirectXDevice():
 	// 使用しているデバイスによってD3D_FEATURE_LEVELの対応バージョンが違うので成功するまでバージョンを変えて繰り返す
 	CreateDevice();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	InfoQueue();
 #endif
 
@@ -140,7 +140,7 @@ void DirectXDevice::CreateDevice() {
 	Lamb::AddLog("Complete create D3D12Device");
 }
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 void DirectXDevice::InfoQueue() const {
 	Lamb::LambPtr<ID3D12InfoQueue> infoQueue = nullptr;
 	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(infoQueue.GetAddressOf())))) {
@@ -169,7 +169,7 @@ void DirectXDevice::InfoQueue() const {
 		infoQueue.Reset();
 	}
 }
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 void DirectXDevice::CreateHeapIncrements() {
 	incrementSRVCBVUAVHeap_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);

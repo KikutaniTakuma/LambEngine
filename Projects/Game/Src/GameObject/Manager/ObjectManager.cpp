@@ -9,9 +9,9 @@
 #include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include <string>
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 #include <fstream>
 
 #include "Utils/FileUtils.h"
@@ -37,9 +37,9 @@ void ObjectManager::Initialize() {
 
 	instance_.reset(new ObjectManager());
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	instance_->levelDataFilePathes_ = Lamb::GetFilePathFormDir("./SceneData/", ".json");
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	CompCollisionManager::Initialize();
 	instance_->collisionManager_ = CompCollisionManager::GetInstance();
@@ -129,7 +129,7 @@ void ObjectManager::Update() {
 	TransformCompUpdater::GetInstance()->UpdateMatrix();
 
 	// デバッグ
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	cameraComp_->LastUpdate();
 	isLoad_ = false;
 	Debug();
@@ -137,7 +137,7 @@ void ObjectManager::Update() {
 		return;
 	}
 	TransformCompUpdater::GetInstance()->Guizmo(cameraComp_.get());
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 	// 最初の処理
@@ -181,11 +181,11 @@ void ObjectManager::Update() {
 }
 
 void ObjectManager::Draw() {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (isLoad_) {
 		return;
 	}
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	// 描画処理
 	for (auto& i : objects_) {
@@ -194,7 +194,7 @@ void ObjectManager::Draw() {
 }
 
 void ObjectManager::Debug() {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	auto windowHandle = WindowFactory::GetInstance()->GetHwnd();
 
 	ImGui::Begin("Objects");
@@ -383,7 +383,7 @@ void ObjectManager::Debug() {
 
 	ImGui::EndChild();
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void ObjectManager::Save() {
@@ -449,11 +449,11 @@ void ObjectManager::Save() {
 		);
 	}
 	else {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 		assert(!"file can not open");
 #else
 		throw Lamb::Error::Code<ObjectManager>("file can not open", ErrorPlace);
-#endif // _DEBUG
+#endif // USE_IMGUI
 	}
 }
 
@@ -500,11 +500,11 @@ void ObjectManager::Load(const std::string& jsonFileName) {
 
 	collisionManager_->MakeCollisionPair();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	MessageBoxA(
 		WindowFactory::GetInstance()->GetHwnd(),
 		("Load " + jsonFileName + " succeeded").c_str(), "ObjectManager",
 		MB_OK | MB_APPLMODAL | MB_ICONINFORMATION
 	);
-#endif // _DEBUG
+#endif // USE_IMGUI
 }

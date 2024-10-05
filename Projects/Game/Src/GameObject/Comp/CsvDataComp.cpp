@@ -1,15 +1,15 @@
 #include "CsvDataComp.h"
 #include "Utils/FileUtils.h"
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 void CsvDataComp::Init()
 {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	filePaths_ = Lamb::GetFilePathFormDir("./", ".csv");
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void CsvDataComp::Load() {
@@ -24,7 +24,7 @@ const std::vector<std::vector<int32_t>>& CsvDataComp::GetCsvData() const {
 }
 
 void CsvDataComp::Debug([[maybe_unused]] const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (ImGui::TreeNode(guiName.c_str())) {
 		if (ImGui::TreeNode("Data")) {
 			for (const auto& line : csvData_) {
@@ -57,7 +57,7 @@ void CsvDataComp::Debug([[maybe_unused]] const std::string& guiName) {
 		ImGui::TreePop();
 	}
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void CsvDataComp::Save(nlohmann::json& json)

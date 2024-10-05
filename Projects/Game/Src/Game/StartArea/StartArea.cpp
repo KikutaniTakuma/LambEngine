@@ -24,13 +24,13 @@ void StartArea::Initialize() {
 }
 
 void StartArea::Update() {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin("Start");
 	ImGui::DragFloat3("scale", &start_->scale.x, 0.1f);
 	ImGui::DragFloat3("rotate", &start_->rotate.x, 0.1f);
 	ImGui::DragFloat3("pos", &start_->pos.x, 0.1f);
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	ResourceUpdate();
 }

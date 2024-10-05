@@ -309,23 +309,23 @@ void Player::Update() {
 	}
 	ParticleUpdate();
 	ResourceUpdate();
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	Debug();
 	ApplyGlobalVariable();
 	globalVariables_->Update();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void Player::ResourceUpdate() {
 	body_->Update();
 	screw_->Update();
 	for (auto& barrel : barrels_) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 		int x = static_cast<int>(barrel->pos.x / preSetObjectDistance_.x);
 		int y = static_cast<int>(barrel->pos.z / preSetObjectDistance_.y);
 		barrel->pos.x = float(x) * setObjectDistance_.x;
 		barrel->pos.z = float(y) * setObjectDistance_.y;
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 		barrel->Update();
 	}
@@ -415,9 +415,9 @@ void Player::Draw(const Camera& camera) {
 	for (auto& loopCannon : loopCannons_) {
 		loopCannon->Draw(camera.GetViewProjection());
 	}
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	DebugDraw(camera.GetViewProjection());
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	for (auto& i : cannonParticle_) {
 		i->Draw(camera.rotate, camera.GetViewProjection());

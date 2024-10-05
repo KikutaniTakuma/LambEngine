@@ -2,9 +2,9 @@
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include <algorithm>
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "Drawers/Line/Line.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 namespace Lamb {
     Skeleton CreateSkeleton(const Node& rootNode)
@@ -52,7 +52,7 @@ void Skeleton::Update() {
 }
 
 void Skeleton::Draw([[maybe_unused]] const Mat4x4& worldMatrix, [[maybe_unused]]const Mat4x4& camera) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
     for (Joint& joint : joints) {
         if (not joint.parent) {
             continue;
@@ -68,7 +68,7 @@ void Skeleton::Draw([[maybe_unused]] const Mat4x4& worldMatrix, [[maybe_unused]]
             std::numeric_limits<uint32_t>::max()
         );
     }
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 SkinCluster* SkinCluster::CreateSkinCluster(const Skeleton& skeleton, const ModelData& modelData)

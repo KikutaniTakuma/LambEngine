@@ -13,11 +13,11 @@ void LineConvertTransformComp::LastUpdate() {
 	transformComp_->scale = { (lineComp_->start - lineComp_->end).Length(), transformComp_->scale.y, transformComp_->scale.z };
 
 	Vector3 to = (lineComp_->end - lineComp_->start).Normalize();
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	transformComp_->eulerRotate = Quaternion::DirectionToDirection(Vector3::kXIdentity, to).ToEuler();
 #else
 	transformComp_->rotate = Quaternion::DirectionToDirection(Vector3::kXIdentity, to);
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void LineConvertTransformComp::Save(nlohmann::json& json)

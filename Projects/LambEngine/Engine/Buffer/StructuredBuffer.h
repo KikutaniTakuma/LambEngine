@@ -68,9 +68,9 @@ public:
 		bufferSize_ = bufferSize;
 
 		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(T) * size());
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 		bufferResource_.SetName<decltype(*this)>();
-#endif // _DEBUG
+#endif // USE_IMGUI
 		srvDesc_ = {};
 		srvDesc_.Format = DXGI_FORMAT_UNKNOWN;
 		srvDesc_.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;

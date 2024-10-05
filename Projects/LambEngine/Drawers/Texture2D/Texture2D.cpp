@@ -7,11 +7,11 @@
 
 #include "Engine/Graphics/RenderingManager/RenderingManager.h"
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "Utils/FileUtils.h"
 
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 const LoadFileNames Texture2D::kFileNames_ = 
@@ -62,9 +62,9 @@ void Texture2D::Draw(
 	uint32_t color,
 	BlendType blend
 ) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	if (isUseMeshShader_ and meshRenderSet) {
 		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<Texture2D::ShaderData, Texture2D::kMaxDrawCount>>(blend);
@@ -93,9 +93,9 @@ void Texture2D::Draw(
 }
 
 void Texture2D::Draw(const Texture2D::Data& data) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	if (isUseMeshShader_ and meshRenderSet) {
 		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<Texture2D::ShaderData, Texture2D::kMaxDrawCount>>(data.blend);

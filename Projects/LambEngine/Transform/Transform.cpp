@@ -1,8 +1,8 @@
 #include "Transform.h"
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 QuaternionTransform& QuaternionTransform::operator=(const Transform& transform) {
@@ -27,13 +27,13 @@ Mat4x4 Transform::GetMatrix() const
 }
 
 void Transform::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin(guiName.c_str());
 	ImGui::DragFloat3("スケール", scale.data(), 0.01f);
 	ImGui::DragFloat3("回転", rotate.data(), 0.01f);
 	ImGui::DragFloat3("ポジション", translate.data(), 0.01f);
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 Mat4x4 QuaternionTransform::GetMatrix() const

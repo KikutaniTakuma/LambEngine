@@ -53,9 +53,9 @@ void Model::Draw(
 	BlendType blend, 
 	bool isLighting
 ) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	
 	if (isUseMeshShader_ and meshRenderSet) {
@@ -81,9 +81,9 @@ void Model::Draw(
 }
 
 void Model::Draw(const Data& data) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	if (isUseMeshShader_ and meshRenderSet) {
 		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<>>(data.blend);

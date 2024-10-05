@@ -1,15 +1,15 @@
 #include "JsonComp.h"
 #include "Utils/FileUtils.h"
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 void JsonComp::Init() {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	filePaths_ = Lamb::GetFilePathFormDir("./", ".json");
-#endif // _DEBUG
+#endif // USE_IMGUI
 	Load();
 }
 
@@ -30,7 +30,7 @@ const nlohmann::json& JsonComp::GetJsonData() const {
 }
 
 void JsonComp::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (ImGui::TreeNode(guiName.c_str())) {
 		if (ImGui::Button("再読み込み")) {
 			filePaths_ = Lamb::GetFilePathFormDir("./", ".json");
@@ -50,7 +50,7 @@ void JsonComp::Debug([[maybe_unused]]const std::string& guiName) {
 		ImGui::TreePop();
 	}
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void JsonComp::Save(nlohmann::json& json)

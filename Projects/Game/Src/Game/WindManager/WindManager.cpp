@@ -39,11 +39,11 @@ void WindManager::Update() {
 }
 
 void WindManager::Draw(const Camera& camera) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	for (auto& wind : winds_) {
 		wind->Draw(camera);
 	}
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 	// パーティクル描画

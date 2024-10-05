@@ -27,8 +27,8 @@ public:
 private:
 	nlohmann::json jsonData_;
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	std::vector<std::filesystem::path> filePaths_;
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 };

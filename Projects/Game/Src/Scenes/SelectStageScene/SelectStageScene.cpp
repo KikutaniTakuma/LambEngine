@@ -294,7 +294,7 @@ void SelectStageScene::Update() {
         inCustomizeSE_->Start(0.5f, false);
     }
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
     ImGui::Begin("StageCount");
     ImGui::Text("Stage:%d", stageIndex_);
     ImGui::End();
@@ -304,7 +304,7 @@ void SelectStageScene::Update() {
     ImGui::Text("MousePos x:%f,y:%f",ChangeMouseToTexture().x, ChangeMouseToTexture().y);
     ImGui::DragFloat3("stageImage", &stageImage_->pos.x, 1.0f);
     ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 
     renderingManager_->SetCameraPos(currentCamera_->GetPos());
     renderingManager_->SetCameraMatrix(currentCamera_->GetViewProjection());

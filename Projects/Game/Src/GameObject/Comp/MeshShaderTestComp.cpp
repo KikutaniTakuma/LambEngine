@@ -4,9 +4,9 @@
 
 #include "ModelRenderDataComp.h"
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "Utils/FileUtils.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 void MeshShaderTestComp::Save(nlohmann::json& json) {
 	SaveCompName(json);
@@ -31,11 +31,11 @@ void MeshShaderTestComp::Init() {
 
     meshDrawer_ = std::make_unique<MeshShaderTest>();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
     filePaths_ = Lamb::GetFilePathFormDir("./", ".obj");
     auto bmp = Lamb::GetFilePathFormDir("./", ".gltf");
     filePaths_.insert(filePaths_.end(), bmp.begin(), bmp.end());
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void MeshShaderTestComp::Draw(CameraComp* cameraComp)
@@ -53,7 +53,7 @@ void MeshShaderTestComp::Draw(CameraComp* cameraComp)
 }
 
 void MeshShaderTestComp::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
     if (ImGui::TreeNode(guiName.c_str())) {
         ImGui::Checkbox("描画有効", &(renderDataComp_->isDraw));
 
@@ -104,5 +104,5 @@ void MeshShaderTestComp::Debug([[maybe_unused]]const std::string& guiName) {
         ImGui::TreePop();
     }
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 }

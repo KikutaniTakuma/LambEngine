@@ -3,9 +3,9 @@
 #include "Transform/Transform.h"
 
 #include <unordered_set>
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "ImGuizmo.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 class TransformComp : public IComp {
@@ -45,11 +45,11 @@ public:
 
 	void Debug(const std::string& guiName) override;
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	void SetGuizmoID(uint32_t id);
 
 	void Guizmo(class CameraComp* cameraComp);
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	void Save(nlohmann::json& json) override;
 	void Load(nlohmann::json& json) override;
@@ -58,12 +58,12 @@ public:
 	Vector3 scale;
 	Quaternion rotate;
 	Vector3 translate;
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	Vector3 eulerRotate;
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 private:
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	uint32_t guizmoID_ = 0;
 	uint32_t guimoType_ = 0;
 
@@ -71,7 +71,7 @@ private:
 
 	static const std::array<std::pair<std::string, ImGuizmo::OPERATION>, 5> kGuizmoMode_;
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 	Mat4x4 worldMatrix_;

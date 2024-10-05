@@ -74,8 +74,8 @@ private:
 
 	std::unique_ptr<SceneLoad> load_;
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	std::unordered_map<BaseScene::ID, std::string> sceneName_;
-#endif // _DEBUG
+#endif // USE_IMGUI
 	std::unordered_map<BaseScene::ID, uint8_t> sceneNum_;
 };

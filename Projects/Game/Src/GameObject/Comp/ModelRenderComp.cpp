@@ -5,19 +5,19 @@
 #include "TransformComp.h"
 #include "CameraComp.h"
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "Utils/FileUtils.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 void ModelRenderComp::Init() {
 	transformComp_ = object_.AddComp<TransformComp>();
 	renderDataComp_ = object_.AddComp<ModelRenderDataComp>();
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
     filePaths_ = Lamb::GetFilePathFormDir("./", ".obj");
     auto bmp = Lamb::GetFilePathFormDir("./", ".gltf");
     filePaths_.insert(filePaths_.end(), bmp.begin(), bmp.end());
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void ModelRenderComp::Draw(CameraComp* cameraComp) {
@@ -39,7 +39,7 @@ void ModelRenderComp::Load() {
 }
 
 void ModelRenderComp::Debug([[maybe_unused]]const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
     if (ImGui::TreeNode(guiName.c_str())) {
         ImGui::Checkbox("描画有効", &(renderDataComp_->isDraw));
 
@@ -90,7 +90,7 @@ void ModelRenderComp::Debug([[maybe_unused]]const std::string& guiName) {
         ImGui::TreePop();
     }
 
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void ModelRenderComp::Save(nlohmann::json& json)

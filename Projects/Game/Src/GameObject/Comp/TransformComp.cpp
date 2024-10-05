@@ -1,11 +1,11 @@
 #include "TransformComp.h"
 #include "../Manager/TransformCompUpdater.h"
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 #include "CameraComp.h"
 #include "imgui.h"
-#endif // _DEBUG
+#endif // USE_IMGUI
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 const std::array<std::pair<std::string, ImGuizmo::OPERATION>, 5> TransformComp::kGuizmoMode_ = {
 	std::make_pair<std::string, ImGuizmo::OPERATION>("TRANSLATE", ImGuizmo::TRANSLATE),
 	std::make_pair<std::string, ImGuizmo::OPERATION>("ROTATE", ImGuizmo::ROTATE),
@@ -13,7 +13,7 @@ const std::array<std::pair<std::string, ImGuizmo::OPERATION>, 5> TransformComp::
 	std::make_pair<std::string, ImGuizmo::OPERATION>("SCALEU", ImGuizmo::SCALEU),
 	std::make_pair<std::string, ImGuizmo::OPERATION>("UNIVERSAL", ImGuizmo::UNIVERSAL)
 };
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 
 
@@ -40,9 +40,9 @@ void TransformComp::Init()
 }
 
 void TransformComp::UpdateMatrix() {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	rotate.SetEuler(eulerRotate);
-#endif // _DEBUG
+#endif // USE_IMGUI
 	rotate = rotate.Normalize();
 	worldMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
 }
@@ -76,7 +76,7 @@ void TransformComp::SetParent(Lamb::SafePtr<TransformComp> parent)
 }
 
 void TransformComp::Debug([[maybe_unused]] const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (ImGui::TreeNode((guiName + " Guizmo").c_str())) {
 		// コンボボックスを使ってenumの値を選択する
 		if (ImGui::BeginCombo("BlendType", kGuizmoMode_[guimoType_].first.c_str()))
@@ -120,11 +120,11 @@ void TransformComp::Debug([[maybe_unused]] const std::string& guiName) {
 
 		ImGui::TreePop();
 	}
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 void TransformComp::SetGuizmoID(uint32_t id) {
 	guizmoID_ = id;
 }
@@ -136,25 +136,25 @@ void TransformComp::Guizmo(CameraComp* cameraComp) {
 		const Mat4x4& ndc = cameraComp->GetToNdcMatrix();
 		if (ImGuizmo::Manipulate(view.data(), ndc.data(), kGuizmoMode_[guimoType_].second, ImGuizmo::WORLD, worldMatrix_.data())) {
 			if (parent_) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 				(worldMatrix_ * parent_->worldMatrix_.Inverse()).Decompose(scale, eulerRotate, translate);
 #else
 				(worldMatrix_ * parent_->worldMatrix_.Inverse()).Decompose(scale, rotate, translate);
-#endif // _DEBUG
+#endif // USE_IMGUI
 			}
 			else {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 				worldMatrix_.Decompose(scale, eulerRotate, translate);
 #else
 				worldMatrix_.Decompose(scale, rotate, translate);
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 			}
 			TransformCompUpdater::GetInstance()->SetCurretnGuizmoID(guizmoID_);
 		}
 	}
 }
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 void TransformComp::Save(nlohmann::json& json) {
 	SaveCompName(json);
@@ -184,8 +184,8 @@ void TransformComp::Load(nlohmann::json& json)
 		translate[i] = json["translate"][i];
 	}
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	eulerRotate = rotate.ToEuler();
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 }

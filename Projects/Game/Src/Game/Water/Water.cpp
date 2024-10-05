@@ -129,7 +129,7 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 }
 
 void Water::Debug([[maybe_unused]]const std::string& guiName){
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	ImGui::Begin(guiName.c_str());
 	ImGui::DragFloat("density", &density_, 0.01f);
 
@@ -172,7 +172,7 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	}
 
 	ImGui::End();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void Water::SetWaveData(const WaterTex2D::WaveData& waveData)

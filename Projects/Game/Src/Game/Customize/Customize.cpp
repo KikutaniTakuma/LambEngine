@@ -263,9 +263,9 @@ void Customize::Update() {
 		loopCannon.left->scale = { std::lerp(loopCannon.left->scale.x ,intervalScale_,kT),std::lerp(loopCannon.left->scale.y,intervalScale_,kT) };
 		loopCannon.right->scale = { std::lerp(loopCannon.right->scale.x ,intervalScale_,kT),std::lerp(loopCannon.right->scale.y,intervalScale_,kT) };
 	}
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	Debug();
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void Customize::Draw(const Camera& camera) {

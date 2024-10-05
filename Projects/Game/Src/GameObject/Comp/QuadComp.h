@@ -27,8 +27,8 @@ public:
 private:
 	Lamb::SafePtr<class TransformComp> transformComp_;
 	Lamb::Flg isCollision_;
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	uint32_t color_ = 0xffffffff;
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 };

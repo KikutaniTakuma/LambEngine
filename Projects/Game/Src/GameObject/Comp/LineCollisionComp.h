@@ -46,9 +46,9 @@ private:
 	Lamb::Flg isCollision_;
 
 	std::string currentCollisionTag_;
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 private:
 	std::string inputTag_;
 	uint32_t color_ = 0xffffffff;
-#endif // _DEBUG
+#endif // USE_IMGUI
 };

@@ -92,7 +92,7 @@ void Object::Draw() const {
 }
 
 bool Object::Debug([[maybe_unused]] const std::string& guiName) {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (ImGui::TreeNode(guiName.c_str())) {
 		if (DebugAddComp()) {
 			ImGui::TreePop();
@@ -112,13 +112,13 @@ bool Object::Debug([[maybe_unused]] const std::string& guiName) {
 		}
 		ImGui::TreePop();
 	}
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	return false;
 }
 
 bool Object::DebugAddComp() {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if (ImGui::TreeNode("Comps")) {
 		ImGui::BeginChild(ImGui::GetID((void*)0), { 0.0f, 150.0f }, ImGuiChildFlags_AlwaysAutoResize | ImGuiChildFlags_AutoResizeX, ImGuiWindowFlags_NoTitleBar);
 		DebugAdd<AudioComp>();
@@ -155,7 +155,7 @@ bool Object::DebugAddComp() {
 
 		return true;
 	}
-#endif // _DEBUG
+#endif // USE_IMGUI
 
 	return false;
 }

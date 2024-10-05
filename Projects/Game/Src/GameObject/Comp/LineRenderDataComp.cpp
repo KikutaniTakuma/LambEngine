@@ -24,7 +24,7 @@ void LineRenderDataComp::Load(nlohmann::json& json) {
 
 void LineRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
 {
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	if(ImGui::TreeNode(guiName.c_str())){
 		ImGui::DragFloat3("start", lineComp_->start.data(), 0.01f);
 		ImGui::DragFloat3("end", lineComp_->end.data(), 0.01f);
@@ -32,5 +32,5 @@ void LineRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
 		ImGui::Checkbox("isDepth", &isDepth);
 		ImGui::TreePop();
 	}
-#endif // _DEBUG
+#endif // USE_IMGUI
 }

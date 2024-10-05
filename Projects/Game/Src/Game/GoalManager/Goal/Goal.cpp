@@ -97,11 +97,11 @@ void Goal::Draw(const Camera& camera) {
 
 	ParticleDraw(camera);
 
-#ifdef _DEBUG
+#ifdef USE_IMGUI
 	for (int i = 0; i < color_.size(); i++) {
 		Collider::DebugDraw(camera.GetViewProjection(), i);
 	}
-#endif // _DEBUG
+#endif // USE_IMGUI
 }
 
 void Goal::SetScale(const Vector3& scale) {
