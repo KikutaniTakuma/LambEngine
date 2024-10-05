@@ -20,4 +20,6 @@ public:
 private:
 	Lamb::SafePtr<ObjectManager> objectManager_;
 	Lamb::SafePtr<LevelData> levelData_;
+	
+	class Water* water_;
 };

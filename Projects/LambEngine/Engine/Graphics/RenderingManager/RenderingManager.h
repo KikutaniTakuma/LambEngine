@@ -102,6 +102,8 @@ private:
 	std::unique_ptr<RenderTarget> colorTexture_;
 	// ワールドポジション書き込み用オフスクリーン
 	std::unique_ptr<RenderTarget> worldPositionTexture_;
+	// 歪み書き込み用オフスクリーン
+	std::unique_ptr<RenderTarget> distortionTexture_;
 
 	// ライティング後のrgbaテクスチャを描画
 	std::unique_ptr<PeraRender> rgbaTexture_;

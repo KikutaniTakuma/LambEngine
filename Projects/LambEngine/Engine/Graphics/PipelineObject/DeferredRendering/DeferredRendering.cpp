@@ -36,7 +36,7 @@ void DeferredRendering::Draw() {
 	commandList->SetGraphicsRootDescriptorTable(2, colorTextureHandle_);
 	commandList->SetGraphicsRootDescriptorTable(3, normalTextureHandle_);
 	commandList->SetGraphicsRootDescriptorTable(4, worldPositionTextureHandle_);
-	//commandList->SetGraphicsRootDescriptorTable(5, environmentTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(5, distortionTextureHandle_);
 	commandList->DrawInstanced(3, 1, 0, 0);
 }
 
@@ -54,6 +54,7 @@ void DeferredRendering::Use(Pipeline::Blend blendType, bool isDepth) {
 	commandList->SetGraphicsRootDescriptorTable(2, colorTextureHandle_);
 	commandList->SetGraphicsRootDescriptorTable(3, normalTextureHandle_);
 	commandList->SetGraphicsRootDescriptorTable(4, worldPositionTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(5, distortionTextureHandle_);
 }
 
 void DeferredRendering::Init(
@@ -91,13 +92,13 @@ void DeferredRendering::Init(
 	diffWorldPositionTextureRange[0].NumDescriptors = 1;
 	diffWorldPositionTextureRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	diffWorldPositionTextureRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> environmentTextureRange = {};
-	environmentTextureRange[0].BaseShaderRegister = 4;
-	environmentTextureRange[0].NumDescriptors = 1;
-	environmentTextureRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	environmentTextureRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> distortionTextureRange = {};
+	distortionTextureRange[0].BaseShaderRegister = 4;
+	distortionTextureRange[0].NumDescriptors = 1;
+	distortionTextureRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	distortionTextureRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 5> rootParameter = {};
+	std::array<D3D12_ROOT_PARAMETER, 6> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	rootParameter[0].DescriptorTable.pDescriptorRanges = cbvRange.data();
@@ -123,10 +124,10 @@ void DeferredRendering::Init(
 	rootParameter[4].DescriptorTable.pDescriptorRanges = diffWorldPositionTextureRange.data();
 	rootParameter[4].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffWorldPositionTextureRange.size());
 
-	/*rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[5].DescriptorTable.pDescriptorRanges = environmentTextureRange.data();
-	rootParameter[5].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(environmentTextureRange.size());*/
+	rootParameter[5].DescriptorTable.pDescriptorRanges = distortionTextureRange.data();
+	rootParameter[5].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(distortionTextureRange.size());
 
 
 	RootSignature::Desc desc;

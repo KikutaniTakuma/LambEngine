@@ -58,6 +58,9 @@ public:
 	void SetWoprldPositionHandle(D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle) {
 		worldPositionTextureHandle_ = worldPositionTextureHandle;
 	}
+	void SetDistortionHandle(D3D12_GPU_DESCRIPTOR_HANDLE distortionTextureHandle) {
+		distortionTextureHandle_ = distortionTextureHandle;
+	}
 
 private:
 	ConstantBuffer<DeferredRenderingData> deferredRenderingData_;
@@ -66,5 +69,6 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE normalTextureHandle_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle_ = {};
+	D3D12_GPU_DESCRIPTOR_HANDLE distortionTextureHandle_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE environmentTextureHandle_ = {};
 };

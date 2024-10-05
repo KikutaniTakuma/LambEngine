@@ -34,16 +34,19 @@ RenderingManager::RenderingManager() {
 	normalTexture_ = std::make_unique<RenderTarget>(width, height);
 	colorTexture_ = std::make_unique<RenderTarget>(width, height);
 	worldPositionTexture_ = std::make_unique<RenderTarget>(width, height);
+	distortionTexture_ = std::make_unique<RenderTarget>(width, height);
 
 	auto* const srvHeap = CbvSrvUavHeap::GetInstance();
-	srvHeap->BookingHeapPos(3u);
+	srvHeap->BookingHeapPos(4u);
 	srvHeap->CreateView(*colorTexture_);
 	srvHeap->CreateView(*normalTexture_);
 	srvHeap->CreateView(*worldPositionTexture_);
+	srvHeap->CreateView(*distortionTexture_);
 
 	deferredRendering_->SetColorHandle(colorTexture_->GetHandleGPU());
 	deferredRendering_->SetNormalHandle(normalTexture_->GetHandleGPU());
 	deferredRendering_->SetWoprldPositionHandle(worldPositionTexture_->GetHandleGPU());
+	deferredRendering_->SetDistortionHandle(distortionTexture_->GetHandleGPU());
 	deferredRenderingData_.isDirectionLight = 1;
 	deferredRenderingData_.environmentCoefficient = 0.2f;
 	deferredRenderingData_.directionLight.shinness = 42.0f;
@@ -124,6 +127,7 @@ RenderingManager::~RenderingManager()
 	srvHeap->ReleaseView(colorTexture_->GetHandleUINT());
 	srvHeap->ReleaseView(normalTexture_->GetHandleUINT());
 	srvHeap->ReleaseView(worldPositionTexture_->GetHandleUINT());
+	srvHeap->ReleaseView(distortionTexture_->GetHandleUINT());
 }
 
 void RenderingManager::Initialize() {
@@ -198,10 +202,11 @@ void RenderingManager::Draw() {
 	/// ====================================================================================
 
 	// 色、法線、ワールドポジション用レンダーターゲットをセット
-	std::array<RenderTarget*, 3> renderTargets;
+	std::array<RenderTarget*, 4> renderTargets;
 	renderTargets[0] = colorTexture_.get();
 	renderTargets[1] = normalTexture_.get();
 	renderTargets[2] = worldPositionTexture_.get();
+	renderTargets[3] = distortionTexture_.get();
 
 	RenderTarget::ResourceStateChangeRenderTargets(
 		renderTargets.data(),

@@ -29,7 +29,7 @@ void MeshShaderTest::Load(const std::string& fileName)
 			}
 	};
 
-	renderContextManager->LoadMesh(fileNames, 3);
+	renderContextManager->LoadMesh(fileNames, 4);
 
 	renderSet = renderContextManager->Get(fileNames);
 }

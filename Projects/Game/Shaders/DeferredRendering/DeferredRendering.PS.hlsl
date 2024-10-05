@@ -42,7 +42,7 @@ StructuredBuffer<PointLight> gPointLight : register(t0);
 Texture2D<float32_t4> gColorTexture : register(t1);
 Texture2D<float32_t4> gNormalTexture : register(t2);
 Texture2D<float32_t4> gWorldPositionTexture : register(t3);
-//TextureCube<float32_t4> gCubeTex : register(t4);
+Texture2D<float32_t4> gDistortionTexture : register(t4);
 
 // リニアサンプラー
 SamplerState gLinearSmp : register(s0);
@@ -120,9 +120,10 @@ float32_t3 SkyColor(float32_t3 gWorldPos, float32_t3 gNormal, float32_t3 cameraP
 }
 
 PixelShaderOutPut main(Output input) {
-    float32_t4 color = gColorTexture.Sample(gPointSmp, input.uv);
-    float32_t4 worldPosition = gWorldPositionTexture.Sample(gPointSmp, input.uv);
-    float32_t3 normal = gNormalTexture.Sample(gPointSmp, input.uv).xyz;
+    float32_t2 uvDistortion = gDistortionTexture.Sample(gPointSmp, input.uv).xy;
+    float32_t4 color = gColorTexture.Sample(gPointSmp, input.uv + uvDistortion);
+    float32_t4 worldPosition = gWorldPositionTexture.Sample(gPointSmp, input.uv + uvDistortion);
+    float32_t3 normal = gNormalTexture.Sample(gPointSmp, input.uv + uvDistortion).xyz;
     float32_t len = length(normal);
     normal = normalize(normal);
     PixelShaderOutPut outputColor;

@@ -8,9 +8,9 @@ struct Texture2DData {
 
 StructuredBuffer<Texture2DData> kTexture2DData : register(t6);
 
-PixelShaderOutPut3 main(MSOutput input)
+PixelShaderOutPut4 main(MSOutput input)
 {
-	PixelShaderOutPut3 output;
+	PixelShaderOutPut4 output;
 
     uint32_t textureID = kTexture2DData[input.instanceID].textureID;
 	
@@ -27,6 +27,8 @@ PixelShaderOutPut3 main(MSOutput input)
 
     // ポジション
     output.color2 = input.worldPosition;
+
+    output.color3 = 0;
     
 	return output;
 }

@@ -2,9 +2,9 @@
 #include "../PerlinNoise.hlsli"
 #include "../Normal.hlsli"
 
-PixelShaderOutPut3 main(GeometoryOutPut input)
+PixelShaderOutPut4 main(GeometoryOutPut input)
 {
-	PixelShaderOutPut3 output;
+	PixelShaderOutPut4 output;
 
     // お水の処理
 	const float32_t2 kRandomVec = kWaterData[input.instanceID].randomVec;
@@ -51,6 +51,10 @@ PixelShaderOutPut3 main(GeometoryOutPut input)
 
     // ポジション
     output.color2 = input.worldPosition;
+
+    output.color3 = 0;
+    output.color3.x = CreateNoise(input.uv + float32_t2(1.0f, 0.0f), kRandomVec, kDensity);
+    output.color3.y = CreateNoise(input.uv + float32_t2(0.0f, 1.0f), kRandomVec, kDensity);
 
     return output;
 }

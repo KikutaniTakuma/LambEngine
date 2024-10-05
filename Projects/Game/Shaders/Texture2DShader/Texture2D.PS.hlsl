@@ -1,8 +1,8 @@
 #include "Texture2D.hlsli"
 
-PixelShaderOutPut3 main(VertexShaderOutput input)
+PixelShaderOutPut4 main(VertexShaderOutput input)
 {
-	PixelShaderOutPut3 output;
+	PixelShaderOutPut4 output;
 
     uint32_t textureID = kTexture2DData[input.instanceID].textureID;
 	
@@ -19,6 +19,8 @@ PixelShaderOutPut3 main(VertexShaderOutput input)
 
     // ポジション
     output.color2 = input.worldPosition;
+
+    output.color3 = 0;
     
 	return output;
 }

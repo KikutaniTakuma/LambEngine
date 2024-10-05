@@ -35,13 +35,13 @@ void Model::Load(const std::string& fileName) {
 	// メッシュシェーダーが読み込む
 	if (Lamb::IsCanUseMeshShader()) {
 		// リソースとメッシュシェーダー読み込み
-		renderContextManager->LoadMesh(meshFileNames, 3);
+		renderContextManager->LoadMesh(meshFileNames, 4);
 		
 		meshRenderSet = renderContextManager->Get(meshFileNames);
 	}
 
 	// リソースとシェーダー読み込み
-	renderContextManager->Load(fileNames,3);
+	renderContextManager->Load(fileNames, 4);
 
 	renderSet = renderContextManager->Get(fileNames);
 }

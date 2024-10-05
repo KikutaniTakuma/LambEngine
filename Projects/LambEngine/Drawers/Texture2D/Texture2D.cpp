@@ -43,13 +43,13 @@ void Texture2D::Load()
 	// メッシュシェーダーが読み込む
 	if (Lamb::IsCanUseMeshShader()) {
 		// リソースとメッシュシェーダー読み込み
-		renderContextManager->LoadMesh<Texture2D::ShaderData, Texture2D::kMaxDrawCount>(kMeshFileNames_, 3);
+		renderContextManager->LoadMesh<Texture2D::ShaderData, Texture2D::kMaxDrawCount>(kMeshFileNames_, 4);
 
 		meshRenderSet = renderContextManager->Get(kMeshFileNames_);
 	}
 
 	// リソースとシェーダー読み込み
-	renderContextManager->Load<Texture2DRenderContext>(kFileNames_, 3);
+	renderContextManager->Load<Texture2DRenderContext>(kFileNames_, 4);
 
 	renderSet = renderContextManager->Get(kFileNames_);
 }

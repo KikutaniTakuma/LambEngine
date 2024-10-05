@@ -6,11 +6,11 @@ struct IsLighting {
 
 StructuredBuffer<IsLighting> gIsLighting : register(t6);
 
-PixelShaderOutPut3 main(MSOutput input)
+PixelShaderOutPut4 main(MSOutput input)
 {
 	float32_t4 textureColor = textures[input.textureID < 128 ? input.textureID : 0].Sample(smp, input.uv);
 
-	PixelShaderOutPut3 output;
+	PixelShaderOutPut4 output;
 	output.color0 = textureColor;
 
 	output.color0 = textureColor;
@@ -50,6 +50,8 @@ PixelShaderOutPut3 main(MSOutput input)
 
 	output.color2.xyz = input.worldPosition.xyz;
 	output.color2.w = 1.0f;
+
+	output.color3 = 0;
 
 	return output;
 }
