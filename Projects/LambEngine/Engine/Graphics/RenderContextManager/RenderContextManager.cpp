@@ -80,6 +80,7 @@ void RenderContextManager::SetIsNowThreading(bool isNowThreading) {
 		ResizeRenderList();
 
 		threadRenderData_.clear();
+		threadMeshRenderData_.clear();
 	}
 }
 
