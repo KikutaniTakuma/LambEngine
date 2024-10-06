@@ -121,6 +121,11 @@ float32_t3 SkyColor(float32_t3 gWorldPos, float32_t3 gNormal, float32_t3 cameraP
 
 PixelShaderOutPut main(Output input) {
     float32_t2 uvDistortion = gDistortionTexture.Sample(gPointSmp, input.uv).xy;
+    float32_t2 scrollDistortion = gDistortionTexture.Sample(gPointSmp, input.uv + uvDistortion).xy;
+    if(scrollDistortion.x == 0.0f && scrollDistortion.y == 0.0f) {
+        uvDistortion = 0;
+    }
+
     float32_t4 color = gColorTexture.Sample(gPointSmp, input.uv + uvDistortion);
     float32_t4 worldPosition = gWorldPositionTexture.Sample(gPointSmp, input.uv + uvDistortion);
     float32_t3 normal = gNormalTexture.Sample(gPointSmp, input.uv + uvDistortion).xyz;
