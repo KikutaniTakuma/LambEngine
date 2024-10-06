@@ -18,6 +18,14 @@ uint32_t GetVertexIndex(Meshlet m, uint32_t localIndex)
 	return gUniqueVertexIndices[localIndex];
 }
 
+struct Texture2DData {
+    float32_t4x4 uvTransform;
+    float32_t3 pad; // <- huh?
+    uint32_t textureID;
+};
+
+StructuredBuffer<Texture2DData> kTexture2DData : register(t6);
+
 [numthreads(128, 1, 1)]
 [outputtopology("triangle")]
 void main(
@@ -50,7 +58,10 @@ void main(
 		output.worldPosition = worldPos;
 
 		output.normal = input.normal;
-		output.uv = input.uv;
+
+		float32_t4 uv = float32_t4(input.uv, 0.0f, 1.0f);
+
+		output.uv = mul(uv, kTexture2DData[groupID].uvTransform).xy;
 		output.textureID = input.textureID;
 
 		verts[groupThreadID] = output;
