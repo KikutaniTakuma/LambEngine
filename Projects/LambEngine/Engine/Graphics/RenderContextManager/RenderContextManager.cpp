@@ -408,7 +408,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateMeshShaderGra
 	// 各shader固有のStructuredBuffer
 	rootPrams[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
 	rootPrams[9].Descriptor.ShaderRegister = 6;
-	rootPrams[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootPrams[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
 	// Textures
 	rootPrams[10].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
