@@ -564,17 +564,17 @@ public:
         shaderData_->gTransform.OnWright();
         colors_.OnWright();
         shaderStruct_.OnWright();
+        instanceCount_.OnWright();
 
         for (uint32_t i = 0; i < drawCount_; i++) {
             shaderData_->gTransform[i] = drawData_[i].wvpMatrix;
             shaderStruct_[i] = drawData_[i].shaderStruct;
             colors_[i] = drawData_[i].color;
         }
-
-        shaderStruct_.OffWright();
-        instanceCount_.OnWright();
         *instanceCount_ = drawCount_;
+
         instanceCount_.OffWright();
+        shaderStruct_.OffWright();
         colors_.OffWright();
         shaderData_->gTransform.OffWright();
     }
