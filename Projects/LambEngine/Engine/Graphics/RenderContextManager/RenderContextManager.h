@@ -34,56 +34,6 @@ private:
 
 
 public:
-	template<IsBasedRenderContext RenderContextType = RenderContext<>>
-	[[nodiscard]] RenderSet* const Create(const LoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
-		std::unique_ptr<RenderSet> renderSet = std::make_unique<RenderSet>();
-
-		Shader shader = LoadShader(fileNames.shaderName);
-
-		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader, numRenderTarget);
-
-		Lamb::SafePtr meshManager = VertexIndexDataManager::GetInstance();
-		meshManager->LoadModel(fileNames.resourceFileName);
-		VertexIndexData* mesh = meshManager->GetMesh(fileNames.resourceFileName);
-		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
-
-		for (uint32_t i = 0; i < BlendType::kNum; i++) {
-			std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();
-
-			renderContext->SetMesh(mesh);
-			renderContext->SetModelData(modelData);
-			renderContext->SetPipeline(pipelines[i]);
-			renderSet->Set(renderContext.release(), BlendType(i));
-		}
-
-		return renderSet.release();
-	}
-
-	template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
-	[[nodiscard]] RenderSet* const CreateSkinAnimationModel(const LoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
-		std::unique_ptr<RenderSet> renderSet = std::make_unique<RenderSet>();
-
-		Shader shader = LoadShader(fileNames.shaderName);
-
-		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader, numRenderTarget);
-
-		Lamb::SafePtr meshManager = VertexIndexDataManager::GetInstance();
-		meshManager->LoadModel(fileNames.resourceFileName);
-		VertexIndexData* mesh = meshManager->GetMesh(fileNames.resourceFileName);
-		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
-
-		for (uint32_t i = 0; i < BlendType::kNum; i++) {
-			std::unique_ptr<SkinRenderContext<T, bufferSize>> renderContext = std::make_unique<SkinRenderContext<T, bufferSize>>();
-
-			renderContext->SetMesh(mesh);
-			renderContext->SetModelData(modelData);
-			renderContext->SetPipeline(pipelines[i]);
-			renderSet->Set(renderContext.release(), BlendType(i));
-		}
-
-		return renderSet.release();
-	}
-
 	/// <summary>
 	/// 描画に必要なものをロードしてコンテナに追加(1度追加してたら追加しない)
 	/// </summary>
