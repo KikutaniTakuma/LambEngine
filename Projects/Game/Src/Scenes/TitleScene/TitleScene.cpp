@@ -196,7 +196,7 @@ void TitleScene::Update() {
     hudShadow_->color = 0xFFFFFFFFu - static_cast<uint32_t>(255.0f * (blinking_ / 0.8f));
     hudShadow_->scale = hudShadow_->GetTexSize() * (0.36f + 0.18f * blinking_);
 
-    if (!isSceneChange_ &&
+    /*if (!isSceneChange_ &&
         Input::GetInstance()->GetMouse()->Pushed(Mouse::Button::Left)) {
         isSceneChange_ = true;
         sceneChangeRotate_ = rotate_;
@@ -209,7 +209,7 @@ void TitleScene::Update() {
 
     if (isSceneChange_) {
         moveShipSE_->SetVolume(volumeEasing_->Get(moveShipSEVolume_.first, moveShipSEVolume_.second));
-    }
+    }*/
 
     #ifdef USE_DEBUG_CODE
     renderingManager_->Debug("RenderSetting");
