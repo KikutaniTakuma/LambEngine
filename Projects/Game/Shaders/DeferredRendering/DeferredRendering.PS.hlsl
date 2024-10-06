@@ -126,9 +126,12 @@ PixelShaderOutPut main(Output input) {
         uvDistortion = 0;
     }
 
-    float32_t4 color = gColorTexture.Sample(gPointSmp, input.uv + uvDistortion);
-    float32_t4 worldPosition = gWorldPositionTexture.Sample(gPointSmp, input.uv + uvDistortion);
-    float32_t3 normal = gNormalTexture.Sample(gPointSmp, input.uv + uvDistortion).xyz;
+    float32_t2 uv = input.uv + uvDistortion;
+    uv = clamp(uv, float32_t2(0.0f,0.0f), float32_t2(1.0f, 1.0f));
+
+    float32_t4 color = gColorTexture.Sample(gPointSmp, uv);
+    float32_t4 worldPosition = gWorldPositionTexture.Sample(gPointSmp, uv);
+    float32_t3 normal = gNormalTexture.Sample(gPointSmp, uv).xyz;
     float32_t len = length(normal);
     normal = normalize(normal);
     PixelShaderOutPut outputColor;
