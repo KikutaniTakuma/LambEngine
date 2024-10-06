@@ -35,13 +35,13 @@ void Model::Load(const std::string& fileName) {
 	// メッシュシェーダーが読み込む
 	if (Lamb::IsCanUseMeshShader()) {
 		// リソースとメッシュシェーダー読み込み
-		renderContextManager->LoadMesh(meshFileNames, 4);
+		renderContextManager->LoadMesh<uint32_t, kMaxDrawCount>(meshFileNames, 4);
 		
 		meshRenderSet = renderContextManager->Get(meshFileNames);
 	}
 
 	// リソースとシェーダー読み込み
-	renderContextManager->Load(fileNames, 4);
+	renderContextManager->Load<RenderContext<uint32_t, kMaxDrawCount>>(fileNames, 4);
 
 	renderSet = renderContextManager->Get(fileNames);
 }
@@ -59,7 +59,7 @@ void Model::Draw(
 
 	
 	if (isUseMeshShader_ and meshRenderSet) {
-		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<>>(blend);
+		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<uint32_t, kMaxDrawCount>>(blend);
 		if (blend == BlendType::kNone) {
 			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
 		}
@@ -68,7 +68,7 @@ void Model::Draw(
 		}
 	}
 	else {
-		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(blend);
+		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<uint32_t, kMaxDrawCount>>(blend);
 		if (blend == BlendType::kNone) {
 			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
 		}
@@ -86,7 +86,7 @@ void Model::Draw(const Data& data) {
 #endif // USE_DEBUG_CODE
 
 	if (isUseMeshShader_ and meshRenderSet) {
-		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<>>(data.blend);
+		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<uint32_t, kMaxDrawCount>>(data.blend);
 		if (data.blend == BlendType::kNone) {
 			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
 		}
@@ -95,7 +95,7 @@ void Model::Draw(const Data& data) {
 		}
 	}
 	else {
-		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<>>(data.blend);
+		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<uint32_t, kMaxDrawCount>>(data.blend);
 		if (data.blend == BlendType::kNone) {
 			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
 		}

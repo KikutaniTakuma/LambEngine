@@ -11,6 +11,8 @@
 
 #include "Drawers/Other/WaterTex2D/WaterTex2D.h"
 
+#include <array>
+
 class TitleScene : public BaseScene {
 public:
 	TitleScene();
@@ -82,4 +84,6 @@ private:
 	std::pair<float, float> moveShipSEVolume_;
 
 	WaterTex2D::WaveData waveData_;
+
+	std::unique_ptr<std::array<ModelInstance, 484>> corals_;
 };

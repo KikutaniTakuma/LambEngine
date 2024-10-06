@@ -6,6 +6,9 @@
 /// </summary>
 class Model : public BaseDrawer {
 public:
+	static constexpr uint32_t kMaxDrawCount = 512;
+
+public:
 	struct Data {
 		Mat4x4 worldMatrix = Mat4x4::kIdentity;
 		Mat4x4 camera = Mat4x4::kIdentity;

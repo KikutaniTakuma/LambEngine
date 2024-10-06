@@ -13,6 +13,8 @@
 #include <format>
 #endif // USE_DEBUG_CODE
 
+#include "Utils/Random.h"
+
 
 TitleScene::TitleScene() : BaseScene(BaseScene::ID::Title) {}
 
@@ -99,6 +101,45 @@ void TitleScene::Initialize() {
     renderingManager_->SetLightRotate(Vector3(0.0f, 90.0f, -1.0f) * Lamb::Math::toRadian<float>);
     renderingManager_->SetBloomKernelSize(128, 128);
     renderingManager_->SetEnvironmentCoefficient(0.3f);
+
+    corals_ = std::make_unique<std::array<ModelInstance, 484>>();
+
+    float32_t minScale = 8.0f;
+    float32_t maxScale = 13.0f;
+    float32_t maxScaleY = 10.0f;
+
+    float32_t offset = 13.0f;
+    size_t countX = 0;
+    size_t countY = 0;
+
+    float32_t posRandomMin = -4.0f;
+    float32_t posRandomMax = 4.0f;
+    std::array<uint32_t, 4> colorRandom = {
+        0x2DFF19E0,
+        0xDDFF19E0,
+        0xFF1919E0,
+        0xC919FFE0,
+    };
+
+    Vector2 startPos = Vector2(-143.0f, -143.0f);
+
+    for (auto& i : *corals_) {
+        i.Load("./Resources/Coral/21488_Tree_Coral_v2_NEW.obj");
+        i.blend = BlendType::kNone;
+        i.color = colorRandom[Lamb::Random(0llu, colorRandom.size() - 1)];
+        i.scale.y = Lamb::Random(minScale, maxScaleY);
+        i.scale.x = Lamb::Random(minScale, maxScale);
+        i.scale.z = Lamb::Random(minScale, maxScale);
+        i.pos.y = -8.0f;
+
+        i.pos.x = startPos.x + offset * static_cast<float32_t>(countX) + Lamb::Random(posRandomMin, posRandomMax);
+        i.pos.z = 100.0f + startPos.y + offset * static_cast<float32_t>(countY) + Lamb::Random(posRandomMin, posRandomMax);
+        countX++;
+        if (22_z <= countX) {
+            countX = 0;
+            countY++;
+        }
+    }
 }
 
 void TitleScene::Finalize() {
@@ -180,6 +221,10 @@ void TitleScene::Update() {
 
     volumeEasing_->Update();
     easing_->Update();
+
+    for (auto& i : *corals_) {
+        i.Update();
+    }
 }
 
 void TitleScene::Draw() {
@@ -200,4 +245,8 @@ void TitleScene::Draw() {
     //title_->Draw(currentCamera_->GetViewOthographics(), Pipeline::Normal, false);
 
     cursor_->Draw(staticCamera_->GetViewOthographics());
+
+    for (auto& i : *corals_) {
+        i.Draw(currentCamera_->GetViewProjection());
+    }
 }

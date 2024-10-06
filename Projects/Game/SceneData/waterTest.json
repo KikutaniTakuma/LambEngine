@@ -35,9 +35,9 @@
                 {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        0.03998926654458046,
+                        0.03998927026987076,
                         -0.0024979913141578436,
-                        0.00010000748443417251,
+                        0.00010000749171013013,
                         0.9991970062255859
                     ],
                     "scale": [
@@ -67,25 +67,25 @@
         {
             "Comps": [
                 {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
                     "BlendType": "kNone",
                     "CompName": "class ModelRenderDataComp",
                     "color": [
                         0.8774510025978088,
-                        0.1763504296541214,
-                        0.38255664706230164,
-                        1.0
+                        0.8774510025978088,
+                        0.8774510025978088,
+                        0.8774510025978088
                     ],
                     "fileName": "./Resources\\Coral\\21488_Tree_Coral_v2_NEW.obj",
                     "isDraw": true,
                     "isLighting": true
                 },
                 {
-                    "CompName": "class ModelRenderComp"
-                },
-                {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        -0.0,
+                        0.0,
                         0.0,
                         0.0,
                         1.0
@@ -98,7 +98,7 @@
                     "translate": [
                         0.08314979076385498,
                         -4.460693836212158,
-                        0.0
+                        8.0
                     ]
                 }
             ],
