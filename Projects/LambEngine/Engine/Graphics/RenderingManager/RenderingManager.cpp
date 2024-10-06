@@ -243,14 +243,14 @@ void RenderingManager::Draw() {
 		DrawSkyBox();
 	}
 
+	/// ====================================================================================
+	
 	RenderDataLists rgbaList = {
 		renderContextManager->CreateRenderList(BlendType::kNormal),
 		renderContextManager->CreateRenderList(BlendType::kAdd),
 		renderContextManager->CreateRenderList(BlendType::kSub),
 		renderContextManager->CreateRenderList(BlendType::kMul)
 	};
-
-	/// ====================================================================================
 
 	// ZSort(アルファ値付きなのでソート)
 	ZSrot(rgbaList);
