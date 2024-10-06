@@ -40,7 +40,7 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     
     float32_t3 lig = diffDirection + specDirection;
     lig += 0.2f;
-    output.color0.rgb = clamp(kColor[input.instanceID].color.rgb /** lig*/, float32_t3(0.0f,0.0f,0.0f), float32_t3(1.0f, 1.0f, 1.0f));
+    output.color0.rgb = clamp(kColor[input.instanceID].color.rgb * lig, float32_t3(0.0f,0.0f,0.0f), float32_t3(1.0f, 1.0f, 1.0f));
     
     // 色
     output.color0.w = kColor[input.instanceID].color.w;

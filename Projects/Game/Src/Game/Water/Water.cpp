@@ -37,7 +37,7 @@ void Water::Init() {
 	waterSurface_ = std::make_unique<WaterTex2D>();
 	waterSurface_->Load();
 
-	color_ = Vector4(0.1f, 0.25f, 0.75f, 1.0f).GetColorRGBA();
+	color_ = 0x16CEDA58;
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
@@ -82,8 +82,8 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 		edgeDivision_,
 		insideDivision_,
 		waveData_,
-		color_,
-		BlendType::kNone
+		color_.GetColorRGBA(),
+		BlendType::kNormal
 	);
 
 	drawTransform_.translate -= drawTransform_.scale * 0.5f;
@@ -95,8 +95,8 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 		edgeDivision_,
 		insideDivision_,
 		waveData_,
-		color_,
-		BlendType::kNone
+		color_.GetColorRGBA(),
+		BlendType::kNormal
 	);
 
 	drawTransform_.translate.x += drawTransform_.scale.x * 0.5f;
@@ -109,8 +109,8 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 		edgeDivision_,
 		insideDivision_,
 		waveData_,
-		color_,
-		BlendType::kNone
+		color_.GetColorRGBA(),
+		BlendType::kNormal
 	);
 
 	drawTransform_.translate.x -= drawTransform_.scale.x * 0.5f;
@@ -123,8 +123,8 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 		edgeDivision_,
 		insideDivision_,
 		waveData_,
-		color_,
-		BlendType::kNone
+		color_.GetColorRGBA(),
+		BlendType::kNormal
 	);
 }
 
@@ -132,6 +132,8 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef USE_DEBUG_CODE
 	ImGui::Begin(guiName.c_str());
 	ImGui::DragFloat("density", &density_, 0.01f);
+
+	ImGui::ColorEdit4("color", color_.data());
 
 	if (ImGui::TreeNode("Light")) {
 		lightRotate_ *= Lamb::Math::toDegree<float>;

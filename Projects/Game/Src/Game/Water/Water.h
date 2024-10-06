@@ -40,11 +40,11 @@ private:
 	std::unique_ptr<PeraRender> gaussianBlurWidth_;
 	std::unique_ptr<PeraRender> gaussianBlurHeight_;
 	std::unique_ptr<WaterTex2D> waterSurface_;
-	uint32_t color_ = 0u;
+	Vector4 color_ = 0u;
 	Vector2 randomVec_;
 	float32_t density_ = 1.0f;
-	int32_t edgeDivision_ = 64;
-	int32_t insideDivision_ = 64;
+	int32_t edgeDivision_ = 1;
+	int32_t insideDivision_ = 1;
 	WaterTex2D::WaveData waveData_;
 	Light light_;
 	float32_t lightScale_ = 0.0f;

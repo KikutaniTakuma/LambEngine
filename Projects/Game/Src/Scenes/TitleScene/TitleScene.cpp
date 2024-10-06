@@ -172,6 +172,7 @@ void TitleScene::Update() {
 
     #ifdef USE_DEBUG_CODE
     renderingManager_->Debug("RenderSetting");
+    water_->Debug("water");
     #endif // USE_DEBUG_CODE
     if (isSceneChange_ && sceneChangeRotateBasis_ <= (rotate_ - sceneChangeRotate_)) {
         SceneManager::GetInstance()->SceneChange(BaseScene::ID::StageSelect);
