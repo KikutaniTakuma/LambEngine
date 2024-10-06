@@ -53,8 +53,8 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     output.color2 = input.worldPosition;
 
     output.color3 = 0;
-    output.color3.x = CreateNoise(input.uv + float32_t2(1.0f, 0.0f), kRandomVec, kDensity);
-    output.color3.y = CreateNoise(input.uv + float32_t2(0.0f, 1.0f), kRandomVec, kDensity);
+    output.color3.x = CreateNoiseNoDdy(input.uv + float32_t2(1.0f, 0.0f), kRandomVec, kDensity) * 0.5f;
+    output.color3.x -= CreateNoiseNoDdy(input.uv - float32_t2(1.0f, 0.0f), kRandomVec, kDensity) * 0.5f;
 
     return output;
 }
