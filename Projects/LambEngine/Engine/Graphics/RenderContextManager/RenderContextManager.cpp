@@ -73,6 +73,12 @@ void RenderContextManager::SetIsNowThreading(bool isNowThreading) {
 			renderData_.insert(std::make_pair(i.first, i.second.release()));
 		}
 
+		for (auto& i : threadMeshRenderData_) {
+			meshRenderData_.insert(std::make_pair(i.first, i.second.release()));
+		}
+
+		ResizeRenderList();
+
 		threadRenderData_.clear();
 	}
 }
