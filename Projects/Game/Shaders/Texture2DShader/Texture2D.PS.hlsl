@@ -14,13 +14,13 @@ PixelShaderOutPut4 main(VertexShaderOutput input)
 	output.color0 = textureColor * kColor[input.instanceID].color;
 
     // 法線
-    output.color1.xyz = input.normal;
-    output.color1.w = 1.0f;
+    output.color2.xyz = input.normal;
+    output.color2.w = 1.0f;
 
     // ポジション
-    output.color2 = input.worldPosition;
+    output.color3 = input.worldPosition;
 
-    output.color3 = 0;
+    output.color1 = 0;
     
 	return output;
 }

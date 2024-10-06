@@ -226,6 +226,9 @@
     <ClCompile Include="Engine\Graphics\VertexIndexDataManager\VertexIndexDataManager.cpp">
       <Filter>Engine\Graphics\VertexIndexDataManager</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\Distortion\Distortion.cpp">
+      <Filter>Engine\Graphics\PipelineObject\Distortion</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -422,6 +425,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\VertexIndexDataManager">
       <UniqueIdentifier>{527d72cc-4ef5-411b-b4d5-7174fb3ab935}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject\Distortion">
+      <UniqueIdentifier>{ecfce8a0-b714-48c7-9970-25b8dd5ed69d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -700,6 +706,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\VertexIndexDataManager\VertexIndexDataManager.h">
       <Filter>Engine\Graphics\VertexIndexDataManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\Distortion\Distortion.h">
+      <Filter>Engine\Graphics\PipelineObject\Distortion</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

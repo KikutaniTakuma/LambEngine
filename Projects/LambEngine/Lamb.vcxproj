@@ -212,6 +212,7 @@
     <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\DeferredRendering\DeferredRendering.cpp" />
+    <ClCompile Include="Engine\Graphics\PipelineObject\Distortion\Distortion.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\GaussianBlur\GaussianBlur.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\Luminate\Luminate.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineObject\Outline\Outline.cpp" />
@@ -296,6 +297,7 @@
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\DeferredRendering\DeferredRendering.h" />
+    <ClInclude Include="Engine\Graphics\PipelineObject\Distortion\Distortion.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\GaussianBlur\GaussianBlur.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\Luminate\Luminate.h" />
     <ClInclude Include="Engine\Graphics\PipelineObject\Outline\Outline.h" />

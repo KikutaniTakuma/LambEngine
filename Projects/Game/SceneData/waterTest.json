@@ -1,0 +1,109 @@
+{
+    "RederingSetting": {
+        "bloom": {
+            "luminanceThreshold": 1.0,
+            "x": 128,
+            "y": 128
+        },
+        "hsv": [
+            0.0,
+            0.0,
+            1.0
+        ],
+        "isDirectionLight": true,
+        "lightRotate": [
+            0.0,
+            4.8869218826293945,
+            -3.0892326831817627
+        ],
+        "outline": 0.0,
+        "outline_enable": false,
+        "skybox": {
+            "environment": 0.0,
+            "environmentCoefficient": 0.0,
+            "isDraw": true,
+            "scale": [
+                500.0,
+                500.0,
+                500.0
+            ]
+        }
+    },
+    "objects": [
+        {
+            "Comps": [
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.03998926654458046,
+                        -0.0024979913141578436,
+                        0.00010000748443417251,
+                        0.9991970062255859
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        0.25197720527648926,
+                        3.1222856044769287,
+                        -16.869678497314453
+                    ]
+                },
+                {
+                    "CompName": "class CameraComp"
+                },
+                {
+                    "CompName": "class Camera3DComp",
+                    "aspectRatio": 1.7777777910232544,
+                    "farClip": 1000.0,
+                    "fov": 0.4869273006916046,
+                    "nearClip": 0.10000000149011612
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        0.8774510025978088,
+                        0.1763504296541214,
+                        0.38255664706230164,
+                        1.0
+                    ],
+                    "fileName": "./Resources\\Coral\\21488_Tree_Coral_v2_NEW.obj",
+                    "isDraw": true,
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        10.0,
+                        10.0,
+                        10.0
+                    ],
+                    "translate": [
+                        0.08314979076385498,
+                        -4.460693836212158,
+                        0.0
+                    ]
+                }
+            ],
+            "type": "Object"
+        }
+    ],
+    "scene": "waterTest"
+}

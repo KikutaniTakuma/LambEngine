@@ -47,7 +47,7 @@ Texture2D<float32_t4> gDistortionTexture : register(t4);
 // リニアサンプラー
 SamplerState gLinearSmp : register(s0);
 // ポイントサンプラー
-SamplerState gPointSmp : register(s01);
+SamplerState gPointSmp : register(s1);
 
 float32_t3 SkyColor(float32_t3 gWorldPos, float32_t3 gNormal, float32_t3 cameraPos){
     const float32_t g = gAtmosphericParams.mieG;

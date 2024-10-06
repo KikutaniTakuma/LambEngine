@@ -46,15 +46,17 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     output.color0.w = kColor[input.instanceID].color.w;
 
     // 法線
-    output.color1.xyz = blendNormal;
-    output.color1.w = 1.0f;
+    output.color2.xyz = blendNormal;
+    output.color2.w = 1.0f;
 
     // ポジション
-    output.color2 = input.worldPosition;
+    output.color3 = input.worldPosition;
 
-    output.color3 = 0;
-    output.color3.x = CreateNoiseNoDdy(input.uv + float32_t2(1.0f, 0.0f), kRandomVec, kDensity) * 0.5f;
-    output.color3.x -= CreateNoiseNoDdy(input.uv - float32_t2(1.0f, 0.0f), kRandomVec, kDensity) * 0.5f;
+    output.color1.x = CreateNoiseNoDdy(input.uv + float32_t2(1.0f, 0.0f), kRandomVec, kDensity) * 0.5f;
+    output.color1.x -= CreateNoiseNoDdy(input.uv - float32_t2(1.0f, 0.0f), kRandomVec, kDensity) * 0.5f;
+    output.color1.y = 0;
+    output.color1.z = 0;
+    output.color1.w = 1.0f;
 
     return output;
 }

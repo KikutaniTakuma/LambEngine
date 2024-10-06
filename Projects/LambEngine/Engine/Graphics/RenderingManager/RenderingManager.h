@@ -105,6 +105,9 @@ private:
 	// 歪み書き込み用オフスクリーン
 	std::unique_ptr<RenderTarget> distortionTexture_;
 
+	// 歪み書き込み用オフスクリーン(アルファ値付きの歪みを書き込む)
+	std::unique_ptr<RenderTarget> distortionTextureRGBA_;
+
 	// ライティング後のrgbaテクスチャを描画
 	std::unique_ptr<PeraRender> rgbaTexture_;
 	Vector3 hsv_;

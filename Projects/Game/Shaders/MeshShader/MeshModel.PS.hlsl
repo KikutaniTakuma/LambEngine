@@ -45,13 +45,13 @@ PixelShaderOutPut4 main(MSOutput input)
 	}
 	output.color0 *= gColor[input.instanceID].color;
 
-	output.color1.xyz = input.normal;
-	output.color1.w = 1.0f;
-
-	output.color2.xyz = input.worldPosition.xyz;
+	output.color2.xyz = input.normal;
 	output.color2.w = 1.0f;
 
-	output.color3 = 0;
+	output.color3.xyz = input.worldPosition.xyz;
+	output.color3.w = 1.0f;
+
+	output.color1 = 0;
 
 	return output;
 }

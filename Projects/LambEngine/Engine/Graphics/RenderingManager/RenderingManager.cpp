@@ -17,6 +17,9 @@
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
 #include "Utils/HSV.h"
 
+
+#include "Engine/Graphics/PipelineObject/Distortion/Distortion.h"
+
 #ifdef USE_DEBUG_CODE
 #include "imgui.h"
 #endif // USE_DEBUG_CODE
@@ -35,13 +38,15 @@ RenderingManager::RenderingManager() {
 	colorTexture_ = std::make_unique<RenderTarget>(width, height);
 	worldPositionTexture_ = std::make_unique<RenderTarget>(width, height);
 	distortionTexture_ = std::make_unique<RenderTarget>(width, height);
+	distortionTextureRGBA_ = std::make_unique<RenderTarget>(width, height);
 
 	auto* const srvHeap = CbvSrvUavHeap::GetInstance();
-	srvHeap->BookingHeapPos(4u);
+	srvHeap->BookingHeapPos(5u);
 	srvHeap->CreateView(*colorTexture_);
 	srvHeap->CreateView(*normalTexture_);
 	srvHeap->CreateView(*worldPositionTexture_);
 	srvHeap->CreateView(*distortionTexture_);
+	srvHeap->CreateView(*distortionTextureRGBA_);
 
 	deferredRendering_->SetColorHandle(colorTexture_->GetHandleGPU());
 	deferredRendering_->SetNormalHandle(normalTexture_->GetHandleGPU());
@@ -58,12 +63,12 @@ RenderingManager::RenderingManager() {
 	srvHeap->CreateView(*depthStencil_);
 
 
+	auto distortion = std::make_unique<Distortion>();
+	distortion->Init();
+	distortion->SetDistortionTexHandle(distortionTextureRGBA_->GetHandleGPU());
+
 	rgbaTexture_ = std::make_unique<PeraRender>();
-	rgbaTexture_->Initialize("./Shaders/PostShader/PostNone2.PS.hlsl", {
-			DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
-			DXGI_FORMAT_R32G32B32A32_FLOAT
-		}
-	);
+	rgbaTexture_->Initialize(distortion.release());
 	Vector4 rgba = rgbaTexture_->color;
 	hsv_ = RGBToHSV({ rgba.color.r,rgba.color.g,rgba.color.b });
 
@@ -128,6 +133,7 @@ RenderingManager::~RenderingManager()
 	srvHeap->ReleaseView(normalTexture_->GetHandleUINT());
 	srvHeap->ReleaseView(worldPositionTexture_->GetHandleUINT());
 	srvHeap->ReleaseView(distortionTexture_->GetHandleUINT());
+	srvHeap->ReleaseView(distortionTextureRGBA_->GetHandleUINT());
 }
 
 void RenderingManager::Initialize() {
@@ -201,12 +207,12 @@ void RenderingManager::Draw() {
 
 	/// ====================================================================================
 
-	// 色、法線、ワールドポジション用レンダーターゲットをセット
+	// 色、歪み、法線、ワールドポジション用レンダーターゲットをセット
 	std::array<RenderTarget*, 4> renderTargets;
 	renderTargets[0] = colorTexture_.get();
-	renderTargets[1] = normalTexture_.get();
-	renderTargets[2] = worldPositionTexture_.get();
-	renderTargets[3] = distortionTexture_.get();
+	renderTargets[1] = distortionTexture_.get();
+	renderTargets[2] = normalTexture_.get();
+	renderTargets[3] = worldPositionTexture_.get();
 
 	RenderTarget::ResourceStateChangeRenderTargets(
 		renderTargets.data(),
@@ -256,8 +262,9 @@ void RenderingManager::Draw() {
 	ZSrot(rgbaList);
 
 	// 色書き込み用のレンダーターゲットをセット
-	std::array<RenderTarget*, 1> rgbaTextureRenderTarget = {
-		&(rgbaTexture_->GetRender())
+	std::array<RenderTarget*, 2> rgbaTextureRenderTarget = {
+		&(rgbaTexture_->GetRender()),
+		(distortionTextureRGBA_.get()),
 	};
 	RenderTarget::ResourceStateChangeRenderTargets(
 		rgbaTextureRenderTarget.data(),

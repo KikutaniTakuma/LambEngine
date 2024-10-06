@@ -12,7 +12,7 @@ TestScene::TestScene():
 void TestScene::Load()
 {
 	objectManager_ = ObjectManager::GetInstance();
-	objectManager_->Load("./SceneData/MeshShaderDrawTest.json");
+	objectManager_->Load("./SceneData/waterTest.json");
 }
 
 void TestScene::Initialize() {
