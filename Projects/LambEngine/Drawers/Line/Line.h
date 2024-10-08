@@ -38,8 +38,8 @@ private:
 	static Lamb::SafePtr<class Pipeline> depthPipeline_;
 	static Lamb::SafePtr<class Pipeline> nodepthPipeline_;
 
-	static std::unique_ptr<StructuredBuffer<VertxData>> depthVertData_;
-	static std::unique_ptr<StructuredBuffer<VertxData>> nodepthVertData_;
+	static std::array<std::unique_ptr<StructuredBuffer<VertxData>>, DirectXSwapChain::kBackBufferNumber> depthVertData_;
+	static std::array<std::unique_ptr<StructuredBuffer<VertxData>>, DirectXSwapChain::kBackBufferNumber> nodepthVertData_;
 
 public:
 	Line();

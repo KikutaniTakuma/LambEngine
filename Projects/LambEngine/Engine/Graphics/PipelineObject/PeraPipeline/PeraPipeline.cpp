@@ -9,7 +9,7 @@
 #include "Utils/EngineInfo.h"
 
 void PeraPipeline::Update() {
-	*colorBuf_ = color;
+	**colorBuf_[Lamb::GetBufferINdex()] = color;
 }
 
 void PeraPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -22,7 +22,7 @@ void PeraPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootDescriptorTable(1, colorBuf_.GetHandleGPU());
+	commandList->SetGraphicsRootConstantBufferView(1, colorBuf_[Lamb::GetBufferINdex()]->GetGPUVtlAdrs());
 }
 
 void PeraPipeline::Init(
@@ -49,11 +49,6 @@ void PeraPipeline::Init(
 	renderRange[0].NumDescriptors = 1;
 	renderRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
-	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 1;
-	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	std::array<D3D12_ROOT_PARAMETER, 2> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -61,10 +56,9 @@ void PeraPipeline::Init(
 	rootParameter[0].DescriptorTable.pDescriptorRanges = renderRange.data();
 	rootParameter[0].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(renderRange.size());
 
-	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[1].DescriptorTable.pDescriptorRanges = cbvRange.data();
-	rootParameter[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
+	rootParameter[1].Descriptor.ShaderRegister = 0;
 
 	RootSignature::Desc desc;
 	desc.rootParameter = rootParameter.data();
@@ -108,15 +102,29 @@ void PeraPipeline::Init(
 
 
 	auto* const srvHeap = CbvSrvUavHeap::GetInstance();
-	srvHeap->BookingHeapPos(2u);
+	srvHeap->BookingHeapPos(1u);
 	srvHeap->CreateView(*render_);
-	srvHeap->CreateView(colorBuf_);
+
+	std::for_each(
+		colorBuf_.begin(),
+		colorBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<Vector4>>();
+		}
+	);
 }
 
 PeraPipeline::~PeraPipeline() {
 	if (render_) {
 		auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 		srvHeap->ReleaseView(render_->GetHandleUINT());
-		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
 	}
+
+	std::for_each(
+		colorBuf_.begin(),
+		colorBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
 }

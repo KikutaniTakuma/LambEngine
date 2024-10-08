@@ -19,11 +19,20 @@
 void Outline::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
-		ImGui::DragFloat("weight", &(outlineData_->weight), 0.01f, 0.0f, 1000.0f);
+		ImGui::DragFloat("weight", &weight_, 0.01f, 0.0f, 1000.0f);
 		ImGui::TreePop();
 	}
 #endif // USE_DEBUG_CODE
 
+}
+
+void Outline::SetWeight(float32_t weight)
+{
+	weight_ = weight;
+}
+
+void Outline::SetProjectionInverse(const float32_t4x4& projectionInverse) {
+		(**(outlineData_[Lamb::GetBufferINdex()])).projectionInverse = projectionInverse;
 }
 
 void Outline::ChangeDepthBufferState()
@@ -33,7 +42,8 @@ void Outline::ChangeDepthBufferState()
 }
 
 void Outline::Update() {
-	*colorBuf_ = color;
+	*(*colorBuf_[Lamb::GetBufferINdex()]) = color;
+	(*outlineData_[Lamb::GetBufferINdex()])->weight = weight_;
 }
 
 void Outline::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -48,7 +58,7 @@ void Outline::Use(Pipeline::Blend blendType, bool isDepth) {
 	auto& depth = RenderingManager::GetInstance()->GetDepthBuffer();
 
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootDescriptorTable(1, colorBuf_.GetHandleGPU());
+	commandList->SetGraphicsRootConstantBufferView(1, colorBuf_[Lamb::GetBufferINdex()]->GetGPUVtlAdrs());
 	commandList->SetGraphicsRootDescriptorTable(2, depth.GetTex()->GetHandleGPU());
 }
 

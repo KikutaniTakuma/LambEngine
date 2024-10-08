@@ -68,17 +68,20 @@ void AirSkyBox::Load() {
     vertexView_.StrideInBytes = static_cast<uint32_t>(sizeof(Vector4));
     vertexView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 
-
-    shaderData_ = std::make_unique<ConstantBuffer<ShaderData>>();
-    atmosphericParams_ = std::make_unique<ConstantBuffer<AtmosphericParams>>();
+    std::for_each(shaderData_.begin(), shaderData_.end(), [](auto& n) {
+        n = std::make_unique<ConstantBuffer<ShaderData>>();
+        });
+    std::for_each(atmosphericParams_.begin(), atmosphericParams_.end(), [](auto& n) {
+        n = std::make_unique<ConstantBuffer<AtmosphericParams>>();
+        });
 
     CreateGraphicsPipeline();
 }
 
 void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color) {
-    (*shaderData_)->worldMat = worldMat;
-    (*shaderData_)->viewProjectionMat = cameraMat;
-    (*shaderData_)->color = color;
+    (*shaderData_[Lamb::GetBufferINdex()])->worldMat = worldMat;
+    (*shaderData_[Lamb::GetBufferINdex()])->viewProjectionMat = cameraMat;
+    (*shaderData_[Lamb::GetBufferINdex()])->color = color;
 
     // コマンドリスト
     ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
@@ -87,8 +90,8 @@ void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t c
     pipeline_->Use();
 
     // ライト構造体
-    commandlist->SetGraphicsRootConstantBufferView(0, shaderData_->GetGPUVtlAdrs());
-    commandlist->SetGraphicsRootConstantBufferView(1, atmosphericParams_->GetGPUVtlAdrs());
+    commandlist->SetGraphicsRootConstantBufferView(0, shaderData_[Lamb::GetBufferINdex()]->GetGPUVtlAdrs());
+    commandlist->SetGraphicsRootConstantBufferView(1, atmosphericParams_[Lamb::GetBufferINdex()]->GetGPUVtlAdrs());
 
     // 頂点バッファセット
     commandlist->IASetVertexBuffers(0, 1, &vertexView_);
@@ -100,7 +103,7 @@ void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t c
 
 void AirSkyBox::SetAtmosphericParams(const AtmosphericParams& atmosphericParams)
 {
-    **atmosphericParams_ = atmosphericParams;
+    **(atmosphericParams_[Lamb::GetBufferINdex()]) = atmosphericParams;
 }
 
 void AirSkyBox::CreateGraphicsPipeline() {

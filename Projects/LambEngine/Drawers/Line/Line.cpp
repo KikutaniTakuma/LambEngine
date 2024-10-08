@@ -7,13 +7,15 @@
 #include "imgui.h"
 #include <numbers>
 
+#include "Utils/EngineInfo.h"
+
 uint32_t Line::nodepthDrawCount_ = 0u;
 uint32_t Line::depthDrawCount_ = 0u;
 Shader Line::shader_ = {};
 Lamb::SafePtr<class Pipeline> Line::depthPipeline_ = nullptr;
 Lamb::SafePtr<Pipeline> Line::nodepthPipeline_ = nullptr;
-std::unique_ptr<StructuredBuffer<Line::VertxData>> Line::nodepthVertData_;
-std::unique_ptr<StructuredBuffer<Line::VertxData>> Line::depthVertData_;
+std::array<std::unique_ptr<StructuredBuffer<Line::VertxData>>, DirectXSwapChain::kBackBufferNumber> Line::nodepthVertData_;
+std::array<std::unique_ptr<StructuredBuffer<Line::VertxData>>, DirectXSwapChain::kBackBufferNumber> Line::depthVertData_;
 
 void Line::Initialize() {
 	Lamb::SafePtr shaderManager = ShaderManager::GetInstance();
@@ -62,26 +64,53 @@ void Line::Initialize() {
 
 	pipelineManager->StateReset();
 
-	nodepthVertData_ = std::make_unique<StructuredBuffer<VertxData>>();
-	nodepthVertData_->Create(Line::kDrawMaxNumber_);
-	depthVertData_ = std::make_unique<StructuredBuffer<VertxData>>();
-	depthVertData_->Create(Line::kDrawMaxNumber_);
+	std::for_each(
+		nodepthVertData_.begin(), 
+		nodepthVertData_.end(), 
+		[](auto& n) {
+			n = std::make_unique<StructuredBuffer<VertxData>>(); 
+			n->Create(Line::kDrawMaxNumber_);
+		}
+	);
+	std::for_each(
+		depthVertData_.begin(),
+		depthVertData_.end(),
+		[](auto& n) {
+			n = std::make_unique<StructuredBuffer<VertxData>>();
+			n->Create(Line::kDrawMaxNumber_);
+		}
+	);
 
 	Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-	heap->BookingHeapPos(2);
-	heap->CreateView(*nodepthVertData_);
-	heap->CreateView(*depthVertData_);
+
+	for (uint32_t i = 0; i < DirectXSwapChain::kBackBufferNumber; ++i) {
+		heap->BookingHeapPos(DirectXSwapChain::kBackBufferNumber);
+		heap->CreateView(*nodepthVertData_[i]);
+		heap->CreateView(*depthVertData_[i]);
+	}
 }
 
 void Line::Finalize() {
-	if (not (nodepthVertData_ and depthVertData_)) {
-		return;
-	}
 	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
-	heap->ReleaseView(nodepthVertData_->GetHandleUINT());
-	heap->ReleaseView(depthVertData_->GetHandleUINT());
-	nodepthVertData_.reset();
-	depthVertData_.reset();
+	for (uint32_t i = 0; i < DirectXSwapChain::kBackBufferNumber; ++i) {
+		heap->BookingHeapPos(DirectXSwapChain::kBackBufferNumber);
+		heap->ReleaseView(nodepthVertData_[i]->GetHandleUINT());
+		heap->ReleaseView(depthVertData_[i]->GetHandleUINT());
+	}
+	std::for_each(
+		nodepthVertData_.begin(),
+		nodepthVertData_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
+	std::for_each(
+		depthVertData_.begin(),
+		depthVertData_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
 }
 
 void Line::AllDraw(bool isDepth) {
@@ -92,7 +121,7 @@ void Line::AllDraw(bool isDepth) {
 		
 		depthPipeline_->Use();
 		Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-		heap->Use(depthVertData_->GetHandleUINT(), 0);
+		heap->Use(depthVertData_[Lamb::GetBufferINdex()]->GetHandleUINT(), 0);
 		auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 		commandList->DrawInstanced(kVertexNum, depthDrawCount_, 0, 0);
 
@@ -105,7 +134,7 @@ void Line::AllDraw(bool isDepth) {
 
 		nodepthPipeline_->Use();
 		Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-		heap->Use(nodepthVertData_->GetHandleUINT(), 0);
+		heap->Use(nodepthVertData_[Lamb::GetBufferINdex()]->GetHandleUINT(), 0);
 		auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 		commandList->DrawInstanced(kVertexNum, nodepthDrawCount_, 0, 0);
 
@@ -137,14 +166,14 @@ void Line::Draw(const Mat4x4& viewProjection, bool isDepth) {
 
 		auto&& colorFloat = UintToVector4(color);
 
-		(*depthVertData_)[depthDrawCount_].color = colorFloat;
+		(*depthVertData_[Lamb::GetBufferINdex()])[depthDrawCount_].color = colorFloat;
 
 		Vector3 scale;
 		scale.x = (end - start).Length();
 		Vector3 to = (end - start).Normalize();
 		Vector3 translate = start;
 
-		(*depthVertData_)[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+		(*depthVertData_[Lamb::GetBufferINdex()])[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
 		depthDrawCount_++;
 	}
@@ -156,14 +185,14 @@ void Line::Draw(const Mat4x4& viewProjection, bool isDepth) {
 
 		auto&& colorFloat = UintToVector4(color);
 
-		(*nodepthVertData_)[nodepthDrawCount_].color = colorFloat;
+		(*nodepthVertData_[Lamb::GetBufferINdex()])[nodepthDrawCount_].color = colorFloat;
 
 		Vector3 scale;
 		scale.x = (end - start).Length();
 		Vector3 to = (end - start).Normalize();
 		Vector3 translate = start;
 
-		(*nodepthVertData_)[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+		(*nodepthVertData_[Lamb::GetBufferINdex()])[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
 		nodepthDrawCount_++;
 	}
@@ -184,14 +213,14 @@ void Line::Draw(
 
 		auto&& colorFloat = UintToVector4(color);
 
-		(*depthVertData_)[depthDrawCount_].color = colorFloat;
+		(*depthVertData_[Lamb::GetBufferINdex()])[depthDrawCount_].color = colorFloat;
 
 		Vector3 scale;
 		scale.x = (end - start).Length();
 		Vector3 to = (end - start).Normalize();
 		Vector3 translate = start;
 
-		(*depthVertData_)[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+		(*depthVertData_[Lamb::GetBufferINdex()])[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
 		depthDrawCount_++;
 	}
@@ -203,14 +232,14 @@ void Line::Draw(
 
 		auto&& colorFloat = UintToVector4(color);
 
-		(*nodepthVertData_)[nodepthDrawCount_].color = colorFloat;
+		(*nodepthVertData_[Lamb::GetBufferINdex()])[nodepthDrawCount_].color = colorFloat;
 
 		Vector3 scale;
 		scale.x = (end - start).Length();
 		Vector3 to = (end - start).Normalize();
 		Vector3 translate = start;
 
-		(*nodepthVertData_)[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+		(*nodepthVertData_[Lamb::GetBufferINdex()])[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
 		nodepthDrawCount_++;
 	}

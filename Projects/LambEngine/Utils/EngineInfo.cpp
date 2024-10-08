@@ -34,10 +34,6 @@ namespace Lamb {
 	bool IsCanUseMeshShader() {
 		return DirectXDevice::GetInstance()->GetIsCanUseMeshShader();
 	}
-	constexpr uint32_t GetBackBufferNum()
-	{
-		return DirectXSwapChain::kBackBufferNumber;
-	}
 
 	uint32_t GetBufferINdex()
 	{
