@@ -43,6 +43,8 @@
 
 #include "Drawers/DrawerManager.h"
 
+#include "Utils/EngineInfo.h"
+
 
 
 #ifdef USE_DEBUG_CODE
@@ -321,12 +323,17 @@ void Engine::InitializeDirectXDevice() {
 /// 
 
 void Engine::InitializeDirectXCommand() {
-	directXCommand_ = new DirectXCommand();
+	std::for_each(directXCommands_.begin(), directXCommands_.end(), [](auto& command) { command = std::make_unique<DirectXCommand>(); });
 }
 
 void Engine::FinalizeDirectXCommand()
 {
-	Lamb::SafeDelete(directXCommand_);
+	std::for_each(directXCommands_.begin(), directXCommands_.end(), [](auto& command) { command.reset(); });
+}
+
+DirectXCommand* const Engine::GetMainCommandlist() const
+{
+	return directXCommands_[Lamb::GetBufferINdex()].get();
 }
 
 

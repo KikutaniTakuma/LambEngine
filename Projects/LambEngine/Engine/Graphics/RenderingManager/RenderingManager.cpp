@@ -152,6 +152,47 @@ Lamb::SafePtr<RenderingManager> const RenderingManager::GetInstance()
 void RenderingManager::FrameStart()
 {
 	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
+	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
+	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
+	if (isFirstFrame_) {
+
+		ImGuiManager::GetInstance()->End();
+
+		directXSwapChain->ChangeBackBufferState();
+
+		// コマンドリストを確定させる
+		directXCommand->CloseCommandlist();
+
+		// GPUにコマンドリストの実行を行わせる
+		directXCommand->ExecuteCommandLists();
+	}
+
+	bufferIndex_++;
+	if (DirectXSwapChain::kBackBufferNumber <= bufferIndex_) {
+		bufferIndex_ = 0;
+	}
+}
+
+void RenderingManager::FrameEnd()
+{
+	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
+	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
+	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
+
+	if (isFirstFrame_) {
+		// GPUとOSに画面の交換を行うように通知する
+		directXSwapChain->SwapChainPresent();
+
+		stringOutPutManager->GmemoryCommit();
+
+		directXCommand->WaitForFinishCommnadlist();
+
+		directXCommand->ResetCommandlist();
+	}
+	else {
+		isFirstFrame_ = true;
+	}
+
 	directXSwapChain->ChangeBackBufferState();
 	RtvHeap::GetInstance()->SetMainRtv(&depthStencil_->GetDepthHandle());
 	depthStencil_->Clear();
@@ -165,32 +206,6 @@ void RenderingManager::FrameStart()
 	const Lamb::SafePtr cbvSrvUavDescriptorHeap = CbvSrvUavHeap::GetInstance();
 	std::array heapPtrs = { cbvSrvUavDescriptorHeap->Get() };
 	DescriptorHeap::SetHeaps(heapPtrs.size(), heapPtrs.data());
-}
-
-void RenderingManager::FrameEnd()
-{
-	ImGuiManager::GetInstance()->End();
-	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
-	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
-	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
-
-	directXSwapChain->ChangeBackBufferState();
-
-	// コマンドリストを確定させる
-	directXCommand->CloseCommandlist();
-
-	// GPUにコマンドリストの実行を行わせる
-	directXCommand->ExecuteCommandLists();
-
-
-	// GPUとOSに画面の交換を行うように通知する
-	directXSwapChain->SwapChainPresent();
-
-	stringOutPutManager->GmemoryCommit();
-
-	directXCommand->WaitForFinishCommnadlist();
-
-	directXCommand->ResetCommandlist();
 }
 
 void RenderingManager::Draw() {
@@ -565,6 +580,11 @@ void RenderingManager::SetIsUseMeshShader(bool isUseMesh) {
 bool RenderingManager::GetIsUseMeshShader() const
 {
 	return isUseMesh_;
+}
+
+uint32_t RenderingManager::GetBufferIndex() const
+{
+	return bufferIndex_;
 }
 
 void RenderingManager::DrawRGB(std::pair<size_t, const std::list<RenderData*>&> renderList) {

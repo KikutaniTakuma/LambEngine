@@ -66,6 +66,8 @@ public:
 
 	bool GetIsUseMeshShader() const;
 
+	uint32_t GetBufferIndex()const;
+
 private:
 	// アルファ値がないものを描画
 	void DrawRGB(std::pair<size_t, const std::list<RenderData*>&> renderList);
@@ -161,4 +163,9 @@ private:
 
 
 	bool isUseMesh_ = false;
+
+
+	bool isFirstFrame_ = false;
+
+	uint32_t bufferIndex_ = 0;
 };

@@ -62,10 +62,10 @@ public:
 	}
 
 public:
-	static constexpr uint32_t kBackBufferNumber_ = 2u;
+	static constexpr uint32_t kBackBufferNumber = 2u;
 
 private:
 	Lamb::LambPtr<IDXGISwapChain4> swapChain_;
-	std::array<Lamb::LambPtr<ID3D12Resource>, kBackBufferNumber_> swapChainResource_;
+	std::array<Lamb::LambPtr<ID3D12Resource>, kBackBufferNumber> swapChainResource_;
 	bool isRenderState_;
 };

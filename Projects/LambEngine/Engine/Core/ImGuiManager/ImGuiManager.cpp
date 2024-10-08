@@ -58,7 +58,7 @@ ImGuiManager::ImGuiManager() {
 	ImGui_ImplWin32_Init(WindowFactory::GetInstance()->GetHwnd());
 	ImGui_ImplDX12_Init(
 		device.get(),
-		DirectXSwapChain::kBackBufferNumber_,
+		DirectXSwapChain::kBackBufferNumber,
 		rtvDesc.Format,
 		descriptorHeap->Get(),
 		descriptorHeap->GetCpuHeapHandle(useHandle),

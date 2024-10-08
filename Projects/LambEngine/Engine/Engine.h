@@ -4,6 +4,8 @@
 
 #include "EngineUtils/LambPtr/LambPtr.h"
 
+#include "Core/DirectXCommand/DirectXCommand.h"
+#include "Core/DirectXSwapChain/DirectXSwapChain.h"
 #include <string>
 #include <memory>
 #include <unordered_map>
@@ -99,12 +101,10 @@ private:
 	void FinalizeDirectXCommand();
 
 public:
-	class DirectXCommand* const GetMainCommandlist() const {
-		return directXCommand_;
-	}
+	DirectXCommand* const GetMainCommandlist() const;
 
 private:
-	class DirectXCommand* directXCommand_ = nullptr;
+	std::array<std::unique_ptr<DirectXCommand>, DirectXSwapChain::kBackBufferNumber> directXCommands_;
 
 /// 
 /// DirectXCommand

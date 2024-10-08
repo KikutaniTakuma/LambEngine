@@ -41,7 +41,7 @@ RtvHeap::RtvHeap(uint32_t heapSize):
 }
 
 void RtvHeap::CreateDescriptorHeap(uint32_t heapSize) {
-	heapSize_ = std::clamp(heapSize, DirectXSwapChain::kBackBufferNumber_, 0xffu);
+	heapSize_ = std::clamp(heapSize, DirectXSwapChain::kBackBufferNumber, 0xffu);
 	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, heapSize_, false);
 	heap_.SetName<RtvHeap>();
 }
@@ -56,7 +56,7 @@ void RtvHeap::CreateHeapHandles() {
 }
 
 void RtvHeap::CreateBackBuffer(
-	std::array<Lamb::LambPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber_>& backBuffer,
+	std::array<Lamb::LambPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber>& backBuffer,
 	IDXGISwapChain4* const swapChain
 ) {
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
@@ -66,7 +66,7 @@ void RtvHeap::CreateBackBuffer(
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 
-	for (uint32_t i = 0u; i < DirectXSwapChain::kBackBufferNumber_; i++) {
+	for (uint32_t i = 0u; i < DirectXSwapChain::kBackBufferNumber; i++) {
 		HRESULT hr = swapChain->GetBuffer(i, IID_PPV_ARGS(backBuffer[i].GetAddressOf()));
 
 		if (!SUCCEEDED(hr)) {

@@ -5,6 +5,8 @@
 
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
+
 namespace Lamb {
 	float DeltaTime() {
 		static FrameInfo* const frameInfo = FrameInfo::GetInstance();
@@ -32,4 +34,15 @@ namespace Lamb {
 	bool IsCanUseMeshShader() {
 		return DirectXDevice::GetInstance()->GetIsCanUseMeshShader();
 	}
+	constexpr uint32_t GetBackBufferNum()
+	{
+		return DirectXSwapChain::kBackBufferNumber;
+	}
+
+	uint32_t GetBufferINdex()
+	{
+		static const auto& renderingManager = *RenderingManager::GetInstance();
+		return renderingManager.GetBufferIndex();
+	}
+	
 }

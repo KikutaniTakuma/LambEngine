@@ -38,7 +38,7 @@ private:
 
 public:
 	void CreateBackBuffer(
-		std::array<Lamb::LambPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber_>& backBuffer,
+		std::array<Lamb::LambPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber>& backBuffer,
 		IDXGISwapChain4* const swapChain
 		);
 	
