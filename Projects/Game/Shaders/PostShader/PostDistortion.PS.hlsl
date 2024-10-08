@@ -3,11 +3,14 @@
 
 Texture2D<float32_t4> gDistortionTexture : register(t1);
 
+// ポイントサンプラー
+SamplerState gPointSmp : register(s1);
+
 PixelShaderOutPut2 main(Output input) {
     PixelShaderOutPut2 output;
 
-    float32_t2 uvDistortion = gDistortionTexture.Sample(smp, input.uv).xy;
-    float32_t2 scrollDistortion = gDistortionTexture.Sample(smp, input.uv + uvDistortion).xy;
+    float32_t2 uvDistortion = gDistortionTexture.Sample(gPointSmp, input.uv).xy;
+    float32_t2 scrollDistortion = gDistortionTexture.Sample(gPointSmp, input.uv + uvDistortion).xy;
     if(scrollDistortion.x == 0.0f && scrollDistortion.y == 0.0f) {
         uvDistortion = 0;
     }

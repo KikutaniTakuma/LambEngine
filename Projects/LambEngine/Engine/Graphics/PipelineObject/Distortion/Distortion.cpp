@@ -91,7 +91,11 @@ void Distortion::Init(
 	desc.rootParameter = rootParameter.data();
 	desc.rootParameterSize = rootParameter.size();
 	desc.samplerDeacs.push_back(
-		CreateBorderSampler()
+		CreateBorderSampler(0)
+	);
+
+	desc.samplerDeacs.push_back(
+		CreatePointSampler(1)
 	);
 
 	auto pipelineManager = PipelineManager::GetInstance();
@@ -102,6 +106,7 @@ void Distortion::Init(
 	pipelineDesc.isDepth = false;
 	pipelineDesc.blend[0] = Pipeline::None;
 	pipelineDesc.solidState = Pipeline::SolidState::Solid;
+
 	pipelineDesc.cullMode = Pipeline::CullMode::Back;
 	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 	pipelineDesc.numRenderTarget = uint32_t(formtats.size());
