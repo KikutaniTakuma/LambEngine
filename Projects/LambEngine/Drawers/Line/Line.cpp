@@ -93,7 +93,6 @@ void Line::Initialize() {
 void Line::Finalize() {
 	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
 	for (uint32_t i = 0; i < DirectXSwapChain::kBackBufferNumber; ++i) {
-		heap->BookingHeapPos(DirectXSwapChain::kBackBufferNumber);
 		heap->ReleaseView(nodepthVertData_[i]->GetHandleUINT());
 		heap->ReleaseView(depthVertData_[i]->GetHandleUINT());
 	}
