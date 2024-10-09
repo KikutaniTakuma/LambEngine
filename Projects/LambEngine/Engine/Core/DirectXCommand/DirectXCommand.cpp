@@ -2,6 +2,7 @@
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Utils/ExecutionLog.h"
 #include <cassert>
+#include <algorithm>
 #include "Error/Error.h"
 #include "Engine/Engine.h"
 #include "Utils/SafePtr.h"
@@ -41,7 +42,7 @@ DirectXCommand* const DirectXCommand::GetMainCommandlist()
 
 void DirectXCommand::CloseCommandlist() {
 	// コマンドリストを確定させる
-	HRESULT hr = commandLists_[Lamb::GetBufferIndex()]->Close();
+	HRESULT hr = commandLists_[bufferIndex_]->Close();
 	isCommandListClose_ = true;
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("commandList_->Close() failed", ErrorPlace);
@@ -49,17 +50,17 @@ void DirectXCommand::CloseCommandlist() {
 }
 
 void DirectXCommand::ExecuteCommandLists() {
-	ID3D12CommandList* commandLists[] = { commandLists_[Lamb::GetBufferIndex()].Get() };
+	ID3D12CommandList* commandLists[] = { commandLists_[bufferIndex_].Get() };
 	commandQueue_->ExecuteCommandLists(_countof(commandLists), commandLists);
 }
 
 void DirectXCommand::ResetCommandlist() {
 	// 次フレーム用のコマンドリストを準備
-	HRESULT hr = commandAllocators_[Lamb::GetBufferIndex()]->Reset();
+	HRESULT hr = commandAllocators_[bufferIndex_]->Reset();
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("commandAllocator_->Reset() faield", ErrorPlace);
 	}
-	hr = commandLists_[Lamb::GetBufferIndex()]->Reset(commandAllocators_[Lamb::GetBufferIndex()].Get(), nullptr);
+	hr = commandLists_[bufferIndex_]->Reset(commandAllocators_[bufferIndex_].Get(), nullptr);
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("commandList_->Reset() faield", ErrorPlace);
 	}
@@ -164,7 +165,12 @@ void DirectXCommand::CrateFence() {
 
 ID3D12GraphicsCommandList6* const DirectXCommand::GetCommandList() const
 {
-	return commandLists_[Lamb::GetBufferIndex()].Get();
+	return commandLists_[bufferIndex_].Get();
+}
+
+void DirectXCommand::SetBufferIndex(uint32_t bufferIndex)
+{
+	bufferIndex_ = std::clamp(bufferIndex, 0u, DirectXSwapChain::kBackBufferNumber - 1u);
 }
 
 void DirectXCommand::Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {

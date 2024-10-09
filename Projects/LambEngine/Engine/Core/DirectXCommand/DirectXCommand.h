@@ -66,6 +66,8 @@ public:
 		return isCommandListClose_;
 	}
 
+	void SetBufferIndex(uint32_t bufferIndex);
+
 private:
 	Lamb::LambPtr<ID3D12CommandQueue> commandQueue_;
 	std::array<Lamb::LambPtr<ID3D12CommandAllocator>, DirectXSwapChain::kBackBufferNumber> commandAllocators_;
@@ -75,6 +77,8 @@ private:
 	Lamb::LambPtr<ID3D12Fence> fence_;
 	uint64_t fenceVal_;
 	HANDLE fenceEvent_;
+
+	uint32_t bufferIndex_ = 0;
 
 public:
 	/// <summary>
