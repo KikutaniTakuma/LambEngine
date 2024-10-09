@@ -154,6 +154,8 @@ void RenderingManager::FrameStart()
 	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
 	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
 	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
+
+	// 最初のフレームは通らない
 	if (isNotFirstFrame_) {
 		ImGuiManager::GetInstance()->End();
 
@@ -165,6 +167,8 @@ void RenderingManager::FrameStart()
 		// GPUにコマンドリストの実行を行わせる
 		directXCommand->ExecuteCommandLists();
 
+		// GPUとOSに画面の交換を行うように通知する
+		directXSwapChain->SwapChainPresent();
 	}
 	
 	ImGuiManager::GetInstance()->Start();
@@ -178,24 +182,16 @@ void RenderingManager::FrameEnd()
 	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
 	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
 
+	// 最初のフレームは通らない
 	if (isNotFirstFrame_) {
-		// GPUとOSに画面の交換を行うように通知する
-		directXSwapChain->SwapChainPresent();
-
-		stringOutPutManager->GmemoryCommit();
-
-		directXCommand->WaitForFinishCommnadlist();
-
-		directXCommand->ResetCommandlist();
-
-		bufferIndex_++;
+		preBufferIndex_ = bufferIndex_++;
 		if (DirectXSwapChain::kBackBufferNumber <= bufferIndex_) {
 			bufferIndex_ = 0;
 		}
 	}
-	else {
-		isNotFirstFrame_ = true;
-	}
+
+	// これからコマンドを積むインデックスをセット
+	directXCommand->SetBufferIndex(bufferIndex_);
 
 	directXSwapChain->ChangeBackBufferState();
 	RtvHeap::GetInstance()->SetMainRtv(&depthStencil_->GetDepthHandle());
@@ -211,7 +207,29 @@ void RenderingManager::FrameEnd()
 	std::array heapPtrs = { cbvSrvUavDescriptorHeap->Get() };
 	DescriptorHeap::SetHeaps(heapPtrs.size(), heapPtrs.data());
 
+	// 描画コマンドを積む
 	Draw();
+
+	// 最初のフレームは通らない
+	if (isNotFirstFrame_) {
+		// 実行中のコマンドリストのインデックスをセットする
+		directXCommand->SetBufferIndex(preBufferIndex_);
+
+		stringOutPutManager->GmemoryCommit();
+
+		// 実行待ち
+		directXCommand->WaitForFinishCommnadlist();
+
+		// リセット
+		directXCommand->ResetCommandlist();
+	}
+	else {
+		// 最初のコマンドを積み終わったのでtrue
+		isNotFirstFrame_ = true;
+	}
+
+	// コマンドを積んだインデックスをセットする
+	directXCommand->SetBufferIndex(bufferIndex_);
 }
 
 void RenderingManager::Draw() {
