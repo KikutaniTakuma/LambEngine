@@ -85,11 +85,11 @@ void Distortion::Init(
 	desc.rootParameter = rootParameter.data();
 	desc.rootParameterSize = rootParameter.size();
 	desc.samplerDeacs.push_back(
-		CreateBorderSampler(0)
+		CreateBorderLinearSampler(0)
 	);
 
 	desc.samplerDeacs.push_back(
-		CreatePointSampler(1)
+		CreateBorderPointSampler(1)
 	);
 
 	auto pipelineManager = PipelineManager::GetInstance();

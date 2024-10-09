@@ -86,7 +86,7 @@ void Luminate::Init(
 	desc.rootParameter = rootParameter.data();
 	desc.rootParameterSize = rootParameter.size();
 	desc.samplerDeacs.push_back(
-		CreateBorderSampler()
+		CreateBorderLinearSampler()
 	);
 
 	auto pipelineManager = PipelineManager::GetInstance();

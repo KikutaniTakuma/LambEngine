@@ -122,7 +122,7 @@ D3D12_STATIC_SAMPLER_DESC CreateLinearSampler(uint32_t shaderRegister)
 	return staticSampler;
 }
 
-D3D12_STATIC_SAMPLER_DESC CreateBorderSampler(uint32_t shaderRegister)
+D3D12_STATIC_SAMPLER_DESC CreateBorderLinearSampler(uint32_t shaderRegister)
 {
 	D3D12_STATIC_SAMPLER_DESC staticSampler{};
 
@@ -146,6 +146,22 @@ D3D12_STATIC_SAMPLER_DESC CreatePointSampler(uint32_t shaderRegister)
 	staticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 	staticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
 	staticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+	staticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+	staticSampler.MaxLOD = D3D12_FLOAT32_MAX;
+	staticSampler.ShaderRegister = shaderRegister;
+	staticSampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
+	return staticSampler;
+}
+
+D3D12_STATIC_SAMPLER_DESC CreateBorderPointSampler(uint32_t shaderRegister)
+{
+	D3D12_STATIC_SAMPLER_DESC staticSampler{};
+
+	staticSampler.Filter = D3D12_FILTER_MIN_MAG_MIP_POINT;
+	staticSampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	staticSampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
+	staticSampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_BORDER;
 	staticSampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
 	staticSampler.MaxLOD = D3D12_FLOAT32_MAX;
 	staticSampler.ShaderRegister = shaderRegister;

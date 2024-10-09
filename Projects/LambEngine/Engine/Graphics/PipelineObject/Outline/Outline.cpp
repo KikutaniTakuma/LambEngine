@@ -118,7 +118,7 @@ void Outline::Init(
 	desc.rootParameter = rootParameter.data();
 	desc.rootParameterSize = rootParameter.size();
 	desc.samplerDeacs.push_back(
-		CreateBorderSampler()
+		CreateBorderLinearSampler()
 	);
 	desc.samplerDeacs.back().ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	desc.samplerDeacs.push_back(
