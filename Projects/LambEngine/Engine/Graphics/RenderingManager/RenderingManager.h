@@ -169,4 +169,5 @@ private:
 	bool isNotFirstFrame_ = false;
 
 	uint32_t bufferIndex_ = 0;
+	uint32_t preBufferIndex_ = 0;
 };
