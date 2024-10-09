@@ -104,7 +104,7 @@ void RenderTarget::SetMainRenderTarget(const D3D12_CPU_DESCRIPTOR_HANDLE* depthH
 }
 
 void RenderTarget::UseThisRenderTargetShaderResource() {
-	static auto mainComList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+	auto mainComList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	mainComList->SetGraphicsRootDescriptorTable(0, heapHandleGPU_);
 }
 

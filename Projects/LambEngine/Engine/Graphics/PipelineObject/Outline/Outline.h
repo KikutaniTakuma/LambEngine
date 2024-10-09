@@ -43,6 +43,6 @@ public:
 	void ChangeDepthBufferState();
 
 private:
-	std::array<std::unique_ptr<ConstantBuffer<OutlineData>>, DirectXSwapChain::kBackBufferNumber> outlineData_;
+	std::array<std::unique_ptr<ConstantBuffer<OutlineData>>, DirectXSwapChain::kBackBufferNumber> outlineDataBuf_;
 	float32_t weight_ = 0.0f;
 };

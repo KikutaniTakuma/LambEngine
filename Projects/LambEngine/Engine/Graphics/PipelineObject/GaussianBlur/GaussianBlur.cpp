@@ -16,9 +16,9 @@
 void GaussianBlur::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
-		ImGui::DragInt("kernel", &gaussianBlurState_->kernelSize, 0.1f, 0, 128);
-		ImGui::DragFloat2("dir", gaussianBlurState_->dir.data(), 1.0f, 0.0f, 1.0f);
-		ImGui::DragFloat("sigma", &gaussianBlurState_->sigma, 0.01f, 0.0f, 1000.0f);
+		ImGui::DragInt("kernel", &gaussianBlurState_.kernelSize, 0.1f, 0, 128);
+		ImGui::DragFloat2("dir", gaussianBlurState_.dir.data(), 1.0f, 0.0f, 1.0f);
+		ImGui::DragFloat("sigma", &gaussianBlurState_.sigma, 0.01f, 0.0f, 1000.0f);
 		ImGui::TreePop();
 	}
 #endif // USE_DEBUG_CODE
@@ -26,7 +26,8 @@ void GaussianBlur::Debug([[maybe_unused]]const std::string& guiName) {
 }
 
 void GaussianBlur::Update() {
-	*colorBuf_ = color;
+	**colorBuf_[Lamb::GetBufferIndex()] = color;
+	**gaussianBlurStateBuf_[Lamb::GetBufferIndex()] = gaussianBlurState_;
 }
 
 void GaussianBlur::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -39,7 +40,8 @@ void GaussianBlur::Use(Pipeline::Blend blendType, bool isDepth) {
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootDescriptorTable(1, colorBuf_.GetHandleGPU());
+	commandList->SetGraphicsRootConstantBufferView(1, colorBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(2, gaussianBlurStateBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void GaussianBlur::Init(
@@ -66,22 +68,20 @@ void GaussianBlur::Init(
 	renderRange[0].NumDescriptors = 1;
 	renderRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
-	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 2;
-	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 2> rootParameter = {};
+	std::array<D3D12_ROOT_PARAMETER, 3> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[0].DescriptorTable.pDescriptorRanges = renderRange.data();
 	rootParameter[0].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(renderRange.size());
 
-	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[1].DescriptorTable.pDescriptorRanges = cbvRange.data();
-	rootParameter[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
+	rootParameter[1].Descriptor.ShaderRegister = 0;
+
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[2].Descriptor.ShaderRegister = 1;
 
 
 	RootSignature::Desc desc;
@@ -127,19 +127,47 @@ void GaussianBlur::Init(
 
 	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
 
-	srvHeap->BookingHeapPos(3u);
+	srvHeap->BookingHeapPos(1u);
 	srvHeap->CreateView(*render_);
-	srvHeap->CreateView(colorBuf_);
-	srvHeap->CreateView(gaussianBlurState_);
+
+	std::for_each(
+		colorBuf_.begin(),
+		colorBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<Vector4>>();
+		}
+	);
+
+	std::for_each(
+		gaussianBlurStateBuf_.begin(),
+		gaussianBlurStateBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<GaussianBlurState>>();
+		}
+	);
 }
 
 GaussianBlur::~GaussianBlur() {
 	if (render_) {
 		auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 		srvHeap->ReleaseView(render_->GetHandleUINT());
-		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
-		srvHeap->ReleaseView(gaussianBlurState_.GetHandleUINT());
 	}
+
+	std::for_each(
+		colorBuf_.begin(),
+		colorBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
+
+	std::for_each(
+		gaussianBlurStateBuf_.begin(),
+		gaussianBlurStateBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
 
 	render_.reset();
 }

@@ -27,7 +27,7 @@ protected:
 
 	virtual void Update() = 0;
 
-	virtual void Draw();
+	virtual void Draw() = 0;
 
 public:
 	void Execution();

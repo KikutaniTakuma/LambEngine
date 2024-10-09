@@ -52,7 +52,7 @@ private:
 	Lamb::LambPtr<ID3D12Resource> indexResource_;
 
 	static constexpr uint32_t kIndexNumber_ = 36u;
-	std::array < std::unique_ptr<ConstantBuffer<ShaderData>>, DirectXSwapChain::kBackBufferNumber> shaderData_;
+	std::array<std::unique_ptr<ConstantBuffer<ShaderData>>, DirectXSwapChain::kBackBufferNumber> shaderData_;
 	std::array<std::unique_ptr<ConstantBuffer<AtmosphericParams>>, DirectXSwapChain::kBackBufferNumber> atmosphericParams_;
 	Lamb::SafePtr<class Pipeline> pipeline_;
 };

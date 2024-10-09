@@ -79,9 +79,9 @@ void AirSkyBox::Load() {
 }
 
 void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color) {
-    (*shaderData_[Lamb::GetBufferINdex()])->worldMat = worldMat;
-    (*shaderData_[Lamb::GetBufferINdex()])->viewProjectionMat = cameraMat;
-    (*shaderData_[Lamb::GetBufferINdex()])->color = color;
+    (*shaderData_[Lamb::GetBufferIndex()])->worldMat = worldMat;
+    (*shaderData_[Lamb::GetBufferIndex()])->viewProjectionMat = cameraMat;
+    (*shaderData_[Lamb::GetBufferIndex()])->color = color;
 
     // コマンドリスト
     ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
@@ -90,8 +90,8 @@ void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t c
     pipeline_->Use();
 
     // ライト構造体
-    commandlist->SetGraphicsRootConstantBufferView(0, shaderData_[Lamb::GetBufferINdex()]->GetGPUVtlAdrs());
-    commandlist->SetGraphicsRootConstantBufferView(1, atmosphericParams_[Lamb::GetBufferINdex()]->GetGPUVtlAdrs());
+    commandlist->SetGraphicsRootConstantBufferView(0, shaderData_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
+    commandlist->SetGraphicsRootConstantBufferView(1, atmosphericParams_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
 
     // 頂点バッファセット
     commandlist->IASetVertexBuffers(0, 1, &vertexView_);
@@ -103,7 +103,7 @@ void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t c
 
 void AirSkyBox::SetAtmosphericParams(const AtmosphericParams& atmosphericParams)
 {
-    **(atmosphericParams_[Lamb::GetBufferINdex()]) = atmosphericParams;
+    **(atmosphericParams_[Lamb::GetBufferIndex()]) = atmosphericParams;
 }
 
 void AirSkyBox::CreateGraphicsPipeline() {

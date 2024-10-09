@@ -18,7 +18,7 @@ void Distortion::SetRtvFormt(DXGI_FORMAT format) {
 }
 
 void Distortion::Update() {
-	*colorBuf_ = color;
+	**colorBuf_[Lamb::GetBufferIndex()] = color;
 }
 
 void Distortion::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -32,7 +32,7 @@ void Distortion::Use(Pipeline::Blend blendType, bool isDepth) {
 
 	render_->UseThisRenderTargetShaderResource();
 	commandList->SetGraphicsRootDescriptorTable(1, distortionTexHandle_);
-	commandList->SetGraphicsRootDescriptorTable(2, colorBuf_.GetHandleGPU());
+	commandList->SetGraphicsRootConstantBufferView(2, colorBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void Distortion::Init(
@@ -64,11 +64,6 @@ void Distortion::Init(
 	distortionRange[0].NumDescriptors = 1;
 	distortionRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	distortionRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
-	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 2;
-	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	std::array<D3D12_ROOT_PARAMETER, 3> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -81,10 +76,9 @@ void Distortion::Init(
 	rootParameter[1].DescriptorTable.pDescriptorRanges = distortionRange.data();
 	rootParameter[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(distortionRange.size());
 
-	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[2].DescriptorTable.pDescriptorRanges = cbvRange.data();
-	rootParameter[2].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
+	rootParameter[2].Descriptor.ShaderRegister = 0;
 
 
 	RootSignature::Desc desc;
@@ -135,17 +129,32 @@ void Distortion::Init(
 
 	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
 
-	srvHeap->BookingHeapPos(3u);
+	srvHeap->BookingHeapPos(1u);
 	srvHeap->CreateView(*render_);
-	srvHeap->CreateView(colorBuf_);
+	
+
+	std::for_each(
+		colorBuf_.begin(),
+		colorBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<Vector4>>();
+		}
+	);
 }
 
 Distortion::~Distortion() {
 	if (render_) {
 		auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 		srvHeap->ReleaseView(render_->GetHandleUINT());
-		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
 	}
+
+	std::for_each(
+		colorBuf_.begin(),
+		colorBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
 
 	render_.reset();
 }

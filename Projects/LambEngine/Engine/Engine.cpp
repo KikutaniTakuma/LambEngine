@@ -323,17 +323,17 @@ void Engine::InitializeDirectXDevice() {
 /// 
 
 void Engine::InitializeDirectXCommand() {
-	std::for_each(directXCommands_.begin(), directXCommands_.end(), [](auto& command) { command = std::make_unique<DirectXCommand>(); });
+	directXCommand_ = std::make_unique<DirectXCommand>();
 }
 
 void Engine::FinalizeDirectXCommand()
 {
-	std::for_each(directXCommands_.begin(), directXCommands_.end(), [](auto& command) { command.reset(); });
+	directXCommand_.reset();
 }
 
 DirectXCommand* const Engine::GetMainCommandlist() const
 {
-	return directXCommands_[Lamb::GetBufferINdex()].get();
+	return directXCommand_.get();
 }
 
 
@@ -364,19 +364,18 @@ void Engine::InitializeDirectXTK() {
 /// 
 
 void Engine::FrameStart() {
+	RenderingManager::GetInstance()->FrameStart();
+
 	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	frameInfo->Start();
 
 	Lamb::screenout.Clear();
 	Lamb::screenout << Lamb::endline;
-
-
-	ImGuiManager::GetInstance()->Start();
-
-	RenderingManager::GetInstance()->FrameStart();
 }
 
 void Engine::FrameEnd() {
+	RenderingManager::GetInstance()->FrameEnd();
+
 	// エラーチェック
 	static auto err = ErrorCheck::GetInstance();
 	if (err->GetError()) {
@@ -388,7 +387,6 @@ void Engine::FrameEnd() {
 	frameInfo->DrawFps();
 	Lamb::screenout.Draw();
 
-	RenderingManager::GetInstance()->FrameEnd();
 
 	frameInfo->End();
 }

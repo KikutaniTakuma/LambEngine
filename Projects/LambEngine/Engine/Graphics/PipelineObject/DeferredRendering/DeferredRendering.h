@@ -39,15 +39,12 @@ public:
 	void Draw();
 
 	void SetDeferredRenderingData(const DeferredRenderingData& deferredRenderingData) {
-		*deferredRenderingData_ = deferredRenderingData;
+		deferredRenderingData_ = deferredRenderingData;
 	}
 	void SetAtmosphericParams(const AirSkyBox::AtmosphericParams& atomosphericData) {
-		*atomosphericData_ = atomosphericData;
+		atomosphericData_ = atomosphericData;
 	}
 
-	void SetLight(const PointLight& light, size_t index);
-
-	void Debug(const std::string& guiName);
 
 	void SetColorHandle(D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle) {
 		colorTextureHandle_ = colorTextureHandle;
@@ -63,9 +60,12 @@ public:
 	}
 
 private:
-	ConstantBuffer<DeferredRenderingData> deferredRenderingData_;
-	ConstantBuffer<AirSkyBox::AtmosphericParams> atomosphericData_;
-	StructuredBuffer<PointLight> lights_;
+	std::array<std::unique_ptr<ConstantBuffer<DeferredRenderingData>>, DirectXSwapChain::kBackBufferNumber> deferredRenderingDataBuf_;
+	std::array<std::unique_ptr<ConstantBuffer<AirSkyBox::AtmosphericParams>>, DirectXSwapChain::kBackBufferNumber> atomosphericDataBuf_;
+
+	DeferredRenderingData deferredRenderingData_;
+	AirSkyBox::AtmosphericParams atomosphericData_;
+
 	D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE normalTextureHandle_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE worldPositionTextureHandle_ = {};

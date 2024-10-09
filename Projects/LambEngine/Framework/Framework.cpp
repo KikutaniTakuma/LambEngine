@@ -96,9 +96,3 @@ void Framework::Execution() {
 	}
 	this->Finalize();
 }
-
-void Framework::Draw() {
-	const Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
-
-	RenderingManager::GetInstance()->Draw();
-}

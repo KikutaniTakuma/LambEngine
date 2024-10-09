@@ -38,11 +38,11 @@ struct AtmosphericParams {
 
 ConstantBuffer<DeferredRenderingData> gDeferredRenderingState : register(b0);
 ConstantBuffer<AtmosphericParams> gAtmosphericParams : register(b1);
-StructuredBuffer<PointLight> gPointLight : register(t0);
-Texture2D<float32_t4> gColorTexture : register(t1);
-Texture2D<float32_t4> gNormalTexture : register(t2);
-Texture2D<float32_t4> gWorldPositionTexture : register(t3);
-Texture2D<float32_t4> gDistortionTexture : register(t4);
+
+Texture2D<float32_t4> gColorTexture : register(t0);
+Texture2D<float32_t4> gNormalTexture : register(t1);
+Texture2D<float32_t4> gWorldPositionTexture : register(t2);
+Texture2D<float32_t4> gDistortionTexture : register(t3);
 
 // リニアサンプラー
 SamplerState gLinearSmp : register(s0);

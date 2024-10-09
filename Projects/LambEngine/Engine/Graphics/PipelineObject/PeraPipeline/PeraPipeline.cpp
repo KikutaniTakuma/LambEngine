@@ -9,7 +9,7 @@
 #include "Utils/EngineInfo.h"
 
 void PeraPipeline::Update() {
-	**colorBuf_[Lamb::GetBufferINdex()] = color;
+	**colorBuf_[Lamb::GetBufferIndex()] = color;
 }
 
 void PeraPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -22,7 +22,7 @@ void PeraPipeline::Use(Pipeline::Blend blendType, bool isDepth) {
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootConstantBufferView(1, colorBuf_[Lamb::GetBufferINdex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(1, colorBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void PeraPipeline::Init(

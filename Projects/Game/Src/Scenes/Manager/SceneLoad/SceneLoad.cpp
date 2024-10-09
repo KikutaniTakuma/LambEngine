@@ -51,8 +51,6 @@ void SceneLoad::Start()
 			BlendType::kUnenableDepthNone
 		);
 
-		RenderingManager::GetInstance()->Draw();
-
 		Engine::FrameEnd();
 
 		tex2Danimator_->Start();
@@ -97,8 +95,6 @@ void SceneLoad::CreateLoad()
 
 
 			renderContextManager_ = RenderContextManager::GetInstance();
-
-			RenderingManager::GetInstance()->Draw();
 
 			Engine::FrameEnd();
 		},

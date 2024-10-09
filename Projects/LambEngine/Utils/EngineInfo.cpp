@@ -35,10 +35,15 @@ namespace Lamb {
 		return DirectXDevice::GetInstance()->GetIsCanUseMeshShader();
 	}
 
-	uint32_t GetBufferINdex()
+	uint32_t GetBufferIndex()
 	{
-		static const auto& renderingManager = *RenderingManager::GetInstance();
-		return renderingManager.GetBufferIndex();
+		const Lamb::SafePtr renderingManager = RenderingManager::GetInstance();
+		if (renderingManager.empty()) {
+			return 0;
+		}
+		else {
+			return renderingManager->GetBufferIndex();
+		}
 	}
 	
 }

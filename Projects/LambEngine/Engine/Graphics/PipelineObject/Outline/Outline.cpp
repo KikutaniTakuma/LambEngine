@@ -32,7 +32,7 @@ void Outline::SetWeight(float32_t weight)
 }
 
 void Outline::SetProjectionInverse(const float32_t4x4& projectionInverse) {
-		(**(outlineData_[Lamb::GetBufferINdex()])).projectionInverse = projectionInverse;
+		(**(outlineDataBuf_[Lamb::GetBufferIndex()])).projectionInverse = projectionInverse;
 }
 
 void Outline::ChangeDepthBufferState()
@@ -42,8 +42,8 @@ void Outline::ChangeDepthBufferState()
 }
 
 void Outline::Update() {
-	*(*colorBuf_[Lamb::GetBufferINdex()]) = color;
-	(*outlineData_[Lamb::GetBufferINdex()])->weight = weight_;
+	**colorBuf_[Lamb::GetBufferIndex()] = color;
+	(*outlineDataBuf_[Lamb::GetBufferIndex()])->weight = weight_;
 }
 
 void Outline::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -58,8 +58,9 @@ void Outline::Use(Pipeline::Blend blendType, bool isDepth) {
 	auto& depth = RenderingManager::GetInstance()->GetDepthBuffer();
 
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootConstantBufferView(1, colorBuf_[Lamb::GetBufferINdex()]->GetGPUVtlAdrs());
-	commandList->SetGraphicsRootDescriptorTable(2, depth.GetTex()->GetHandleGPU());
+	commandList->SetGraphicsRootDescriptorTable(1, depth.GetTex()->GetHandleGPU());
+	commandList->SetGraphicsRootConstantBufferView(2, colorBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(3, outlineDataBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void Outline::Init(
@@ -86,11 +87,6 @@ void Outline::Init(
 	renderRange[0].NumDescriptors = 1;
 	renderRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
-	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 2;
-	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
 	std::array<D3D12_DESCRIPTOR_RANGE, 1> depthRange = {};
 	depthRange[0].BaseShaderRegister = 1;
@@ -98,21 +94,25 @@ void Outline::Init(
 	depthRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	depthRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 3> rootParameter = {};
+	std::array<D3D12_ROOT_PARAMETER, 4> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[0].DescriptorTable.pDescriptorRanges = renderRange.data();
 	rootParameter[0].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(renderRange.size());
 
 	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[1].DescriptorTable.pDescriptorRanges = cbvRange.data();
-	rootParameter[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
+	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[1].DescriptorTable.pDescriptorRanges = depthRange.data();
+	rootParameter[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(depthRange.size());
 
-	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[2].DescriptorTable.pDescriptorRanges = depthRange.data();
-	rootParameter[2].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(depthRange.size());
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[2].Descriptor.ShaderRegister = 0;
+
+	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[3].Descriptor.ShaderRegister = 1;
+
 
 	RootSignature::Desc desc;
 	desc.rootParameter = rootParameter.data();
@@ -162,21 +162,49 @@ void Outline::Init(
 
 	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
 
-	srvHeap->BookingHeapPos(3u);
+	srvHeap->BookingHeapPos(1u);
 	srvHeap->CreateView(*render_);
-	srvHeap->CreateView(colorBuf_);
-	srvHeap->CreateView(outlineData_);
 
-	outlineData_->weight = 0.3f;
+	std::for_each(
+		colorBuf_.begin(),
+		colorBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<Vector4>>();
+		}
+	);
+
+	std::for_each(
+		outlineDataBuf_.begin(),
+		outlineDataBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<OutlineData>>();
+		}
+	);
+
+	weight_ = 0.3f;
 }
 
 Outline::~Outline() {
 	if (render_) {
 		auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 		srvHeap->ReleaseView(render_->GetHandleUINT());
-		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
-		srvHeap->ReleaseView(outlineData_.GetHandleUINT());
 	}
+
+	std::for_each(
+		colorBuf_.begin(),
+		colorBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
+
+	std::for_each(
+		outlineDataBuf_.begin(),
+		outlineDataBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
 
 	render_.reset();
 }

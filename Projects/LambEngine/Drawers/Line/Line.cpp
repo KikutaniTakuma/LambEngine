@@ -121,7 +121,7 @@ void Line::AllDraw(bool isDepth) {
 		
 		depthPipeline_->Use();
 		Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-		heap->Use(depthVertData_[Lamb::GetBufferINdex()]->GetHandleUINT(), 0);
+		heap->Use(depthVertData_[Lamb::GetBufferIndex()]->GetHandleUINT(), 0);
 		auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 		commandList->DrawInstanced(kVertexNum, depthDrawCount_, 0, 0);
 
@@ -134,7 +134,7 @@ void Line::AllDraw(bool isDepth) {
 
 		nodepthPipeline_->Use();
 		Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-		heap->Use(nodepthVertData_[Lamb::GetBufferINdex()]->GetHandleUINT(), 0);
+		heap->Use(nodepthVertData_[Lamb::GetBufferIndex()]->GetHandleUINT(), 0);
 		auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 		commandList->DrawInstanced(kVertexNum, nodepthDrawCount_, 0, 0);
 
@@ -166,14 +166,14 @@ void Line::Draw(const Mat4x4& viewProjection, bool isDepth) {
 
 		auto&& colorFloat = UintToVector4(color);
 
-		(*depthVertData_[Lamb::GetBufferINdex()])[depthDrawCount_].color = colorFloat;
+		(*depthVertData_[Lamb::GetBufferIndex()])[depthDrawCount_].color = colorFloat;
 
 		Vector3 scale;
 		scale.x = (end - start).Length();
 		Vector3 to = (end - start).Normalize();
 		Vector3 translate = start;
 
-		(*depthVertData_[Lamb::GetBufferINdex()])[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+		(*depthVertData_[Lamb::GetBufferIndex()])[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
 		depthDrawCount_++;
 	}
@@ -185,14 +185,14 @@ void Line::Draw(const Mat4x4& viewProjection, bool isDepth) {
 
 		auto&& colorFloat = UintToVector4(color);
 
-		(*nodepthVertData_[Lamb::GetBufferINdex()])[nodepthDrawCount_].color = colorFloat;
+		(*nodepthVertData_[Lamb::GetBufferIndex()])[nodepthDrawCount_].color = colorFloat;
 
 		Vector3 scale;
 		scale.x = (end - start).Length();
 		Vector3 to = (end - start).Normalize();
 		Vector3 translate = start;
 
-		(*nodepthVertData_[Lamb::GetBufferINdex()])[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+		(*nodepthVertData_[Lamb::GetBufferIndex()])[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
 		nodepthDrawCount_++;
 	}
@@ -213,14 +213,14 @@ void Line::Draw(
 
 		auto&& colorFloat = UintToVector4(color);
 
-		(*depthVertData_[Lamb::GetBufferINdex()])[depthDrawCount_].color = colorFloat;
+		(*depthVertData_[Lamb::GetBufferIndex()])[depthDrawCount_].color = colorFloat;
 
 		Vector3 scale;
 		scale.x = (end - start).Length();
 		Vector3 to = (end - start).Normalize();
 		Vector3 translate = start;
 
-		(*depthVertData_[Lamb::GetBufferINdex()])[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+		(*depthVertData_[Lamb::GetBufferIndex()])[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
 		depthDrawCount_++;
 	}
@@ -232,14 +232,14 @@ void Line::Draw(
 
 		auto&& colorFloat = UintToVector4(color);
 
-		(*nodepthVertData_[Lamb::GetBufferINdex()])[nodepthDrawCount_].color = colorFloat;
+		(*nodepthVertData_[Lamb::GetBufferIndex()])[nodepthDrawCount_].color = colorFloat;
 
 		Vector3 scale;
 		scale.x = (end - start).Length();
 		Vector3 to = (end - start).Normalize();
 		Vector3 translate = start;
 
-		(*nodepthVertData_[Lamb::GetBufferINdex()])[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+		(*nodepthVertData_[Lamb::GetBufferIndex()])[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
 
 		nodepthDrawCount_++;
 	}

@@ -104,7 +104,7 @@ public:
 	DirectXCommand* const GetMainCommandlist() const;
 
 private:
-	std::array<std::unique_ptr<DirectXCommand>, DirectXSwapChain::kBackBufferNumber> directXCommands_;
+	std::unique_ptr<DirectXCommand> directXCommand_;
 
 /// 
 /// DirectXCommand

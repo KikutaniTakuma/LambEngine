@@ -35,11 +35,12 @@ public:
 	void Update()override;
 
 	void SetGaussianState(const GaussianBlurState& gaussianBlurState) {
-		*gaussianBlurState_ = gaussianBlurState;
+		gaussianBlurState_ = gaussianBlurState;
 	}
 
 	void Debug(const std::string& guiName);
 
 private:
-	ConstantBuffer<GaussianBlurState> gaussianBlurState_;
+	std::array<std::unique_ptr<ConstantBuffer<GaussianBlurState>>, DirectXSwapChain::kBackBufferNumber> gaussianBlurStateBuf_;
+	GaussianBlurState  gaussianBlurState_;
 };

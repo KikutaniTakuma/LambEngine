@@ -41,9 +41,10 @@ public:
 
 	void FrameEnd();
 
+private:
+	void Draw();
 
 public:
-	void Draw();
 
 	DepthBuffer& GetDepthBuffer();
 
@@ -165,7 +166,7 @@ private:
 	bool isUseMesh_ = false;
 
 
-	bool isFirstFrame_ = false;
+	bool isNotFirstFrame_ = false;
 
 	uint32_t bufferIndex_ = 0;
 };
