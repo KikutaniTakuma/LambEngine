@@ -125,7 +125,7 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	// ディスクリプタヒープ初期化
 	RtvHeap::Initialize(128u);
 	DsvHeap::Initialize(128u);
-	CbvSrvUavHeap::Initialize(4096u);
+	CbvSrvUavHeap::Initialize(1024u);
 
 	// コマンドリスト生成
 	instance_->InitializeDirectXCommand();
