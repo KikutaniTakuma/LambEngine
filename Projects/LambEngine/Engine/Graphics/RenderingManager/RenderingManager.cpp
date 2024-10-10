@@ -121,9 +121,9 @@ RenderingManager::RenderingManager() {
 	skyBox_->Load();
 	transform_.scale *= 500.0f;
 
-	//deferredRendering_->SetEnvironmentHandle(skyBox_->GetHandle());
 
 	isUseMesh_ = Lamb::IsCanUseMeshShader();
+
 }
 
 RenderingManager::~RenderingManager()
@@ -156,7 +156,7 @@ void RenderingManager::FrameStart()
 	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
 
 	// 最初のフレームは通らない
-	if (isNotFirstFrame_) {
+	if (not isFirstFrame_) {
 		ImGuiManager::GetInstance()->End();
 
 		directXSwapChain->ChangeBackBufferState();
@@ -183,7 +183,7 @@ void RenderingManager::FrameEnd()
 	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
 
 	// 最初のフレームは通らない
-	if (isNotFirstFrame_) {
+	if (not isFirstFrame_) {
 		preBufferIndex_ = bufferIndex_++;
 		if (DirectXSwapChain::kBackBufferNumber <= bufferIndex_) {
 			bufferIndex_ = 0;
@@ -210,8 +210,12 @@ void RenderingManager::FrameEnd()
 	// 描画コマンドを積む
 	Draw();
 
-	// 最初のフレームは通らない
-	if (isNotFirstFrame_) {
+	if (isFirstFrame_) {
+		// 最初のコマンドを積み終わったのでfalse
+		isFirstFrame_ = false;
+	}
+	else /* 最初のフレームは通らない */ {
+
 		// 実行中のコマンドリストのインデックスをセットする
 		directXCommand->SetBufferIndex(preBufferIndex_);
 
@@ -222,10 +226,6 @@ void RenderingManager::FrameEnd()
 
 		// リセット
 		directXCommand->ResetCommandlist();
-	}
-	else {
-		// 最初のコマンドを積み終わったのでtrue
-		isNotFirstFrame_ = true;
 	}
 
 	// コマンドを積んだインデックスをセットする
