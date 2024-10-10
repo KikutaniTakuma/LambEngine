@@ -28,7 +28,7 @@ public:
 	void Update()override;
 
 	void SetLuminanceThreshold(float32_t luminanceThreshold) {
-		*luminanceThreshold_ = luminanceThreshold;
+		luminanceThreshold_ = luminanceThreshold;
 	}
 
 	void SetRtvFormt(DXGI_FORMAT format);
@@ -36,6 +36,7 @@ public:
 	void Debug();
 
 private:
-	ConstantBuffer<float32_t> luminanceThreshold_;
+	std::array<std::unique_ptr<ConstantBuffer<float32_t>>, DirectXSwapChain::kBackBufferNumber> luminanceThresholdBuf_;
+	float32_t luminanceThreshold_ = 0.0f;
 	DXGI_FORMAT format_ = DXGI_FORMAT_R32G32B32A32_FLOAT;
 };

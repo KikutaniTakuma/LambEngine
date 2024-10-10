@@ -19,12 +19,13 @@ void Luminate::SetRtvFormt(DXGI_FORMAT format) {
 
 void Luminate::Debug() {
 #ifdef USE_DEBUG_CODE
-	ImGui::DragFloat("輝度閾値", &(*luminanceThreshold_), 0.001f, 0.0f, 1.0f);
+	ImGui::DragFloat("輝度閾値", &luminanceThreshold_, 0.001f, 0.0f, 1.0f);
 #endif // USE_DEBUG_CODE
 }
 
 void Luminate::Update() {
-	*colorBuf_ = color;
+	**colorBuf_[Lamb::GetBufferIndex()] = color;
+	**luminanceThresholdBuf_[Lamb::GetBufferIndex()] = luminanceThreshold_;
 }
 
 void Luminate::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -37,7 +38,8 @@ void Luminate::Use(Pipeline::Blend blendType, bool isDepth) {
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootDescriptorTable(1, colorBuf_.GetHandleGPU());
+	commandList->SetGraphicsRootConstantBufferView(1, colorBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(2, luminanceThresholdBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void Luminate::Init(
@@ -64,29 +66,27 @@ void Luminate::Init(
 	renderRange[0].NumDescriptors = 1;
 	renderRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	renderRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-	std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
-	cbvRange[0].BaseShaderRegister = 0;
-	cbvRange[0].NumDescriptors = 2;
-	cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-	cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 2> rootParameter = {};
+	std::array<D3D12_ROOT_PARAMETER, 3> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[0].DescriptorTable.pDescriptorRanges = renderRange.data();
 	rootParameter[0].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(renderRange.size());
 
-	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[1].DescriptorTable.pDescriptorRanges = cbvRange.data();
-	rootParameter[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(cbvRange.size());
+	rootParameter[1].Descriptor.ShaderRegister = 0;
+
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[2].Descriptor.ShaderRegister = 1;
 
 
 	RootSignature::Desc desc;
 	desc.rootParameter = rootParameter.data();
 	desc.rootParameterSize = rootParameter.size();
 	desc.samplerDeacs.push_back(
-		CreateBorderSampler()
+		CreateBorderLinearSampler()
 	);
 
 	auto pipelineManager = PipelineManager::GetInstance();
@@ -125,19 +125,47 @@ void Luminate::Init(
 
 	CbvSrvUavHeap* const srvHeap = CbvSrvUavHeap::GetInstance();
 
-	srvHeap->BookingHeapPos(3u);
+	srvHeap->BookingHeapPos(1u);
 	srvHeap->CreateView(*render_);
-	srvHeap->CreateView(colorBuf_);
-	srvHeap->CreateView(luminanceThreshold_);
+
+	std::for_each(
+		colorBuf_.begin(),
+		colorBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<Vector4>>();
+		}
+	);
+
+	std::for_each(
+		luminanceThresholdBuf_.begin(),
+		luminanceThresholdBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<float32_t>>();
+		}
+	);
 }
 
 Luminate::~Luminate() {
 	if (render_) {
 		auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 		srvHeap->ReleaseView(render_->GetHandleUINT());
-		srvHeap->ReleaseView(colorBuf_.GetHandleUINT());
-		srvHeap->ReleaseView(luminanceThreshold_.GetHandleUINT());
 	}
+
+	std::for_each(
+		colorBuf_.begin(),
+		colorBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
+
+	std::for_each(
+		luminanceThresholdBuf_.begin(),
+		luminanceThresholdBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
 
 	render_.reset();
 }

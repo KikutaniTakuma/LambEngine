@@ -48,7 +48,7 @@ public:
 protected:
 	std::unique_ptr<RenderTarget> render_;
 
-	ConstantBuffer<Vector4> colorBuf_;
+	std::array<std::unique_ptr<ConstantBuffer<Vector4>>, DirectXSwapChain::kBackBufferNumber> colorBuf_;
 	uint32_t width_ = 0u;
 	uint32_t height_ = 0u;
 };

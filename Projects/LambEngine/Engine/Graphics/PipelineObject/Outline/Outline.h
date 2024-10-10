@@ -5,6 +5,8 @@
 #include "Math/MathCommon.h"
 #include "Engine/Graphics/GraphicsStructs.h"
 
+#include "Utils/EngineInfo.h"
+
 class Outline final : public PeraPipeline {
 public:
 	struct OutlineData{
@@ -35,15 +37,12 @@ public:
 
 	void Debug(const std::string& guiName);
 
-	void SetWeight(float32_t weight) {
-		outlineData_->weight = weight;
-	}
-	void SetProjectionInverse(const float32_t4x4& projectionInverse) {
-		outlineData_->projectionInverse = projectionInverse;
-	}
+	void SetWeight(float32_t weight);
+	void SetProjectionInverse(const float32_t4x4& projectionInverse);
 
 	void ChangeDepthBufferState();
 
 private:
-	ConstantBuffer<OutlineData> outlineData_;
+	std::array<std::unique_ptr<ConstantBuffer<OutlineData>>, DirectXSwapChain::kBackBufferNumber> outlineDataBuf_;
+	float32_t weight_ = 0.0f;
 };

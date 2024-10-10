@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 #include "Math/Vector2.h"
+#include <cstdint>
 
 namespace Lamb {
 	float DeltaTime();
@@ -14,4 +15,6 @@ namespace Lamb {
 	bool IsEngineFianlize();
 
 	bool IsCanUseMeshShader();
+
+	uint32_t GetBufferIndex();
 }

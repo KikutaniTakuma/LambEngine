@@ -52,8 +52,9 @@ private:
 };
 
 D3D12_STATIC_SAMPLER_DESC CreateLinearSampler(uint32_t shaderRegister = 0);
-D3D12_STATIC_SAMPLER_DESC CreateBorderSampler(uint32_t shaderRegister = 0);
+D3D12_STATIC_SAMPLER_DESC CreateBorderLinearSampler(uint32_t shaderRegister = 0);
 D3D12_STATIC_SAMPLER_DESC CreatePointSampler(uint32_t shaderRegister = 0);
+D3D12_STATIC_SAMPLER_DESC CreateBorderPointSampler(uint32_t shaderRegister = 0);
 
 bool operator==(const D3D12_STATIC_SAMPLER_DESC& left, const D3D12_STATIC_SAMPLER_DESC& right);
 bool operator==(const D3D12_ROOT_PARAMETER& left, const D3D12_ROOT_PARAMETER& right);

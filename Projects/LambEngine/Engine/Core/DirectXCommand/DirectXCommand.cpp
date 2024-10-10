@@ -2,15 +2,17 @@
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Utils/ExecutionLog.h"
 #include <cassert>
+#include <algorithm>
 #include "Error/Error.h"
 #include "Engine/Engine.h"
 #include "Utils/SafePtr.h"
+#include "Utils/EngineInfo.h"
 
 
 DirectXCommand::DirectXCommand():
 	commandQueue_{},
-	commandAllocator_{},
-	commandList_{},
+	commandAllocators_{},
+	commandLists_{},
 	isCommandListClose_{false},
 	fence_{},
 	fenceVal_{0llu},
@@ -40,7 +42,7 @@ DirectXCommand* const DirectXCommand::GetMainCommandlist()
 
 void DirectXCommand::CloseCommandlist() {
 	// コマンドリストを確定させる
-	HRESULT hr = commandList_->Close();
+	HRESULT hr = commandLists_[bufferIndex_]->Close();
 	isCommandListClose_ = true;
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("commandList_->Close() failed", ErrorPlace);
@@ -48,17 +50,17 @@ void DirectXCommand::CloseCommandlist() {
 }
 
 void DirectXCommand::ExecuteCommandLists() {
-	ID3D12CommandList* commandLists[] = { commandList_.Get() };
+	ID3D12CommandList* commandLists[] = { commandLists_[bufferIndex_].Get() };
 	commandQueue_->ExecuteCommandLists(_countof(commandLists), commandLists);
 }
 
 void DirectXCommand::ResetCommandlist() {
 	// 次フレーム用のコマンドリストを準備
-	HRESULT hr = commandAllocator_->Reset();
+	HRESULT hr = commandAllocators_[bufferIndex_]->Reset();
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("commandAllocator_->Reset() faield", ErrorPlace);
 	}
-	hr = commandList_->Reset(commandAllocator_.Get(), nullptr);
+	hr = commandLists_[bufferIndex_]->Reset(commandAllocators_[bufferIndex_].Get(), nullptr);
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXCommand>("commandList_->Reset() faield", ErrorPlace);
 	}
@@ -101,32 +103,41 @@ void DirectXCommand::CreateCommandQueue() {
 void DirectXCommand::CreateCommandAllocator() {
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 
+	commandAllocators_ = { nullptr };
+
 	// コマンドアロケータを生成する
-	commandAllocator_ = nullptr;
-	HRESULT hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(commandAllocator_.GetAddressOf()));
-	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<DirectXCommand>("device somethig error", ErrorPlace);
-	}
-	else {
-		Lamb::AddLog(std::string{ __func__} + " succeeded");
-	}
-	commandAllocator_.SetName<DirectXCommand>();
+	std::for_each(
+		commandAllocators_.begin(),
+		commandAllocators_.end(),
+		[&device](auto& n) {
+			HRESULT hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(n.GetAddressOf()));
+			if (!SUCCEEDED(hr)) {
+				throw Lamb::Error::Code<DirectXCommand>("device somethig error", ErrorPlace);
+			}
+			else {
+				Lamb::AddLog(std::string{ __func__ } + " succeeded");
+			}
+			n.SetName<DirectXCommand>();
+		}
+	);
 }
 
 void DirectXCommand::CreateGraphicsCommandList() {
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	
-	// コマンドリストを作成する
-	commandList_ = nullptr;
-	HRESULT hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator_.Get(), nullptr, IID_PPV_ARGS(commandList_.GetAddressOf()));
+	for (size_t i = 0; i < commandLists_.size(); ++i) {
+		// コマンドリストを作成する
+		commandLists_[i] = nullptr;
+		HRESULT hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocators_[i].Get(), nullptr, IID_PPV_ARGS(commandLists_[i].GetAddressOf()));
+		if (!SUCCEEDED(hr)) {
+			throw Lamb::Error::Code<DirectXCommand>("device somethig error", ErrorPlace);
+		}
+		else {
+			Lamb::AddLog(std::string{ __func__ } + " succeeded");
+		}
+		commandLists_[i].SetName<DirectXCommand>();
+	}
 	
-	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<DirectXCommand>("device somethig error", ErrorPlace);
-	}
-	else {
-		Lamb::AddLog(std::string{ __func__ } + " succeeded");
-	}
-	commandList_.SetName<DirectXCommand>();
 }
 
 void DirectXCommand::CrateFence() {
@@ -150,6 +161,16 @@ void DirectXCommand::CrateFence() {
 	}
 
 	Lamb::AddLog(std::string{ __func__ } + " succeeded");
+}
+
+ID3D12GraphicsCommandList6* const DirectXCommand::GetCommandList() const
+{
+	return commandLists_[bufferIndex_].Get();
+}
+
+void DirectXCommand::SetBufferIndex(uint32_t bufferIndex)
+{
+	bufferIndex_ = std::clamp(bufferIndex, 0u, DirectXSwapChain::kBackBufferNumber - 1u);
 }
 
 void DirectXCommand::Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {

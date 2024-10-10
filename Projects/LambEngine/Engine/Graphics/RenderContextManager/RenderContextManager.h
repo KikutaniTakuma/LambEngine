@@ -146,7 +146,6 @@ public:
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<MeshRenderContext<T, bufferSize>> renderContext = std::make_unique<MeshRenderContext<T, bufferSize>>();
 
-			renderContext->SetResMesh(mesh.first.get());
 			renderContext->SetMeshShaderData(mesh.second.get());
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));

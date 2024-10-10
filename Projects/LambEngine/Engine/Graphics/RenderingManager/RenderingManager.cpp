@@ -121,9 +121,9 @@ RenderingManager::RenderingManager() {
 	skyBox_->Load();
 	transform_.scale *= 500.0f;
 
-	//deferredRendering_->SetEnvironmentHandle(skyBox_->GetHandle());
 
 	isUseMesh_ = Lamb::IsCanUseMeshShader();
+
 }
 
 RenderingManager::~RenderingManager()
@@ -152,6 +152,47 @@ Lamb::SafePtr<RenderingManager> const RenderingManager::GetInstance()
 void RenderingManager::FrameStart()
 {
 	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
+	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
+	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
+
+	// 最初のフレームは通らない
+	if (not isFirstFrame_) {
+		ImGuiManager::GetInstance()->End();
+
+		directXSwapChain->ChangeBackBufferState();
+
+		// コマンドリストを確定させる
+		directXCommand->CloseCommandlist();
+
+		// GPUにコマンドリストの実行を行わせる
+		directXCommand->ExecuteCommandLists();
+
+		// GPUとOSに画面の交換を行うように通知する
+		directXSwapChain->SwapChainPresent();
+	}
+	
+	ImGuiManager::GetInstance()->Start();
+	
+
+}
+
+void RenderingManager::FrameEnd()
+{
+	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
+	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
+	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
+
+	// 最初のフレームは通らない
+	if (not isFirstFrame_) {
+		preBufferIndex_ = bufferIndex_++;
+		if (DirectXSwapChain::kBackBufferNumber <= bufferIndex_) {
+			bufferIndex_ = 0;
+		}
+	}
+
+	// これからコマンドを積むインデックスをセット
+	directXCommand->SetBufferIndex(bufferIndex_);
+
 	directXSwapChain->ChangeBackBufferState();
 	RtvHeap::GetInstance()->SetMainRtv(&depthStencil_->GetDepthHandle());
 	depthStencil_->Clear();
@@ -165,32 +206,30 @@ void RenderingManager::FrameStart()
 	const Lamb::SafePtr cbvSrvUavDescriptorHeap = CbvSrvUavHeap::GetInstance();
 	std::array heapPtrs = { cbvSrvUavDescriptorHeap->Get() };
 	DescriptorHeap::SetHeaps(heapPtrs.size(), heapPtrs.data());
-}
 
-void RenderingManager::FrameEnd()
-{
-	ImGuiManager::GetInstance()->End();
-	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
-	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
-	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
+	// 描画コマンドを積む
+	Draw();
 
-	directXSwapChain->ChangeBackBufferState();
+	if (isFirstFrame_) {
+		// 最初のコマンドを積み終わったのでfalse
+		isFirstFrame_ = false;
+	}
+	else /* 最初のフレームは通らない */ {
 
-	// コマンドリストを確定させる
-	directXCommand->CloseCommandlist();
+		// 実行中のコマンドリストのインデックスをセットする
+		directXCommand->SetBufferIndex(preBufferIndex_);
 
-	// GPUにコマンドリストの実行を行わせる
-	directXCommand->ExecuteCommandLists();
+		stringOutPutManager->GmemoryCommit();
 
+		// 実行待ち
+		directXCommand->WaitForFinishCommnadlist();
 
-	// GPUとOSに画面の交換を行うように通知する
-	directXSwapChain->SwapChainPresent();
+		// リセット
+		directXCommand->ResetCommandlist();
+	}
 
-	stringOutPutManager->GmemoryCommit();
-
-	directXCommand->WaitForFinishCommnadlist();
-
-	directXCommand->ResetCommandlist();
+	// コマンドを積んだインデックスをセットする
+	directXCommand->SetBufferIndex(bufferIndex_);
 }
 
 void RenderingManager::Draw() {
@@ -565,6 +604,11 @@ void RenderingManager::SetIsUseMeshShader(bool isUseMesh) {
 bool RenderingManager::GetIsUseMeshShader() const
 {
 	return isUseMesh_;
+}
+
+uint32_t RenderingManager::GetBufferIndex() const
+{
+	return bufferIndex_;
 }
 
 void RenderingManager::DrawRGB(std::pair<size_t, const std::list<RenderData*>&> renderList) {

@@ -43,6 +43,8 @@
 
 #include "Drawers/DrawerManager.h"
 
+#include "Utils/EngineInfo.h"
+
 
 
 #ifdef USE_DEBUG_CODE
@@ -123,7 +125,7 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	// ディスクリプタヒープ初期化
 	RtvHeap::Initialize(128u);
 	DsvHeap::Initialize(128u);
-	CbvSrvUavHeap::Initialize(4096u);
+	CbvSrvUavHeap::Initialize(1024u);
 
 	// コマンドリスト生成
 	instance_->InitializeDirectXCommand();
@@ -321,12 +323,17 @@ void Engine::InitializeDirectXDevice() {
 /// 
 
 void Engine::InitializeDirectXCommand() {
-	directXCommand_ = new DirectXCommand();
+	directXCommand_ = std::make_unique<DirectXCommand>();
 }
 
 void Engine::FinalizeDirectXCommand()
 {
-	Lamb::SafeDelete(directXCommand_);
+	directXCommand_.reset();
+}
+
+DirectXCommand* const Engine::GetMainCommandlist() const
+{
+	return directXCommand_.get();
 }
 
 
@@ -357,19 +364,18 @@ void Engine::InitializeDirectXTK() {
 /// 
 
 void Engine::FrameStart() {
+	RenderingManager::GetInstance()->FrameStart();
+
 	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
 	frameInfo->Start();
 
 	Lamb::screenout.Clear();
 	Lamb::screenout << Lamb::endline;
-
-
-	ImGuiManager::GetInstance()->Start();
-
-	RenderingManager::GetInstance()->FrameStart();
 }
 
 void Engine::FrameEnd() {
+	RenderingManager::GetInstance()->FrameEnd();
+
 	// エラーチェック
 	static auto err = ErrorCheck::GetInstance();
 	if (err->GetError()) {
@@ -381,7 +387,6 @@ void Engine::FrameEnd() {
 	frameInfo->DrawFps();
 	Lamb::screenout.Draw();
 
-	RenderingManager::GetInstance()->FrameEnd();
 
 	frameInfo->End();
 }

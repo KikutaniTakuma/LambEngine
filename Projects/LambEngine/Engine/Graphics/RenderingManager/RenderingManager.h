@@ -41,9 +41,10 @@ public:
 
 	void FrameEnd();
 
+private:
+	void Draw();
 
 public:
-	void Draw();
 
 	DepthBuffer& GetDepthBuffer();
 
@@ -65,6 +66,8 @@ public:
 	void SetIsUseMeshShader(bool isUseMesh);
 
 	bool GetIsUseMeshShader() const;
+
+	uint32_t GetBufferIndex()const;
 
 private:
 	// アルファ値がないものを描画
@@ -161,4 +164,10 @@ private:
 
 
 	bool isUseMesh_ = false;
+
+
+	bool isFirstFrame_ = true;
+
+	uint32_t bufferIndex_ = 0;
+	uint32_t preBufferIndex_ = 0;
 };

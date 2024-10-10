@@ -6,6 +6,9 @@
 #undef min
 
 #include "Engine/EngineUtils/LambPtr/LambPtr.h"
+#include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
+
+#include <array>
 
 class DirectXCommand {
 public:
@@ -53,9 +56,7 @@ private:
 	void CrateFence();
 
 public:
-	ID3D12GraphicsCommandList6* const GetCommandList() const {
-		return commandList_.Get();
-	}
+	ID3D12GraphicsCommandList6* const GetCommandList() const;
 
 	ID3D12CommandQueue* const GetCommandQueue() const {
 		return commandQueue_.Get();
@@ -65,15 +66,19 @@ public:
 		return isCommandListClose_;
 	}
 
+	void SetBufferIndex(uint32_t bufferIndex);
+
 private:
 	Lamb::LambPtr<ID3D12CommandQueue> commandQueue_;
-	Lamb::LambPtr<ID3D12CommandAllocator> commandAllocator_;
-	Lamb::LambPtr<ID3D12GraphicsCommandList6> commandList_;
+	std::array<Lamb::LambPtr<ID3D12CommandAllocator>, DirectXSwapChain::kBackBufferNumber> commandAllocators_;
+	std::array<Lamb::LambPtr<ID3D12GraphicsCommandList6>, DirectXSwapChain::kBackBufferNumber> commandLists_;
 	bool isCommandListClose_;
 
 	Lamb::LambPtr<ID3D12Fence> fence_;
 	uint64_t fenceVal_;
 	HANDLE fenceEvent_;
+
+	uint32_t bufferIndex_ = 0;
 
 public:
 	/// <summary>

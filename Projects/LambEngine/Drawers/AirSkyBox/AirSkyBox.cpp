@@ -10,11 +10,6 @@
 
 AirSkyBox::~AirSkyBox()
 {
-    if (shaderData_) {
-        Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-        heap->ReleaseView(shaderData_->GetHandleUINT());
-        heap->ReleaseView(atmosphericParams_->GetHandleUINT());
-    }
 }
 
 void AirSkyBox::Load() {
@@ -73,26 +68,20 @@ void AirSkyBox::Load() {
     vertexView_.StrideInBytes = static_cast<uint32_t>(sizeof(Vector4));
     vertexView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
 
-    Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-    if (shaderData_) {
-        shaderData_.reset();
-        heap->ReleaseView(shaderData_->GetHandleUINT());
-    }
-
-    shaderData_ = std::make_unique<ConstantBuffer<ShaderData>>();
-    atmosphericParams_ = std::make_unique<ConstantBuffer<AtmosphericParams>>();
-
-    heap->BookingHeapPos(2u);
-    heap->CreateView(*shaderData_);
-    heap->CreateView(*atmosphericParams_);
+    std::for_each(shaderData_.begin(), shaderData_.end(), [](auto& n) {
+        n = std::make_unique<ConstantBuffer<ShaderData>>();
+        });
+    std::for_each(atmosphericParams_.begin(), atmosphericParams_.end(), [](auto& n) {
+        n = std::make_unique<ConstantBuffer<AtmosphericParams>>();
+        });
 
     CreateGraphicsPipeline();
 }
 
 void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color) {
-    (*shaderData_)->worldMat = worldMat;
-    (*shaderData_)->viewProjectionMat = cameraMat;
-    (*shaderData_)->color = color;
+    (*shaderData_[Lamb::GetBufferIndex()])->worldMat = worldMat;
+    (*shaderData_[Lamb::GetBufferIndex()])->viewProjectionMat = cameraMat;
+    (*shaderData_[Lamb::GetBufferIndex()])->color = color;
 
     // コマンドリスト
     ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
@@ -101,8 +90,8 @@ void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t c
     pipeline_->Use();
 
     // ライト構造体
-    commandlist->SetGraphicsRootDescriptorTable(0, shaderData_->GetHandleGPU());
-    commandlist->SetGraphicsRootDescriptorTable(1, atmosphericParams_->GetHandleGPU());
+    commandlist->SetGraphicsRootConstantBufferView(0, shaderData_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
+    commandlist->SetGraphicsRootConstantBufferView(1, atmosphericParams_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
 
     // 頂点バッファセット
     commandlist->IASetVertexBuffers(0, 1, &vertexView_);
@@ -114,7 +103,7 @@ void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t c
 
 void AirSkyBox::SetAtmosphericParams(const AtmosphericParams& atmosphericParams)
 {
-    **atmosphericParams_ = atmosphericParams;
+    **(atmosphericParams_[Lamb::GetBufferIndex()]) = atmosphericParams;
 }
 
 void AirSkyBox::CreateGraphicsPipeline() {
@@ -126,11 +115,6 @@ void AirSkyBox::CreateGraphicsPipeline() {
     shader.vertex = shaderMaanger->LoadVertexShader("./Shaders/SkyBoxShader/SkyBox.VS.hlsl");
     shader.pixel = shaderMaanger->LoadPixelShader("./Shaders/SkyBoxShader/AirSkyBox.PS.hlsl");
 
-    std::array<D3D12_DESCRIPTOR_RANGE, 1> cbvRange = {};
-    cbvRange[0].NumDescriptors = 1;
-    cbvRange[0].BaseShaderRegister = 0;
-    cbvRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
-    cbvRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
     std::array<D3D12_DESCRIPTOR_RANGE, 1> atmosphericParamsRange = {};
     atmosphericParamsRange[0].NumDescriptors = 1;
     atmosphericParamsRange[0].BaseShaderRegister = 1;
@@ -139,14 +123,12 @@ void AirSkyBox::CreateGraphicsPipeline() {
 
 
     std::array<D3D12_ROOT_PARAMETER, 2> rootPrams = {};
-    rootPrams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootPrams[0].DescriptorTable.NumDescriptorRanges = UINT(cbvRange.size());
-    rootPrams[0].DescriptorTable.pDescriptorRanges = cbvRange.data();
+    rootPrams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootPrams[0].Descriptor.ShaderRegister = 0;
     rootPrams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-    rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    rootPrams[1].DescriptorTable.NumDescriptorRanges = UINT(atmosphericParamsRange.size());
-    rootPrams[1].DescriptorTable.pDescriptorRanges = atmosphericParamsRange.data();
+    rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    rootPrams[1].Descriptor.ShaderRegister = 1;
     rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
 
