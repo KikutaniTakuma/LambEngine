@@ -2,6 +2,8 @@
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include <algorithm>
 
+#include "Utils/EngineInfo.h"
+
 #ifdef USE_DEBUG_CODE
 #include "Drawers/Line/Line.h"
 #endif // USE_DEBUG_CODE
@@ -76,11 +78,15 @@ SkinCluster* SkinCluster::CreateSkinCluster(const Skeleton& skeleton, const Mode
     Lamb::SafePtr<CbvSrvUavHeap> heap = CbvSrvUavHeap::GetInstance();
     Lamb::SafePtr device = DirectXDevice::GetInstance();
 
-    SkinCluster* result = new SkinCluster();
-    result->paletteBuffer.Create(static_cast<uint32_t>(skeleton.joints.size()));
-
-    heap->BookingHeapPos(1u);
-    heap->CreateView(result->paletteBuffer);
+    std::unique_ptr<SkinCluster> result;
+    result.reset(new SkinCluster());
+    std::for_each(
+        result->paletteBuffer.begin(),
+        result->paletteBuffer.end(),
+        [&skeleton](auto& n) {
+            n.Create(static_cast<uint32_t>(skeleton.joints.size()));
+        }
+    );
 
 
 
@@ -119,13 +125,11 @@ SkinCluster* SkinCluster::CreateSkinCluster(const Skeleton& skeleton, const Mode
     }
 
 
-    return result;
+    return result.release();
 }
 
 SkinCluster::~SkinCluster()
 {
-    Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-    heap->ReleaseView(this->paletteBuffer.GetHandleUINT());
 }
 
 void SkinCluster::Update(const Skeleton& skeleton) {
@@ -134,9 +138,9 @@ void SkinCluster::Update(const Skeleton& skeleton) {
             throw Lamb::Error::Code<SkinCluster>("jointIndex is over to joints size of skeleton", ErrorPlace);
         }
 
-        this->paletteBuffer[jointIndex].skeletonSpaceMatrix =
+        this->paletteBuffer[Lamb::GetBufferIndex()][jointIndex].skeletonSpaceMatrix =
             this->inverseBindPoseMatrices[jointIndex] * skeleton.joints[jointIndex].skeletonSpaceMatrix;
-        this->paletteBuffer[jointIndex].skeletonSpaceInverseTransposeMatrix = 
-            this->paletteBuffer[jointIndex].skeletonSpaceMatrix.Inverse().Transepose();
+        this->paletteBuffer[Lamb::GetBufferIndex()][jointIndex].skeletonSpaceInverseTransposeMatrix =
+            this->paletteBuffer[Lamb::GetBufferIndex()][jointIndex].skeletonSpaceMatrix.Inverse().Transepose();
     }
 }

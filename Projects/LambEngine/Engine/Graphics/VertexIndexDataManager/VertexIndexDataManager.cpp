@@ -11,7 +11,7 @@ VertexIndexDataManager* const VertexIndexDataManager::GetInstance() {
 }
 
 VertexIndexDataManager::~VertexIndexDataManager() {
-	meshs_.clear();
+	vertexIndexData_.clear();
 	Lamb::AddLog("Finalize MeshManager succeeded");
 }
 
@@ -29,19 +29,19 @@ void VertexIndexDataManager::Finalize() {
 }
 
 void VertexIndexDataManager::LoadModel(const std::string& fileName) {
-	auto mesh = meshs_.find(fileName);
+	auto mesh = vertexIndexData_.find(fileName);
 
-	if (mesh == meshs_.end()) {
+	if (mesh == vertexIndexData_.end()) {
 		modelData_.insert(std::make_pair(fileName, std::make_unique<ModelData>(VertexIndexDataLoader::LoadModel(fileName))));
-		meshs_.insert(std::make_pair(fileName, CreateMesh(*modelData_[fileName])));
+		vertexIndexData_.insert(std::make_pair(fileName, CreateMesh(*modelData_[fileName])));
 	}
 }
 
-VertexIndexData* VertexIndexDataManager::GetMesh(const std::string& fileName)
+VertexIndexData* VertexIndexDataManager::GetVertexIndexData(const std::string& fileName)
 {
-	auto mesh = meshs_.find(fileName);
+	auto mesh = vertexIndexData_.find(fileName);
 
-	if (mesh == meshs_.end()) {
+	if (mesh == vertexIndexData_.end()) {
 		throw Lamb::Error::Code<VertexIndexDataManager>("This file is not loaded -> " + fileName, ErrorPlace);
 	}
 

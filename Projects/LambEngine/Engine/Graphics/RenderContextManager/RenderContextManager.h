@@ -58,15 +58,15 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader, numRenderTarget);
 
-		Lamb::SafePtr meshManager = VertexIndexDataManager::GetInstance();
-		meshManager->LoadModel(fileNames.resourceFileName);
-		VertexIndexData* mesh = meshManager->GetMesh(fileNames.resourceFileName);
-		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
+		Lamb::SafePtr vertexIndexDataManager = VertexIndexDataManager::GetInstance();
+		vertexIndexDataManager->LoadModel(fileNames.resourceFileName);
+		VertexIndexData* vertexIndexData = vertexIndexDataManager->GetVertexIndexData(fileNames.resourceFileName);
+		ModelData* modelData = vertexIndexDataManager->GetModelData(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();
 
-			renderContext->SetMesh(mesh);
+			renderContext->SetVertexIndexData(vertexIndexData);
 			renderContext->SetModelData(modelData);
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
@@ -99,15 +99,15 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader, numRenderTarget);
 
-		Lamb::SafePtr meshManager = VertexIndexDataManager::GetInstance();
-		meshManager->LoadModel(fileNames.resourceFileName);
-		VertexIndexData* mesh = meshManager->GetMesh(fileNames.resourceFileName);
-		ModelData* modelData = meshManager->GetModelData(fileNames.resourceFileName);
+		Lamb::SafePtr vertexIndexDataManager = VertexIndexDataManager::GetInstance();
+		vertexIndexDataManager->LoadModel(fileNames.resourceFileName);
+		VertexIndexData* vertexIndexData = vertexIndexDataManager->GetVertexIndexData(fileNames.resourceFileName);
+		ModelData* modelData = vertexIndexDataManager->GetModelData(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<SkinRenderContext<T, bufferSize>> renderContext = std::make_unique<SkinRenderContext<T, bufferSize>>();
 
-			renderContext->SetMesh(mesh);
+			renderContext->SetVertexIndexData(vertexIndexData);
 			renderContext->SetModelData(modelData);
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
@@ -138,14 +138,20 @@ public:
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateMeshShaderGraphicsPipelines(shader, numRenderTarget);
 
-		Lamb::SafePtr meshManager = MeshletManager::GetInstance();
 
+		Lamb::SafePtr vertexIndexDataManager = VertexIndexDataManager::GetInstance();
+		vertexIndexDataManager->LoadModel(fileNames.resourceFileName);
+		VertexIndexData* vertexIndexData = vertexIndexDataManager->GetVertexIndexData(fileNames.resourceFileName);
+
+
+		Lamb::SafePtr meshManager = MeshletManager::GetInstance();
 		meshManager->LoadMesh(fileNames.resourceFileName, bufferSize);
 		const auto& mesh = meshManager->GetMesh(fileNames.resourceFileName);
 
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<MeshRenderContext<T, bufferSize>> renderContext = std::make_unique<MeshRenderContext<T, bufferSize>>();
 
+			renderContext->SetVertexIndexData(vertexIndexData);
 			renderContext->SetMeshShaderData(mesh.second.get());
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));

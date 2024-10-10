@@ -22,7 +22,7 @@ public:
 
 public:
     BaseRenderContext():
-        mesh_(nullptr),
+        vertexIndexData_(nullptr),
         modelData_(nullptr),
         pipeline_(nullptr),
         drawCount_(0),
@@ -36,7 +36,7 @@ public:
         return typeID_;
     }
 
-    virtual void SetMesh(const VertexIndexData* const mesh) = 0;
+    virtual void SetVertexIndexData(const VertexIndexData* const) = 0;
     virtual void SetModelData(const ModelData* const modelData) = 0;
     virtual void SetPipeline(Pipeline* const pipeline) = 0;
     virtual void SetWVPMatrix(const WVPMatrix& matrix) = 0;
@@ -62,11 +62,11 @@ public:
     }
 
     const std::string& GetRootName() const {
-        return mesh_->node.name;
+        return vertexIndexData_->node.name;
     }
 
-    const VertexIndexData* const GetMesh() const {
-        return mesh_;
+    const VertexIndexData* const GetVertexIndexData() const {
+        return vertexIndexData_;
     }
 
     const ModelData* const GetModelData() const {
@@ -74,11 +74,11 @@ public:
     }
 
     const Node& GetNode() const {
-        return mesh_->node;
+        return vertexIndexData_->node;
     }
 
 protected:
-    const VertexIndexData* mesh_;
+    const VertexIndexData* vertexIndexData_;
     const ModelData* modelData_;
 
 
@@ -103,7 +103,10 @@ public:
             shaderData_[i].shaderStruct.Create(bufferSize);
         }
 
-        drawData_.resize(bufferSize);
+        drawData_.color.resize(bufferSize);
+        drawData_.depth.resize(bufferSize);
+        drawData_.shaderStruct.resize(bufferSize);
+        drawData_.wvpMatrix.resize(bufferSize);
 
 
         pipeline_ = nullptr;
@@ -152,19 +155,19 @@ public:
         commandlist->SetGraphicsRootDescriptorTable(5, descriptorHeap->GetGpuHeapHandle(0));
 
         // 頂点バッファセット
-        commandlist->IASetVertexBuffers(0, 1, &(mesh_->vertexView));
+        commandlist->IASetVertexBuffers(0, 1, &(vertexIndexData_->vertexView));
         // インデックスバッファセット
-        commandlist->IASetIndexBuffer(&(mesh_->indexView));
+        commandlist->IASetIndexBuffer(&(vertexIndexData_->indexView));
         // ドローコール
-        commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, 0);
+        commandlist->DrawIndexedInstanced(vertexIndexData_->indexNumber, drawCount_, 0, 0, 0);
     }
     
 public:
-    inline void SetMesh(const VertexIndexData* const mesh) override {
-        if (!mesh) {
-            throw Lamb::Error::Code<RenderContext>("mesh is nullptr", ErrorPlace);
+    inline void SetVertexIndexData(const VertexIndexData* const vertexIndexData) override {
+        if (!vertexIndexData) {
+            throw Lamb::Error::Code<RenderContext>("vertexIndexData is nullptr", ErrorPlace);
         }
-        mesh_ = mesh;
+        vertexIndexData_ = vertexIndexData;
     }
     inline void SetModelData(const ModelData* const modelData) override {
         if (!modelData) {
@@ -183,15 +186,15 @@ public:
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        drawData_[drawCount_].wvpMatrix.worldMat = mesh_->node.loacalMatrix * matrix.worldMat;
-        drawData_[drawCount_].wvpMatrix.cameraMat = matrix.cameraMat;
+        drawData_.wvpMatrix[drawCount_].worldMat = vertexIndexData_->node.loacalMatrix * matrix.worldMat;
+        drawData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        drawData_[drawCount_].color = color;
+        drawData_.color[drawCount_] = color;
     }
     inline void SetLight(const DirectionLight& light) override {
         shaderData_[Lamb::GetBufferIndex()].light.OnWright();
@@ -207,7 +210,7 @@ public:
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<RenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
-        drawData_[drawCount_].shaderStruct = data;
+        drawData_.shaderStruct[drawCount_] = data;
     }
 
     inline void ZSort() override {
@@ -215,43 +218,45 @@ public:
         if (drawCount_ <= 1) {
             return;
         }
-        
-        
+
+
         // 正規化デバイス座標系にしてその深度値を入れる
         for (uint32_t i = 0; i < drawCount_; i++) {
-            Mat4x4&& ndcMatrix = drawData_[i].wvpMatrix.worldMat * drawData_[i].wvpMatrix.cameraMat;
-            drawData_[i].depth = ndcMatrix.GetTranslate().z;
+            Mat4x4&& ndcMatrix = drawData_.wvpMatrix[i].worldMat * drawData_.wvpMatrix[i].cameraMat;
+            // 深度値
+            drawData_.depth[i] = ndcMatrix.back().at(3);
         }
         // 描画をする部分だけソート
-        auto endItr = drawData_.begin() + drawCount_;
+        auto endItr = drawData_.depth.begin() + drawCount_;
         // 深度値でソート(大きい順。奥から描画していくため)
-        std::sort(drawData_.begin(), endItr, [](const DrawData<T>& left, const DrawData<T>& right) {
-            return left.depth > right.depth;
+        std::sort(drawData_.depth.begin(), endItr, [](float left, float right) {
+            return right < left;
             }
         );
 
     }
 
     inline void DataSet() override {
-        shaderData_[Lamb::GetBufferIndex()].wvpMatrix.OnWright();
-        shaderData_[Lamb::GetBufferIndex()].color.OnWright();
-        shaderData_[Lamb::GetBufferIndex()].shaderStruct.OnWright();
+        shaderData_[Lamb::GetBufferIndex()].wvpMatrix.MemCpy(
+            drawData_.wvpMatrix.data(),
+            sizeof(WVPMatrix) * drawCount_
+        );
 
-        for (uint32_t i = 0; i < drawCount_; i++) {
-            shaderData_[Lamb::GetBufferIndex()].wvpMatrix[i] = drawData_[i].wvpMatrix;
-            shaderData_[Lamb::GetBufferIndex()].color[i] = drawData_[i].color;
-            shaderData_[Lamb::GetBufferIndex()].shaderStruct[i] = drawData_[i].shaderStruct;
-        }
+        shaderData_[Lamb::GetBufferIndex()].color.MemCpy(
+            drawData_.color.data(),
+            sizeof(Vector4) * drawCount_
+        );
 
-        shaderData_[Lamb::GetBufferIndex()].wvpMatrix.OffWright();
-        shaderData_[Lamb::GetBufferIndex()].color.OffWright();
-        shaderData_[Lamb::GetBufferIndex()].shaderStruct.OffWright();
+        shaderData_[Lamb::GetBufferIndex()].shaderStruct.MemCpy(
+            drawData_.shaderStruct.data(),
+            sizeof(T) * drawCount_
+        );
     }
 
 
 private:
     std::array<ShaderData<T>, DirectXSwapChain::kBackBufferNumber> shaderData_;
-    std::vector<DrawData<T>> drawData_;
+    DrawData<T> drawData_;
 };
 
 template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
@@ -260,43 +265,30 @@ public:
     SkinRenderContext() :
         shaderData_()
     {
-        shaderData_.wvpMatrix.Create(bufferSize);
-        shaderData_.color.Create(bufferSize);
-        shaderData_.shaderStruct.Create(bufferSize);
+        shaderData_[Lamb::GetBufferIndex()].wvpMatrix.Create(bufferSize);
+        shaderData_[Lamb::GetBufferIndex()].color.Create(bufferSize);
+        shaderData_[Lamb::GetBufferIndex()].shaderStruct.Create(bufferSize);
 
-        drawData_.resize(bufferSize);
+        drawData_.color.resize(bufferSize);
+        drawData_.depth.resize(bufferSize);
+        drawData_.shaderStruct.resize(bufferSize);
+        drawData_.wvpMatrix.resize(bufferSize);
 
+        for (uint32_t i = 0; i < DirectXSwapChain::kBackBufferNumber; ++i) {
+            shaderData_[i].wvpMatrix.OffWright();
+            shaderData_[i].color.OffWright();
+            shaderData_[i].shaderStruct.OffWright();
+            shaderData_[i].light.OffWright();
+            shaderData_[i].eyePos.OffWright();
+        }
 
         pipeline_ = nullptr;
         drawCount_ = 0u;
 
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
-
-        descriptorHeap->BookingHeapPos(5);
-        descriptorHeap->CreateView(shaderData_.light);
-        descriptorHeap->CreateView(shaderData_.eyePos);
-        descriptorHeap->CreateView(shaderData_.wvpMatrix);
-        descriptorHeap->CreateView(shaderData_.color);
-        descriptorHeap->CreateView(shaderData_.shaderStruct);
-
-        shaderData_.wvpMatrix.OffWright();
-        shaderData_.color.OffWright();
-        shaderData_.shaderStruct.OffWright();
-        shaderData_.light.OffWright();
-        shaderData_.eyePos.OffWright();
-
         typeID_ = (typeid(SkinRenderContext<T, bufferSize>).name());
     }
     ~SkinRenderContext() {
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
 
-        descriptorHeap->ReleaseView(shaderData_.light.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.eyePos.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.wvpMatrix.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.color.GetHandleUINT());
-        descriptorHeap->ReleaseView(shaderData_.shaderStruct.GetHandleUINT());
     }
 
     SkinRenderContext(const SkinRenderContext&) = delete;
@@ -316,34 +308,40 @@ public:
         pipeline_->Use();
 
         // ライト構造体
-        commandlist->SetGraphicsRootDescriptorTable(0, shaderData_.light.GetHandleGPU());
-        // ワールドとカメラマトリックス, 色, 各シェーダーの構造体
-        commandlist->SetGraphicsRootDescriptorTable(1, shaderData_.wvpMatrix.GetHandleGPU());
+        commandlist->SetGraphicsRootConstantBufferView(0, shaderData_[Lamb::GetBufferIndex()].light.GetGPUVtlAdrs());
+        // カメラポジション
+        commandlist->SetGraphicsRootConstantBufferView(1, shaderData_[Lamb::GetBufferIndex()].eyePos.GetGPUVtlAdrs());
+        // ワールドとカメラマトリックス
+        commandlist->SetGraphicsRootShaderResourceView(2, shaderData_[Lamb::GetBufferIndex()].wvpMatrix.GetGPUVtlAdrs());
+        // 色
+        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_[Lamb::GetBufferIndex()].color.GetGPUVtlAdrs());
+        // shaderの固有構造体
+        commandlist->SetGraphicsRootShaderResourceView(4, shaderData_[Lamb::GetBufferIndex()].shaderStruct.GetGPUVtlAdrs());
         // スキンアニメーション用
-        commandlist->SetGraphicsRootDescriptorTable(2, skinCluster_->paletteBuffer.GetHandleGPU());
+        commandlist->SetGraphicsRootShaderResourceView(5, skinCluster_->paletteBuffer[Lamb::GetBufferIndex()].GetGPUVtlAdrs());
         // テクスチャ
-        commandlist->SetGraphicsRootDescriptorTable(3, descriptorHeap->GetGpuHeapHandle(0));
+        commandlist->SetGraphicsRootDescriptorTable(6, descriptorHeap->GetGpuHeapHandle(0));
 
         std::array vertexBuffer = {
-            mesh_->vertexView,
+            vertexIndexData_->vertexView,
             skinCluster_->infliuenceBufferView
         };
 
         // 頂点バッファセット
         commandlist->IASetVertexBuffers(0, static_cast<uint32_t>(vertexBuffer.size()), vertexBuffer.data());
         // インデックスバッファセット
-        commandlist->IASetIndexBuffer(&mesh_->indexView);
+        commandlist->IASetIndexBuffer(&vertexIndexData_->indexView);
         // ドローコール
-        commandlist->DrawIndexedInstanced(mesh_->indexNumber, drawCount_, 0, 0, 0);
+        commandlist->DrawIndexedInstanced(vertexIndexData_->indexNumber, drawCount_, 0, 0, 0);
         //commandlist->DrawInstanced(mesh_->vertexNumber, drawCount_, 0, 0);
     }
 
 public:
-    inline void SetMesh(const VertexIndexData* const mesh) override {
-        if (!mesh) {
-            throw Lamb::Error::Code<SkinRenderContext>("mesh is nullptr", ErrorPlace);
+    inline void SetVertexIndexData(const VertexIndexData* const vertexIndexData) override {
+        if (!vertexIndexData) {
+            throw Lamb::Error::Code<SkinRenderContext>("vertexIndexData is nullptr", ErrorPlace);
         }
-        mesh_ = mesh;
+        vertexIndexData_ = vertexIndexData;
     }
     inline void SetModelData(const ModelData* const modelData) override {
         if (!modelData) {
@@ -368,31 +366,31 @@ public:
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        drawData_[drawCount_].wvpMatrix.worldMat = matrix.worldMat;
-        drawData_[drawCount_].wvpMatrix.cameraMat = matrix.cameraMat;
+        drawData_.wvpMatrix[drawCount_].worldMat = matrix.worldMat;
+        drawData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        drawData_[drawCount_].color = color;
+        drawData_.color[drawCount_] = color;
     }
     inline void SetLight(const DirectionLight& light) override {
-        shaderData_.light.OnWright();
-        *shaderData_.light = light;
-        shaderData_.light.OffWright();
+        shaderData_[Lamb::GetBufferIndex()].light.OnWright();
+        *shaderData_[Lamb::GetBufferIndex()].light = light;
+        shaderData_[Lamb::GetBufferIndex()].light.OffWright();
     }
     inline void SetCameraPos(const Vector3& cameraPos) {
-        shaderData_.eyePos.OnWright();
-        *shaderData_.eyePos = cameraPos;
-        shaderData_.eyePos.OffWright();
+        shaderData_[Lamb::GetBufferIndex()].eyePos.OnWright();
+        *shaderData_[Lamb::GetBufferIndex()].eyePos = cameraPos;
+        shaderData_[Lamb::GetBufferIndex()].eyePos.OffWright();
     }
     inline void SetShaderStruct(const T& data) {
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<SkinRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
-        drawData_[drawCount_].shaderStruct = data;
+        drawData_.shaderStruct[drawCount_] = data;
     }
 
     inline void ZSort() override {
@@ -404,40 +402,42 @@ public:
 
         // 正規化デバイス座標系にしてその深度値を入れる
         for (uint32_t i = 0; i < drawCount_; i++) {
-            Mat4x4&& ndcMatrix = drawData_[i].wvpMatrix.worldMat * drawData_[i].wvpMatrix.cameraMat;
-            drawData_[i].depth = ndcMatrix.GetTranslate().z;
+            Mat4x4&& ndcMatrix = drawData_.wvpMatrix[i].worldMat * drawData_.wvpMatrix[i].cameraMat;
+            // 深度値
+            drawData_.depth[i] = ndcMatrix.back().at(3);
         }
         // 描画をする部分だけソート
-        auto endItr = drawData_.begin() + drawCount_;
+        auto endItr = drawData_.depth.begin() + drawCount_;
         // 深度値でソート(大きい順。奥から描画していくため)
-        std::sort(drawData_.begin(), endItr, [](const DrawData<T>& left, const DrawData<T>& right) {
-            return left.depth > right.depth;
+        std::sort(drawData_.depth.begin(), endItr, [](float left, float right) {
+            return right < left;
             }
         );
     }
 
     inline void DataSet() override {
-        shaderData_.wvpMatrix.OnWright();
-        shaderData_.color.OnWright();
-        shaderData_.shaderStruct.OnWright();
+        shaderData_[Lamb::GetBufferIndex()].wvpMatrix.MemCpy(
+            drawData_.wvpMatrix.data(),
+            sizeof(WVPMatrix) * drawCount_
+        );
 
-        for (uint32_t i = 0; i < drawCount_; i++) {
-            shaderData_.wvpMatrix[i] = std::move(drawData_[i].wvpMatrix);
-            shaderData_.color[i] = std::move(drawData_[i].color);
-            shaderData_.shaderStruct[i] = std::move(drawData_[i].shaderStruct);
-        }
+        shaderData_[Lamb::GetBufferIndex()].color.MemCpy(
+            drawData_.color.data(),
+            sizeof(Vector4) * drawCount_
+        );
 
-        shaderData_.wvpMatrix.OffWright();
-        shaderData_.color.OffWright();
-        shaderData_.shaderStruct.OffWright();
+        shaderData_[Lamb::GetBufferIndex()].shaderStruct.MemCpy(
+            drawData_.shaderStruct.data(),
+            sizeof(T) * drawCount_
+        );
     }
 
 
 private:
-    ShaderData<T> shaderData_;
-    std::vector<DrawData<T>> drawData_;
+    std::array<ShaderData<T>, DirectXSwapChain::kBackBufferNumber> shaderData_;
+    DrawData<T> drawData_;
 
-    SkinCluster* skinCluster_;
+    Lamb::SafePtr<SkinCluster> skinCluster_;
 };
 
 // MeshShaderテスト用
@@ -448,7 +448,11 @@ public:
         shaderData_()
     {
         constexpr uint32_t kBufferSize = bufferSize;
-        drawData_.resize(kBufferSize);
+        drawData_.color.resize(kBufferSize);
+        drawData_.depth.resize(kBufferSize);
+        drawData_.shaderStruct.resize(kBufferSize);
+        drawData_.wvpMatrix.resize(kBufferSize);
+       
         std::for_each(
             shaderStruct_.begin(),
             shaderStruct_.end(),
@@ -515,8 +519,11 @@ public:
     }
 
 public:
-    inline void SetMesh([[maybe_unused]]const VertexIndexData* const mesh) override {
-       
+    inline void SetVertexIndexData(const VertexIndexData* const vertexIndexData) override {
+        if (!vertexIndexData) {
+            throw Lamb::Error::Code<MeshRenderContext>("vertexIndexData is nullptr", ErrorPlace);
+        }
+        vertexIndexData_ = vertexIndexData;
     }
     inline void SetModelData([[maybe_unused]]const ModelData* const modelData) override {
         
@@ -532,14 +539,15 @@ public:
             throw Lamb::Error::Code<MeshRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        drawData_[drawCount_].wvpMatrix = matrix;
+        drawData_.wvpMatrix[drawCount_].worldMat = vertexIndexData_->node.loacalMatrix *  matrix.worldMat;
+        drawData_.wvpMatrix[drawCount_].cameraMat = matrix.cameraMat;
     }
     inline void SetColor(const Vector4& color) override {
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<MeshRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
 
-        drawData_[drawCount_].color = color;
+        drawData_.color[drawCount_] = color;
     }
     inline void SetLight(const DirectionLight& light) override {
         light_[Lamb::GetBufferIndex()].OnWright();
@@ -555,7 +563,7 @@ public:
         if (bufferSize <= drawCount_) {
             throw Lamb::Error::Code<MeshRenderContext>("drawCount is over " + std::to_string(bufferSize), ErrorPlace);
         }
-        drawData_[drawCount_].shaderStruct = data;
+        drawData_.shaderStruct[drawCount_] = data;
     }
 
     inline void ZSort() override {
@@ -567,35 +575,34 @@ public:
 
         // 正規化デバイス座標系にしてその深度値を入れる
         for (uint32_t i = 0; i < drawCount_; i++) {
-            Mat4x4&& ndcMatrix = drawData_[i].wvpMatrix.worldMat * drawData_[i].wvpMatrix.cameraMat;
-            drawData_[i].depth = ndcMatrix.GetTranslate().z;
+            Mat4x4&& ndcMatrix = drawData_.wvpMatrix[i].worldMat * drawData_.wvpMatrix[i].cameraMat;
+            // 深度値
+            drawData_.depth[i] = ndcMatrix.back().at(3);
         }
         // 描画をする部分だけソート
-        auto endItr = drawData_.begin() + drawCount_;
+        auto endItr = drawData_.depth.begin() + drawCount_;
         // 深度値でソート(大きい順。奥から描画していくため)
-        std::sort(drawData_.begin(), endItr, [](const DrawData<T>& left, const DrawData<T>& right) {
-            return left.depth > right.depth;
+        std::sort(drawData_.depth.begin(), endItr, [](float left, float right) {
+            return right < left;
             }
         );
     }
 
     inline void DataSet() override {
-        shaderData_->gTransform[Lamb::GetBufferIndex()].OnWright();
-        colors_[Lamb::GetBufferIndex()].OnWright();
-        shaderStruct_[Lamb::GetBufferIndex()].OnWright();
+
+        shaderData_->gTransform[Lamb::GetBufferIndex()].MemCpy(
+            drawData_.wvpMatrix.data(), sizeof(WVPMatrix) * drawCount_
+        );
+        shaderStruct_[Lamb::GetBufferIndex()].MemCpy(
+            drawData_.shaderStruct.data(), sizeof(T) * drawCount_
+        );
+        colors_[Lamb::GetBufferIndex()].MemCpy(
+            drawData_.color.data(), sizeof(Vector4) * drawCount_
+        );
+
         instanceCount_[Lamb::GetBufferIndex()].OnWright();
-
-        for (uint32_t i = 0; i < drawCount_; i++) {
-            shaderData_->gTransform[Lamb::GetBufferIndex()][i] = drawData_[i].wvpMatrix;
-            shaderStruct_[Lamb::GetBufferIndex()][i] = drawData_[i].shaderStruct;
-            colors_[Lamb::GetBufferIndex()][i] = drawData_[i].color;
-        }
         *instanceCount_[Lamb::GetBufferIndex()] = drawCount_;
-
         instanceCount_[Lamb::GetBufferIndex()].OffWright();
-        shaderStruct_[Lamb::GetBufferIndex()].OffWright();
-        colors_[Lamb::GetBufferIndex()].OffWright();
-        shaderData_->gTransform[Lamb::GetBufferIndex()].OffWright();
     }
 
     inline void SetMeshShaderData(Lamb::SafePtr<MeshShaderData> shaderData) {
@@ -611,7 +618,7 @@ private:
     std::array<StructuredBuffer<T>, DirectXSwapChain::kBackBufferNumber> shaderStruct_;
     std::array<StructuredBuffer<Vector4>, DirectXSwapChain::kBackBufferNumber> colors_;
 
-    std::vector<DrawData<T>> drawData_;
+   DrawData<T> drawData_;
 };
 
 
@@ -697,7 +704,7 @@ public:
     }
 
     const VertexIndexData* const GetMesh() const {
-        return renderDatas_.front()->GetMesh();
+        return renderDatas_.front()->GetVertexIndexData();
     }
     const ModelData* const GetModelData() const {
         return renderDatas_.front()->GetModelData();

@@ -165,10 +165,10 @@ struct ShaderData {
 
 template<Lamb::IsObject T>
 struct DrawData {
-    float depth;
-    WVPMatrix wvpMatrix;
-    Vector4 color;
-    T shaderStruct;
+    std::vector<float> depth;
+    std::vector<WVPMatrix> wvpMatrix;
+    std::vector<Vector4> color;
+    std::vector<T> shaderStruct;
 };
 
 struct ShaderFileNames {

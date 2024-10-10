@@ -31,13 +31,13 @@ private:
 
 public:
 	void LoadModel(const std::string& objFileName);
-	[[nodiscard]] VertexIndexData* GetMesh(const std::string& objFileName);
+	[[nodiscard]] VertexIndexData* GetVertexIndexData(const std::string& objFileName);
 	[[nodiscard]] ModelData* GetModelData(const std::string& objFileName);
 
 private:
 	[[nodiscard]] VertexIndexData* CreateMesh(const ModelData& modelData);
 
 private:
-	std::unordered_map<std::string, std::unique_ptr<VertexIndexData>> meshs_;
+	std::unordered_map<std::string, std::unique_ptr<VertexIndexData>> vertexIndexData_;
 	std::unordered_map<std::string, std::unique_ptr<ModelData>> modelData_;
 };

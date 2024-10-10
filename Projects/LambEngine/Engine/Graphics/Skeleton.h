@@ -77,7 +77,7 @@ public:
 	Lamb::LambPtr<ID3D12Resource> influenceResource;
 	D3D12_VERTEX_BUFFER_VIEW infliuenceBufferView{};
 	std::span<VertexInfluence> mappedInfluence;
-	StructuredBuffer<WellForGpu> paletteBuffer;
+	std::array<StructuredBuffer<WellForGpu>, DirectXSwapChain::kBackBufferNumber> paletteBuffer;
 };
 
 namespace Lamb {
