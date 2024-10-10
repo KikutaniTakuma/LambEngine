@@ -364,10 +364,11 @@ void Engine::InitializeDirectXTK() {
 /// 
 
 void Engine::FrameStart() {
+	const Lamb::SafePtr frameInfo = FrameInfo::GetInstance();
+	frameInfo->Start();
+
 	RenderingManager::GetInstance()->FrameStart();
 
-	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
-	frameInfo->Start();
 
 	Lamb::screenout.Clear();
 	Lamb::screenout << Lamb::endline;
@@ -383,7 +384,7 @@ void Engine::FrameEnd() {
 	}
 	FlgManager::GetInstance()->AllFlgUpdate();
 
-	static FrameInfo* const frameInfo = FrameInfo::GetInstance();
+	const Lamb::SafePtr frameInfo = FrameInfo::GetInstance();
 	frameInfo->DrawFps();
 	Lamb::screenout.Draw();
 
