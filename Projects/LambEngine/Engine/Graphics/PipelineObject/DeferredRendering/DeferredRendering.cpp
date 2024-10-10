@@ -129,10 +129,7 @@ void DeferredRendering::Init(
 	desc.rootParameter = rootParameter.data();
 	desc.rootParameterSize = rootParameter.size();
 	desc.samplerDeacs.push_back(
-		CreateLinearSampler()
-	);
-	desc.samplerDeacs.push_back(
-		CreatePointSampler(1)
+		CreateBorderPointSampler(0)
 	);
 
 	auto pipelineManager = PipelineManager::GetInstance();
