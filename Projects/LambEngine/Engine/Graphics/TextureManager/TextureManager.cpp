@@ -98,7 +98,7 @@ void TextureManager::UploadTextureData()
 		directXCommand_->CloseCommandlist();
 
 		// GPUにコマンドリストの実行を行わせる
-		directXCommand_->ExecuteCommandLists();
+		directXCommand_->ExecuteCommandList();
 
 		directXCommand_->WaitForFinishCommnadlist();
 

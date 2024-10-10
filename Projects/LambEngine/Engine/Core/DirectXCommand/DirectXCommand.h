@@ -34,7 +34,7 @@ public:
 	/// <summary>
 	/// コマンドリストを実行
 	/// </summary>
-	void ExecuteCommandLists();
+	void ExecuteCommandList();
 
 	/// <summary>
 	/// コマンドリストのリセット(また使えるようにする)

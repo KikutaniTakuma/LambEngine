@@ -49,7 +49,7 @@ void DirectXCommand::CloseCommandlist() {
 	}
 }
 
-void DirectXCommand::ExecuteCommandLists() {
+void DirectXCommand::ExecuteCommandList() {
 	ID3D12CommandList* commandLists[] = { commandLists_[bufferIndex_].Get() };
 	commandQueue_->ExecuteCommandLists(_countof(commandLists), commandLists);
 }

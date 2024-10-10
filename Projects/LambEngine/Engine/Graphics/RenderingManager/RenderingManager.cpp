@@ -165,30 +165,19 @@ void RenderingManager::FrameStart()
 		directXCommand->CloseCommandlist();
 
 		// GPUにコマンドリストの実行を行わせる
-		directXCommand->ExecuteCommandLists();
+		directXCommand->ExecuteCommandList();
 
 		// GPUとOSに画面の交換を行うように通知する
 		directXSwapChain->SwapChainPresent();
-	}
-	
-	ImGuiManager::GetInstance()->Start();
-	
 
-}
 
-void RenderingManager::FrameEnd()
-{
-	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
-	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
-	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
-
-	// 最初のフレームは通らない
-	if (not isFirstFrame_) {
 		preBufferIndex_ = bufferIndex_++;
 		if (DirectXSwapChain::kBackBufferNumber <= bufferIndex_) {
 			bufferIndex_ = 0;
 		}
 	}
+	
+	ImGuiManager::GetInstance()->Start();
 
 	// これからコマンドを積むインデックスをセット
 	directXCommand->SetBufferIndex(bufferIndex_);
@@ -206,6 +195,13 @@ void RenderingManager::FrameEnd()
 	const Lamb::SafePtr cbvSrvUavDescriptorHeap = CbvSrvUavHeap::GetInstance();
 	std::array heapPtrs = { cbvSrvUavDescriptorHeap->Get() };
 	DescriptorHeap::SetHeaps(heapPtrs.size(), heapPtrs.data());
+}
+
+void RenderingManager::FrameEnd()
+{
+	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
+	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
+	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
 
 	// 描画コマンドを積む
 	Draw();
