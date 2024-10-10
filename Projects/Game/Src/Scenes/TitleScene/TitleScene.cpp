@@ -102,8 +102,7 @@ void TitleScene::Initialize() {
     renderingManager_->SetBloomKernelSize(128, 128);
     renderingManager_->SetEnvironmentCoefficient(0.3f);
 
-    constexpr size_t kLowObjectNum = 22llu;
-    corals_ = std::make_unique<std::array<ModelInstance, kLowObjectNum * kLowObjectNum>>();
+    corals_ = std::make_unique<std::array<ModelInstance, kLowCoralObjectNum_ * kLowCoralObjectNum_>>();
 
     float32_t minScale = 8.0f;
     float32_t maxScale = 13.0f;
@@ -138,7 +137,7 @@ void TitleScene::Initialize() {
         i.pos.x = startPos.x + offset * static_cast<float32_t>(countX) + Lamb::Random(posRandomMin, posRandomMax);
         i.pos.z = 100.0f + startPos.y + offset * static_cast<float32_t>(countY) + Lamb::Random(posRandomMin, posRandomMax);
         countX++;
-        if (kLowObjectNum <= countX) {
+        if (kLowCoralObjectNum_ <= countX) {
             countX = 0;
             countY++;
         }

@@ -35,6 +35,9 @@ public:
 	void Draw() override;
 
 private:
+	static constexpr size_t kLowCoralObjectNum_ = 22llu;
+
+private:
 	std::unique_ptr<Camera> staticCamera_;
 	std::unique_ptr<Tex2DInstance> title_;
 	std::unique_ptr<Cursor> cursor_;
@@ -85,5 +88,5 @@ private:
 
 	WaterTex2D::WaveData waveData_;
 
-	std::unique_ptr<std::array<ModelInstance, 484>> corals_;
+	std::unique_ptr<std::array<ModelInstance, kLowCoralObjectNum_ * kLowCoralObjectNum_>> corals_;
 };
