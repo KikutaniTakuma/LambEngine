@@ -124,7 +124,7 @@ void TitleScene::Initialize() {
     Vector2 startPos = Vector2(-143.0f, -143.0f);
 
     for (auto& i : *corals_) {
-        i.Load("./Resources/Coral/Coral_3584.obj");
+        i.Load("./Resources/Coral/Coral_9866.obj");
         i.blend = BlendType::kNone;
         i.color = colorRandom[Lamb::Random(0llu, colorRandom.size() - 1)];
         i.scale.y = Lamb::Random(minScale, maxScaleY);
