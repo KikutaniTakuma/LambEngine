@@ -102,7 +102,8 @@ void TitleScene::Initialize() {
     renderingManager_->SetBloomKernelSize(128, 128);
     renderingManager_->SetEnvironmentCoefficient(0.3f);
 
-    corals_ = std::make_unique<std::array<ModelInstance, 484>>();
+    constexpr size_t kLowObjectNum = 22llu;
+    corals_ = std::make_unique<std::array<ModelInstance, kLowObjectNum * kLowObjectNum>>();
 
     float32_t minScale = 8.0f;
     float32_t maxScale = 13.0f;
@@ -123,7 +124,9 @@ void TitleScene::Initialize() {
 
     Vector2 startPos = Vector2(-143.0f, -143.0f);
 
+
     for (auto& i : *corals_) {
+        // 9866頂点オブジェクト
         i.Load("./Resources/Coral/Coral_9866.obj");
         i.blend = BlendType::kNone;
         i.color = colorRandom[Lamb::Random(0llu, colorRandom.size() - 1)];
@@ -135,7 +138,7 @@ void TitleScene::Initialize() {
         i.pos.x = startPos.x + offset * static_cast<float32_t>(countX) + Lamb::Random(posRandomMin, posRandomMax);
         i.pos.z = 100.0f + startPos.y + offset * static_cast<float32_t>(countY) + Lamb::Random(posRandomMin, posRandomMax);
         countX++;
-        if (22_z <= countX) {
+        if (kLowObjectNum <= countX) {
             countX = 0;
             countY++;
         }
