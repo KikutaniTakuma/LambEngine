@@ -28,8 +28,6 @@ public:
 public:
 	void Use(Pipeline::Blend blendType, bool isDepth) override;
 
-	void Update()override;
-
 	void SetRtvFormt(DXGI_FORMAT format);
 
 	void SetDistortionTexHandle(D3D12_GPU_DESCRIPTOR_HANDLE distortionTexHandle) {

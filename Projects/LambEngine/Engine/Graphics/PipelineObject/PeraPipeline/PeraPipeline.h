@@ -27,7 +27,7 @@ public:
 	) override;
 
 public:
-	virtual void Update();
+	virtual void DataSet();
 
 	void SetSize(uint32_t width, uint32_t height) {
 		width_ = width;

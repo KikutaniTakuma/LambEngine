@@ -16,5 +16,5 @@ namespace Lamb {
 
 	bool IsCanUseMeshShader();
 
-	uint32_t GetBufferIndex();
+	uint32_t GetGraphicBufferIndex();
 }

@@ -25,9 +25,9 @@ void GaussianBlur::Debug([[maybe_unused]]const std::string& guiName) {
 
 }
 
-void GaussianBlur::Update() {
-	**colorBuf_[Lamb::GetBufferIndex()] = color;
-	**gaussianBlurStateBuf_[Lamb::GetBufferIndex()] = gaussianBlurState_;
+void GaussianBlur::DataSet() {
+	colorBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(color.data());
+	gaussianBlurStateBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&gaussianBlurState_);
 }
 
 void GaussianBlur::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -40,8 +40,8 @@ void GaussianBlur::Use(Pipeline::Blend blendType, bool isDepth) {
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootConstantBufferView(1, colorBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
-	commandList->SetGraphicsRootConstantBufferView(2, gaussianBlurStateBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(1, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(2, gaussianBlurStateBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void GaussianBlur::Init(

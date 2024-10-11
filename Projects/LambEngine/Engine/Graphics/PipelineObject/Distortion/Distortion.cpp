@@ -17,10 +17,6 @@ void Distortion::SetRtvFormt(DXGI_FORMAT format) {
 	format_ = format;
 }
 
-void Distortion::Update() {
-	**colorBuf_[Lamb::GetBufferIndex()] = color;
-}
-
 void Distortion::Use(Pipeline::Blend blendType, bool isDepth) {
 	if (isDepth) {
 		pipelines_[blendType]->Use();
@@ -32,7 +28,7 @@ void Distortion::Use(Pipeline::Blend blendType, bool isDepth) {
 
 	render_->UseThisRenderTargetShaderResource();
 	commandList->SetGraphicsRootDescriptorTable(1, distortionTexHandle_);
-	commandList->SetGraphicsRootConstantBufferView(2, colorBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(2, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void Distortion::Init(

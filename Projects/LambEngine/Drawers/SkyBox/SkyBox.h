@@ -40,7 +40,7 @@ private:
 	Lamb::LambPtr<ID3D12Resource> indexResource_;
 
 	static constexpr uint32_t kIndexNumber_ = 36u;
-	std::unique_ptr<ConstantBuffer<ShaderData>> cbuffer_;
+	std::unique_ptr<ConstantBuffer<ShaderData>> shaderData_;
 	Lamb::SafePtr<class Texture> texture_;
 	Lamb::SafePtr<class Pipeline> pipeline_;
 };

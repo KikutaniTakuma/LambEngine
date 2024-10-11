@@ -35,7 +35,7 @@ namespace Lamb {
 		return DirectXDevice::GetInstance()->GetIsCanUseMeshShader();
 	}
 
-	uint32_t GetBufferIndex()
+	uint32_t GetGraphicBufferIndex()
 	{
 		const Lamb::SafePtr renderingManager = RenderingManager::GetInstance();
 		if (renderingManager.empty()) {

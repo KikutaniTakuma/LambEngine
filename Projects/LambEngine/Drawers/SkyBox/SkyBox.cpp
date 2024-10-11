@@ -10,9 +10,9 @@
 
 SkyBox::~SkyBox()
 {
-    if (cbuffer_) {
+    if (shaderData_) {
         Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-        heap->ReleaseView(cbuffer_->GetHandleUINT());
+        heap->ReleaseView(shaderData_->GetHandleUINT());
     }
 }
 
@@ -77,23 +77,25 @@ void SkyBox::Load(const std::string& fileName) {
     texture_ = textureMangaer->GetTexture(fileName);
 
     Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-    if (cbuffer_) {
-        cbuffer_.reset();
-        heap->ReleaseView(cbuffer_->GetHandleUINT());
+    if (shaderData_) {
+        shaderData_.reset();
+        heap->ReleaseView(shaderData_->GetHandleUINT());
     }
 
-    cbuffer_ = std::make_unique<ConstantBuffer<ShaderData>>();
+    shaderData_ = std::make_unique<ConstantBuffer<ShaderData>>();
 
     heap->BookingHeapPos(1u);
-    heap->CreateView(*cbuffer_);
+    heap->CreateView(*shaderData_);
 
     CreateGraphicsPipeline();
 }
 
 void SkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color) {
-    (*cbuffer_)->worldMat = worldMat;
-    (*cbuffer_)->viewProjectionMat = cameraMat;
-    (*cbuffer_)->color = color;
+    (*shaderData_).OnWright();
+    (*shaderData_)->worldMat = worldMat;
+    (*shaderData_)->viewProjectionMat = cameraMat;
+    (*shaderData_)->color = color;
+    (*shaderData_).OffWright();
 
     // コマンドリスト
     ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
@@ -102,7 +104,7 @@ void SkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t colo
     pipeline_->Use();
 
     // ライト構造体
-    commandlist->SetGraphicsRootDescriptorTable(0, cbuffer_->GetHandleGPU());
+    commandlist->SetGraphicsRootDescriptorTable(0, shaderData_->GetHandleGPU());
     // テクスチャ
     commandlist->SetGraphicsRootDescriptorTable(1, texture_->GetHandleGPU());
 

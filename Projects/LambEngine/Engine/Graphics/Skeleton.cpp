@@ -138,9 +138,9 @@ void SkinCluster::Update(const Skeleton& skeleton) {
             throw Lamb::Error::Code<SkinCluster>("jointIndex is over to joints size of skeleton", ErrorPlace);
         }
 
-        this->paletteBuffer[Lamb::GetBufferIndex()][jointIndex].skeletonSpaceMatrix =
+        this->paletteBuffer[Lamb::GetGraphicBufferIndex()][jointIndex].skeletonSpaceMatrix =
             this->inverseBindPoseMatrices[jointIndex] * skeleton.joints[jointIndex].skeletonSpaceMatrix;
-        this->paletteBuffer[Lamb::GetBufferIndex()][jointIndex].skeletonSpaceInverseTransposeMatrix =
-            this->paletteBuffer[Lamb::GetBufferIndex()][jointIndex].skeletonSpaceMatrix.Inverse().Transepose();
+        this->paletteBuffer[Lamb::GetGraphicBufferIndex()][jointIndex].skeletonSpaceInverseTransposeMatrix =
+            this->paletteBuffer[Lamb::GetGraphicBufferIndex()][jointIndex].skeletonSpaceMatrix.Inverse().Transepose();
     }
 }

@@ -32,7 +32,7 @@ public:
 public:
 	void Use(Pipeline::Blend blendType, bool isDepth) override;
 
-	void Update()override;
+	void DataSet()override;
 
 	void SetGaussianState(const GaussianBlurState& gaussianBlurState) {
 		gaussianBlurState_ = gaussianBlurState;

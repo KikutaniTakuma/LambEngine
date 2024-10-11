@@ -111,14 +111,6 @@ public:
 
         pipeline_ = nullptr;
         drawCount_ = 0u;
-
-        for (uint32_t i = 0; i < DirectXSwapChain::kBackBufferNumber; ++i) {
-            shaderData_[i].wvpMatrix.OffWright();
-            shaderData_[i].color.OffWright();
-            shaderData_[i].shaderStruct.OffWright();
-            shaderData_[i].light.OffWright();
-            shaderData_[i].eyePos.OffWright();
-        }
        
 
         typeID_ = (typeid(RenderContext<T, bufferSize>).name());
@@ -142,15 +134,15 @@ public:
         pipeline_->Use();
 
         // ライト構造体
-        commandlist->SetGraphicsRootConstantBufferView(0, shaderData_[Lamb::GetBufferIndex()].light.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootConstantBufferView(0, shaderData_[Lamb::GetGraphicBufferIndex()].light.GetGPUVtlAdrs());
         // カメラポジション
-        commandlist->SetGraphicsRootConstantBufferView(1, shaderData_[Lamb::GetBufferIndex()].eyePos.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootConstantBufferView(1, shaderData_[Lamb::GetGraphicBufferIndex()].eyePos.GetGPUVtlAdrs());
         // ワールドとカメラマトリックス
-        commandlist->SetGraphicsRootShaderResourceView(2, shaderData_[Lamb::GetBufferIndex()].wvpMatrix.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(2, shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.GetGPUVtlAdrs());
         // 色
-        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_[Lamb::GetBufferIndex()].color.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_[Lamb::GetGraphicBufferIndex()].color.GetGPUVtlAdrs());
         // shaderの固有構造体
-        commandlist->SetGraphicsRootShaderResourceView(4, shaderData_[Lamb::GetBufferIndex()].shaderStruct.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(4, shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.GetGPUVtlAdrs());
         // テクスチャ
         commandlist->SetGraphicsRootDescriptorTable(5, descriptorHeap->GetGpuHeapHandle(0));
 
@@ -197,14 +189,10 @@ public:
         drawData_.color[drawCount_] = color;
     }
     inline void SetLight(const DirectionLight& light) override {
-        shaderData_[Lamb::GetBufferIndex()].light.OnWright();
-        *shaderData_[Lamb::GetBufferIndex()].light = light;
-        shaderData_[Lamb::GetBufferIndex()].light.OffWright();
+        shaderData_[Lamb::GetGraphicBufferIndex()].light.MemCpy(&light);
     }
     inline void SetCameraPos(const Vector3& cameraPos) {
-        shaderData_[Lamb::GetBufferIndex()].eyePos.OnWright();
-        *shaderData_[Lamb::GetBufferIndex()].eyePos = cameraPos;
-        shaderData_[Lamb::GetBufferIndex()].eyePos.OffWright();
+        shaderData_[Lamb::GetGraphicBufferIndex()].eyePos.MemCpy(cameraPos.data());
     }
     inline void SetShaderStruct(const T& data) {
         if (bufferSize <= drawCount_) {
@@ -237,17 +225,17 @@ public:
     }
 
     inline void DataSet() override {
-        shaderData_[Lamb::GetBufferIndex()].wvpMatrix.MemCpy(
+        shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.MemCpy(
             drawData_.wvpMatrix.data(),
             sizeof(WVPMatrix) * drawCount_
         );
 
-        shaderData_[Lamb::GetBufferIndex()].color.MemCpy(
+        shaderData_[Lamb::GetGraphicBufferIndex()].color.MemCpy(
             drawData_.color.data(),
             sizeof(Vector4) * drawCount_
         );
 
-        shaderData_[Lamb::GetBufferIndex()].shaderStruct.MemCpy(
+        shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.MemCpy(
             drawData_.shaderStruct.data(),
             sizeof(T) * drawCount_
         );
@@ -265,22 +253,14 @@ public:
     SkinRenderContext() :
         shaderData_()
     {
-        shaderData_[Lamb::GetBufferIndex()].wvpMatrix.Create(bufferSize);
-        shaderData_[Lamb::GetBufferIndex()].color.Create(bufferSize);
-        shaderData_[Lamb::GetBufferIndex()].shaderStruct.Create(bufferSize);
+        shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.Create(bufferSize);
+        shaderData_[Lamb::GetGraphicBufferIndex()].color.Create(bufferSize);
+        shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.Create(bufferSize);
 
         drawData_.color.resize(bufferSize);
         drawData_.depth.resize(bufferSize);
         drawData_.shaderStruct.resize(bufferSize);
         drawData_.wvpMatrix.resize(bufferSize);
-
-        for (uint32_t i = 0; i < DirectXSwapChain::kBackBufferNumber; ++i) {
-            shaderData_[i].wvpMatrix.OffWright();
-            shaderData_[i].color.OffWright();
-            shaderData_[i].shaderStruct.OffWright();
-            shaderData_[i].light.OffWright();
-            shaderData_[i].eyePos.OffWright();
-        }
 
         pipeline_ = nullptr;
         drawCount_ = 0u;
@@ -308,17 +288,17 @@ public:
         pipeline_->Use();
 
         // ライト構造体
-        commandlist->SetGraphicsRootConstantBufferView(0, shaderData_[Lamb::GetBufferIndex()].light.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootConstantBufferView(0, shaderData_[Lamb::GetGraphicBufferIndex()].light.GetGPUVtlAdrs());
         // カメラポジション
-        commandlist->SetGraphicsRootConstantBufferView(1, shaderData_[Lamb::GetBufferIndex()].eyePos.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootConstantBufferView(1, shaderData_[Lamb::GetGraphicBufferIndex()].eyePos.GetGPUVtlAdrs());
         // ワールドとカメラマトリックス
-        commandlist->SetGraphicsRootShaderResourceView(2, shaderData_[Lamb::GetBufferIndex()].wvpMatrix.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(2, shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.GetGPUVtlAdrs());
         // 色
-        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_[Lamb::GetBufferIndex()].color.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_[Lamb::GetGraphicBufferIndex()].color.GetGPUVtlAdrs());
         // shaderの固有構造体
-        commandlist->SetGraphicsRootShaderResourceView(4, shaderData_[Lamb::GetBufferIndex()].shaderStruct.GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(4, shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.GetGPUVtlAdrs());
         // スキンアニメーション用
-        commandlist->SetGraphicsRootShaderResourceView(5, skinCluster_->paletteBuffer[Lamb::GetBufferIndex()].GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(5, skinCluster_->paletteBuffer[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
         // テクスチャ
         commandlist->SetGraphicsRootDescriptorTable(6, descriptorHeap->GetGpuHeapHandle(0));
 
@@ -377,14 +357,10 @@ public:
         drawData_.color[drawCount_] = color;
     }
     inline void SetLight(const DirectionLight& light) override {
-        shaderData_[Lamb::GetBufferIndex()].light.OnWright();
-        *shaderData_[Lamb::GetBufferIndex()].light = light;
-        shaderData_[Lamb::GetBufferIndex()].light.OffWright();
+        shaderData_[Lamb::GetGraphicBufferIndex()].light.MemCpy(&light);
     }
     inline void SetCameraPos(const Vector3& cameraPos) {
-        shaderData_[Lamb::GetBufferIndex()].eyePos.OnWright();
-        *shaderData_[Lamb::GetBufferIndex()].eyePos = cameraPos;
-        shaderData_[Lamb::GetBufferIndex()].eyePos.OffWright();
+        shaderData_[Lamb::GetGraphicBufferIndex()].eyePos.MemCpy(cameraPos.data());
     }
     inline void SetShaderStruct(const T& data) {
         if (bufferSize <= drawCount_) {
@@ -416,17 +392,17 @@ public:
     }
 
     inline void DataSet() override {
-        shaderData_[Lamb::GetBufferIndex()].wvpMatrix.MemCpy(
+        shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.MemCpy(
             drawData_.wvpMatrix.data(),
             sizeof(WVPMatrix) * drawCount_
         );
 
-        shaderData_[Lamb::GetBufferIndex()].color.MemCpy(
+        shaderData_[Lamb::GetGraphicBufferIndex()].color.MemCpy(
             drawData_.color.data(),
             sizeof(Vector4) * drawCount_
         );
 
-        shaderData_[Lamb::GetBufferIndex()].shaderStruct.MemCpy(
+        shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.MemCpy(
             drawData_.shaderStruct.data(),
             sizeof(T) * drawCount_
         );
@@ -491,15 +467,15 @@ public:
         // パイプライン設定
         pipeline_->Use();
         // Light
-        commandlist->SetGraphicsRootConstantBufferView(0, light_[Lamb::GetBufferIndex()].GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootConstantBufferView(0, light_[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
         // cameraPos
-        commandlist->SetGraphicsRootConstantBufferView(1, eyePos_[Lamb::GetBufferIndex()].GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootConstantBufferView(1, eyePos_[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
         // インスタンスカウント
-        commandlist->SetGraphicsRootConstantBufferView(2, instanceCount_[Lamb::GetBufferIndex()].GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootConstantBufferView(2, instanceCount_[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
 
 
         // Transform
-        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_->gTransform[Lamb::GetBufferIndex()].GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_->gTransform[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
         // gVertices
         commandlist->SetGraphicsRootShaderResourceView(4, shaderData_->gVertices.GetGPUVtlAdrs());
         // gUniqueVertexIndices
@@ -509,9 +485,9 @@ public:
         // gMeshlets
         commandlist->SetGraphicsRootShaderResourceView(7, shaderData_->gMeshlets.GetGPUVtlAdrs());
         // 色
-        commandlist->SetGraphicsRootShaderResourceView(8, colors_[Lamb::GetBufferIndex()].GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(8, colors_[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
         // 各shader固有の構造体
-        commandlist->SetGraphicsRootShaderResourceView(9, shaderStruct_[Lamb::GetBufferIndex()].GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(9, shaderStruct_[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
         // Textures
         commandlist->SetGraphicsRootDescriptorTable(10, descriptorHeap->GetGpuHeapHandle(0));
         // ドローコール
@@ -550,14 +526,10 @@ public:
         drawData_.color[drawCount_] = color;
     }
     inline void SetLight(const DirectionLight& light) override {
-        light_[Lamb::GetBufferIndex()].OnWright();
-        *light_[Lamb::GetBufferIndex()] = light;
-        light_[Lamb::GetBufferIndex()].OffWright();
+        light_[Lamb::GetGraphicBufferIndex()].MemCpy(&light);
     }
     inline void SetCameraPos(const Vector3& cameraPos) {
-        eyePos_[Lamb::GetBufferIndex()].OnWright();
-        *eyePos_[Lamb::GetBufferIndex()] = cameraPos;
-        eyePos_[Lamb::GetBufferIndex()].OffWright();
+        eyePos_[Lamb::GetGraphicBufferIndex()].MemCpy(cameraPos.data());
     }
     inline void SetShaderStruct(const T& data) {
         if (bufferSize <= drawCount_) {
@@ -590,19 +562,17 @@ public:
 
     inline void DataSet() override {
 
-        shaderData_->gTransform[Lamb::GetBufferIndex()].MemCpy(
+        shaderData_->gTransform[Lamb::GetGraphicBufferIndex()].MemCpy(
             drawData_.wvpMatrix.data(), sizeof(WVPMatrix) * drawCount_
         );
-        shaderStruct_[Lamb::GetBufferIndex()].MemCpy(
+        shaderStruct_[Lamb::GetGraphicBufferIndex()].MemCpy(
             drawData_.shaderStruct.data(), sizeof(T) * drawCount_
         );
-        colors_[Lamb::GetBufferIndex()].MemCpy(
+        colors_[Lamb::GetGraphicBufferIndex()].MemCpy(
             drawData_.color.data(), sizeof(Vector4) * drawCount_
         );
 
-        instanceCount_[Lamb::GetBufferIndex()].OnWright();
-        *instanceCount_[Lamb::GetBufferIndex()] = drawCount_;
-        instanceCount_[Lamb::GetBufferIndex()].OffWright();
+        instanceCount_[Lamb::GetGraphicBufferIndex()].MemCpy(&drawCount_);
     }
 
     inline void SetMeshShaderData(Lamb::SafePtr<MeshShaderData> shaderData) {

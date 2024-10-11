@@ -25,7 +25,7 @@ public:
 public:
 	void Use(Pipeline::Blend blendType, bool isDepth) override;
 
-	void Update()override;
+	void DataSet()override;
 
 	void SetLuminanceThreshold(float32_t luminanceThreshold) {
 		luminanceThreshold_ = luminanceThreshold;

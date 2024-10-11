@@ -23,9 +23,9 @@ void Luminate::Debug() {
 #endif // USE_DEBUG_CODE
 }
 
-void Luminate::Update() {
-	**colorBuf_[Lamb::GetBufferIndex()] = color;
-	**luminanceThresholdBuf_[Lamb::GetBufferIndex()] = luminanceThreshold_;
+void Luminate::DataSet() {
+	colorBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(color.data());
+	luminanceThresholdBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&luminanceThreshold_);
 }
 
 void Luminate::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -38,8 +38,8 @@ void Luminate::Use(Pipeline::Blend blendType, bool isDepth) {
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootConstantBufferView(1, colorBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
-	commandList->SetGraphicsRootConstantBufferView(2, luminanceThresholdBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(1, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(2, luminanceThresholdBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void Luminate::Init(

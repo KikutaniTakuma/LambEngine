@@ -15,21 +15,21 @@
 
 
 void DeferredRendering::Draw() {
-	(*deferredRenderingDataBuf_[Lamb::GetBufferIndex()]).OnWright();
-	(*atomosphericDataBuf_[Lamb::GetBufferIndex()]).OnWright();
+	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).OnWright();
+	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).OnWright();
 
-	**deferredRenderingDataBuf_[Lamb::GetBufferIndex()] = deferredRenderingData_;
-	**atomosphericDataBuf_[Lamb::GetBufferIndex()] = atomosphericData_;
+	**deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()] = deferredRenderingData_;
+	**atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()] = atomosphericData_;
 
-	(*deferredRenderingDataBuf_[Lamb::GetBufferIndex()]).OffWright();
-	(*atomosphericDataBuf_[Lamb::GetBufferIndex()]).OffWright();
+	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).OffWright();
+	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).OffWright();
 
 	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	pipelinesNoDepth_[Pipeline::Blend::None]->Use();
 
-	commandList->SetGraphicsRootConstantBufferView(0, deferredRenderingDataBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
-	commandList->SetGraphicsRootConstantBufferView(1, atomosphericDataBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(0, deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(1, atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 
 	commandList->SetGraphicsRootDescriptorTable(2, colorTextureHandle_);
 	commandList->SetGraphicsRootDescriptorTable(3, normalTextureHandle_);
@@ -39,14 +39,14 @@ void DeferredRendering::Draw() {
 }
 
 void DeferredRendering::Use(Pipeline::Blend blendType, bool isDepth) {
-	(*deferredRenderingDataBuf_[Lamb::GetBufferIndex()]).OnWright();
-	(*atomosphericDataBuf_[Lamb::GetBufferIndex()]).OnWright();
+	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).OnWright();
+	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).OnWright();
 
-	**deferredRenderingDataBuf_[Lamb::GetBufferIndex()] = deferredRenderingData_;
-	**atomosphericDataBuf_[Lamb::GetBufferIndex()] = atomosphericData_;
+	**deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()] = deferredRenderingData_;
+	**atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()] = atomosphericData_;
 
-	(*deferredRenderingDataBuf_[Lamb::GetBufferIndex()]).OffWright();
-	(*atomosphericDataBuf_[Lamb::GetBufferIndex()]).OffWright();
+	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).OffWright();
+	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).OffWright();
 
 	if (isDepth) {
 		pipelines_[blendType]->Use();
@@ -55,8 +55,8 @@ void DeferredRendering::Use(Pipeline::Blend blendType, bool isDepth) {
 		pipelinesNoDepth_[blendType]->Use();
 	}
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	commandList->SetGraphicsRootConstantBufferView(0, deferredRenderingDataBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
-	commandList->SetGraphicsRootConstantBufferView(1, atomosphericDataBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(0, deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(1, atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 
 	commandList->SetGraphicsRootDescriptorTable(2, colorTextureHandle_);
 	commandList->SetGraphicsRootDescriptorTable(3, normalTextureHandle_);

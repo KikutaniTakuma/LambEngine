@@ -23,7 +23,7 @@ public:
 protected:
 	virtual void Update() = 0;
 
-public:
+protected:
 	Lamb::Flg isActive_;
 
 protected:

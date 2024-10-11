@@ -33,7 +33,7 @@ public:
 public:
 	void Use(Pipeline::Blend blendType, bool isDepth = false) override;
 
-	void Update()override;
+	void DataSet()override;
 
 	void Debug(const std::string& guiName);
 
@@ -44,5 +44,5 @@ public:
 
 private:
 	std::array<std::unique_ptr<ConstantBuffer<OutlineData>>, DirectXSwapChain::kBackBufferNumber> outlineDataBuf_;
-	float32_t weight_ = 0.0f;
+	OutlineData outlineData_;
 };

@@ -19,7 +19,7 @@
 void Outline::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
-		ImGui::DragFloat("weight", &weight_, 0.01f, 0.0f, 1000.0f);
+		ImGui::DragFloat("weight", &outlineData_.weight, 0.01f, 0.0f, 1000.0f);
 		ImGui::TreePop();
 	}
 #endif // USE_DEBUG_CODE
@@ -28,11 +28,11 @@ void Outline::Debug([[maybe_unused]] const std::string& guiName) {
 
 void Outline::SetWeight(float32_t weight)
 {
-	weight_ = weight;
+	outlineData_.weight = weight;
 }
 
 void Outline::SetProjectionInverse(const float32_t4x4& projectionInverse) {
-		(**(outlineDataBuf_[Lamb::GetBufferIndex()])).projectionInverse = projectionInverse;
+	outlineData_.projectionInverse = projectionInverse;
 }
 
 void Outline::ChangeDepthBufferState()
@@ -41,9 +41,9 @@ void Outline::ChangeDepthBufferState()
 	depth.Barrier();
 }
 
-void Outline::Update() {
-	**colorBuf_[Lamb::GetBufferIndex()] = color;
-	(*outlineDataBuf_[Lamb::GetBufferIndex()])->weight = weight_;
+void Outline::DataSet() {
+	colorBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(color.data());
+	outlineDataBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&outlineData_);
 }
 
 void Outline::Use(Pipeline::Blend blendType, bool isDepth) {
@@ -59,8 +59,8 @@ void Outline::Use(Pipeline::Blend blendType, bool isDepth) {
 
 	render_->UseThisRenderTargetShaderResource();
 	commandList->SetGraphicsRootDescriptorTable(1, depth.GetTex()->GetHandleGPU());
-	commandList->SetGraphicsRootConstantBufferView(2, colorBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
-	commandList->SetGraphicsRootConstantBufferView(3, outlineDataBuf_[Lamb::GetBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(2, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(3, outlineDataBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void Outline::Init(
@@ -181,7 +181,7 @@ void Outline::Init(
 		}
 	);
 
-	weight_ = 0.3f;
+	outlineData_.weight = 0.3f;
 }
 
 Outline::~Outline() {
