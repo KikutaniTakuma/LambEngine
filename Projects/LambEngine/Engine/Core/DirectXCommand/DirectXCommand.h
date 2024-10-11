@@ -90,4 +90,15 @@ public:
 	/// <param name="subResource">サブリソース</param>
 	static void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource = 0u);
 	static void BarrierUAV(ID3D12Resource* resource);
+	
+	/// <summary>
+	/// 複数のリソースバリアを貼る
+	/// </summary>
+	/// <param name="resources">リソースバリアを貼るリソース</param>
+	/// <param name="before">今の状態</param>
+	/// <param name="after">遷移後の状態</param>
+	/// <param name="subResource">サブリソース</param>
+	static void Barrier(std::initializer_list<ID3D12Resource*> resources, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource = 0u);
+	static void Barrier(ID3D12Resource** resources, uint32_t numResource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource = 0u);
+	static void Barrier(std::vector<ID3D12Resource*> resources, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource = 0u);
 };

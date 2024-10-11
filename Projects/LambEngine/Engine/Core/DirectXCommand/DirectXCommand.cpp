@@ -209,3 +209,90 @@ void DirectXCommand::BarrierUAV(ID3D12Resource* resource)
 	// TransitionBarrierを張る
 	commandList->ResourceBarrier(1, &barrier);
 }
+
+void DirectXCommand::Barrier(std::initializer_list<ID3D12Resource*> resources, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {
+	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+	// TransitionBarrierの設定
+	D3D12_RESOURCE_BARRIER barrier{};
+	// 今回のバリアはTransition
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	// Noneにしておく
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	// subResourceの設定
+	barrier.Transition.Subresource = subResource;
+	// 遷移前(現在)のResouceState
+	barrier.Transition.StateBefore = before;
+	// 遷移後のResouceState
+	barrier.Transition.StateAfter = after;
+
+	std::vector<D3D12_RESOURCE_BARRIER> barriers = {};
+
+	barriers.reserve(resources.size());
+	for (auto& resource : resources) {
+		barriers.push_back(barrier);
+		barriers.back().Transition.pResource = resource;
+	}
+
+	// TransitionBarrierを張る
+	commandList->ResourceBarrier(static_cast<UINT>(barriers.size()), barriers.data());
+}
+
+void DirectXCommand::Barrier(ID3D12Resource** resources, uint32_t numResource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource) {
+	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+	// TransitionBarrierの設定
+	D3D12_RESOURCE_BARRIER barrier{};
+	// 今回のバリアはTransition
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	// Noneにしておく
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	// subResourceの設定
+	barrier.Transition.Subresource = subResource;
+	// 遷移前(現在)のResouceState
+	barrier.Transition.StateBefore = before;
+	// 遷移後のResouceState
+	barrier.Transition.StateAfter = after;
+
+	std::vector<D3D12_RESOURCE_BARRIER> barriers = {};
+
+	barriers.resize(numResource);
+	for (size_t count = 0; auto & i : barriers) {
+		i = barrier;
+		i.Transition.pResource = resources[count];
+		count++;
+	}
+
+	// TransitionBarrierを張る
+	commandList->ResourceBarrier(static_cast<UINT>(barriers.size()), barriers.data());
+}
+
+void DirectXCommand::Barrier(std::vector<ID3D12Resource*> resources, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource)
+{
+	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+	// TransitionBarrierの設定
+	D3D12_RESOURCE_BARRIER barrier{};
+	// 今回のバリアはTransition
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	// Noneにしておく
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	// subResourceの設定
+	barrier.Transition.Subresource = subResource;
+	// 遷移前(現在)のResouceState
+	barrier.Transition.StateBefore = before;
+	// 遷移後のResouceState
+	barrier.Transition.StateAfter = after;
+
+	std::vector<D3D12_RESOURCE_BARRIER> barriers = {};
+
+	barriers.resize(resources.size());
+	for (size_t count = 0; auto & i : barriers) {
+		i = barrier;
+		i.Transition.pResource = resources[count];
+		count++;
+	}
+
+	// TransitionBarrierを張る
+	commandList->ResourceBarrier(static_cast<UINT>(barriers.size()), barriers.data());
+}
