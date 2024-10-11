@@ -11,9 +11,18 @@
 /// <summary>
 /// ストラクチャードバッファ
 /// </summary>
-/// <typeparam name="T">ポインタと参照型以外をサポート</typeparam>
-template<Lamb::IsNotReferenceAndPtr T>
+/// <typeparam name="ValueType">ポインタと参照型以外をサポート</typeparam>
+template<Lamb::IsNotReferenceAndPtr ValueType>
 class StructuredBuffer final : public Descriptor {
+public:
+	using value_type = ValueType;
+	using reference_type = value_type&;
+	using const_reference_type = const value_type&;
+
+	using pointer = value_type*;
+	using const_pointer = const value_type*;
+
+
 public:
 	StructuredBuffer() :
 		bufferResource_(),
@@ -22,52 +31,23 @@ public:
 		isWright_(true),
 		bufferSize_(0u),
 		isCreateView_(false)
-	{
-		
-	}
+	{}
 
 	~StructuredBuffer() = default;
 
-	inline StructuredBuffer(const StructuredBuffer& right) :
-		StructuredBuffer()
-	{
-		*this = right;
-	}
+	// コピーやムーブはしないので削除
+private:
+	StructuredBuffer(const StructuredBuffer&) = delete;
+	StructuredBuffer(StructuredBuffer&&) = delete;
 
-	inline StructuredBuffer(StructuredBuffer&& right) :
-		StructuredBuffer()
-	{
-		*this = right;
-	}
-
-	inline StructuredBuffer& operator=(const StructuredBuffer& right) {
-		bufferResource_ = right.bufferResource_;
-		srvDesc_ = right.srvDesc_;
-		isWright_ = right.isWright_;
-		bufferSize_ = right.bufferSize_;
-		isCreateView_ = right.isCreateView_;
-
-		data_ = right.data_;
-
-		return *this;
-	}
-	inline StructuredBuffer<T>& operator=(StructuredBuffer&& right) noexcept {
-		bufferResource_ = right.bufferResource_.Release();
-		srvDesc_ = right.srvDesc_;
-		isWright_ = right.isWright_;
-		bufferSize_ = right.bufferSize_;
-		isCreateView_ = right.isCreateView_;
-
-		data_ = right.data_;
-
-		return *this;
-	}
+	StructuredBuffer& operator=(const StructuredBuffer&) = delete;
+	StructuredBuffer& operator=(StructuredBuffer&&) = delete;
 
 public:
 	void Create(uint32_t bufferSize) {
 		bufferSize_ = bufferSize;
 
-		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(T) * size());
+		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(ValueType) * size());
 #ifdef USE_DEBUG_CODE
 		bufferResource_.SetName<decltype(*this)>();
 #endif // USE_DEBUG_CODE
@@ -78,11 +58,7 @@ public:
 		srvDesc_.Buffer.FirstElement = 0;
 		srvDesc_.Buffer.Flags = D3D12_BUFFER_SRV_FLAG_NONE;
 		srvDesc_.Buffer.NumElements = size();
-		srvDesc_.Buffer.StructureByteStride = sizeof(T);
-
-		if (isWright_) {
-			bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&data_));
-		}
+		srvDesc_.Buffer.StructureByteStride = sizeof(ValueType);
 	}
 
 	void Reset(DescriptorHeap* descriptorHeap) {
@@ -100,28 +76,40 @@ public:
 
 public:
 	void OnWright() noexcept {
-		if (!isWright_) {
+		if (not isWright_) {
 			bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&data_));
-			isWright_ = !isWright_;
+			isWright_ = true;
 		}
 	}
 
 	void OffWright() noexcept {
 		if (isWright_) {
 			bufferResource_->Unmap(0, nullptr);
-			isWright_ = !isWright_;
+			isWright_ = false;
 		}
 	}
 
 	template<Lamb::IsInt IsInt>
-	T& operator[](IsInt index) {
-		assert(static_cast<uint32_t>(index) < bufferSize_);
+	reference_type operator[](IsInt index) {
+		if (bufferSize_ <= static_cast<uint32_t>(index) or not isWright_) [[unlikely]] {
+#ifdef USE_DEBUG_CODE
+			assert(!"Out of array references or did not Map");
+#else
+			throw Lamb::Error::Code<StructuredBuffer>("Out of array references or did not Map", ErrorPlace);
+#endif // USE_DEBUG_CODE
+		}
 		return data_[index];
 	}
 
 	template<Lamb::IsInt IsInt>
-	const T& operator[](IsInt index) const {
-		assert(static_cast<uint32_t>(index) < bufferSize_);
+	const_reference_type operator[](IsInt index) const {
+		if (bufferSize_ <= static_cast<uint32_t>(index) or not isWright_) [[unlikely]] {
+#ifdef USE_DEBUG_CODE
+			assert(!"Out of array references or did not Map");
+#else
+			throw Lamb::Error::Code<StructuredBuffer>("Out of array references or did not Map", ErrorPlace);
+#endif // USE_DEBUG_CODE
+		}
 		return data_[index];
 	}
 
@@ -151,7 +139,7 @@ private:
 	Lamb::LambPtr<ID3D12Resource> bufferResource_;
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc_;
 
-	T* data_;
+	ValueType* data_;
 
 	uint32_t bufferSize_;
 
