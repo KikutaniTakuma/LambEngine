@@ -249,7 +249,7 @@ void RenderingManager::Draw() {
 	renderTargets[2] = normalTexture_.get();
 	renderTargets[3] = worldPositionTexture_.get();
 
-	RenderTarget::ResourceStateChangeRenderTargets(
+	RenderTarget::ChangeToWriteResources(
 		renderTargets.data(),
 		static_cast<uint32_t>(renderTargets.size())
 	);
@@ -258,7 +258,7 @@ void RenderingManager::Draw() {
 		static_cast<uint32_t>(renderTargets.size()),
 		&depthStencil_->GetDepthHandle()
 	);
-	RenderTarget::ClearRenderTargets(
+	RenderTarget::Clear(
 		renderTargets.data(),
 		static_cast<uint32_t>(renderTargets.size())
 	);
@@ -301,7 +301,7 @@ void RenderingManager::Draw() {
 		&(rgbaTexture_->GetRender()),
 		(distortionTextureRGBA_.get()),
 	};
-	RenderTarget::ResourceStateChangeRenderTargets(
+	RenderTarget::ChangeToWriteResources(
 		rgbaTextureRenderTarget.data(),
 		static_cast<uint32_t>(rgbaTextureRenderTarget.size())
 	);
@@ -310,13 +310,13 @@ void RenderingManager::Draw() {
 		static_cast<uint32_t>(rgbaTextureRenderTarget.size()),
 		&depthStencil_->GetDepthHandle()
 	);
-	RenderTarget::ClearRenderTargets(
+	RenderTarget::Clear(
 		rgbaTextureRenderTarget.data(),
 		static_cast<uint32_t>(rgbaTextureRenderTarget.size())
 	);
 
 	// リソースをテクスチャとして扱えるようにする
-	RenderTarget::ResourceStateChangeRenderTargets(
+	RenderTarget::ChangeToTextureResources(
 		renderTargets.data(),
 		static_cast<uint32_t>(renderTargets.size())
 	);
@@ -326,7 +326,7 @@ void RenderingManager::Draw() {
 	// Defferdでライティングした後に描画
 	DrawRGBA(rgbaList);
 
-	RenderTarget::ResourceStateChangeRenderTargets(
+	RenderTarget::ChangeToTextureResources(
 		rgbaTextureRenderTarget.data(),
 		static_cast<uint32_t>(rgbaTextureRenderTarget.size())
 	);
@@ -339,7 +339,7 @@ void RenderingManager::Draw() {
 	std::array<RenderTarget*, 1> luminate = {
 		&(luminateTexture_->GetRender())
 	};
-	RenderTarget::ResourceStateChangeRenderTargets(
+	RenderTarget::ChangeResourceState(
 		luminate.data(),
 		static_cast<uint32_t>(luminate.size())
 	);
@@ -348,7 +348,7 @@ void RenderingManager::Draw() {
 		static_cast<uint32_t>(luminate.size()),
 		nullptr
 	);
-	RenderTarget::ClearRenderTargets(
+	RenderTarget::Clear(
 		luminate.data(),
 		static_cast<uint32_t>(luminate.size())
 	);

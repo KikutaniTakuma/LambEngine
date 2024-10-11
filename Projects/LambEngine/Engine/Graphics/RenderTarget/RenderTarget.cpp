@@ -159,6 +159,11 @@ UINT RenderTarget::GetRtvHandleUINT() const
 	return rtvHeapHandleUint_;
 }
 
+ID3D12Resource* const RenderTarget::GetResource() const
+{
+	return resource_.Get();
+}
+
 void RenderTarget::SetRenderTargets(
 	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
 	uint32_t numRenderTarget, 
@@ -189,7 +194,7 @@ void RenderTarget::SetMainAndRenderTargets(
 	rtvHeap->SetRtvAndMain(handles.data(), numRenderTarget, depthHandle);
 }
 
-void RenderTarget::ResourceStateChangeRenderTargets(
+void RenderTarget::ChangeResourceState(
 	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
 	uint32_t numRenderTarget
 ) {
@@ -198,7 +203,37 @@ void RenderTarget::ResourceStateChangeRenderTargets(
 	}
 }
 
-void RenderTarget::ClearRenderTargets(
+void RenderTarget::ChangeToWriteResources(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget) {
+	std::vector<ID3D12Resource*> resources;
+	resources.resize(numRenderTarget);
+	for (uint32_t i = 0; i < numRenderTarget; i++) {
+		resources[i] = renderTargetPtrs[i]->GetResource();
+		renderTargetPtrs[i]->isWrightResouceState_ = true;
+	}
+	
+	DirectXCommand::Barrier(
+		resources,
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+		D3D12_RESOURCE_STATE_RENDER_TARGET
+	);
+}
+
+void RenderTarget::ChangeToTextureResources(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget) {
+	std::vector<ID3D12Resource*> resources;
+	resources.resize(numRenderTarget);
+	for (uint32_t i = 0; i < numRenderTarget; i++) {
+		resources[i] = renderTargetPtrs[i]->GetResource();
+		renderTargetPtrs[i]->isWrightResouceState_ = false;
+	}
+
+	DirectXCommand::Barrier(
+		resources,
+		D3D12_RESOURCE_STATE_RENDER_TARGET,
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE
+	);
+}
+
+void RenderTarget::Clear(
 	Lamb::SafePtr<RenderTarget*> renderTargetPtrs, 
 	uint32_t numRenderTarget
 ) {

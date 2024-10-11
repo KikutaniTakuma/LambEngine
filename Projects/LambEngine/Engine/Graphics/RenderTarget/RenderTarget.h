@@ -44,11 +44,15 @@ public:
 	const D3D12_CPU_DESCRIPTOR_HANDLE& GetRtvHandleCPU() const;
 	UINT GetRtvHandleUINT() const;
 
+	ID3D12Resource* const GetResource() const;
+
 public:
 	static void SetRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 	static void SetMainAndRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
-	static void ResourceStateChangeRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
-	static void ClearRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	static void ChangeResourceState(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	static void ChangeToWriteResources(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	static void ChangeToTextureResources(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	static void Clear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
 
 private:
 	Lamb::LambPtr<ID3D12Resource> resource_;
