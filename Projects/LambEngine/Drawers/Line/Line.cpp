@@ -22,17 +22,10 @@ void Line::Initialize() {
 	shader_.vertex = shaderManager->LoadVertexShader("./Shaders/LineShader/Line.VS.hlsl");
 	shader_.pixel = shaderManager->LoadPixelShader("./Shaders/LineShader/Line.PS.hlsl");
 
-	D3D12_DESCRIPTOR_RANGE range = {};
-	range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-	range.BaseShaderRegister = 0;
-	range.NumDescriptors = 1;
-	range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
-
 	D3D12_ROOT_PARAMETER paramater = {};
 	paramater.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	paramater.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	paramater.DescriptorTable.pDescriptorRanges = &range;
-	paramater.DescriptorTable.NumDescriptorRanges = 1;
+	paramater.ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	paramater.Descriptor.ShaderRegister = 0;
 
 	RootSignature::Desc desc;
 	desc.rootParameter = &paramater;
@@ -80,22 +73,9 @@ void Line::Initialize() {
 			n->Create(Line::kDrawMaxNumber_);
 		}
 	);
-
-	Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-
-	for (uint32_t i = 0; i < DirectXSwapChain::kBackBufferNumber; ++i) {
-		heap->BookingHeapPos(DirectXSwapChain::kBackBufferNumber);
-		heap->CreateView(*nodepthVertData_[i]);
-		heap->CreateView(*depthVertData_[i]);
-	}
 }
 
 void Line::Finalize() {
-	CbvSrvUavHeap* const heap = CbvSrvUavHeap::GetInstance();
-	for (uint32_t i = 0; i < DirectXSwapChain::kBackBufferNumber; ++i) {
-		heap->ReleaseView(nodepthVertData_[i]->GetHandleUINT());
-		heap->ReleaseView(depthVertData_[i]->GetHandleUINT());
-	}
 	std::for_each(
 		nodepthVertData_.begin(),
 		nodepthVertData_.end(),
@@ -113,32 +93,21 @@ void Line::Finalize() {
 }
 
 void Line::AllDraw(bool isDepth) {
-	if (isDepth) {
-		if (depthDrawCount_ == 0u) {
-			return;
-		}
-		
-		depthPipeline_->Use();
-		Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-		heap->Use(depthVertData_[Lamb::GetGraphicBufferIndex()]->GetHandleUINT(), 0);
-		auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-		commandList->DrawInstanced(kVertexNum, depthDrawCount_, 0, 0);
-
-		depthDrawCount_ = 0u;
+	uint32_t& drawCount = isDepth ? depthDrawCount_ : nodepthDrawCount_;
+	if (drawCount == 0u) {
+		return;
 	}
-	else {
-		if (nodepthDrawCount_ == 0u) {
-			return;
-		}
 
-		nodepthPipeline_->Use();
-		Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-		heap->Use(nodepthVertData_[Lamb::GetGraphicBufferIndex()]->GetHandleUINT(), 0);
-		auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-		commandList->DrawInstanced(kVertexNum, nodepthDrawCount_, 0, 0);
+	auto& vertData = isDepth ? depthVertData_[Lamb::GetGraphicBufferIndex()] : nodepthVertData_[Lamb::GetGraphicBufferIndex()];
+	auto& pipeline = isDepth ? depthPipeline_ : nodepthPipeline_;
 
-		nodepthDrawCount_ = 0u;
-	}
+	auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+	pipeline->Use();
+	commandList->SetGraphicsRootShaderResourceView(0, vertData->GetGPUVtlAdrs());
+	commandList->DrawInstanced(kVertexNum, drawCount, 0, 0);
+
+	drawCount = 0;
 }
 
 Line::Line():
@@ -157,44 +126,28 @@ void Line::Debug([[maybe_unused]]const std::string& guiName) {
 }
 
 void Line::Draw(const Mat4x4& viewProjection, bool isDepth) {
-	if (isDepth) {
-		assert(depthDrawCount_ < kDrawMaxNumber_);
-		if (!(depthDrawCount_ < kDrawMaxNumber_)) {
-			Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
-		}
-
-		auto&& colorFloat = UintToVector4(color);
-
-		(*depthVertData_[Lamb::GetGraphicBufferIndex()])[depthDrawCount_].color = colorFloat;
-
-		Vector3 scale;
-		scale.x = (end - start).Length();
-		Vector3 to = (end - start).Normalize();
-		Vector3 translate = start;
-
-		(*depthVertData_[Lamb::GetGraphicBufferIndex()])[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
-
-		depthDrawCount_++;
+	uint32_t& drawCount = isDepth ? depthDrawCount_ : nodepthDrawCount_;
+	assert(drawCount < kDrawMaxNumber_);
+	if (not (drawCount < kDrawMaxNumber_)) [[unlikely]] {
+		Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
 	}
-	else {
-		assert(nodepthDrawCount_ < kDrawMaxNumber_);
-		if (!(nodepthDrawCount_ < kDrawMaxNumber_)) {
-			Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
-		}
 
-		auto&& colorFloat = UintToVector4(color);
+	auto& vertData = isDepth ? depthVertData_[Lamb::GetGraphicBufferIndex()] : nodepthVertData_[Lamb::GetGraphicBufferIndex()];
 
-		(*nodepthVertData_[Lamb::GetGraphicBufferIndex()])[nodepthDrawCount_].color = colorFloat;
+	auto&& colorFloat = UintToVector4(color);
 
-		Vector3 scale;
-		scale.x = (end - start).Length();
-		Vector3 to = (end - start).Normalize();
-		Vector3 translate = start;
+	vertData->OnWright();
+	(*vertData)[drawCount].color = colorFloat;
 
-		(*nodepthVertData_[Lamb::GetGraphicBufferIndex()])[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+	Vector3 scale;
+	scale.x = (end - start).Length();
+	Vector3 to = (end - start).Normalize();
+	Vector3 translate = start;
 
-		nodepthDrawCount_++;
-	}
+	(*vertData)[drawCount].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+	vertData->OffWright();
+
+	drawCount++;
 }
 
 void Line::Draw(
@@ -204,42 +157,26 @@ void Line::Draw(
 	uint32_t color,
 	bool isDepth
 ) {
-	if (isDepth) {
-		assert(depthDrawCount_ < kDrawMaxNumber_);
-		if (!(depthDrawCount_ < kDrawMaxNumber_)) {
-			throw Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
-		}
-
-		auto&& colorFloat = UintToVector4(color);
-
-		(*depthVertData_[Lamb::GetGraphicBufferIndex()])[depthDrawCount_].color = colorFloat;
-
-		Vector3 scale;
-		scale.x = (end - start).Length();
-		Vector3 to = (end - start).Normalize();
-		Vector3 translate = start;
-
-		(*depthVertData_[Lamb::GetGraphicBufferIndex()])[depthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
-
-		depthDrawCount_++;
+	uint32_t& drawCount = isDepth ? depthDrawCount_ : nodepthDrawCount_;
+	assert(drawCount < kDrawMaxNumber_);
+	if (not (drawCount < kDrawMaxNumber_)) [[unlikely]] {
+		Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
 	}
-	else {
-		assert(nodepthDrawCount_ < kDrawMaxNumber_);
-		if (!(nodepthDrawCount_ < kDrawMaxNumber_)) {
-			throw Lamb::Error::Code<Line>("Over Draw index", ErrorPlace);
-		}
 
-		auto&& colorFloat = UintToVector4(color);
+	auto& vertData = isDepth ? depthVertData_[Lamb::GetGraphicBufferIndex()] : nodepthVertData_[Lamb::GetGraphicBufferIndex()];
 
-		(*nodepthVertData_[Lamb::GetGraphicBufferIndex()])[nodepthDrawCount_].color = colorFloat;
+	auto&& colorFloat = UintToVector4(color);
 
-		Vector3 scale;
-		scale.x = (end - start).Length();
-		Vector3 to = (end - start).Normalize();
-		Vector3 translate = start;
+	vertData->OnWright();
+	(*vertData)[drawCount].color = colorFloat;
 
-		(*nodepthVertData_[Lamb::GetGraphicBufferIndex()])[nodepthDrawCount_].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+	Vector3 scale;
+	scale.x = (end - start).Length();
+	Vector3 to = (end - start).Normalize();
+	Vector3 translate = start;
 
-		nodepthDrawCount_++;
-	}
+	(*vertData)[drawCount].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
+	vertData->OffWright();
+
+	drawCount++;
 }
