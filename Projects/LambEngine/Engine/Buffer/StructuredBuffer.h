@@ -28,7 +28,7 @@ public:
 		bufferResource_(),
 		srvDesc_(),
 		data_(nullptr),
-		isWright_(true),
+		isWright_(false),
 		bufferSize_(0u),
 		isCreateView_(false)
 	{}
