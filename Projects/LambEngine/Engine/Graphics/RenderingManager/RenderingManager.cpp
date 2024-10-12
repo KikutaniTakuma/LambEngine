@@ -321,9 +321,9 @@ void RenderingManager::Draw() {
 		static_cast<uint32_t>(renderTargets.size())
 	);
 
-	DrawDefferd();
+	DrawDeferred();
 
-	// Defferdでライティングした後に描画
+	// Deferredでライティングした後に描画
 	DrawRGBA(rgbaList);
 
 	RenderTarget::ChangeToTextureResources(
@@ -636,7 +636,7 @@ void RenderingManager::DrawRGBA(const RenderDataLists& rgbaList) {
 	}
 }
 
-void RenderingManager::DrawDefferd() {
+void RenderingManager::DrawDeferred() {
 	deferredRendering_->SetDeferredRenderingData(deferredRenderingData_);
 	deferredRendering_->SetAtmosphericParams(atmosphericParams_);
 

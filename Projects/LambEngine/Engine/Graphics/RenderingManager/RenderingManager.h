@@ -80,7 +80,7 @@ private:
 	void DrawRGBA(const RenderDataLists& rgbaList);
 
 	// ディファード描画
-	void DrawDefferd();
+	void DrawDeferred();
 
 	// ポストエフェクトを描画する
 	void DrawPostEffect();
