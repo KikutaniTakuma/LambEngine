@@ -95,6 +95,7 @@ IDxcBlob* ShaderFactory::CompileShader(
 
 
 	// 2. Compileする
+#ifdef USE_DEBUG_CODE
 	LPCWSTR arguments[] = {
 		filePath.c_str(), // コンパイル対象のhlslファイル名
 		L"-E", L"main", // エントリーポイントの指定。基本的にmain以外にはしない
@@ -112,6 +113,25 @@ IDxcBlob* ShaderFactory::CompileShader(
 		includeHandler_.Get(),      // includeが含まれた諸々
 		IID_PPV_ARGS(shaderResult.GetAddressOf()) // コンパイル結果
 	);
+#else
+	LPCWSTR arguments[] = {
+		filePath.c_str(), // コンパイル対象のhlslファイル名
+		L"-E", L"main", // エントリーポイントの指定。基本的にmain以外にはしない
+		L"-T", profile, // ShaderProfileの設定
+		L"-O3", // 最大最適化
+		L"-Zpr" // メモリレイアウトを優先
+	};
+	// 実際にShaderをコンパイルする
+	Lamb::LambPtr<IDxcResult> shaderResult;
+	hr = dxcCompiler_->Compile(
+		&shaderSourceBuffer, // 読みこんだファイル
+		arguments,           // コンパイルオプション
+		_countof(arguments), // コンパイルオプションの数
+		includeHandler_.Get(),      // includeが含まれた諸々
+		IID_PPV_ARGS(shaderResult.GetAddressOf()) // コンパイル結果
+	);
+#endif // USE_DEBUG_CODE
+
 
 	// コンパイルエラーではなくdxcが起動できないなど致命的な状況
 	assert(SUCCEEDED(hr));
