@@ -19,6 +19,7 @@ public:
 	RWStructuredBuffer() = default;
 	~RWStructuredBuffer() = default;
 
+	// コピーやムーブはしないので削除
 private:
 	RWStructuredBuffer(const RWStructuredBuffer&) = delete;
 	RWStructuredBuffer(RWStructuredBuffer&&) = delete;

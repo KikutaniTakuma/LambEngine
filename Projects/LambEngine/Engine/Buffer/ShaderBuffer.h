@@ -22,6 +22,15 @@ public:
 	ShaderBuffer() = default;
 	virtual ~ShaderBuffer() = default;
 
+	// コピーやムーブはしないので削除
+private:
+	ShaderBuffer(const ShaderBuffer&) = delete;
+	ShaderBuffer(ShaderBuffer&&) = delete;
+
+	ShaderBuffer& operator=(const ShaderBuffer&) = delete;
+	ShaderBuffer& operator=(ShaderBuffer&&) = delete;
+
+
 public:
 	D3D12_GPU_VIRTUAL_ADDRESS GetGPUVtlAdrs() const noexcept {
 		return bufferResource_->GetGPUVirtualAddress();
