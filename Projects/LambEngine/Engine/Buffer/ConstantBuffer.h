@@ -77,7 +77,7 @@ public:
 #ifdef USE_DEBUG_CODE
 			assert(!"Did not Map");
 #else
-			throw Lamb::Error::Code<StructuredBuffer>("Did not Map", ErrorPlace);
+			throw Lamb::Error::Code<ConstantBuffer>("Did not Map", ErrorPlace);
 #endif // USE_DEBUG_CODE
 		}
 		return *data_;
@@ -88,7 +88,7 @@ public:
 #ifdef USE_DEBUG_CODE
 			assert(!"Did not Map");
 #else
-			throw Lamb::Error::Code<StructuredBuffer>("Did not Map", ErrorPlace);
+			throw Lamb::Error::Code<ConstantBuffer>("Did not Map", ErrorPlace);
 #endif // USE_DEBUG_CODE
 		}
 		return *data_;
@@ -99,7 +99,7 @@ public:
 #ifdef USE_DEBUG_CODE
 			assert(!"Did not Map");
 #else
-			throw Lamb::Error::Code<StructuredBuffer>("Did not Map", ErrorPlace);
+			throw Lamb::Error::Code<ConstantBuffer>("Did not Map", ErrorPlace);
 #endif // USE_DEBUG_CODE
 		}
 		return data_;
@@ -110,7 +110,7 @@ public:
 #ifdef USE_DEBUG_CODE
 			assert(!"Did not Map");
 #else
-			throw Lamb::Error::Code<StructuredBuffer>("Did not Map", ErrorPlace);
+			throw Lamb::Error::Code<ConstantBuffer>("Did not Map", ErrorPlace);
 #endif // USE_DEBUG_CODE
 		}
 		return data_;
