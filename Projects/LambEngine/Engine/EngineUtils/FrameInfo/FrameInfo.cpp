@@ -116,11 +116,10 @@ void FrameInfo::Start() {
 }
 
 void FrameInfo::End() {
-	static std::chrono::steady_clock::time_point end{};
-	end = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
 	// 10^-6
-	static constexpr double unitAdjustment = 0.000001;
+	static constexpr double kUnitAdjustment = 0.000001;
 	
 	auto elapsed =
 		std::chrono::duration_cast<std::chrono::microseconds>(end - reference_);
@@ -134,7 +133,7 @@ void FrameInfo::End() {
 	end = std::chrono::steady_clock::now();
 	auto frameTime = std::chrono::duration_cast<std::chrono::microseconds>(end - frameStartTime_);
 
-	deltaTime_ = static_cast<double>(frameTime.count()) * unitAdjustment;
+	deltaTime_ = static_cast<double>(frameTime.count()) * kUnitAdjustment;
 	fps_ = 1.0 / deltaTime_;
 	fps_ = std::min(fps_, fpsLimit_);
 
