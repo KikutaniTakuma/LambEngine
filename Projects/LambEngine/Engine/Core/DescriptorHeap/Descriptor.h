@@ -29,4 +29,6 @@ protected:
 	D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU_;
 	D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU_;
 	UINT heapHandle_;
+
+	bool isCreateView_ = false;
 };

@@ -1,58 +1,39 @@
 #pragma once
 
-#include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
+#include "ShaderBuffer.h"
 
-#include "Engine/EngineUtils/LambPtr/LambPtr.h"
-#include "Utils/SafePtr.h"
-#include "Utils/Concepts.h"
 
-template<class T>
-class RWStructuredBuffer : public Descriptor {
+template<Lamb::IsNotReferenceAndPtr ValueType>
+class RWStructuredBuffer : public Descriptor, public ShaderBuffer<ValueType> {
 public:
-	using type = T;
+	using value_type = ValueType;
+
+	using reference_type = value_type&;
+	using const_reference_type = const value_type&;
+
+	using pointer = value_type*;
+	using const_pointer = const value_type*;
 
 public:
-	RWStructuredBuffer() :
-		data_(),
-		bufferResource_(),
-		uavDesc_{},
-		isCreateView_(false),
-		isWright_(false),
-		bufferSize_(1)
-	{
-	}
+	RWStructuredBuffer() = default;
+	~RWStructuredBuffer() = default;
 
+private:
 	RWStructuredBuffer(const RWStructuredBuffer&) = delete;
 	RWStructuredBuffer(RWStructuredBuffer&&) = delete;
 
 	RWStructuredBuffer& operator=(const RWStructuredBuffer&) = delete;
 	RWStructuredBuffer& operator=(RWStructuredBuffer&&) = delete;
-public:
-	~RWStructuredBuffer() = default;
 
 public:
 	void Create(uint32_t bufferSize) {
-		bufferSize_ = bufferSize;
+		this->bufferSize_ = bufferSize;
 
-		bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(type) * size());
+		this->bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(value_type) * this->size());
 #ifdef USE_DEBUG_CODE
-		bufferResource_.SetName<decltype(*this)>();
+		this->bufferResource_.SetName<RWStructuredBuffer>();
 #endif // USE_DEBUG_CODE
-
-
-		OnWright();
-
-
-		uavDesc_ = {};
-
-		uavDesc_.Format = DXGI_FORMAT_UNKNOWN;
-		uavDesc_.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
-		uavDesc_.Buffer.FirstElement = 0;
-		uavDesc_.Buffer.NumElements = bufferSize_;
-		uavDesc_.Buffer.CounterOffsetInBytes = 0;
-		uavDesc_.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
-		uavDesc_.Buffer.StructureByteStride = sizeof(T);
 	}
 
 	void CreateView(
@@ -60,55 +41,23 @@ public:
 		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
 		UINT heapHandle) noexcept override
 	{
-		heapHandleCPU_ = heapHandleCPU;
-		heapHandleGPU_ = heapHandleGPU;
-		heapHandle_ = heapHandle;
+		D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+
+		uavDesc.Format = DXGI_FORMAT_UNKNOWN;
+		uavDesc.ViewDimension = D3D12_UAV_DIMENSION_BUFFER;
+		uavDesc.Buffer.FirstElement = 0;
+		uavDesc.Buffer.NumElements = this->size();
+		uavDesc.Buffer.CounterOffsetInBytes = 0;
+		uavDesc.Buffer.Flags = D3D12_BUFFER_UAV_FLAG_NONE;
+		uavDesc.Buffer.StructureByteStride = sizeof(value_type);
+
+		this->heapHandleCPU_ = heapHandleCPU;
+		this->heapHandleGPU_ = heapHandleGPU;
+		this->heapHandle_ = heapHandle;
 
 		Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
-		device->CreateUnorderedAccessView(bufferResource_.Get(), nullptr, &uavDesc_, heapHandleCPU_);
+		device->CreateUnorderedAccessView(this->bufferResource_.Get(), nullptr, &uavDesc, heapHandleCPU_);
 
 		isCreateView_ = true;
 	}
-
-public:
-	void OnWright() noexcept {
-		if (!isWright_) {
-			bufferResource_->Map(0, nullptr, data_.GetPtrAdress());
-			isWright_ = !isWright_;
-		}
-	}
-
-	void OffWright() noexcept {
-		if (isWright_) {
-			bufferResource_->Unmap(0, nullptr);
-			isWright_ = !isWright_;
-		}
-	}
-
-	template<Lamb::IsInt IsInt>
-	T& operator[](IsInt index) {
-		return data_[index];
-	}
-
-	template<Lamb::IsInt IsInt>
-	const T& operator[](IsInt index) const {
-		return data_[index];
-	}
-
-
-public:
-	uint32_t size() const noexcept {
-		return bufferSize_;
-	}
-
-private:
-	Lamb::SafePtr<type> data_;
-	uint32_t bufferSize_;
-
-	Lamb::LambPtr<ID3D12Resource> bufferResource_;
-	D3D12_UNORDERED_ACCESS_VIEW_DESC uavDesc_;
-
-	bool isCreateView_;
-	bool isWright_;
-
 };

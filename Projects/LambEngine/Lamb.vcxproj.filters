@@ -710,5 +710,8 @@
     <ClInclude Include="Engine\Graphics\PipelineObject\Distortion\Distortion.h">
       <Filter>Engine\Graphics\PipelineObject\Distortion</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Buffer\ShaderBuffer.h">
+      <Filter>Engine\Buffer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
