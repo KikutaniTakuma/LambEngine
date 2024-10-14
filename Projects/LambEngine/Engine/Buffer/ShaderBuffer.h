@@ -33,25 +33,25 @@ private:
 
 public:
 	D3D12_GPU_VIRTUAL_ADDRESS GetGPUVtlAdrs() const noexcept {
-		return bufferResource_->GetGPUVirtualAddress();
+		return this->bufferResource_->GetGPUVirtualAddress();
 	}
 
 	uint32_t size() const noexcept {
-		return bufferSize_;
+		return this->bufferSize_;
 	}
 
 public:
 	void OnWright() noexcept {
-		if (not isWright_) {
-			bufferResource_->Map(0, nullptr, reinterpret_cast<void**>(&pData_));
-			isWright_ = true;
+		if (not this->isWright_) {
+			this->bufferResource_->Map(0, nullptr, this->pData_.GetPtrAdress());
+			this->isWright_ = true;
 		}
 	}
 
 	void OffWright() noexcept {
-		if (isWright_) {
-			bufferResource_->Unmap(0, nullptr);
-			isWright_ = false;
+		if (this->isWright_) {
+			this->bufferResource_->Unmap(0, nullptr);
+			this->isWright_ = false;
 		}
 	}
 
@@ -62,7 +62,7 @@ public:
 	/// <param name="size">コピーサイズ</param>
 	void MemCpy(const void* pSrc, size_t size) {
 		OnWright();
-		std::memcpy(pData_, pSrc, size);
+		std::memcpy(this->pData_.get(), pSrc, size);
 		OffWright();
 	}
 
@@ -72,13 +72,13 @@ public:
 	/// <param name="pSrc">コピー元</param>
 	void MemCpy(const void* pSrc) {
 		OnWright();
-		std::memcpy(pData_, pSrc, sizeof(value_type));
+		std::memcpy(this->pData_.get(), pSrc, sizeof(value_type));
 		OffWright();
 	}
 
 	template<Lamb::IsInt IsInt>
 	reference_type operator[](IsInt index) {
-		if (bufferSize_ <= static_cast<uint32_t>(index) or not isWright_) [[unlikely]] {
+		if (this->bufferSize_ <= static_cast<uint32_t>(index) or not this->isWright_) [[unlikely]] {
 #ifdef USE_DEBUG_CODE
 			assert(!"Out of array references or did not Map");
 #else
@@ -86,19 +86,19 @@ public:
 #endif // USE_DEBUG_CODE
 		}
 
-		return pData_[index];
+		return this->pData_[index];
 	}
 
 	template<Lamb::IsInt IsInt>
 	const_reference_type operator[](IsInt index) const {
-		if (bufferSize_ <= static_cast<uint32_t>(index) or not isWright_) [[unlikely]] {
+		if (this->bufferSize_ <= static_cast<uint32_t>(index) or not this->isWright_) [[unlikely]] {
 #ifdef USE_DEBUG_CODE
 			assert(!"Out of array references or did not Map");
 #else
 			throw Lamb::Error::Code<ShaderBuffer>("Out of array references or did not Map", ErrorPlace);
 #endif // USE_DEBUG_CODE
 		}
-		return pData_[index];
+		return this->pData_[index];
 	}
 
 	reference_type operator*() {
@@ -131,7 +131,7 @@ public:
 			throw Lamb::Error::Code<ShaderBuffer>("Did not Map", ErrorPlace);
 #endif // USE_DEBUG_CODE
 		}
-		return (this->pData_);
+		return (this->pData_.get());
 	}
 
 	const_pointer operator->() const {
@@ -142,12 +142,12 @@ public:
 			throw Lamb::Error::Code<ShaderBuffer>("Did not Map", ErrorPlace);
 #endif // USE_DEBUG_CODE
 		}
-		return (this->pData_);
+		return (this->pData_.get());
 	}
 
 protected:
 	Lamb::LambPtr<ID3D12Resource> bufferResource_;
-	pointer pData_ = nullptr;
+	Lamb::SafePtr<value_type> pData_ = nullptr;
 	uint32_t bufferSize_ = 0u;
 	bool isWright_ = false;
 };
