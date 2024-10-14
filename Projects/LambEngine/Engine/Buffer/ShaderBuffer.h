@@ -41,17 +41,17 @@ public:
 	}
 
 public:
-	void OnWright() noexcept {
-		if (not this->isWright_) {
+	void Map() noexcept {
+		if (not this->isMap) {
 			this->bufferResource_->Map(0, nullptr, this->pData_.GetPtrAdress());
-			this->isWright_ = true;
+			this->isMap = true;
 		}
 	}
 
-	void OffWright() noexcept {
-		if (this->isWright_) {
+	void Unmap() noexcept {
+		if (this->isMap) {
 			this->bufferResource_->Unmap(0, nullptr);
-			this->isWright_ = false;
+			this->isMap = false;
 		}
 	}
 
@@ -61,9 +61,9 @@ public:
 	/// <param name="pSrc">コピー元</param>
 	/// <param name="size">コピーサイズ</param>
 	void MemCpy(const void* pSrc, size_t size) {
-		OnWright();
+		Map();
 		std::memcpy(this->pData_.get(), pSrc, size);
-		OffWright();
+		Unmap();
 	}
 
 	/// <summary>
@@ -71,14 +71,14 @@ public:
 	/// </summary>
 	/// <param name="pSrc">コピー元</param>
 	void MemCpy(const void* pSrc) {
-		OnWright();
+		Map();
 		std::memcpy(this->pData_.get(), pSrc, sizeof(value_type));
-		OffWright();
+		Unmap();
 	}
 
 	template<Lamb::IsInt IsInt>
 	reference_type operator[](IsInt index) {
-		if (this->bufferSize_ <= static_cast<uint32_t>(index) or not this->isWright_) [[unlikely]] {
+		if (this->bufferSize_ <= static_cast<uint32_t>(index) or not this->isMap) [[unlikely]] {
 #ifdef USE_DEBUG_CODE
 			assert(!"Out of array references or did not Map");
 #else
@@ -91,7 +91,7 @@ public:
 
 	template<Lamb::IsInt IsInt>
 	const_reference_type operator[](IsInt index) const {
-		if (this->bufferSize_ <= static_cast<uint32_t>(index) or not this->isWright_) [[unlikely]] {
+		if (this->bufferSize_ <= static_cast<uint32_t>(index) or not this->isMap) [[unlikely]] {
 #ifdef USE_DEBUG_CODE
 			assert(!"Out of array references or did not Map");
 #else
@@ -102,7 +102,7 @@ public:
 	}
 
 	reference_type operator*() {
-		if (not this->isWright_) [[unlikely]] {
+		if (not this->isMap) [[unlikely]] {
 #ifdef USE_DEBUG_CODE
 			assert(!"Did not Map");
 #else
@@ -113,7 +113,7 @@ public:
 	}
 
 	const_reference_type operator*() const {
-		if (not this->isWright_) [[unlikely]] {
+		if (not this->isMap) [[unlikely]] {
 #ifdef USE_DEBUG_CODE
 			assert(!"Did not Map");
 #else
@@ -124,7 +124,7 @@ public:
 	}
 
 	pointer operator->() {
-		if (not this->isWright_) [[unlikely]] {
+		if (not this->isMap) [[unlikely]] {
 #ifdef USE_DEBUG_CODE
 			assert(!"Did not Map");
 #else
@@ -135,7 +135,7 @@ public:
 	}
 
 	const_pointer operator->() const {
-		if (not this->isWright_) [[unlikely]] {
+		if (not this->isMap) [[unlikely]] {
 #ifdef USE_DEBUG_CODE
 			assert(!"Did not Map");
 #else
@@ -149,5 +149,5 @@ protected:
 	Lamb::LambPtr<ID3D12Resource> bufferResource_;
 	Lamb::SafePtr<value_type> pData_ = nullptr;
 	uint32_t bufferSize_ = 0u;
-	bool isWright_ = false;
+	bool isMap = false;
 };

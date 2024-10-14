@@ -91,11 +91,11 @@ void SkyBox::Load(const std::string& fileName) {
 }
 
 void SkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color) {
-    (*shaderData_).OnWright();
+    (*shaderData_).Map();
     (*shaderData_)->worldMat = worldMat;
     (*shaderData_)->viewProjectionMat = cameraMat;
     (*shaderData_)->color = color;
-    (*shaderData_).OffWright();
+    (*shaderData_).Unmap();
 
     // コマンドリスト
     ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();

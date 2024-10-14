@@ -15,14 +15,14 @@
 
 
 void DeferredRendering::Draw() {
-	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).OnWright();
-	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).OnWright();
+	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).Map();
+	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).Map();
 
 	**deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()] = deferredRenderingData_;
 	**atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()] = atomosphericData_;
 
-	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).OffWright();
-	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).OffWright();
+	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).Unmap();
+	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).Unmap();
 
 	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
@@ -39,14 +39,14 @@ void DeferredRendering::Draw() {
 }
 
 void DeferredRendering::Use(Pipeline::Blend blendType, bool isDepth) {
-	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).OnWright();
-	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).OnWright();
+	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).Map();
+	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).Map();
 
 	**deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()] = deferredRenderingData_;
 	**atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()] = atomosphericData_;
 
-	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).OffWright();
-	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).OffWright();
+	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).Unmap();
+	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).Unmap();
 
 	if (isDepth) {
 		pipelines_[blendType]->Use();

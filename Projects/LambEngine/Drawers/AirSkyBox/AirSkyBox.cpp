@@ -79,11 +79,11 @@ void AirSkyBox::Load() {
 }
 
 void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color) {
-    shaderData_[Lamb::GetGraphicBufferIndex()]->OnWright();
+    shaderData_[Lamb::GetGraphicBufferIndex()]->Map();
     (*shaderData_[Lamb::GetGraphicBufferIndex()])->worldMat = worldMat;
     (*shaderData_[Lamb::GetGraphicBufferIndex()])->viewProjectionMat = cameraMat;
     (*shaderData_[Lamb::GetGraphicBufferIndex()])->color = color;
-    shaderData_[Lamb::GetGraphicBufferIndex()]->OffWright();
+    shaderData_[Lamb::GetGraphicBufferIndex()]->Unmap();
 
     // コマンドリスト
     ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();

@@ -136,7 +136,7 @@ void Line::Draw(const Mat4x4& viewProjection, bool isDepth) {
 
 	auto&& colorFloat = UintToVector4(color);
 
-	vertData->OnWright();
+	vertData->Map();
 	(*vertData)[drawCount].color = colorFloat;
 
 	Vector3 scale;
@@ -145,7 +145,7 @@ void Line::Draw(const Mat4x4& viewProjection, bool isDepth) {
 	Vector3 translate = start;
 
 	(*vertData)[drawCount].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
-	vertData->OffWright();
+	vertData->Unmap();
 
 	drawCount++;
 }
@@ -167,7 +167,7 @@ void Line::Draw(
 
 	auto&& colorFloat = UintToVector4(color);
 
-	vertData->OnWright();
+	vertData->Map();
 	(*vertData)[drawCount].color = colorFloat;
 
 	Vector3 scale;
@@ -176,7 +176,7 @@ void Line::Draw(
 	Vector3 translate = start;
 
 	(*vertData)[drawCount].wvp = Mat4x4::MakeAffin(scale, Vector3::kXIdentity, to, translate) * viewProjection;
-	vertData->OffWright();
+	vertData->Unmap();
 
 	drawCount++;
 }
