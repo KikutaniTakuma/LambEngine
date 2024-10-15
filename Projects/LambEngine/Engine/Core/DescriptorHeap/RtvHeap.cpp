@@ -93,12 +93,18 @@ void RtvHeap::SetRtv(uint32_t heapHandle, const D3D12_CPU_DESCRIPTOR_HANDLE* dep
 	SetRtv(&heapHandles_[heapHandle].first, 1, depthHandle);
 }
 void RtvHeap::SetRtv(std::initializer_list<D3D12_CPU_DESCRIPTOR_HANDLE> heapHandles, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
-	assert(0llu < heapHandles.size() || heapHandles.size() <= 8llu);
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+	
+	assert(0llu <= heapHandles.size() || heapHandles.size() <= 8llu);
+	if (heapHandles.size() == 0u) {
+		commandList->OMSetRenderTargets(0u, nullptr, false, depthHandle);
+		return;
+	}
+
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
 	handles.resize(heapHandles.size());
 	std::copy(heapHandles.begin(), heapHandles.end(), handles.begin());
 
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	commandList->OMSetRenderTargets(static_cast<uint32_t>(handles.size()), handles.data(), false, depthHandle);
 }
