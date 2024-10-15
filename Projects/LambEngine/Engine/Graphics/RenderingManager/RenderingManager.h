@@ -46,7 +46,7 @@ private:
 
 public:
 
-	DepthBuffer& GetDepthBuffer();
+	DepthBuffer* GetDepthBuffer();
 
 	void SetCameraPos(const Vector3& cameraPos);
 	void SetCameraMatrix(const Mat4x4& camera);
@@ -128,8 +128,8 @@ private:
 	// ブルームで使用するガウシアンフィルタ(縦)用オフスクリーン
 	std::unique_ptr<PeraRender> gaussianVerticalTexture_;
 
-	GaussianBlur::GaussianBlurState gaussianBlurStateHorizontal_;
-	GaussianBlur::GaussianBlurState gaussianBlurStateVertical_;
+	GaussianBlur::State gaussianBlurStateHorizontal_;
+	GaussianBlur::State gaussianBlurStateVertical_;
 
 	// ガウシアンフィルタ用パイプラインオジェクト
 	std::array<Lamb::SafePtr<GaussianBlur>, 2> gaussianPipeline_;

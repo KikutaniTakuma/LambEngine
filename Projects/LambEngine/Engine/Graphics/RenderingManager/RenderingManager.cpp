@@ -85,7 +85,7 @@ RenderingManager::RenderingManager() {
 
 	std::array<std::unique_ptr<GaussianBlur>, 2> gaussianPipeline = { std::make_unique<GaussianBlur>(), std::make_unique<GaussianBlur>() };
 	gaussianPipeline[0]->Init();
-	gaussianBlurStateHorizontal_ = GaussianBlur::GaussianBlurState{
+	gaussianBlurStateHorizontal_ = GaussianBlur::State{
 		.dir = Vector2(1.0f, 0.0f),
 		.sigma = 10.0f,
 		.kernelSize = 8,
@@ -99,7 +99,7 @@ RenderingManager::RenderingManager() {
 		"./Shaders/PostShader/PostGaussian.PS.hlsl",
 		{ DXGI_FORMAT_R8G8B8A8_UNORM_SRGB }
 	);
-	gaussianBlurStateVertical_ = GaussianBlur::GaussianBlurState{
+	gaussianBlurStateVertical_ = GaussianBlur::State{
 			.dir = Vector2(0.0f, 1.0f),
 			.sigma = 10.0f,
 			.kernelSize = 8,
@@ -111,6 +111,7 @@ RenderingManager::RenderingManager() {
 	gaussianVerticalTexture_->Initialize(gaussianPipeline_[1].get());
 
 	std::unique_ptr<Outline> outline = std::make_unique<Outline>();
+	outline->SetDepthBuffer(depthStencil_.get());
 	outline->Init();
 	outlinePipeline_ = outline.release();
 	outlineTexture_ = std::make_unique<PeraRender>();
@@ -408,9 +409,9 @@ void RenderingManager::Draw() {
 
 }
 
-DepthBuffer& RenderingManager::GetDepthBuffer()
+DepthBuffer* RenderingManager::GetDepthBuffer()
 {
-	return *depthStencil_;
+	return depthStencil_.get();
 }
 
 void RenderingManager::SetCameraPos(const Vector3& cameraPos) {

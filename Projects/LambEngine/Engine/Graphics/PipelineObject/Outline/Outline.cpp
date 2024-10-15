@@ -37,8 +37,11 @@ void Outline::SetProjectionInverse(const float32_t4x4& projectionInverse) {
 
 void Outline::ChangeDepthBufferState()
 {
-	auto& depth = RenderingManager::GetInstance()->GetDepthBuffer();
-	depth.Barrier();
+	depthBuffer_->Barrier();
+}
+
+void Outline::SetDepthBuffer(DepthBuffer* depthBuffer) {
+	depthBuffer_ = depthBuffer;
 }
 
 void Outline::DataSet() {
@@ -55,10 +58,8 @@ void Outline::Use(Pipeline::Blend blendType, bool isDepth) {
 	}
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
-	auto& depth = RenderingManager::GetInstance()->GetDepthBuffer();
-
 	render_->UseThisRenderTargetShaderResource();
-	commandList->SetGraphicsRootDescriptorTable(1, depth.GetTex()->GetHandleGPU());
+	commandList->SetGraphicsRootDescriptorTable(1, depthBuffer_->GetTex()->GetHandleGPU());
 	commandList->SetGraphicsRootConstantBufferView(2, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 	commandList->SetGraphicsRootConstantBufferView(3, outlineDataBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 }

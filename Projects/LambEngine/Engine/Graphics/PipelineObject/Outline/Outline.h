@@ -1,11 +1,8 @@
 #pragma once
-#include "../PipelineObject.h"
 #include "../PeraPipeline/PeraPipeline.h"
-#include "Math/Vector2.h"
 #include "Math/MathCommon.h"
-#include "Engine/Graphics/GraphicsStructs.h"
-
-#include "Utils/EngineInfo.h"
+#include "Engine/Buffer/ConstantBuffer.h"
+#include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
 
 class Outline final : public PeraPipeline {
 public:
@@ -42,7 +39,11 @@ public:
 
 	void ChangeDepthBufferState();
 
+	void SetDepthBuffer(DepthBuffer* depthBuffer);
+
 private:
 	std::array<std::unique_ptr<ConstantBuffer<OutlineData>>, DirectXSwapChain::kBackBufferNumber> outlineDataBuf_;
 	OutlineData outlineData_;
+
+	Lamb::SafePtr<DepthBuffer> depthBuffer_;
 };
