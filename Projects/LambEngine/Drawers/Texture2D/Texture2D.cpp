@@ -26,9 +26,9 @@ const LoadFileNames Texture2D::kFileNames_ =
 const MeshLoadFileNames Texture2D::kMeshFileNames_ = MeshLoadFileNames{
 	.resourceFileName{"./Resources/EngineResources/Texture2D/Texture2D.obj"},
 	.shaderName{
-		.asFileName = "./Shaders/Texture2DMeshShader/MeshTex2D.AS.hlsl",
-		.msFileName = "./Shaders/Texture2DMeshShader/MeshTex2D.MS.hlsl",
-		.psFileName = "./Shaders/Texture2DMeshShader/MeshTex2D.PS.hlsl"
+		.asFileName = "./Shaders/Texture2DShader/MeshTex2D.AS.hlsl",
+		.msFileName = "./Shaders/Texture2DShader/MeshTex2D.MS.hlsl",
+		.psFileName = "./Shaders/Texture2DShader/MeshTex2D.PS.hlsl"
 	}
 };
 

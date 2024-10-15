@@ -26,9 +26,9 @@ void Model::Load(const std::string& fileName) {
 	MeshLoadFileNames meshFileNames = {
 		.resourceFileName = fileName,
 		.shaderName{
-			.asFileName = "./Shaders/MeshShader/MeshModel.AS.hlsl",
-			.msFileName = "./Shaders/MeshShader/MeshModel.MS.hlsl",
-			.psFileName = "./Shaders/MeshShader/MeshModel.PS.hlsl"
+			.asFileName = "./Shaders/ModelShader/MeshModel.AS.hlsl",
+			.msFileName = "./Shaders/ModelShader/MeshModel.MS.hlsl",
+			.psFileName = "./Shaders/ModelShader/MeshModel.PS.hlsl"
 		}
 	};
 
