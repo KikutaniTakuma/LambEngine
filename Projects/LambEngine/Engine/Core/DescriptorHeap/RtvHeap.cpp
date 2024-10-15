@@ -105,21 +105,27 @@ void RtvHeap::SetRtv(std::initializer_list<D3D12_CPU_DESCRIPTOR_HANDLE> heapHand
 
 void RtvHeap::SetRtv(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle)
 {
-	assert(0llu < numRenderTargets || numRenderTargets <= 8llu);
+	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+	assert(0u <= numRenderTargets and numRenderTargets <= 8u);
+	if (numRenderTargets == 0u) {
+		commandList->OMSetRenderTargets(numRenderTargets, nullptr, false, depthHandle);
+		return;
+	}
+
 	std::vector<D3D12_CPU_DESCRIPTOR_HANDLE> handles;
 	handles.resize(numRenderTargets);
 	for (uint32_t i = 0; i < numRenderTargets; i++) {
 		handles[i].ptr = heapHandles[i].ptr;
 	}
 
-	ID3D12GraphicsCommandList* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 	// 描画先をRTVを設定する
 	commandList->OMSetRenderTargets(static_cast<uint32_t>(handles.size()), handles.data(), false, depthHandle);
 }
 
 void RtvHeap::SetRtvAndMain(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle)
 {
-	assert(0llu < numRenderTargets || numRenderTargets <= 7llu);
+	assert(0u < numRenderTargets and numRenderTargets <= 7u);
 	IDXGISwapChain4* const swapChain = DirectXSwapChain::GetInstance()->GetSwapChain();
 	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
 
