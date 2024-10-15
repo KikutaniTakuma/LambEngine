@@ -87,15 +87,19 @@ void Pipeline::Create(
 	graphicsPipelineStateDesc.pRootSignature = desc_->rootSignature->Get();
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 
-	graphicsPipelineStateDesc.VS = {
-			desc_->shader.vertex->GetBufferPointer(),
-			desc_->shader.vertex->GetBufferSize()
-	};
-	graphicsPipelineStateDesc.PS = {
-			desc_->shader.pixel->GetBufferPointer(),
-			desc_->shader.pixel->GetBufferSize()
-	};
-	if (desc_->shader.hull && desc_->shader.domain) {
+	if (desc_->shader.vertex) {
+		graphicsPipelineStateDesc.VS = {
+				desc_->shader.vertex->GetBufferPointer(),
+				desc_->shader.vertex->GetBufferSize()
+		};
+	}
+	if (desc_->shader.pixel) {
+		graphicsPipelineStateDesc.PS = {
+				desc_->shader.pixel->GetBufferPointer(),
+				desc_->shader.pixel->GetBufferSize()
+		};
+	}
+	if (desc_->shader.hull and desc_->shader.domain) {
 		graphicsPipelineStateDesc.HS = {
 				desc_->shader.hull->GetBufferPointer(),
 				desc_->shader.hull->GetBufferSize()
@@ -173,15 +177,19 @@ void Pipeline::CreateCubeMap(
 	graphicsPipelineStateDesc.pRootSignature = desc_->rootSignature->Get();
 	graphicsPipelineStateDesc.InputLayout = inputLayoutDesc;
 
-	graphicsPipelineStateDesc.VS = {
-			desc_->shader.vertex->GetBufferPointer(),
-			desc_->shader.vertex->GetBufferSize()
-	};
-	graphicsPipelineStateDesc.PS = {
-			desc_->shader.pixel->GetBufferPointer(),
-			desc_->shader.pixel->GetBufferSize()
-	};
-	if (desc_->shader.hull && desc_->shader.domain) {
+	if (desc_->shader.vertex) {
+		graphicsPipelineStateDesc.VS = {
+				desc_->shader.vertex->GetBufferPointer(),
+				desc_->shader.vertex->GetBufferSize()
+		};
+	}
+	if (desc_->shader.pixel) {
+		graphicsPipelineStateDesc.PS = {
+				desc_->shader.pixel->GetBufferPointer(),
+				desc_->shader.pixel->GetBufferSize()
+		};
+	}
+	if (desc_->shader.hull and desc_->shader.domain) {
 		graphicsPipelineStateDesc.HS = {
 				desc_->shader.hull->GetBufferPointer(),
 				desc_->shader.hull->GetBufferSize()
@@ -282,14 +290,18 @@ void Pipeline::Create(const MeshDesc& desc) {
 			meshDesc_->shader.amplification->GetBufferSize()
 		};
 	}
-	graphicsPipelineStateDesc.MS = {
-		meshDesc_->shader.mesh->GetBufferPointer(),
-		meshDesc_->shader.mesh->GetBufferSize()
-	};
-	graphicsPipelineStateDesc.PS = {
-		meshDesc_->shader.pixel->GetBufferPointer(),
-		meshDesc_->shader.pixel->GetBufferSize()
-	};
+	if (meshDesc_->shader.mesh) {
+		graphicsPipelineStateDesc.MS = {
+			meshDesc_->shader.mesh->GetBufferPointer(),
+			meshDesc_->shader.mesh->GetBufferSize()
+		};
+	}
+	if (meshDesc_->shader.pixel) {
+		graphicsPipelineStateDesc.PS = {
+			meshDesc_->shader.pixel->GetBufferPointer(),
+			meshDesc_->shader.pixel->GetBufferSize()
+		};
+	}
 	graphicsPipelineStateDesc.blend = blendDesc;
 	graphicsPipelineStateDesc.rasterizer = rasterizerDesc;
 	if (meshDesc_->isDepth) {
