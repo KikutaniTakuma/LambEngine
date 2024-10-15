@@ -8,7 +8,7 @@
 
 class GaussianBlur final : public PeraPipeline {
 public:
-	struct GaussianBlurState {
+	struct State {
 		Vector2 dir;
 		float32_t sigma;
 		int32_t kernelSize;
@@ -34,13 +34,13 @@ public:
 
 	void DataSet()override;
 
-	void SetGaussianState(const GaussianBlurState& gaussianBlurState) {
+	void SetGaussianState(const State& gaussianBlurState) {
 		gaussianBlurState_ = gaussianBlurState;
 	}
 
 	void Debug(const std::string& guiName);
 
 private:
-	std::array<std::unique_ptr<ConstantBuffer<GaussianBlurState>>, DirectXSwapChain::kBackBufferNumber> gaussianBlurStateBuf_;
-	GaussianBlurState  gaussianBlurState_;
+	std::array<std::unique_ptr<ConstantBuffer<State>>, DirectXSwapChain::kBackBufferNumber> gaussianBlurStateBuf_;
+	State  gaussianBlurState_;
 };

@@ -142,7 +142,7 @@ void GaussianBlur::Init(
 		gaussianBlurStateBuf_.begin(),
 		gaussianBlurStateBuf_.end(),
 		[](auto& n) {
-			n = std::make_unique<ConstantBuffer<GaussianBlurState>>();
+			n = std::make_unique<ConstantBuffer<State>>();
 		}
 	);
 }
