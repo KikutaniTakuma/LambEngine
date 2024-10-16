@@ -2,7 +2,7 @@
 #include <memory>
 
 #include "Game/CollisionManager/Collider/Collider.h"
-#include "Drawers/Model/Model.h"
+#include "Drawer/Model/Model.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Math/Mat4x4.h"
 

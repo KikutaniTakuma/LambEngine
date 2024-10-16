@@ -1,6 +1,6 @@
 #pragma once
 #include "../Object.h"
-#include "Drawers/Other/MeshShaderTest.h"
+#include "Drawer/Other/MeshShaderTest.h"
 
 class MeshShaderTestComp : public IComp {
 public:

@@ -1,7 +1,7 @@
 #include "SpriteRenderComp.h"
-#include "Drawers/DrawerManager.h"
+#include "Drawer/DrawerManager.h"
 #include "SpriteRenderDataComp.h"
-#include "Drawers/Texture2D/Texture2D.h"
+#include "Drawer/Texture2D/Texture2D.h"
 
 #include "TransformComp.h"
 #include "CameraComp.h"

@@ -1,6 +1,6 @@
 #pragma once
 #include "Utils/SafePtr.h"
-#include "Drawers/PeraRender/PeraRender.h"
+#include "Drawer/PeraRender/PeraRender.h"
 #include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
 #include "Engine/Graphics/PipelineObject/GaussianBlur/GaussianBlur.h"
 #include "Engine/Graphics/PipelineObject/Outline/Outline.h"
@@ -8,7 +8,7 @@
 
 #include "Engine/Graphics/PipelineObject/DeferredRendering/DeferredRendering.h"
 
-#include "Drawers/AirSkyBox/AirSkyBox.h"
+#include "Drawer/AirSkyBox/AirSkyBox.h"
 #include "json.hpp"
 
 #include <list>

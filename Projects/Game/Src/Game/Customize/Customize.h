@@ -5,8 +5,8 @@
 #include <cstdint>
 
 #include "AudioManager/AudioManager.h"
-#include "Drawers/Model/Model.h"
-#include "Drawers/Texture2D/Texture2D.h"
+#include "Drawer/Model/Model.h"
+#include "Drawer/Texture2D/Texture2D.h"
 #include "Game/Player/Player.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Math/Mat4x4.h"

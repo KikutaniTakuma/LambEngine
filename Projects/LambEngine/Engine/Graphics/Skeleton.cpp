@@ -5,7 +5,7 @@
 #include "Utils/EngineInfo.h"
 
 #ifdef USE_DEBUG_CODE
-#include "Drawers/Line/Line.h"
+#include "Drawer/Line/Line.h"
 #endif // USE_DEBUG_CODE
 
 namespace Lamb {

@@ -1,6 +1,6 @@
 #pragma once
 #include "../Object.h"
-#include "Drawers/Model/Model.h"
+#include "Drawer/Model/Model.h"
 
 
 class ModelRenderDataComp : public IComp {

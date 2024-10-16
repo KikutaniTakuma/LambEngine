@@ -3,7 +3,7 @@
 #include <variant>
 #include <string>
 
-#include "Drawers/Model/Model.h"
+#include "Drawer/Model/Model.h"
 #include "Math/Vector3.h"
 
 class Camera;

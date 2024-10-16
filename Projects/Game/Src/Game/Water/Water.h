@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
-#include "Drawers/PeraRender/PeraRender.h"
-#include "Drawers/Other/WaterTex2D/WaterTex2D.h"
+#include "Drawer/PeraRender/PeraRender.h"
+#include "Drawer/Other/WaterTex2D/WaterTex2D.h"
 
 class Water final {
 private:

@@ -1,7 +1,7 @@
 #include "LineRenderComp.h"
 #include "LineRenderDataComp.h"
 #include "LineComp.h"
-#include "Drawers/Line/Line.h"
+#include "Drawer/Line/Line.h"
 #include "CameraComp.h"
 
 void LineRenderComp::Init() {

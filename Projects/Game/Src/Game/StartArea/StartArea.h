@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "Drawers/Model/Model.h"
+#include "Drawer/Model/Model.h"
 
 class Camera;
 class StartArea {

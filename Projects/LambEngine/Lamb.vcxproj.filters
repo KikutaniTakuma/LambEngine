@@ -19,26 +19,8 @@
     <ClCompile Include="Input\Mouse\Mouse.cpp">
       <Filter>Input\Mouse</Filter>
     </ClCompile>
-    <ClCompile Include="Drawers\Line\Line.cpp">
-      <Filter>Drawers\Line</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawers\Model\Model.cpp">
-      <Filter>Drawers\Model</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawers\PeraRender\PeraRender.cpp">
-      <Filter>Drawers\PeraRender</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawers\Texture2D\Texture2D.cpp">
-      <Filter>Drawers\Texture2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawers\StringOut\StringOut.cpp">
-      <Filter>Drawers\StringOut</Filter>
-    </ClCompile>
     <ClCompile Include="Input\Input.cpp">
       <Filter>Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawers\Particle\Particle.cpp">
-      <Filter>Drawers\Particle</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.cpp">
       <Filter>Engine\Core\DescriptorHeap</Filter>
@@ -130,9 +112,6 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.cpp">
       <Filter>Engine\Graphics\PipelineObject\PeraPipeline</Filter>
     </ClCompile>
-    <ClCompile Include="Drawers\BaseDrawer.cpp">
-      <Filter>Drawers</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\RenderContextManager\RenderContextManager.cpp">
       <Filter>Engine\Graphics\RenderContextManager</Filter>
     </ClCompile>
@@ -142,14 +121,8 @@
     <ClCompile Include="Engine\Graphics\Animator\Animator.cpp">
       <Filter>Engine\Graphics\Animator</Filter>
     </ClCompile>
-    <ClCompile Include="Drawers\AnimationModel\AnimationModel.cpp">
-      <Filter>Drawers\AnimationModel</Filter>
-    </ClCompile>
     <ClCompile Include="Transform\Transform.cpp">
       <Filter>Transform</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawers\DrawerManager.cpp">
-      <Filter>Drawers</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Skeleton.cpp">
       <Filter>Engine\Graphics</Filter>
@@ -159,12 +132,6 @@
     </ClCompile>
     <ClCompile Include="Math\MathCommon.cpp">
       <Filter>Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawers\Other\WaterTex2D\WaterTex2D.cpp">
-      <Filter>Drawers\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawers\SkyBox\SkyBox.cpp">
-      <Filter>Drawers\SkyBox</Filter>
     </ClCompile>
     <ClCompile Include="Engine\EngineUtils\ResourceLoadLog\ResourceLoadLog.cpp">
       <Filter>Engine\EngineUtils\ResourceLoadLog</Filter>
@@ -211,12 +178,6 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\Luminate\Luminate.cpp">
       <Filter>Engine\Graphics\PipelineObject\Luminate</Filter>
     </ClCompile>
-    <ClCompile Include="Drawers\AirSkyBox\AirSkyBox.cpp">
-      <Filter>Drawers\AirSkyBox</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawers\Other\MeshShaderTest.cpp">
-      <Filter>Drawers\Other</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Meshlet\Meshlet.cpp">
       <Filter>Engine\Graphics\Meshlet</Filter>
     </ClCompile>
@@ -229,6 +190,45 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\Distortion\Distortion.cpp">
       <Filter>Engine\Graphics\PipelineObject\Distortion</Filter>
     </ClCompile>
+    <ClCompile Include="Drawer\DrawerManager.cpp">
+      <Filter>Drawer</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\BaseDrawer.cpp">
+      <Filter>Drawer</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\Texture2D\Texture2D.cpp">
+      <Filter>Drawer\Texture2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\StringOut\StringOut.cpp">
+      <Filter>Drawer\StringOut</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\SkyBox\SkyBox.cpp">
+      <Filter>Drawer\SkyBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\PeraRender\PeraRender.cpp">
+      <Filter>Drawer\PeraRender</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\Particle\Particle.cpp">
+      <Filter>Drawer\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\Other\MeshShaderTest.cpp">
+      <Filter>Drawer\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\Other\WaterTex2D\WaterTex2D.cpp">
+      <Filter>Drawer\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\Model\Model.cpp">
+      <Filter>Drawer\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\Line\Line.cpp">
+      <Filter>Drawer\Line</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\AnimationModel\AnimationModel.cpp">
+      <Filter>Drawer\AnimationModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\AirSkyBox\AirSkyBox.cpp">
+      <Filter>Drawer\AirSkyBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -239,21 +239,6 @@
     </Filter>
     <Filter Include="AudioManager\Audio">
       <UniqueIdentifier>{7d34ec95-2a47-42f6-93fb-23ebe8cc0e42}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Drawers">
-      <UniqueIdentifier>{13568cd3-f8d9-4f82-a4be-021ef5239ea6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Drawers\Texture2D">
-      <UniqueIdentifier>{192c5cda-f43f-40d2-9f13-b9f849327730}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Drawers\Model">
-      <UniqueIdentifier>{75878dc3-228d-4f78-a159-c89a43ffafe2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Drawers\Line">
-      <UniqueIdentifier>{17a37595-e9f9-42e9-9496-d637dc153066}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Drawers\PeraRender">
-      <UniqueIdentifier>{9f8d179a-c3cd-4256-8e00-4a3389c927d7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Input">
       <UniqueIdentifier>{2c0b204b-f97b-4c0f-998a-577cdd645955}</UniqueIdentifier>
@@ -267,14 +252,8 @@
     <Filter Include="Input\Mouse">
       <UniqueIdentifier>{840634f8-e2bb-40d7-a128-78abed2ce12a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Drawers\StringOut">
-      <UniqueIdentifier>{8f6f9f0d-e177-4c18-b9a0-cab1926af85b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{42aaa316-1089-4ab2-ba8d-4be0f3334763}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Drawers\Particle">
-      <UniqueIdentifier>{81d2d594-ca17-412f-85ce-bbbad35d144c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Core">
       <UniqueIdentifier>{078e13f7-3a71-446c-96c7-2c855798a9b8}</UniqueIdentifier>
@@ -375,23 +354,14 @@
     <Filter Include="Engine\Graphics\AnimationManager">
       <UniqueIdentifier>{add96670-dfee-46cd-bd03-5f72b25dbe9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Drawers\AnimationModel">
-      <UniqueIdentifier>{ce9b2a74-162e-42e2-9e98-2f278ed2aa76}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Transform">
       <UniqueIdentifier>{aa982000-c4e2-4c12-a54a-f75fa2d1c84d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\Graphics\Tex2DAniamtor">
       <UniqueIdentifier>{d2bdf60c-0eca-4b04-af8b-a90657a2185f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Drawers\Other">
-      <UniqueIdentifier>{5c308a47-9839-49cb-b2bf-2944c9b53af8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Animator">
       <UniqueIdentifier>{0359fcab-3674-4f23-a03c-3ef946b211c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Drawers\SkyBox">
-      <UniqueIdentifier>{035a3a54-6a51-4f0b-bfcd-a00c979ca55f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\EngineUtils\ResourceLoadLog">
       <UniqueIdentifier>{5d704287-10e8-4615-9e1d-949b3bb47401}</UniqueIdentifier>
@@ -411,9 +381,6 @@
     <Filter Include="Engine\Graphics\PipelineObject\Luminate">
       <UniqueIdentifier>{c2218a0e-ba38-4d0a-beb0-7e7194492ba5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Drawers\AirSkyBox">
-      <UniqueIdentifier>{ca4daa01-23b2-4a95-840d-4ee7e9337717}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\Shader\MeshShader">
       <UniqueIdentifier>{56824c3d-fcf4-40f3-af61-c665721bac0d}</UniqueIdentifier>
     </Filter>
@@ -428,6 +395,39 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\Distortion">
       <UniqueIdentifier>{ecfce8a0-b714-48c7-9970-25b8dd5ed69d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer">
+      <UniqueIdentifier>{13568cd3-f8d9-4f82-a4be-021ef5239ea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer\Texture2D">
+      <UniqueIdentifier>{192c5cda-f43f-40d2-9f13-b9f849327730}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer\Model">
+      <UniqueIdentifier>{75878dc3-228d-4f78-a159-c89a43ffafe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer\Line">
+      <UniqueIdentifier>{17a37595-e9f9-42e9-9496-d637dc153066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer\PeraRender">
+      <UniqueIdentifier>{9f8d179a-c3cd-4256-8e00-4a3389c927d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer\StringOut">
+      <UniqueIdentifier>{8f6f9f0d-e177-4c18-b9a0-cab1926af85b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer\AnimationModel">
+      <UniqueIdentifier>{ce9b2a74-162e-42e2-9e98-2f278ed2aa76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer\Other">
+      <UniqueIdentifier>{5c308a47-9839-49cb-b2bf-2944c9b53af8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer\SkyBox">
+      <UniqueIdentifier>{035a3a54-6a51-4f0b-bfcd-a00c979ca55f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer\AirSkyBox">
+      <UniqueIdentifier>{ca4daa01-23b2-4a95-840d-4ee7e9337717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer\Particle">
+      <UniqueIdentifier>{b53c4b35-c897-4ef6-bffb-a327c572b220}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -449,26 +449,8 @@
     <ClInclude Include="Input\Mouse\Mouse.h">
       <Filter>Input\Mouse</Filter>
     </ClInclude>
-    <ClInclude Include="Drawers\Line\Line.h">
-      <Filter>Drawers\Line</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawers\Model\Model.h">
-      <Filter>Drawers\Model</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawers\PeraRender\PeraRender.h">
-      <Filter>Drawers\PeraRender</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawers\Texture2D\Texture2D.h">
-      <Filter>Drawers\Texture2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawers\StringOut\StringOut.h">
-      <Filter>Drawers\StringOut</Filter>
-    </ClInclude>
     <ClInclude Include="Input\Input.h">
       <Filter>Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawers\Particle\Particle.h">
-      <Filter>Drawers\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Core\DescriptorHeap\CbvSrvUavHeap.h">
       <Filter>Engine\Core\DescriptorHeap</Filter>
@@ -569,9 +551,6 @@
     <ClInclude Include="Engine\Graphics\PipelineObject\PeraPipeline\PeraPipeline.h">
       <Filter>Engine\Graphics\PipelineObject\PeraPipeline</Filter>
     </ClInclude>
-    <ClInclude Include="Drawers\BaseDrawer.h">
-      <Filter>Drawers</Filter>
-    </ClInclude>
     <ClInclude Include="Math\MathCommon.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -593,29 +572,17 @@
     <ClInclude Include="Engine\Graphics\Animator\Animator.h">
       <Filter>Engine\Graphics\Animator</Filter>
     </ClInclude>
-    <ClInclude Include="Drawers\AnimationModel\AnimationModel.h">
-      <Filter>Drawers\AnimationModel</Filter>
-    </ClInclude>
     <ClInclude Include="Math\Matrix.h">
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="Transform\Transform.h">
       <Filter>Transform</Filter>
     </ClInclude>
-    <ClInclude Include="Drawers\DrawerManager.h">
-      <Filter>Drawers</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Skeleton.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Tex2DAniamtor\Tex2DAniamtor.h">
       <Filter>Engine\Graphics\Tex2DAniamtor</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawers\Other\WaterTex2D\WaterTex2D.h">
-      <Filter>Drawers\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawers\SkyBox\SkyBox.h">
-      <Filter>Drawers\SkyBox</Filter>
     </ClInclude>
     <ClInclude Include="Engine\EngineUtils\ResourceLoadLog\ResourceLoadLog.h">
       <Filter>Engine\EngineUtils\ResourceLoadLog</Filter>
@@ -683,9 +650,6 @@
     <ClInclude Include="Utils\HSV.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Drawers\AirSkyBox\AirSkyBox.h">
-      <Filter>Drawers\AirSkyBox</Filter>
-    </ClInclude>
     <ClInclude Include="Math\Unit.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -694,9 +658,6 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\CreateBlendDesc.h">
       <Filter>Engine\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawers\Other\MeshShaderTest.h">
-      <Filter>Drawers\Other</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Meshlet\Meshlet.h">
       <Filter>Engine\Graphics\Meshlet</Filter>
@@ -712,6 +673,45 @@
     </ClInclude>
     <ClInclude Include="Engine\Buffer\ShaderBuffer.h">
       <Filter>Engine\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\DrawerManager.h">
+      <Filter>Drawer</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\BaseDrawer.h">
+      <Filter>Drawer</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\Texture2D\Texture2D.h">
+      <Filter>Drawer\Texture2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\StringOut\StringOut.h">
+      <Filter>Drawer\StringOut</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\SkyBox\SkyBox.h">
+      <Filter>Drawer\SkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\PeraRender\PeraRender.h">
+      <Filter>Drawer\PeraRender</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\Particle\Particle.h">
+      <Filter>Drawer\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\Other\MeshShaderTest.h">
+      <Filter>Drawer\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\Other\WaterTex2D\WaterTex2D.h">
+      <Filter>Drawer\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\Model\Model.h">
+      <Filter>Drawer\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\Line\Line.h">
+      <Filter>Drawer\Line</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\AnimationModel\AnimationModel.h">
+      <Filter>Drawer\AnimationModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\AirSkyBox\AirSkyBox.h">
+      <Filter>Drawer\AirSkyBox</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

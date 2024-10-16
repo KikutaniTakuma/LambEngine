@@ -1,5 +1,5 @@
 #pragma once
-#include "Drawers/Particle/Particle.h"
+#include "Drawer/Particle/Particle.h"
 #include "./Camera/Camera.h"
 
 class ParticleEditor {

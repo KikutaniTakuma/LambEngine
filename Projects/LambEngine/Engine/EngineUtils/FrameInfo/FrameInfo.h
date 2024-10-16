@@ -1,7 +1,7 @@
 #pragma once
 #include <chrono>
 #include <queue>
-#include "Drawers/StringOut/StringOut.h"
+#include "Drawer/StringOut/StringOut.h"
 
 /// <summary>
 /// フレーム情報の管理(fps固定、デルタタイム、平均fps)

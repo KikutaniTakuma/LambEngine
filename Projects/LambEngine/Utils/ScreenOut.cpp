@@ -1,5 +1,5 @@
 #include "ScreenOut.h"
-#include "Drawers/StringOut/StringOut.h"
+#include "Drawer/StringOut/StringOut.h"
 
 ScreenOut* ScreenOut::instance_ = nullptr;
 

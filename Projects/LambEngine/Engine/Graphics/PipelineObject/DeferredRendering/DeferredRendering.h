@@ -6,7 +6,7 @@
 #include "Math/Vector2.h"
 #include "Math/MathCommon.h"
 #include "Engine/Graphics/GraphicsStructs.h"
-#include "Drawers/AirSkyBox/AirSkyBox.h"
+#include "Drawer/AirSkyBox/AirSkyBox.h"
 
 class DeferredRendering final : public PipelineObject {
 public:

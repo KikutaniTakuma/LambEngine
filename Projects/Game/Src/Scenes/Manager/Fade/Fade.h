@@ -1,7 +1,7 @@
 #pragma once
 #include "Utils/SafePtr.h"
 #include "Transform/Transform.h"
-#include "Drawers/Texture2D/Texture2D.h"
+#include "Drawer/Texture2D/Texture2D.h"
 #include "Utils/FileUtils.h"
 #include "Utils/Easeing.h"
 #include <memory>

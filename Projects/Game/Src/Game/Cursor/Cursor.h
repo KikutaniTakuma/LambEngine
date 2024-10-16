@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "Drawers/Texture2D/Texture2D.h"
+#include "Drawer/Texture2D/Texture2D.h"
 #include "Camera/Camera.h"
 
 class Cursor {

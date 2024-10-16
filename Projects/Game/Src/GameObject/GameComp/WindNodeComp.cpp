@@ -1,5 +1,5 @@
 #include "WindNodeComp.h"
-#include "Drawers/Line/Line.h"
+#include "Drawer/Line/Line.h"
 #include "../Comp/CameraComp.h"
 
 void WindNodeComp::Start() {

@@ -5,9 +5,9 @@
 #include <vector>
 
 #include "AudioManager/AudioManager.h"
-#include "Drawers/Model/Model.h"
-#include "Drawers/Texture2D/Texture2D.h"
-#include "Drawers/Particle/Particle.h"
+#include "Drawer/Model/Model.h"
+#include "Drawer/Texture2D/Texture2D.h"
+#include "Drawer/Particle/Particle.h"
 #include "Game/CollisionManager/Collider/Collider.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Math/Mat4x4.h"

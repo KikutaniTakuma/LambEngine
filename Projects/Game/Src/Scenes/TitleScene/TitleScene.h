@@ -1,15 +1,15 @@
 #pragma once
 #include "Scenes/Manager/SceneManager.h"
-#include "Drawers/Model/Model.h"
-#include "Drawers/Texture2D/Texture2D.h"
-#include "Drawers/PeraRender/PeraRender.h"
-#include "Drawers/Particle/Particle.h"
-#include "Drawers/StringOut/StringOut.h"
+#include "Drawer/Model/Model.h"
+#include "Drawer/Texture2D/Texture2D.h"
+#include "Drawer/PeraRender/PeraRender.h"
+#include "Drawer/Particle/Particle.h"
+#include "Drawer/StringOut/StringOut.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Utils/Easeing.h"
 #include "Game/Cursor/Cursor.h"
 
-#include "Drawers/Other/WaterTex2D/WaterTex2D.h"
+#include "Drawer/Other/WaterTex2D/WaterTex2D.h"
 
 #include <array>
 
