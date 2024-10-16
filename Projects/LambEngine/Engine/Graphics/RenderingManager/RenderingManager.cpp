@@ -145,7 +145,7 @@ void RenderingManager::Finalize() {
 	instance_.reset();
 }
 
-Lamb::SafePtr<RenderingManager> const RenderingManager::GetInstance()
+const Lamb::SafePtr<RenderingManager> RenderingManager::GetInstance()
 {
 	return instance_.get();
 }

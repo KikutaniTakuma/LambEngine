@@ -31,7 +31,7 @@ public:
 	static void Initialize();
 	static void Finalize();
 
-	static Lamb::SafePtr<RenderingManager> const GetInstance();
+	static const Lamb::SafePtr<RenderingManager> GetInstance();
 
 private:
 	static std::unique_ptr<RenderingManager> instance_;
