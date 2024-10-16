@@ -367,6 +367,8 @@ public:
 
 	static [[nodiscard]] Matrix MakeOrthographic(float width, float height, float nearClip, float farClip);
 
+	static [[nodiscard]] Matrix ConvertPerspectiveFovToOrthographic(float fovY, float aspectRatio, float nearClip, float farClip, float distanceZ);
+
 	static [[nodiscard]] Matrix MakeViewPort(float left, float top, float width, float height, float minDepth, float maxDepth);
 
 

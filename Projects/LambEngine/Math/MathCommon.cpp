@@ -20,13 +20,13 @@ namespace Lamb {
             // 角度差分を求める
             float diff = b - a;
             // 角度[-2PI,+2PI]に補正
-            diff = std::fmod(diff, 360.0f * std::numbers::pi_v<float> / 180.0f);
+            diff = std::fmod(diff, 2.0f * std::numbers::pi_v<float>);
             // 角度[-PI,+PI]に補正
-            if (diff > 180.0f * std::numbers::pi_v<float> / 180.0f) {
-                diff -= 360.0f * std::numbers::pi_v<float> / 180.0f;
+            if (diff > std::numbers::pi_v<float>) {
+                diff -= 2.0f * std::numbers::pi_v<float>;
             }
-            else if (diff < -180.0f * std::numbers::pi_v<float> / 180.0f) {
-                diff += 360.0f * std::numbers::pi_v<float> / 180.0f;
+            else if (diff < -std::numbers::pi_v<float>) {
+                diff += 2.0f * std::numbers::pi_v<float>;
             }
             return std::lerp(a, a + diff, t);
         }

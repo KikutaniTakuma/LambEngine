@@ -125,16 +125,26 @@ Matrix<float,4,4> Matrix<float,4,4>::MakeOrthographic(float width, float height,
 	return result;
 }
 
-Matrix<float,4,4> Matrix<float,4,4>::MakeViewPort(float left, float top, float width, float height, float minDepth, float maxDepth) {
-	Matrix<float,4,4> result;
+Matrix<float, 4, 4> Matrix<float, 4, 4>::ConvertPerspectiveFovToOrthographic(float fovY, float aspectRatio, float nearClip, float farClip, float distanceZ) {
+	// height の計算
+	float height = 2.0f * std::clamp(distanceZ, nearClip, farClip) * std::tan(fovY * 0.5f);
 
-	result[0][0] = width / 2.0f;
-	result[1][1] = height / -2.0f;
+	// width の計算
+	float width = aspectRatio * height;
+
+	return MakeOrthographic(width, height, nearClip, farClip);
+}
+
+Matrix<float, 4, 4> Matrix<float, 4, 4>::MakeViewPort(float left, float top, float width, float height, float minDepth, float maxDepth) {
+	Matrix<float, 4, 4> result;
+
+	result[0][0] = width * 0.5f;
+	result[1][1] = height * - 0.5f;
 	result[2][2] = maxDepth - minDepth;
 	result[3][3] = 1.0f;
 
-	result[3][0] = left + (width / 2.0f);
-	result[3][1] = top + (height / 2.0f);
+	result[3][0] = left + (width * 0.5f);
+	result[3][1] = top + (height * 0.5f);
 	result[3][2] = minDepth;
 
 	return result;
@@ -144,10 +154,10 @@ Matrix<float,4,4> Matrix<float,4,4>::DirectionToDirection(const Vector3& from, c
 	Vector3 normal;
 
 	if (from.Dot(to) == -1.0f) {
-		if (from.x != 0.0f || from.y != 0.0f) {
+		if (from.x != 0.0f or from.y != 0.0f) {
 			normal = Vector3{ from.y, -from.x, 0.0f }.Normalize();
 		}
-		else if (from.x != 0.0f || from.z != 0.0f) {
+		else if (from.x != 0.0f or from.z != 0.0f) {
 			normal = Vector3{ from.z, 0.0f, -from.x }.Normalize();
 		}
 	}
