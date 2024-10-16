@@ -131,7 +131,7 @@ void RtvHeap::SetRtv(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRende
 
 void RtvHeap::SetRtvAndMain(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle)
 {
-	assert(0u < numRenderTargets and numRenderTargets <= 7u);
+	assert(0u <= numRenderTargets and numRenderTargets <= 7u);
 	IDXGISwapChain4* const swapChain = DirectXSwapChain::GetInstance()->GetSwapChain();
 	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
 
