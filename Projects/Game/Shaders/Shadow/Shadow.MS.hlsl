@@ -27,7 +27,7 @@ struct ShadowOutput{
 	float32_t4 pos : SV_POSITION;
 };
 
-ConstantBuffer<LightCamera> gLightCamera         : register(b0);
+ConstantBuffer<LightCamera> gLightCamera         : register(b1);
 
 StructuredBuffer<WVPMatrix> gTransform           : register(t0);
 StructuredBuffer<MSInput>   gVertices            : register(t1);

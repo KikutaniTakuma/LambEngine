@@ -17,7 +17,7 @@ class RenderingManager {
 public:
 	struct State {
 		Vector3 cameraPos;
-		Mat4x4 cameraMatrix;
+		Mat4x4 viewMatrix;
 		Mat4x4 projectionMatrix;
 		bool isLighting = false;
 		bool isUseMeshShader = false;
@@ -34,7 +34,8 @@ public:
 	};
 
 private:
-	using RenderDataLists = std::vector<std::pair<size_t, const std::list<RenderData*>&>>;
+	using RenderDataList = std::pair<size_t, const std::list<RenderData*>&>;
+	using RenderDataLists = std::vector<RenderDataList>;
 
 public:
 	RenderingManager();
@@ -70,8 +71,8 @@ public:
 	void SetState(const State& state);
 
 	void SetCameraPos(const Vector3& cameraPos);
-	void SetCameraMatrix(const Mat4x4& camera);
-	void SetProjectionInverseMatrix(const Mat4x4& projectionInverce);
+	void SetViewMatrix(const Mat4x4& view);
+	void SetProjectionMatrix(const Mat4x4& projection);
 	void SetHsv(const Vector3& hsv);
 	void SetColor(const Vector4& color);
 	void SetIsLighting(bool isLighting);
@@ -92,7 +93,7 @@ public:
 
 private:
 	// アルファ値がないものを描画
-	void DrawRGB(std::pair<size_t, const std::list<RenderData*>&> renderList);
+	void DrawRGB(const RenderDataList& renderList);
 
 	// cubemapの描画
 	void DrawSkyBox();
@@ -102,6 +103,8 @@ private:
 
 	// ディファード描画
 	void DrawDeferred();
+
+	void DrawShadow(const RenderDataList& rgbList, const RenderDataLists& rgbaList);
 
 	// ポストエフェクトを描画する
 	void DrawPostEffect();
@@ -138,6 +141,8 @@ private:
 
 	// 深度値(法線書き込みと色書き込み、アウトラインで使用する)
 	std::unique_ptr<DepthBuffer> depthStencil_;
+	// 影のための深度値書き込み
+	std::unique_ptr<DepthBuffer> depthStencilShadow_;
 
 	// ブルームで使用する輝度抽出用オフスクリーン
 	std::unique_ptr<PeraRender> luminateTexture_;
@@ -171,7 +176,8 @@ private:
 	Vector3 lightRotate_;
 	bool isDrawSkyBox_ = true;
 
-	Mat4x4 cameraMatrix_;
+	Mat4x4 viewMatrix_;
+	Mat4x4 projectionMatrix_;
 
 	/// 
 	/// その他ポストエフェクトは増える予定

@@ -59,8 +59,10 @@ RenderingManager::RenderingManager() {
 	deferredRenderingData_.directionLight.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>);
 
 	depthStencil_ = std::make_unique<DepthBuffer>();
-	srvHeap->BookingHeapPos(1u);
+	depthStencilShadow_ = std::make_unique<DepthBuffer>();
+	srvHeap->BookingHeapPos(2u);
 	srvHeap->CreateView(*depthStencil_);
+	srvHeap->CreateView(*depthStencilShadow_);
 
 
 	auto distortion = std::make_unique<Distortion>();
@@ -264,7 +266,7 @@ void RenderingManager::Draw() {
 		static_cast<uint32_t>(renderTargets.size())
 	);
 
-	auto rgbRenderList = renderContextManager->CreateRenderList(BlendType::kNone);
+	RenderDataList rgbRenderList = renderContextManager->CreateRenderList(BlendType::kNone);
 
 	DrawRGB(rgbRenderList);
 
@@ -331,6 +333,17 @@ void RenderingManager::Draw() {
 		rgbaTextureRenderTarget.data(),
 		static_cast<uint32_t>(rgbaTextureRenderTarget.size())
 	);
+
+	/// ===================================================================================
+
+	// depthだけセット
+	RenderTarget::SetRenderTargets(
+		nullptr,
+		0u,
+		&depthStencilShadow_->GetDepthHandle()
+	);
+
+	DrawShadow(rgbRenderList, rgbaList);
 
 
 	/// ====================================================================================
@@ -416,8 +429,8 @@ DepthBuffer* RenderingManager::GetDepthBuffer()
 
 void RenderingManager::SetState(const State& state) {
 	SetCameraPos(state.cameraPos);
-	SetCameraMatrix(state.cameraMatrix);
-	SetProjectionInverseMatrix(state.projectionMatrix);
+	SetViewMatrix(state.viewMatrix);
+	SetProjectionMatrix(state.projectionMatrix);
 	SetHsv(state.hsv);
 	SetIsLighting(state.isLighting);
 	isUseMesh_ = state.isUseMeshShader;
@@ -437,14 +450,13 @@ void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 	atmosphericParams_.lightDirection = -Vector3::kXIdentity * Quaternion::EulerToQuaternion(lightRotate_);
 }
 
-void RenderingManager::SetCameraMatrix(const Mat4x4& camera)
-{
-	cameraMatrix_ = camera;
+void RenderingManager::SetViewMatrix(const Mat4x4& view) {
+	viewMatrix_ = view;
 }
 
-void RenderingManager::SetProjectionInverseMatrix(const Mat4x4& projectionInverse)
-{
-	outlinePipeline_->SetProjectionInverse(projectionInverse);
+void RenderingManager::SetProjectionMatrix(const Mat4x4& projection) {
+	projectionMatrix_ = projection;
+	outlinePipeline_->SetProjectionInverse(projectionMatrix_.Inverse());
 }
 
 void RenderingManager::SetHsv(const Vector3& hsv)
@@ -624,7 +636,7 @@ uint32_t RenderingManager::GetBufferIndex() const
 	return bufferIndex_;
 }
 
-void RenderingManager::DrawRGB(std::pair<size_t, const std::list<RenderData*>&> renderList) {
+void RenderingManager::DrawRGB(const RenderDataList& renderList) {
 	for (size_t index = 0; const auto & element : renderList.second) {
 		if (renderList.first <= index) {
 			break;
@@ -636,7 +648,7 @@ void RenderingManager::DrawRGB(std::pair<size_t, const std::list<RenderData*>&> 
 }
 
 void RenderingManager::DrawSkyBox() {
-	skyBox_->Draw(skyBoxTransform_.GetMatrix(), cameraMatrix_, 0xffffffff);
+	skyBox_->Draw(skyBoxTransform_.GetMatrix(), viewMatrix_ * projectionMatrix_, 0xffffffff);
 }
 
 void RenderingManager::DrawRGBA(const RenderDataLists& rgbaList) {
@@ -658,6 +670,25 @@ void RenderingManager::DrawDeferred() {
 	deferredRendering_->SetAtmosphericParams(atmosphericParams_);
 
 	deferredRendering_->Draw();
+}
+
+void RenderingManager::DrawShadow(const RenderDataList& rgbList, const RenderDataLists& rgbaList)
+{
+	Quaternion cameraRotate = viewMatrix_.Inverse().GetRotate();
+	Vector3 cameraDirection = Vector3::kZIdentity * cameraRotate;
+
+	cameraDirection *= skyBoxTransform_.scale.Length();
+
+	Mat4x4 camera = ;
+
+	for (size_t index = 0; auto element : rgbList.second) {
+		if (rgbList.first <= index) {
+			break;
+		}
+		element->SetLightCameraMatrix(camera);
+		element->DrawShadow();
+		index++;
+	}
 }
 
 void RenderingManager::DrawPostEffect() {
