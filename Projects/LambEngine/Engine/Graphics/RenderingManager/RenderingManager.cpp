@@ -116,11 +116,11 @@ RenderingManager::RenderingManager() {
 	outlinePipeline_ = outline.release();
 	outlineTexture_ = std::make_unique<PeraRender>();
 	outlineTexture_->Initialize(outlinePipeline_.get());
-	outlinePipeline_->SetWeight(weight_);
+	outlinePipeline_->SetWeight(outlineWeight_);
 
 	skyBox_ = std::make_unique<AirSkyBox>();
 	skyBox_->Load();
-	transform_.scale *= 500.0f;
+	skyBoxTransform_.scale *= 500.0f;
 
 
 	isUseMesh_ = Lamb::IsCanUseMeshShader();
@@ -239,7 +239,7 @@ void RenderingManager::Draw() {
 	gaussianPipeline_[kHorizontal]->SetGaussianState(gaussianBlurStateHorizontal_);
 	gaussianPipeline_[kVertical]->SetGaussianState(gaussianBlurStateVertical_);
 	luminate_->SetLuminanceThreshold(luminanceThreshold);
-	outlinePipeline_->SetWeight(weight_);
+	outlinePipeline_->SetWeight(outlineWeight_);
 
 	/// ====================================================================================
 
@@ -414,9 +414,25 @@ DepthBuffer* RenderingManager::GetDepthBuffer()
 	return depthStencil_.get();
 }
 
+void RenderingManager::SetState(const State& state) {
+	SetCameraPos(state.cameraPos);
+	SetCameraMatrix(state.cameraMatrix);
+	SetProjectionInverseMatrix(state.projectionMatrix);
+	SetHsv(state.hsv);
+	SetIsLighting(state.isLighting);
+	isUseMesh_ = state.isUseMeshShader;
+	isDrawSkyBox_ = state.isDrawSkyBox;
+	skyBoxTransform_.scale = state.skyBoxScale;
+	isDrawOutLine_ = state.isDrawOutline;
+	outlineWeight_ = state.outlineWeight;
+	SetLightRotate(state.lightRotate);
+	SetBloomKernelSize(state.bloomHorizontalSize, state.bloomVerticalSize);
+	SetEnvironmentCoefficient(state.skyBoxEnvironmentCoefficient);
+}
+
 void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 	deferredRenderingData_.eyePos = cameraPos;
-	transform_.translate = cameraPos;
+	skyBoxTransform_.translate = cameraPos;
 	atmosphericParams_.cameraPosition = cameraPos;
 	atmosphericParams_.lightDirection = -Vector3::kXIdentity * Quaternion::EulerToQuaternion(lightRotate_);
 }
@@ -505,14 +521,14 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 				ImGui::DragFloat("environment", &deferredRenderingData_.environmentCoefficient, 0.001f, 0.0f, 5.0f);
 			}
 			ImGui::Checkbox("SkyBox描画", &isDrawSkyBox_);
-			ImGui::DragFloat3("scale", transform_.scale.data(), 0.1f);
+			ImGui::DragFloat3("scale", skyBoxTransform_.scale.data(), 0.1f);
 			ImGui::TreePop();
 		}
 
 		if (ImGui::TreeNode("Outline")) {
-			ImGui::DragFloat("アウトラインしきい値", &weight_, 0.001f, 0.0f, 1000.0f);
-			ImGui::Checkbox("アウトライン有効", &isOutLine_);
-			outlinePipeline_->SetWeight(weight_);
+			ImGui::DragFloat("アウトラインしきい値", &outlineWeight_, 0.001f, 0.0f, 1000.0f);
+			ImGui::Checkbox("アウトライン有効", &isDrawOutLine_);
+			outlinePipeline_->SetWeight(outlineWeight_);
 
 			ImGui::TreePop();
 		}
@@ -539,14 +555,14 @@ void RenderingManager::Save(nlohmann::json& jsonFile) {
 	json["bloom"]["y"] = gaussianBlurStateVertical_.kernelSize;
 	json["bloom"]["luminanceThreshold"] = luminanceThreshold;
 	json["skybox"]["scale"] = nlohmann::json::array();
-	for (auto& i : transform_.scale) {
+	for (auto& i : skyBoxTransform_.scale) {
 		json["skybox"]["scale"].push_back(i);
 	}
 	json["skybox"]["environmentCoefficient"] = deferredRenderingData_.environmentCoefficient;
 	json["skybox"]["isDraw"] = isDrawSkyBox_;
 	json["skybox"]["environment"] = deferredRenderingData_.environmentCoefficient;
-	json["outline"] = weight_;
-	json["outline_enable"] = isOutLine_;
+	json["outline"] = outlineWeight_;
+	json["outline_enable"] = isDrawOutLine_;
 }
 
 void RenderingManager::Load(nlohmann::json& jsonFile) {
@@ -567,8 +583,8 @@ void RenderingManager::Load(nlohmann::json& jsonFile) {
 	else {
 		luminanceThreshold = 1.0f;
 	}
-	for (size_t i = 0; i < transform_.scale.size(); i++) {
-		transform_.scale[i] = json["skybox"]["scale"][i].get<float>();
+	for (size_t i = 0; i < skyBoxTransform_.scale.size(); i++) {
+		skyBoxTransform_.scale[i] = json["skybox"]["scale"][i].get<float>();
 	}
 	if (json["skybox"]["environmentCoefficient"].is_number_float()) {
 		deferredRenderingData_.environmentCoefficient = json["skybox"]["environmentCoefficient"].get<float>();
@@ -581,10 +597,10 @@ void RenderingManager::Load(nlohmann::json& jsonFile) {
 		deferredRenderingData_.environmentCoefficient = json["skybox"]["environment"].get<float>();
 	}
 
-	weight_ = json["outline"].get<float>();
+	outlineWeight_ = json["outline"].get<float>();
 
 	if (json.contains("outline_enable")) {
-		isOutLine_ = json["outline_enable"].get<bool>();
+		isDrawOutLine_ = json["outline_enable"].get<bool>();
 	}
 
 }
@@ -620,7 +636,7 @@ void RenderingManager::DrawRGB(std::pair<size_t, const std::list<RenderData*>&> 
 }
 
 void RenderingManager::DrawSkyBox() {
-	skyBox_->Draw(transform_.GetMatrix(), cameraMatrix_, 0xffffffff);
+	skyBox_->Draw(skyBoxTransform_.GetMatrix(), cameraMatrix_, 0xffffffff);
 }
 
 void RenderingManager::DrawRGBA(const RenderDataLists& rgbaList) {
@@ -661,7 +677,7 @@ void RenderingManager::DrawPostEffect() {
 	);
 	gaussianVerticalTexture_->Draw(Pipeline::Blend::Add, nullptr);
 
-	if (isOutLine_) {
+	if (isDrawOutLine_) {
 		outlinePipeline_->ChangeDepthBufferState();
 		outlineTexture_->ChangeResourceState();
 		RenderTarget::SetMainAndRenderTargets(

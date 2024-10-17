@@ -14,6 +14,25 @@
 #include <list>
 
 class RenderingManager {
+public:
+	struct State {
+		Vector3 cameraPos;
+		Mat4x4 cameraMatrix;
+		Mat4x4 projectionMatrix;
+		bool isLighting = false;
+		bool isUseMeshShader = false;
+		Vector3 lightRotate;
+		Vector3 hsv;
+		int32_t bloomHorizontalSize = 1;
+		int32_t bloomVerticalSize = 1;
+		float32_t luminanceThreshold = 1.0f;
+		bool isDrawSkyBox = false;
+		float32_t skyBoxEnvironmentCoefficient = 0.0f;
+		Vector3 skyBoxScale = Vector3::kIdentity * 500.0f;
+		bool isDrawOutline = false;
+		float32_t outlineWeight = 0.0f;
+	};
+
 private:
 	using RenderDataLists = std::vector<std::pair<size_t, const std::list<RenderData*>&>>;
 
@@ -47,6 +66,8 @@ private:
 public:
 
 	DepthBuffer* GetDepthBuffer();
+
+	void SetState(const State& state);
 
 	void SetCameraPos(const Vector3& cameraPos);
 	void SetCameraMatrix(const Mat4x4& camera);
@@ -139,13 +160,13 @@ private:
 	std::unique_ptr<PeraRender> outlineTexture_;
 	// アウトライン用パイプラインオジェクト
 	Lamb::SafePtr<Outline> outlinePipeline_;
-	float32_t weight_ = 0.0f;
-	bool isOutLine_ = false;
+	float32_t outlineWeight_ = 0.0f;
+	bool isDrawOutLine_ = false;
 
 
 	// skybox
 	std::unique_ptr<AirSkyBox> skyBox_;
-	QuaternionTransform transform_;
+	QuaternionTransform skyBoxTransform_;
 	AirSkyBox::AtmosphericParams atmosphericParams_;
 	Vector3 lightRotate_;
 	bool isDrawSkyBox_ = true;
