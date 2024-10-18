@@ -297,7 +297,7 @@ void RenderingManager::Draw() {
 	};
 
 	// ZSort(アルファ値付きなのでソート)
-	ZSrot(rgbaList);
+	ZSort(rgbaList);
 
 	// 色書き込み用のレンダーターゲットをセット
 	std::array<RenderTarget*, 2> rgbaTextureRenderTarget = {
@@ -384,7 +384,7 @@ void RenderingManager::Draw() {
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthMul)
 	};
 
-	ZSrot(nodepthLists);
+	ZSort(nodepthLists);
 
 	// UIの描画(depth書き込まないやつ)
 	DrawNoDepth(nodepthLists);
@@ -505,7 +505,7 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 		lightRotate_.z = std::fmodf(lightRotate_.z, 360.0f);
 		lightRotate_ *= Lamb::Math::toRadian<float>;
 
-		atmosphericParams_.lightDirection = -Vector3::kXIdentity * Quaternion::EulerToQuaternion(lightRotate_);
+		atmosphericParams_.lightDirection = -Vector3::kZIdentity * Quaternion::EulerToQuaternion(lightRotate_);
 		if (ImGui::TreeNode("hsv")) {
 			ImGui::DragFloat("h", &hsv_.x, 0.1f, 0.0f, 360.0f);
 			ImGui::DragFloat("s", &hsv_.y, 0.001f, 0.0f, 1.0f);
@@ -674,12 +674,18 @@ void RenderingManager::DrawDeferred() {
 
 void RenderingManager::DrawShadow(const RenderDataList& rgbList, const RenderDataLists& rgbaList)
 {
-	Quaternion cameraRotate = viewMatrix_.Inverse().GetRotate();
+	Quaternion cameraRotate;
+	Vector3 cameraScale, cameraTranslate;
+	viewMatrix_.Inverse().Decompose(cameraScale, cameraRotate, cameraTranslate);
 	Vector3 cameraDirection = Vector3::kZIdentity * cameraRotate;
 
-	cameraDirection *= skyBoxTransform_.scale.Length();
+	// いったんマジックナンバー
+	cameraDirection *= 1000.0f * 0.5f;
 
-	Mat4x4 camera = ;
+	Quaternion lightRotate = Quaternion::EulerToQuaternion(lightRotate_);
+
+	Vector3 lightPos = (cameraTranslate + cameraDirection) + ;
+	Mat4x4 camera = Mat4x4::MakeAffin(Vector3::kIdentity, Quaternion::EulerToQuaternion(), lightPos);
 
 	for (size_t index = 0; auto element : rgbList.second) {
 		if (rgbList.first <= index) {
@@ -739,7 +745,7 @@ void RenderingManager::DrawNoDepth(const RenderDataLists& nodepthList)
 	}
 }
 
-void RenderingManager::ZSrot(const RenderDataLists& rgbaList) {
+void RenderingManager::ZSort(const RenderDataLists& rgbaList) {
 	for (auto& list : rgbaList) {
 		for (size_t count = 0; auto & element : list.second) {
 			if (list.first <= count) {

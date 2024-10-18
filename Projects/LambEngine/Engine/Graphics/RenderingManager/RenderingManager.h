@@ -115,7 +115,7 @@ private:
 private:
 
 	// アルファ値があるものを順番を並び替える
-	void ZSrot(const RenderDataLists& rgbaList);
+	void ZSort(const RenderDataLists& rgbaList);
 
 
 private:
