@@ -295,7 +295,7 @@ void RenderingManager::Draw() {
 	};
 
 	// ZSort(アルファ値付きなのでソート)
-	ZSrot(rgbaList);
+	ZSort(rgbaList);
 
 	// 色書き込み用のレンダーターゲットをセット
 	std::array<RenderTarget*, 2> rgbaTextureRenderTarget = {
@@ -371,7 +371,7 @@ void RenderingManager::Draw() {
 		renderContextManager->CreateRenderList(BlendType::kUnenableDepthMul)
 	};
 
-	ZSrot(nodepthLists);
+	ZSort(nodepthLists);
 
 	// UIの描画(depth書き込まないやつ)
 	DrawNoDepth(nodepthLists);
@@ -708,7 +708,7 @@ void RenderingManager::DrawNoDepth(const RenderDataLists& nodepthList)
 	}
 }
 
-void RenderingManager::ZSrot(const RenderDataLists& rgbaList) {
+void RenderingManager::ZSort(const RenderDataLists& rgbaList) {
 	for (auto& list : rgbaList) {
 		for (size_t count = 0; auto & element : list.second) {
 			if (list.first <= count) {
