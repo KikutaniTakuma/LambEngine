@@ -43,7 +43,7 @@
       - [GameObject](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Src/GameObject)
         - [Manager](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Src/GameObject/Manager)
 ---
-* コンポーネント志向に基づくオブジェクトの配置
+* コンポーネント志向に基づくオブジェクトの設計
 * エディターでオブジェクトの追加と削除、コンポーネントの追加
 * エディターでTransformの編集
 * 実際のゲーム内で使用したのは2024年の10daysのみです。今後水中のオブジェクトの配置をする際にはこれを使用する予定です
