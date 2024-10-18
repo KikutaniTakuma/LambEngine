@@ -33,6 +33,14 @@ public:
 		float32_t outlineWeight = 0.0f;
 	};
 
+public:
+	enum GaussianIndex {
+		kHorizontal = 0,
+		kVertical = 1,
+
+		kNum
+	};
+
 private:
 	using RenderDataLists = std::vector<std::pair<size_t, const std::list<RenderData*>&>>;
 
@@ -153,7 +161,7 @@ private:
 	GaussianBlur::State gaussianBlurStateVertical_;
 
 	// ガウシアンフィルタ用パイプラインオジェクト
-	std::array<Lamb::SafePtr<GaussianBlur>, 2> gaussianPipeline_;
+	std::array<Lamb::SafePtr<GaussianBlur>, GaussianIndex::kNum> gaussianPipeline_;
 
 
 	// アウトライン用オフスクリーン
