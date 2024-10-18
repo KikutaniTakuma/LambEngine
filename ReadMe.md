@@ -35,6 +35,7 @@
   * レンダーターゲットの設定、ポストエフェクト等もここで行います
 * 描画情報の格納は[RenderContext](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Engine/Graphics/RenderContextManager/RenderContext)
 * 描画情報を積んでいるのは[Drawer](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Drawer)
+---
 ## コンポーネント志向
 - Projects
   - Game
