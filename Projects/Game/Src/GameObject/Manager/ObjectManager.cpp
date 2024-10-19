@@ -175,8 +175,8 @@ void ObjectManager::Update() {
 	TransformCompUpdater::GetInstance()->UpdateMatrix();
 
 	Lamb::SafePtr renderingManager = RenderingManager::GetInstance();
-	renderingManager->SetCameraMatrix(cameraComp_->GetCameraMatrix());
-	renderingManager->SetProjectionInverseMatrix(cameraComp_->GetToNdcMatrix().Inverse());
+	renderingManager->SetViewMatrix(cameraComp_->GetViewMatrix());
+	renderingManager->SetProjectionMatrix(cameraComp_->GetToNdcMatrix());
 	renderingManager->SetCameraPos(cameraComp_->GetTransformComp().translate);
 }
 

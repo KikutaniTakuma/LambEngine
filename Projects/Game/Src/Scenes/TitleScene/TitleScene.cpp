@@ -115,10 +115,10 @@ void TitleScene::Initialize() {
     float32_t posRandomMin = -4.0f;
     float32_t posRandomMax = 4.0f;
     std::array<uint32_t, 4> colorRandom = {
-        0x2DFF19E0,
-        0xDDFF19E0,
-        0xFF1919E0,
-        0xC919FFE0,
+        0x2DFF19ff,
+        0xDDFF19ff,
+        0xFF1919ff,
+        0xC919FFff,
     };
 
     Vector2 startPos = Vector2(-143.0f, -143.0f);
@@ -177,8 +177,8 @@ void TitleScene::Update() {
 
 
     renderingManager_->SetCameraPos(currentCamera_->GetPos());
-    renderingManager_->SetCameraMatrix(currentCamera_->GetViewProjection());
-    renderingManager_->SetProjectionInverseMatrix(currentCamera_->GetProjection().Inverse());
+    renderingManager_->SetViewMatrix(currentCamera_->GetViewProjection());
+    renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 
     waveData_.ripplesPoint = ship_->pos;
     //waveData_.time += Lamb::DeltaTime();

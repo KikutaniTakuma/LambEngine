@@ -12,6 +12,7 @@
 #include "json.hpp"
 
 #include <list>
+#include <functional>
 
 class RenderingManager {
 public:
@@ -104,7 +105,7 @@ private:
 	// ディファード描画
 	void DrawDeferred();
 
-	void DrawShadow(const RenderDataList& rgbList, const RenderDataLists& rgbaList);
+	void DrawShadow(const RenderDataList& rgbList);
 
 	// ポストエフェクトを描画する
 	void DrawPostEffect();
@@ -117,6 +118,8 @@ private:
 	// アルファ値があるものを順番を並び替える
 	void ZSort(const RenderDataLists& rgbaList);
 
+private:
+	std::function<void(RenderDataList&)> resetDrawCount_;
 
 private:
 	// ディファードレンダリング用オフスクリーン
@@ -173,6 +176,7 @@ private:
 	std::unique_ptr<AirSkyBox> skyBox_;
 	QuaternionTransform skyBoxTransform_;
 	AirSkyBox::AtmosphericParams atmosphericParams_;
+	const Vector3 kLightRotateBaseVector = -Vector3::kXIdentity;
 	Vector3 lightRotate_;
 	bool isDrawSkyBox_ = true;
 

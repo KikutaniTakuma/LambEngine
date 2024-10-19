@@ -28,6 +28,17 @@
 std::unique_ptr<RenderingManager> RenderingManager::instance_;
 
 RenderingManager::RenderingManager() {
+	resetDrawCount_ = 
+		[](RenderDataList& list) {
+			std::for_each(
+				list.second.begin(),
+				std::next(list.second.begin(), list.first),
+				[](RenderData* element) {
+					element->ResetDrawCount();
+				}
+			);
+		};
+
 	this->deferredRendering_ = std::make_unique<DeferredRendering>();
 	deferredRendering_->Init();
 
@@ -186,8 +197,8 @@ void RenderingManager::FrameStart()
 	directXCommand->SetBufferIndex(bufferIndex_);
 
 	directXSwapChain->ChangeBackBufferState();
-	RtvHeap::GetInstance()->SetMainRtv(&depthStencil_->GetDepthHandle());
 	depthStencil_->Clear();
+	depthStencilShadow_->Clear();
 	directXSwapChain->ClearBackBuffer();
 
 	// ビューポート
@@ -336,14 +347,14 @@ void RenderingManager::Draw() {
 
 	/// ===================================================================================
 
-	// depthだけセット
-	RenderTarget::SetRenderTargets(
-		nullptr,
-		0u,
-		&depthStencilShadow_->GetDepthHandle()
-	);
+	//// depthだけセット
+	//RenderTarget::SetRenderTargets(
+	//	nullptr,
+	//	0u,
+	//	&depthStencilShadow_->GetDepthHandle()
+	//);
 
-	DrawShadow(rgbRenderList, rgbaList);
+	//DrawShadow(rgbRenderList);
 
 
 	/// ====================================================================================
@@ -394,32 +405,11 @@ void RenderingManager::Draw() {
 	/// ====================================================================================
 
 	// Drawカウントリセット
-	for (size_t count = 0; auto& i : rgbRenderList.second) {
-		if (rgbRenderList.first <= count) {
-			break;
-		}
-		i->ResetDrawCount();
-		count++;
-	}
-	for (auto& renderList : rgbaList) {
-		for (size_t count = 0; auto& i : renderList.second) {
-			if (renderList.first <= count) {
-				break;
-			}
-			i->ResetDrawCount();
-			count++;
-		}
-	}
-	for (auto& renderList : nodepthLists) {
-		for (size_t count = 0; auto& i : renderList.second) {
-			if (renderList.first <= count) {
-				break;
-			}
-			i->ResetDrawCount();
-			count++;
-		}
-	}
+	resetDrawCount_(rgbRenderList);
 
+	std::for_each(rgbaList.begin(), rgbaList.end(), resetDrawCount_);
+
+	std::for_each(nodepthLists.begin(), nodepthLists.end(), resetDrawCount_);
 }
 
 DepthBuffer* RenderingManager::GetDepthBuffer()
@@ -447,7 +437,7 @@ void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 	deferredRenderingData_.eyePos = cameraPos;
 	skyBoxTransform_.translate = cameraPos;
 	atmosphericParams_.cameraPosition = cameraPos;
-	atmosphericParams_.lightDirection = -Vector3::kXIdentity * Quaternion::EulerToQuaternion(lightRotate_);
+	atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
 }
 
 void RenderingManager::SetViewMatrix(const Mat4x4& view) {
@@ -505,7 +495,7 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 		lightRotate_.z = std::fmodf(lightRotate_.z, 360.0f);
 		lightRotate_ *= Lamb::Math::toRadian<float>;
 
-		atmosphericParams_.lightDirection = -Vector3::kZIdentity * Quaternion::EulerToQuaternion(lightRotate_);
+		atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
 		if (ImGui::TreeNode("hsv")) {
 			ImGui::DragFloat("h", &hsv_.x, 0.1f, 0.0f, 360.0f);
 			ImGui::DragFloat("s", &hsv_.y, 0.001f, 0.0f, 1.0f);
@@ -672,7 +662,7 @@ void RenderingManager::DrawDeferred() {
 	deferredRendering_->Draw();
 }
 
-void RenderingManager::DrawShadow(const RenderDataList& rgbList, const RenderDataLists& rgbaList)
+void RenderingManager::DrawShadow(const RenderDataList& rgbList)
 {
 	Quaternion cameraRotate;
 	Vector3 cameraScale, cameraTranslate;
@@ -680,12 +670,12 @@ void RenderingManager::DrawShadow(const RenderDataList& rgbList, const RenderDat
 	Vector3 cameraDirection = Vector3::kZIdentity * cameraRotate;
 
 	// いったんマジックナンバー
-	cameraDirection *= 1000.0f * 0.5f;
+	cameraDirection *= 1000.0f * 0.3f;
 
 	Quaternion lightRotate = Quaternion::EulerToQuaternion(lightRotate_);
 
-	Vector3 lightPos = (cameraTranslate + cameraDirection) + ;
-	Mat4x4 camera = Mat4x4::MakeAffin(Vector3::kIdentity, Quaternion::EulerToQuaternion(), lightPos);
+	Vector3 lightPos = (cameraTranslate + cameraDirection) + (-kLightRotateBaseVector * lightRotate * cameraDirection.Length());
+	Mat4x4 camera = Mat4x4::MakeAffin(Vector3::kIdentity, lightRotate, lightPos) * Mat4x4::MakeOrthographic(160.0f, 90.0f, 0.1f, 1000.0f);
 
 	for (size_t index = 0; auto element : rgbList.second) {
 		if (rgbList.first <= index) {

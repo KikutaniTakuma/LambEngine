@@ -11,6 +11,11 @@ struct LightCamera {
 	float32_t4x4 mat;
 };
 
+struct WVPMatrix {
+	float32_t4x4 worldMat;
+	float32_t4x4 cameraMat;
+};
+
 ConstantBuffer<LightCamera> gCameraMat : register(b0);
 StructuredBuffer<WVPMatrix> gWvpMat : register(t0);
 

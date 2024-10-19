@@ -174,13 +174,11 @@ public:
     }
 
     void DrawShadow() const override {
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
         // コマンドリスト
         ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
         // パイプライン設定
-        pipeline_->Use();
+        shadowPipeline_->Use();
 
         // ライトのカメラマトリックス
         commandlist->SetGraphicsRootConstantBufferView(0, lightCamera_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
@@ -350,13 +348,11 @@ public:
     }
 
     void DrawShadow() const override {
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
         // コマンドリスト
         ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
         // パイプライン設定
-        pipeline_->Use();
+        shadowPipeline_->Use();
 
         // ライトのカメラマトリックス
         commandlist->SetGraphicsRootConstantBufferView(0, lightCamera_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
@@ -550,14 +546,11 @@ public:
     }
 
     void DrawShadow() const override {
-        // ディスクリプタヒープ
-        CbvSrvUavHeap* const descriptorHeap = CbvSrvUavHeap::GetInstance();
-
         // コマンドリスト
         Lamb::SafePtr commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
         // パイプライン設定
-        pipeline_->Use();
+        shadowPipeline_->Use();
         // インスタンスカウント
         commandlist->SetGraphicsRootConstantBufferView(0, instanceCount_[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
         // ライトマトリックス

@@ -129,7 +129,7 @@ void Outline::Init(
 
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::Desc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
 	pipelineDesc.vsInputData.clear();
 	pipelineDesc.shader = shader_;
 	pipelineDesc.isDepth = false;

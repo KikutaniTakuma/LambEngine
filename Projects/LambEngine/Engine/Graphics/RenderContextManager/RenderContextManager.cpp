@@ -203,7 +203,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateGraphicsPipel
 
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::Desc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
 	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
@@ -298,7 +298,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateSkinAnimation
 
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::Desc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
 	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
@@ -428,7 +428,7 @@ std::array<Pipeline*, BlendType::kNum> RenderContextManager::CreateMeshShaderGra
 
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::MeshDesc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
 	pipelineDesc.shader = shader;
 	pipelineDesc.isDepth =false;
 	pipelineDesc.blend[0] = Pipeline::None;
@@ -468,8 +468,6 @@ Pipeline* RenderContextManager::CreateShadowPipeline()
 
 	Pipeline* result = nullptr;
 
-	auto srvHeap = CbvSrvUavHeap::GetInstance();
-
 	ShaderManager* const shaderMaanger = ShaderManager::GetInstance();
 
 	Shader shader;
@@ -480,21 +478,18 @@ Pipeline* RenderContextManager::CreateShadowPipeline()
 	rootPrams[0].Descriptor.ShaderRegister = 0;
 	rootPrams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
-	rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootPrams[1].Descriptor.ShaderRegister = 1;
+	rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	rootPrams[1].Descriptor.ShaderRegister = 0;
 	rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
 	RootSignature::Desc desc;
 	desc.rootParameter = rootPrams.data();
 	desc.rootParameterSize = rootPrams.size();
-	desc.samplerDeacs.push_back(
-		CreateLinearSampler()
-	);
 
 
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::Desc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
 	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
@@ -521,8 +516,6 @@ Pipeline* RenderContextManager::CreateSkinAnimationShadowPipeline()
 {
 	Pipeline* result = nullptr;
 
-	auto srvHeap = CbvSrvUavHeap::GetInstance();
-
 	ShaderManager* const shaderMaanger = ShaderManager::GetInstance();
 
 	Shader shader;
@@ -533,25 +526,22 @@ Pipeline* RenderContextManager::CreateSkinAnimationShadowPipeline()
 	rootPrams[0].Descriptor.ShaderRegister = 0;
 	rootPrams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
-	rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootPrams[1].Descriptor.ShaderRegister = 1;
+	rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+	rootPrams[1].Descriptor.ShaderRegister = 0;
 	rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
-	rootPrams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootPrams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
 	rootPrams[2].Descriptor.ShaderRegister = 1;
 	rootPrams[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
 	RootSignature::Desc desc;
 	desc.rootParameter = rootPrams.data();
 	desc.rootParameterSize = rootPrams.size();
-	desc.samplerDeacs.push_back(
-		CreateLinearSampler()
-	);
 
 
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::Desc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
 	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT });
 	pipelineDesc.vsInputData.push_back({ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT });
@@ -584,8 +574,6 @@ Pipeline* RenderContextManager::CreateMeshShaderShadowPipeline()
 {
 	Pipeline* result = nullptr;
 
-	auto srvHeap = CbvSrvUavHeap::GetInstance();
-
 	ShaderManager* const shaderMaanger = ShaderManager::GetInstance();
 
 	MeshShader shader;
@@ -600,6 +588,7 @@ Pipeline* RenderContextManager::CreateMeshShaderShadowPipeline()
 	rootPrams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootPrams[1].Descriptor.ShaderRegister = 1;
 	rootPrams[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_MESH;
+
 
 	rootPrams[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
 	rootPrams[2].Descriptor.ShaderRegister = 0;
@@ -624,9 +613,6 @@ Pipeline* RenderContextManager::CreateMeshShaderShadowPipeline()
 	RootSignature::Desc desc;
 	desc.rootParameter = rootPrams.data();
 	desc.rootParameterSize = rootPrams.size();
-	desc.samplerDeacs.push_back(
-		CreateLinearSampler()
-	);
 	desc.flag = D3D12_ROOT_SIGNATURE_FLAG_DENY_VERTEX_SHADER_ROOT_ACCESS;
 	desc.flag |= D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS;
 	desc.flag |= D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS;
@@ -635,7 +621,7 @@ Pipeline* RenderContextManager::CreateMeshShaderShadowPipeline()
 
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::MeshDesc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
 	pipelineDesc.shader = shader;
 	pipelineDesc.isDepth = true;
 	pipelineDesc.solidState = Pipeline::SolidState::Solid;
@@ -643,7 +629,7 @@ Pipeline* RenderContextManager::CreateMeshShaderShadowPipeline()
 	pipelineDesc.numRenderTarget = 0;
 
 	pipelineManager->SetDesc(pipelineDesc);
-	result = pipelineManager->Create();
+	result = pipelineManager->CreateMesh();
 
 
 	pipelineManager->StateReset();

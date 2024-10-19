@@ -7,7 +7,6 @@
 
 RootSignature::RootSignature():
 	rootSignature_{},
-	isTexture_(false),
 	desc_()
 {
 	rootParamater_ = {};
@@ -21,14 +20,12 @@ RootSignature::RootSignature(RootSignature&& right) noexcept {
 RootSignature& RootSignature::operator=(const RootSignature& right) {
 	rootSignature_ = right.rootSignature_;
 	rootParamater_ = right.rootParamater_;
-	isTexture_ = right.isTexture_;
 
 	return *this;
 }
 RootSignature& RootSignature::operator=(RootSignature&& right) noexcept {
 	rootSignature_ = std::move(right.rootSignature_);
 	rootParamater_ = std::move(right.rootParamater_);
-	isTexture_ = std::move(right.isTexture_);
 
 	return *this;
 }
@@ -42,13 +39,13 @@ bool RootSignature::operator==(const RootSignature& right) const {
 			return false;
 		}
 	}
-	return  isTexture_ == right.isTexture_ && desc_ == right.desc_;
+	return  desc_ == right.desc_;
 }
 bool RootSignature::operator!=(const RootSignature& right) const {
 	return !(*this == right);
 }
 
-void RootSignature::Create(const Desc& desc, bool isTexture) {
+void RootSignature::Create(const Desc& desc) {
 	desc_ = desc;
 
 	// RootSignatureの生成
@@ -82,10 +79,10 @@ void RootSignature::Create(const Desc& desc, bool isTexture) {
 	descriptionRootSignature.pParameters = params.data();
 	descriptionRootSignature.NumParameters = static_cast<UINT>(params.size());
 
-	isTexture_ = isTexture;
+	bool isTexture = not desc_.samplerDeacs.empty();
 
-	descriptionRootSignature.pStaticSamplers = isTexture_ ? desc_.samplerDeacs.data() : nullptr;
-	descriptionRootSignature.NumStaticSamplers = UINT(isTexture_ ? desc_.samplerDeacs.size() : 0llu);
+	descriptionRootSignature.pStaticSamplers = isTexture ? desc_.samplerDeacs.data() : nullptr;
+	descriptionRootSignature.NumStaticSamplers = UINT(isTexture ? desc_.samplerDeacs.size() : 0llu);
 
 	// シリアライズしてバイナリにする
 	Lamb::LambPtr<ID3DBlob> signatureBlob;
@@ -231,13 +228,16 @@ bool operator!=(const D3D12_ROOT_PARAMETER& left, const D3D12_ROOT_PARAMETER& ri
 	return !(left == right);
 }
 
-bool RootSignature::IsSame(const Desc& desc, bool isTexture) const {
-	return isTexture_ == isTexture && desc_ == desc;
+bool RootSignature::IsSame(const Desc& desc) const {
+	return desc_ == desc;
 }
 
 bool RootSignature::Desc::operator==(const Desc& right) const
 {
 	if (this->rootParameterSize != right.rootParameterSize) {
+		return false;
+	}
+	if (this->flag != right.flag) {
 		return false;
 	}
 	for (size_t i = 0; i < this->rootParameterSize; i++) {

@@ -1,9 +1,11 @@
-#include "../LambMesh.hlsli"
-
 struct WVPMatrix {
 	float32_t4x4 worldMat;
 	float32_t4x4 cameraMat;
 };
+
+struct PayloadStruct { 
+    uint32_t myArbitraryData; 
+}; 
 
 struct MSInput {
 	float32_t4 position;

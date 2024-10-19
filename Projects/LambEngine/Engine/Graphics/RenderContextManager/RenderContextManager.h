@@ -141,7 +141,7 @@ public:
 		MeshShader shader = LoadMeshShader(fileNames.shaderName);
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateMeshShaderGraphicsPipelines(shader, numRenderTarget);
-		Pipeline* shadowPipeline = CreateShadowPipeline();
+		Pipeline* shadowPipeline = CreateMeshShaderShadowPipeline();
 
 		Lamb::SafePtr vertexIndexDataManager = VertexIndexDataManager::GetInstance();
 		vertexIndexDataManager->LoadModel(fileNames.resourceFileName);
