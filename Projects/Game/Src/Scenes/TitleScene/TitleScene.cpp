@@ -177,7 +177,7 @@ void TitleScene::Update() {
 
 
     renderingManager_->SetCameraPos(currentCamera_->GetPos());
-    renderingManager_->SetViewMatrix(currentCamera_->GetViewProjection());
+    renderingManager_->SetViewMatrix(currentCamera_->GetView());
     renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 
     waveData_.ripplesPoint = ship_->pos;
