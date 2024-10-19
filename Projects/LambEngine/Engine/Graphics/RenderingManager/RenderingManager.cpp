@@ -96,18 +96,18 @@ RenderingManager::RenderingManager() {
 	gaussianHorizontalTexture_ = std::make_unique<PeraRender>();
 	gaussianVerticalTexture_ = std::make_unique<PeraRender>();
 
-	std::array<std::unique_ptr<GaussianBlur>, 2> gaussianPipeline = { std::make_unique<GaussianBlur>(), std::make_unique<GaussianBlur>() };
-	gaussianPipeline[0]->Init();
+	std::array<std::unique_ptr<GaussianBlur>, GaussianIndex::kNum> gaussianPipeline = { std::make_unique<GaussianBlur>(), std::make_unique<GaussianBlur>() };
+	gaussianPipeline[GaussianIndex::kHorizontal]->Init();
 	gaussianBlurStateHorizontal_ = GaussianBlur::State{
 		.dir = Vector2(1.0f, 0.0f),
 		.sigma = 10.0f,
 		.kernelSize = 8,
 	};
 
-	gaussianPipeline[0]->SetGaussianState(gaussianBlurStateHorizontal_);
-	gaussianPipeline_[0] = gaussianPipeline[0].release();
+	gaussianPipeline[GaussianIndex::kHorizontal]->SetGaussianState(gaussianBlurStateHorizontal_);
+	gaussianPipeline_[GaussianIndex::kHorizontal] = gaussianPipeline[GaussianIndex::kHorizontal].release();
 
-	gaussianPipeline[1]->Init(
+	gaussianPipeline[GaussianIndex::kVertical]->Init(
 		"./Shaders/PostShader/Post.VS.hlsl",
 		"./Shaders/PostShader/PostGaussian.PS.hlsl",
 		{ DXGI_FORMAT_R8G8B8A8_UNORM_SRGB }
@@ -117,11 +117,11 @@ RenderingManager::RenderingManager() {
 			.sigma = 10.0f,
 			.kernelSize = 8,
 	};
-	gaussianPipeline[1]->SetGaussianState(gaussianBlurStateVertical_);
-	gaussianPipeline_[1] = gaussianPipeline[1].release();
+	gaussianPipeline[GaussianIndex::kVertical]->SetGaussianState(gaussianBlurStateVertical_);
+	gaussianPipeline_[GaussianIndex::kVertical] = gaussianPipeline[GaussianIndex::kVertical].release();
 
-	gaussianHorizontalTexture_->Initialize(gaussianPipeline_[0].get());
-	gaussianVerticalTexture_->Initialize(gaussianPipeline_[1].get());
+	gaussianHorizontalTexture_->Initialize(gaussianPipeline_[GaussianIndex::kHorizontal].get());
+	gaussianVerticalTexture_->Initialize(gaussianPipeline_[GaussianIndex::kVertical].get());
 
 	std::unique_ptr<Outline> outline = std::make_unique<Outline>();
 	outline->SetDepthBuffer(depthStencil_.get());
@@ -245,12 +245,9 @@ void RenderingManager::FrameEnd()
 void RenderingManager::Draw() {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	static constexpr int32_t kHorizontal = 0;
-	static constexpr int32_t kVertical = 1;
-
 	deferredRenderingData_.directionLight.ligDirection = atmosphericParams_.lightDirection;
-	gaussianPipeline_[kHorizontal]->SetGaussianState(gaussianBlurStateHorizontal_);
-	gaussianPipeline_[kVertical]->SetGaussianState(gaussianBlurStateVertical_);
+	gaussianPipeline_[GaussianIndex::kHorizontal]->SetGaussianState(gaussianBlurStateHorizontal_);
+	gaussianPipeline_[GaussianIndex::kVertical]->SetGaussianState(gaussianBlurStateVertical_);
 	luminate_->SetLuminanceThreshold(luminanceThreshold);
 	outlinePipeline_->SetWeight(outlineWeight_);
 
@@ -511,8 +508,8 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 			ImGui::DragInt("縦カーネルサイズ", &gaussianBlurStateVertical_.kernelSize, 0.1f, 0, 128);
 			ImGui::DragFloat("輝度しきい値", &luminanceThreshold, 0.001f, 0.0f, 2.0f);
 
-			gaussianPipeline_[0]->SetGaussianState(gaussianBlurStateHorizontal_);
-			gaussianPipeline_[1]->SetGaussianState(gaussianBlurStateVertical_);
+			gaussianPipeline_[GaussianIndex::kHorizontal]->SetGaussianState(gaussianBlurStateHorizontal_);
+			gaussianPipeline_[GaussianIndex::kVertical]->SetGaussianState(gaussianBlurStateVertical_);
 			luminate_->SetLuminanceThreshold(luminanceThreshold);
 
 			ImGui::TreePop();
