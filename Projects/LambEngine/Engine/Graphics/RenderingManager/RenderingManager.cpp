@@ -344,14 +344,14 @@ void RenderingManager::Draw() {
 
 	/// ===================================================================================
 
-	//// depthだけセット
-	//RenderTarget::SetRenderTargets(
-	//	nullptr,
-	//	0u,
-	//	&depthStencilShadow_->GetDepthHandle()
-	//);
+	// depthだけセット
+	RenderTarget::SetRenderTargets(
+		nullptr,
+		0u,
+		&depthStencilShadow_->GetDepthHandle()
+	);
 
-	//DrawShadow(rgbRenderList);
+	DrawShadow(rgbRenderList);
 
 
 	/// ====================================================================================
@@ -667,12 +667,15 @@ void RenderingManager::DrawShadow(const RenderDataList& rgbList)
 	Vector3 cameraDirection = Vector3::kZIdentity * cameraRotate;
 
 	// いったんマジックナンバー
-	cameraDirection *= 1000.0f * 0.3f;
+	cameraDirection *= 1000.0f * 0.1f;
 
 	Quaternion lightRotate = Quaternion::EulerToQuaternion(lightRotate_);
 
-	Vector3 lightPos = (cameraTranslate + cameraDirection) + (-kLightRotateBaseVector * lightRotate * cameraDirection.Length());
-	Mat4x4 camera = Mat4x4::MakeAffin(Vector3::kIdentity, lightRotate, lightPos) * Mat4x4::MakeOrthographic(160.0f, 90.0f, 0.1f, 1000.0f);
+	Vector3 lightBasePos = cameraTranslate;
+	Vector3 lightPos = lightBasePos + (-kLightRotateBaseVector * lightRotate * cameraDirection.Length());
+	Quaternion viewRotate = Quaternion::DirectionToDirection(Vector3::kZIdentity, (lightBasePos - lightPos).Normalize());
+
+	Mat4x4 camera = Mat4x4::MakeAffin(Vector3::kIdentity, viewRotate.Inverce(), lightPos) * Mat4x4::MakeOrthographic(160.0f, 90.0f, 0.1f, 1000.0f);
 
 	for (size_t index = 0; auto element : rgbList.second) {
 		if (rgbList.first <= index) {

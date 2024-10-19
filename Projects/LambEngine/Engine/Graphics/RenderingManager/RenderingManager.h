@@ -184,7 +184,7 @@ private:
 	std::unique_ptr<AirSkyBox> skyBox_;
 	QuaternionTransform skyBoxTransform_;
 	AirSkyBox::AtmosphericParams atmosphericParams_;
-	const Vector3 kLightRotateBaseVector = -Vector3::kXIdentity;
+	const Vector3 kLightRotateBaseVector = -Vector3::kZIdentity;
 	Vector3 lightRotate_;
 	bool isDrawSkyBox_ = true;
 

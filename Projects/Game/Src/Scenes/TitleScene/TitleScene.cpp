@@ -98,7 +98,7 @@ void TitleScene::Initialize() {
     cursor_ = std::make_unique<Cursor>();
     cursor_->Initialize();
 
-    renderingManager_->SetLightRotate(Vector3(0.0f, 91.0f, -118.0f) * Lamb::Math::toRadian<float>);
+    renderingManager_->SetLightRotate(Vector3(91.0f, -118.0f, 0.0f) * Lamb::Math::toRadian<float>);
     renderingManager_->SetBloomKernelSize(128, 128);
     renderingManager_->SetEnvironmentCoefficient(0.3f);
 
