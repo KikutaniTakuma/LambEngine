@@ -20,6 +20,8 @@
 
 #include "Engine/Graphics/PipelineObject/Distortion/Distortion.h"
 
+#include "Drawer/DrawerManager.h"
+
 #ifdef USE_DEBUG_CODE
 #include "imgui.h"
 #endif // USE_DEBUG_CODE
@@ -39,9 +41,11 @@ RenderingManager::RenderingManager() {
 			);
 		};
 
-	this->deferredRendering_ = std::make_unique<DeferredRendering>();
+	deferredRendering_ = std::make_unique<DeferredRendering>();
 	deferredRendering_->Init();
 
+	shadow_ = std::make_unique<ShadowRendering>();
+	shadow_->Init();
 
 	uint32_t width = uint32_t(Lamb::ClientSize().x);
 	uint32_t height = uint32_t(Lamb::ClientSize().y);
@@ -75,6 +79,8 @@ RenderingManager::RenderingManager() {
 	srvHeap->CreateView(*depthStencil_);
 	srvHeap->CreateView(*depthStencilShadow_);
 
+	shadow_->SetDepthHandle(depthStencil_->GetHandleGPU());
+	shadow_->SetDepthShadowHandle(depthStencilShadow_->GetHandleGPU());
 
 	auto distortion = std::make_unique<Distortion>();
 	distortion->Init();
@@ -251,6 +257,10 @@ void RenderingManager::Draw() {
 	luminate_->SetLuminanceThreshold(luminanceThreshold);
 	outlinePipeline_->SetWeight(outlineWeight_);
 
+	CalcLightCamera();
+	deferredRendering_->SetCameraMatrix(viewMatrix_ * projectionMatrix_);
+	deferredRendering_->SetLightCameraMatrix(lightCamera_);
+
 	/// ====================================================================================
 
 	// 色、歪み、法線、ワールドポジション用レンダーターゲットをセット
@@ -409,6 +419,25 @@ void RenderingManager::Draw() {
 	std::for_each(nodepthLists.begin(), nodepthLists.end(), resetDrawCount_);
 }
 
+void RenderingManager::CalcLightCamera() {
+	Quaternion cameraRotate;
+	Vector3 cameraScale, cameraTranslate;
+	viewMatrix_.Inverse().Decompose(cameraScale, cameraRotate, cameraTranslate);
+	Vector3 cameraDirection = Vector3::kZIdentity * cameraRotate;
+
+	// いったんマジックナンバー
+	cameraDirection *= 1000.0f * 0.1f;
+
+	Quaternion lightRotate = Quaternion::EulerToQuaternion(lightRotate_);
+
+	Vector3 lightBasePos = cameraTranslate + cameraDirection;
+	Vector3 lightDirection = (kLightRotateBaseVector * lightRotate).Normalize();
+	Vector3 lightPos = lightBasePos + (lightDirection * cameraDirection.Length());
+	Quaternion viewRotate = Quaternion::DirectionToDirection(Vector3::kZIdentity, (lightBasePos - lightPos).Normalize());
+
+	lightCamera_ = Mat4x4::MakeAffin(Vector3::kIdentity, viewRotate, lightPos) * Mat4x4::MakeOrthographic(160.0f, 90.0f, 0.1f, 1000.0f);
+}
+
 DepthBuffer* RenderingManager::GetDepthBuffer()
 {
 	return depthStencil_.get();
@@ -485,6 +514,7 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 		}
 
 		ImGui::Checkbox("lighting", reinterpret_cast<bool*>(&deferredRenderingData_.isDirectionLight));
+		ImGui::Checkbox("isShadow", reinterpret_cast<bool*>(&deferredRenderingData_.isShadow));
 		lightRotate_ *= Lamb::Math::toDegree<float>;
 		ImGui::DragFloat3("ライト角度", lightRotate_.data(), 1.0f);
 		lightRotate_.x = std::fmodf(lightRotate_.x, 360.0f);
@@ -542,6 +572,7 @@ void RenderingManager::Save(nlohmann::json& jsonFile) {
 	auto& json = jsonFile["RederingSetting"];
 
 	json["isDirectionLight"] = static_cast<bool>(deferredRenderingData_.isDirectionLight);
+	json["isShadow"] = static_cast<bool>(deferredRenderingData_.isShadow);
 	json["lightRotate"] = nlohmann::json::array();
 	for (auto& i : lightRotate_) {
 		json["lightRotate"].push_back(i);
@@ -567,6 +598,9 @@ void RenderingManager::Save(nlohmann::json& jsonFile) {
 void RenderingManager::Load(nlohmann::json& jsonFile) {
 	auto& json = jsonFile["RederingSetting"];
 	deferredRenderingData_.isDirectionLight = json["isDirectionLight"].get<bool>();
+	if (json.contains("isShadow")) {
+		deferredRenderingData_.isShadow = json["isShadow"].get<bool>();
+	}
 	for (size_t i = 0; i < lightRotate_.size(); i++) {
 		lightRotate_[i] = json["lightRotate"][i].get<float>();
 	}
@@ -661,27 +695,11 @@ void RenderingManager::DrawDeferred() {
 
 void RenderingManager::DrawShadow(const RenderDataList& rgbList)
 {
-	Quaternion cameraRotate;
-	Vector3 cameraScale, cameraTranslate;
-	viewMatrix_.Inverse().Decompose(cameraScale, cameraRotate, cameraTranslate);
-	Vector3 cameraDirection = Vector3::kZIdentity * cameraRotate;
-
-	// いったんマジックナンバー
-	cameraDirection *= 1000.0f * 0.1f;
-
-	Quaternion lightRotate = Quaternion::EulerToQuaternion(lightRotate_);
-
-	Vector3 lightBasePos = cameraTranslate;
-	Vector3 lightPos = lightBasePos + (-kLightRotateBaseVector * lightRotate * cameraDirection.Length());
-	Quaternion viewRotate = Quaternion::DirectionToDirection(Vector3::kZIdentity, (lightBasePos - lightPos).Normalize());
-
-	Mat4x4 camera = Mat4x4::MakeAffin(Vector3::kIdentity, viewRotate.Inverce(), lightPos) * Mat4x4::MakeOrthographic(160.0f, 90.0f, 0.1f, 1000.0f);
-
 	for (size_t index = 0; auto element : rgbList.second) {
 		if (rgbList.first <= index) {
 			break;
 		}
-		element->SetLightCameraMatrix(camera);
+		element->SetLightCameraMatrix(viewMatrix_ * projectionMatrix_);
 		element->DrawShadow();
 		index++;
 	}
@@ -704,8 +722,11 @@ void RenderingManager::DrawPostEffect() {
 	);
 	gaussianVerticalTexture_->Draw(Pipeline::Blend::Add, nullptr);
 
+	//depthStencilShadow_->Barrier();
+	depthStencil_->Barrier();
+	//shadow_->Draw();
+
 	if (isDrawOutLine_) {
-		outlinePipeline_->ChangeDepthBufferState();
 		outlineTexture_->ChangeResourceState();
 		RenderTarget::SetMainAndRenderTargets(
 			nullptr,
@@ -713,8 +734,9 @@ void RenderingManager::DrawPostEffect() {
 			nullptr
 		);
 		outlineTexture_->Draw(Pipeline::Blend::Normal, nullptr);
-		outlinePipeline_->ChangeDepthBufferState();
 	}
+	depthStencil_->Barrier();
+	//depthStencilShadow_->Barrier();
 }
 
 void RenderingManager::DrawNoDepth(const RenderDataLists& nodepthList)

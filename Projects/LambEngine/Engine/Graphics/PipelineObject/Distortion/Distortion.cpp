@@ -28,7 +28,9 @@ void Distortion::Use(Pipeline::Blend blendType, bool isDepth) {
 
 	render_->UseThisRenderTargetShaderResource();
 	commandList->SetGraphicsRootDescriptorTable(1, distortionTexHandle_);
-	commandList->SetGraphicsRootConstantBufferView(2, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootDescriptorTable(2, depthTexHandle_);
+	commandList->SetGraphicsRootDescriptorTable(3, causticsTexHandle_);
+	commandList->SetGraphicsRootConstantBufferView(4, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void Distortion::Init(
@@ -61,7 +63,18 @@ void Distortion::Init(
 	distortionRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	distortionRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 3> rootParameter = {};
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> depthRange = {};
+	depthRange[0].BaseShaderRegister = 2;
+	depthRange[0].NumDescriptors = 1;
+	depthRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	depthRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> causticsRange = {};
+	causticsRange[0].BaseShaderRegister = 3;
+	causticsRange[0].NumDescriptors = 1;
+	causticsRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	causticsRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	std::array<D3D12_ROOT_PARAMETER, 5> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[0].DescriptorTable.pDescriptorRanges = renderRange.data();
@@ -72,9 +85,19 @@ void Distortion::Init(
 	rootParameter[1].DescriptorTable.pDescriptorRanges = distortionRange.data();
 	rootParameter[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(distortionRange.size());
 
-	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[2].Descriptor.ShaderRegister = 0;
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[2].DescriptorTable.pDescriptorRanges = depthRange.data();
+	rootParameter[2].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(depthRange.size());
+
+	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[3].DescriptorTable.pDescriptorRanges = causticsRange.data();
+	rootParameter[3].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(causticsRange.size());
+
+	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[4].Descriptor.ShaderRegister = 0;
 
 
 	RootSignature::Desc desc;

@@ -2,12 +2,16 @@
 #include "../OutputStructs.hlsli"
 
 Texture2D<float32_t4> gDistortionTexture : register(t1);
+Texture2D<float32_t> gDepthTexture : register(t2);
+Texture2D<float32_t4> gCausticsTexture : register(t3);
 
 // ポイントサンプラー
 SamplerState gPointSmp : register(s1);
 
 PixelShaderOutPut2 main(Output input) {
     PixelShaderOutPut2 output;
+
+    flaot32_t depth = gDepthTexture.Sample(gPointSmp, input.uv);
 
     float32_t2 uvDistortion = gDistortionTexture.Sample(gPointSmp, input.uv).xy;
     float32_t2 scrollDistortion = gDistortionTexture.Sample(gPointSmp, input.uv + uvDistortion).xy;

@@ -34,7 +34,13 @@ public:
 		distortionTexHandle_ = distortionTexHandle;
 	}
 
+	void SetDistortionTexHandle(D3D12_GPU_DESCRIPTOR_HANDLE depthTexHandle) {
+		depthTexHandle_ = depthTexHandle;
+	}
+
 private:
 	DXGI_FORMAT format_ = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	D3D12_GPU_DESCRIPTOR_HANDLE distortionTexHandle_ = {};
+	D3D12_GPU_DESCRIPTOR_HANDLE depthTexHandle_ = {};
+	D3D12_GPU_DESCRIPTOR_HANDLE causticsTexHandle_ = {};
 };

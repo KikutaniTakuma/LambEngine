@@ -7,6 +7,7 @@
 #include "Engine/Graphics/RenderContextManager/RenderContext/RenderContext.h"
 
 #include "Engine/Graphics/PipelineObject/DeferredRendering/DeferredRendering.h"
+#include "Engine/Graphics/PipelineObject/ShadowRendering/ShadowRendering.h"
 
 #include "Drawer/AirSkyBox/AirSkyBox.h"
 #include "json.hpp"
@@ -73,6 +74,8 @@ public:
 private:
 	void Draw();
 
+	void CalcLightCamera();
+
 public:
 
 	DepthBuffer* GetDepthBuffer();
@@ -134,6 +137,8 @@ private:
 	std::unique_ptr<DeferredRendering> deferredRendering_;
 	DeferredRendering::DeferredRenderingData deferredRenderingData_;
 
+	std::unique_ptr<ShadowRendering> shadow_;
+
 	// 法線書き込み用オフスクリーン
 	std::unique_ptr<RenderTarget> normalTexture_;
 	// 色書き込み用オフスクリーン
@@ -190,6 +195,7 @@ private:
 
 	Mat4x4 viewMatrix_;
 	Mat4x4 projectionMatrix_;
+	Mat4x4 lightCamera_;
 
 	/// 
 	/// その他ポストエフェクトは増える予定
