@@ -136,7 +136,7 @@ struct PointLight {
 
 struct DirectionLight {
     Vector3 ligDirection = -Vector3::kYIdentity;
-    float shinness = 1.0f;
+    float shinness = 256.0f;
     Vector3 ligColor = Vector3::kIdentity;
     float pad0 = 0.0f;
 };

@@ -103,6 +103,10 @@ public:
 
 	uint32_t GetBufferIndex()const;
 
+	const AirSkyBox::AtmosphericParams& GetAtmosphericParams() const;
+
+	const Vector3& GetCameraDirection() const;
+
 private:
 	// アルファ値がないものを描画
 	void DrawRGB(const RenderDataList& renderList);
@@ -196,6 +200,7 @@ private:
 	Mat4x4 viewMatrix_;
 	Mat4x4 projectionMatrix_;
 	Mat4x4 lightCamera_;
+	Vector3 cameraDirection_;
 
 	/// 
 	/// その他ポストエフェクトは増える予定

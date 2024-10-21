@@ -34,11 +34,23 @@ public:
 		distortionTexHandle_ = distortionTexHandle;
 	}
 
-	void SetDistortionTexHandle(D3D12_GPU_DESCRIPTOR_HANDLE depthTexHandle) {
+	void SetDepthTexHandle(D3D12_GPU_DESCRIPTOR_HANDLE depthTexHandle) {
 		depthTexHandle_ = depthTexHandle;
 	}
 
+	void SetCausticsTexHandle(D3D12_GPU_DESCRIPTOR_HANDLE causticsTexHandle) {
+		causticsTexHandle_ = causticsTexHandle;
+	}
+
 private:
+	std::array<std::unique_ptr<ConstantBuffer<float32_t4x4>>, DirectXSwapChain::kBackBufferNumber> scrollUVBuf_;
+	std::array<std::unique_ptr<ConstantBuffer<float32_t>>, DirectXSwapChain::kBackBufferNumber> depthFloatBuf_;
+	float32_t4x4 scrollUV_;
+	float32_t depthFloat_ = 0.423f;
+
+	Vector3 translate_;
+	Vector3 uvScrollSpeed_ = Vector3::kXIdentity * 0.05f + Vector3::kYIdentity * 0.05f;
+
 	DXGI_FORMAT format_ = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	D3D12_GPU_DESCRIPTOR_HANDLE distortionTexHandle_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE depthTexHandle_ = {};

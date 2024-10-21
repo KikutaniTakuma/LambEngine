@@ -20,7 +20,7 @@
 
 #include "Engine/Graphics/PipelineObject/Distortion/Distortion.h"
 
-#include "Drawer/DrawerManager.h"
+#include "Engine/Graphics/TextureManager/TextureManager.h"
 
 #ifdef USE_DEBUG_CODE
 #include "imgui.h"
@@ -82,9 +82,14 @@ RenderingManager::RenderingManager() {
 	shadow_->SetDepthHandle(depthStencil_->GetHandleGPU());
 	shadow_->SetDepthShadowHandle(depthStencilShadow_->GetHandleGPU());
 
+	TextureManager::GetInstance()->LoadTexture("./Resources/Water/caustics_02.bmp");
+	Texture* causticsTex = TextureManager::GetInstance()->GetTexture("./Resources/Water/caustics_02.bmp");
+
 	auto distortion = std::make_unique<Distortion>();
 	distortion->Init();
 	distortion->SetDistortionTexHandle(distortionTextureRGBA_->GetHandleGPU());
+	distortion->SetDepthTexHandle(depthStencilShadow_->GetHandleGPU());
+	distortion->SetCausticsTexHandle(causticsTex->GetHandleGPU());
 
 	rgbaTexture_ = std::make_unique<PeraRender>();
 	rgbaTexture_->Initialize(distortion.release());
@@ -385,7 +390,10 @@ void RenderingManager::Draw() {
 		static_cast<uint32_t>(luminate.size())
 	);
 
+	
+	depthStencilShadow_->Barrier();
 	rgbaTexture_->Draw(Pipeline::None, nullptr);
+	depthStencilShadow_->Barrier();
 
 	/// ====================================================================================
 
@@ -468,6 +476,7 @@ void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 
 void RenderingManager::SetViewMatrix(const Mat4x4& view) {
 	viewMatrix_ = view;
+	cameraDirection_ = Vector3::kZIdentity * viewMatrix_.Inverse().GetRotate();
 }
 
 void RenderingManager::SetProjectionMatrix(const Mat4x4& projection) {
@@ -655,6 +664,16 @@ bool RenderingManager::GetIsUseMeshShader() const
 uint32_t RenderingManager::GetBufferIndex() const
 {
 	return bufferIndex_;
+}
+
+const AirSkyBox::AtmosphericParams& RenderingManager::GetAtmosphericParams() const
+{
+	return atmosphericParams_;
+}
+
+const Vector3& RenderingManager::GetCameraDirection() const
+{
+	return cameraDirection_;
 }
 
 void RenderingManager::DrawRGB(const RenderDataList& renderList) {

@@ -16,7 +16,7 @@ public:
 		uint32_t rightNum = 0;
 		DirectionLight directionLight;
 		uint32_t isDirectionLight = 1u;
-		uint32_t isShadow = 1u;
+		uint32_t isShadow = 0u;
 		float32_t environmentCoefficient = 1.0f;
 	};
 public:
