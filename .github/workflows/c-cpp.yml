@@ -2,9 +2,9 @@ name: MSBuild
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "Engine-Update" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "Engine-Update" ]
 
 env:
   SOLUTION_FILE_PATH: LambEngine.sln
