@@ -137,8 +137,8 @@ void Goal::ParticleUpdate()
 				particleCoolTime_ = Lamb::Random(particleCoolTimeRange_.first, particleCoolTimeRange_.second);
 				
 				// 音鳴らす
-				fireworkSound_->Stop();
-				fireworkSound_->Start(0.5f, false);
+				//fireworkSound_->Stop();
+				//fireworkSound_->Start(0.5f, false);
 				break;
 			}
 		}
@@ -154,9 +154,9 @@ void Goal::ParticleUpdate()
 void Goal::ParticleDraw(const Camera& camera)
 {
 	if (isParticleStart_) {
-		for (auto& i : particles_) {
+		/*for (auto& i : particles_) {
 			i->Draw(camera.rotate, camera.GetViewProjection());
-		}
+		}*/
 	}
 }
 

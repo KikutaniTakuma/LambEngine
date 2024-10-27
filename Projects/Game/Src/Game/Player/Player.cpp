@@ -419,9 +419,9 @@ void Player::Draw(const Camera& camera) {
 	DebugDraw(camera.GetViewProjection());
 #endif // USE_DEBUG_CODE
 
-	for (auto& i : cannonParticle_) {
+	/*for (auto& i : cannonParticle_) {
 		i->Draw(camera.rotate, camera.GetViewProjection());
-	}
+	}*/
 }
 
 void Player::DrawUI(const Camera& camera) {
