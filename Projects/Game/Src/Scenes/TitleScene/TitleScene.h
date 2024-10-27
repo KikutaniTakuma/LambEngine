@@ -11,6 +11,7 @@
 
 #include "Drawer/Other/WaterTex2D/WaterTex2D.h"
 
+#include "Game/Corals/Corals.h"
 #include <array>
 
 class TitleScene : public BaseScene {
@@ -33,9 +34,6 @@ public:
 	void Update() override;
 
 	void Draw() override;
-
-private:
-	static constexpr size_t kLowCoralObjectNum_ = 22llu;
 
 private:
 	std::unique_ptr<Camera> staticCamera_;
@@ -88,5 +86,5 @@ private:
 
 	WaterTex2D::WaveData waveData_;
 
-	std::unique_ptr<std::array<ModelInstance, kLowCoralObjectNum_ * kLowCoralObjectNum_>> corals_;
+	Corals corals_;
 };

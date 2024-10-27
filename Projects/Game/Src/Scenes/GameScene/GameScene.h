@@ -23,6 +23,8 @@
 #include "Game/Cursor/Cursor.h"
 #include "Drawer/Other/WaterTex2D/WaterTex2D.h"
 
+#include "Game/Corals/Corals.h"
+
 class GameScene : public BaseScene {
 public:
 	GameScene();
@@ -81,4 +83,6 @@ public:
 	class Audio* seaSE_ = nullptr;
 
 	WaterTex2D::WaveData waveData_;
+
+	Corals corals_;
 };

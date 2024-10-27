@@ -140,6 +140,8 @@ void SelectStageScene::Initialize() {
 
     currentCamera_->pos.z = -10.0f;
 
+    corals_.Init(-12.0f);
+
     //renderingManager_->SetTime(7.0f);
 }
 
@@ -165,15 +167,15 @@ void SelectStageScene::Update() {
 
     screw_->Update();
 
-    waveData_.ripplesPoint = ship_->pos;
-    //waveData_.time += Lamb::DeltaTime();
-    waveData_.waveStrength = 0.2f;
-    waveData_.ripples = 10.0f;
-    waveData_.waveSpeed = 2.0f;
-    waveData_.timeAttenuation = 0.0f;
+    //waveData_.ripplesPoint = ship_->pos;
+    ////waveData_.time += Lamb::DeltaTime();
+    //waveData_.waveStrength = 0.2f;
+    //waveData_.ripples = 10.0f;
+    //waveData_.waveSpeed = 2.0f;
+    //waveData_.timeAttenuation = 0.0f;
 
     water_->Update(currentCamera_->GetPos());
-    water_->SetWaveData(waveData_);
+    //water_->SetWaveData(waveData_);
 #pragma endregion
 
 
@@ -349,6 +351,8 @@ void SelectStageScene::Draw() {
     }
 
     cursor_->Draw(*currentCamera_);
+
+    corals_.Draw(currentCamera_->GetViewProjection());
 }
 
 Vector2 SelectStageScene::ChangeMouseToTexture() {

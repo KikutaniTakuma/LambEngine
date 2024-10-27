@@ -11,6 +11,8 @@
 
 #include "Drawer/Other/WaterTex2D/WaterTex2D.h"
 
+#include "Game/Corals/Corals.h"
+
 
 class SelectStageScene : public BaseScene {
 public:
@@ -97,4 +99,5 @@ private:
 
     WaterTex2D::WaveData waveData_;
 
+    Corals corals_;
 };

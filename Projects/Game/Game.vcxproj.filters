@@ -275,6 +275,9 @@
     <ClCompile Include="Src\GameObject\Comp\MeshShaderTestComp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\Corals\Corals.cpp">
+      <Filter>Game\Corals</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -342,6 +345,9 @@
     </Filter>
     <Filter Include="Scenes\TestScene">
       <UniqueIdentifier>{509f02f8-d848-4da3-bd97-134e93acdf86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Corals">
+      <UniqueIdentifier>{91b428eb-825f-4a1a-973a-b49c36b04664}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -629,6 +635,9 @@
     </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\MeshShaderTestComp.h">
       <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Corals\Corals.h">
+      <Filter>Game\Corals</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

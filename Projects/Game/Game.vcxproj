@@ -247,6 +247,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\Game\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Collision\Collision.cpp" />
     <ClCompile Include="Src\Game\CollisionManager\Plane\Plane.cpp" />
+    <ClCompile Include="Src\Game\Corals\Corals.cpp" />
     <ClCompile Include="Src\Game\Cursor\Cursor.cpp" />
     <ClCompile Include="Src\Game\CustomizeCamera\CustomizeCamera.cpp" />
     <ClCompile Include="Src\Game\Customize\Customize.cpp" />
@@ -344,6 +345,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\Game\CollisionManager\Collision\Collision.h" />
     <ClInclude Include="Src\Game\CollisionManager\Obb\Obb.h" />
     <ClInclude Include="Src\Game\CollisionManager\Plane\Plane.h" />
+    <ClInclude Include="Src\Game\Corals\Corals.h" />
     <ClInclude Include="Src\Game\Cursor\Cursor.h" />
     <ClInclude Include="Src\Game\CustomizeCamera\CustomizeCamera.h" />
     <ClInclude Include="Src\Game\Customize\Customize.h" />

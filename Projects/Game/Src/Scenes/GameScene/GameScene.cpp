@@ -89,6 +89,8 @@ void GameScene::Initialize() {
 
 	cursor_->Initialize();
 
+	corals_.Init();
+
 	//renderingManager_->SetTime(12.0f);
 }
 
@@ -229,12 +231,12 @@ void GameScene::Update() {
 	CameraManager::GetInstance()->Update(player_->GetPosition(), player_->GetRotate());
 
 	water_->Debug("Water");
-	waveData_.ripplesPoint = player_->GetPosition();
-	//waveData_.time += Lamb::DeltaTime();
-	waveData_.waveStrength = 0.3f;
-	waveData_.ripples = 20.0f;
-	waveData_.waveSpeed = 2.0f;
-	waveData_.timeAttenuation = 0.0f;
+	//waveData_.ripplesPoint = player_->GetPosition();
+	////waveData_.time += Lamb::DeltaTime();
+	//waveData_.waveStrength = 0.3f;
+	//waveData_.ripples = 20.0f;
+	//waveData_.waveSpeed = 2.0f;
+	//waveData_.timeAttenuation = 0.0f;
 
 	water_->Update(currentCamera_->GetPos());
 	water_->SetWaveData(waveData_);
@@ -276,6 +278,8 @@ void GameScene::Draw() {
 	windManager_->Draw(*currentCamera_);
 	BulletManager::GetInstance()->Draw(*currentCamera_);
 	player_->DrawUI(*uiCamera_);
+	corals_.Draw(currentCamera_->GetViewProjection());
+
 	if (player_->GetIsCustomize()) {
 		customize_->Draw(*currentCamera_);
 		// 上に描画したい
