@@ -30,13 +30,11 @@ void Line::Initialize() {
 	RootSignature::Desc desc;
 	desc.rootParameter = &paramater;
 	desc.rootParameterSize = 1;
-	desc.samplerDeacs.push_back(
-		CreateLinearSampler()
-	);
+	desc.samplerDeacs.clear();
 
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::Desc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, false);
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
 	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
 	pipelineDesc.shader = shader_;
 	pipelineDesc.blend[0] = Pipeline::None;

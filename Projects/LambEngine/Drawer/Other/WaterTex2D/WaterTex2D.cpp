@@ -1,6 +1,7 @@
 #include "WaterTex2D.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include "Utils/SafePtr.h"
 
 #ifdef USE_DEBUG_CODE
@@ -60,6 +61,7 @@ void WaterTex2D::Draw(
 			.edgeDivision = std::clamp(shaderData.edgeDivision, 1u, 64u),
 			.insideDivision = std::clamp(shaderData.insideDivision, 1u, 64u),
 			.waveData = shaderData.waveData,
+			.atomosphericParam = RenderingManager::GetInstance()->GetAtmosphericParams(),
 			.effectState = shaderData.effectState
 		}
 	);

@@ -15,38 +15,58 @@
 
 
 void DeferredRendering::Draw() {
-	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).Map();
-	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).Map();
+	const uint32_t kBufferIndex = Lamb::GetGraphicBufferIndex();
 
-	**deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()] = deferredRenderingData_;
-	**atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()] = atomosphericData_;
+	(*deferredRenderingDataBuf_[kBufferIndex]).Map();
+	(*atomosphericDataBuf_[kBufferIndex]).Map();
+	(*cameraBuf_[kBufferIndex]).Map();
+	(*lightCameraBuf_[kBufferIndex]).Map();
 
-	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).Unmap();
-	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).Unmap();
+	**deferredRenderingDataBuf_[kBufferIndex] = deferredRenderingData_;
+	**atomosphericDataBuf_[kBufferIndex] = atomosphericData_;
+	**cameraBuf_[kBufferIndex] = cameraMatrix_;
+	**lightCameraBuf_[kBufferIndex] = lightCameraMatrix_;
+
+	(*deferredRenderingDataBuf_[kBufferIndex]).Unmap();
+	(*atomosphericDataBuf_[kBufferIndex]).Unmap();
+	(*cameraBuf_[kBufferIndex]).Unmap();
+	(*lightCameraBuf_[kBufferIndex]).Unmap();
 
 	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	pipelinesNoDepth_[Pipeline::Blend::None]->Use();
 
-	commandList->SetGraphicsRootConstantBufferView(0, deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
-	commandList->SetGraphicsRootConstantBufferView(1, atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(0, deferredRenderingDataBuf_[kBufferIndex]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(1, atomosphericDataBuf_[kBufferIndex]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(2, cameraBuf_[kBufferIndex]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(3, lightCameraBuf_[kBufferIndex]->GetGPUVtlAdrs());
 
-	commandList->SetGraphicsRootDescriptorTable(2, colorTextureHandle_);
-	commandList->SetGraphicsRootDescriptorTable(3, normalTextureHandle_);
-	commandList->SetGraphicsRootDescriptorTable(4, worldPositionTextureHandle_);
-	commandList->SetGraphicsRootDescriptorTable(5, distortionTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(4, colorTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(5, normalTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(6, worldPositionTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(7, distortionTextureHandle_);
 	commandList->DrawInstanced(3, 1, 0, 0);
 }
 
+void DeferredRendering::SetCameraMatrix(const float32_t4x4& camera) {
+	cameraMatrix_ = camera;
+}
+
+void DeferredRendering::SetLightCameraMatrix(const float32_t4x4& lightCamera) {
+	lightCameraMatrix_ = lightCamera;
+}
+
 void DeferredRendering::Use(Pipeline::Blend blendType, bool isDepth) {
-	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).Map();
-	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).Map();
+	const uint32_t kBufferIndex = Lamb::GetGraphicBufferIndex();
 
-	**deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()] = deferredRenderingData_;
-	**atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()] = atomosphericData_;
+	(*deferredRenderingDataBuf_[kBufferIndex]).Map();
+	(*atomosphericDataBuf_[kBufferIndex]).Map();
 
-	(*deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]).Unmap();
-	(*atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]).Unmap();
+	**deferredRenderingDataBuf_[kBufferIndex] = deferredRenderingData_;
+	**atomosphericDataBuf_[kBufferIndex] = atomosphericData_;
+
+	(*deferredRenderingDataBuf_[kBufferIndex]).Unmap();
+	(*atomosphericDataBuf_[kBufferIndex]).Unmap();
 
 	if (isDepth) {
 		pipelines_[blendType]->Use();
@@ -55,13 +75,15 @@ void DeferredRendering::Use(Pipeline::Blend blendType, bool isDepth) {
 		pipelinesNoDepth_[blendType]->Use();
 	}
 	auto* const commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	commandList->SetGraphicsRootConstantBufferView(0, deferredRenderingDataBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
-	commandList->SetGraphicsRootConstantBufferView(1, atomosphericDataBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(0, deferredRenderingDataBuf_[kBufferIndex]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(1, atomosphericDataBuf_[kBufferIndex]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(2, cameraBuf_[kBufferIndex]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(3, lightCameraBuf_[kBufferIndex]->GetGPUVtlAdrs());
 
-	commandList->SetGraphicsRootDescriptorTable(2, colorTextureHandle_);
-	commandList->SetGraphicsRootDescriptorTable(3, normalTextureHandle_);
-	commandList->SetGraphicsRootDescriptorTable(4, worldPositionTextureHandle_);
-	commandList->SetGraphicsRootDescriptorTable(5, distortionTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(4, colorTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(5, normalTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(6, worldPositionTextureHandle_);
+	commandList->SetGraphicsRootDescriptorTable(7, distortionTextureHandle_);
 }
 
 void DeferredRendering::Init(
@@ -95,7 +117,7 @@ void DeferredRendering::Init(
 	distortionTextureRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	distortionTextureRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 6> rootParameter = {};
+	std::array<D3D12_ROOT_PARAMETER, 8> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	rootParameter[0].Descriptor.ShaderRegister = 0;
@@ -104,25 +126,33 @@ void DeferredRendering::Init(
 	rootParameter[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	rootParameter[1].Descriptor.ShaderRegister = 1;
 
-	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[2].DescriptorTable.pDescriptorRanges = diffColorTextureRange.data();
-	rootParameter[2].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffColorTextureRange.size());
-	
-	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[3].DescriptorTable.pDescriptorRanges = diffNormalTextureRange.data();
-	rootParameter[3].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffNormalTextureRange.size());
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[2].Descriptor.ShaderRegister = 2;
+
+	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[3].Descriptor.ShaderRegister = 3;
 
 	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[4].DescriptorTable.pDescriptorRanges = diffWorldPositionTextureRange.data();
-	rootParameter[4].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffWorldPositionTextureRange.size());
-
+	rootParameter[4].DescriptorTable.pDescriptorRanges = diffColorTextureRange.data();
+	rootParameter[4].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffColorTextureRange.size());
+	
 	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[5].DescriptorTable.pDescriptorRanges = distortionTextureRange.data();
-	rootParameter[5].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(distortionTextureRange.size());
+	rootParameter[5].DescriptorTable.pDescriptorRanges = diffNormalTextureRange.data();
+	rootParameter[5].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffNormalTextureRange.size());
+
+	rootParameter[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[6].DescriptorTable.pDescriptorRanges = diffWorldPositionTextureRange.data();
+	rootParameter[6].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffWorldPositionTextureRange.size());
+
+	rootParameter[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[7].DescriptorTable.pDescriptorRanges = distortionTextureRange.data();
+	rootParameter[7].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(distortionTextureRange.size());
 
 
 	RootSignature::Desc desc;
@@ -134,7 +164,7 @@ void DeferredRendering::Init(
 
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::Desc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
 	pipelineDesc.vsInputData.clear();
 	pipelineDesc.shader = shader_;
 	pipelineDesc.isDepth = false;
@@ -181,6 +211,22 @@ void DeferredRendering::Init(
 			n = std::make_unique<ConstantBuffer<AirSkyBox::AtmosphericParams>>();
 		}
 	);
+
+	std::for_each(
+		 cameraBuf_.begin(),
+		 cameraBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<float32_t4x4>>();
+		}
+	);
+
+	std::for_each(
+		lightCameraBuf_.begin(),
+		lightCameraBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<float32_t4x4>>();
+		}
+	);
 }
 
 DeferredRendering::~DeferredRendering() {
@@ -195,6 +241,22 @@ DeferredRendering::~DeferredRendering() {
 	std::for_each(
 		atomosphericDataBuf_.begin(),
 		atomosphericDataBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
+
+	std::for_each(
+		cameraBuf_.begin(),
+		cameraBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
+
+	std::for_each(
+		lightCameraBuf_.begin(),
+		lightCameraBuf_.end(),
 		[](auto& n) {
 			n.reset();
 		}

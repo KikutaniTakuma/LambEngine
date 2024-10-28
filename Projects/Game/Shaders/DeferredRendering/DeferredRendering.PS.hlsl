@@ -16,6 +16,7 @@ struct DeferredRenderingData{
     uint32_t rightNum;
     DirectionLight directionLight;
     uint32_t isDirectionLight;
+    uint32_t isShadow;
     float32_t environmentCoefficient;
 };
 
@@ -35,9 +36,15 @@ struct AtmosphericParams {
 	float32_t mieG;              // Mie散乱位相関数のg値（0から1の範囲）
 };
 
+struct Mat4x4{
+    float32_t4x4 value;
+};
+
 
 ConstantBuffer<DeferredRenderingData> gDeferredRenderingState : register(b0);
 ConstantBuffer<AtmosphericParams> gAtmosphericParams : register(b1);
+ConstantBuffer<Mat4x4> gCameraMatrix : register(b2);
+ConstantBuffer<Mat4x4> gLightCameraMatrix : register(b3);
 
 Texture2D<float32_t4> gColorTexture : register(t0);
 Texture2D<float32_t4> gNormalTexture : register(t1);
@@ -136,6 +143,18 @@ PixelShaderOutPut main(Output input) {
 
     float32_t3 eyePos = gDeferredRenderingState.eyePos;
 
+    float32_t4 ndcPos = mul(worldPosition, gCameraMatrix.value);
+    float32_t4 shadowNDCPos = mul(worldPosition, gLightCameraMatrix.value);
+
+    float32_t depth = pow(ndcPos.w, 100.0f);
+    float32_t shadowDepth = pow(shadowNDCPos.w, 100.0f);
+    float32_t shadowWeight = 1.0f;
+
+    if(gDeferredRenderingState.isShadow && shadowDepth < depth) {
+        shadowWeight = 0.1f;
+    }
+
+
     if(len != 0.0f){
         float32_t3 skyColor = SkyColor(worldPosition.xyz, normal, eyePos);
         color.rgb += skyColor * gDeferredRenderingState.environmentCoefficient;
@@ -164,7 +183,7 @@ PixelShaderOutPut main(Output input) {
         t = pow(saturate(t), shinness);
         float32_t3 specDirection = ligColor * t;
     
-        float32_t3 lig = diffDirection + specDirection;
+        float32_t3 lig = (diffDirection + specDirection) * shadowWeight;
         lig += 0.2f;
         outputColor.color.rgb = color.rgb * lig;
     }else{

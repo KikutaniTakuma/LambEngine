@@ -57,7 +57,7 @@ void Pipeline::Create(
 	const Desc& desc
 ) {
 	*desc_ = desc;
-	assert(1 <= desc_->numRenderTarget and desc_->numRenderTarget < 8);
+	assert(0 <= desc_->numRenderTarget and desc_->numRenderTarget < 8);
 
 	for (auto& i : desc_->vsInputData) {
 		AddVertexInput(i);
@@ -153,7 +153,7 @@ void Pipeline::CreateCubeMap(
 	const Desc& desc
 ) {
 	*desc_ = desc;
-	assert(1 <= desc_->numRenderTarget and desc_->numRenderTarget < 8);
+	assert(0 <= desc_->numRenderTarget and desc_->numRenderTarget < 8);
 
 	for (auto& i : desc_->vsInputData) {
 		AddVertexInput(i);
@@ -242,7 +242,7 @@ void Pipeline::Create(const MeshDesc& desc) {
 	*meshDesc_ = desc;
 	isMesh_ = true;
 
-	assert(1 <= meshDesc_->numRenderTarget and meshDesc_->numRenderTarget < 8);
+	assert(0 <= meshDesc_->numRenderTarget and meshDesc_->numRenderTarget < 8);
 
 	// RasterizerStateの設定
 	D3D12_RASTERIZER_DESC rasterizerDesc{};
@@ -374,24 +374,28 @@ bool Pipeline::GetIsMesh() const
 }
 
 bool Pipeline::Desc::operator==(const Pipeline::Desc& right) const {
-	return this->shader == right.shader
-		and this->vsInputData == right.vsInputData
+	return  
+			this->rootSignature == right.rootSignature
 		and this->blend == right.blend
 		and this->rtvFormtat == right.rtvFormtat
+		and this->numRenderTarget == right.numRenderTarget
+		and this->isDepth == right.isDepth
 		and this->cullMode == right.cullMode
 		and this->solidState == right.solidState
-		and this->topologyType == right.topologyType
-		and this->numRenderTarget == right.numRenderTarget
-		and this->isDepth == right.isDepth;
+		and	this->shader == right.shader
+		and this->vsInputData == right.vsInputData
+		and this->topologyType == right.topologyType;
 }
 
 bool Pipeline::MeshDesc::operator==(const MeshDesc& right) const
 {
-	return this->shader == right.shader
+	return 
+			this->rootSignature == right.rootSignature
 		and this->blend == right.blend
 		and this->rtvFormtat == right.rtvFormtat
+		and this->numRenderTarget == right.numRenderTarget
+		and this->isDepth == right.isDepth
 		and this->cullMode == right.cullMode
 		and this->solidState == right.solidState
-		and this->numRenderTarget == right.numRenderTarget
-		and this->isDepth == right.isDepth;
+	    and this->shader == right.shader;
 }

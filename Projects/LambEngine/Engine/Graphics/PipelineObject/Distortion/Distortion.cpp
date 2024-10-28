@@ -18,6 +18,19 @@ void Distortion::SetRtvFormt(DXGI_FORMAT format) {
 }
 
 void Distortion::Use(Pipeline::Blend blendType, bool isDepth) {
+	translate_ += uvScrollSpeed_ * Lamb::DeltaTime();
+	scrollUV_ = Mat4x4::MakeAffin(Vector3::kIdentity * 2.0f, Quaternion::MakeRotateZAxis(std::numbers::pi_v<float32_t> * 0.25f), translate_);
+
+	scrollUVBuf_[Lamb::GetGraphicBufferIndex()]->Map();
+	**scrollUVBuf_[Lamb::GetGraphicBufferIndex()] = scrollUV_;
+	scrollUVBuf_[Lamb::GetGraphicBufferIndex()]->Unmap();
+
+
+	depthFloatBuf_[Lamb::GetGraphicBufferIndex()]->Map();
+	**depthFloatBuf_[Lamb::GetGraphicBufferIndex()] = depthFloat_;
+	depthFloatBuf_[Lamb::GetGraphicBufferIndex()]->Unmap();
+
+
 	if (isDepth) {
 		pipelines_[blendType]->Use();
 	}
@@ -28,7 +41,11 @@ void Distortion::Use(Pipeline::Blend blendType, bool isDepth) {
 
 	render_->UseThisRenderTargetShaderResource();
 	commandList->SetGraphicsRootDescriptorTable(1, distortionTexHandle_);
-	commandList->SetGraphicsRootConstantBufferView(2, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootDescriptorTable(2, depthTexHandle_);
+	commandList->SetGraphicsRootDescriptorTable(3, causticsTexHandle_);
+	commandList->SetGraphicsRootConstantBufferView(4, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(5, scrollUVBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(6, depthFloatBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void Distortion::Init(
@@ -61,7 +78,18 @@ void Distortion::Init(
 	distortionRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	distortionRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 3> rootParameter = {};
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> depthRange = {};
+	depthRange[0].BaseShaderRegister = 2;
+	depthRange[0].NumDescriptors = 1;
+	depthRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	depthRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> causticsRange = {};
+	causticsRange[0].BaseShaderRegister = 3;
+	causticsRange[0].NumDescriptors = 1;
+	causticsRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	causticsRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	std::array<D3D12_ROOT_PARAMETER, 7> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[0].DescriptorTable.pDescriptorRanges = renderRange.data();
@@ -72,16 +100,34 @@ void Distortion::Init(
 	rootParameter[1].DescriptorTable.pDescriptorRanges = distortionRange.data();
 	rootParameter[1].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(distortionRange.size());
 
-	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[2].Descriptor.ShaderRegister = 0;
+	rootParameter[2].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[2].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[2].DescriptorTable.pDescriptorRanges = depthRange.data();
+	rootParameter[2].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(depthRange.size());
+
+	rootParameter[3].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[3].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[3].DescriptorTable.pDescriptorRanges = causticsRange.data();
+	rootParameter[3].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(causticsRange.size());
+
+	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[4].Descriptor.ShaderRegister = 0;
+
+	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[5].Descriptor.ShaderRegister = 1;
+
+	rootParameter[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[6].Descriptor.ShaderRegister = 2;
 
 
 	RootSignature::Desc desc;
 	desc.rootParameter = rootParameter.data();
 	desc.rootParameterSize = rootParameter.size();
 	desc.samplerDeacs.push_back(
-		CreateBorderLinearSampler(0)
+		CreateLinearSampler(0)
 	);
 
 	desc.samplerDeacs.push_back(
@@ -90,7 +136,7 @@ void Distortion::Init(
 
 	auto pipelineManager = PipelineManager::GetInstance();
 	Pipeline::Desc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
 	pipelineDesc.vsInputData.clear();
 	pipelineDesc.shader = shader_;
 	pipelineDesc.isDepth = false;
@@ -136,6 +182,22 @@ void Distortion::Init(
 			n = std::make_unique<ConstantBuffer<Vector4>>();
 		}
 	);
+
+	std::for_each(
+		 scrollUVBuf_.begin(),
+		 scrollUVBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<float32_t4x4>>();
+		}
+	);
+
+	std::for_each(
+		depthFloatBuf_.begin(),
+		depthFloatBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<float32_t>>();
+		}
+	);
 }
 
 Distortion::~Distortion() {
@@ -147,6 +209,23 @@ Distortion::~Distortion() {
 	std::for_each(
 		colorBuf_.begin(),
 		colorBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
+
+
+	std::for_each(
+		scrollUVBuf_.begin(),
+		scrollUVBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
+
+	std::for_each(
+		depthFloatBuf_.begin(),
+		depthFloatBuf_.end(),
 		[](auto& n) {
 			n.reset();
 		}

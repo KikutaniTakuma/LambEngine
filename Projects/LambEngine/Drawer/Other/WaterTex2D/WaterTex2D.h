@@ -3,6 +3,7 @@
 #pragma once
 #include "../../BaseDrawer.h"
 #include "Engine/Graphics/RenderContextManager/RenderContext/RenderContext.h"
+#include "Drawer/AirSkyBox/AirSkyBox.h"
 
 /// <summary>
 /// 板ポリ描画
@@ -33,7 +34,10 @@ public:
 		float32_t density = 0.0_f32;
 		uint32_t edgeDivision = 1;
 		uint32_t insideDivision = 1;
+		float32_t3 cameraDirection;
+		float32_t pad;
 		WaveData waveData;
+		AirSkyBox::AtmosphericParams atomosphericParam;
 		EffectState effectState;
 	};
 

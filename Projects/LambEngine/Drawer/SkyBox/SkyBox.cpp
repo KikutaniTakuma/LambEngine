@@ -163,10 +163,10 @@ void SkyBox::CreateGraphicsPipeline() {
 
     auto pipelineManager = PipelineManager::GetInstance();
     Pipeline::Desc pipelineDesc;
-    pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+    pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
     pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
     pipelineDesc.shader = shader;
-    pipelineDesc.isDepth = false;
+    pipelineDesc.isDepth = true;
     pipelineDesc.blend[0] = Pipeline::None;
     pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
     pipelineDesc.solidState = Pipeline::SolidState::Solid;

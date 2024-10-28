@@ -1,5 +1,3 @@
-#include "../LambMesh.hlsli"
-
 struct PayloadStruct { 
     uint32_t myArbitraryData; 
 }; 

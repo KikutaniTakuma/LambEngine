@@ -26,11 +26,22 @@ public:
         modelData_(nullptr),
         pipeline_(nullptr),
         drawCount_(0),
+        shadowPipeline_(nullptr),
+        lightCamera_(),
         typeID_()
-    {}
+    {
+        std::for_each(
+            lightCamera_.begin(),
+            lightCamera_.end(),
+            [](auto& n) {
+                n = std::make_unique<ConstantBuffer<float32_t4x4>>();
+            }
+        );
+    }
     virtual ~BaseRenderContext() = default;
 
     virtual void Draw() const = 0;
+    virtual void DrawShadow() const = 0;
 
     const std::string& GetID() const {
         return typeID_;
@@ -46,7 +57,15 @@ public:
     virtual void ZSort() = 0;
     virtual void DataSet() = 0;
 
+    void SetShadowPipeline(Pipeline* const shadowPipeline) {
+        if (not shadowPipeline_ and shadowPipeline) {
+            shadowPipeline_ = shadowPipeline;
+        }
+    }
 
+    void SetLightCameraMatrix(const float32_t4x4& lightCameraMatrix) {
+        lightCamera_[Lamb::GetGraphicBufferIndex()]->MemCpy(lightCameraMatrix.data());
+    }
 
 public:
     void AddDrawCount() {
@@ -81,9 +100,11 @@ protected:
     const VertexIndexData* vertexIndexData_;
     const ModelData* modelData_;
 
-
     Pipeline* pipeline_;
     uint32_t drawCount_;
+
+    Pipeline* shadowPipeline_;
+    std::array<std::unique_ptr<ConstantBuffer<float32_t4x4>>, DirectXSwapChain::kBackBufferNumber> lightCamera_;
 
     std::string typeID_;
 };
@@ -95,6 +116,7 @@ template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
 class RenderContext : public BaseRenderContext {
 public:
     RenderContext():
+        BaseRenderContext(),
         shaderData_()
     {
         for (uint32_t i = 0; i < DirectXSwapChain::kBackBufferNumber; ++i) {
@@ -142,6 +164,26 @@ public:
         commandlist->SetGraphicsRootShaderResourceView(4, shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.GetGPUVtlAdrs());
         // テクスチャ
         commandlist->SetGraphicsRootDescriptorTable(5, descriptorHeap->GetGpuHeapHandle(0));
+
+        // 頂点バッファセット
+        commandlist->IASetVertexBuffers(0, 1, &(vertexIndexData_->vertexView));
+        // インデックスバッファセット
+        commandlist->IASetIndexBuffer(&(vertexIndexData_->indexView));
+        // ドローコール
+        commandlist->DrawIndexedInstanced(vertexIndexData_->indexNumber, drawCount_, 0, 0, 0);
+    }
+
+    void DrawShadow() const override {
+        // コマンドリスト
+        ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+        // パイプライン設定
+        shadowPipeline_->Use();
+
+        // ライトのカメラマトリックス
+        commandlist->SetGraphicsRootConstantBufferView(0, lightCamera_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+        // ワールドとカメラマトリックス
+        commandlist->SetGraphicsRootShaderResourceView(1, shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.GetGPUVtlAdrs());
 
         // 頂点バッファセット
         commandlist->IASetVertexBuffers(0, 1, &(vertexIndexData_->vertexView));
@@ -214,7 +256,7 @@ public:
         // 描画をする部分だけソート
         auto endItr = drawData_.begin() + drawCount_;
         // 深度値でソート(大きい順。奥から描画していくため)
-        std::sort(drawData_.begin(), endItr, [](const auto& left, const auto& right) {
+        std::sort(drawData_.begin(), endItr, [](const DrawData<T>& left, const DrawData<T>& right) {
             return right.depth < left.depth;
             }
         );
@@ -225,13 +267,11 @@ public:
         shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.Map();
         shaderData_[Lamb::GetGraphicBufferIndex()].color.Map();
         shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.Map();
-
         for (uint32_t i = 0; i < drawCount_; ++i) {
-            shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix[i]    = drawData_[i].wvpMatrix;
-            shaderData_[Lamb::GetGraphicBufferIndex()].color[i]        = drawData_[i].color;
+            shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix[i] = drawData_[i].wvpMatrix;
             shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct[i] = drawData_[i].shaderStruct;
+            shaderData_[Lamb::GetGraphicBufferIndex()].color[i] = drawData_[i].color;
         }
-
         shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.Unmap();
         shaderData_[Lamb::GetGraphicBufferIndex()].color.Unmap();
         shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.Unmap();
@@ -247,6 +287,7 @@ template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
 class SkinRenderContext : public BaseRenderContext {
 public:
     SkinRenderContext() :
+        BaseRenderContext(),
         shaderData_()
     {
         shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.Create(bufferSize);
@@ -254,16 +295,13 @@ public:
         shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.Create(bufferSize);
 
         drawData_.resize(bufferSize);
-       
 
         pipeline_ = nullptr;
         drawCount_ = 0u;
 
         typeID_ = (typeid(SkinRenderContext<T, bufferSize>).name());
     }
-    ~SkinRenderContext() {
-
-    }
+    ~SkinRenderContext() = default;
 
     SkinRenderContext(const SkinRenderContext&) = delete;
     SkinRenderContext(SkinRenderContext&&) = delete;
@@ -307,7 +345,33 @@ public:
         commandlist->IASetIndexBuffer(&vertexIndexData_->indexView);
         // ドローコール
         commandlist->DrawIndexedInstanced(vertexIndexData_->indexNumber, drawCount_, 0, 0, 0);
-        //commandlist->DrawInstanced(mesh_->vertexNumber, drawCount_, 0, 0);
+    }
+
+    void DrawShadow() const override {
+        // コマンドリスト
+        ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+        // パイプライン設定
+        shadowPipeline_->Use();
+
+        // ライトのカメラマトリックス
+        commandlist->SetGraphicsRootConstantBufferView(0, lightCamera_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+        // ワールドとカメラマトリックス
+        commandlist->SetGraphicsRootShaderResourceView(1, shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.GetGPUVtlAdrs());
+        // スキンアニメーション用
+        commandlist->SetGraphicsRootShaderResourceView(2, skinCluster_->paletteBuffer[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
+
+        std::array vertexBuffer = {
+            vertexIndexData_->vertexView,
+            skinCluster_->infliuenceBufferView
+        };
+
+        // 頂点バッファセット
+        commandlist->IASetVertexBuffers(0, static_cast<uint32_t>(vertexBuffer.size()), vertexBuffer.data());
+        // インデックスバッファセット
+        commandlist->IASetIndexBuffer(&vertexIndexData_->indexView);
+        // ドローコール
+        commandlist->DrawIndexedInstanced(vertexIndexData_->indexNumber, drawCount_, 0, 0, 0);
     }
 
 public:
@@ -379,7 +443,7 @@ public:
         // 描画をする部分だけソート
         auto endItr = drawData_.begin() + drawCount_;
         // 深度値でソート(大きい順。奥から描画していくため)
-        std::sort(drawData_.begin(), endItr, [](const auto& left, const auto& right) {
+        std::sort(drawData_.begin(), endItr, [](const DrawData<T>& left, const DrawData<T>& right) {
             return right.depth < left.depth;
             }
         );
@@ -389,13 +453,11 @@ public:
         shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.Map();
         shaderData_[Lamb::GetGraphicBufferIndex()].color.Map();
         shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.Map();
-
         for (uint32_t i = 0; i < drawCount_; ++i) {
             shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix[i] = drawData_[i].wvpMatrix;
-            shaderData_[Lamb::GetGraphicBufferIndex()].color[i] = drawData_[i].color;
             shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct[i] = drawData_[i].shaderStruct;
+            shaderData_[Lamb::GetGraphicBufferIndex()].color[i] = drawData_[i].color;
         }
-
         shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.Unmap();
         shaderData_[Lamb::GetGraphicBufferIndex()].color.Unmap();
         shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.Unmap();
@@ -414,6 +476,7 @@ template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
 class MeshRenderContext : public BaseRenderContext {
 public:
     MeshRenderContext() :
+        BaseRenderContext(),
         shaderData_()
     {
         constexpr uint32_t kBufferSize = bufferSize;
@@ -436,9 +499,7 @@ public:
 
         typeID_ = (typeid(MeshRenderContext).name());
     }
-    ~MeshRenderContext() {
-        
-    }
+    ~MeshRenderContext() = default;
 
     MeshRenderContext(const MeshRenderContext&) = delete;
     MeshRenderContext(MeshRenderContext&&) = delete;
@@ -480,6 +541,34 @@ public:
         commandlist->SetGraphicsRootShaderResourceView(9, shaderStruct_[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
         // Textures
         commandlist->SetGraphicsRootDescriptorTable(10, descriptorHeap->GetGpuHeapHandle(0));
+        // ドローコール
+        commandlist->DispatchMesh(shaderData_->meshletCount, 1, 1);
+    }
+
+    void DrawShadow() const override {
+        // コマンドリスト
+        Lamb::SafePtr commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
+
+        // パイプライン設定
+        shadowPipeline_->Use();
+        // インスタンスカウント
+        commandlist->SetGraphicsRootConstantBufferView(0, instanceCount_[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
+        // ライトマトリックス
+        commandlist->SetGraphicsRootConstantBufferView(1, lightCamera_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+
+
+        // Transform
+        commandlist->SetGraphicsRootShaderResourceView(2, shaderData_->gTransform[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
+        // gVertices
+        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_->gVertices.GetGPUVtlAdrs());
+        // gUniqueVertexIndices
+        commandlist->SetGraphicsRootShaderResourceView(4, shaderData_->gUniqueVertexIndices.GetGPUVtlAdrs());
+        // gPrimitiveIndices
+        commandlist->SetGraphicsRootShaderResourceView(5, shaderData_->gPrimitiveIndices.GetGPUVtlAdrs());
+        // gMeshlets
+        commandlist->SetGraphicsRootShaderResourceView(6, shaderData_->gMeshlets.GetGPUVtlAdrs());
+       
+
         // ドローコール
         commandlist->DispatchMesh(shaderData_->meshletCount, 1, 1);
     }
@@ -544,7 +633,7 @@ public:
         // 描画をする部分だけソート
         auto endItr = drawData_.begin() + drawCount_;
         // 深度値でソート(大きい順。奥から描画していくため)
-        std::sort(drawData_.begin(), endItr, [](const auto& left, const auto& right) {
+        std::sort(drawData_.begin(), endItr, [](const DrawData<T>& left, const DrawData<T>& right) {
             return right.depth < left.depth;
             }
         );
@@ -561,6 +650,14 @@ public:
             shaderStruct_[Lamb::GetGraphicBufferIndex()][i] = drawData_[i].shaderStruct;
         }
 
+        shaderData_->gTransform[Lamb::GetGraphicBufferIndex()].Map();
+        shaderStruct_[Lamb::GetGraphicBufferIndex()].Map();
+        colors_[Lamb::GetGraphicBufferIndex()].Map();
+        for (uint32_t i = 0; i < drawCount_; ++i) {
+            shaderData_->gTransform[Lamb::GetGraphicBufferIndex()][i] = drawData_[i].wvpMatrix;
+            shaderStruct_[Lamb::GetGraphicBufferIndex()][i] = drawData_[i].shaderStruct;
+            colors_[Lamb::GetGraphicBufferIndex()][i] = drawData_[i].color;
+        }
         shaderData_->gTransform[Lamb::GetGraphicBufferIndex()].Unmap();
         shaderStruct_[Lamb::GetGraphicBufferIndex()].Unmap();
         colors_[Lamb::GetGraphicBufferIndex()].Unmap();

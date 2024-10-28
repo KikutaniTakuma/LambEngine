@@ -43,7 +43,7 @@ public:
 	/// </summary>
 	/// <param name="desc">設定</param>
 	/// <param name="isTexture_">テクスチャを使う場合はtrue</param>
-	[[nodiscard]] RootSignature* CreateRootSgnature(const RootSignature::Desc& desc, bool isTexture);
+	[[nodiscard]] RootSignature* CreateRootSgnature(const RootSignature::Desc& desc);
 
 	void SetDesc(const Pipeline::Desc& desc);
 	void SetDesc(const Pipeline::MeshDesc& desc);

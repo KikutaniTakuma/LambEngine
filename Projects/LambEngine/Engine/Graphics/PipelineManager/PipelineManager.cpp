@@ -31,10 +31,10 @@ PipelineManager* const PipelineManager::GetInstance()
 	return instance_.get();
 }
 
-RootSignature* PipelineManager::CreateRootSgnature(const RootSignature::Desc& desc, bool isTexture)
+RootSignature* PipelineManager::CreateRootSgnature(const RootSignature::Desc& desc)
 {
-	auto IsSame = [&desc, &isTexture](const std::unique_ptr<RootSignature>& rootSignature_) {
-		return rootSignature_->IsSame(desc, isTexture);
+	auto IsSame = [&desc](const std::unique_ptr<RootSignature>& rootSignature_) {
+		return rootSignature_->IsSame(desc);
 		};
 
 	auto rootSignatureItr = std::find_if(instance_->rootSignatures_.begin(), instance_->rootSignatures_.end(), IsSame);
@@ -42,7 +42,7 @@ RootSignature* PipelineManager::CreateRootSgnature(const RootSignature::Desc& de
 	if (rootSignatureItr == instance_->rootSignatures_.end()) {
 		auto rootSignature = std::make_unique<RootSignature>();
 
-		rootSignature->Create(desc, isTexture);
+		rootSignature->Create(desc);
 
 		instance_->rootSignatures_.push_back(std::move(rootSignature));
 
