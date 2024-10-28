@@ -57,6 +57,10 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     output.color1.y = CreateNoiseNoDdy(input.uv + float32_t2(0.0f, 1.0f), kRandomVec, kDensity) * 0.5f;
     output.color1.y -= CreateNoiseNoDdy(input.uv - float32_t2(0.0f, 1.0f), kRandomVec, kDensity) * 0.5f;
     output.color1.z = 0;
+
+    if(kWaterData[input.instanceID].effectState.isEnableDistortion == 0){
+        output.color1 = 0;
+    }
     output.color1.w = 1.0f;
 
     return output;

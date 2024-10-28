@@ -9,6 +9,11 @@ struct WaveData{
     float32_t3 ripplesPoint;
 };
 
+struct EffectState {
+	uint32_t isEnableDistortion;
+
+};
+
 struct WaterData {
     float32_t2 randomVec;
     float32_t3 normal;
@@ -18,6 +23,7 @@ struct WaterData {
     uint32_t edgeDivision;
     uint32_t insideDivision;
     WaveData waveData;
+    EffectState effectState;
 };
 
 StructuredBuffer<WaterData> kWaterData : register(t2);

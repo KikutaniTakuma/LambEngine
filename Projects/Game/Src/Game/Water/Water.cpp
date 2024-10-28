@@ -7,6 +7,16 @@
 
 #include "Camera/Camera.h"
 
+#ifdef USE_DEBUG_CODE
+const std::array<std::string, static_cast<size_t>(Water::Version::kNum)> Water::kComboVersionString_ 
+= {
+	"kFirst",        // 何もしていない初期の水
+	"kTransparency", // 透過させた
+	"kDistortion",   // 水面下のオブジェクトを歪ませる
+	"kCaustics"      // 水面下にコーティクス
+};
+#endif // USE_DEBUG_CODE
+
 Water* Water::instance_ = nullptr;
 
 void Water::Initialize()
@@ -39,7 +49,7 @@ void Water::Init() {
 
 	color_ = 0x16CEDA58;
 
-	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
+	shaderData_.randomVec = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
 	waveData_.ripplesPoint = transform.translate;
 	waveData_.waveStrength = 0.5f;
@@ -47,13 +57,35 @@ void Water::Init() {
 	waveData_.waveSpeed = 10.0f;
 	waveData_.timeAttenuation = 0.1f;
 
-	density_ = 1.3f * 2.0f;
+	shaderData_.density = 1.3f * 2.0f;
 }
 
 void Water::Update() {
 
-	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
-	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+	shaderData_.randomVec.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+	shaderData_.randomVec.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
+
+	switch (currentVersion)
+	{
+	case Water::Version::kFirst:
+		color_ = 0x16CEDAFF;
+		shaderData_.effectState.isEnableDistortion = 0u;
+		break;
+	case Water::Version::kTransparency:
+		color_ = 0x16CEDA58;
+		shaderData_.effectState.isEnableDistortion = 0u;
+		break;
+	case Water::Version::kDistortion:
+		color_ = 0x16CEDA58;
+		shaderData_.effectState.isEnableDistortion = 1u;
+		break;
+	case Water::Version::kCaustics:
+		color_ = 0x16CEDA58;
+		shaderData_.effectState.isEnableDistortion = 1u;
+		break;
+	}
+
+	shaderData_.waveData = waveData_;
 
 	//waveData_.time += Lamb::DeltaTime();
 }
@@ -66,11 +98,7 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 	waterSurface_->Draw(
 		transform.GetMatrix(),
 		cameraMat,
-		randomVec_,
-		density_,
-		edgeDivision_,
-		insideDivision_,
-		waveData_,
+		shaderData_,
 		color_.GetColorRGBA(),
 		BlendType::kNormal
 	);
@@ -79,11 +107,7 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 	waterSurface_->Draw(
 		transform.GetMatrix(),
 		cameraMat,
-		randomVec_,
-		density_,
-		edgeDivision_,
-		insideDivision_,
-		waveData_,
+		shaderData_,
 		color_.GetColorRGBA(),
 		BlendType::kNormal
 	);
@@ -93,11 +117,7 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 	waterSurface_->Draw(
 		transform.GetMatrix(),
 		cameraMat,
-		randomVec_,
-		density_,
-		edgeDivision_,
-		insideDivision_,
-		waveData_,
+		shaderData_,
 		color_.GetColorRGBA(),
 		BlendType::kNormal
 	);
@@ -107,11 +127,7 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 	waterSurface_->Draw(
 		transform.GetMatrix(),
 		cameraMat,
-		randomVec_,
-		density_,
-		edgeDivision_,
-		insideDivision_,
-		waveData_,
+		shaderData_,
 		color_.GetColorRGBA(),
 		BlendType::kNormal
 	);
@@ -120,7 +136,31 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef USE_DEBUG_CODE
 	ImGui::Begin(guiName.c_str());
-	ImGui::DragFloat("density", &density_, 0.01f);
+
+	if (ImGui::TreeNode("バージョン変更")) {
+		// コンボボックスを使ってenumの値を選択する
+		if (ImGui::BeginCombo("BlendType", kComboVersionString_[static_cast<size_t>(currentVersion)].c_str()))
+		{
+			for (uint32_t count = 0; auto & i : kComboVersionString_)
+			{
+				bool isSelected = (static_cast<size_t>(currentVersion) == count);
+				if (ImGui::Selectable(i.c_str(), isSelected))
+				{
+					currentVersion = static_cast<Version>(count);
+				}
+				if (isSelected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+				count++;
+			}
+			ImGui::EndCombo();
+		}
+
+		ImGui::TreePop();
+	}
+
+	ImGui::DragFloat("density", &shaderData_.density, 0.01f);
 
 	ImGui::ColorEdit4("color", color_.data());
 
@@ -132,8 +172,8 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	}
 
 	if (ImGui::TreeNode("ポリゴン分割数")) {
-		ImGui::DragInt("edgeDivision", &edgeDivision_, 0.1f, 1, 64);
-		ImGui::DragInt("insideDivision", &insideDivision_, 0.1f, 1, 64);
+		ImGui::DragInt("edgeDivision", reinterpret_cast<int32_t*>(&shaderData_.edgeDivision), 0.1f, 1, 64);
+		ImGui::DragInt("insideDivision", reinterpret_cast<int32_t*>(&shaderData_.insideDivision), 0.1f, 1, 64);
 		ImGui::TreePop();
 	}
 

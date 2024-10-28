@@ -9,8 +9,15 @@ public:
 		kFirst,        // 何もしていない初期の水
 		kTransparency, // 透過させた
 		kDistortion,   // 水面下のオブジェクトを歪ませる
-		kCaustics      // 水面下にコーティクス
+		kCaustics,     // 水面下にコーティクス
+
+		kNum
 	};
+
+#ifdef USE_DEBUG_CODE
+private:
+	static const std::array<std::string, static_cast<size_t>(Version::kNum)> kComboVersionString_;
+#endif // USE_DEBUG_CODE
 
 private:
 	Water() = default;
@@ -49,9 +56,8 @@ private:
 	std::unique_ptr<PeraRender> gaussianBlurHeight_;
 	std::unique_ptr<WaterTex2D> waterSurface_;
 	Vector4 color_ = 0u;
-	Vector2 randomVec_;
-	float32_t density_ = 1.0f;
-	int32_t edgeDivision_ = 1;
-	int32_t insideDivision_ = 1;
+	WaterTex2D::ShaderData shaderData_;
 	WaterTex2D::WaveData waveData_;
+
+	Version currentVersion = Version::kFirst;
 };

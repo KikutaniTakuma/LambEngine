@@ -44,11 +44,7 @@ void WaterTex2D::Load()
 void WaterTex2D::Draw(
 	const Mat4x4& worldMatrix,
 	const Mat4x4& camera,
-	Vector2 randomVec,
-	float32_t density,
-	uint32_t edgeDivision,
-	uint32_t insideDivision,
-	WaveData waveData,
+	ShaderData shaderData,
 	uint32_t color,
 	BlendType blend
 ) {
@@ -56,14 +52,15 @@ void WaterTex2D::Draw(
 
 	renderContext->SetShaderStruct(
 		ShaderData{
-			.randomVec = randomVec,
+			.randomVec = shaderData.randomVec,
 			.normal  = Vector3(0.0f,1.0f,0.0f),
 			.tangent = Vector3(0.0f,0.0f,1.0f),
 			.textureID = kCausticsTextureID_,
-			.density = density,
-			.edgeDivision = std::clamp(edgeDivision, 1u, 64u),
-			.insideDivision = std::clamp(insideDivision, 1u, 64u),
-			.waveData = waveData
+			.density = shaderData.density,
+			.edgeDivision = std::clamp(shaderData.edgeDivision, 1u, 64u),
+			.insideDivision = std::clamp(shaderData.insideDivision, 1u, 64u),
+			.waveData = shaderData.waveData,
+			.effectState = shaderData.effectState
 		}
 	);
 

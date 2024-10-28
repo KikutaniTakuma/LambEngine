@@ -20,15 +20,21 @@ public:
 		Vector3 ripplesPoint;
 	};
 
+	struct EffectState {
+		uint32_t isEnableDistortion = 0;
+
+	};
+
 	struct ShaderData {
 		Vector2 randomVec;
-		Vector3 normal;
-		Vector3 tangent;
+		Vector3 normal = Vector3(0.0f, 1.0f, 0.0f);
+		Vector3 tangent = Vector3(0.0f, 0.0f, 1.0f);
 		uint32_t textureID = 0u;
 		float32_t density = 0.0_f32;
 		uint32_t edgeDivision = 1;
 		uint32_t insideDivision = 1;
 		WaveData waveData;
+		EffectState effectState;
 	};
 
 	using WaterRenderContext = RenderContext<ShaderData, kMaxDrawCount>;
@@ -53,11 +59,7 @@ public:
 	void Draw(
 		const Mat4x4& worldMatrix,
 		const Mat4x4& camera,
-		Vector2 randomVec,
-		float32_t density,
-		uint32_t edgeDivision,
-		uint32_t insideDivision,
-		WaveData waveData,
+		ShaderData shaderData, 
 		uint32_t color,
 		BlendType blend
 	);
