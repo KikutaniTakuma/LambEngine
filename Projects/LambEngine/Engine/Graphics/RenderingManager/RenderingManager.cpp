@@ -357,14 +357,14 @@ void RenderingManager::Draw() {
 
 	/// ===================================================================================
 
-	//// depthだけセット
-	//RenderTarget::SetRenderTargets(
-	//	nullptr,
-	//	0u,
-	//	&depthStencilShadow_->GetDepthHandle()
-	//);
+	// depthだけセット
+	RenderTarget::SetRenderTargets(
+		nullptr,
+		0u,
+		&depthStencilShadow_->GetDepthHandle()
+	);
 
-	//DrawShadow(rgbRenderList);
+	DrawShadow(rgbRenderList);
 
 
 	/// ====================================================================================
