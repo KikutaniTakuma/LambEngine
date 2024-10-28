@@ -13,8 +13,13 @@ struct Float{
     float32_t value;
 };
 
+struct Uint{
+    uint32_t value;
+};
+
 ConstantBuffer<Mat4x4> gUVScroll : register(b1);
 ConstantBuffer<Float> gDepthFloat : register(b2);
+ConstantBuffer<Uint> gIsEnableCausticsBuf : register(b3);
 
 // ポイントサンプラー
 SamplerState gPointSmp : register(s1);
@@ -41,7 +46,10 @@ PixelShaderOutPut2 main(Output input) {
     inputUV.w = 1.0f;
 
     float32_t4 color = tex.Sample(gPointSmp, uv);
-    if(depth < gDepthFloat.value && !(scrollDistortion.x == 0.0f && scrollDistortion.y == 0.0f)){
+    if(gIsEnableCausticsBuf.value != 0 
+        && depth < gDepthFloat.value 
+        && !(scrollDistortion.x == 0.0f && scrollDistortion.y == 0.0f)
+    ) {
         float32_t4 uvDistortionTmp = 0;
         uvDistortionTmp.xy = uvDistortion;
         uvDistortionTmp.z = 0;

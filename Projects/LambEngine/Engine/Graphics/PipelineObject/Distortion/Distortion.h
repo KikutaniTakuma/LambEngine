@@ -42,11 +42,15 @@ public:
 		causticsTexHandle_ = causticsTexHandle;
 	}
 
+	void SetIsEnable(uint32_t isEnableCaustics);
+
 private:
 	std::array<std::unique_ptr<ConstantBuffer<float32_t4x4>>, DirectXSwapChain::kBackBufferNumber> scrollUVBuf_;
 	std::array<std::unique_ptr<ConstantBuffer<float32_t>>, DirectXSwapChain::kBackBufferNumber> depthFloatBuf_;
+	std::array<std::unique_ptr<ConstantBuffer<uint32_t>>, DirectXSwapChain::kBackBufferNumber> isEnableCausticsBuf_;
 	float32_t4x4 scrollUV_;
 	float32_t depthFloat_ = 0.423f;
+	uint32_t isEnableCaustics_ = 0;
 
 	Vector3 translate_;
 	Vector3 uvScrollSpeed_ = Vector3::kXIdentity * 0.05f + Vector3::kYIdentity * 0.05f;

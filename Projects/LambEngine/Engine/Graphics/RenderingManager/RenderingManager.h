@@ -12,6 +12,8 @@
 #include "Drawer/AirSkyBox/AirSkyBox.h"
 #include "json.hpp"
 
+#include "Engine/Graphics/PipelineObject/Distortion/Distortion.h"
+
 #include <list>
 #include <functional>
 
@@ -91,6 +93,7 @@ public:
 	void SetLightRotate(const Vector3& lightRotate);
 	void SetBloomKernelSize(int32_t x, int32_t y);
 	void SetEnvironmentCoefficient(float32_t environmentCoefficient);
+	void SetIsCaustics(uint32_t isCaustics);
 
 	void Debug(const std::string& guiName);
 
@@ -158,6 +161,7 @@ private:
 	// ライティング後のrgbaテクスチャを描画
 	std::unique_ptr<PeraRender> rgbaTexture_;
 	Vector3 hsv_;
+	Lamb::SafePtr<Distortion> distortion_;
 
 	// 深度値(法線書き込みと色書き込み、アウトラインで使用する)
 	std::unique_ptr<DepthBuffer> depthStencil_;

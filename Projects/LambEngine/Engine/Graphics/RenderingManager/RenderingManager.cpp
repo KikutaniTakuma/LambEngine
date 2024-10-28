@@ -18,8 +18,6 @@
 #include "Utils/HSV.h"
 
 
-#include "Engine/Graphics/PipelineObject/Distortion/Distortion.h"
-
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 
 #ifdef USE_DEBUG_CODE
@@ -85,14 +83,14 @@ RenderingManager::RenderingManager() {
 	TextureManager::GetInstance()->LoadTexture("./Resources/Water/caustics_02.bmp");
 	Texture* causticsTex = TextureManager::GetInstance()->GetTexture("./Resources/Water/caustics_02.bmp");
 
-	auto distortion = std::make_unique<Distortion>();
-	distortion->Init();
-	distortion->SetDistortionTexHandle(distortionTextureRGBA_->GetHandleGPU());
-	distortion->SetDepthTexHandle(depthStencilShadow_->GetHandleGPU());
-	distortion->SetCausticsTexHandle(causticsTex->GetHandleGPU());
+	distortion_ = Lamb::MakeSafePtr<Distortion>();
+	distortion_->Init();
+	distortion_->SetDistortionTexHandle(distortionTextureRGBA_->GetHandleGPU());
+	distortion_->SetDepthTexHandle(depthStencilShadow_->GetHandleGPU());
+	distortion_->SetCausticsTexHandle(causticsTex->GetHandleGPU());
 
 	rgbaTexture_ = std::make_unique<PeraRender>();
-	rgbaTexture_->Initialize(distortion.release());
+	rgbaTexture_->Initialize(distortion_.get());
 	Vector4 rgba = rgbaTexture_->color;
 	hsv_ = RGBToHSV({ rgba.color.r,rgba.color.g,rgba.color.b });
 
@@ -513,6 +511,11 @@ void RenderingManager::SetBloomKernelSize(int32_t x, int32_t y) {
 
 void RenderingManager::SetEnvironmentCoefficient(float32_t environmentCoefficient) {
 	deferredRenderingData_.environmentCoefficient = environmentCoefficient;
+}
+
+void RenderingManager::SetIsCaustics(uint32_t isCaustics)
+{
+	distortion_->SetIsEnable(isCaustics);
 }
 
 void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {

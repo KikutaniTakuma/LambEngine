@@ -17,18 +17,18 @@ void Distortion::SetRtvFormt(DXGI_FORMAT format) {
 	format_ = format;
 }
 
+void Distortion::SetIsEnable(uint32_t isEnableCaustics)
+{
+	isEnableCaustics_ = isEnableCaustics;
+}
+
 void Distortion::Use(Pipeline::Blend blendType, bool isDepth) {
 	translate_ += uvScrollSpeed_ * Lamb::DeltaTime();
 	scrollUV_ = Mat4x4::MakeAffin(Vector3::kIdentity * 2.0f, Quaternion::MakeRotateZAxis(std::numbers::pi_v<float32_t> * 0.25f), translate_);
 
-	scrollUVBuf_[Lamb::GetGraphicBufferIndex()]->Map();
-	**scrollUVBuf_[Lamb::GetGraphicBufferIndex()] = scrollUV_;
-	scrollUVBuf_[Lamb::GetGraphicBufferIndex()]->Unmap();
-
-
-	depthFloatBuf_[Lamb::GetGraphicBufferIndex()]->Map();
-	**depthFloatBuf_[Lamb::GetGraphicBufferIndex()] = depthFloat_;
-	depthFloatBuf_[Lamb::GetGraphicBufferIndex()]->Unmap();
+	scrollUVBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&scrollUV_);
+	depthFloatBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&depthFloat_);
+	isEnableCausticsBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&isEnableCaustics_);
 
 
 	if (isDepth) {
@@ -46,6 +46,7 @@ void Distortion::Use(Pipeline::Blend blendType, bool isDepth) {
 	commandList->SetGraphicsRootConstantBufferView(4, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 	commandList->SetGraphicsRootConstantBufferView(5, scrollUVBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 	commandList->SetGraphicsRootConstantBufferView(6, depthFloatBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(7, isEnableCausticsBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 }
 
 void Distortion::Init(
@@ -89,7 +90,7 @@ void Distortion::Init(
 	causticsRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	causticsRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 7> rootParameter = {};
+	std::array<D3D12_ROOT_PARAMETER, 8> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[0].DescriptorTable.pDescriptorRanges = renderRange.data();
@@ -121,6 +122,10 @@ void Distortion::Init(
 	rootParameter[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 	rootParameter[6].Descriptor.ShaderRegister = 2;
+
+	rootParameter[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[7].Descriptor.ShaderRegister = 3;
 
 
 	RootSignature::Desc desc;
@@ -198,6 +203,14 @@ void Distortion::Init(
 			n = std::make_unique<ConstantBuffer<float32_t>>();
 		}
 	);
+
+	std::for_each(
+		isEnableCausticsBuf_.begin(),
+		isEnableCausticsBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<uint32_t>>();
+		}
+	);
 }
 
 Distortion::~Distortion() {
@@ -226,6 +239,14 @@ Distortion::~Distortion() {
 	std::for_each(
 		depthFloatBuf_.begin(),
 		depthFloatBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
+
+	std::for_each(
+		isEnableCausticsBuf_.begin(),
+		isEnableCausticsBuf_.end(),
 		[](auto& n) {
 			n.reset();
 		}

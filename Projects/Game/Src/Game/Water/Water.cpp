@@ -2,7 +2,7 @@
 #include "Utils/EngineInfo.h"
 #include "imgui.h"
 #include "Utils/SafeDelete.h"
-#include "Engine/Graphics/PipelineObject/GaussianBlur/GaussianBlur.h"
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include "Utils/Random.h"
 
 #include "Camera/Camera.h"
@@ -70,18 +70,22 @@ void Water::Update() {
 	case Water::Version::kFirst:
 		color_ = 0x16CEDAFF;
 		shaderData_.effectState.isEnableDistortion = 0u;
+		RenderingManager::GetInstance()->SetIsCaustics(0u);
 		break;
 	case Water::Version::kTransparency:
 		color_ = 0x16CEDA58;
 		shaderData_.effectState.isEnableDistortion = 0u;
+		RenderingManager::GetInstance()->SetIsCaustics(0u);
 		break;
 	case Water::Version::kDistortion:
 		color_ = 0x16CEDA58;
 		shaderData_.effectState.isEnableDistortion = 1u;
+		RenderingManager::GetInstance()->SetIsCaustics(0u);
 		break;
 	case Water::Version::kCaustics:
 		color_ = 0x16CEDA58;
 		shaderData_.effectState.isEnableDistortion = 1u;
+		RenderingManager::GetInstance()->SetIsCaustics(1u);
 		break;
 	}
 
@@ -137,27 +141,23 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef USE_DEBUG_CODE
 	ImGui::Begin(guiName.c_str());
 
-	if (ImGui::TreeNode("バージョン変更")) {
-		// コンボボックスを使ってenumの値を選択する
-		if (ImGui::BeginCombo("BlendType", kComboVersionString_[static_cast<size_t>(currentVersion)].c_str()))
+	// コンボボックスを使ってenumの値を選択する
+	if (ImGui::BeginCombo("BlendType", kComboVersionString_[static_cast<size_t>(currentVersion)].c_str()))
+	{
+		for (uint32_t count = 0; auto & i : kComboVersionString_)
 		{
-			for (uint32_t count = 0; auto & i : kComboVersionString_)
+			bool isSelected = (static_cast<size_t>(currentVersion) == count);
+			if (ImGui::Selectable(i.c_str(), isSelected))
 			{
-				bool isSelected = (static_cast<size_t>(currentVersion) == count);
-				if (ImGui::Selectable(i.c_str(), isSelected))
-				{
-					currentVersion = static_cast<Version>(count);
-				}
-				if (isSelected)
-				{
-					ImGui::SetItemDefaultFocus();
-				}
-				count++;
+				currentVersion = static_cast<Version>(count);
 			}
-			ImGui::EndCombo();
+			if (isSelected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+			count++;
 		}
-
-		ImGui::TreePop();
+		ImGui::EndCombo();
 	}
 
 	ImGui::DragFloat("density", &shaderData_.density, 0.01f);
