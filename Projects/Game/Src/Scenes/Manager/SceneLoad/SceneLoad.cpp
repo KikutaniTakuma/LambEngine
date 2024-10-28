@@ -71,6 +71,17 @@ void SceneLoad::Stop()
 		tex2Danimator_->Stop();
 		renderContextManager_->SetIsNowThreading(isLoad_);
 
+		loadTex_->Draw(
+			Mat4x4::MakeAffin(Vector3(Lamb::ClientSize(), 1.0f), Vector3::kZero, Vector3::kZero),
+			Mat4x4::MakeScale(
+				Vector3(1.0f / static_cast<float>(setting.animationNumber), 1.0f, 1.0f)
+			),
+			cameraMatrix_,
+			textureID_,
+			std::numeric_limits<uint32_t>::max(),
+			BlendType::kUnenableDepthNone
+		);
+
 		Engine::FrameStart();
 	}
 }
