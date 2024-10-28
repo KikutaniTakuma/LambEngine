@@ -11,10 +11,11 @@
             1.0
         ],
         "isDirectionLight": true,
+        "isShadow": false,
         "lightRotate": [
             0.0,
-            1.588249619314,
-            -2.059488517353
+            -2.8972465991973877,
+            0.0
         ],
         "outline": 0.0,
         "outline_enable": false,
@@ -35,9 +36,9 @@
                 {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        0.03998927026987076,
+                        0.039989273995161057,
                         -0.0024979913141578436,
-                        0.00010000749171013013,
+                        0.00010000749898608774,
                         0.9991970062255859
                     ],
                     "scale": [
@@ -60,46 +61,6 @@
                     "farClip": 1000.0,
                     "fov": 0.4869273006916046,
                     "nearClip": 0.10000000149011612
-                }
-            ],
-            "type": "Object"
-        },
-        {
-            "Comps": [
-                {
-                    "CompName": "class ModelRenderComp"
-                },
-                {
-                    "BlendType": "kNone",
-                    "CompName": "class ModelRenderDataComp",
-                    "color": [
-                        0.8774510025978088,
-                        0.8774510025978088,
-                        0.8774510025978088,
-                        0.8774510025978088
-                    ],
-                    "fileName": "./Resources\\Coral\\Coral_9866.obj",
-                    "isDraw": true,
-                    "isLighting": true
-                },
-                {
-                    "CompName": "class TransformComp",
-                    "rotate": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        10.0,
-                        10.0,
-                        10.0
-                    ],
-                    "translate": [
-                        0.08314979076385498,
-                        -4.460693836212158,
-                        8.0
-                    ]
                 }
             ],
             "type": "Object"

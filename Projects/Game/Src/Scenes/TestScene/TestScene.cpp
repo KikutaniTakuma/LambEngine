@@ -13,6 +13,7 @@ void TestScene::Load()
 {
 	objectManager_ = ObjectManager::GetInstance();
 	objectManager_->Load("./SceneData/waterTest.json");
+	corals_.Init();
 }
 
 void TestScene::Initialize() {
@@ -26,6 +27,8 @@ void TestScene::Update()
 {
 	objectManager_->Update();
 
+	water_->Debug("water");
+
 	water_->Update();
 }
 
@@ -33,4 +36,5 @@ void TestScene::Draw()
 {
 	water_->Draw(objectManager_->GetCameraMatrix());
 	objectManager_->Draw();
+	corals_.Draw(objectManager_->GetCameraMatrix());
 }

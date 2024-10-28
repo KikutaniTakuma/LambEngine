@@ -142,7 +142,7 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	ImGui::Begin(guiName.c_str());
 
 	// コンボボックスを使ってenumの値を選択する
-	if (ImGui::BeginCombo("BlendType", kComboVersionString_[static_cast<size_t>(currentVersion)].c_str()))
+	if (ImGui::BeginCombo("バージョン", kComboVersionString_[static_cast<size_t>(currentVersion)].c_str()))
 	{
 		for (uint32_t count = 0; auto & i : kComboVersionString_)
 		{
@@ -171,13 +171,13 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("ポリゴン分割数")) {
+	/*if (ImGui::TreeNode("ポリゴン分割数")) {
 		ImGui::DragInt("edgeDivision", reinterpret_cast<int32_t*>(&shaderData_.edgeDivision), 0.1f, 1, 64);
 		ImGui::DragInt("insideDivision", reinterpret_cast<int32_t*>(&shaderData_.insideDivision), 0.1f, 1, 64);
 		ImGui::TreePop();
-	}
+	}*/
 
-	if (ImGui::TreeNode("Wave")) {
+	/*if (ImGui::TreeNode("Wave")) {
 		ImGui::DragFloat("波の高さm", &waveData_.waveStrength, 0.01f);
 		ImGui::DragFloat("波長", &waveData_.ripples, 0.001f);
 		ImGui::DragFloat("波の速度m/s", &waveData_.waveSpeed, 0.001f);
@@ -186,7 +186,7 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 		ImGui::DragFloat3("波源", waveData_.ripplesPoint.data(), 0.01f);
 
 		ImGui::TreePop();
-	}
+	}*/
 
 	ImGui::End();
 #endif // USE_DEBUG_CODE
