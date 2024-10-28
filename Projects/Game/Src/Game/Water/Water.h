@@ -4,6 +4,14 @@
 #include "Drawer/Other/WaterTex2D/WaterTex2D.h"
 
 class Water final {
+public:
+	enum class Version {
+		kFirst,        // 何もしていない初期の水
+		kTransparency, // 透過させた
+		kDistortion,   // 水面下のオブジェクトを歪ませる
+		kCaustics      // 水面下にコーティクス
+	};
+
 private:
 	Water() = default;
 
@@ -24,7 +32,7 @@ private:
 public:
 	void Init();
 
-	void Update(const Vector3& cameraPos);
+	void Update();
 
 	void Draw(const Mat4x4& cameraMat, PeraRender* const pera = nullptr);
 
@@ -46,10 +54,4 @@ private:
 	int32_t edgeDivision_ = 1;
 	int32_t insideDivision_ = 1;
 	WaterTex2D::WaveData waveData_;
-	Light light_;
-	float32_t lightScale_ = 0.0f;
-	Vector3 lightRotate_;
-
-	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectWidth_;
-	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectHeight_;
 };

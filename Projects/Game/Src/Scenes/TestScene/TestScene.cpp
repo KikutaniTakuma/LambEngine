@@ -26,7 +26,7 @@ void TestScene::Update()
 {
 	objectManager_->Update();
 
-	water_->Update(objectManager_->GetCameraPos());
+	water_->Update();
 }
 
 void TestScene::Draw()

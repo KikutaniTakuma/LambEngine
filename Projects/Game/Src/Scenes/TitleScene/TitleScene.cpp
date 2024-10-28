@@ -148,7 +148,7 @@ void TitleScene::Update() {
     waveData_.waveSpeed = 2.0f;
     waveData_.timeAttenuation = 0.0f;
 
-    water_->Update(currentCamera_->GetPos());
+    water_->Update();
     water_->SetWaveData(waveData_);
 
     blinking_ += blinkingSpeed_ * Lamb::DeltaTime();
