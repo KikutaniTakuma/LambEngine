@@ -357,14 +357,14 @@ void RenderingManager::Draw() {
 
 	/// ===================================================================================
 
-	// depthだけセット
-	RenderTarget::SetRenderTargets(
-		nullptr,
-		0u,
-		&depthStencilShadow_->GetDepthHandle()
-	);
+	//// depthだけセット
+	//RenderTarget::SetRenderTargets(
+	//	nullptr,
+	//	0u,
+	//	&depthStencilShadow_->GetDepthHandle()
+	//);
 
-	DrawShadow(rgbRenderList);
+	//DrawShadow(rgbRenderList);
 
 
 	/// ====================================================================================
@@ -411,7 +411,7 @@ void RenderingManager::Draw() {
 	ZSort(nodepthLists);
 
 	// UIの描画(depth書き込まないやつ)
-	//DrawNoDepth(nodepthLists);
+	DrawNoDepth(nodepthLists);
 	// 深度値なしのlineを描画
 	Line::AllDraw(false);
 
