@@ -16,7 +16,6 @@
 #include "Game/StageManager/StageManager.h"
 
 #include "Utils/FileUtils.h"
-Customize::Customize() {}
 
 void Customize::Initialize() {
 	maxInput_ = 15;
@@ -389,7 +388,7 @@ void Customize::Draw(const Camera& camera) {
 void Customize::PostDraw(const Camera& camera) {
 	gearTexture_->blend = BlendType::kUnenableDepthNormal;
 	gearTexture_->Draw(camera.GetViewOthographics());
-	customizeBaseTexture_->pos.z = 2.0f;
+	customizeBaseTexture_->pos.z = 15.0f;
 	customizeBaseTexture_->blend = BlendType::kUnenableDepthNormal;
 	customizeBaseTexture_->Draw(camera.GetViewOthographics());
 

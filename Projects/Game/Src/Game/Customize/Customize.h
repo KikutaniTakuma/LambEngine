@@ -37,7 +37,7 @@ private:
 		std::unique_ptr<Tex2DInstance> right;
 	};
 public:
-	Customize();
+	Customize() = default;
 
 	void Initialize();
 
@@ -50,7 +50,6 @@ public:
 
 	void SetCamera(Camera* camera) { camera_ = camera; }
 
-	void OnCustomize();
 	void OffCustomize();
 	void Reset();
 
