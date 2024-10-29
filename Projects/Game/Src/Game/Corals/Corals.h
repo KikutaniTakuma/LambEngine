@@ -27,7 +27,7 @@ private:
 	Corals& operator=(Corals&&) = delete;
 
 public:
-	void Init(float32_t coralHeight = -8.0f, ModelVertexLevel modelLevel = ModelVertexLevel::LEVEL1_9866);
+	void Init(float32_t coralHeight = -8.0f, ModelVertexLevel modelLevel = ModelVertexLevel::LEVEL0_3584);
 
 	void Draw(const float32_t4x4& cameraMat);
 
