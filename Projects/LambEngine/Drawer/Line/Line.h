@@ -53,7 +53,7 @@ public:
 public:
 	void Debug(const std::string& guiName);
 
-	void Draw(const Mat4x4& viewProjection, bool isDepth = true);
+	void Draw(const Mat4x4& viewProjection, bool isDepth = false);
 
 	static void Draw(
 		const Vector3& start, 
