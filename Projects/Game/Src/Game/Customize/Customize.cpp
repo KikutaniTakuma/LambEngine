@@ -1195,8 +1195,8 @@ void Customize::SetSail() {
 	left->scale = { intervalScale_, intervalScale_ };
 	right->scale = { intervalScale_, intervalScale_ };
 
-	left->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().x, (ChangeCursorToTileMap().y - int(float(height_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().y, 0.0f };
-	right->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().x, (ChangeCursorToTileMap().y - int(float(height_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().y, 0.0f };
+	left->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().x, (ChangeCursorToTileMap().y - int(float(height_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().y, -1.0f };
+	right->pos = { (ChangeCursorToTileMap().x - int(float(width_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().x, (ChangeCursorToTileMap().y - int(float(height_) * 0.5f)) * player_->GetTileMapSize() + player_->GetTileMapOffset().y, -1.0f };
 	if (angle_ == 0.0f || angle_ == 180.0f) {
 		left->pos.x -= intervalTextureDistance_;
 		right->pos.x += intervalTextureDistance_;
