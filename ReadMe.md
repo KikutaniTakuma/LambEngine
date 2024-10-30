@@ -29,7 +29,7 @@
 * 描画情報の格納は[RenderContext](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Engine/Graphics/RenderContextManager/RenderContext)
 * 描画情報を積んでいるのは[Drawer](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Drawer)
 * 水面のシミュレーションは[PixelShader](https://github.com/KikutaniTakuma/LambEngine/blob/master/Projects/Game/Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl)
-で情報を書き込みをし、[DeferredRendering](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Shaders/DeferredRendering)でライティングしている
+で情報の書き込みをし、[DeferredRendering](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Shaders/DeferredRendering)でライティングしている
 ---
 
 <br> 
