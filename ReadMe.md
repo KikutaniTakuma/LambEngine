@@ -23,15 +23,6 @@
 ![DistortionTitle](Demo/Water-DistortionDemo.gif)
 
 ## エンジンで最もこだわっているところ
-- Projects
-  - LambEngine
-    - Engine
-      - Graphics
-        - [RenderingManager](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Engine/Graphics/RenderingManager)
-        - RenderContextManager
-          - [RenderContext](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Engine/Graphics/RenderContextManager/RenderContext)
-      - [Drawer](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Drawer)
----
 * 描画は[RenderingManager](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Engine/Graphics/RenderingManager)で管理してます。
   * RenderContextの情報をもとに実際に描画コマンドを発行します
   * レンダーターゲットの設定、ポストエフェクト等もここで行います
@@ -42,7 +33,7 @@
 でフォワードライティングをしている。
 
 ## 外部ライブラリ
-- [externals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals)フォルダ
+- [Projects/externals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals)
   - [DirectXMesh](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/DirectXMesh)
   - [DirectXTK12](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/DirectXTK12)
   - [DirectXTex](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/DirectXTex)
@@ -64,11 +55,7 @@
 ## ゲーム画面
 ![InGame](Demo/Game-Demo.gif)
 ## チームメンバーが書いたコード
-- Projects
-  - Game
-    - Src
-      - [GameExternals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Src/GameExternals)
----
+[Projects/Game/Src/GameExternals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Src/GameExternals)
 * ゲームの部分のコードはチームメンバーが書いています
 * 各シーンの基底クラスや大元は自分で書きました
 * 一部書き直したりしています
