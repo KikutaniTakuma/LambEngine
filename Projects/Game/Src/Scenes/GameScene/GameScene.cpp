@@ -298,7 +298,7 @@ void GameScene::Draw() {
 	}
 #endif // USE_DEBUG_CODE
 	if (!CameraManager::GetInstance()->GetFollowCamera()->IsUsedCamera()) {
-		cursor_->Draw(*currentCamera_);
+		cursor_->Draw(Mat4x4::MakeTranslate({0.0f, 0.0f, 10.0f}) * Camera::GetStaticViewOthographics());
 	}
 	else {
 		Input::GetInstance()->GetMouse()->SetPos(CameraManager::GetInstance()->GetFollowCamera()->GetPrePos());

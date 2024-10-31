@@ -37,7 +37,7 @@ void Cursor::Update() {
 
 void Cursor::Draw(const Camera& camera) {
 	cursor_->blend = BlendType::kUnenableDepthNormal;
-	cursor_->Draw(camera.GetOthographics());
+	cursor_->Draw(camera.GetViewOthographics());
 }
 
 void Cursor::Draw(const Mat4x4& cameracameraMat) {
@@ -47,6 +47,10 @@ void Cursor::Draw(const Mat4x4& cameracameraMat) {
 
 Vector2 Cursor::ChangeCursorToTexturePos() {
 	auto mouse = Input::GetInstance()->GetMouse();
-	Vector3 texPos = Vector3(mouse->GetPos(), 0.0f) * (Mat4x4::MakeTranslate(Vector3::kZIdentity * 10.0f) * Mat4x4::MakeOrthographic(1280.0f, 720.0f, 0.1f, 1000.0f) * Mat4x4::MakeViewPort(0.0f, 0.0f, 1280.0f, 720.0f, 0.0f,1.0f)).Inverse();
+	Vector3 texPos = Vector3(mouse->GetPos(), 0.0f) * 
+		(Mat4x4::MakeTranslate(Vector3::kZIdentity * 10.0f) 
+			* Mat4x4::MakeOrthographic(1280.0f, 720.0f, 0.1f, 1000.0f) 
+			* Mat4x4::MakeViewPort(0.0f, 0.0f, 1280.0f, 720.0f, 0.0f,1.0f)
+			).Inverse();
 	return {texPos.x, texPos.y};
 }

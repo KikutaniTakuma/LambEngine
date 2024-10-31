@@ -204,7 +204,7 @@ void TitleScene::Draw() {
     hud_->Draw(staticCamera_->GetViewOthographics());
     //title_->Draw(currentCamera_->GetViewOthographics(), Pipeline::Normal, false);
 
-    cursor_->Draw(staticCamera_->GetViewOthographics());
+    cursor_->Draw(Mat4x4::MakeTranslate({ 0.0f, 0.0f, 10.0f }) * Camera::GetStaticViewOthographics());
 
 
     corals_.Draw(currentCamera_->GetViewProjection());
