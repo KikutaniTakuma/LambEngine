@@ -309,8 +309,8 @@ void SelectStageScene::Update() {
 #endif // USE_DEBUG_CODE
 
     renderingManager_->SetCameraPos(currentCamera_->GetPos());
-    renderingManager_->SetCameraMatrix(currentCamera_->GetViewProjection());
-    renderingManager_->SetProjectionInverseMatrix(currentCamera_->GetProjection().Inverse());
+    renderingManager_->SetViewMatrix(currentCamera_->GetView());
+    renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 }
 
 void SelectStageScene::Draw() {

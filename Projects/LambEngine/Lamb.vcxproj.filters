@@ -229,6 +229,9 @@
     <ClCompile Include="Drawer\AirSkyBox\AirSkyBox.cpp">
       <Filter>Drawer\AirSkyBox</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\ShadowRendering\ShadowRendering.cpp">
+      <Filter>Engine\Graphics\PipelineObject\ShadowRendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -428,6 +431,9 @@
     </Filter>
     <Filter Include="Drawer\Particle">
       <UniqueIdentifier>{b53c4b35-c897-4ef6-bffb-a327c572b220}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject\ShadowRendering">
+      <UniqueIdentifier>{a90aa1dd-aafa-43b6-bc7a-f761153e7ff3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -712,6 +718,9 @@
     </ClInclude>
     <ClInclude Include="Drawer\AirSkyBox\AirSkyBox.h">
       <Filter>Drawer\AirSkyBox</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\ShadowRendering\ShadowRendering.h">
+      <Filter>Engine\Graphics\PipelineObject\ShadowRendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,3 @@
-#include "Model.hlsli"
-
 // Vertex shader input
 struct VertexShaderInput {
 	float32_t4 position : POSITION0;
@@ -11,6 +9,11 @@ struct VertexShaderInput {
 
 struct LightCamera {
 	float32_t4x4 mat;
+};
+
+struct WVPMatrix {
+	float32_t4x4 worldMat;
+	float32_t4x4 cameraMat;
 };
 
 ConstantBuffer<LightCamera> gCameraMat : register(b0);

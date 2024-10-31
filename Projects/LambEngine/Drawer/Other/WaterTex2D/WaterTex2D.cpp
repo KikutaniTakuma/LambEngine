@@ -1,6 +1,7 @@
 #include "WaterTex2D.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include "Utils/SafePtr.h"
 
 #ifdef USE_DEBUG_CODE
@@ -57,13 +58,15 @@ void WaterTex2D::Draw(
 	renderContext->SetShaderStruct(
 		ShaderData{
 			.randomVec = randomVec,
-			.normal  = Vector3(0.0f,1.0f,0.0f),
+			.normal = Vector3(0.0f,1.0f,0.0f),
 			.tangent = Vector3(0.0f,0.0f,1.0f),
 			.textureID = kCausticsTextureID_,
 			.density = density,
 			.edgeDivision = std::clamp(edgeDivision, 1u, 64u),
 			.insideDivision = std::clamp(insideDivision, 1u, 64u),
-			.waveData = waveData
+			.cameraDirection = RenderingManager::GetInstance()->GetCameraDirection(),
+			.waveData = waveData,
+			.atomosphericParam = RenderingManager::GetInstance()->GetAtmosphericParams()
 		}
 	);
 

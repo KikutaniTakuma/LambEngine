@@ -35,19 +35,18 @@ public:
 	bool operator!=(const RootSignature& right) const;
 
 public:
-	void Create(const Desc& desc, bool isTexture);
+	void Create(const Desc& desc);
 
 	inline ID3D12RootSignature* Get() const {
 		return rootSignature_.Get();
 	}
 
-	bool IsSame(const Desc& desc, bool isTexture) const;
+	bool IsSame(const Desc& desc) const;
 
 private:
 	Lamb::LambPtr<ID3D12RootSignature> rootSignature_;
 	std::vector<std::pair<D3D12_ROOT_PARAMETER, std::vector<D3D12_DESCRIPTOR_RANGE>>> rootParamater_;
-	
-	bool isTexture_;
+
 	Desc desc_;
 };
 

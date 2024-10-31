@@ -117,12 +117,6 @@ void AirSkyBox::CreateGraphicsPipeline() {
     shader.vertex = shaderMaanger->LoadVertexShader("./Shaders/SkyBoxShader/SkyBox.VS.hlsl");
     shader.pixel = shaderMaanger->LoadPixelShader("./Shaders/SkyBoxShader/AirSkyBox.PS.hlsl");
 
-    std::array<D3D12_DESCRIPTOR_RANGE, 1> atmosphericParamsRange = {};
-    atmosphericParamsRange[0].NumDescriptors = 1;
-    atmosphericParamsRange[0].BaseShaderRegister = 1;
-    atmosphericParamsRange[0].OffsetInDescriptorsFromTableStart = D3D12_APPEND_ALIGNED_ELEMENT;
-    atmosphericParamsRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;
-
 
     std::array<D3D12_ROOT_PARAMETER, 2> rootPrams = {};
     rootPrams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
@@ -143,10 +137,10 @@ void AirSkyBox::CreateGraphicsPipeline() {
 
     auto pipelineManager = PipelineManager::GetInstance();
     Pipeline::Desc pipelineDesc;
-    pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc, true);
+    pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
     pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
     pipelineDesc.shader = shader;
-    pipelineDesc.isDepth = false;
+    pipelineDesc.isDepth = true;
     pipelineDesc.blend[0] = Pipeline::None;
     pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
     pipelineDesc.solidState = Pipeline::SolidState::Solid;
