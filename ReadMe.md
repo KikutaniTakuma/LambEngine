@@ -1,7 +1,7 @@
 # LambEngine
 ## 水の描画に特化したエンジン
 * DeferredRendering
-* ZSrot
+* ZSort
 * 水面のシミュレーション
 * ポストエフェクト
 * MeshShaderとVertexShaderの切り替え
