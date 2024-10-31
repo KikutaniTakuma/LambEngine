@@ -7,10 +7,20 @@
 * MeshShaderとVertexShaderの切り替え
 
 ## 水概要
-* 制作期間 : 11ヶ月
+制作期間 : 11ヶ月
 * PerlinNoiseからHeightMapを作成、NormalMapに変換して細かい波の表現しています。
+![PerlinNoise](Demo/Water_Surface_Complete.gif)
+
+</br>
+
 * 水を透過させて水面下に484個のモデルを配置。DoubleBufferとMeshShaderで描画を最適化しています。
+![Object](Demo/Water-NoDistortionDemo.gif)
+
+</br>
+
 * 水を描画する際に歪みの情報をPerlinNoiseで生成。それを元にポストエフェクトで歪ませています。
+![Distortion](Demo/Water-Distortion.gif)
+![DistortionTitle](Demo/Water-DistortionDemo.gif)
 
 ## エンジンで最もこだわっているところ
 - Projects
@@ -30,6 +40,16 @@
 * 描画情報を積んでいるのは[Drawer](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Drawer)
 * 水面のシミュレーションは[PixelShader](https://github.com/KikutaniTakuma/LambEngine/blob/master/Projects/Game/Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl)
 で情報の書き込みをし、[DeferredRendering](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Shaders/DeferredRendering)でライティングしている
+
+## 外部ライブラリ
+- [externals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals)フォルダ
+  - [DirectXMesh](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/DirectXMesh)
+  - [DirectXTK12](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/DirectXTK12)
+  - [DirectXTex](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/DirectXTex)
+  - [ImGui](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/ImGui)
+  - [ImGuizmo](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/ImGuizmo)
+  - [assimp](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/assimp)
+  - [nlohmann](https://github.com/KikutaniTakuma/LambEngine/blob/master/Projects/externals/json.hpp)
 ---
 
 <br> 
@@ -40,6 +60,7 @@
 * 作成期間 : 2ヶ月
 * 制作人数 : 3人(プランナー1人、プログラマー2人)
 * 担当箇所 : 水、空、タイトル、描画エンジン
+![InGame]()
 ## チームメンバーが書いたコード
 - Projects
   - Game
