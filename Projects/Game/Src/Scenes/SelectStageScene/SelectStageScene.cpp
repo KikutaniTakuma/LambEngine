@@ -1,6 +1,6 @@
 #include "SelectStageScene.h"
 
-#include "../Game/Src/Game/StageManager/StageManager.h"
+#include "./GameExternals/StageManager/StageManager.h"
 
 #include "imgui.h"
 

@@ -2,8 +2,8 @@
 #include <numbers>
 #include <format>
 #include "AudioManager/AudioManager.h"
-#include "Game/CameraManager/CameraManager.h"
-#include "Game/StageManager/StageManager.h"
+#include "GameExternals/CameraManager/CameraManager.h"
+#include "GameExternals/StageManager/StageManager.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Math/Quaternion.h"
 #include "Utils/ScreenOut.h"

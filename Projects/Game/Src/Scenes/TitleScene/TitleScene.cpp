@@ -2,7 +2,7 @@
 #include "Game/Water/Water.h"
 #include "Utils/EngineInfo.h"
 #include "AudioManager/AudioManager.h"
-#include "Game/StageManager/StageManager.h"
+#include "GameExternals/StageManager/StageManager.h"
 
 #include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include <numbers>
