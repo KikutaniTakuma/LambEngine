@@ -2,8 +2,8 @@
 #include <numbers>
 #include <format>
 #include "AudioManager/AudioManager.h"
-#include "Game/CameraManager/CameraManager.h"
-#include "Game/StageManager/StageManager.h"
+#include "GameExternals/CameraManager/CameraManager.h"
+#include "GameExternals/StageManager/StageManager.h"
 #include "Engine/EngineUtils/FrameInfo/FrameInfo.h"
 #include "Math/Quaternion.h"
 #include "Utils/ScreenOut.h"
@@ -263,8 +263,8 @@ void GameScene::Update() {
 #endif // USE_DEBUG_CODE
 
 	renderingManager_->SetCameraPos(currentCamera_->GetPos());
-	renderingManager_->SetCameraMatrix(currentCamera_->GetViewProjection());
-	renderingManager_->SetProjectionInverseMatrix(currentCamera_->GetProjection().Inverse());
+	renderingManager_->SetViewMatrix(currentCamera_->GetView());
+	renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 	renderingManager_->Debug("randeringManager");
 }
 
@@ -298,7 +298,7 @@ void GameScene::Draw() {
 	}
 #endif // USE_DEBUG_CODE
 	if (!CameraManager::GetInstance()->GetFollowCamera()->IsUsedCamera()) {
-		cursor_->Draw(*currentCamera_);
+		cursor_->Draw(Mat4x4::MakeTranslate({0.0f, 0.0f, 10.0f}) * Camera::GetStaticViewOthographics());
 	}
 	else {
 		Input::GetInstance()->GetMouse()->SetPos(CameraManager::GetInstance()->GetFollowCamera()->GetPrePos());

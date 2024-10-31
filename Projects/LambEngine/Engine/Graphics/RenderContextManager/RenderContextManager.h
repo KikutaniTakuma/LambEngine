@@ -57,6 +57,7 @@ public:
 		Shader shader = LoadShader(fileNames.shaderName);
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader, numRenderTarget);
+		Pipeline* shadowPipeline = CreateShadowPipeline();
 
 		Lamb::SafePtr vertexIndexDataManager = VertexIndexDataManager::GetInstance();
 		vertexIndexDataManager->LoadModel(fileNames.resourceFileName);
@@ -66,6 +67,7 @@ public:
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();
 
+			renderContext->SetShadowPipeline(shadowPipeline);
 			renderContext->SetVertexIndexData(vertexIndexData);
 			renderContext->SetModelData(modelData);
 			renderContext->SetPipeline(pipelines[i]);
@@ -98,6 +100,7 @@ public:
 		Shader shader = LoadShader(fileNames.shaderName);
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader, numRenderTarget);
+		Pipeline* shadowPipeline = CreateSkinAnimationShadowPipeline();
 
 		Lamb::SafePtr vertexIndexDataManager = VertexIndexDataManager::GetInstance();
 		vertexIndexDataManager->LoadModel(fileNames.resourceFileName);
@@ -107,6 +110,7 @@ public:
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<SkinRenderContext<T, bufferSize>> renderContext = std::make_unique<SkinRenderContext<T, bufferSize>>();
 
+			renderContext->SetShadowPipeline(shadowPipeline);
 			renderContext->SetVertexIndexData(vertexIndexData);
 			renderContext->SetModelData(modelData);
 			renderContext->SetPipeline(pipelines[i]);
@@ -137,7 +141,7 @@ public:
 		MeshShader shader = LoadMeshShader(fileNames.shaderName);
 
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateMeshShaderGraphicsPipelines(shader, numRenderTarget);
-
+		Pipeline* shadowPipeline = CreateMeshShaderShadowPipeline();
 
 		Lamb::SafePtr vertexIndexDataManager = VertexIndexDataManager::GetInstance();
 		vertexIndexDataManager->LoadModel(fileNames.resourceFileName);
@@ -151,6 +155,7 @@ public:
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<MeshRenderContext<T, bufferSize>> renderContext = std::make_unique<MeshRenderContext<T, bufferSize>>();
 
+			renderContext->SetShadowPipeline(shadowPipeline);
 			renderContext->SetVertexIndexData(vertexIndexData);
 			renderContext->SetMeshShaderData(mesh.second.get());
 			renderContext->SetPipeline(pipelines[i]);
@@ -188,6 +193,9 @@ private:
 	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateSkinAnimationGraphicsPipelines(Shader shader, uint32_t numRenderTarget = 1);
 	[[nodiscard]] std::array<Pipeline*, BlendType::kNum> CreateMeshShaderGraphicsPipelines(MeshShader shader, uint32_t numRenderTarget = 1);
 
+	[[nodiscard]] Pipeline* CreateShadowPipeline();
+	[[nodiscard]] Pipeline* CreateSkinAnimationShadowPipeline();
+	[[nodiscard]] Pipeline* CreateMeshShaderShadowPipeline();
 
 private:
 	std::unordered_map<Key, std::unique_ptr<RenderSet>> renderData_;

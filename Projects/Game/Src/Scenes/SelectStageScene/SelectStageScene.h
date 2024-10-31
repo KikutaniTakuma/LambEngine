@@ -7,7 +7,7 @@
 #include "Drawer/StringOut/StringOut.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Utils/Easeing.h"
-#include "Game/Cursor/Cursor.h"
+#include "GameExternals/Cursor/Cursor.h"
 
 #include "Drawer/Other/WaterTex2D/WaterTex2D.h"
 

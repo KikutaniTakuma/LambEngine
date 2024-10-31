@@ -1,6 +1,6 @@
 #include "SelectStageScene.h"
 
-#include "../Game/Src/Game/StageManager/StageManager.h"
+#include "./GameExternals/StageManager/StageManager.h"
 
 #include "imgui.h"
 
@@ -309,8 +309,8 @@ void SelectStageScene::Update() {
 #endif // USE_DEBUG_CODE
 
     renderingManager_->SetCameraPos(currentCamera_->GetPos());
-    renderingManager_->SetCameraMatrix(currentCamera_->GetViewProjection());
-    renderingManager_->SetProjectionInverseMatrix(currentCamera_->GetProjection().Inverse());
+    renderingManager_->SetViewMatrix(currentCamera_->GetView());
+    renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 }
 
 void SelectStageScene::Draw() {
@@ -350,7 +350,7 @@ void SelectStageScene::Draw() {
         stageIndexTenNumber_->Draw(currentCamera_->GetViewOthographics());
     }
 
-    cursor_->Draw(*currentCamera_);
+    cursor_->Draw(Mat4x4::MakeTranslate({ 0.0f, 0.0f, 10.0f }) * Camera::GetStaticViewOthographics());
 
     corals_.Draw(currentCamera_->GetViewProjection());
 }

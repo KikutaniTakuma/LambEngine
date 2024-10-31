@@ -4,6 +4,7 @@
 #include "../PipelineObject.h"
 #include "../PeraPipeline/PeraPipeline.h"
 #include "Math/Vector2.h"
+#include "Math/Mat4x4.h"
 #include "Math/MathCommon.h"
 #include "Engine/Graphics/GraphicsStructs.h"
 #include "Drawer/AirSkyBox/AirSkyBox.h"
@@ -15,6 +16,7 @@ public:
 		uint32_t rightNum = 0;
 		DirectionLight directionLight;
 		uint32_t isDirectionLight = 1u;
+		uint32_t isShadow = 0u;
 		float32_t environmentCoefficient = 1.0f;
 	};
 public:
@@ -59,12 +61,20 @@ public:
 		distortionTextureHandle_ = distortionTextureHandle;
 	}
 
+	void SetCameraMatrix(const float32_t4x4& camera);
+	void SetLightCameraMatrix(const float32_t4x4& lightCamera);
+
 private:
 	std::array<std::unique_ptr<ConstantBuffer<DeferredRenderingData>>, DirectXSwapChain::kBackBufferNumber> deferredRenderingDataBuf_;
 	std::array<std::unique_ptr<ConstantBuffer<AirSkyBox::AtmosphericParams>>, DirectXSwapChain::kBackBufferNumber> atomosphericDataBuf_;
+	std::array<std::unique_ptr<ConstantBuffer<float32_t4x4>>, DirectXSwapChain::kBackBufferNumber> cameraBuf_;
+	std::array<std::unique_ptr<ConstantBuffer<float32_t4x4>>, DirectXSwapChain::kBackBufferNumber> lightCameraBuf_;
 
 	DeferredRenderingData deferredRenderingData_;
 	AirSkyBox::AtmosphericParams atomosphericData_;
+
+	float32_t4x4 cameraMatrix_;
+	float32_t4x4 lightCameraMatrix_;
 
 	D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle_ = {};
 	D3D12_GPU_DESCRIPTOR_HANDLE normalTextureHandle_ = {};

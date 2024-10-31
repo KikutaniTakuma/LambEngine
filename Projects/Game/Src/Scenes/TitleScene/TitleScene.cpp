@@ -2,7 +2,7 @@
 #include "Game/Water/Water.h"
 #include "Utils/EngineInfo.h"
 #include "AudioManager/AudioManager.h"
-#include "Game/StageManager/StageManager.h"
+#include "GameExternals/StageManager/StageManager.h"
 
 #include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include <numbers>
@@ -98,7 +98,7 @@ void TitleScene::Initialize() {
     cursor_ = std::make_unique<Cursor>();
     cursor_->Initialize();
 
-    renderingManager_->SetLightRotate(Vector3(0.0f, 91.0f, -118.0f) * Lamb::Math::toRadian<float>);
+    renderingManager_->SetLightRotate(Vector3(22.0f, -8.0f, 0.0f) * Lamb::Math::toRadian<float>);
     renderingManager_->SetBloomKernelSize(128, 128);
     renderingManager_->SetEnvironmentCoefficient(0.3f);
 
@@ -138,8 +138,8 @@ void TitleScene::Update() {
 
 
     renderingManager_->SetCameraPos(currentCamera_->GetPos());
-    renderingManager_->SetCameraMatrix(currentCamera_->GetViewProjection());
-    renderingManager_->SetProjectionInverseMatrix(currentCamera_->GetProjection().Inverse());
+    renderingManager_->SetViewMatrix(currentCamera_->GetView());
+    renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 
     waveData_.ripplesPoint = ship_->pos;
     //waveData_.time += Lamb::DeltaTime();
@@ -204,7 +204,7 @@ void TitleScene::Draw() {
     hud_->Draw(staticCamera_->GetViewOthographics());
     //title_->Draw(currentCamera_->GetViewOthographics(), Pipeline::Normal, false);
 
-    cursor_->Draw(staticCamera_->GetViewOthographics());
+    cursor_->Draw(Mat4x4::MakeTranslate({ 0.0f, 0.0f, 10.0f }) * Camera::GetStaticViewOthographics());
 
 
     corals_.Draw(currentCamera_->GetViewProjection());
