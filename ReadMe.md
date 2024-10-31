@@ -45,13 +45,7 @@
 - Projects
   - Game
     - Src
-      - Editor
-        - ParticleEditor以外
-      - Game
-        - Water以外
-      - Scenes
-        - GameScene
-        - SelectStageScene
+      - [GameExternals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Src/GameExternals)
 ---
 * ゲームの部分のコードはチームメンバーが書いています
 * 各シーンの基底クラスや大元は自分で書きました
