@@ -34,13 +34,13 @@
 
 ## 外部ライブラリ
 - [Projects/externals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals)
-  - [DirectXMesh](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/DirectXMesh)
-  - [DirectXTK12](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/DirectXTK12)
-  - [DirectXTex](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/DirectXTex)
-  - [ImGui](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/ImGui)
-  - [ImGuizmo](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/ImGuizmo)
-  - [assimp](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals/assimp)
-  - [nlohmann](https://github.com/KikutaniTakuma/LambEngine/blob/master/Projects/externals/json.hpp)
+  - [DirectXMesh](https://github.com/microsoft/DirectXMesh)
+  - [DirectXTK12](https://github.com/microsoft/DirectXTK12)
+  - [DirectXTex](https://github.com/microsoft/DirectXTex)
+  - [ImGui](https://github.com/ocornut/imgui/tree/docking)
+  - [ImGuizmo](https://github.com/CedricGuillemet/ImGuizmo)
+  - [assimp](https://github.com/assimp/assimp)
+  - [nlohmann](https://github.com/nlohmann/json)
 ---
 
 <br>
