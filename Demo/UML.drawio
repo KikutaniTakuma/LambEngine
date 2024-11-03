@@ -4,23 +4,6 @@
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="4" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;rounded=1;" edge="1" parent="1" source="2" target="3">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="2" value="Hello World" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="130" y="300" width="120" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="5" style="edgeStyle=none;html=1;rounded=1;" edge="1" parent="1" source="3" target="7">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="480" y="330" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="3" value="cout" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="284" y="300" width="126" height="60" as="geometry"/>
-                </mxCell>
-                <mxCell id="7" value="return 0" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="470" y="300" width="120" height="60" as="geometry"/>
-                </mxCell>
             </root>
         </mxGraphModel>
     </diagram>
