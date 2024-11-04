@@ -49,7 +49,8 @@ void main(
 		output.position = projPos;
 		output.worldPosition = worldPos;
 
-		output.normal = input.normal;
+		output.normal = mul(input.normal, (float32_t3x3)gTransform[groupID].worldMat);
+		output.normal = normalize(output.normal);
 		output.uv = input.uv;
 		output.textureID = input.textureID;
 
