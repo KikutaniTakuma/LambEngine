@@ -11,10 +11,11 @@
             1.0
         ],
         "isDirectionLight": true,
+        "isShadow": false,
         "lightRotate": [
+            1.5533430576324463,
             0.0,
-            1.588249619314,
-            -2.059488517353
+            0.0
         ],
         "outline": 0.0,
         "outline_enable": false,
@@ -33,12 +34,57 @@
         {
             "Comps": [
                 {
+                    "CompName": "class CloudRenderCoomp"
+                },
+                {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        0.03998927026987076,
-                        -0.0024979913141578436,
-                        0.00010000749171013013,
-                        0.9991970062255859
+                        -0.7071068286895752,
+                        0.0,
+                        0.0,
+                        0.7071067690849304
+                    ],
+                    "scale": [
+                        1000.0,
+                        1000.0,
+                        0.9999985694885254
+                    ],
+                    "translate": [
+                        0.0,
+                        42.52863693237305,
+                        0.0
+                    ]
+                },
+                {
+                    "CompName": "class CloudRenderDataCoomp",
+                    "density": 60.119998931884766,
+                    "discard": 1.0,
+                    "min": 1.0
+                },
+                {
+                    "BlendType": "kNormal",
+                    "CompName": "class SpriteRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/EngineResources/white2x2.png",
+                    "offsetType": "kMiddle"
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.013873637653887272,
+                        0.38014549016952515,
+                        0.005702862050384283,
+                        0.9248050451278687
                     ],
                     "scale": [
                         1.0,
@@ -46,9 +92,9 @@
                         0.9999999403953552
                     ],
                     "translate": [
-                        0.25197720527648926,
-                        3.1222856044769287,
-                        -16.869678497314453
+                        -13.35606575012207,
+                        3.0955991744995117,
+                        -3.8354907035827637
                     ]
                 },
                 {

@@ -278,6 +278,12 @@
     <ClCompile Include="Src\GameExternals\WindParticle\WindParticle.cpp">
       <Filter>GameExternals</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\CloudRenderDataCoomp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObject\Comp\CloudRenderCoomp.cpp">
+      <Filter>GameObject\Comp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -641,6 +647,12 @@
     </ClInclude>
     <ClInclude Include="Src\GameExternals\WindParticle\WindParticle.h">
       <Filter>GameExternals</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\CloudRenderDataCoomp.h">
+      <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObject\Comp\CloudRenderCoomp.h">
+      <Filter>GameObject\Comp</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

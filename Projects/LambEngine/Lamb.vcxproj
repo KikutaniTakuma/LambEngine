@@ -180,6 +180,7 @@
     <ClCompile Include="Drawer\DrawerManager.cpp" />
     <ClCompile Include="Drawer\Line\Line.cpp" />
     <ClCompile Include="Drawer\Model\Model.cpp" />
+    <ClCompile Include="Drawer\Other\CloudTex2D\CloudTex2D.cpp" />
     <ClCompile Include="Drawer\Other\MeshShaderTest.cpp" />
     <ClCompile Include="Drawer\Other\WaterTex2D\WaterTex2D.cpp" />
     <ClCompile Include="Drawer\Particle\Particle.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="Drawer\DrawerManager.h" />
     <ClInclude Include="Drawer\Line\Line.h" />
     <ClInclude Include="Drawer\Model\Model.h" />
+    <ClInclude Include="Drawer\Other\CloudTex2D\CloudTex2D.h" />
     <ClInclude Include="Drawer\Other\MeshShaderTest.h" />
     <ClInclude Include="Drawer\Other\WaterTex2D\WaterTex2D.h" />
     <ClInclude Include="Drawer\Particle\Particle.h" />
