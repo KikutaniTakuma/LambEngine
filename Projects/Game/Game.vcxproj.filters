@@ -284,6 +284,9 @@
     <ClCompile Include="Src\GameObject\Comp\CloudRenderCoomp.cpp">
       <Filter>GameObject\Comp</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\Cloud\Cloud.cpp">
+      <Filter>Game\Cloud</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -357,6 +360,9 @@
     </Filter>
     <Filter Include="GameExternals">
       <UniqueIdentifier>{fa4023e9-bf8b-4741-8d4e-6a86e563bc0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Cloud">
+      <UniqueIdentifier>{e6860cf0-6bb5-46a2-af93-64dafe05f7d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -653,6 +659,9 @@
     </ClInclude>
     <ClInclude Include="Src\GameObject\Comp\CloudRenderCoomp.h">
       <Filter>GameObject\Comp</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Cloud\Cloud.h">
+      <Filter>Game\Cloud</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
