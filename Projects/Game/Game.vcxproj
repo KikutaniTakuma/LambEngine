@@ -230,6 +230,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\Comp\Camera3DComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\CameraComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ChildrenObjectComp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\CloudRenderCoomp.cpp" />
+    <ClCompile Include="Src\GameObject\Comp\CloudRenderDataCoomp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\CsvDataComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\EventComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\FallComp.cpp" />
@@ -265,6 +267,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\Manager\ObjectManager.cpp" />
     <ClCompile Include="Src\GameObject\Manager\TransformCompUpdater.cpp" />
     <ClCompile Include="Src\GameObject\Object.cpp" />
+    <ClCompile Include="Src\Game\Cloud\Cloud.cpp" />
     <ClCompile Include="Src\Game\Corals\Corals.cpp" />
     <ClCompile Include="Src\Game\Water\Water.cpp" />
     <ClCompile Include="Src\GlobalVariables\GlobalVariables.cpp" />
@@ -328,6 +331,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\Comp\Camera3DComp.h" />
     <ClInclude Include="Src\GameObject\Comp\CameraComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ChildrenObjectComp.h" />
+    <ClInclude Include="Src\GameObject\Comp\CloudRenderCoomp.h" />
+    <ClInclude Include="Src\GameObject\Comp\CloudRenderDataCoomp.h" />
     <ClInclude Include="Src\GameObject\Comp\CsvDataComp.h" />
     <ClInclude Include="Src\GameObject\Comp\EventComp.h" />
     <ClInclude Include="Src\GameObject\Comp\FallComp.h" />
@@ -363,6 +368,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\Manager\ObjectManager.h" />
     <ClInclude Include="Src\GameObject\Manager\TransformCompUpdater.h" />
     <ClInclude Include="Src\GameObject\Object.h" />
+    <ClInclude Include="Src\Game\Cloud\Cloud.h" />
     <ClInclude Include="Src\Game\Corals\Corals.h" />
     <ClInclude Include="Src\Game\Water\Water.h" />
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h" />

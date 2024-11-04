@@ -232,6 +232,9 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\ShadowRendering\ShadowRendering.cpp">
       <Filter>Engine\Graphics\PipelineObject\ShadowRendering</Filter>
     </ClCompile>
+    <ClCompile Include="Drawer\Other\CloudTex2D\CloudTex2D.cpp">
+      <Filter>Drawer\Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -721,6 +724,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\ShadowRendering\ShadowRendering.h">
       <Filter>Engine\Graphics\PipelineObject\ShadowRendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\Other\CloudTex2D\CloudTex2D.h">
+      <Filter>Drawer\Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

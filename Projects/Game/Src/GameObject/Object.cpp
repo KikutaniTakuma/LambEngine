@@ -32,6 +32,9 @@
 
 #include "Comp/MeshShaderTestComp.h"
 
+#include "Comp/CloudRenderCoomp.h"
+#include "Comp/CloudRenderDataCoomp.h"
+
 
 void Object::Init() {
 	/*for (auto& i : components_) {
@@ -148,6 +151,8 @@ bool Object::DebugAddComp() {
 		DebugAdd<LineCollisionComp>();
 		DebugAdd<LineConvertTransformComp>();
 		DebugAdd<MeshShaderTestComp>();
+		DebugAdd<CloudRenderCoomp>();
+		DebugAdd<CloudRenderDataCoomp>();
 
 		ImGui::EndChild();
 
@@ -211,5 +216,7 @@ void Object::AddComps(nlohmann::json& compData)
 	AddAndLoadComp<LineCollisionComp>(compName, compData);
 	AddAndLoadComp<LineConvertTransformComp>(compName, compData);
 	AddAndLoadComp<MeshShaderTestComp>(compName, compData);
+	AddAndLoadComp<CloudRenderCoomp>(compName, compData);
+	AddAndLoadComp<CloudRenderDataCoomp>(compName, compData);
 }
 
