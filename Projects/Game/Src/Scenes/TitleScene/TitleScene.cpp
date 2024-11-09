@@ -103,6 +103,8 @@ void TitleScene::Initialize() {
     renderingManager_->SetEnvironmentCoefficient(0.3f);
 
     corals_.Init();
+
+    cloud_ = std::make_unique<Cloud>();
 }
 
 void TitleScene::Finalize() {
@@ -208,4 +210,6 @@ void TitleScene::Draw() {
 
 
     corals_.Draw(currentCamera_->GetViewProjection());
+
+    cloud_->Draw(currentCamera_->GetViewProjection());
 }
