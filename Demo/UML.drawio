@@ -1,9 +1,338 @@
 <mxfile host="65bd71144e">
     <diagram id="uH7TFUyroTzwectZcCgI" name="ページ1">
-        <mxGraphModel dx="1244" dy="714" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
+        <mxGraphModel dx="2714" dy="1082" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" background="#524F4F" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
+                <mxCell id="24" value="" style="group;resizeWidth=0;resizeHeight=0;" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="50" y="120" width="190" height="114" as="geometry"/>
+                </mxCell>
+                <object label="template&amp;lt;T&amp;gt; RenderContext" id="2">
+                    <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#782619;fontColor=#FCFCFC;" parent="24" vertex="1">
+                        <mxGeometry width="190" height="114.28571428571428" as="geometry"/>
+                    </mxCell>
+                </object>
+                <mxCell id="3" value="・描画データ保存、ZSort" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="2" vertex="1">
+                    <mxGeometry y="30" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" value="・描画コマンド発行" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="2" vertex="1">
+                    <mxGeometry y="60" width="190" height="24.285714285714285" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="-&amp;nbsp; 描画データ&amp;lt;T&amp;gt;" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;strokeColor=default;fillColor=#303030;fontColor=#FFFFFF;" parent="2" vertex="1">
+                    <mxGeometry y="84.28571428571428" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="" style="group;" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="680" y="119.99999999999999" width="310" height="190" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="RenderContextManager" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#782619;fontColor=#FFFFFF;" parent="30" vertex="1">
+                    <mxGeometry width="310" height="190" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="・RenderSetの管理" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="6" vertex="1">
+                    <mxGeometry y="30" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="・RenderSetの作成" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fillStyle=auto;gradientColor=none;fontColor=#FFFFFF;" parent="6" vertex="1">
+                    <mxGeometry y="60" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="・グラフィックスパイプラインの作成" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="6" vertex="1">
+                    <mxGeometry y="90" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="・描画するRenderContextをまとめたlistの作成" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="6" vertex="1">
+                    <mxGeometry y="120" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="- std::unordered_map&amp;lt;Key, RenderSet&amp;gt;&lt;br&gt;- std::array&amp;lt;std::list&amp;lt;RenderContext*&amp;gt;, ブレンド数&amp;gt;" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;strokeColor=default;fillColor=#303030;fontColor=#FFFFFF;" parent="6" vertex="1">
+                    <mxGeometry y="150" width="310" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="49" value="" style="group;resizeWidth=0;resizeHeight=0;" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="-490" y="390" width="190" height="116" as="geometry"/>
+                </mxCell>
+                <object label="BaseRenderContext" id="50">
+                    <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" parent="49" vertex="1">
+                        <mxGeometry width="190.47" height="115.71571428571428" as="geometry"/>
+                    </mxCell>
+                </object>
+                <mxCell id="52" value="・描画カウント" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="50" vertex="1">
+                    <mxGeometry y="30" width="190.47" height="24.285714285714285" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" value="# モデルデータ&lt;br&gt;# GraphicPipeline&lt;br&gt;# DrawCont" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="50" vertex="1">
+                    <mxGeometry y="54.285714285714285" width="190.47" height="61.43" as="geometry"/>
+                </mxCell>
+                <object label="template&amp;lt;T&amp;gt; RenderContext" id="59">
+                    <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" parent="1" vertex="1">
+                        <mxGeometry x="-720" y="605.71" width="190" height="114.28571428571428" as="geometry"/>
+                    </mxCell>
+                </object>
+                <mxCell id="60" value="・描画データ保存、ZSort" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="59" vertex="1">
+                    <mxGeometry y="30" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="61" value="・描画コマンド発行" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="59" vertex="1">
+                    <mxGeometry y="60" width="190" height="24.285714285714285" as="geometry"/>
+                </mxCell>
+                <mxCell id="62" value="-&amp;nbsp; 描画データ&amp;lt;T&amp;gt;" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="59" vertex="1">
+                    <mxGeometry y="84.28571428571428" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <object label="template&amp;lt;T&amp;gt; SkinRenderContext" id="63">
+                    <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" parent="1" vertex="1">
+                        <mxGeometry x="-489.53" y="602.86" width="190" height="119.99571428571429" as="geometry"/>
+                    </mxCell>
+                </object>
+                <mxCell id="64" value="・描画データ保存、ZSort" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="63" vertex="1">
+                    <mxGeometry y="30" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="65" value="・描画コマンド発行" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="63" vertex="1">
+                    <mxGeometry y="60" width="190" height="24.285714285714285" as="geometry"/>
+                </mxCell>
+                <mxCell id="66" value="- 描画データ&amp;lt;T&amp;gt;&lt;br&gt;-&amp;nbsp;SkinCluster" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="63" vertex="1">
+                    <mxGeometry y="84.28571428571428" width="190" height="35.71" as="geometry"/>
+                </mxCell>
+                <object label="template&amp;lt;T&amp;gt; MeshRenderContext" id="67">
+                    <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#647687;fontColor=#ffffff;strokeColor=#314354;" parent="1" vertex="1">
+                        <mxGeometry x="-270" y="603" width="190" height="129.99571428571429" as="geometry"/>
+                    </mxCell>
+                </object>
+                <mxCell id="68" value="・描画データ保存、ZSort" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="67" vertex="1">
+                    <mxGeometry y="30" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="69" value="・描画コマンド発行" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="67" vertex="1">
+                    <mxGeometry y="60" width="190" height="24.285714285714285" as="geometry"/>
+                </mxCell>
+                <mxCell id="70" value="-&amp;nbsp; 描画データ&amp;lt;T&amp;gt;&lt;br&gt;- MeshShader用StructuredBuffer" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="67" vertex="1">
+                    <mxGeometry y="84.28571428571428" width="190" height="45.71" as="geometry"/>
+                </mxCell>
+                <mxCell id="85" value="" style="group;resizeWidth=0;resizeHeight=0;" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="-490" y="113" width="190" height="90" as="geometry"/>
+                </mxCell>
+                <object label="BaseDrawer" id="86">
+                    <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#6d8764;fontColor=#ffffff;strokeColor=#3A5431;" parent="85" vertex="1">
+                        <mxGeometry width="190" height="90" as="geometry"/>
+                    </mxCell>
+                </object>
+                <mxCell id="87" value="・対応するRenderSetの管理" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="86" vertex="1">
+                    <mxGeometry y="30" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="89" value="#&amp;nbsp; RenderSet*" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="86" vertex="1">
+                    <mxGeometry y="60" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="90" value="" style="group;resizeWidth=0;resizeHeight=0;" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="-690" y="300" width="190" height="60" as="geometry"/>
+                </mxCell>
+                <object label="Texture2D" id="91">
+                    <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#6d8764;fontColor=#ffffff;strokeColor=#3A5431;" parent="90" vertex="1">
+                        <mxGeometry width="190" height="60" as="geometry"/>
+                    </mxCell>
+                </object>
+                <mxCell id="92" value="・板ポリゴン描画" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="91" vertex="1">
+                    <mxGeometry y="30" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="95" value="" style="group;resizeWidth=0;resizeHeight=0;" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="-490" y="300" width="190" height="60" as="geometry"/>
+                </mxCell>
+                <object label="Model" id="96">
+                    <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#6d8764;fontColor=#ffffff;strokeColor=#3A5431;" parent="95" vertex="1">
+                        <mxGeometry width="190" height="60" as="geometry"/>
+                    </mxCell>
+                </object>
+                <mxCell id="97" value="・モデル描画" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="96" vertex="1">
+                    <mxGeometry y="30" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="98" value="" style="group;resizeWidth=0;resizeHeight=0;" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="-290" y="300" width="230" height="60" as="geometry"/>
+                </mxCell>
+                <object label="AnimationModel" id="99">
+                    <mxCell style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#6d8764;fontColor=#ffffff;strokeColor=#3A5431;" parent="98" vertex="1">
+                        <mxGeometry width="230" height="60" as="geometry"/>
+                    </mxCell>
+                </object>
+                <mxCell id="100" value="・スキンアニメーションモデル描画" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="99" vertex="1">
+                    <mxGeometry y="30" width="230" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="110" value="" style="edgeStyle=none;html=1;endArrow=block;endFill=0;entryX=0.499;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryPerimeter=0;fontColor=#F0F0F0;strokeColor=#FFFFFF;" parent="1" source="99" target="89" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-310" y="312.8599999999999" as="sourcePoint"/>
+                        <mxPoint x="-310" y="215.86" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="-175" y="270"/>
+                            <mxPoint x="-395" y="270"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="107" value="" style="edgeStyle=none;html=1;endArrow=block;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontColor=#F0F0F0;strokeColor=#FFFFFF;" parent="1" source="96" target="86" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="109" value="" style="edgeStyle=none;html=1;endArrow=block;endFill=0;entryX=0.499;entryY=1.016;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryPerimeter=0;fontColor=#F0F0F0;strokeColor=#FFFFFF;" parent="1" source="91" target="89" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-385" y="309.9999999999999" as="sourcePoint"/>
+                        <mxPoint x="-385" y="213" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="-600" y="270"/>
+                            <mxPoint x="-395" y="270"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="111" value="" style="endArrow=block;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0.996;entryDx=0;entryDy=0;entryPerimeter=0;endFill=0;fontColor=#F0F0F0;strokeColor=#FCFCFC;" parent="1" source="63" target="54" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="-350" y="530" as="sourcePoint"/>
+                        <mxPoint x="-400" y="580" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="113" value="" style="endArrow=block;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1.004;entryDx=0;entryDy=0;entryPerimeter=0;endFill=0;fontColor=#F0F0F0;strokeColor=#FFFFFF;" parent="1" source="67" target="54" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="-384.52999999999975" y="612.86" as="sourcePoint"/>
+                        <mxPoint x="-384.7649999999999" y="515.4699942857143" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="-175" y="580"/>
+                            <mxPoint x="-395" y="570"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="114" value="" style="endArrow=block;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1.012;entryDx=0;entryDy=0;entryPerimeter=0;endFill=0;fontColor=#F0F0F0;strokeColor=#FFFFFF;" parent="1" source="59" target="54" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="-374.52999999999975" y="622.86" as="sourcePoint"/>
+                        <mxPoint x="-374.7649999999999" y="525.4699942857143" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="-625" y="580"/>
+                            <mxPoint x="-395" y="570"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="115" value="" style="group;fontColor=#FFFFFF;" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="30" y="420" width="310" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="116" value="RenderingManager" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#B02CA7;fontColor=#FFFFFF;" parent="115" vertex="1">
+                    <mxGeometry width="310" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="117" value="・描画の管理" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="116" vertex="1">
+                    <mxGeometry y="30" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="118" value="・RenderContextManagerからのlist受け取り" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="116" vertex="1">
+                    <mxGeometry y="60" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="119" value="・ExecuteCommnadlists" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="116" vertex="1">
+                    <mxGeometry y="90" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="123" value="・ポストエフェクトの管理" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="116" vertex="1">
+                    <mxGeometry y="120" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="120" value="・DoubleBufferのIndex切り替え" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="116" vertex="1">
+                    <mxGeometry y="150" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="121" value="- 各種レンダーターゲット&lt;br&gt;- DepthBbuffer" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;strokeColor=default;fillColor=#303030;fontColor=#FFFFFF;" parent="116" vertex="1">
+                    <mxGeometry y="180" width="310" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="" style="group;" parent="1" vertex="1" connectable="0">
+                    <mxGeometry x="300" y="119.99999999999999" width="285" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="RenderSet" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#782619;fontColor=#F7F7F7;" parent="28" vertex="1">
+                    <mxGeometry width="284.68" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="・各ブレンドタイプに応じたBaseRenderContextを管理" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=#303030;fontColor=#FFFFFF;" parent="10" vertex="1">
+                    <mxGeometry y="30" width="284.68" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="- std::array&amp;lt;BaseRenderContext, ブレンド数&amp;gt;" style="text;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;strokeColor=default;fillColor=#303030;fontColor=#FFFFFF;" parent="10" vertex="1">
+                    <mxGeometry y="80" width="284.68" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="151" value="listの受け渡し" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;labelBackgroundColor=none;labelBorderColor=#FFFFFF;fontColor=#FAFAFA;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="320" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="152" value="" style="endArrow=none;html=1;exitX=1;exitY=0.056;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.001;entryY=0.026;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#F0F0F0;strokeColor=#FAFAFA;" parent="1" source="116" target="179" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="410" y="590" as="sourcePoint"/>
+                        <mxPoint x="567" y="430" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="179" value="描画フローチャート" style="swimlane;fillColor=#B02CA7;fontColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="420" width="600" height="400" as="geometry"/>
+                </mxCell>
+                <mxCell id="197" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=none;startFill=0;endArrow=open;endFill=0;fontColor=#F0F0F0;" parent="179" source="185" target="186" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="185" value="描画処理開始" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;fillColor=#303030;fontColor=#FFFFFF;" parent="179" vertex="1">
+                    <mxGeometry x="25" y="30" width="110" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="198" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=none;startFill=0;endArrow=open;endFill=0;fontColor=#F0F0F0;" parent="179" source="186" target="187" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="186" value="描画データセット" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#303030;fontColor=#FFFFFF;" parent="179" vertex="1">
+                    <mxGeometry x="17.5" y="110" width="125" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="199" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=none;startFill=0;endArrow=open;endFill=0;fontColor=#F0F0F0;" parent="179" source="187" target="188" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="187" value="ブレンドをしない&lt;br&gt;オブジェクトの描画" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#303030;fontColor=#FFFFFF;" parent="179" vertex="1">
+                    <mxGeometry x="10" y="180" width="140" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="202" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=none;startFill=0;endArrow=open;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontColor=#F0F0F0;" parent="179" source="188" target="189" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="170" y="285"/>
+                            <mxPoint x="180" y="130"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="188" value="SkyBox描画" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#303030;fontColor=#FFFFFF;" parent="179" vertex="1">
+                    <mxGeometry x="10" y="260" width="140" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="203" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=none;startFill=0;endArrow=open;endFill=0;fontColor=#F0F0F0;" parent="179" source="189" target="190" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="189" value="ブレンドをする&lt;br&gt;オブジェクトをZSort" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#303030;fontColor=#FFFFFF;" parent="179" vertex="1">
+                    <mxGeometry x="200" y="105" width="150" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="204" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=none;startFill=0;endArrow=open;endFill=0;fontColor=#F0F0F0;" parent="179" source="190" target="191" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="190" value="DeferredRendering" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#303030;fontColor=#FFFFFF;" parent="179" vertex="1">
+                    <mxGeometry x="200" y="180" width="150" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="205" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=none;startFill=0;endArrow=open;endFill=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontColor=#F0F0F0;" parent="179" source="191" target="192" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="370" y="285"/>
+                            <mxPoint x="380" y="130"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="191" value="ブレンドをする&lt;br&gt;オブジェクトの描画" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#303030;fontColor=#FFFFFF;" parent="179" vertex="1">
+                    <mxGeometry x="200" y="260" width="150" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="206" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=none;startFill=0;endArrow=open;endFill=0;fontColor=#F0F0F0;" parent="179" source="192" target="193" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="192" value="深度値の書き込みを行わない&lt;br&gt;オブジェクトをZSort" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#303030;fontColor=#FFFFFF;" parent="179" vertex="1">
+                    <mxGeometry x="400" y="105" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="207" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=none;startFill=0;endArrow=open;endFill=0;fontColor=#F0F0F0;" parent="179" source="193" target="194" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="193" value="深度値の書き込みを行わない&lt;br&gt;オブジェクトの描画" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#303030;fontColor=#FFFFFF;" parent="179" vertex="1">
+                    <mxGeometry x="400" y="180" width="180" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="208" style="edgeStyle=none;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=none;startFill=0;endArrow=open;endFill=0;fontColor=#F0F0F0;" parent="179" source="194" target="195" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="194" value="DrawCountのリセット" style="rounded=1;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;fillColor=#303030;fontColor=#FFFFFF;" parent="179" vertex="1">
+                    <mxGeometry x="427.5" y="265" width="125" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="195" value="描画処理終了" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;fillColor=#303030;fontColor=#FFFFFF;" parent="179" vertex="1">
+                    <mxGeometry x="435" y="340" width="110" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="180" value="" style="endArrow=diamondThin;endFill=1;endSize=24;html=1;exitX=1;exitY=0.133;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.009;entryY=0.119;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#F0F0F0;strokeColor=#FFFFFF;" parent="1" source="2" target="10" edge="1">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="360" y="470" as="sourcePoint"/>
+                        <mxPoint x="400" y="350" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="181" value="" style="endArrow=diamondThin;endFill=1;endSize=24;html=1;exitX=1.001;exitY=0.141;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.003;entryY=0.083;entryDx=0;entryDy=0;entryPerimeter=0;fontColor=#F0F0F0;strokeColor=#FFFFFF;" parent="1" source="10" target="6" edge="1">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="645" y="190.90000000000003" as="sourcePoint"/>
+                        <mxPoint x="712.7225600000002" y="189.99999999999994" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="182" value="" style="endArrow=open;startArrow=cross;endFill=0;startFill=0;endSize=8;startSize=10;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontColor=#F0F0F0;strokeColor=#FFFFFF;" parent="1" source="8" target="116" edge="1">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="460" y="380" as="sourcePoint"/>
+                        <mxPoint x="620" y="380" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
             </root>
         </mxGraphModel>
     </diagram>
