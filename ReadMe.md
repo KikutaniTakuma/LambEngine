@@ -11,7 +11,7 @@
 * 水の作成変遷
   * PerlinNoiseからHeightMapを作成、NormalMapに変換して細かい波の表現しています。
   ![PerlinNoise](Demo/Water_Surface_Complete.gif)
-  * 水を透過させて水面下に484個のモデルを配置。DoubleBufferとMeshShaderで描画を最適化しています。(画像は後述の歪みを無効にしています)
+  * 水を透過させて水面下に484個のモデルを配置。DoubleBufferとMeshShaderで描画を最適化しています。
   ![Object](Demo/Water-NoDistortionDemo.gif)
   * 水を描画する際に歪みの情報をPerlinNoiseで生成。それを元にポストエフェクトで歪ませています。
   ![Distortion](Demo/Water-Distortion.gif)
