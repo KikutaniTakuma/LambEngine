@@ -7,7 +7,7 @@
 * MeshShaderとVertexShaderの切り替え
 
 ## 水概要
-制作期間 : 11ヶ月
+制作期間 : 11ヶ月(作成開始2023年12月)
 * 水の作成変遷
   * PerlinNoiseからHeightMapを作成、NormalMapに変換して細かい波の表現しています。
   ![PerlinNoise](Demo/Water_Surface_Complete.gif)
