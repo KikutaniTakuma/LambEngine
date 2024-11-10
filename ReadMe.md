@@ -27,11 +27,10 @@
 * 描画は[RenderingManager](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Engine/Graphics/RenderingManager)で管理してます。
   * RenderContextの情報をもとに実際に描画コマンドを発行します
   * レンダーターゲットの設定、ポストエフェクト等もここで行います
-  * ZSortをRenderingManagerのDraw関数でしています
-* 描画情報の格納は[RenderContext](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Engine/Graphics/RenderContextManager/RenderContext)
-* 描画情報を積んでいるのは[Drawer](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Drawer)
+* 描画情報を[RenderContext](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Engine/Graphics/RenderContextManager/RenderContext)に格納しています
+* 描画情報を[Drawer](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Drawer)で積んでいます
 * 水面のシミュレーションは[PixelShader](https://github.com/KikutaniTakuma/LambEngine/blob/master/Projects/Game/Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl)
-でフォワードライティングをしている。
+でフォワードライティングをしています。
 
 ## 外部ライブラリ
 - [Projects/externals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals)
