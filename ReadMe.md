@@ -23,6 +23,7 @@
 ![DistortionTitle](Demo/Water-DistortionDemo.gif)
 
 ## エンジンで最もこだわっているところ
+![UML](Demo/UML.png)
 * 描画は[RenderingManager](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Engine/Graphics/RenderingManager)で管理してます。
   * RenderContextの情報をもとに実際に描画コマンドを発行します
   * レンダーターゲットの設定、ポストエフェクト等もここで行います
