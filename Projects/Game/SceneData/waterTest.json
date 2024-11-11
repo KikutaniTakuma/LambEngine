@@ -58,7 +58,7 @@
                 {
                     "CompName": "class CloudRenderDataCoomp",
                     "density": 60.119998931884766,
-                    "discard": 1.0,
+                    "discard": 0.45399999618530273,
                     "min": 1.0
                 },
                 {
@@ -81,10 +81,10 @@
                 {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        -0.013873637653887272,
-                        0.38014549016952515,
-                        0.005702862050384283,
-                        0.9248050451278687
+                        -0.01134923379868269,
+                        0.419109046459198,
+                        0.005239414516836405,
+                        0.9078498482704163
                     ],
                     "scale": [
                         1.0,
@@ -113,9 +113,6 @@
         {
             "Comps": [
                 {
-                    "CompName": "class ModelRenderComp"
-                },
-                {
                     "BlendType": "kNone",
                     "CompName": "class ModelRenderDataComp",
                     "color": [
@@ -127,6 +124,9 @@
                     "fileName": "./Resources\\Coral\\Coral_9866.obj",
                     "isDraw": true,
                     "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
