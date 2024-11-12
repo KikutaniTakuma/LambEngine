@@ -12,6 +12,7 @@
 #include "imgui_impl_dx12.h"
 #include "imgui_impl_win32.h"
 #include "ImGuizmo.h"
+#include "implot.h"
 
 #include "Utils/SafeDelete.h"
 
@@ -42,6 +43,7 @@ ImGuiManager::ImGuiManager() {
 	// ImGuiの初期化
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	ImPlot::CreateContext();
 
 	// ImGuiIO
 	auto& imguiIO = ImGui::GetIO();
@@ -81,6 +83,7 @@ ImGuiManager::~ImGuiManager() {
 #ifdef USE_DEBUG_CODE
 	ImGui_ImplDX12_Shutdown();
 	ImGui_ImplWin32_Shutdown();
+	ImPlot::DestroyContext();
 	ImGui::DestroyContext();
 
 	Lamb::AddLog("Finalize ImGuiManager succeeded");
