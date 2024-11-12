@@ -22,6 +22,7 @@
 
 #ifdef USE_DEBUG_CODE
 #include "imgui.h"
+#include "implot.h"
 #endif // USE_DEBUG_CODE
 
 
@@ -147,6 +148,17 @@ RenderingManager::RenderingManager() {
 
 	isUseMesh_ = Lamb::IsCanUseMeshShader();
 
+#ifdef USE_DEBUG_CODE
+	toeDataX_.resize(11);
+	toeDataY_.resize(11);
+	sholderDataX_.resize(11);
+	sholderDataY_.resize(11);
+
+	whiteBorderX_ = {0.0f, 1.0f, 1.0f};
+
+	whiteBorderY_ = { 0.0f, 1.0f, 1.0f };
+
+#endif // USE_DEBUG_CODE
 
 }
 
@@ -265,7 +277,7 @@ void RenderingManager::Draw() {
 	deferredRendering_->SetCameraMatrix(viewMatrix_ * projectionMatrix_);
 	deferredRendering_->SetLightCameraMatrix(lightCamera_);
 
-	tonemapParamas_ = PrepareTonemapParams(tonemapToe_, tonemapLiner_, tonemapSholder_);
+	tonemapParamas_ = PrepareTonemapParams(tonemapToe_, tonemapLinear_, tonemapSholder_);
 	distortion_->SetTonemapParams(tonemapParamas_);
 
 	/// ====================================================================================
@@ -534,13 +546,50 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 		lightRotate_ *= Lamb::Math::toRadian<float>;
 
 		if (ImGui::TreeNode("トーンマップ")) {
-			ImGui::DragFloat2("toe", tonemapToe_.data(), 0.001f, 0.0f, 2.0f);
-			ImGui::DragFloat2("liner", tonemapLiner_.data(), 0.001f, 0.0f, 2.0f);
-			ImGui::DragFloat2("sholder", tonemapSholder_.data(), 0.001f, 0.0f, 2.0f);
+			if (ImPlot::BeginPlot("トーンカーブ")) {
+				for (size_t i = 0; i < toeDataX_.size(); ++i) {
+					toeDataX_[i] = std::lerp(0.0f, tonemapToe_.x, static_cast<float>(i) / static_cast<float>(toeDataX_.size()-1));
+				}
+				for (size_t i = 0; i < toeDataY_.size(); ++i) {
+					toeDataY_[i] = Toe(toeDataX_[i], tonemapToe_, tonemapLinear_);
+				}
+				linearDataX_[0] = tonemapToe_.x;
+				linearDataX_[1] = tonemapLinear_.x;
+				linearDataY_[0] = tonemapToe_.y;
+				linearDataY_[1] = tonemapLinear_.y;
+				for (size_t i = 0; i < sholderDataX_.size(); ++i) {
+					sholderDataX_[i] = std::lerp(tonemapLinear_.x, tonemapSholder_.x, static_cast<float>(i) / static_cast<float>(sholderDataX_.size() - 1));
+				}
+				for (size_t i = 0; i < sholderDataY_.size(); ++i) {
+					sholderDataY_[i] = Sholder(sholderDataX_[i], tonemapToe_, tonemapLinear_, tonemapSholder_);
+				}
+				whiteBorderX_.back() = std::max(tonemapSholder_.x + tonemapSholder_.x * 0.1f, 1.5f);
 
 
+				ImPlot::SetNextLineStyle(ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
+				ImPlot::PlotLine("暗部", toeDataX_.data(), toeDataY_.data(), static_cast<int32_t>(toeDataX_.size()));
+				ImPlot::SetNextLineStyle(ImVec4(0.0f, 0.0f, 1.0f, 1.0f));
+				ImPlot::PlotLine("中間部", linearDataX_.data(), linearDataY_.data(), static_cast<int32_t>(linearDataX_.size()));
+				ImPlot::SetNextLineStyle(ImVec4(0.0f, 1.0f, 0.0f, 1.0f));
+				ImPlot::PlotLine("ハイライト圧縮部", sholderDataX_.data(), sholderDataY_.data(), static_cast<int32_t>(sholderDataX_.size()));
+				ImPlot::SetNextLineStyle(ImVec4(1.0f, 1.0f, 1.0f, 0.2f));
+				ImPlot::PlotLine("白飛び", whiteBorderX_.data(), whiteBorderY_.data(), static_cast<int32_t>(whiteBorderX_.size()));
+				
+				ImPlot::EndPlot();
+			}
+			ImGui::DragFloat("toe x", tonemapToe_.data(), 0.001f, 0.0f, std::min(tonemapLinear_.x - 1e-5f, 0.5f));
+			ImGui::DragFloat("toe y", &tonemapToe_[1], 0.001f, 0.0f, tonemapLinear_.y - 1e-5f);
+			
+			ImGui::DragFloat("linear x", tonemapLinear_.data(), 0.001f, tonemapToe_.x + 1e-5f, std::min(tonemapSholder_.x - 1e-5f, 0.9f));
+			ImGui::DragFloat("linear y", &tonemapLinear_[1], 0.001f, tonemapToe_.y + 1e-5f, tonemapSholder_.y - 1e-5f);
+			
+			ImGui::DragFloat("sholder x", tonemapSholder_.data(), 0.001f, tonemapLinear_.x + 1e-5f, 100.0f);
+			ImGui::DragFloat("sholder y", &tonemapSholder_[1], 0.001f, tonemapLinear_.y + 1e-5f, 3.0f);
+			
 			ImGui::TreePop();
 		}
+
+		
 
 		atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
 		if (ImGui::TreeNode("hsv")) {

@@ -19,3 +19,6 @@ struct TonemapParams
 float32_t3 Tonemap(const TonemapParams& tc, float32_t3 x);
 
 TonemapParams PrepareTonemapParams(float32_t2 p1, float32_t2 p2, float32_t2 p3);
+
+float32_t Toe(float32_t x, float32_t2 p1, float32_t2 p2);
+float32_t Sholder(float32_t x, float32_t2 p1, float32_t2 p2, float32_t2 p3);

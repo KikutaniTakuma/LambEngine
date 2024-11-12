@@ -210,9 +210,20 @@ private:
 
 	TonemapParams tonemapParamas_;
 	Vector2 tonemapToe_ = Vector2(0.2f, 0.2f);
-	Vector2 tonemapLiner_ = Vector2(0.6f, 0.6f);
+	Vector2 tonemapLinear_ = Vector2(0.6f, 0.6f);
 	Vector2 tonemapSholder_ = Vector2::kIdentity;
 
+#ifdef USE_DEBUG_CODE
+	std::vector<float32_t> toeDataX_;
+	std::vector<float32_t> toeDataY_;
+	std::array<float32_t, 2> linearDataX_;
+	std::array<float32_t, 2> linearDataY_;
+	std::vector<float32_t> sholderDataX_;
+	std::vector<float32_t> sholderDataY_;
+
+	std::vector<float32_t> whiteBorderX_;
+	std::vector<float32_t> whiteBorderY_;
+#endif // USE_DEBUG_CODE
 
 
 	/// 
