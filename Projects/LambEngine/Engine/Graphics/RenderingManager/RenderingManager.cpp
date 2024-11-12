@@ -573,7 +573,7 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 				ImPlot::SetNextLineStyle(ImVec4(0.0f, 1.0f, 0.0f, 1.0f));
 				ImPlot::PlotLine("ハイライト圧縮部", sholderDataX_.data(), sholderDataY_.data(), static_cast<int32_t>(sholderDataX_.size()));
 				ImPlot::SetNextLineStyle(ImVec4(1.0f, 1.0f, 1.0f, 0.2f));
-				ImPlot::PlotLine("白飛び", whiteBorderX_.data(), whiteBorderY_.data(), static_cast<int32_t>(whiteBorderX_.size()));
+				ImPlot::PlotLine("基準", whiteBorderX_.data(), whiteBorderY_.data(), static_cast<int32_t>(whiteBorderX_.size()));
 				
 				ImPlot::EndPlot();
 			}

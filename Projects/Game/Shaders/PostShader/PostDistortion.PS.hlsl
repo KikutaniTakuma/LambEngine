@@ -52,7 +52,8 @@ PixelShaderOutPut2 main(Output input) {
         color.rgb += caustics.rgb * depth;
     }
 
-    output.color0.rgb = Tonemap(gTonemapParams, color.rgb) * kColor.color.rgb;
+    float32_t luminate = dot(color.rgb, float32_t3(0.2627f,0.678f,0.0593f));
+    output.color0.rgb = Tonemap(gTonemapParams, float32_t3(luminate,luminate,luminate)) * rcp(float32_t3(luminate,luminate,luminate)) * color.rgb * kColor.color.rgb;
     output.color0.w = 1.0f;
     output.color1 = output.color0;
 
