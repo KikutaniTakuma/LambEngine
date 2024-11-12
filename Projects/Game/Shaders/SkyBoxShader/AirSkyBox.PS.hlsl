@@ -78,7 +78,7 @@ PixelOutPut main(VertexOutput input)
 
 	PixelOutPut output;
 	output.color.rgb = rayleighPhase * c0 + miePhase * c1;
-	output.color.rgb = min(output.color.rgb, float32_t3(1.0f, 1.0f, 1.0f));
+	output.color.rgb = output.color.rgb;
 
 	output.color.a = 1.0f;
 
