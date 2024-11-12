@@ -235,6 +235,9 @@
     <ClCompile Include="Drawer\Other\CloudTex2D\CloudTex2D.cpp">
       <Filter>Drawer\Other</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\Tonemap\Tonemap.cpp">
+      <Filter>Engine\Graphics\Tonemap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -437,6 +440,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\ShadowRendering">
       <UniqueIdentifier>{a90aa1dd-aafa-43b6-bc7a-f761153e7ff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Tonemap">
+      <UniqueIdentifier>{e08aa258-8db6-48ff-8631-d93ca0d0c488}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -727,6 +733,9 @@
     </ClInclude>
     <ClInclude Include="Drawer\Other\CloudTex2D\CloudTex2D.h">
       <Filter>Drawer\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\Tonemap\Tonemap.h">
+      <Filter>Engine\Graphics\Tonemap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

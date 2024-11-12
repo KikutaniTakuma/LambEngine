@@ -5,6 +5,8 @@
 #include "Math/MathCommon.h"
 #include "Engine/Graphics/GraphicsStructs.h"
 
+#include "Engine/Graphics/Tonemap/Tonemap.h"
+
 class Distortion final : public PeraPipeline {
 public:
 	Distortion() = default;
@@ -42,11 +44,15 @@ public:
 		causticsTexHandle_ = causticsTexHandle;
 	}
 
+	void SetTonemapParams(const TonemapParams& tonemapParams);
+
 private:
 	std::array<std::unique_ptr<ConstantBuffer<float32_t4x4>>, DirectXSwapChain::kBackBufferNumber> scrollUVBuf_;
 	std::array<std::unique_ptr<ConstantBuffer<float32_t>>, DirectXSwapChain::kBackBufferNumber> depthFloatBuf_;
+	std::array<std::unique_ptr<ConstantBuffer<TonemapParams>>, DirectXSwapChain::kBackBufferNumber> tonemapParamasBuf_;
 	float32_t4x4 scrollUV_;
 	float32_t depthFloat_ = 0.423f;
+	TonemapParams tonemapParamas_;
 
 	Vector3 translate_;
 	Vector3 uvScrollSpeed_ = Vector3::kXIdentity * 0.05f + Vector3::kYIdentity * 0.05f;

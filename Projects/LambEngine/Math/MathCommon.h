@@ -4,6 +4,8 @@
 #include <initializer_list>
 #include <cmath>
 
+#include "Utils/Concepts.h"
+
 namespace Lamb {
 	namespace Math {
 		template<std::floating_point Floating>
@@ -27,9 +29,14 @@ namespace Lamb {
 		float LerpShortAngle(float a, float b, float t);
 	}
 
-	template<typename T>
+	template<Lamb::IsNumber T>
 	bool Between(const T& num, const T& min, const T& max) {
 		return min <= num && num <= max;
+	}
+
+	template<Lamb::IsNumber T>
+	bool Step(const T& a, const T& x) {
+		return x < a ? static_cast<T>(0) : static_cast<T>(1);
 	}
 }
 

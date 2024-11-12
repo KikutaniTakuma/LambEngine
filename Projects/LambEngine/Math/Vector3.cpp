@@ -3,6 +3,7 @@
 #include <numbers>
 #include "Vector2.h"
 #include "Quaternion.h"
+#include "MathCommon.h"
 
 #include "Error/Error.h"
 
@@ -86,6 +87,37 @@ Vector3& Vector3::operator/=(float scalar) noexcept {
 
 	return *this;
 }
+
+Vector3 Vector3::operator+(float right) const noexcept
+{
+	return Vector3(x + right, y + right, z + right);
+}
+
+Vector3 Vector3::operator-(float right) const noexcept
+{
+	return Vector3(x - right, y - right, z - right);
+}
+
+Vector3 operator+(float right, const Vector3& left) noexcept
+{
+	return left + right;
+}
+
+Vector3 operator-(float right, const Vector3& left) noexcept
+{
+	return Vector3(right - left.x, right - left.y, right - left.z);
+}
+
+Vector3 operator*(float right, const Vector3& left) noexcept
+{
+	return left * right;
+}
+
+Vector3 operator/(float right, const Vector3& left) noexcept
+{
+	return Vector3(right / left.x, right / left.y, right / left.z);
+}
+
 
 Vector3 Vector3::operator*(const Mat4x4& mat) const {
 	Vector3 result;
@@ -192,6 +224,22 @@ Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, float t) {
 	result.z = std::lerp(start.z, end.z, t);
 
 	return result;
+}
+
+Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, const Vector3& t)
+{
+	Vector3 result;
+
+	result.x = std::lerp(start.x, end.x, t.x);
+	result.y = std::lerp(start.y, end.y, t.y);
+	result.z = std::lerp(start.z, end.z, t.z);
+
+	return result;
+}
+
+Vector3 Vector3::Step(const float a, const Vector3& x)
+{
+	return Vector3(Lamb::Step(a, x.x), Lamb::Step(a, x.y), Lamb::Step(a, x.z));
 }
 
 Vector3 Project(const Vector3& vec1, const Vector3& vec2) {

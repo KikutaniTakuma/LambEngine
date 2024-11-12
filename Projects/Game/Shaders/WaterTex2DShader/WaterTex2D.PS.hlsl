@@ -120,7 +120,7 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     float32_t reflectCos = dot(normalize(reflect(kWaterData[input.instanceID].cameraDirection, input.normal)), normalize(kWaterData[input.instanceID].cameraDirection));
     float32_t reflectivity = 0.4f;
     float32_t skyReflect = reflectivity + (1.0f - reflectivity) * pow(1.0f - reflectCos, 5.0f);
-    output.color0.rgb = saturate(lerp(kColor[input.instanceID].color.rgb * lig, skyColor, skyReflect));
+    output.color0.rgb = lerp(kColor[input.instanceID].color.rgb * lig, skyColor, skyReflect);
     
     // 色
     output.color0.w = max(skyReflect, kColor[input.instanceID].color.w);

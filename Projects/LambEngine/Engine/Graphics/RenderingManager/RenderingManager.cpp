@@ -18,8 +18,6 @@
 #include "Utils/HSV.h"
 
 
-#include "Engine/Graphics/PipelineObject/Distortion/Distortion.h"
-
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 
 #ifdef USE_DEBUG_CODE
@@ -85,14 +83,14 @@ RenderingManager::RenderingManager() {
 	TextureManager::GetInstance()->LoadTexture("./Resources/Water/caustics_02.bmp");
 	Texture* causticsTex = TextureManager::GetInstance()->GetTexture("./Resources/Water/caustics_02.bmp");
 
-	auto distortion = std::make_unique<Distortion>();
-	distortion->Init();
-	distortion->SetDistortionTexHandle(distortionTextureRGBA_->GetHandleGPU());
-	distortion->SetDepthTexHandle(depthStencilShadow_->GetHandleGPU());
-	distortion->SetCausticsTexHandle(causticsTex->GetHandleGPU());
+	distortion_ = Lamb::MakeSafePtr<Distortion>();
+	distortion_->Init();
+	distortion_->SetDistortionTexHandle(distortionTextureRGBA_->GetHandleGPU());
+	distortion_->SetDepthTexHandle(depthStencilShadow_->GetHandleGPU());
+	distortion_->SetCausticsTexHandle(causticsTex->GetHandleGPU());
 
 	rgbaTexture_ = std::make_unique<PeraRender>();
-	rgbaTexture_->Initialize(distortion.release());
+	rgbaTexture_->Initialize(distortion_.get());
 	Vector4 rgba = rgbaTexture_->color;
 	hsv_ = RGBToHSV({ rgba.color.r,rgba.color.g,rgba.color.b });
 
@@ -148,6 +146,7 @@ RenderingManager::RenderingManager() {
 
 
 	isUseMesh_ = Lamb::IsCanUseMeshShader();
+
 
 }
 
@@ -265,6 +264,9 @@ void RenderingManager::Draw() {
 	CalcLightCamera();
 	deferredRendering_->SetCameraMatrix(viewMatrix_ * projectionMatrix_);
 	deferredRendering_->SetLightCameraMatrix(lightCamera_);
+
+	tonemapParamas_ = PrepareTonemapParams(tonemapToe_, tonemapLiner_, tonemapSholder_);
+	distortion_->SetTonemapParams(tonemapParamas_);
 
 	/// ====================================================================================
 
@@ -530,6 +532,15 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 		lightRotate_.y = std::fmodf(lightRotate_.y, 360.0f);
 		lightRotate_.z = std::fmodf(lightRotate_.z, 360.0f);
 		lightRotate_ *= Lamb::Math::toRadian<float>;
+
+		if (ImGui::TreeNode("トーンマップ")) {
+			ImGui::DragFloat2("toe", tonemapToe_.data(), 0.001f, 0.0f, 2.0f);
+			ImGui::DragFloat2("liner", tonemapLiner_.data(), 0.001f, 0.0f, 2.0f);
+			ImGui::DragFloat2("sholder", tonemapSholder_.data(), 0.001f, 0.0f, 2.0f);
+
+
+			ImGui::TreePop();
+		}
 
 		atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
 		if (ImGui::TreeNode("hsv")) {

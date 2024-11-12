@@ -12,6 +12,10 @@
 #include "Drawer/AirSkyBox/AirSkyBox.h"
 #include "json.hpp"
 
+#include "Engine/Graphics/Tonemap/Tonemap.h"
+
+#include "Engine/Graphics/PipelineObject/Distortion/Distortion.h"
+
 #include <list>
 #include <functional>
 
@@ -159,6 +163,8 @@ private:
 	std::unique_ptr<PeraRender> rgbaTexture_;
 	Vector3 hsv_;
 
+	Lamb::SafePtr<Distortion> distortion_;
+
 	// 深度値(法線書き込みと色書き込み、アウトラインで使用する)
 	std::unique_ptr<DepthBuffer> depthStencil_;
 	// 影のための深度値書き込み
@@ -201,6 +207,13 @@ private:
 	Mat4x4 projectionMatrix_;
 	Mat4x4 lightCamera_;
 	Vector3 cameraDirection_;
+
+	TonemapParams tonemapParamas_;
+	Vector2 tonemapToe_ = Vector2(0.2f, 0.2f);
+	Vector2 tonemapLiner_ = Vector2(0.6f, 0.6f);
+	Vector2 tonemapSholder_ = Vector2::kIdentity;
+
+
 
 	/// 
 	/// その他ポストエフェクトは増える予定

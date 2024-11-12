@@ -57,6 +57,13 @@ public:
 	[[nodiscard]] Vector3 operator/(float scalar) const noexcept;
 	Vector3& operator/=(float scalar) noexcept;
 
+	[[nodiscard]] Vector3 operator+(float right) const noexcept;
+	[[nodiscard]] Vector3 operator-(float right) const noexcept;
+	friend Vector3 operator+(float right, const Vector3& left) noexcept;
+	friend Vector3 operator-(float right, const Vector3& left) noexcept;
+	friend Vector3 operator*(float right, const Vector3& left) noexcept;
+	friend Vector3 operator/(float right, const Vector3& left) noexcept;
+
 	[[nodiscard]] Vector3 operator*(const Mat4x4& mat) const;
 	Vector3& operator*=(const Mat4x4& mat);
 
@@ -215,6 +222,8 @@ public:
 /// </summary>
 public:
 	static [[nodiscard]] Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
+	static [[nodiscard]] Vector3 Lerp(const Vector3& start, const Vector3& end, const Vector3& t);
+	static [[nodiscard]] Vector3 Step(const float a, const Vector3& x);
 };
 
 struct Ray {

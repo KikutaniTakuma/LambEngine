@@ -1,5 +1,6 @@
 #include "Post.hlsli"
 #include "../OutputStructs.hlsli"
+#include "../Tonemap.hlsli"
 
 Texture2D<float32_t4> gDistortionTexture : register(t1);
 Texture2D<float32_t> gDepthTexture : register(t2);
@@ -15,6 +16,7 @@ struct Float{
 
 ConstantBuffer<Mat4x4> gUVScroll : register(b1);
 ConstantBuffer<Float> gDepthFloat : register(b2);
+ConstantBuffer<TonemapParams> gTonemapParams : register(b3);
 
 // ポイントサンプラー
 SamplerState gPointSmp : register(s1);
@@ -50,7 +52,8 @@ PixelShaderOutPut2 main(Output input) {
         color.rgb += caustics.rgb * depth;
     }
 
-    output.color0 = color * kColor.color;
+    output.color0.rgb = Tonemap(gTonemapParams, color.rgb) * kColor.color.rgb;
+    output.color0.w = 1.0f;
     output.color1 = output.color0;
 
     return output;
