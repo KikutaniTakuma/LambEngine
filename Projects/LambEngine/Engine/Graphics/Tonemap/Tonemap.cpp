@@ -5,7 +5,7 @@
 /// 参考 : https://technorgb.blogspot.com/2018/02/hyperbola-tone-mapping.html
 /// </summary>
 
-float32_t3 Tonemap(const TonemapParams& tc, float32_t3 x)
+float32_t3 Tonemap(const TonemapParams& tc, const float32_t3& x)
 {
 	float32_t3 toe = -tc.mToe.x / (x + tc.mToe.y) + tc.mToe.z;
 	float32_t3 mid = tc.mMid.x * x + tc.mMid.y;
@@ -16,7 +16,7 @@ float32_t3 Tonemap(const TonemapParams& tc, float32_t3 x)
 	return result;
 }
 
-TonemapParams PrepareTonemapParams(float32_t2 p1, float32_t2 p2, float32_t2 p3)
+TonemapParams PrepareTonemapParams(const float32_t2 p1, const float32_t2 p2, const float32_t2 p3)
 {
 	TonemapParams tc;
 
@@ -53,7 +53,7 @@ TonemapParams PrepareTonemapParams(float32_t2 p1, float32_t2 p2, float32_t2 p3)
 	return tc;
 }
 
-float32_t Toe(float32_t x, float32_t2 p1, float32_t2 p2)
+float32_t TonemapToe(const float32_t x, const float32_t2 p1, const float32_t2 p2)
 {
 	float32_t n = (p2.y - p1.y) / (p2.x - p1.x);
 
@@ -69,7 +69,7 @@ float32_t Toe(float32_t x, float32_t2 p1, float32_t2 p2)
 	return -(1.0f / (a1 * (x + xOffset))) + yOffset;
 }
 
-float32_t Sholder(float32_t x, float32_t2 p1, float32_t2 p2, float32_t2 p3)
+float32_t TonemapSholder(const float32_t x, const float32_t2 p1, const float32_t2 p2, const float32_t2 p3)
 {
 	float32_t pl = p3.y - p2.y;
 	float32_t n = (p2.y - p1.y) / (p2.x - p1.x);

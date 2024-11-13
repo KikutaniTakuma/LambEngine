@@ -16,9 +16,9 @@ struct TonemapParams
 	float32_t2 mBy;	// only used for InvTonemap
 };
 
-float32_t3 Tonemap(const TonemapParams& tc, float32_t3 x);
+float32_t3 Tonemap(const TonemapParams& tc, const float32_t3& x);
 
-TonemapParams PrepareTonemapParams(float32_t2 p1, float32_t2 p2, float32_t2 p3);
+TonemapParams PrepareTonemapParams(const float32_t2 p1, const float32_t2 p2, const float32_t2 p3);
 
-float32_t Toe(float32_t x, float32_t2 p1, float32_t2 p2);
-float32_t Sholder(float32_t x, float32_t2 p1, float32_t2 p2, float32_t2 p3);
+float32_t TonemapToe(const float32_t x, const float32_t2 p1, const float32_t2 p2);
+float32_t TonemapSholder(const float32_t x, const float32_t2 p1, const float32_t2 p2, const float32_t2 p3);

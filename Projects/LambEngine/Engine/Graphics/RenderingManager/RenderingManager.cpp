@@ -552,7 +552,7 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 					toeDataX_[i] = std::lerp(0.0f, tonemapToe_.x, static_cast<float>(i) / static_cast<float>(toeDataX_.size()-1));
 				}
 				for (size_t i = 0; i < toeDataY_.size(); ++i) {
-					toeDataY_[i] = Toe(toeDataX_[i], tonemapToe_, tonemapLinear_);
+					toeDataY_[i] = TonemapToe(toeDataX_[i], tonemapToe_, tonemapLinear_);
 				}
 				linearDataX_[0] = tonemapToe_.x;
 				linearDataX_[1] = tonemapLinear_.x;
@@ -562,7 +562,7 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 					sholderDataX_[i] = std::lerp(tonemapLinear_.x, tonemapSholder_.x, static_cast<float>(i) / static_cast<float>(sholderDataX_.size() - 1));
 				}
 				for (size_t i = 0; i < sholderDataY_.size(); ++i) {
-					sholderDataY_[i] = Sholder(sholderDataX_[i], tonemapToe_, tonemapLinear_, tonemapSholder_);
+					sholderDataY_[i] = TonemapSholder(sholderDataX_[i], tonemapToe_, tonemapLinear_, tonemapSholder_);
 				}
 				whiteBorderX_.back() = std::max(tonemapSholder_.x + tonemapSholder_.x * 0.1f, 1.5f);
 
