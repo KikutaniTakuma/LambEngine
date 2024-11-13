@@ -23,6 +23,7 @@
 #ifdef USE_DEBUG_CODE
 #include "imgui.h"
 #include "implot.h"
+#include <bit>
 #endif // USE_DEBUG_CODE
 
 
@@ -536,8 +537,8 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 			ImGui::Checkbox("MeshShader", &isUseMesh_);
 		}
 
-		ImGui::Checkbox("lighting", reinterpret_cast<bool*>(&deferredRenderingData_.isDirectionLight));
-		ImGui::Checkbox("isShadow", reinterpret_cast<bool*>(&deferredRenderingData_.isShadow));
+		ImGui::Checkbox("lighting", std::bit_cast<bool*>(&deferredRenderingData_.isDirectionLight));
+		ImGui::Checkbox("isShadow", std::bit_cast<bool*>(&deferredRenderingData_.isShadow));
 		lightRotate_ *= Lamb::Math::toDegree<float>;
 		ImGui::DragFloat3("ライト角度", lightRotate_.data(), 1.0f);
 		lightRotate_.x = std::fmodf(lightRotate_.x, 360.0f);

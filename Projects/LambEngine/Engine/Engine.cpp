@@ -8,6 +8,8 @@
 #include <comdef.h>
 #pragma comment(lib, "wbemuuid.lib")
 
+#include <bit>
+
 #include "Core/WindowFactory/WindowFactory.h"
 #include "Core/DirectXDevice/DirectXDevice.h"
 #include "Core/DirectXCommand/DirectXCommand.h"
@@ -217,7 +219,7 @@ std::string Engine::GetCpuName() const {
 		nullptr,
 		CLSCTX_INPROC_SERVER,
 		IID_IWbemLocator,
-		reinterpret_cast<LPVOID*>(&pLoc)
+		std::bit_cast<LPVOID*>(&pLoc)
 	);
 
 	if (FAILED(hres)) {

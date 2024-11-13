@@ -3,6 +3,8 @@
 #include "Utils/ExecutionLog.h"
 #include "Error/Error.h"
 
+#include <bit>
+
 Input* Input::instance_ = nullptr;
 
 void Input::Initialize() {
@@ -22,7 +24,7 @@ Input::Input():
 		WindowFactory::GetInstance()->GetWNDCLASSEX().hInstance, 
 		DIRECTINPUT_VERSION,
 		IID_IDirectInput8,
-		reinterpret_cast<void**>(directInput_.GetAddressOf()),
+		std::bit_cast<void**>(directInput_.GetAddressOf()),
 		nullptr
 	);
 	assert(SUCCEEDED(hr));

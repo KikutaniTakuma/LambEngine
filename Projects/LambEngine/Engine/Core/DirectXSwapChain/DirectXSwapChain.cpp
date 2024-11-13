@@ -10,6 +10,7 @@
 
 #include "Error/Error.h"
 #include "Utils/SafeDelete.h"
+#include <bit>
 
 Lamb::SafePtr<DirectXSwapChain> DirectXSwapChain::instance_ = nullptr;
 
@@ -49,7 +50,7 @@ DirectXSwapChain::DirectXSwapChain():
 	swapChainDesc.BufferCount = kBackBufferNumber;
 	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
-	HRESULT hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue, WindowFactory::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, reinterpret_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
+	HRESULT hr = dxgiFactory->CreateSwapChainForHwnd(commandQueue, WindowFactory::GetInstance()->GetHwnd(), &swapChainDesc, nullptr, nullptr, std::bit_cast<IDXGISwapChain1**>(swapChain_.GetAddressOf()));
 	assert(SUCCEEDED(hr));
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<DirectXSwapChain>("something error", "CreateSwapChainForHwnd", __FILE__, __LINE__);

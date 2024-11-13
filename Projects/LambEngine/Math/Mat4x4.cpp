@@ -2,6 +2,7 @@
 #include "Quaternion.h"
 #include <cmath>
 #include "Math/MathCommon.h"
+#include <bit>
 
 const Matrix<float,4,4> Matrix<float,4,4>::kIdentity = DirectX::XMMatrixIdentity();
 
@@ -228,8 +229,8 @@ void Matrix<float,4,4>::Decompose(Vector3& scale, Quaternion& rotate, Vector3& t
 		this->xmMatrix_
 		);
 
-	DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(scale.data()), outScale);
-	DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(translate.data()), outTranslate);
+	DirectX::XMStoreFloat3(std::bit_cast<DirectX::XMFLOAT3*>(scale.data()), outScale);
+	DirectX::XMStoreFloat3(std::bit_cast<DirectX::XMFLOAT3*>(translate.data()), outTranslate);
 }
 
 void Matrix<float,4,4>::Decompose(Vector3& scale, Vector3& rotate, Vector3& translate) const {
@@ -246,8 +247,8 @@ void Matrix<float,4,4>::Decompose(Vector3& scale, Vector3& rotate, Vector3& tran
 		this->xmMatrix_
 	);
 
-	DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(scale.data()), outScale);
-	DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(translate.data()), outTranslate);
+	DirectX::XMStoreFloat3(std::bit_cast<DirectX::XMFLOAT3*>(scale.data()), outScale);
+	DirectX::XMStoreFloat3(std::bit_cast<DirectX::XMFLOAT3*>(translate.data()), outTranslate);
 
 	rotate = Quaternion::QuaternionToEuler(quaternion);
 }

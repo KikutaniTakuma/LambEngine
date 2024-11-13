@@ -3,6 +3,8 @@
 #undef max
 #undef min
 
+#include <bit>
+
 /// 
 /// string to wstring
 /// 
@@ -11,12 +13,12 @@ std::wstring ConvertString(const std::string& msg) {
 		return std::wstring();
 	}
 
-	auto sizeNeeded = MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<const char*>(&msg[0]), static_cast<int>(msg.size()), NULL, 0);
+	auto sizeNeeded = MultiByteToWideChar(CP_UTF8, 0, std::bit_cast<const char*>(&msg[0]), static_cast<int>(msg.size()), NULL, 0);
 	if (sizeNeeded == 0) {
 		return std::wstring();
 	}
 	std::wstring result(sizeNeeded, 0);
-	MultiByteToWideChar(CP_UTF8, 0, reinterpret_cast<const char*>(&msg[0]), static_cast<int>(msg.size()), &result[0], sizeNeeded);
+	MultiByteToWideChar(CP_UTF8, 0, std::bit_cast<const char*>(&msg[0]), static_cast<int>(msg.size()), &result[0], sizeNeeded);
 	return result;
 }
 
