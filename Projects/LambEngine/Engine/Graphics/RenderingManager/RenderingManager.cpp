@@ -663,6 +663,19 @@ void RenderingManager::Save(nlohmann::json& jsonFile) {
 	json["skybox"]["environment"] = deferredRenderingData_.environmentCoefficient;
 	json["outline"] = outlineWeight_;
 	json["outline_enable"] = isDrawOutLine_;
+
+	json["tonemap"]["toe"] = nlohmann::json::array();
+	for (auto& i : tonemapToe_) {
+		json["tonemap"]["toe"].push_back(i);
+	}
+	json["tonemap"]["linear"] = nlohmann::json::array();
+	for (auto& i : tonemapLinear_) {
+		json["tonemap"]["linear"].push_back(i);
+	}
+	json["tonemap"]["sholder"] = nlohmann::json::array();
+	for (auto& i : tonemapSholder_) {
+		json["tonemap"]["sholder"].push_back(i);
+	}
 }
 
 void RenderingManager::Load(nlohmann::json& jsonFile) {
@@ -706,6 +719,17 @@ void RenderingManager::Load(nlohmann::json& jsonFile) {
 		isDrawOutLine_ = json["outline_enable"].get<bool>();
 	}
 
+	if (json.contains("tonemap")) {
+		for (size_t i = 0; i < tonemapToe_.size(); ++i) {
+			tonemapToe_[i] = json["tonemap"]["toe"][i].get<float>();
+		}
+		for (size_t i = 0; i < tonemapLinear_.size(); ++i) {
+			tonemapLinear_[i] = json["tonemap"]["linear"][i].get<float>();
+		}
+		for (size_t i = 0; i < tonemapSholder_.size(); ++i) {
+			tonemapSholder_[i] = json["tonemap"]["sholder"][i].get<float>();
+		}
+	}
 }
 
 void RenderingManager::SetIsUseMeshShader(bool isUseMesh) {
