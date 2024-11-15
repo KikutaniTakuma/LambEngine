@@ -1,3 +1,5 @@
+[![MSBuild](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/c-cpp.yml)
+
 # LambEngine
 ## 水の描画に特化したエンジン
 * DeferredRendering
