@@ -101,6 +101,7 @@ void TitleScene::Initialize() {
     renderingManager_->SetLightRotate(Vector3(22.0f, -8.0f, 0.0f) * Lamb::Math::toRadian<float>);
     renderingManager_->SetBloomKernelSize(128, 128);
     renderingManager_->SetEnvironmentCoefficient(0.3f);
+    renderingManager_->SetTonemapParam({ 0.166f, 0.133f }, { 0.6f, 0.4f }, {15.0f, 1.0f});
 
     corals_.Init();
 

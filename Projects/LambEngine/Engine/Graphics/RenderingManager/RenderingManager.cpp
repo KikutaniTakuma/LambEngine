@@ -150,13 +150,14 @@ RenderingManager::RenderingManager() {
 	isUseMesh_ = Lamb::IsCanUseMeshShader();
 
 #ifdef USE_DEBUG_CODE
-	toeDataX_.resize(11);
-	toeDataY_.resize(11);
-	sholderDataX_.resize(11);
-	sholderDataY_.resize(11);
+	const uint32_t kPlotDivison = 11;
+
+	toeDataX_.resize(kPlotDivison);
+	toeDataY_.resize(kPlotDivison);
+	sholderDataX_.resize(kPlotDivison);
+	sholderDataY_.resize(kPlotDivison);
 
 	whiteBorderX_ = {0.0f, 1.0f, 1.0f};
-
 	whiteBorderY_ = { 0.0f, 1.0f, 1.0f };
 
 #endif // USE_DEBUG_CODE
@@ -278,7 +279,7 @@ void RenderingManager::Draw() {
 	deferredRendering_->SetCameraMatrix(viewMatrix_ * projectionMatrix_);
 	deferredRendering_->SetLightCameraMatrix(lightCamera_);
 
-	tonemapParamas_ = PrepareTonemapParams(tonemapToe_, tonemapLinear_, tonemapSholder_);
+	tonemapParamas_ = PrepareTonemapParams(tonemapToe_, tonemapLinear_, tonemapShoulder_);
 	distortion_->SetTonemapParams(tonemapParamas_);
 
 	/// ====================================================================================
@@ -530,6 +531,12 @@ void RenderingManager::SetEnvironmentCoefficient(float32_t environmentCoefficien
 	deferredRenderingData_.environmentCoefficient = environmentCoefficient;
 }
 
+void RenderingManager::SetTonemapParam(float32_t2 toe, float32_t2 linear, float32_t2 shoulder) {
+	tonemapToe_ = toe;
+	tonemapLinear_ = linear;
+	tonemapShoulder_ = shoulder;
+}
+
 void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 #ifdef USE_DEBUG_CODE
 	if (ImGui::TreeNode(guiName.c_str())) {
@@ -559,12 +566,12 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 				linearDataY_[0] = tonemapToe_.y;
 				linearDataY_[1] = tonemapLinear_.y;
 				for (size_t i = 0; i < sholderDataX_.size(); ++i) {
-					sholderDataX_[i] = std::lerp(tonemapLinear_.x, tonemapSholder_.x, static_cast<float>(i) / static_cast<float>(sholderDataX_.size() - 1));
+					sholderDataX_[i] = std::lerp(tonemapLinear_.x, tonemapShoulder_.x, static_cast<float>(i) / static_cast<float>(sholderDataX_.size() - 1));
 				}
 				for (size_t i = 0; i < sholderDataY_.size(); ++i) {
-					sholderDataY_[i] = TonemapSholder(sholderDataX_[i], tonemapToe_, tonemapLinear_, tonemapSholder_);
+					sholderDataY_[i] = TonemapSholder(sholderDataX_[i], tonemapToe_, tonemapLinear_, tonemapShoulder_);
 				}
-				whiteBorderX_.back() = std::max(tonemapSholder_.x + tonemapSholder_.x * 0.1f, 1.5f);
+				whiteBorderX_.back() = std::max(tonemapShoulder_.x + tonemapShoulder_.x * 0.1f, 1.5f);
 
 
 				ImPlot::SetNextLineStyle(ImVec4(1.0f, 0.0f, 0.0f, 1.0f));
@@ -581,11 +588,11 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 			ImGui::DragFloat("toe x", tonemapToe_.data(), 0.001f, 0.0f, std::min(tonemapLinear_.x - 1e-5f, 0.5f));
 			ImGui::DragFloat("toe y", &tonemapToe_[1], 0.001f, 0.0f, tonemapLinear_.y - 1e-5f);
 			
-			ImGui::DragFloat("linear x", tonemapLinear_.data(), 0.001f, tonemapToe_.x + 1e-5f, std::min(tonemapSholder_.x - 1e-5f, 0.9f));
-			ImGui::DragFloat("linear y", &tonemapLinear_[1], 0.001f, tonemapToe_.y + 1e-5f, tonemapSholder_.y - 1e-5f);
+			ImGui::DragFloat("linear x", tonemapLinear_.data(), 0.001f, tonemapToe_.x + 1e-5f, std::min(tonemapShoulder_.x - 1e-5f, 0.9f));
+			ImGui::DragFloat("linear y", &tonemapLinear_[1], 0.001f, tonemapToe_.y + 1e-5f, tonemapShoulder_.y - 1e-5f);
 			
-			ImGui::DragFloat("sholder x", tonemapSholder_.data(), 0.001f, tonemapLinear_.x + 1e-5f, 100.0f);
-			ImGui::DragFloat("sholder y", &tonemapSholder_[1], 0.001f, tonemapLinear_.y + 1e-5f, 3.0f);
+			ImGui::DragFloat("shoulder x", tonemapShoulder_.data(), 0.001f, tonemapLinear_.x + 1e-5f, 100.0f);
+			ImGui::DragFloat("shoulder y", &tonemapShoulder_[1], 0.001f, tonemapLinear_.y + 1e-5f, 3.0f);
 			
 			ImGui::TreePop();
 		}
@@ -672,9 +679,9 @@ void RenderingManager::Save(nlohmann::json& jsonFile) {
 	for (auto& i : tonemapLinear_) {
 		json["tonemap"]["linear"].push_back(i);
 	}
-	json["tonemap"]["sholder"] = nlohmann::json::array();
-	for (auto& i : tonemapSholder_) {
-		json["tonemap"]["sholder"].push_back(i);
+	json["tonemap"]["shoulder"] = nlohmann::json::array();
+	for (auto& i : tonemapShoulder_) {
+		json["tonemap"]["shoulder"].push_back(i);
 	}
 }
 
@@ -726,8 +733,8 @@ void RenderingManager::Load(nlohmann::json& jsonFile) {
 		for (size_t i = 0; i < tonemapLinear_.size(); ++i) {
 			tonemapLinear_[i] = json["tonemap"]["linear"][i].get<float>();
 		}
-		for (size_t i = 0; i < tonemapSholder_.size(); ++i) {
-			tonemapSholder_[i] = json["tonemap"]["sholder"][i].get<float>();
+		for (size_t i = 0; i < tonemapShoulder_.size(); ++i) {
+			tonemapShoulder_[i] = json["tonemap"]["shoulder"][i].get<float>();
 		}
 	}
 }

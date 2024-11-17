@@ -95,6 +95,7 @@ public:
 	void SetLightRotate(const Vector3& lightRotate);
 	void SetBloomKernelSize(int32_t x, int32_t y);
 	void SetEnvironmentCoefficient(float32_t environmentCoefficient);
+	void SetTonemapParam(float32_t2 toe, float32_t2 linear, float32_t2 shoulder);
 
 	void Debug(const std::string& guiName);
 
@@ -211,7 +212,7 @@ private:
 	TonemapParams tonemapParamas_;
 	Vector2 tonemapToe_ = Vector2(0.2f, 0.2f);
 	Vector2 tonemapLinear_ = Vector2(0.6f, 0.6f);
-	Vector2 tonemapSholder_ = Vector2::kIdentity;
+	Vector2 tonemapShoulder_ = Vector2::kIdentity;
 
 #ifdef USE_DEBUG_CODE
 	std::vector<float32_t> toeDataX_;
