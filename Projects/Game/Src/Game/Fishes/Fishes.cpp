@@ -4,14 +4,16 @@
 
 #include "Drawer/DrawerManager.h"
 
+#include "Drawer/Line/Line.h"
+
 const Vector3& Fish::GetDirection() const {
 	return direction_;
 }
 
 void Fish::Init(const Vector3& min, const Vector3& max) {
-	direction_ = Lamb::Random(Vector3(0.0f, 0.0f, 0.0f), Vector3(1.0f, 0.0f, 1.0f));
+	direction_ = Lamb::Random(Vector3(-1.0f, 0.0f, -1.0f), Vector3(1.0f, 0.0f, 1.0f));
 
-	speed_ = 10.0f;
+	speed_ = 30.0f;
 
 	posision_ = Lamb::Random(min, max);
 }
@@ -58,28 +60,31 @@ bool Fish::IsCollision(const Fish& other) const {
 }
 
 void Fish::CalcAvoidWallDirection(const Vector3& min, const Vector3& max) {
-	Vector3 n;
 
+	avoidWallDirection_ = direction_;
 	if ((posision_.x - wallCollisionRange_) < min.x) {
-		n = Vector3::kXIdentity;
+		speed_ = 0.0f;
+		weight_.z = 1.0f - std::max(1.0f, std::abs(posision_.x - min.x) / wallCollisionRange_);
+		avoidWallDirection_.x *= -1.0f;
 	}
 	if ((posision_.z - wallCollisionRange_) < min.z) {
-		n += Vector3::kZIdentity;
-		n = n.Normalize();
+		speed_ = 0.0f;
+		weight_.z = std::max(weight_.z, 1.0f - std::max(1.0f, std::abs(posision_.z - min.z) / wallCollisionRange_));
+		avoidWallDirection_.z *= -1.0f;
 	}
 	if (max.x < (posision_.x + wallCollisionRange_)) {
-		n += -Vector3::kXIdentity;
-		n = n.Normalize();
+		speed_ = 0.0f;
+		weight_.z = std::max(weight_.z, 1.0f - std::max(1.0f, std::abs(max.x - posision_.x) / wallCollisionRange_));
+		avoidWallDirection_.x *= -1.0f;
 	}
 	if (max.z < (posision_.z + wallCollisionRange_)) {
-		n += -Vector3::kZIdentity;
-		n = n.Normalize();
+		speed_ = 0.0f;
+		weight_.z = std::max(weight_.z, 1.0f - std::max(1.0f, std::abs(max.z - posision_.z) / wallCollisionRange_));
+		avoidWallDirection_.z *= -1.0f;
 	}
 
-	avoidWallDirection_ = Vector3::Reflect(direction_, n);
-
-	if (avoidWallDirection_ != Vector3::kZero) {
-		weight_.z = 1.0f;
+	if (avoidWallDirection_ == direction_) {
+		weight_.z = 0.0f;
 	}
 }
 
@@ -114,13 +119,13 @@ void Fish::CalcAvgAndCenterOfGravityDirection() {
 }
 
 void Fish::CalcDirection() {
-	weight_ = weight_.Normalize();
-	if (avoidDirection_ != Vector3::kZero and avgDirection_ != Vector3::kZero) {
+	//weight_ = weight_.Normalize();
+	/*if (avoidDirection_ != Vector3::kZero and avgDirection_ != Vector3::kZero) {
 		direction_ = Vector3::Lerp(avoidDirection_, avgDirection_, weight_.x);
 	}
 	if (centerOfGravityDirection_ != Vector3::kZero) {
 		direction_ = Vector3::Lerp(direction_, centerOfGravityDirection_, weight_.y);
-	}
+	}*/
 	direction_ = Vector3::Lerp(direction_, avoidWallDirection_, weight_.z);
 }
 
@@ -130,21 +135,24 @@ Mat4x4 Fish::CreateWorldMatrix() const {
 
 
 void Fishes::Init(size_t numFishes) {
-	fishes_.reserve(numFishes);
+	rangeMin_ = { -200.0f * 0.25f, 1.0f, -100.0f * 0.25f };
+	rangeMax_ = { 200.0f * 0.25f, 1.0f, 300.0f * 0.25f };
 
+	fishes_.reserve(numFishes);
 	for (size_t i = 0; i < numFishes; ++i) {
 		fishes_.push_back(std::make_unique<Fish>());
 		fishes_.back()->Init(rangeMin_, rangeMax_);
 	}
+
 	DrawerManager::GetInstance()->LoadModel("./Resources/Fish/Fish.gltf");
 	model_ = DrawerManager::GetInstance()->GetModel("./Resources/Fish/Fish.gltf");
-
 }
 
 void Fishes::Update()
 {
 	for (auto& i : fishes_) {
 		i->Update();
+		i->CalcAvoidWallDirection(rangeMin_, rangeMax_);
 	}
 
 	for (auto y = fishes_.begin(); y != fishes_.end(); ++y) {
@@ -156,8 +164,6 @@ void Fishes::Update()
 			// 視野範囲ないに入っていたら
 			if ((*x)->IsCollision(**y)) {
 				// 避ける
-				// 壁
-				(*x)->CalcAvoidWallDirection(rangeMin_, rangeMax_);
 				// 最も近いもの進行方向と最も近いものの方向でよける向きを求める
 				// 避ける方向が決まったら距離に応じた重みを求める
 				(*x)->CalcAvoidDirection(**y);
@@ -187,5 +193,28 @@ void Fishes::Draw(const Mat4x4& cameraMat) {
 			BlendType::kNone
 		);
 	}
+
+	Line::Draw(
+		rangeMin_,
+		Vector3(rangeMax_.x, rangeMin_.y, rangeMin_.z),
+		cameraMat
+	);
+	Line::Draw(
+		Vector3(rangeMax_.x, rangeMin_.y, rangeMin_.z),
+		Vector3(rangeMax_.x, rangeMin_.y, rangeMax_.z),
+		cameraMat
+	);
+
+	Line::Draw(
+		Vector3(rangeMax_.x, rangeMin_.y, rangeMax_.z),
+		Vector3(rangeMin_.x, rangeMin_.y, rangeMax_.z),
+		cameraMat
+	);
+
+	Line::Draw(
+		Vector3(rangeMin_.x, rangeMin_.y, rangeMax_.z),
+		rangeMin_,
+		cameraMat
+	);
 }
 

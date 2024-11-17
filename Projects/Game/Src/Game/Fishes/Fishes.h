@@ -5,6 +5,7 @@
 #include "Math/Vector3.h"
 #include "Math/MathCommon.h"
 #include "Math/Quaternion.h"
+#include "Utils/SafePtr.h"
 
 #include <memory>
 
@@ -68,7 +69,7 @@ private:
 	// 当たり判定をする距離
 	float collisionRange_ = 0.0f;
 
-	float wallCollisionRange_ = 0.0f;
+	float wallCollisionRange_ = 1.0f;
 
 	// どれを優先にするかの重み
 	Vector3 weight_ = Vector3::kXIdentity;

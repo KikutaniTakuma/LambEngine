@@ -2,6 +2,7 @@
 #include "Scenes/Manager/BaseScene/BaseScene.h"
 #include "GameObject/Manager/ObjectManager.h"
 #include "Level/LevelData.h"
+#include "Game/Fishes/Fishes.h"
 
 class TestScene : public BaseScene {
 public:
@@ -22,4 +23,6 @@ private:
 	Lamb::SafePtr<LevelData> levelData_;
 	
 	class Water* water_;
+
+	std::unique_ptr<Fishes> fishes_;
 };
