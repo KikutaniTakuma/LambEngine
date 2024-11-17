@@ -243,6 +243,10 @@ Vector3 Vector3::Step(const float a, const Vector3& x)
 }
 
 Vector3 Vector3::Reflect(const Vector3& i, const Vector3& n) {
+	if (n == Vector3::kZero) {
+		return n;
+	}
+
 	return i - (2.0f * i.Dot(n) * n);
 }
 
@@ -250,7 +254,23 @@ Vector3 Vector3::ReflectNormal(const Vector3& i, const Vector3& r) {
 	return (r - i).Normalize();
 }
 
+Vector3 Vector3::Avarage(std::initializer_list<Vector3> vecs) {
+	if (vecs.size() == 0) {
+		return Vector3::kZero;
+	}
+
+	Vector3 result;
+	for (auto& i : vecs) {
+		result += i;
+	}
+	
+	return result / static_cast<float>(vecs.size());
+}
+
 Vector3 Pararerl(const Vector3& i, const Vector3& n) {
+	if (n == Vector3::kZero) {
+		return n;
+	}
 	return i - (i.Dot(n) * n);
 }
 
