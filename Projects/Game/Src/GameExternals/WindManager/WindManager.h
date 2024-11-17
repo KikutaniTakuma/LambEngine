@@ -5,7 +5,7 @@
 #include <list>
 
 #include "Wind/Wind.h"
-#include "Math/Mat4x4.h"
+#include "Math/Matrix.h"
 #include "Math/Vector3.h"
 #include "../WindParticle/WindParticle.h"
 

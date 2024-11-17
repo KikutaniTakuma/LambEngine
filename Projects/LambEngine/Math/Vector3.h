@@ -1,6 +1,6 @@
 #pragma once
 #include <array>
-#include "Mat4x4.h"
+#include "Matrix.h"
 
 /// <summary>
 /// 三次元配列

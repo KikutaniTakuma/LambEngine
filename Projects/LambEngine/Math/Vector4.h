@@ -2,7 +2,7 @@
 #include <array>
 #include <immintrin.h>
 #include "Utils/Concepts.h"
-#include "Mat4x4.h"
+#include "Matrix.h"
 
 /// <summary>
 /// 4次元配列

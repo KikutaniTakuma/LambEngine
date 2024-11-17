@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Whirlpool/Whirlpool.h"
-#include "Math/Mat4x4.h"
+#include "Math/Matrix.h"
 #include "Math/Vector3.h"
 
 class Camera;

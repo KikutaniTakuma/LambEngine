@@ -7,7 +7,7 @@
 #include "Drawer/Model/Model.h"
 #include "Drawer/Texture2D/Texture2D.h"
 #include "GlobalVariables/GlobalVariables.h"
-#include "Math/Mat4x4.h"
+#include "Math/Matrix.h"
 #include "Math/Vector3.h"
 
 class Camera;

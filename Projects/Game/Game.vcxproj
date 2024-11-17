@@ -269,6 +269,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\Object.cpp" />
     <ClCompile Include="Src\Game\Cloud\Cloud.cpp" />
     <ClCompile Include="Src\Game\Corals\Corals.cpp" />
+    <ClCompile Include="Src\Game\Fishes\Fishes.cpp" />
     <ClCompile Include="Src\Game\Water\Water.cpp" />
     <ClCompile Include="Src\GlobalVariables\GlobalVariables.cpp" />
     <ClCompile Include="Src\Level\LevelLoader.cpp" />
@@ -370,6 +371,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\Object.h" />
     <ClInclude Include="Src\Game\Cloud\Cloud.h" />
     <ClInclude Include="Src\Game\Corals\Corals.h" />
+    <ClInclude Include="Src\Game\Fishes\Fishes.h" />
     <ClInclude Include="Src\Game\Water\Water.h" />
     <ClInclude Include="Src\GlobalVariables\GlobalVariables.h" />
     <ClInclude Include="Src\Level\LevelData.h" />

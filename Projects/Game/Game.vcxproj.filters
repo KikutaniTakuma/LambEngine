@@ -287,6 +287,9 @@
     <ClCompile Include="Src\Game\Cloud\Cloud.cpp">
       <Filter>Game\Cloud</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\Fishes\Fishes.cpp">
+      <Filter>Game\Fishes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -363,6 +366,9 @@
     </Filter>
     <Filter Include="Game\Cloud">
       <UniqueIdentifier>{e6860cf0-6bb5-46a2-af93-64dafe05f7d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Fishes">
+      <UniqueIdentifier>{048cb0c1-1a6d-41f6-a5d8-cbc1cd9d2cb3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -662,6 +668,9 @@
     </ClInclude>
     <ClInclude Include="Src\Game\Cloud\Cloud.h">
       <Filter>Game\Cloud</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\Fishes\Fishes.h">
+      <Filter>Game\Fishes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

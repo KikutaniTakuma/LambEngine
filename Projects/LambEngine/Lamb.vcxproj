@@ -332,7 +332,6 @@
     <ClInclude Include="Input\KeyInput\KeyInput.h" />
     <ClInclude Include="Input\Mouse\Mouse.h" />
     <ClInclude Include="Math\MathCommon.h" />
-    <ClInclude Include="Math\Mat4x4.h" />
     <ClInclude Include="Math\Matrix.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Unit.h" />

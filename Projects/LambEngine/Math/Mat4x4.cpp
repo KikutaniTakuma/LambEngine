@@ -1,4 +1,4 @@
-#include "Mat4x4.h"
+#include "Matrix.h"
 #include "Quaternion.h"
 #include <cmath>
 #include "Math/MathCommon.h"
@@ -8,10 +8,17 @@ const Matrix<float,4,4> Matrix<float,4,4>::kIdentity = DirectX::XMMatrixIdentity
 
 const Matrix<float,4,4> Matrix<float,4,4>::kZero = Matrix<float,4,4>();
 
+constexpr Matrix<float, 4, 4>& Matrix<float, 4, 4>::operator=(const DirectX::XMMATRIX& xmMatrix)
+{
+	this->xmMatrix_ = xmMatrix;
+
+	return *this;
+}
+
 Matrix<float,4,4> Matrix<float,4,4>::MakeTranslate(const Vector3& vec) {
 	Matrix<float,4,4> result;
 
-	result.xmMatrix_ = DirectX::XMMatrixTranslation(vec.x, vec.y, vec.z);
+	result = DirectX::XMMatrixTranslation(vec.x, vec.y, vec.z);
 
 	return result;
 }
@@ -19,7 +26,7 @@ Matrix<float,4,4> Matrix<float,4,4>::MakeTranslate(const Vector3& vec) {
 Matrix<float,4,4> Matrix<float,4,4>::MakeScale(const Vector3& vec) {
 	Matrix<float,4,4> result;
 
-	result.xmMatrix_ = DirectX::XMMatrixScaling(vec.x, vec.y, vec.z);
+	result = DirectX::XMMatrixScaling(vec.x, vec.y, vec.z);
 
 	return result;
 }
@@ -27,7 +34,7 @@ Matrix<float,4,4> Matrix<float,4,4>::MakeScale(const Vector3& vec) {
 Matrix<float,4,4> Matrix<float,4,4>::MakeRotateX(float rad) {
 	Matrix<float,4,4> result;
 
-	result.xmMatrix_ = DirectX::XMMatrixRotationX(rad);
+	result = DirectX::XMMatrixRotationX(rad);
 
 	return result;
 }
@@ -35,7 +42,7 @@ Matrix<float,4,4> Matrix<float,4,4>::MakeRotateX(float rad) {
 Matrix<float,4,4> Matrix<float,4,4>::MakeRotateY(float rad) {
 	Matrix<float,4,4> result;
 
-	result.xmMatrix_ = DirectX::XMMatrixRotationY(rad);
+	result = DirectX::XMMatrixRotationY(rad);
 
 	return result;
 }
@@ -43,7 +50,7 @@ Matrix<float,4,4> Matrix<float,4,4>::MakeRotateY(float rad) {
 Matrix<float,4,4> Matrix<float,4,4>::MakeRotateZ(float rad) {
 	Matrix<float,4,4> result;
 
-	result.xmMatrix_ = DirectX::XMMatrixRotationZ(rad);
+	result = DirectX::XMMatrixRotationZ(rad);
 
 	return result;
 }
@@ -78,7 +85,7 @@ Matrix<float,4,4> Matrix<float,4,4>::MakeAffin(const Vector3& scale, const Quate
 {
 	Matrix<float,4,4> result;
 
-	result.xmMatrix_ = DirectX::XMMatrixAffineTransformation({ scale.x, scale.y, scale.z }, {}, rad.m128, { translate.x,translate.y,translate.z });
+	result = DirectX::XMMatrixAffineTransformation({ scale.x, scale.y, scale.z }, {}, rad.m128, { translate.x,translate.y,translate.z });
 
 	return result;
 }
@@ -86,7 +93,7 @@ Matrix<float,4,4> Matrix<float,4,4>::MakeAffin(const Vector3& scale, const Quate
 Matrix<float,4,4> Matrix<float,4,4>::MakeAffin(const Vector3& scale, const Vector3& from, const Vector3& to, const Vector3& translate) {
 	Matrix<float,4,4> result;
 
-	result.xmMatrix_ = DirectX::XMMatrixAffineTransformation({ scale.x, scale.y, scale.z }, {}, Quaternion::DirectionToDirection(from, to).m128, { translate.x,translate.y,translate.z });
+	result = DirectX::XMMatrixAffineTransformation({ scale.x, scale.y, scale.z }, {}, Quaternion::DirectionToDirection(from, to).m128, { translate.x,translate.y,translate.z });
 
 	return result;
 }
@@ -102,7 +109,7 @@ Matrix<float,4,4> Matrix<float,4,4>::MakePerspectiveFov(float fovY, float aspect
 	result[3][2] = (-nearClip * farClip) / (farClip - nearClip);
 	*/
 
-	result.xmMatrix_ = DirectX::XMMatrixPerspectiveFovLH(fovY, aspectRatio, nearClip, farClip);
+	result = DirectX::XMMatrixPerspectiveFovLH(fovY, aspectRatio, nearClip, farClip);
 
 	return result;
 }
@@ -121,7 +128,7 @@ Matrix<float,4,4> Matrix<float,4,4>::MakeOrthographic(float width, float height,
 	result[3][2] = nearClip / (nearClip - farClip);
 	*/
 
-	result.xmMatrix_ = DirectX::XMMatrixOrthographicLH(width, height, nearClip, farClip);
+	result = DirectX::XMMatrixOrthographicLH(width, height, nearClip, farClip);
 
 	return result;
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "Math/Vector3.h"
-#include "Math/Mat4x4.h"
+#include "Math/Matrix.h"
 
 struct OBB {
 	Vector3 center;
