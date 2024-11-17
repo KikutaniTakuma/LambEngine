@@ -794,6 +794,10 @@ void Customize::Mouse() {
 				angle_ -= 90.0f;
 			}
 		}
+
+		if (angle_ < 0.0f) {
+			angle_ = 360.0f + angle_;
+		}
 		angle_ = std::fmod(angle_, 360.0f);
 	}
 	// 消去
@@ -806,9 +810,9 @@ void Customize::SetObject() {
 	int32_t cursor_x = int32_t(ChangeCursorToTileMap().x);
 	int32_t cursor_y = int32_t(ChangeCursorToTileMap().y);
 
-	if ((gamepad->Pushed(Gamepad::Button::A) || mouse->Pushed(Mouse::Button::Left)) &&
-		(float(cursor_x) != -1.0f ||
-			float(cursor_y) != -1.0f)) {
+	if ((gamepad->Pushed(Gamepad::Button::A) or mouse->Pushed(Mouse::Button::Left)) 
+		and (float(cursor_x) != -1.0f or float(cursor_y) != -1.0f)
+	) {
 		switch (currentType_) {
 		case Customize::kCursor:
 		{
@@ -863,6 +867,10 @@ void Customize::SetObject() {
 						angle_ = player_->GetCannonsTextures(index)->rotate.z * 180.0f / std::numbers::pi_v<float>;
 						cursor_.x = (player_->GetCannonsTextures(index)->pos.x - player_->GetTileMapOffset().x) / player_->GetTileMapSize() + int(float(width_) * 0.5f);
 						cursor_.y = (player_->GetCannonsTextures(index)->pos.y - player_->GetTileMapOffset().y) / player_->GetTileMapSize() + int(float(height_) * 0.5f);
+						if (angle_ < 0.0f) {
+							angle_ = std::abs(angle_);
+						}
+						
 						if (angle_ == 0.0f) {
 							cursor_.y += 0.5f;
 						}
@@ -913,6 +921,10 @@ void Customize::SetObject() {
 						angle_ = player_->GetLoopCannonsTextures(index)->rotate.z * 180.0f / std::numbers::pi_v<float>;
 						cursor_.x = (player_->GetLoopCannonsTextures(index)->pos.x - player_->GetTileMapOffset().x) / player_->GetTileMapSize() + int(float(width_) * 0.5f);
 						cursor_.y = (player_->GetLoopCannonsTextures(index)->pos.y - player_->GetTileMapOffset().y) / player_->GetTileMapSize() + int(float(height_) * 0.5f);
+						if (angle_ < 0.0f) {
+							angle_ = std::abs(angle_);
+						}
+						
 						if (angle_ == 0.0f) {
 							cursor_.y += 0.5f;
 						}

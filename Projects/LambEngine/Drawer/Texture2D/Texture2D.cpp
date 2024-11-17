@@ -32,9 +32,11 @@ const MeshLoadFileNames Texture2D::kMeshFileNames_ = MeshLoadFileNames{
 	}
 };
 
-Texture2D::Texture2D():
+Texture2D::Texture2D() :
 	BaseDrawer()
-{}
+{
+	isUseMeshShader_ = false;
+}
 
 void Texture2D::Load()
 {
@@ -52,6 +54,7 @@ void Texture2D::Load()
 	renderContextManager->Load<Texture2DRenderContext>(kFileNames_, 4);
 
 	renderSet = renderContextManager->Get(kFileNames_);
+
 }
 
 void Texture2D::Draw(
@@ -62,63 +65,29 @@ void Texture2D::Draw(
 	uint32_t color,
 	BlendType blend
 ) {
-#ifdef USE_DEBUG_CODE
-	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
-#endif // USE_DEBUG_CODE
+	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
 
-	if (isUseMeshShader_ and meshRenderSet) {
-		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<Texture2D::ShaderData, Texture2D::kMaxDrawCount>>(blend);
-
-		renderContext->SetShaderStruct(
-			ShaderData{
-				.uvTransform = uvTransform,
-				.pad = Vector3::kZero,
-				.textureID = textureID
-			}
-		);
-	}
-	else {
-		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
-
-		renderContext->SetShaderStruct(
-			ShaderData{
-				.uvTransform = uvTransform,
-				.pad = Vector3::kZero,
-				.textureID = textureID
-			}
-		);
-	}
+	renderContext->SetShaderStruct(
+		ShaderData{
+			.uvTransform = uvTransform,
+			.pad = Vector3::kZero,
+			.textureID = textureID
+		}
+	);
 
 	BaseDrawer::Draw(worldMatrix, camera, color,  blend);
 }
 
 void Texture2D::Draw(const Texture2D::Data& data) {
-#ifdef USE_DEBUG_CODE
-	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
-#endif // USE_DEBUG_CODE
+	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(data.blend);
 
-	if (isUseMeshShader_ and meshRenderSet) {
-		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<Texture2D::ShaderData, Texture2D::kMaxDrawCount>>(data.blend);
-
-		renderContext->SetShaderStruct(
-			ShaderData{
-				.uvTransform = data.uvTransform,
-				.pad = Vector3::kZero,
-				.textureID = data.textureID
-			}
-		);
-	}
-	else {
-		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(data.blend);
-
-		renderContext->SetShaderStruct(
-			ShaderData{
-				.uvTransform = data.uvTransform,
-				.pad = Vector3::kZero,
-				.textureID = data.textureID
-			}
-		);
-	}
+	renderContext->SetShaderStruct(
+		ShaderData{
+			.uvTransform = data.uvTransform,
+			.pad = Vector3::kZero,
+			.textureID = data.textureID
+		}
+	);
 
 	BaseDrawer::Draw(data.worldMatrix, data.camera, data.color, data.blend);
 }
