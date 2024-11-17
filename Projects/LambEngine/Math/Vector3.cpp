@@ -242,6 +242,18 @@ Vector3 Vector3::Step(const float a, const Vector3& x)
 	return Vector3(Lamb::Step(a, x.x), Lamb::Step(a, x.y), Lamb::Step(a, x.z));
 }
 
+Vector3 Vector3::Reflect(const Vector3& i, const Vector3& n) {
+	return i - (2.0f * i.Dot(n) * n);
+}
+
+Vector3 Vector3::ReflectNormal(const Vector3& i, const Vector3& r) {
+	return (r - i).Normalize();
+}
+
+Vector3 Pararerl(const Vector3& i, const Vector3& n) {
+	return i - (i.Dot(n) * n);
+}
+
 Vector3 Project(const Vector3& vec1, const Vector3& vec2) {
 	return vec2 * (vec1.Dot(vec2) / std::pow(vec2.Length(), 2.0f));
 }

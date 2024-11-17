@@ -224,6 +224,11 @@ public:
 	static [[nodiscard]] Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
 	static [[nodiscard]] Vector3 Lerp(const Vector3& start, const Vector3& end, const Vector3& t);
 	static [[nodiscard]] Vector3 Step(const float a, const Vector3& x);
+	static [[nodiscard]] Vector3 Reflect(const Vector3& i, const Vector3& n);
+	// 元のベクトルと反射後のベクトルを使って法線を求める
+	static [[nodiscard]] Vector3 ReflectNormal(const Vector3& i, const Vector3& r);
+
+	static [[nodiscard]] Vector3 Pararerl(const Vector3& i, const Vector3& n);
 };
 
 struct Ray {
