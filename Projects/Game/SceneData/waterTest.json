@@ -48,6 +48,40 @@
         {
             "Comps": [
                 {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.053630292415618896,
+                        0.3586897552013397,
+                        -0.020647039636969566,
+                        0.9316861629486084
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        -133.26998901367188,
+                        11.756669044494629,
+                        -88.30644226074219
+                    ]
+                },
+                {
+                    "CompName": "class CameraComp"
+                },
+                {
+                    "CompName": "class Camera3DComp",
+                    "aspectRatio": 1.7777777910232544,
+                    "farClip": 1000.0,
+                    "fov": 0.4869273006916046,
+                    "nearClip": 0.10000000149011612
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
                     "CompName": "class CloudRenderCoomp"
                 },
                 {
@@ -86,80 +120,6 @@
                     ],
                     "fileName": "./Resources/EngineResources/white2x2.png",
                     "offsetType": "kMiddle"
-                }
-            ],
-            "type": "Object"
-        },
-        {
-            "Comps": [
-                {
-                    "CompName": "class TransformComp",
-                    "rotate": [
-                        0.14750505983829498,
-                        0.3730485439300537,
-                        -0.0602019727230072,
-                        0.9140310883522034
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        0.9999999403953552
-                    ],
-                    "translate": [
-                        -93.99330139160156,
-                        39.930049896240234,
-                        -67.85912322998047
-                    ]
-                },
-                {
-                    "CompName": "class CameraComp"
-                },
-                {
-                    "CompName": "class Camera3DComp",
-                    "aspectRatio": 1.7777777910232544,
-                    "farClip": 1000.0,
-                    "fov": 0.4869273006916046,
-                    "nearClip": 0.10000000149011612
-                }
-            ],
-            "type": "Object"
-        },
-        {
-            "Comps": [
-                {
-                    "BlendType": "kNone",
-                    "CompName": "class ModelRenderDataComp",
-                    "color": [
-                        0.8774510025978088,
-                        0.8774510025978088,
-                        0.8774510025978088,
-                        0.8774510025978088
-                    ],
-                    "fileName": "./Resources\\Coral\\Coral_9866.obj",
-                    "isDraw": true,
-                    "isLighting": true
-                },
-                {
-                    "CompName": "class ModelRenderComp"
-                },
-                {
-                    "CompName": "class TransformComp",
-                    "rotate": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        10.0,
-                        10.0,
-                        10.0
-                    ],
-                    "translate": [
-                        0.08314979076385498,
-                        -4.460693836212158,
-                        8.0
-                    ]
                 }
             ],
             "type": "Object"
