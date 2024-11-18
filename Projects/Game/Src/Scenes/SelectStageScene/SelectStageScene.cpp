@@ -143,6 +143,9 @@ void SelectStageScene::Initialize() {
     corals_.Init(-12.0f);
 
     //renderingManager_->SetTime(7.0f);
+
+    fishes_ = std::make_unique<Fishes>();
+    fishes_->Init(200);
 }
 
 void SelectStageScene::Finalize() {
@@ -311,6 +314,8 @@ void SelectStageScene::Update() {
     renderingManager_->SetCameraPos(currentCamera_->GetPos());
     renderingManager_->SetViewMatrix(currentCamera_->GetView());
     renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
+
+    fishes_->Update();
 }
 
 void SelectStageScene::Draw() {
@@ -353,6 +358,7 @@ void SelectStageScene::Draw() {
     cursor_->Draw(Mat4x4::MakeTranslate({ 0.0f, 0.0f, 10.0f }) * Camera::GetStaticViewOthographics());
 
     corals_.Draw(currentCamera_->GetViewProjection());
+    fishes_->Draw(currentCamera_->GetViewProjection());
 }
 
 Vector2 SelectStageScene::ChangeMouseToTexture() {

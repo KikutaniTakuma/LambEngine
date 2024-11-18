@@ -25,6 +25,8 @@
 
 #include "Game/Corals/Corals.h"
 
+#include "Game/Fishes/Fishes.h"
+
 class GameScene : public BaseScene {
 public:
 	GameScene();
@@ -85,4 +87,6 @@ public:
 	WaterTex2D::WaveData waveData_;
 
 	Corals corals_;
+
+	std::unique_ptr<Fishes> fishes_;
 };

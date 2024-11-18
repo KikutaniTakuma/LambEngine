@@ -106,6 +106,9 @@ void TitleScene::Initialize() {
     corals_.Init();
 
     cloud_ = std::make_unique<Cloud>();
+
+    fishes_ = std::make_unique<Fishes>();
+    fishes_->Init(200);
 }
 
 void TitleScene::Finalize() {
@@ -188,6 +191,7 @@ void TitleScene::Update() {
     volumeEasing_->Update();
     easing_->Update();
 
+    fishes_->Update();
 }
 
 void TitleScene::Draw() {
@@ -213,4 +217,5 @@ void TitleScene::Draw() {
     corals_.Draw(currentCamera_->GetViewProjection());
 
     cloud_->Draw(currentCamera_->GetViewProjection());
+    fishes_->Draw(currentCamera_->GetViewProjection());
 }

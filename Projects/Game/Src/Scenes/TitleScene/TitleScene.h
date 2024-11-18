@@ -13,6 +13,7 @@
 
 #include "Game/Corals/Corals.h"
 #include "Game/Cloud/Cloud.h"
+#include "Game/Fishes/Fishes.h"
 #include <array>
 
 class TitleScene : public BaseScene {
@@ -90,4 +91,5 @@ private:
 	Corals corals_;
 
 	std::unique_ptr<Cloud> cloud_;
+	std::unique_ptr<Fishes> fishes_;
 };

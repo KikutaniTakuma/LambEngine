@@ -92,6 +92,9 @@ void GameScene::Initialize() {
 	corals_.Init();
 
 	//renderingManager_->SetTime(12.0f);
+
+	fishes_ = std::make_unique<Fishes>();
+	fishes_->Init(200);
 }
 
 void GameScene::Finalize() {
@@ -266,6 +269,8 @@ void GameScene::Update() {
 	renderingManager_->SetViewMatrix(currentCamera_->GetView());
 	renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 	renderingManager_->Debug("randeringManager");
+
+	fishes_->Update();
 }
 
 void GameScene::Draw() {
@@ -279,6 +284,7 @@ void GameScene::Draw() {
 	BulletManager::GetInstance()->Draw(*currentCamera_);
 	player_->DrawUI(*uiCamera_);
 	corals_.Draw(currentCamera_->GetViewProjection());
+	fishes_->Draw(currentCamera_->GetViewProjection());
 
 	if (player_->GetIsCustomize()) {
 		customize_->Draw(*currentCamera_);
