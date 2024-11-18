@@ -29,7 +29,6 @@ public:
 	bool IsCollision(const Fish& other) const;
 
 
-	void CalcAvoidWallDirection(const Vector3& min, const Vector3& max);
 	void CalcAvoidDirection(const Fish& other);
 	// 重心と平均方向を求めるために足す
 	void AddAvgAndCenterOfGravityDirection(const Fish& other);
@@ -40,6 +39,21 @@ public:
 	void CalcDirection();
 
 	Mat4x4 CreateWorldMatrix() const;
+
+	uint32_t GetColors() const;
+
+private:
+	void CalcAvoidWallDirection(const Vector3& min, const Vector3& max);
+
+public:
+	// どれを優先にするかの重み
+	Vector3 weight = {0.005f, 1.0f, 0.05f};
+	// 視野範囲
+	float fov = 45.0f * Lamb::Math::toRadian<float>;
+	// 離れる距離
+	float avoidDistance = 20.0f;
+	// 当たり判定をする距離
+	float collisionRange = 50.0f;
 
 
 private:
@@ -60,22 +74,16 @@ private:
 	// 近くの人の重心の方向
 	Vector3 centerOfGravityDirection_;
 
-	// 壁から離れる
-	Vector3 avoidWallDirection_;
+	float wallCollisionRange_ = 10.0f;
 
-	// 視野範囲
-	float fov_ = 45.0f * Lamb::Math::toRadian<float>;
-
-	// 当たり判定をする距離
-	float collisionRange_ = 0.0f;
-
-	float wallCollisionRange_ = 1.0f;
-
-	// どれを優先にするかの重み
-	Vector3 weight_ = Vector3::kXIdentity;
 
 	float collisionCount_ = 0.0f;
-	float minNearLength = std::numeric_limits<float>::max();
+	float minNearLength_ = std::numeric_limits<float>::max();
+
+	Vector3 minRange_;
+	Vector3 maxRange_;
+
+	uint32_t color_;
 };
 
 class Fishes {
@@ -95,6 +103,8 @@ public:
 
 	void Draw(const Mat4x4& cameraMat);
 
+	void Debug();
+
 private:
 	Vector3 rangeMin_;
 	Vector3 rangeMax_;
@@ -102,4 +112,8 @@ private:
 private:
 	std::vector<std::unique_ptr<Fish>> fishes_;
 	Lamb::SafePtr<class Model> model_;
+	Vector3 weight_ = { 0.005f, 1.0f, 0.005f };
+	float avoidDistance_ = 5.0f;
+	float fov_ = 30.0f * Lamb::Math::toRadian<float>;
+	float collisionRange_ = 10.0f;
 };
