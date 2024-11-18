@@ -173,6 +173,7 @@ public:
 /// </summary>
 public:
 	static [[nodiscard]] Vector2 Lerp(const Vector2& start, const Vector2& end, float easeSpd);
+	static [[nodiscard]] Vector2 Clamp(const Vector2& num, const Vector2& min, const Vector2& max);
 
 /// <summary>
 /// 静的定数

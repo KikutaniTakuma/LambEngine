@@ -173,3 +173,7 @@ Vector2 Vector2::Lerp(const Vector2& start, const Vector2& end, float easeSpd) {
 
 	return result;
 }
+
+Vector2 Vector2::Clamp(const Vector2& num, const Vector2& min, const Vector2& max) {
+	return Vector2(std::clamp(num.x, min.x, max.x), std::clamp(num.y, min.y, max.y));
+}

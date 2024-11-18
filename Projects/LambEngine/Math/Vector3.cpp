@@ -267,11 +267,16 @@ Vector3 Vector3::Avarage(std::initializer_list<Vector3> vecs) {
 	return result / static_cast<float>(vecs.size());
 }
 
-Vector3 Pararerl(const Vector3& i, const Vector3& n) {
+
+Vector3 Vector3::Pararerl(const Vector3& i, const Vector3& n) {
 	if (n == Vector3::kZero) {
 		return n;
 	}
 	return i - (i.Dot(n) * n);
+}
+
+Vector3 Vector3::Clamp(const Vector3& num, const Vector3& min, const Vector3& max) {
+	return Vector3(std::clamp(num.x, min.x, max.x), std::clamp(num.y, min.y, max.y), std::clamp(num.z, min.z, max.z));
 }
 
 Vector3 Project(const Vector3& vec1, const Vector3& vec2) {

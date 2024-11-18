@@ -232,6 +232,8 @@ public:
 
 	static [[nodiscard]] Vector3 Avarage(std::initializer_list<Vector3> vecs);
 
+	static [[nodiscard]] Vector3 Clamp(const Vector3& num, const Vector3& min, const Vector3& max);
+
 
 };
 
