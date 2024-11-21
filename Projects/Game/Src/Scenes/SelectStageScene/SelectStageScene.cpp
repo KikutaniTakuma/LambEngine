@@ -145,6 +145,7 @@ void SelectStageScene::Initialize() {
     //renderingManager_->SetTime(7.0f);
 
     fishes_ = std::make_unique<Fishes>();
+    fishes_->height = -5.0f;
     fishes_->Init(200);
 }
 

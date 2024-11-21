@@ -22,7 +22,7 @@ public:
 public:
 	const Vector3& GetDirection() const;
 
-	void Init(const Vector3& min, const Vector3& max);
+	void Init(const Vector3& min, const Vector3& max, float height);
 
 	void Update();
 
@@ -104,6 +104,9 @@ public:
 	void Draw(const Mat4x4& cameraMat);
 
 	void Debug();
+
+public:
+	float height = -3.0f;
 
 private:
 	Vector3 rangeMin_;

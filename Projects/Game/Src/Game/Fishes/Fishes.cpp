@@ -15,7 +15,7 @@ const Vector3& Fish::GetDirection() const {
 	return direction_;
 }
 
-void Fish::Init(const Vector3& min, const Vector3& max) {
+void Fish::Init(const Vector3& min, const Vector3& max, float height) {
 	const std::array colors = {
 		0x00ffccff_u32, // エメラルドグリーン
 		0x0077ffff_u32, // ディープブルー
@@ -35,9 +35,10 @@ void Fish::Init(const Vector3& min, const Vector3& max) {
 	maxRange_ = max;
 	direction_ = Lamb::Random(Vector3(-1.0f, 0.0f, -1.0f), Vector3(1.0f, 0.0f, 1.0f));
 
-	speed_ = 20.0f;
+	speed_ = Lamb::Random(8.0f, 12.0f);
 
 	posision_ = Lamb::Random(min + (Vector3::kXIdentity + Vector3::kZIdentity) * wallCollisionRange_, max - (Vector3::kXIdentity + Vector3::kZIdentity) * wallCollisionRange_);
+	posision_.y = height;
 }
 
 void Fish::Update() {
@@ -163,7 +164,7 @@ void Fishes::Init(size_t numFishes) {
 	fishes_.reserve(numFishes);
 	for (size_t i = 0; i < numFishes; ++i) {
 		fishes_.push_back(std::make_unique<Fish>());
-		fishes_.back()->Init(rangeMin_, rangeMax_);
+		fishes_.back()->Init(rangeMin_, rangeMax_, height);
 	}
 
 	DrawerManager::GetInstance()->LoadModel("./Resources/Fish/Fish.gltf");
