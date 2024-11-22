@@ -1,7 +1,6 @@
 Windows : [![MSBuild](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/c-cpp.yml)  
-Release : 
-Windows SDK : 10.0.22621.0
-DirectX : 12
+Windows SDK : 10.0.22621.0  
+DirectX : 12  
 推奨グラフィックボード : GeForce RTX2060以上(GTXではMeshShaderが利用できずパフォーマンスに影響が出ますが実行はできます)  
 
 <br>
