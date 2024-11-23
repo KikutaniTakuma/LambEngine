@@ -75,6 +75,7 @@ DirectX : 12
 * 制作人数 : 3人(プランナー1人、プログラマー2人)
 * 担当箇所 : 水、空、タイトル、描画エンジン
 ## ゲーム画面
+[動画](https://youtu.be/n-AkMtcHfJg)
 ![InGame](Demo/Game-Demo.gif)
 ## チームメンバーが書いたコード
 [Projects/Game/Src/GameExternals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Src/GameExternals)
