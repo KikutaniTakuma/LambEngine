@@ -16,8 +16,8 @@ Whirlpool::Whirlpool() {
 	whirlpool_ = std::make_unique<Tex2DInstance>();
 	whirlpool_->Load("./Resources/DebugArrow/DebugDeath.png");
 	whirlpool_->blend = BlendType::kNormal;
-	AudioManager::GetInstance()->Load("./Resources/Sound/whirlpoolSE.wav");
-	deathSE_ = AudioManager::GetInstance()->Get("./Resources/Sound/whirlpoolSE.wav");
+	AudioManager::GetInstance()->Load("./Resources/Sound/whirlpoolSE.mp3");
+	deathSE_ = AudioManager::GetInstance()->Get("./Resources/Sound/whirlpoolSE.mp3");
 }
 
 void Whirlpool::Initialize(const Vector3& scale, const Vector3& rotate, const Vector3& pos, float gameOverSpeed) {

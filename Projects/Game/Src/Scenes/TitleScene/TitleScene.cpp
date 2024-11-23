@@ -86,12 +86,12 @@ void TitleScene::Initialize() {
     easing_.reset(new Easeing{});
     volumeEasing_.reset(new Easeing{});
 
-    audioManager_->Load("./Resources/Sound/sea.wav");
-    seaSE_ = audioManager_->Get("./Resources/Sound/sea.wav");
+    audioManager_->Load("./Resources/Sound/sea.mp3");
+    seaSE_ = audioManager_->Get("./Resources/Sound/sea.mp3");
     seaSE_->Start(0.05f, true);
 
-    audioManager_->Load("./Resources/Sound/move.wav");
-    moveShipSE_ = audioManager_->Get("./Resources/Sound/move.wav");
+    audioManager_->Load("./Resources/Sound/move.mp3");
+    moveShipSE_ = audioManager_->Get("./Resources/Sound/move.mp3");
 
     moveShipSEVolume_ = { 0.4f, 0.02f };
 

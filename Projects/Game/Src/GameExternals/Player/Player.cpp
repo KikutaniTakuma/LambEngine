@@ -72,15 +72,15 @@ Player::Player() {
 	scheme_->Load("./Resources/uiImage.png");
 	scheme_->scale = { 1280.0f,720.0f };
 
-	AudioManager::GetInstance()->Load("./Resources/Sound/move.wav");
-	AudioManager::GetInstance()->Load("./Resources/Sound/shot.wav");
-	AudioManager::GetInstance()->Load("./Resources/Sound/sail.wav");
-	AudioManager::GetInstance()->Load("./Resources/Sound/start.wav");
+	AudioManager::GetInstance()->Load("./Resources/Sound/move.mp3");
+	AudioManager::GetInstance()->Load("./Resources/Sound/shot.mp3");
+	AudioManager::GetInstance()->Load("./Resources/Sound/sail.mp3");
+	AudioManager::GetInstance()->Load("./Resources/Sound/start.mp3");
 
-	moveAudioSound_ =   AudioManager::GetInstance()->Get("./Resources/Sound/move.wav");
-	shotSound_ =		AudioManager::GetInstance()->Get("./Resources/Sound/shot.wav");
-	sailSound_ =		AudioManager::GetInstance()->Get("./Resources/Sound/sail.wav");
-	startSound_ =		AudioManager::GetInstance()->Get("./Resources/Sound/start.wav");
+	moveAudioSound_ =   AudioManager::GetInstance()->Get("./Resources/Sound/move.mp3");
+	shotSound_ =		AudioManager::GetInstance()->Get("./Resources/Sound/shot.mp3");
+	sailSound_ =		AudioManager::GetInstance()->Get("./Resources/Sound/sail.mp3");
+	startSound_ =		AudioManager::GetInstance()->Get("./Resources/Sound/start.mp3");
 
 	maxPowerGauge_ = std::make_unique<Tex2DInstance>();
 	currentPowerGauge_ = std::make_unique<Tex2DInstance>();

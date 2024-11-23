@@ -70,12 +70,12 @@ void GameScene::Initialize() {
 	CameraManager::GetInstance()->SetType(CameraManager::kCustomize);
 	CameraManager::GetInstance()->Initialize(currentCamera_.get(), player_.get(), player_->GetPosition(), player_->GetRotate(), goalManager_->GetGoals().at(0)->GetScale(), goalManager_->GetGoals().at(0)->GetRotate(), goalManager_->GetGoals().at(0)->GetPosition());
 
-	audioManager_->Load("./Resources/Sound/customize.wav");
-	customizeBGM_ = audioManager_->Get("./Resources/Sound/customize.wav");
+	audioManager_->Load("./Resources/Sound/customize.mp3");
+	customizeBGM_ = audioManager_->Get("./Resources/Sound/customize.mp3");
 	customizeBGM_->Start(0.1f, true);
 
-	audioManager_->Load("./Resources/Sound/sea.wav");
-	seaSE_ = audioManager_->Get("./Resources/Sound/sea.wav");
+	audioManager_->Load("./Resources/Sound/sea.mp3");
+	seaSE_ = audioManager_->Get("./Resources/Sound/sea.mp3");
 
 	clearMessage_.reset(new Tex2DInstance());
 	clearMessage_->Load("./Resources/InGame/goal.png");

@@ -60,7 +60,7 @@ void AudioComp::Debug([[maybe_unused]]const std::string& guiName) {
             filePaths_.clear();
             filePaths_.reserve(size);
 			filePaths_ = Lamb::GetFilePathFormDir("./", ".mp3");
-			auto wav = Lamb::GetFilePathFormDir("./", ".wav");
+			auto wav = Lamb::GetFilePathFormDir("./", ".mp3");
 			filePaths_.insert(filePaths_.end(), wav.begin(), wav.end());
         }
 

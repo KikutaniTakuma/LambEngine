@@ -10,8 +10,8 @@
 Block::Block() {
 	model_ = std::make_unique<ModelInstance>();
 	model_->Load("./Resources/InGame/Models/wall.obj");
-	AudioManager::GetInstance()->Load("./Resources/Sound/hitRock.wav");
-	hitBlockSound_ = AudioManager::GetInstance()->Get("./Resources/Sound/hitRock.wav");
+	AudioManager::GetInstance()->Load("./Resources/Sound/hitRock.mp3");
+	hitBlockSound_ = AudioManager::GetInstance()->Get("./Resources/Sound/hitRock.mp3");
 }
 
 void Block::Initialize(const Vector3& scale, const Vector3& rotate, const Vector3& pos) {

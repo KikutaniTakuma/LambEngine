@@ -63,8 +63,8 @@ void Goal::Initialize(const Vector3& scale, const Vector3& rotate, const Vector3
 	emitterRange_.first.y = 5.0f;
 	emitterRange_.second.y = 8.0f;
 
-	AudioManager::GetInstance()->Load("./Resources/Sound/fireworkSE.wav");
-	fireworkSound_ = AudioManager::GetInstance()->Get("./Resources/Sound/fireworkSE.wav");
+	AudioManager::GetInstance()->Load("./Resources/Sound/fireworkSE.mp3");
+	fireworkSound_ = AudioManager::GetInstance()->Get("./Resources/Sound/fireworkSE.mp3");
 
 	subtractionVelocity_ = -2.5f;
 	subtractionCannonVelocity_ = -30.0f;

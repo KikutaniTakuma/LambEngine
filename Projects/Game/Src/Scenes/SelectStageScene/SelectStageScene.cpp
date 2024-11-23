@@ -102,15 +102,15 @@ void SelectStageScene::Initialize() {
     isInput_ = true;
     inputCount_ = 0;
 
-    audioManager_->Load("./Resources/Sound/stageSelect.wav");
-    stageSelectBGM_ = audioManager_->Get("./Resources/Sound/stageSelect.wav");
+    audioManager_->Load("./Resources/Sound/stageSelect.mp3");
+    stageSelectBGM_ = audioManager_->Get("./Resources/Sound/stageSelect.mp3");
     stageSelectBGM_->Start(0.1f, true);
 
-    audioManager_->Load("./Resources/Sound/changeSE.wav");
-    audioManager_->Load("./Resources/Sound/toCustomizeSE.wav");
+    audioManager_->Load("./Resources/Sound/changeSE.mp3");
+    audioManager_->Load("./Resources/Sound/toCustomizeSE.mp3");
 
-    changeStageSE_ = audioManager_->Get("./Resources/Sound/changeSE.wav");
-    inCustomizeSE_ = audioManager_->Get("./Resources/Sound/toCustomizeSE.wav");
+    changeStageSE_ = audioManager_->Get("./Resources/Sound/changeSE.mp3");
+    inCustomizeSE_ = audioManager_->Get("./Resources/Sound/toCustomizeSE.mp3");
 
 
 

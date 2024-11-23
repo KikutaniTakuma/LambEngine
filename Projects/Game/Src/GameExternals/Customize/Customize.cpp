@@ -161,21 +161,21 @@ void Customize::Initialize() {
 	loadString_ = StageManager::GetStageString(stageIndex_);
 	LoadJson(loadString_);
 
-	AudioManager::GetInstance()->Load("./Resources/Sound/set.wav");
-	AudioManager::GetInstance()->Load("./Resources/Sound/delete.wav");
-	AudioManager::GetInstance()->Load("./Resources/Sound/count.wav");
-	AudioManager::GetInstance()->Load("./Resources/Sound/rotate.wav");
-	AudioManager::GetInstance()->Load("./Resources/Sound/changeItem.wav");
-	AudioManager::GetInstance()->Load("./Resources/Sound/ready.wav");
-	AudioManager::GetInstance()->Load("./Resources/Sound/moveTile.wav");
+	AudioManager::GetInstance()->Load("./Resources/Sound/set.mp3");
+	AudioManager::GetInstance()->Load("./Resources/Sound/delete.mp3");
+	AudioManager::GetInstance()->Load("./Resources/Sound/count.mp3");
+	AudioManager::GetInstance()->Load("./Resources/Sound/rotate.mp3");
+	AudioManager::GetInstance()->Load("./Resources/Sound/changeItem.mp3");
+	AudioManager::GetInstance()->Load("./Resources/Sound/ready.mp3");
+	AudioManager::GetInstance()->Load("./Resources/Sound/moveTile.mp3");
 
-	pushA_ =	 AudioManager::GetInstance()->Get("./Resources/Sound/set.wav");
-	pushB_ =	 AudioManager::GetInstance()->Get("./Resources/Sound/delete.wav");
-	pushY_ =	 AudioManager::GetInstance()->Get("./Resources/Sound/count.wav");
-	pushLBRB_ =  AudioManager::GetInstance()->Get("./Resources/Sound/rotate.wav");
-	pushLTRT_ =  AudioManager::GetInstance()->Get("./Resources/Sound/changeItem.wav");
-	pushStart_ = AudioManager::GetInstance()->Get("./Resources/Sound/ready.wav");
-	moveTile_ =  AudioManager::GetInstance()->Get("./Resources/Sound/moveTile.wav");
+	pushA_ =	 AudioManager::GetInstance()->Get("./Resources/Sound/set.mp3");
+	pushB_ =	 AudioManager::GetInstance()->Get("./Resources/Sound/delete.mp3");
+	pushY_ =	 AudioManager::GetInstance()->Get("./Resources/Sound/count.mp3");
+	pushLBRB_ =  AudioManager::GetInstance()->Get("./Resources/Sound/rotate.mp3");
+	pushLTRT_ =  AudioManager::GetInstance()->Get("./Resources/Sound/changeItem.mp3");
+	pushStart_ = AudioManager::GetInstance()->Get("./Resources/Sound/ready.mp3");
+	moveTile_ =  AudioManager::GetInstance()->Get("./Resources/Sound/moveTile.mp3");
 
 	isCustomizeEnd_ = false;
 }
