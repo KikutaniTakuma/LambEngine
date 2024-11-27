@@ -175,7 +175,7 @@ const aiScene* VertexIndexDataLoader::ReadFile(Assimp::Importer& importer, const
 	if (not std::filesystem::exists(path)) [[unlikely]] {
 		throw Lamb::Error::Code<VertexIndexDataLoader>("This file does not find -> " + fileName, ErrorPlace);
 	}
-	// objかgltfではない
+	// objかgltfかglbではない
 	if (not (path.extension() == ".obj" or path.extension() == ".gltf" or path.extension() == ".glb")) [[unlikely]] {
 		throw Lamb::Error::Code<VertexIndexDataLoader>("This file(" + path.extension().string() + ") does not support -> " + fileName, ErrorPlace);
 	}
