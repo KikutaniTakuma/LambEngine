@@ -28,7 +28,6 @@ void World::Initialize() {
 
 	//Cloud::Initialize();
 
-	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/mincho_size_32.spritefont");
 	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/default.spritefont");
 
 	TransformCompUpdater::Initialize();
