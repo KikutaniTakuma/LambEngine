@@ -85,14 +85,15 @@ RenderingManager::RenderingManager() {
 	TextureManager::GetInstance()->LoadTexture("./Resources/Water/caustics_02.bmp");
 	Texture* causticsTex = TextureManager::GetInstance()->GetTexture("./Resources/Water/caustics_02.bmp");
 
-	distortion_ = Lamb::MakeSafePtr<Distortion>();
-	distortion_->Init();
-	distortion_->SetDistortionTexHandle(distortionTextureRGBA_->GetHandleGPU());
-	distortion_->SetDepthTexHandle(depthStencilShadow_->GetHandleGPU());
-	distortion_->SetCausticsTexHandle(causticsTex->GetHandleGPU());
+	postWater_ = Lamb::MakeSafePtr<PostWater>();
+	postWater_->Init();
+	postWater_->SetDistortionTexHandle(distortionTextureRGBA_->GetHandleGPU());
+	postWater_->SetDepthTexHandle(depthStencilShadow_->GetHandleGPU());
+	postWater_->SetCausticsTexHandle(causticsTex->GetHandleGPU());
+	postWater_->SetWorldPositionTexHandle(worldPositionTexture_->GetHandleGPU());
 
 	rgbaTexture_ = std::make_unique<PeraRender>();
-	rgbaTexture_->Initialize(distortion_.get());
+	rgbaTexture_->Initialize(postWater_.get());
 	Vector4 rgba = rgbaTexture_->color;
 	hsv_ = RGBToHSV({ rgba.color.r,rgba.color.g,rgba.color.b });
 
@@ -280,7 +281,8 @@ void RenderingManager::Draw() {
 	deferredRendering_->SetLightCameraMatrix(lightCamera_);
 
 	tonemapParamas_ = PrepareTonemapParams(tonemapToe_, tonemapLinear_, tonemapShoulder_);
-	distortion_->SetTonemapParams(tonemapParamas_);
+	postWater_->SetTonemapParams(tonemapParamas_);
+	postWater_->SetWaterWorldMatrixInverse(waterWorldMatrx_.Inverse());
 
 	/// ====================================================================================
 
@@ -488,6 +490,10 @@ void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 	skyBoxTransform_.translate = cameraPos;
 	atmosphericParams_.cameraPosition = cameraPos;
 	atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
+}
+
+void RenderingManager::SetWaterMatrix(const Mat4x4& waterMatrix) {
+	waterWorldMatrx_ = waterMatrix;
 }
 
 void RenderingManager::SetViewMatrix(const Mat4x4& view) {
