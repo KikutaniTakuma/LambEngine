@@ -1,11 +1,14 @@
 #include "Water.h"
 #include "Utils/EngineInfo.h"
-#include "imgui.h"
 #include "Utils/SafeDelete.h"
-#include "Engine/Graphics/PipelineObject/GaussianBlur/GaussianBlur.h"
 #include "Utils/Random.h"
 
-#include "Camera/Camera.h"
+#include "Engine/Graphics/RenderingManager/RenderingManager.h"
+
+#ifdef USE_DEBUG_CODE
+#include "imgui.h"
+#endif // USE_DEBUG_CODE
+
 
 Water* Water::instance_ = nullptr;
 
@@ -70,51 +73,8 @@ void Water::Update(const Vector3& cameraPos) {
 }
 
 void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera) {
-	Transform drawTransform_ = transform;
-	drawTransform_.scale *= 0.5f;
-	drawTransform_.translate += drawTransform_.scale * 0.5f;
+	RenderingManager::GetInstance()->SetWaterMatrix(transform.GetMatrix());
 
-	waterSurface_->Draw(
-		transform.GetMatrix(),
-		cameraMat,
-		randomVec_,
-		density_,
-		edgeDivision_,
-		insideDivision_,
-		waveData_,
-		color_.GetColorRGBA(),
-		BlendType::kNormal
-	);
-
-	drawTransform_.translate -= drawTransform_.scale * 0.5f;
-	waterSurface_->Draw(
-		transform.GetMatrix(),
-		cameraMat,
-		randomVec_,
-		density_,
-		edgeDivision_,
-		insideDivision_,
-		waveData_,
-		color_.GetColorRGBA(),
-		BlendType::kNormal
-	);
-
-	drawTransform_.translate.x += drawTransform_.scale.x * 0.5f;
-	drawTransform_.translate.z -= drawTransform_.scale.z * 0.5f;
-	waterSurface_->Draw(
-		transform.GetMatrix(),
-		cameraMat,
-		randomVec_,
-		density_,
-		edgeDivision_,
-		insideDivision_,
-		waveData_,
-		color_.GetColorRGBA(),
-		BlendType::kNormal
-	);
-
-	drawTransform_.translate.x -= drawTransform_.scale.x * 0.5f;
-	drawTransform_.translate.z += drawTransform_.scale.z * 0.5f;
 	waterSurface_->Draw(
 		transform.GetMatrix(),
 		cameraMat,
