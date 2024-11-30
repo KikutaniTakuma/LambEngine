@@ -42,9 +42,9 @@ PixelShaderOutPut2 main(Output input) {
     float32_t4 color = tex.Sample(gPointSmp, uv);
     
     // コースティクス加算
-    if(depth < gDepthFloat.value && !(scrollDistortion.x == 0.0f && scrollDistortion.y == 0.0f)){
+    if(depth < gDepthFloat.value && !(uvDistortion.x == 0.0f && uvDistortion.y == 0.0f)){
         // コースティクステクスチャのUV計算
-        float32_t4 worldPostion = gWorldPositionTexture.Sample(gPointSmp, uv);
+        float32_t4 worldPostion = gWorldPositionTexture.Sample(gPointSmp, input.uv);
         worldPostion.y = 0.0f;
         worldPostion.w = 1.0f;
         float32_t4 waterLocalPostion = mul(worldPostion, gWaterMatrixInverse.value);
@@ -57,11 +57,7 @@ PixelShaderOutPut2 main(Output input) {
         causticsUV.w = 1.0f;
         causticsUV = mul(causticsUV, gUVScroll.value);
 
-        float32_t4 uvDistortionTmp = 0;
-        uvDistortionTmp.xy = uvDistortion;
-        uvDistortionTmp.z = 0;
-        uvDistortionTmp.w = 1.0f;
-        float32_t4 caustics = gCausticsTexture.Sample(smp, causticsUV.xy + uvDistortionTmp.xy * 2.0f);
+        float32_t4 caustics = gCausticsTexture.Sample(smp, causticsUV.xy + uvDistortion);
         color.rgb += caustics.rgb;
     }
     
