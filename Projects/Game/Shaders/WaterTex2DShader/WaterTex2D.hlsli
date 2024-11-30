@@ -22,14 +22,11 @@ struct WaveData{
 
 struct WaterData {
     float32_t2 randomVec;
-    float32_t3 normal;
-    float32_t3 tangent;
-    uint32_t textureID;
     float32_t density;
     uint32_t edgeDivision;
     uint32_t insideDivision;
     float32_t3 cameraDirection;
-    float32_t pad;
+    float32_t4x4 viewportMatrix;
     WaveData waveData;
     AtmosphericParams atmosphericParams;
 };

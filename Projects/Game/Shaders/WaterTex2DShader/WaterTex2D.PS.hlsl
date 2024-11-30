@@ -116,14 +116,10 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     
     float32_t3 lig = diffDirection + specDirection;
     lig += 0.2f;
-
-    float32_t reflectCos = dot(normalize(reflect(kWaterData[input.instanceID].cameraDirection, input.normal)), normalize(kWaterData[input.instanceID].cameraDirection));
-    float32_t reflectivity = 0.4f;
-    float32_t skyReflect = reflectivity + (1.0f - reflectivity) * pow(1.0f - reflectCos, 5.0f);
-    output.color0.rgb = lerp(kColor[input.instanceID].color.rgb * lig, skyColor, skyReflect);
     
     // 色
-    output.color0.w = max(skyReflect, kColor[input.instanceID].color.w);
+    output.color0.rgb = kColor[input.instanceID].color.rgb * lig;
+    output.color0.w = kColor[input.instanceID].color.w;
 
     // 法線
     output.color2.xyz = blendNormal;
