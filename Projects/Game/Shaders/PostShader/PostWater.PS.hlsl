@@ -1,6 +1,7 @@
 #include "Post.hlsli"
 #include "../OutputStructs.hlsli"
 #include "../Tonemap.hlsli"
+#include "../PerlinNoise.hlsli"
 
 Texture2D<float32_t4> gDistortionTexture : register(t1);
 Texture2D<float32_t> gDepthTexture : register(t2);
@@ -44,11 +45,13 @@ PixelShaderOutPut2 main(Output input) {
     // コースティクス加算
     // コースティクステクスチャのUV計算
     float32_t4 worldPostion = gWorldPositionTexture.Sample(gPointSmp, uv);
+    float32_t waterSurfaceLength = -gWaterMatrixInverse.value[3][1] - worldPostion.y;
+    float32_t2 waterUV = 0;
     if(worldPostion.y < -gWaterMatrixInverse.value[3][1] && !(scrollDistortion.x == 0.0f && scrollDistortion.y == 0.0f)){
         worldPostion.y = 0.0f;
         worldPostion.w = 1.0f;
         float32_t4 waterLocalPostion = mul(worldPostion, gWaterMatrixInverse.value);
-        float32_t2 waterUV = waterLocalPostion.xz;
+        waterUV = waterLocalPostion.xz;
         waterUV.y *= -1.0f;
         waterUV = (waterUV + 1.0f) * 0.5f;
         float32_t4 causticsUV = 0;
@@ -58,11 +61,16 @@ PixelShaderOutPut2 main(Output input) {
         causticsUV = mul(causticsUV, gUVMatrix.value);
 
         float32_t4 caustics = gCausticsTexture.Sample(smp, causticsUV.xy+ uvDistortion);
-        float32_t luminate = dot(caustics.rgb, float32_t3(0.2627f,0.678f,0.0593f));
-        //if(0.6f < luminate){
-            color.rgb += caustics.rgb;
-        //}
+        color.rgb += caustics.rgb;
+        
     }
+    // 泡
+    // 水面との距離が一定以下だったら
+    //if(0.0f < waterSurfaceLength && waterSurfaceLength < gDepthFloat.value) {
+        //float32_t3 bubble = Perlin(100.0f, waterUV.xy);
+        //color.rgb += bubble;
+    //}
+
     
 
     float32_t luminate = dot(color.rgb, float32_t3(0.2627f,0.678f,0.0593f));
