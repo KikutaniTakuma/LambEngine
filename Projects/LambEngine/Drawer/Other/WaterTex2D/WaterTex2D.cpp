@@ -13,7 +13,7 @@
 
 const LoadFileNames WaterTex2D::kFileNames_ =
 LoadFileNames{
-	.resourceFileName{"./Resources/EngineResources/Texture2D/Texture2D.obj"},
+	.resourceFileName{"./Resources/Water/WaterSurface.glb"},
 	.shaderName = ShaderFileNames{
 		.vsFileName = "./Shaders/WaterTex2DShader/WaterTex2D.VS.hlsl",
 		.psFileName = "./Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl",

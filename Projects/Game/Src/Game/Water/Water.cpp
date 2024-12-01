@@ -34,8 +34,7 @@ void Water::Init() {
 	transform.translate.y = -0.1f;
 	transform.translate.z = 100.0f;
 	transform.scale.x = 400.0f;
-	transform.scale.y = 400.0f;
-	transform.rotate.x = 1.57f;
+	transform.scale.z = 400.0f;
 
 	waterSurface_ = std::make_unique<WaterTex2D>();
 	waterSurface_->Load();
@@ -73,7 +72,7 @@ void Water::Update(const Vector3& cameraPos) {
 }
 
 void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera) {
-	RenderingManager::GetInstance()->SetWaterMatrix(Mat4x4::MakeAffin(Vector3(transform.scale.x, 1.0f, transform.scale.y), Quaternion::kIdentity, transform.translate));
+	RenderingManager::GetInstance()->SetWaterMatrix(transform.GetMatrix());
 
 	waterSurface_->Draw(
 		transform.GetMatrix(),
