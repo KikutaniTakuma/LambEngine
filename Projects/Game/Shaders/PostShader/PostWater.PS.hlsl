@@ -15,7 +15,7 @@ struct Float{
     float32_t value;
 };
 
-ConstantBuffer<Mat4x4> gUVScroll : register(b1);
+ConstantBuffer<Mat4x4> gUVMatrix : register(b1);
 ConstantBuffer<Float> gDepthFloat : register(b2);
 ConstantBuffer<TonemapParams> gTonemapParams : register(b3);
 ConstantBuffer<Mat4x4> gWaterMatrixInverse : register(b4);
@@ -42,9 +42,9 @@ PixelShaderOutPut2 main(Output input) {
     float32_t4 color = tex.Sample(gPointSmp, uv);
     
     // コースティクス加算
-    if(depth < gDepthFloat.value && !(uvDistortion.x == 0.0f && uvDistortion.y == 0.0f)){
-        // コースティクステクスチャのUV計算
-        float32_t4 worldPostion = gWorldPositionTexture.Sample(gPointSmp, input.uv);
+    // コースティクステクスチャのUV計算
+    float32_t4 worldPostion = gWorldPositionTexture.Sample(gPointSmp, uv);
+    if(worldPostion.y < -gWaterMatrixInverse.value[3][1] && !(scrollDistortion.x == 0.0f && scrollDistortion.y == 0.0f)){
         worldPostion.y = 0.0f;
         worldPostion.w = 1.0f;
         float32_t4 waterLocalPostion = mul(worldPostion, gWaterMatrixInverse.value);
@@ -55,10 +55,13 @@ PixelShaderOutPut2 main(Output input) {
         causticsUV.xy = waterUV;
         causticsUV.z = 0.0f;
         causticsUV.w = 1.0f;
-        causticsUV = mul(causticsUV, gUVScroll.value);
+        causticsUV = mul(causticsUV, gUVMatrix.value);
 
-        float32_t4 caustics = gCausticsTexture.Sample(smp, causticsUV.xy + uvDistortion);
-        color.rgb += caustics.rgb;
+        float32_t4 caustics = gCausticsTexture.Sample(smp, causticsUV.xy+ uvDistortion);
+        float32_t luminate = dot(caustics.rgb, float32_t3(0.2627f,0.678f,0.0593f));
+        //if(0.6f < luminate){
+            color.rgb += caustics.rgb;
+        //}
     }
     
 

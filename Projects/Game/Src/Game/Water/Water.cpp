@@ -73,7 +73,7 @@ void Water::Update(const Vector3& cameraPos) {
 }
 
 void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera) {
-	RenderingManager::GetInstance()->SetWaterMatrix(transform.GetMatrix());
+	RenderingManager::GetInstance()->SetWaterMatrix(Mat4x4::MakeAffin(Vector3(transform.scale.x, 1.0f, transform.scale.y), Quaternion::kIdentity, transform.translate));
 
 	waterSurface_->Draw(
 		transform.GetMatrix(),

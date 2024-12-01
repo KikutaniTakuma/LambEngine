@@ -157,7 +157,7 @@ void PostWater::Init(
 	);
 
 	desc.samplerDeacs.push_back(
-		CreateBorderPointSampler(1)
+		CreatePointSampler(1)
 	);
 
 	auto pipelineManager = PipelineManager::GetInstance();
