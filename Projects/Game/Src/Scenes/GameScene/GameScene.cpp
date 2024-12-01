@@ -95,6 +95,14 @@ void GameScene::Initialize() {
 
 	fishes_ = std::make_unique<Fishes>();
 	fishes_->Init(200);
+
+	tex2DData_.blend = BlendType::kNone;
+	tex2DData_.uvTransform = float32_t4x4::MakeAffin(float32_t3::kIdentity * 10.0f, Quaternion::kIdentity, float32_t3::kZero);
+	tex2DData_.worldMatrix = float32_t4x4::MakeAffin(float32_t3(400.f, 400.0f, 1.0f), Quaternion::MakeRotateXAxis(1.57f), water_->transform.translate);
+	tex2DData_.worldMatrix[3][1] = -8.0f;
+	tex2DData_.color = 0xffffffff;
+	drawerManager_->LoadTexture("./Resources/sandybeach.png");
+	tex2DData_.textureID = drawerManager_->GetTexture("./Resources/sandybeach.png");
 }
 
 void GameScene::Finalize() {
@@ -309,4 +317,7 @@ void GameScene::Draw() {
 	else {
 		Input::GetInstance()->GetMouse()->SetPos(CameraManager::GetInstance()->GetFollowCamera()->GetPrePos());
 	}
+
+	tex2DData_.camera = currentCamera_->GetViewProjection();
+	drawerManager_->GetTexture2D()->Draw(tex2DData_);
 }

@@ -102,4 +102,6 @@ private:
 
     Corals corals_;
     std::unique_ptr<Fishes> fishes_;
+
+    Texture2D::Data tex2DData_;
 };
