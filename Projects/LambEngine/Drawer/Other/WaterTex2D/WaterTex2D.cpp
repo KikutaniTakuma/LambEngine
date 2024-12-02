@@ -10,11 +10,10 @@
 #include "imgui.h"
 #endif // USE_DEBUG_CODE
 
-uint32_t WaterTex2D::kCausticsTextureID_ = 0u;
 
 const LoadFileNames WaterTex2D::kFileNames_ =
 LoadFileNames{
-	.resourceFileName{"./Resources/EngineResources/Texture2D/Texture2D.obj"},
+	.resourceFileName{"./Resources/Water/WaterSurface.glb"},
 	.shaderName = ShaderFileNames{
 		.vsFileName = "./Shaders/WaterTex2DShader/WaterTex2D.VS.hlsl",
 		.psFileName = "./Shaders/WaterTex2DShader/WaterTex2D.PS.hlsl",
@@ -38,8 +37,6 @@ void WaterTex2D::Load()
 
 	Lamb::SafePtr textureManager = TextureManager::GetInstance();
 	textureManager->LoadTexture("./Resources/Common/Water/caustics_01.bmp");
-
-	kCausticsTextureID_ = textureManager->GetHandle("./Resources/Common/Water/caustics_01.bmp");
 }
 
 void WaterTex2D::Draw(
@@ -55,16 +52,16 @@ void WaterTex2D::Draw(
 ) {
 	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<WaterRenderContext>(blend);
 
+	Vector2 clientSize = Lamb::ClientSize();
+
 	renderContext->SetShaderStruct(
 		ShaderData{
 			.randomVec = randomVec,
-			.normal = Vector3(0.0f,1.0f,0.0f),
-			.tangent = Vector3(0.0f,0.0f,1.0f),
-			.textureID = kCausticsTextureID_,
 			.density = density,
 			.edgeDivision = std::clamp(edgeDivision, 1u, 64u),
 			.insideDivision = std::clamp(insideDivision, 1u, 64u),
 			.cameraDirection = RenderingManager::GetInstance()->GetCameraDirection(),
+			.viewportMatrix = float32_t4x4::MakeViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f),
 			.waveData = waveData,
 			.atomosphericParam = RenderingManager::GetInstance()->GetAtmosphericParams()
 		}

@@ -1,134 +1,82 @@
-#include "PostWater.hlsli"
-#include "PerlinNoise.hlsli"
+#include "Post.hlsli"
+#include "../OutputStructs.hlsli"
+#include "../Tonemap.hlsli"
+#include "../PerlinNoise.hlsli"
 
-cbuffer RamdomVec : register(b3)
-{
-    float2 randomVec;
-}
+Texture2D<float32_t4> gDistortionTexture : register(t1);
+Texture2D<float32_t> gDepthTexture : register(t2);
+Texture2D<float32_t4> gCausticsTexture : register(t3);
+Texture2D<float32_t4> gWorldPositionTexture : register(t4);
 
-struct Light
-{
-    float3 ligDirection;
-    float3 ligColor;
-    float3 eyePos;
-
-    float3 ptPos;
-    float3 ptColor;
-    float ptRange;
+struct Mat4x4{
+    float32_t4x4 value;
 };
 
-ConstantBuffer<Light> light : register(b4);
+struct Float{
+    float32_t value;
+};
 
-float CreateNoise(float2 uv)
-{
-    float density = 20.0f * kDensityScale;
-    
-    float pn = FractalSumNnoise(density, uv + randomVec);
-    float pn2 = FractalSumNnoise(density, uv - randomVec);
-    uv.x *= -1.0f;
-    float pn3 = FractalSumNnoise(density, uv + randomVec);
-    uv.x *= -1.0f;
-    uv.y *= -1.0f;
-    float pn4 = FractalSumNnoise(density, uv + randomVec);
-    
-    float noise = lerp((pn * 0.1f), (pn2 * 0.1f), 3.0f);
-    float noise2 = lerp((pn3 * 0.1f), (pn4 * 0.1f), 3.0f);
-    
-    return ddy(noise + noise2);
-}
+ConstantBuffer<Mat4x4> gUVMatrix : register(b1);
+ConstantBuffer<Float> gDepthFloat : register(b2);
+ConstantBuffer<TonemapParams> gTonemapParams : register(b3);
+ConstantBuffer<Mat4x4> gWaterMatrixInverse : register(b4);
 
-float CreateNoiseNoDdy(float2 uv)
-{
-    float density = 20.0f * kDensityScale;
-    
-    float pn = FractalSumNnoise(density * 2.0f, uv + randomVec);
-    float pn2 = FractalSumNnoise(density, uv - randomVec);
-    uv.x *= -1.0f;
-    float pn3 = FractalSumNnoise(density * 2.0f, uv + randomVec);
-    uv.x *= -1.0f;
-    uv.y *= -1.0f;
-    float pn4 = FractalSumNnoise(density, uv + randomVec);
-    
-    float noise = lerp((pn * 0.1f), (pn2 * 0.08f), 3.0f);
-    float noise2 = lerp((pn3 * 0.1f), (pn4 * 0.08f), 3.0f);
-    
-    return lerp(noise, noise2, 0.5f);
-}
+// ポイントサンプラー
+SamplerState gPointSmp : register(s1);
 
-float3 CreateNormal(float2 uv)
-{
-    float heightScale = 5.0f;
-    
-    float right = CreateNoise(float2(uv.x + 1.0f, uv.y)) * heightScale;
-    float left = CreateNoise(float2(uv.x - 1.0f, uv.y)) * heightScale;
-    float up = CreateNoise(float2(uv.x, uv.y + 1.0f)) * heightScale;
-    float bottom = CreateNoise(float2(uv.x, uv.y - 1.0f)) * heightScale;
-    
-    float dfx = right - left;
-    float dfy = up - bottom;
-    
-    float3 n = normalize(float3(-dfx, -dfy, 2.0f));
-    
-    float a = 0.01f;
-    n = (n / a) * 0.5f;
-    
-    n = (n * 2.0f) - 1.0f;
-   
-    return normalize(n);
-}
+PixelShaderOutPut2 main(Output input) {
+    PixelShaderOutPut2 output;
 
-float4 main(Output input) : SV_TARGET{
-    float noise = CreateNoise(input.uv);
-    
-    float4 texColor = tex.Sample(smp, input.uv.xy + (CreateNoiseNoDdy(input.uv)));
-    
-    float4 causticsColor = caustics.Sample(smp, input.causticsUv.xy + frac(CreateNoiseNoDdy(input.causticsUv * 0.1f)));
-    
-    float3 normal = CreateNormal(input.uv);
-    //normal = mul(normal, input.tangentBasis);
-    //normal = (normal.xyz + 1.0f) * 0.5f;
 
-    float3 ligDirection = light.ligDirection;
-    ligDirection = mul(ligDirection, input.tangentBasis);
-    
-    // ディレクションライト拡散反射光
-    float t = dot(normal, -ligDirection);
+    float32_t depth = gDepthTexture.Sample(gPointSmp, input.uv);
+    depth = 1.0f - pow(depth, 120.0f);
 
-    //t *= -1.0f;
-    //t = (t + abs(t)) * 0.5f;
-    
-    t = saturate(t);
-    //t = pow(t, 2.0f);
+    float32_t2 uvDistortion = gDistortionTexture.Sample(gPointSmp, input.uv).xy;
+    float32_t2 scrollDistortion = gDistortionTexture.Sample(gPointSmp, input.uv + uvDistortion).xy;
+    if(scrollDistortion.x == 0.0f && scrollDistortion.y == 0.0f) {
+        uvDistortion = 0;
+    }
 
-    float3 diffDirection = light.ligColor * t * 1.0f;
-    
-    
-    float3 toEye = light.eyePos - input.worldPos.xyz;
-    toEye = mul(toEye, input.tangentBasis);
-    toEye = normalize(toEye);
-    
-    float3 refVec = -reflect(toEye, normal);
-    refVec = normalize(refVec);
+    float32_t2 uv = input.uv + uvDistortion;
+    uv = saturate(uv);
 
-    t = dot(refVec, toEye);
+    float32_t4 color = tex.Sample(gPointSmp, uv);
+    
+    // コースティクス加算
+    // コースティクステクスチャのUV計算
+    float32_t4 worldPostion = gWorldPositionTexture.Sample(gPointSmp, uv);
+    float32_t waterSurfaceLength = -gWaterMatrixInverse.value[3][1] - worldPostion.y;
+    float32_t2 waterUV = 0;
+    if(worldPostion.y < -gWaterMatrixInverse.value[3][1] && !(scrollDistortion.x == 0.0f && scrollDistortion.y == 0.0f)){
+        worldPostion.y = 0.0f;
+        worldPostion.w = 1.0f;
+        float32_t4 waterLocalPostion = mul(worldPostion, gWaterMatrixInverse.value);
+        waterUV = waterLocalPostion.xz;
+        waterUV.y *= -1.0f;
+        waterUV = (waterUV + 1.0f) * 0.5f;
+        float32_t4 causticsUV = 0;
+        causticsUV.xy = waterUV;
+        causticsUV.z = 0.0f;
+        causticsUV.w = 1.0f;
+        causticsUV = mul(causticsUV, gUVMatrix.value);
 
-    t = pow(saturate(t), 128.0f);
-    float3 specDirection = light.ligColor * t;
-    
-    float3 lig = diffDirection + specDirection;
-    //float3 lig = specPerlin;
-    
-    lig.xyz += 0.2f;
-    
-    //lig = pow(lig, 1.0f);
-    
-    float4 finalColor = texColor + causticsColor;
-    
-    finalColor *= color;
-    finalColor.xyz *= lig;
+        float32_t4 caustics = gCausticsTexture.Sample(smp, causticsUV.xy+ uvDistortion);
+        color.rgb += caustics.rgb;
+        
+    }
+    // 泡
+    // 水面との距離が一定以下だったら
+    //if(0.0f < waterSurfaceLength && waterSurfaceLength < gDepthFloat.value) {
+        //float32_t3 bubble = Perlin(100.0f, waterUV.xy);
+        //color.rgb += bubble;
+    //}
 
-    return finalColor;
-    //return float4(normal, 1.0f);
     
-    //return float4(float3(noise, noise, noise) * 2.0f, 1.0f);
+
+    float32_t luminate = dot(color.rgb, float32_t3(0.2627f,0.678f,0.0593f));
+    output.color0.rgb = Tonemap(gTonemapParams, float32_t3(luminate,luminate,luminate)) * rcp(float32_t3(luminate,luminate,luminate)) * color.rgb * kColor.color.rgb;
+    output.color0.w = 1.0f;
+    output.color1 = output.color0;
+
+    return output;
 }

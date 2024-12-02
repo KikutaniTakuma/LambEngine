@@ -1,4 +1,4 @@
-#include "Distortion.h"
+#include "PostWater.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
 #include "Utils/Random.h"
@@ -13,21 +13,26 @@
 #endif // USE_DEBUG_CODE
 
 
-void Distortion::SetRtvFormt(DXGI_FORMAT format) {
+void PostWater::SetRtvFormt(DXGI_FORMAT format) {
 	format_ = format;
 }
 
-void Distortion::SetTonemapParams(const TonemapParams& tonemapParams) {
+void PostWater::SetTonemapParams(const TonemapParams& tonemapParams) {
 	tonemapParamas_ = tonemapParams;
 }
 
-void Distortion::Use(Pipeline::Blend blendType, bool isDepth) {
-	translate_ += uvScrollSpeed_ * Lamb::DeltaTime();
-	scrollUV_ = Mat4x4::MakeAffin(Vector3::kIdentity * 2.0f, Quaternion::MakeRotateZAxis(std::numbers::pi_v<float32_t> * 0.25f), translate_);
+void PostWater::SetWaterWorldMatrixInverse(const float32_t4x4& waterWorldMatrixInverse) {
+	waterWorldMatrixInverse_ = waterWorldMatrixInverse;
+}
+
+void PostWater::Use(Pipeline::Blend blendType, bool isDepth) {
+	//translate_ += uvScrollSpeed_ * Lamb::DeltaTime();
+	scrollUV_ = Mat4x4::MakeAffin(Vector3::kIdentity * 10.0f, Quaternion::kIdentity, translate_);
 
 	scrollUVBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&scrollUV_);
 	depthFloatBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&depthFloat_);
 	tonemapParamasBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&tonemapParamas_);
+	waterInverseBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&waterWorldMatrixInverse_);
 
 
 	if (isDepth) {
@@ -42,13 +47,15 @@ void Distortion::Use(Pipeline::Blend blendType, bool isDepth) {
 	commandList->SetGraphicsRootDescriptorTable(1, distortionTexHandle_);
 	commandList->SetGraphicsRootDescriptorTable(2, depthTexHandle_);
 	commandList->SetGraphicsRootDescriptorTable(3, causticsTexHandle_);
-	commandList->SetGraphicsRootConstantBufferView(4, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
-	commandList->SetGraphicsRootConstantBufferView(5, scrollUVBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
-	commandList->SetGraphicsRootConstantBufferView(6, depthFloatBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
-	commandList->SetGraphicsRootConstantBufferView(7, tonemapParamasBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootDescriptorTable(4, worldPositionTexHandle_);
+	commandList->SetGraphicsRootConstantBufferView(5, colorBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(6, scrollUVBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(7, depthFloatBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(8, tonemapParamasBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
+	commandList->SetGraphicsRootConstantBufferView(9, waterInverseBuf_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
 }
 
-void Distortion::Init(
+void PostWater::Init(
 	const std::string& vsShader,
 	const std::string& psShader,
 	std::initializer_list<DXGI_FORMAT> formtats
@@ -89,7 +96,13 @@ void Distortion::Init(
 	causticsRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
 	causticsRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-	std::array<D3D12_ROOT_PARAMETER, 8> rootParameter = {};
+	std::array<D3D12_DESCRIPTOR_RANGE, 1> worldPositionTexRange = {};
+	worldPositionTexRange[0].BaseShaderRegister = 4;
+	worldPositionTexRange[0].NumDescriptors = 1;
+	worldPositionTexRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+	worldPositionTexRange[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+
+	std::array<D3D12_ROOT_PARAMETER, 10> rootParameter = {};
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 	rootParameter[0].DescriptorTable.pDescriptorRanges = renderRange.data();
@@ -110,21 +123,30 @@ void Distortion::Init(
 	rootParameter[3].DescriptorTable.pDescriptorRanges = causticsRange.data();
 	rootParameter[3].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(causticsRange.size());
 
-	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[4].Descriptor.ShaderRegister = 0;
+	rootParameter[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+	rootParameter[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+	rootParameter[4].DescriptorTable.pDescriptorRanges = worldPositionTexRange.data();
+	rootParameter[4].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(worldPositionTexRange.size());
 
 	rootParameter[5].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[5].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[5].Descriptor.ShaderRegister = 1;
+	rootParameter[5].Descriptor.ShaderRegister = 0;
 
 	rootParameter[6].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[6].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[6].Descriptor.ShaderRegister = 2;
+	rootParameter[6].Descriptor.ShaderRegister = 1;
 
 	rootParameter[7].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 	rootParameter[7].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-	rootParameter[7].Descriptor.ShaderRegister = 3;
+	rootParameter[7].Descriptor.ShaderRegister = 2;
+
+	rootParameter[8].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[8].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[8].Descriptor.ShaderRegister = 3;
+
+	rootParameter[9].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+	rootParameter[9].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+	rootParameter[9].Descriptor.ShaderRegister = 4;
 
 
 	RootSignature::Desc desc;
@@ -135,7 +157,7 @@ void Distortion::Init(
 	);
 
 	desc.samplerDeacs.push_back(
-		CreateBorderPointSampler(1)
+		CreatePointSampler(1)
 	);
 
 	auto pipelineManager = PipelineManager::GetInstance();
@@ -210,9 +232,17 @@ void Distortion::Init(
 			n = std::make_unique<ConstantBuffer<TonemapParams>>();
 		}
 	);
+
+	std::for_each(
+		waterInverseBuf_.begin(),
+		waterInverseBuf_.end(),
+		[](auto& n) {
+			n = std::make_unique<ConstantBuffer<float32_t4x4>>();
+		}
+	);
 }
 
-Distortion::~Distortion() {
+PostWater::~PostWater() {
 	if (render_) {
 		auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 		srvHeap->ReleaseView(render_->GetHandleUINT());
@@ -246,6 +276,14 @@ Distortion::~Distortion() {
 	std::for_each(
 		tonemapParamasBuf_.begin(),
 		tonemapParamasBuf_.end(),
+		[](auto& n) {
+			n.reset();
+		}
+	);
+
+	std::for_each(
+		waterInverseBuf_.begin(),
+		waterInverseBuf_.end(),
 		[](auto& n) {
 			n.reset();
 		}

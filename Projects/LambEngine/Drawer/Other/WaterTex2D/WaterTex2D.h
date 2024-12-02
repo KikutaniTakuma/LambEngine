@@ -10,7 +10,7 @@
 /// </summary>
 class WaterTex2D : public BaseDrawer {
 public:
-	static constexpr uint32_t kMaxDrawCount = 4u;
+	static constexpr uint32_t kMaxDrawCount = 1u;
 
 	struct WaveData {
 		float32_t waveStrength = 5.0f;
@@ -23,14 +23,11 @@ public:
 
 	struct ShaderData {
 		Vector2 randomVec;
-		Vector3 normal;
-		Vector3 tangent;
-		uint32_t textureID = 0u;
 		float32_t density = 0.0_f32;
 		uint32_t edgeDivision = 1;
 		uint32_t insideDivision = 1;
 		float32_t3 cameraDirection;
-		float32_t pad;
+		float32_t4x4 viewportMatrix;
 		WaveData waveData;
 		AirSkyBox::AtmosphericParams atomosphericParam;
 	};
@@ -39,8 +36,6 @@ public:
 private:
 
 	static const LoadFileNames kFileNames_;
-
-	static uint32_t kCausticsTextureID_;
 
 public:
 	WaterTex2D();

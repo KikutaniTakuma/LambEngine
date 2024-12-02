@@ -92,4 +92,6 @@ private:
 
 	std::unique_ptr<Cloud> cloud_;
 	std::unique_ptr<Fishes> fishes_;
+
+	Texture2D::Data tex2DData_;
 };

@@ -14,7 +14,7 @@
 
 #include "Engine/Graphics/Tonemap/Tonemap.h"
 
-#include "Engine/Graphics/PipelineObject/Distortion/Distortion.h"
+#include "Engine/Graphics/PipelineObject/PostWater/PostWater.h"
 
 #include <list>
 #include <functional>
@@ -87,6 +87,7 @@ public:
 	void SetState(const State& state);
 
 	void SetCameraPos(const Vector3& cameraPos);
+	void SetWaterMatrix(const Mat4x4& waterMatrix);
 	void SetViewMatrix(const Mat4x4& view);
 	void SetProjectionMatrix(const Mat4x4& projection);
 	void SetHsv(const Vector3& hsv);
@@ -164,7 +165,8 @@ private:
 	std::unique_ptr<PeraRender> rgbaTexture_;
 	Vector3 hsv_;
 
-	Lamb::SafePtr<Distortion> distortion_;
+	Lamb::SafePtr<PostWater> postWater_;
+	float32_t4x4 waterWorldMatrx_;
 
 	// 深度値(法線書き込みと色書き込み、アウトラインで使用する)
 	std::unique_ptr<DepthBuffer> depthStencil_;

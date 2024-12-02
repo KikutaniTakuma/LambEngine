@@ -15,8 +15,10 @@ void ModelRenderComp::Init() {
 
 #ifdef USE_DEBUG_CODE
     filePaths_ = Lamb::GetFilePathFormDir("./", ".obj");
-    auto bmp = Lamb::GetFilePathFormDir("./", ".gltf");
-    filePaths_.insert(filePaths_.end(), bmp.begin(), bmp.end());
+    auto temp = Lamb::GetFilePathFormDir("./", ".gltf");
+    filePaths_.insert(filePaths_.end(), temp.begin(), temp.end());
+    temp = Lamb::GetFilePathFormDir("./", ".glb");
+    filePaths_.insert(filePaths_.end(), temp.begin(), temp.end());
 #endif // USE_DEBUG_CODE
 }
 
@@ -73,8 +75,10 @@ void ModelRenderComp::Debug([[maybe_unused]]const std::string& guiName) {
             filePaths_.clear();
             filePaths_.reserve(size);
             filePaths_ = Lamb::GetFilePathFormDir("./", ".obj");
-            auto bmp = Lamb::GetFilePathFormDir("./", ".gltf");
-            filePaths_.insert(filePaths_.end(), bmp.begin(), bmp.end());
+            auto temp = Lamb::GetFilePathFormDir("./", ".gltf");
+            filePaths_.insert(filePaths_.end(), temp.begin(), temp.end());
+            temp = Lamb::GetFilePathFormDir("./", ".glb");
+            filePaths_.insert(filePaths_.end(), temp.begin(), temp.end());
         }
 
         if (ImGui::TreeNode("モデル読み込み")) {

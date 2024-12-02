@@ -153,6 +153,19 @@ void SpriteRenderDataComp::Save(nlohmann::json& json)
     }
     json["offsetType"] = kOffsetEnumString_[size_t(offsetType)];
     json["fileName"] = fileName;
+    json["uv"]["scale"] = nlohmann::json::array();
+    for (auto& i : uvTransform.scale) {
+        json["uv"]["scale"].push_back(i);
+    }
+    json["uv"]["rotate"] = nlohmann::json::array();
+    for (auto& i : uvTransform.rotate) {
+        json["uv"]["rotate"].push_back(i);
+    }
+    json["uv"]["translate"] = nlohmann::json::array();
+
+    for (auto& i : uvTransform.translate) {
+        json["uv"]["translate"].push_back(i);
+    }
 }
 
 void SpriteRenderDataComp::Load(nlohmann::json& json)
@@ -167,7 +180,7 @@ void SpriteRenderDataComp::Load(nlohmann::json& json)
     }
 
     for (size_t i = 0; i < json["color"].size(); i++) {
-        color[i] = json["color"][0];
+        color[i] = json["color"][i];
     }
     std::string&& offsetTypeStr = json["offsetType"].get<std::string>();
     for (size_t count = 0; const auto & i : kOffsetEnumString_) {
@@ -178,6 +191,19 @@ void SpriteRenderDataComp::Load(nlohmann::json& json)
         count++;
     }
     fileName = json["fileName"].get<std::string>();
+
+    if (json.contains("uv")) {
+        for (size_t i = 0; i < uvTransform.scale.size(); ++i) {
+            uvTransform.scale[i] = json["uv"]["scale"][i].get<float>();
+        }
+        for (size_t i = 0; i < uvTransform.rotate.vector4.size(); ++i) {
+            uvTransform.rotate.vector4[i] = json["uv"]["rotate"][i].get<float>();
+        }
+
+        for (size_t i = 0; i < uvTransform.translate.size(); ++i) {
+            uvTransform.translate[i] = json["uv"]["translate"][i].get<float>();
+        }
+    }
 }
 
 void SpriteRenderDataComp::Load()

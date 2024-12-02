@@ -187,9 +187,6 @@
     <ClCompile Include="Engine\Graphics\VertexIndexDataManager\VertexIndexDataManager.cpp">
       <Filter>Engine\Graphics\VertexIndexDataManager</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Graphics\PipelineObject\Distortion\Distortion.cpp">
-      <Filter>Engine\Graphics\PipelineObject\Distortion</Filter>
-    </ClCompile>
     <ClCompile Include="Drawer\DrawerManager.cpp">
       <Filter>Drawer</Filter>
     </ClCompile>
@@ -237,6 +234,9 @@
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Tonemap\Tonemap.cpp">
       <Filter>Engine\Graphics\Tonemap</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\PipelineObject\PostWater\PostWater.cpp">
+      <Filter>Engine\Graphics\PipelineObject\PostWater</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -402,9 +402,6 @@
     <Filter Include="Engine\Graphics\VertexIndexDataManager">
       <UniqueIdentifier>{527d72cc-4ef5-411b-b4d5-7174fb3ab935}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Graphics\PipelineObject\Distortion">
-      <UniqueIdentifier>{ecfce8a0-b714-48c7-9970-25b8dd5ed69d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Drawer">
       <UniqueIdentifier>{13568cd3-f8d9-4f82-a4be-021ef5239ea6}</UniqueIdentifier>
     </Filter>
@@ -443,6 +440,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\Tonemap">
       <UniqueIdentifier>{e08aa258-8db6-48ff-8631-d93ca0d0c488}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\PipelineObject\PostWater">
+      <UniqueIdentifier>{ecfce8a0-b714-48c7-9970-25b8dd5ed69d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -680,9 +680,6 @@
     <ClInclude Include="Engine\Graphics\VertexIndexDataManager\VertexIndexDataManager.h">
       <Filter>Engine\Graphics\VertexIndexDataManager</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Graphics\PipelineObject\Distortion\Distortion.h">
-      <Filter>Engine\Graphics\PipelineObject\Distortion</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Buffer\ShaderBuffer.h">
       <Filter>Engine\Buffer</Filter>
     </ClInclude>
@@ -733,6 +730,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Tonemap\Tonemap.h">
       <Filter>Engine\Graphics\Tonemap</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\PipelineObject\PostWater\PostWater.h">
+      <Filter>Engine\Graphics\PipelineObject\PostWater</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
