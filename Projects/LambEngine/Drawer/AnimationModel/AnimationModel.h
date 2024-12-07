@@ -1,3 +1,7 @@
+/// ==================================
+/// ==  AnimationModelクラスの宣言  ==
+/// ==================================
+
 #pragma once
 #include "../Model/Model.h"
 #include "Engine/Graphics/Animator/Animator.h"
@@ -5,6 +9,9 @@
 
 #include <memory>
 
+/// <summary>
+/// スキンアニメーションの描画クラス
+/// </summary>
 class AnimationModel : public Model {
 
 public:

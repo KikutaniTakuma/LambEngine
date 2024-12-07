@@ -1,3 +1,7 @@
+/// ==============================
+/// ==  PeraRenderクラスの定義  ==
+/// ==============================
+
 #include "PeraRender.h"
 #include "Utils/ConvertString.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"

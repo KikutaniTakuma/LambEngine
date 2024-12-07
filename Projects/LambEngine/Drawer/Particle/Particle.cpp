@@ -1,3 +1,7 @@
+/// ============================
+/// ==  Particleクラスの定義  ==
+/// ============================
+
 #include "Particle.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "imgui.h"

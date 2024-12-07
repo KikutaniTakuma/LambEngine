@@ -1,3 +1,7 @@
+/// =============================
+/// ==  StringOutクラスの宣言  ==
+/// =============================
+
 #pragma once
 #include <string>
 #include "Math/Vector2.h"

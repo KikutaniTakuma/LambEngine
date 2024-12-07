@@ -1,3 +1,7 @@
+/// =============================
+/// ==  Texture2Dクラスの宣言  ==
+/// =============================
+
 #pragma once
 #include "../BaseDrawer.h"
 #include "Engine/Graphics/RenderContextManager/RenderContext/RenderContext.h"

@@ -1,3 +1,7 @@
+/// ==========================
+/// ==  Water2Dクラスの定義 ==
+/// ==========================
+
 #include "WaterTex2D.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"

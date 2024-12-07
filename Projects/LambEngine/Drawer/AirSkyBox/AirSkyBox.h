@@ -1,3 +1,7 @@
+/// =============================
+/// ==  AirSkyBoxクラスの宣言  ==
+/// =============================
+
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Math/Matrix.h"
@@ -7,6 +11,10 @@
 #include "Engine/Buffer/ConstantBuffer.h"
 #include "Utils/EngineInfo.h"
 
+
+/// <summary>
+/// 大気散乱のSkyBox
+/// </summary>
 class AirSkyBox {
 public:
 	struct ShaderData {

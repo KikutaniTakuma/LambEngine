@@ -1,9 +1,16 @@
+/// ==========================
+/// ==  SkyBoxクラスの宣言  ==
+/// ==========================
+
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Math/Matrix.h"
 #include "Math/Vector4.h"
 #include "Engine/Buffer/ConstantBuffer.h"
 
+/// <summary>
+/// CubeMapの描画
+/// </summary>
 class SkyBox {
 public:
 	struct ShaderData {

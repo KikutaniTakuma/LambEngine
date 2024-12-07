@@ -1,3 +1,7 @@
+/// =================================
+/// ==  DrawerManagerクラスの宣言  ==
+/// =================================
+
 #pragma once
 #include <unordered_map>
 #include <memory>
@@ -5,6 +9,7 @@
 #include "Model/Model.h"
 #include "Utils/SafePtr.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
+
 
 class DrawerManager {
 private:

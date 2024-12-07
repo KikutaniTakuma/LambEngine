@@ -1,3 +1,7 @@
+/// =============================
+/// ==  Texture2Dクラスの定義  ==
+/// =============================
+
 #include "Texture2D.h"
 #include "Engine/Graphics/TextureManager/TextureManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"

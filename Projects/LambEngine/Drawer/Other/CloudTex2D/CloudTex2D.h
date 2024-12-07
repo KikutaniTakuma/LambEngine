@@ -1,9 +1,13 @@
+/// ==============================
+/// ==  CloudTex2Dクラスの宣言  ==
+/// ==============================
+
 #pragma once
 #include "Drawer/BaseDrawer.h"
 #include "Engine/Graphics/RenderContextManager/RenderContext/RenderContext.h"
 
 /// <summary>
-/// 板ポリ描画
+/// 雲の描画
 /// </summary>
 class CloudTex2D : public BaseDrawer {
 public:

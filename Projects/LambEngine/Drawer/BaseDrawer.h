@@ -1,3 +1,7 @@
+/// ==============================
+/// ==  BaseDrawerクラスの宣言  ==
+/// ==============================
+
 #pragma once
 #include "Math/Matrix.h"
 #include "Math/Quaternion.h"
@@ -9,6 +13,9 @@
 #include "Engine/Graphics/GraphicsStructs.h"
 #include "Transform/Transform.h"
 
+/// <summary>
+/// 描画クラスの基底クラス
+/// </summary>
 class BaseDrawer {
 public:
 	BaseDrawer();

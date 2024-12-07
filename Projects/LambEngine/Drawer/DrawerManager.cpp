@@ -1,3 +1,7 @@
+/// =================================
+/// ==  DrawerManagerクラスの定義  ==
+/// =================================
+
 #include "DrawerManager.h"
 
 Lamb::SafePtr<DrawerManager> DrawerManager::instance_ = nullptr;

@@ -1,3 +1,7 @@
+/// =========================
+/// ==  Audioクラスの定義  ==
+/// =========================
+
 #include <fstream>
 #include <filesystem>
 #include "AudioManager/AudioManager.h"

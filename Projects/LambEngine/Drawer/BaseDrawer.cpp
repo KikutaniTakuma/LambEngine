@@ -1,3 +1,7 @@
+/// ==============================
+/// ==  BaseDrawerクラスの定義  ==
+/// ==============================
+
 #include "BaseDrawer.h"
 #include "Utils/SafePtr.h"
 

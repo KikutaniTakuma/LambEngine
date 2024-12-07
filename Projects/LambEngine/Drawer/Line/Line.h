@@ -1,3 +1,7 @@
+/// ========================
+/// ==  Lineクラスの宣言  ==
+/// ========================
+
 #pragma once
 #include "Math/Vector3.h"
 #include "Math/Matrix.h"

@@ -1,3 +1,7 @@
+/// =========================
+/// ==  Modelクラスの定義  ==
+/// =========================
+
 #include "Model.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 #include "Engine/Graphics/RenderingManager/RenderingManager.h"

@@ -1,3 +1,7 @@
+/// =============================
+/// ==  StringOutクラスの定義  ==
+/// =============================
+
 #include "StringOut.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Engine/Core/StringOutPutManager/StringOutPutManager.h"

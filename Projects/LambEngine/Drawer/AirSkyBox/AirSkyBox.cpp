@@ -1,3 +1,7 @@
+/// =============================
+/// ==  AirSkyBoxクラスの定義  ==
+/// =============================
+
 #include "AirSkyBox.h"
 #include <array>
 #include "Math/MathCommon.h"

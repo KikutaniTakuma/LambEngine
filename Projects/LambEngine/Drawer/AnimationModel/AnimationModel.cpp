@@ -1,3 +1,7 @@
+/// ==================================
+/// ==  AnimationModelクラスの定義  ==
+/// ==================================
+
 #include "AnimationModel.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 

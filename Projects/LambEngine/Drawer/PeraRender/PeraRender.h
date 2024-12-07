@@ -1,3 +1,7 @@
+/// ==============================
+/// ==  PeraRenderクラスの宣言  ==
+/// ==============================
+
 #pragma once
 #include <string>
 #include <array>

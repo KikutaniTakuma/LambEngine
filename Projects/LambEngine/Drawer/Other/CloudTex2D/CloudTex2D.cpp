@@ -1,3 +1,7 @@
+/// ==============================
+/// ==  CloudTex2Dクラスの定義  ==
+/// ==============================
+
 #include "CloudTex2D.h"
 
 #include "Engine/Graphics/TextureManager/TextureManager.h"

@@ -1,3 +1,7 @@
+/// ============================
+/// ==  Particleクラスの宣言  ==
+/// ============================
+
 #pragma once
 #include "Engine/Graphics/GraphicsStructs.h"
 

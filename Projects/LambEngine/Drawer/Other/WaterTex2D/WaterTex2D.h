@@ -1,3 +1,7 @@
+/// ===========================
+/// ==  Water2Dクラスの宣言  ==
+/// ===========================
+
 #pragma once
 
 #pragma once
@@ -6,7 +10,7 @@
 #include "Drawer/AirSkyBox/AirSkyBox.h"
 
 /// <summary>
-/// 板ポリ描画
+/// 水面板ポリ描画
 /// </summary>
 class WaterTex2D : public BaseDrawer {
 public:

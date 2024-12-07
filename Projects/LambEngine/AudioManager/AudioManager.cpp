@@ -1,3 +1,7 @@
+/// ================================
+/// ==  AudioManagerクラスの定義  ==
+/// ================================
+
 #include "AudioManager.h"
 #include "Utils/ExecutionLog.h"
 #include "Utils/EngineInfo.h"

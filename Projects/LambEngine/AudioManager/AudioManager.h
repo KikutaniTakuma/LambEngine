@@ -1,3 +1,8 @@
+/// ================================
+/// ==  AudioManagerクラスの宣言  ==
+/// ================================
+
+
 #pragma once
 #include <memory>
 #include <unordered_map>

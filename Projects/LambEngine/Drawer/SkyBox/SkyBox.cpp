@@ -1,3 +1,7 @@
+/// ==========================
+/// ==  SkyBoxクラスの定義  ==
+/// ==========================
+
 #include "SkyBox.h"
 #include <array>
 #include "Math/MathCommon.h"

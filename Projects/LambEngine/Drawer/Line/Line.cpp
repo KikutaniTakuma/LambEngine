@@ -1,3 +1,7 @@
+/// ========================
+/// ==  Lineクラスの定義  ==
+/// ========================
+
 #include "Line.h"
 #include <algorithm>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
