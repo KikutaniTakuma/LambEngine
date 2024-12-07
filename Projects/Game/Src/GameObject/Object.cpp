@@ -30,7 +30,6 @@
 #include "Comp/AudioComp.h"
 #include "Comp/BgmComp.h"
 
-#include "Comp/MeshShaderTestComp.h"
 
 #include "Comp/CloudRenderCoomp.h"
 #include "Comp/CloudRenderDataCoomp.h"
@@ -150,7 +149,6 @@ bool Object::DebugAddComp() {
 		DebugAdd<LineRenderDataComp>();
 		DebugAdd<LineCollisionComp>();
 		DebugAdd<LineConvertTransformComp>();
-		DebugAdd<MeshShaderTestComp>();
 		DebugAdd<CloudRenderCoomp>();
 		DebugAdd<CloudRenderDataCoomp>();
 
@@ -215,7 +213,6 @@ void Object::AddComps(nlohmann::json& compData)
 	AddAndLoadComp<LineRenderDataComp>(compName, compData);
 	AddAndLoadComp<LineCollisionComp>(compName, compData);
 	AddAndLoadComp<LineConvertTransformComp>(compName, compData);
-	AddAndLoadComp<MeshShaderTestComp>(compName, compData);
 	AddAndLoadComp<CloudRenderCoomp>(compName, compData);
 	AddAndLoadComp<CloudRenderDataCoomp>(compName, compData);
 }

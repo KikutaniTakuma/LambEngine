@@ -241,7 +241,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Src\GameObject\Comp\LineConvertTransformComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\LineRenderComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\LineRenderDataComp.cpp" />
-    <ClCompile Include="Src\GameObject\Comp\MeshShaderTestComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ModelRenderComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\InputMoveComp.cpp" />
     <ClCompile Include="Src\GameObject\Comp\ObbComp.cpp" />
@@ -344,7 +343,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Src\GameObject\Comp\LineConvertTransformComp.h" />
     <ClInclude Include="Src\GameObject\Comp\LineRenderComp.h" />
     <ClInclude Include="Src\GameObject\Comp\LineRenderDataComp.h" />
-    <ClInclude Include="Src\GameObject\Comp\MeshShaderTestComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ModelRenderComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ObbComp.h" />
     <ClInclude Include="Src\GameObject\Comp\ObbPushComp.h" />

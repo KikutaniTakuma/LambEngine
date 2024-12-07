@@ -173,9 +173,6 @@
     <ClCompile Include="Src\GameObject\Manager\CompCollisionManager.cpp">
       <Filter>GameObject\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Src\GameObject\Comp\MeshShaderTestComp.cpp">
-      <Filter>GameObject\Comp</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Game\Corals\Corals.cpp">
       <Filter>Game\Corals</Filter>
     </ClCompile>
@@ -545,9 +542,6 @@
     </ClInclude>
     <ClInclude Include="Src\GameObject\Manager\CompCollisionManager.h">
       <Filter>GameObject\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GameObject\Comp\MeshShaderTestComp.h">
-      <Filter>GameObject\Comp</Filter>
     </ClInclude>
     <ClInclude Include="Src\Game\Corals\Corals.h">
       <Filter>Game\Corals</Filter>
