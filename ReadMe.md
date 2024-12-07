@@ -1,4 +1,8 @@
-Windows : [![MSBuild](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/c-cpp.yml)  
+Windows :  
+* [![DebugBuild](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/DebugBuild.yml/badge.svg)](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/DebugBuild.yml)
+* [![DemoBuild](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/DemoBuild.yml/badge.svg)](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/DemoBuild.yml)
+* [![ReleaseBuild](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/ReleaseBuild.yml/badge.svg)](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/ReleaseBuild.yml)
+
 Windows SDK : 10.0.22621.0  
 DirectX : 12  
 推奨グラフィックボード : GeForce RTX2060以上(GTXではMeshShaderが利用できずパフォーマンスに影響が出ますが実行はできます)  
