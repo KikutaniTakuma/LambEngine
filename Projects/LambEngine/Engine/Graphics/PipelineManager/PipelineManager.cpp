@@ -1,3 +1,8 @@
+/// ===================================
+/// ==  PipelineManagerクラスの定義  ==
+/// ===================================
+
+
 #include "PipelineManager.h"
 #include <cassert>
 #include <algorithm>

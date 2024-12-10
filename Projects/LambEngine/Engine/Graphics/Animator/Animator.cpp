@@ -1,3 +1,8 @@
+/// ============================
+/// ==  Animatorクラスの定義  ==
+/// ============================
+
+
 #include "Animator.h"
 #include "../AnimationManager/AnimationManager.h"
 #include "Utils/EngineInfo.h"

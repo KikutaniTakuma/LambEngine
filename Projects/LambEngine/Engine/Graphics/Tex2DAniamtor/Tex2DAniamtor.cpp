@@ -1,3 +1,8 @@
+/// =================================
+/// ==  Tex2DAniamtorクラスの定義  ==
+/// =================================
+
+
 #include "Tex2DAniamtor.h"
 #include "Utils/EngineInfo.h"
 

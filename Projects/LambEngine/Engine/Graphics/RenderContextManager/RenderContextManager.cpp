@@ -1,3 +1,9 @@
+/// ========================================
+/// ==  RenderContextManagerクラスの定義  ==
+/// ========================================
+
+
+
 #include "RenderContextManager.h"
 #include "Utils/SafeDelete.h"
 

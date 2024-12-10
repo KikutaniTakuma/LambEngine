@@ -1,3 +1,8 @@
+/// ============================
+/// ==  Pipelineクラスの宣言  ==
+/// ============================
+
+
 #pragma once
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
 #include <Utils/SafePtr.h>

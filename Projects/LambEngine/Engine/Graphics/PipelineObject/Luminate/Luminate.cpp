@@ -1,3 +1,9 @@
+/// ============================
+/// ==  Luminateクラスの定義  ==
+/// ============================
+
+
+
 #include "Luminate.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"

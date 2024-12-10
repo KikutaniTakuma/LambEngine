@@ -1,3 +1,8 @@
+/// ================================
+/// ==  PeraPipelineクラスの定義  ==
+/// ================================
+
+
 #include "PeraPipeline.h"
 #include <cassert>
 #include <initializer_list>

@@ -1,3 +1,8 @@
+/// =================================
+/// ==  Tex2DAniamtorクラスの宣言  ==
+/// =================================
+
+
 #pragma once
 #include <string>
 #include "Math/Matrix.h"

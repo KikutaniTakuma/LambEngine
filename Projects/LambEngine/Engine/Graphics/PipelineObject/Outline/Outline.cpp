@@ -1,3 +1,8 @@
+/// ===========================
+/// ==  Outlineクラスの定義  ==
+/// ===========================
+
+
 #include "Outline.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"

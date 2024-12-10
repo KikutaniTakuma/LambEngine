@@ -1,3 +1,9 @@
+/// ==================================
+/// ==  PipelineObjectクラスの宣言  ==
+/// ==================================
+
+
+
 #pragma once
 #include <string>
 #include <unordered_map>

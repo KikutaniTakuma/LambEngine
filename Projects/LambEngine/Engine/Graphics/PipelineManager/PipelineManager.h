@@ -1,3 +1,9 @@
+/// ===================================
+/// ==  PipelineManagerクラスの宣言  ==
+/// ===================================
+
+
+
 #pragma once
 #include "Pipeline/Pipeline.h"
 #include "../RootSignature/RootSignature.h"

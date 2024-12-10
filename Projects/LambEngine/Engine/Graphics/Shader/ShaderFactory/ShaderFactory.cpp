@@ -1,3 +1,8 @@
+/// =================================
+/// ==  ShaderFactoryクラスの定義  ==
+/// =================================
+
+
 #include "ShaderFactory.h"
 #include "Utils/ExecutionLog.h"
 #include "Utils/ConvertString.h"

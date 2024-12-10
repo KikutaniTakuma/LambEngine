@@ -1,3 +1,9 @@
+/// ===========================
+/// ==  Outlineクラスの宣言  ==
+/// ===========================
+
+
+
 #pragma once
 #include "../PeraPipeline/PeraPipeline.h"
 #include "Math/MathCommon.h"

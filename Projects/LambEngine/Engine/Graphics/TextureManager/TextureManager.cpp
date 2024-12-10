@@ -1,3 +1,9 @@
+/// ==================================
+/// ==  TextureManagerクラスの定義  ==
+/// ==================================
+
+
+
 #include "TextureManager.h"
 #include "Utils/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"

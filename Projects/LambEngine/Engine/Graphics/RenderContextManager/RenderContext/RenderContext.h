@@ -1,3 +1,8 @@
+/// =================================
+/// ==  RenderContextクラスの定義  ==
+/// =================================
+
+
 #pragma once
 #include "../../GraphicsStructs.h"
 #include "../../Meshlet/Meshlet.h"

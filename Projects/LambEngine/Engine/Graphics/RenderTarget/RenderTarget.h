@@ -1,3 +1,8 @@
+/// ================================
+/// ==  RenderTargerクラスの宣言  ==
+/// ================================
+
+
 #pragma once
 #include "Engine/Graphics/TextureManager/Texture/Texture.h"
 #include "Engine/Core/DescriptorHeap/Descriptor.h"

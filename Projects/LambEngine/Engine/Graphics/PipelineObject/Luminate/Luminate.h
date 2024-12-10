@@ -1,3 +1,8 @@
+/// ============================
+/// ==  Luminateクラスの宣言  ==
+/// ============================
+
+
 #pragma once
 #include "../PipelineObject.h"
 #include "../PeraPipeline/PeraPipeline.h"

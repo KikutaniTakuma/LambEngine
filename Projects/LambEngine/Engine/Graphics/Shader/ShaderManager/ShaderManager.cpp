@@ -1,3 +1,8 @@
+/// =================================
+/// ==  ShaderManagerクラスの定義  ==
+/// =================================
+
+
 #include "ShaderManager.h"
 #include "../ShaderFactory/ShaderFactory.h"
 #include "Utils/ConvertString.h"

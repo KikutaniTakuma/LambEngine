@@ -1,4 +1,8 @@
-#pragma once
+/// ===================================
+/// ==  ShadowRenderingクラスの宣言  ==
+/// ===================================
+
+
 
 #pragma once
 #include "../PipelineObject.h"
