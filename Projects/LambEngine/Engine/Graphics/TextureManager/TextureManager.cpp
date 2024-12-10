@@ -1,3 +1,9 @@
+/// ==================================
+/// ==  TextureManagerクラスの定義  ==
+/// ==================================
+
+
+
 #include "TextureManager.h"
 #include "Utils/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
@@ -8,7 +14,6 @@
 
 #include "Error/Error.h"
 
-#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
 Lamb::SafePtr<TextureManager> TextureManager::instance_ = nullptr;
 const std::string TextureManager::kWhiteTexturePath = "./Resources/EngineResources/white2x2.png";
@@ -68,7 +73,6 @@ void TextureManager::LoadTexture(const std::string& fileName) {
 
 		thisFrameLoadFlg_ = true;
 
-		ResourceLoadLog::Set(fileName);
 	}
 }
 

@@ -1,3 +1,9 @@
+/// ====================================
+/// ==  DeferredRederingクラスの定義  ==
+/// ====================================
+
+
+
 #include "DeferredRendering.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"

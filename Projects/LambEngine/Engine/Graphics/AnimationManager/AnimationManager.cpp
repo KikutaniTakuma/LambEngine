@@ -1,3 +1,8 @@
+/// ====================================
+/// ==  AnimationManagerクラスの定義  ==
+/// ====================================
+
+
 #include "AnimationManager.h"
 #include "Error/Error.h"
 #include "Utils/SafeDelete.h"

@@ -1,3 +1,9 @@
+/// ====================================
+/// ==  RenderingManagerクラスの宣言  ==
+/// ====================================
+
+
+
 #pragma once
 #include "Utils/SafePtr.h"
 #include "Drawer/PeraRender/PeraRender.h"

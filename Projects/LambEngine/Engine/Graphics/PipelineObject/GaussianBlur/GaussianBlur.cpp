@@ -1,3 +1,8 @@
+/// ================================
+/// ==  GaussianBlurクラスの定義  ==
+/// ================================
+
+
 #include "GaussianBlur.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"

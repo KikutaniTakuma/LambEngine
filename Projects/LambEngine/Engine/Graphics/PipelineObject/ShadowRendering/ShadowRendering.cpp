@@ -1,3 +1,9 @@
+/// ===================================
+/// ==  ShadowRenderingクラスの定義  ==
+/// ===================================
+
+
+
 #include "ShadowRendering.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"

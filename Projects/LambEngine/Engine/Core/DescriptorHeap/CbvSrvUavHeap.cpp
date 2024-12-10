@@ -1,3 +1,7 @@
+/// =================================
+/// ==  CbvSrvUavHeapクラスの定義  ==
+/// =================================
+
 #include "CbvSrvUavHeap.h"
 #include "Utils/ConvertString.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"

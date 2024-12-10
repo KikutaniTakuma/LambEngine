@@ -1,3 +1,8 @@
+/// ===============================
+/// ==  DepthBufferクラスの定義  ==
+/// ===============================
+
+
 #include "DepthBuffer.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"

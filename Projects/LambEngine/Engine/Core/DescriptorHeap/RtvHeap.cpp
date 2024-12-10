@@ -1,3 +1,8 @@
+/// ===========================
+/// ==  RtvHeapクラスの定義  ==
+/// ===========================
+
+
 #include "RtvHeap.h"
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
 #include "Utils/ExecutionLog.h"

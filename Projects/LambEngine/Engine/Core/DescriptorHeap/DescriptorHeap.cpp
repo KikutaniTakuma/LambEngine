@@ -1,3 +1,8 @@
+/// ==================================
+/// ==  DescriptorHeapクラスの定義  ==
+/// ==================================
+
+
 #include "DescriptorHeap.h"
 
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"

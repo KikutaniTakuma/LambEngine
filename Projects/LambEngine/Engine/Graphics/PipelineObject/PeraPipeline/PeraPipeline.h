@@ -1,3 +1,8 @@
+/// ================================
+/// ==  PeraPipelineクラスの宣言  ==
+/// ================================
+
+
 #pragma once
 #include "../PipelineObject.h"
 #include "Engine/Buffer/ConstantBuffer.h"

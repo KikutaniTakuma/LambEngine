@@ -1,3 +1,7 @@
+/// ==================================
+/// ==  ConstantBufferクラスの定義  ==
+/// ==================================
+
 #pragma once
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
 #include "ShaderBuffer.h"

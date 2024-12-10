@@ -1,3 +1,7 @@
+/// ====================================
+/// ==  DirectXSwapchainクラスの宣言  ==
+/// ====================================
+
 #pragma once
 #include <cstdint>
 #include <array>

@@ -1,3 +1,7 @@
+/// ====================================
+/// ==  DirectXSwapchainクラスの定義  ==
+/// ====================================
+
 #include "DirectXSwapChain.h"
 #include "Utils/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"

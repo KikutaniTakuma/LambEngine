@@ -1,3 +1,7 @@
+/// ==================================
+/// ==  DescriptorHeapクラスの宣言  ==
+/// ==================================
+
 #pragma once
 
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"

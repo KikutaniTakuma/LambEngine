@@ -1,3 +1,8 @@
+/// ================================
+/// ==  ShaderBufferクラスの定義  ==
+/// ================================
+
+
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"

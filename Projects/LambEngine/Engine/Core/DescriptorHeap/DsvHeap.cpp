@@ -1,3 +1,8 @@
+/// ===========================
+/// ==  DsvHeapクラスの定義  ==
+/// ===========================
+
+
 #include "DsvHeap.h"
 #include "Engine/Graphics/DepthBuffer/DepthBuffer.h"
 #include "Utils/ExecutionLog.h"

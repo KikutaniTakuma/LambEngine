@@ -1,3 +1,8 @@
+/// ===================
+/// ==  Tonemap関係  ==
+/// ===================
+
+
 #include "Tonemap.h"
 #include <cmath>
 

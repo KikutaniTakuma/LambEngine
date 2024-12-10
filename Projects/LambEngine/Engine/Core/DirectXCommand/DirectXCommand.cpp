@@ -1,3 +1,7 @@
+/// ==================================
+/// ==  DirectXCommandクラスの定義  ==
+/// ==================================
+
 #include "DirectXCommand.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Utils/ExecutionLog.h"

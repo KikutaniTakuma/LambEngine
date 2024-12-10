@@ -1,3 +1,8 @@
+/// ==================================
+/// ==  TextureManagerクラスの宣言  ==
+/// ==================================
+
+
 #pragma once
 #include "Texture/Texture.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
