@@ -75,6 +75,8 @@ public:
 
 	void FrameEnd();
 
+	void FinalFrame();
+
 private:
 	void Draw();
 

@@ -78,6 +78,7 @@ void Framework::Execution() {
 #endif
 			// 終了リクエストが来たら終わり
 			if (this->isEnd_) {
+				RenderingManager::GetInstance()->FinalFrame();
 				break;
 			}
 

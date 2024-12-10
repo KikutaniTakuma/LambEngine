@@ -267,6 +267,24 @@ void RenderingManager::FrameEnd()
 	directXCommand->SetBufferIndex(bufferIndex_);
 }
 
+void RenderingManager::FinalFrame()
+{
+	Lamb::SafePtr directXSwapChain = DirectXSwapChain::GetInstance();
+	Lamb::SafePtr directXCommand = DirectXCommand::GetMainCommandlist();
+	Lamb::SafePtr stringOutPutManager = StringOutPutManager::GetInstance();
+
+	// 実行中のコマンドリストのインデックスをセットする
+	directXCommand->SetBufferIndex(preBufferIndex_);
+
+	stringOutPutManager->GmemoryCommit();
+
+	// 実行待ち
+	directXCommand->WaitForFinishCommnadlist();
+
+	// リセット
+	directXCommand->ResetCommandlist();
+}
+
 void RenderingManager::Draw() {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
