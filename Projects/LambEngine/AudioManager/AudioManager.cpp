@@ -8,7 +8,6 @@
 #include <filesystem>
 #include "Error/Error.h"
 #include "Utils/SafeDelete.h"
-#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
 Lamb::SafePtr<AudioManager> AudioManager::instance_ = nullptr;
 void AudioManager::Inititalize() {
@@ -58,7 +57,6 @@ void AudioManager::Load(const std::string& fileName) {
 		audio->Load(fileName);
 		audios_.insert({ fileName, std::move(audio) });
 
-		ResourceLoadLog::Set(fileName);
 	}
 }
 

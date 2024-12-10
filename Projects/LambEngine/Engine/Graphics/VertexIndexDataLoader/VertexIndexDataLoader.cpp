@@ -3,7 +3,6 @@
 #include "Utils/SafePtr.h"
 #include "../TextureManager/TextureManager.h"
 #include "../../Core/DirectXDevice/DirectXDevice.h"
-#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
 #include <filesystem>
 #include <unordered_map>
@@ -103,7 +102,6 @@ ModelData VertexIndexDataLoader::LoadModel(const std::string& fileName)
 
 	EndLoadTimeCountAndAddLog(fileName);
 
-	ResourceLoadLog::Set(fileName);
 
 	return result;
 }
@@ -162,7 +160,6 @@ Animations* VertexIndexDataLoader::LoadAnimation(const std::string& fileName)
 
 	EndLoadTimeCountAndAddLog(fileName);
 
-	ResourceLoadLog::Set(fileName);
 
 	return result.release();
 }

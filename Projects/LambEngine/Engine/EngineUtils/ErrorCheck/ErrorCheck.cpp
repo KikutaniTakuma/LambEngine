@@ -1,3 +1,8 @@
+/// ==============================
+/// ==  ErrorCheckクラスの定義  ==
+/// ==============================
+
+
 #include "ErrorCheck.h"
 #include <fstream>
 #include <filesystem>
