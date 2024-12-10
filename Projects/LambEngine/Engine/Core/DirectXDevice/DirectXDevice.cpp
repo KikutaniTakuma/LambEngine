@@ -1,3 +1,7 @@
+/// =================================
+/// ==  DirectXDeviceクラスの定義  ==
+/// =================================
+
 #include "DirectXDevice.h"
 #include "Utils/ExecutionLog.h"
 #include "Utils/ConvertString.h"

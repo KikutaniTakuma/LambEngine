@@ -1,3 +1,8 @@
+/// ===========================
+/// ==  DsvHeapクラスの宣言  ==
+/// ===========================
+
+
 #pragma once
 #include "Engine/Core/DescriptorHeap/DescriptorHeap.h"
 #include "Utils/SafePtr.h"

@@ -1,3 +1,7 @@
+/// =======================================
+/// ==  StringOutPutManagerクラスの定義  ==
+/// =======================================
+
 #include "StringOutPutManager.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"

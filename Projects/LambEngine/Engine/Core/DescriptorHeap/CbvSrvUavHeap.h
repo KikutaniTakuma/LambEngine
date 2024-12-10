@@ -1,3 +1,7 @@
+/// =================================
+/// ==  CbvSrvUavHeapクラスの宣言  ==
+/// =================================
+
 #pragma once
 #include "DescriptorHeap.h"
 #include "Engine/Graphics/TextureManager/Texture/Texture.h"

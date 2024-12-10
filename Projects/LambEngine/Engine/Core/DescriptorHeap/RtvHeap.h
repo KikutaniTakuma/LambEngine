@@ -1,3 +1,8 @@
+/// ===========================
+/// ==  RtvHeapクラスの宣言  ==
+/// ===========================
+
+
 #pragma once
 #include "DescriptorHeap.h"
 #include <array>

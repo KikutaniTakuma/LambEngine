@@ -1,3 +1,7 @@
+/// =================================
+/// ==  WindowFactoryクラスの定義  ==
+/// =================================
+
 #include "WindowFactory.h"
 #pragma comment(lib, "winmm.lib")
 

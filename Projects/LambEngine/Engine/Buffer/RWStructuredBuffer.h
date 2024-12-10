@@ -1,3 +1,7 @@
+/// ======================================
+/// ==  RWStructuredBufferクラスの定義  ==
+/// ======================================
+
 #pragma once
 
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
