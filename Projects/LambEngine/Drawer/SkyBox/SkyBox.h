@@ -51,13 +51,13 @@ private:
 
 private:
 	D3D12_VERTEX_BUFFER_VIEW vertexView_ = {};
-	Lamb::LambPtr<ID3D12Resource> vertexResource_;
+	Lamb::LambPtr<ID3D12Resource> pVertexResource_;
 
 	D3D12_INDEX_BUFFER_VIEW indexView_ = {};
-	Lamb::LambPtr<ID3D12Resource> indexResource_;
+	Lamb::LambPtr<ID3D12Resource> pIndexResource_;
 
 	static constexpr uint32_t kIndexNumber_ = 36u;
-	std::unique_ptr<ConstantBuffer<ShaderData>> shaderData_;
-	Lamb::SafePtr<class Texture> texture_;
-	Lamb::SafePtr<class Pipeline> pipeline_;
+	std::unique_ptr<ConstantBuffer<ShaderData>> pShaderData_;
+	Lamb::SafePtr<class Texture> pTexture_;
+	Lamb::SafePtr<class Pipeline> pPipeline_;
 };

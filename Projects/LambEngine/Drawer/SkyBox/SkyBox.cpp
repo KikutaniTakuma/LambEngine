@@ -14,9 +14,9 @@
 
 SkyBox::~SkyBox()
 {
-    if (shaderData_) {
+    if (pShaderData_) {
         Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-        heap->ReleaseView(shaderData_->GetHandleUINT());
+        heap->ReleaseView(pShaderData_->GetHandleUINT());
     }
 }
 
@@ -53,64 +53,64 @@ void SkyBox::Load(const std::string& fileName) {
     uint32_t indexSizeInBytes = static_cast<uint32_t>(sizeof(uint16_t) * indexData.size());
     uint32_t vertexSizeInBytes = static_cast<uint32_t>(sizeof(Vector4) * vertexData.size());
 
-    indexResource_ = directXDevice->CreateBufferResuorce(indexSizeInBytes);
+    pIndexResource_ = directXDevice->CreateBufferResuorce(indexSizeInBytes);
 
     Lamb::SafePtr<uint16_t> indexMap = nullptr;
-    indexResource_->Map(0, nullptr, indexMap.GetPtrAdress());
+    pIndexResource_->Map(0, nullptr, indexMap.GetPtrAdress());
     std::copy(indexData.begin(), indexData.end(), indexMap);
-    indexResource_->Unmap(0, nullptr);
+    pIndexResource_->Unmap(0, nullptr);
 
     indexView_.SizeInBytes = indexSizeInBytes;
     indexView_.Format = DXGI_FORMAT_R16_UINT;
-    indexView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+    indexView_.BufferLocation = pIndexResource_->GetGPUVirtualAddress();
 
 
-    vertexResource_ = directXDevice->CreateBufferResuorce(vertexSizeInBytes);
+    pVertexResource_ = directXDevice->CreateBufferResuorce(vertexSizeInBytes);
 
     Lamb::SafePtr<Vector4> vertMap = nullptr;
-    vertexResource_->Map(0, nullptr, vertMap.GetPtrAdress());
+    pVertexResource_->Map(0, nullptr, vertMap.GetPtrAdress());
     std::copy(vertexData.begin(), vertexData.end(), vertMap);
-    vertexResource_->Unmap(0, nullptr);
+    pVertexResource_->Unmap(0, nullptr);
 
     vertexView_.SizeInBytes = vertexSizeInBytes;
     vertexView_.StrideInBytes = static_cast<uint32_t>(sizeof(Vector4));
-    vertexView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+    vertexView_.BufferLocation = pVertexResource_->GetGPUVirtualAddress();
 
     Lamb::SafePtr textureMangaer = TextureManager::GetInstance();
     textureMangaer->LoadTexture(fileName);
-    texture_ = textureMangaer->GetTexture(fileName);
+    pTexture_ = textureMangaer->GetTexture(fileName);
 
     Lamb::SafePtr heap = CbvSrvUavHeap::GetInstance();
-    if (shaderData_) {
-        shaderData_.reset();
-        heap->ReleaseView(shaderData_->GetHandleUINT());
+    if (pShaderData_) {
+        pShaderData_.reset();
+        heap->ReleaseView(pShaderData_->GetHandleUINT());
     }
 
-    shaderData_ = std::make_unique<ConstantBuffer<ShaderData>>();
+    pShaderData_ = std::make_unique<ConstantBuffer<ShaderData>>();
 
     heap->BookingHeapPos(1u);
-    heap->CreateView(*shaderData_);
+    heap->CreateView(*pShaderData_);
 
     CreateGraphicsPipeline_();
 }
 
 void SkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color) {
-    (*shaderData_).Map();
-    (*shaderData_)->worldMat = worldMat;
-    (*shaderData_)->viewProjectionMat = cameraMat;
-    (*shaderData_)->color = color;
-    (*shaderData_).Unmap();
+    (*pShaderData_).Map();
+    (*pShaderData_)->worldMat = worldMat;
+    (*pShaderData_)->viewProjectionMat = cameraMat;
+    (*pShaderData_)->color = color;
+    (*pShaderData_).Unmap();
 
     // コマンドリスト
     ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
     // パイプライン設定
-    pipeline_->Use();
+    pPipeline_->Use();
 
     // ライト構造体
-    commandlist->SetGraphicsRootDescriptorTable(0, shaderData_->GetHandleGPU());
+    commandlist->SetGraphicsRootDescriptorTable(0, pShaderData_->GetHandleGPU());
     // テクスチャ
-    commandlist->SetGraphicsRootDescriptorTable(1, texture_->GetHandleGPU());
+    commandlist->SetGraphicsRootDescriptorTable(1, pTexture_->GetHandleGPU());
 
     // 頂点バッファセット
     commandlist->IASetVertexBuffers(0, 1, &vertexView_);
@@ -122,7 +122,7 @@ void SkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t colo
 
 D3D12_GPU_DESCRIPTOR_HANDLE SkyBox::GetHandle() const
 {
-    return texture_->GetHandleGPU();
+    return pTexture_->GetHandleGPU();
 }
 
 void SkyBox::CreateGraphicsPipeline_() {
@@ -178,6 +178,6 @@ void SkyBox::CreateGraphicsPipeline_() {
     pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
     pipelineDesc.numRenderTarget = 1;
     pipelineManager->SetDesc(pipelineDesc);
-    pipeline_ = pipelineManager->CreateCubeMap();
+    pPipeline_ = pipelineManager->CreateCubeMap();
     pipelineManager->StateReset();
 }

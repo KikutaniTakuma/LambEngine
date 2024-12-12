@@ -49,8 +49,8 @@ public:
 private:
 	static Shader shader_;
 
-	static Lamb::SafePtr<class Pipeline> depthPipeline_;
-	static Lamb::SafePtr<class Pipeline> nodepthPipeline_;
+	static Lamb::SafePtr<class Pipeline> pDepthPipeline_;
+	static Lamb::SafePtr<class Pipeline> pNodepthPipeline_;
 
 	static std::array<std::unique_ptr<StructuredBuffer<VertxData>>, DirectXSwapChain::kBackBufferNumber> depthVertData_;
 	static std::array<std::unique_ptr<StructuredBuffer<VertxData>>, DirectXSwapChain::kBackBufferNumber> nodepthVertData_;

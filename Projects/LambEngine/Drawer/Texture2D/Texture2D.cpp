@@ -51,13 +51,13 @@ void Texture2D::Load()
 		// リソースとメッシュシェーダー読み込み
 		renderContextManager->LoadMesh<Texture2D::ShaderData, Texture2D::kMaxDrawCount>(kMeshFileNames_, 4);
 
-		meshRenderSet = renderContextManager->Get(kMeshFileNames_);
+		pMeshRenderSet = renderContextManager->Get(kMeshFileNames_);
 	}
 
 	// リソースとシェーダー読み込み
 	renderContextManager->Load<Texture2DRenderContext>(kFileNames_, 4);
 
-	renderSet = renderContextManager->Get(kFileNames_);
+	pRenderSet = renderContextManager->Get(kFileNames_);
 
 }
 
@@ -69,7 +69,7 @@ void Texture2D::Draw(
 	uint32_t color,
 	BlendType blend
 ) {
-	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
+	Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<Texture2DRenderContext>(blend);
 
 	renderContext->SetShaderStruct(
 		ShaderData{
@@ -83,7 +83,7 @@ void Texture2D::Draw(
 }
 
 void Texture2D::Draw(const Texture2D::Data& data) {
-	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<Texture2DRenderContext>(data.blend);
+	Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<Texture2DRenderContext>(data.blend);
 
 	renderContext->SetShaderStruct(
 		ShaderData{
@@ -96,26 +96,21 @@ void Texture2D::Draw(const Texture2D::Data& data) {
 	BaseDrawer::Draw(data.worldMatrix, data.camera, data.color, data.blend);
 }
 
-void Texture2D::AllDraw() {
-	renderSet->Draw();
-	renderSet->ResetDrawCount();
-}
-
 void Tex2DInstance::Load(const std::string& fileName) {
 	Lamb::SafePtr drawerManager = DrawerManager::GetInstance();
 	drawerManager->LoadTexture(fileName);
-	tex_ = TextureManager::GetInstance()->GetTexture(fileName);
-	tex2D_ = drawerManager->GetTexture2D();
+	pTex_ = TextureManager::GetInstance()->GetTexture(fileName);
+	pTex2D_ = drawerManager->GetTexture2D();
 }
 
 void Tex2DInstance::Draw(const Mat4x4& cameraMat)
 {
-	if (tex2D_.have()) {
-		tex2D_->Draw(
+	if (pTex2D_.have()) {
+		pTex2D_->Draw(
 			Mat4x4::MakeAffin(scale, rotate, pos),
 			Mat4x4::MakeAffin(Vector3(uvSize, 1.0f), Vector3::kZero, Vector3(uvPibot, 0.0f)),
 			cameraMat,
-			tex_->GetHandleUINT(),
+			pTex_->GetHandleUINT(),
 			color,
 			blend
 		);

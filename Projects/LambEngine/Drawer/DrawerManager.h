@@ -41,7 +41,15 @@ private:
 
 
 public:
+	/// <summary>
+	/// テクスチャロード
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void LoadTexture(const std::string& fileName);
+	/// <summary>
+	/// ロードモデル
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void LoadModel(const std::string& fileName);
 	Model* const GetModel(const std::string& fileName);
 

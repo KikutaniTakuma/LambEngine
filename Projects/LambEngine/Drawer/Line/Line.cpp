@@ -16,8 +16,8 @@
 uint32_t Line::nodepthDrawCount_ = 0u;
 uint32_t Line::depthDrawCount_ = 0u;
 Shader Line::shader_ = {};
-Lamb::SafePtr<class Pipeline> Line::depthPipeline_ = nullptr;
-Lamb::SafePtr<Pipeline> Line::nodepthPipeline_ = nullptr;
+Lamb::SafePtr<class Pipeline> Line::pDepthPipeline_ = nullptr;
+Lamb::SafePtr<Pipeline> Line::pNodepthPipeline_ = nullptr;
 std::array<std::unique_ptr<StructuredBuffer<Line::VertxData>>, DirectXSwapChain::kBackBufferNumber> Line::nodepthVertData_;
 std::array<std::unique_ptr<StructuredBuffer<Line::VertxData>>, DirectXSwapChain::kBackBufferNumber> Line::depthVertData_;
 
@@ -50,12 +50,12 @@ void Line::Initialize() {
 	pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	pipelineDesc.isDepth = true;
 	pipelineManager->SetDesc(pipelineDesc);
-	depthPipeline_ = pipelineManager->Create();
+	pDepthPipeline_ = pipelineManager->Create();
 
 	pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	pipelineDesc.isDepth = false;
 	pipelineManager->SetDesc(pipelineDesc);
-	nodepthPipeline_ = pipelineManager->Create();
+	pNodepthPipeline_ = pipelineManager->Create();
 
 	pipelineManager->StateReset();
 
@@ -101,7 +101,7 @@ void Line::DrawAll(bool isDepth) {
 	}
 
 	auto& vertData = isDepth ? depthVertData_[Lamb::GetGraphicBufferIndex()] : nodepthVertData_[Lamb::GetGraphicBufferIndex()];
-	auto& pipeline = isDepth ? depthPipeline_ : nodepthPipeline_;
+	auto& pipeline = isDepth ? pDepthPipeline_ : pNodepthPipeline_;
 
 	auto commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 

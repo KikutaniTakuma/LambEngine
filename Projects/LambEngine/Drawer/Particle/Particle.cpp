@@ -20,7 +20,7 @@
 
 Particle::Particle() :
 	wtfs_(),
-	tex_(TextureManager::GetInstance()->GetTexture(TextureManager::kWhiteTexturePath)),
+	pTex_(TextureManager::GetInstance()->GetTexture(TextureManager::kWhiteTexturePath)),
 	isLoad_(false),
 	isBillboard_(true),
 	isYBillboard_(false),
@@ -128,9 +128,9 @@ void Particle::LoadTexture(const std::string& fileName) {
 	static TextureManager* textureManager = TextureManager::GetInstance();
 
 	textureManager->LoadTexture(fileName);
-	tex_ = textureManager->GetTexture(fileName);
+	pTex_ = textureManager->GetTexture(fileName);
 
-	if (tex_ && !isLoad_) {
+	if (pTex_ && !isLoad_) {
 		isLoad_ = true;
 	}
 }
@@ -178,7 +178,7 @@ void Particle::LoadSettingDirectory(const std::string& directoryName) {
 			this->LoadTexture(lineBuf);
 		}
 		else {
-			tex_ = TextureManager::GetInstance()->GetTexture(TextureManager::kWhiteTexturePath);
+			pTex_ = TextureManager::GetInstance()->GetTexture(TextureManager::kWhiteTexturePath);
 			isLoad_ = true;
 		}
 		if (std::getline(file, lineBuf)) {
@@ -454,7 +454,7 @@ void Particle::ParticleStop()
 
 
 void Particle::Update() {
-	if (tex_ && !isLoad_) {
+	if (pTex_ && !isLoad_) {
 		isLoad_ = true;
 	}
 
@@ -620,7 +620,7 @@ void Particle::Draw(
 	const Mat4x4& viewProjection,
 	BlendType blend
 ) {
-	if (tex_ && isLoad_ && !settings_.empty()) {
+	if (pTex_ && isLoad_ && !settings_.empty()) {
 		Mat4x4 billboardMat;
 		if (isBillboard_) {
 			if (isYBillboard_) {
@@ -643,7 +643,7 @@ void Particle::Draw(
 					Mat4x4::MakeAffin(wtfs_[i].scale_, wtfs_[i].rotate_, wtfs_[i].pos_) * billboardMat,
 					Mat4x4::kIdentity,
 					viewProjection,
-					tex_->GetHandleUINT(),
+					pTex_->GetHandleUINT(),
 					wtfs_[i].color_,
 					blend
 				);
@@ -962,7 +962,7 @@ void Particle::Debug(const std::string& guiName) {
 
 		if (!file.fail() && isLoad_) {
 			file << static_cast<bool>(isLoop_) << std::endl
-				<< tex_->GetFileName() << std::endl
+				<< pTex_->GetFileName() << std::endl
 				<< isBillboard_ << std::endl
 				<< isYBillboard_;
 			file.close();
@@ -978,7 +978,7 @@ void Particle::Debug(const std::string& guiName) {
 
 	if (isLoad_) {
 		if (ImGui::TreeNode("png files Load")) {
-			ImGui::Text(("now Texture is : " + tex_->GetFileName()).c_str());
+			ImGui::Text(("now Texture is : " + pTex_->GetFileName()).c_str());
 			for (auto& fileName : fileNames) {
 				if (ImGui::Button(fileName.string().c_str())) {
 					this->LoadTexture(fileName.string());

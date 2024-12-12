@@ -110,7 +110,7 @@ void Audio::Load(const std::string& fileName) {
 	pMFSourceReader->Release();
 
 
-	HRESULT hr = AudioManager::GetInstance()->xAudio2_->CreateSourceVoice(&pSourceVoice_, &wfet_);
+	HRESULT hr = AudioManager::GetInstance()->pxAudio2_->CreateSourceVoice(&pSourceVoice_, &wfet_);
 	if (!SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<Audio>("CreateSourceVoice() failed", ErrorPlace);
 	}
@@ -131,7 +131,7 @@ void Audio::Start(float volume, bool isLoop) {
 	isLoop_ = isLoop;
 	if (!pSourceVoice_) {
 
-		hr = AudioManager::GetInstance()->xAudio2_->CreateSourceVoice(&pSourceVoice_, &wfet_);
+		hr = AudioManager::GetInstance()->pxAudio2_->CreateSourceVoice(&pSourceVoice_, &wfet_);
 		XAUDIO2_BUFFER buf{};
 		buf.pAudioData = pBuffer_.get();
 		buf.AudioBytes = bufferSize_;

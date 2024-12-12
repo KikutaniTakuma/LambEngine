@@ -54,12 +54,12 @@ public:
 
 public:
 	inline Animator& GetAnimator() {
-		return *animator_;
+		return *pAnimator_;
 	}
 
 private:
-	std::unique_ptr<Animator> animator_;
+	std::unique_ptr<Animator> pAnimator_;
 
-	std::unique_ptr<Skeleton> skeleton_;
-	std::unique_ptr<SkinCluster> skinCluster_;
+	std::unique_ptr<Skeleton> pSkeleton_;
+	std::unique_ptr<SkinCluster> pSkinCluster_;
 };

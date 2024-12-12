@@ -41,13 +41,13 @@ void Model::Load(const std::string& fileName) {
 		// リソースとメッシュシェーダー読み込み
 		renderContextManager->LoadMesh<uint32_t, kMaxDrawCount>(meshFileNames, 4);
 		
-		meshRenderSet = renderContextManager->Get(meshFileNames);
+		pMeshRenderSet = renderContextManager->Get(meshFileNames);
 	}
 
 	// リソースとシェーダー読み込み
 	renderContextManager->Load<RenderContext<uint32_t, kMaxDrawCount>>(fileNames, 4);
 
-	renderSet = renderContextManager->Get(fileNames);
+	pRenderSet = renderContextManager->Get(fileNames);
 }
 
 void Model::Draw(
@@ -62,8 +62,8 @@ void Model::Draw(
 #endif // USE_DEBUG_CODE
 
 	
-	if (isUseMeshShader_ and meshRenderSet) {
-		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<uint32_t, kMaxDrawCount>>(blend);
+	if (isUseMeshShader_ and pMeshRenderSet) {
+		Lamb::SafePtr renderContext = pMeshRenderSet->GetRenderContextDowncast<MeshRenderContext<uint32_t, kMaxDrawCount>>(blend);
 		if (blend == BlendType::kNone) {
 			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
 		}
@@ -72,7 +72,7 @@ void Model::Draw(
 		}
 	}
 	else {
-		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<uint32_t, kMaxDrawCount>>(blend);
+		Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<RenderContext<uint32_t, kMaxDrawCount>>(blend);
 		if (blend == BlendType::kNone) {
 			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
 		}
@@ -89,8 +89,8 @@ void Model::Draw(const Data& data) {
 	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
 #endif // USE_DEBUG_CODE
 
-	if (isUseMeshShader_ and meshRenderSet) {
-		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<uint32_t, kMaxDrawCount>>(data.blend);
+	if (isUseMeshShader_ and pMeshRenderSet) {
+		Lamb::SafePtr renderContext = pMeshRenderSet->GetRenderContextDowncast<MeshRenderContext<uint32_t, kMaxDrawCount>>(data.blend);
 		if (data.blend == BlendType::kNone) {
 			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
 		}
@@ -99,7 +99,7 @@ void Model::Draw(const Data& data) {
 		}
 	}
 	else {
-		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<RenderContext<uint32_t, kMaxDrawCount>>(data.blend);
+		Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<RenderContext<uint32_t, kMaxDrawCount>>(data.blend);
 		if (data.blend == BlendType::kNone) {
 			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
 		}
@@ -113,11 +113,11 @@ void Model::Draw(const Data& data) {
 
 const Node& Model::GetNode() const
 {
-	return renderSet->GetNode();
+	return pRenderSet->GetNode();
 }
 
 const ModelData& Model::GetModelData() const {
-	return *renderSet->GetModelData();
+	return *pRenderSet->GetModelData();
 }
 
 
@@ -128,21 +128,21 @@ const ModelData& Model::GetModelData() const {
 
 void ModelInstance::Load(const std::string& fileName) {
 	DrawerManager::GetInstance()->LoadModel(fileName);
-	model_ = DrawerManager::GetInstance()->GetModel(fileName);
+	pModel_ = DrawerManager::GetInstance()->GetModel(fileName);
 }
 
 void ModelInstance::Update()
 {
 	worldMat_ = Mat4x4::MakeAffin(scale, rotate, pos);
-	if (parent_.have()) {
-		worldMat_ *= parent_->worldMat_;
+	if (pParent_.have()) {
+		worldMat_ *= pParent_->worldMat_;
 	}
 }
 
 void ModelInstance::Draw(const Mat4x4& cameraMat)
 {
-	if (model_.have()) {
-		model_->Draw(
+	if (pModel_.have()) {
+		pModel_->Draw(
 			worldMat_,
 			cameraMat,
 			color,
@@ -154,7 +154,7 @@ void ModelInstance::Draw(const Mat4x4& cameraMat)
 
 void ModelInstance::SetParent(ModelInstance* parent)
 {
-	parent_ = parent;
+	pParent_ = parent;
 }
 
 const Mat4x4& ModelInstance::GetWorldMatrix() const

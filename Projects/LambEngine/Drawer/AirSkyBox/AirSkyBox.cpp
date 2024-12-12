@@ -49,28 +49,28 @@ void AirSkyBox::Load() {
     uint32_t indexSizeInBytes = static_cast<uint32_t>(sizeof(uint16_t) * indexData.size());
     uint32_t vertexSizeInBytes = static_cast<uint32_t>(sizeof(Vector4) * vertexData.size());
 
-    indexResource_ = directXDevice->CreateBufferResuorce(indexSizeInBytes);
+    pIndexResource_ = directXDevice->CreateBufferResuorce(indexSizeInBytes);
 
     Lamb::SafePtr<uint16_t> indexMap = nullptr;
-    indexResource_->Map(0, nullptr, indexMap.GetPtrAdress());
+    pIndexResource_->Map(0, nullptr, indexMap.GetPtrAdress());
     std::copy(indexData.begin(), indexData.end(), indexMap);
-    indexResource_->Unmap(0, nullptr);
+    pIndexResource_->Unmap(0, nullptr);
 
     indexView_.SizeInBytes = indexSizeInBytes;
     indexView_.Format = DXGI_FORMAT_R16_UINT;
-    indexView_.BufferLocation = indexResource_->GetGPUVirtualAddress();
+    indexView_.BufferLocation = pIndexResource_->GetGPUVirtualAddress();
 
 
-    vertexResource_ = directXDevice->CreateBufferResuorce(vertexSizeInBytes);
+    pVertexResource_ = directXDevice->CreateBufferResuorce(vertexSizeInBytes);
 
     Lamb::SafePtr<Vector4> vertMap = nullptr;
-    vertexResource_->Map(0, nullptr, vertMap.GetPtrAdress());
+    pVertexResource_->Map(0, nullptr, vertMap.GetPtrAdress());
     std::copy(vertexData.begin(), vertexData.end(), vertMap);
-    vertexResource_->Unmap(0, nullptr);
+    pVertexResource_->Unmap(0, nullptr);
 
     vertexView_.SizeInBytes = vertexSizeInBytes;
     vertexView_.StrideInBytes = static_cast<uint32_t>(sizeof(Vector4));
-    vertexView_.BufferLocation = vertexResource_->GetGPUVirtualAddress();
+    vertexView_.BufferLocation = pVertexResource_->GetGPUVirtualAddress();
 
     std::for_each(shaderData_.begin(), shaderData_.end(), [](auto& n) {
         n = std::make_unique<ConstantBuffer<ShaderData>>();
@@ -93,7 +93,7 @@ void AirSkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t c
     ID3D12GraphicsCommandList* const commandlist = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
     // パイプライン設定
-    pipeline_->Use();
+    pPipeline_->Use();
 
     // ライト構造体
     commandlist->SetGraphicsRootConstantBufferView(0, shaderData_[Lamb::GetGraphicBufferIndex()]->GetGPUVtlAdrs());
@@ -152,6 +152,6 @@ void AirSkyBox::CreateGraphicsPipeline() {
     pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
     pipelineDesc.numRenderTarget = 1;
     pipelineManager->SetDesc(pipelineDesc);
-    pipeline_ = pipelineManager->CreateCubeMap();
+    pPipeline_ = pipelineManager->CreateCubeMap();
     pipelineManager->StateReset();
 }

@@ -61,18 +61,18 @@ public:
 	);
 
 	Texture* GetTex() const {
-		return peraPipelineObject_->GetRender().GetTex();
+		return pPeraPipelineObject_->GetRender().GetTex();
 	}
 
 	/// <summary>
 	/// 書き込みとのステート変更
 	/// </summary>
 	void ChangeResourceState() {
-		peraPipelineObject_->GetRender().ChangeResourceState();
+		pPeraPipelineObject_->GetRender().ChangeResourceState();
 	}
 
 	void SetMainRenderTarget(D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
-		peraPipelineObject_->GetRender().SetMainRenderTarget(depthHandle);
+		pPeraPipelineObject_->GetRender().SetMainRenderTarget(depthHandle);
 	}
 
 	/// <summary>
@@ -90,5 +90,5 @@ public:
 	uint32_t color;
 
 private:
-	std::unique_ptr<PeraPipeline> peraPipelineObject_;
+	std::unique_ptr<PeraPipeline> pPeraPipelineObject_;
 };

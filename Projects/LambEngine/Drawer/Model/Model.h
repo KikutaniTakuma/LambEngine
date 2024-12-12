@@ -123,7 +123,7 @@ public:
 	bool isLighting = true;
 
 private:
-	Lamb::SafePtr<Model> model_;
-	Lamb::SafePtr<ModelInstance> parent_;
+	Lamb::SafePtr<Model> pModel_;
+	Lamb::SafePtr<ModelInstance> pParent_;
 	Mat4x4 worldMat_ = Mat4x4::kIdentity;
 };

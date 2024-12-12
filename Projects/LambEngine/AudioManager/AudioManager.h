@@ -62,12 +62,12 @@ public:
 
 
 	IXAudio2MasteringVoice* GetMasterVoice() {
-		return masterVoice_.get();
+		return pMasterVoice_.get();
 	}
 
 private:
-	Lamb::LambPtr<IXAudio2> xAudio2_;
-	Lamb::SafePtr<IXAudio2MasteringVoice> masterVoice_;
+	Lamb::LambPtr<IXAudio2> pxAudio2_;
+	Lamb::SafePtr<IXAudio2MasteringVoice> pMasterVoice_;
 
 	std::unordered_map<std::string, std::unique_ptr<Audio>> audios_;
 };

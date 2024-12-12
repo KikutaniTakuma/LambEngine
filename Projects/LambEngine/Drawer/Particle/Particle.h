@@ -271,7 +271,7 @@ private:
 
 	std::vector<WorldTransForm> wtfs_;
 
-	const class Texture* tex_;
+	const class Texture* pTex_;
 	bool isLoad_;
 
 	bool isBillboard_;
