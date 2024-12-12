@@ -34,15 +34,27 @@ private:
 	static Lamb::SafePtr<DirectXDevice> pInstance_;
 
 private:
-	void SettingAdapter();
+	/// <summary>
+	/// アダプターの設定
+	/// </summary>
+	void SettingAdapter_();
 
-	void CreateDevice();
+	/// <summary>
+	/// デバイス作成
+	/// </summary>
+	void CreateDevice_();
 
 #ifdef USE_DEBUG_CODE
-	void InfoQueue() const;
+	/// <summary>
+	/// エラー関係
+	/// </summary>
+	void InfoQueue_() const;
 #endif // USE_DEBUG_CODE
 
-	void CreateHeapIncrements();
+	/// <summary>
+	/// ヒープ毎のインクリメントサイズを作成
+	/// </summary>
+	void CreateHeapIncrements_();
 
 
 /// <summary>

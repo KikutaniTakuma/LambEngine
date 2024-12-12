@@ -44,7 +44,12 @@ public:
 	void CrashProgram();
 
 private:
-	void ErrorLog(const std::string& text, const std::string& boxName = "Error");
+	/// <summary>
+	/// ログを作成してファイルに出力
+	/// </summary>
+	/// <param name="text">エラーテキスト</param>
+	/// <param name="boxName">メッセージボックスの名前</param>
+	void ErrorLog_(const std::string& text, const std::string& boxName = "Error");
 
 
 private:

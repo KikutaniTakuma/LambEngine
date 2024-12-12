@@ -49,25 +49,25 @@ DirectXDevice::DirectXDevice():
 	}
 
 	// 使用するグラボの設定
-	SettingAdapter();
+	SettingAdapter_();
 	if (useAdapter_ == nullptr) {
 		throw Lamb::Error::Code<DirectXDevice>("GPU not Found", "SettingAdapter", __FILE__, __LINE__);
 	}
 
 	// Deviceの初期化
 	// 使用しているデバイスによってD3D_FEATURE_LEVELの対応バージョンが違うので成功するまでバージョンを変えて繰り返す
-	CreateDevice();
+	CreateDevice_();
 
 #ifdef USE_DEBUG_CODE
-	InfoQueue();
+	InfoQueue_();
 #endif
 
-	CreateHeapIncrements();
+	CreateHeapIncrements_();
 
 	Lamb::AddLog("Initialize DirectXDevice succeeded");
 }
 
-void DirectXDevice::SettingAdapter() {
+void DirectXDevice::SettingAdapter_() {
 	useAdapter_ = nullptr;
 	for (UINT i = 0;
 		dxgiFactory_->EnumAdapterByGpuPreference(i, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(useAdapter_.GetAddressOf())) != DXGI_ERROR_NOT_FOUND;
@@ -89,7 +89,7 @@ void DirectXDevice::SettingAdapter() {
 	}
 }
 
-void DirectXDevice::CreateDevice() {
+void DirectXDevice::CreateDevice_() {
 	// Deviceの初期化
 	// 使用しているデバイスによってD3D_FEATURE_LEVELの対応バージョンが違うので成功するまでバージョンを変えて繰り返す
 	std::array featureLevels = {
@@ -145,7 +145,7 @@ void DirectXDevice::CreateDevice() {
 }
 
 #ifdef USE_DEBUG_CODE
-void DirectXDevice::InfoQueue() const {
+void DirectXDevice::InfoQueue_() const {
 	Lamb::LambPtr<ID3D12InfoQueue> infoQueue = nullptr;
 	if (SUCCEEDED(device_->QueryInterface(IID_PPV_ARGS(infoQueue.GetAddressOf())))) {
 		// やばいエラーの予期に止まる
@@ -175,7 +175,7 @@ void DirectXDevice::InfoQueue() const {
 }
 #endif // USE_DEBUG_CODE
 
-void DirectXDevice::CreateHeapIncrements() {
+void DirectXDevice::CreateHeapIncrements_() {
 	incrementSRVCBVUAVHeap_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	incrementRTVHeap_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	incrementDSVHeap_ = device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);

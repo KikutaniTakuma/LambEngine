@@ -26,7 +26,13 @@ private:
 	static Lamb::SafePtr<ImGuiManager> pInstance_;
 
 public:
+	/// <summary>
+	/// フレームの最初に呼ぶ
+	/// </summary>
 	void Start();
 
+	/// <summary>
+	/// フレームの最後に呼ぶ
+	/// </summary>
 	void End();
 };

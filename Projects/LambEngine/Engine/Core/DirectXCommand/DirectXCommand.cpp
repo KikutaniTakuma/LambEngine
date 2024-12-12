@@ -22,13 +22,13 @@ DirectXCommand::DirectXCommand():
 	fenceVal_{0llu},
 	fenceEvent_{nullptr}
 {
-	CreateCommandQueue();
+	CreateCommandQueue_();
 
-	CreateCommandAllocator();
+	CreateCommandAllocator_();
 
-	CreateGraphicsCommandList();
+	CreateGraphicsCommandList_();
 
-	CrateFence();
+	CrateFence_();
 
 	Lamb::AddLog("Initialize DirectXCommand succeeded");
 }
@@ -87,7 +87,7 @@ void DirectXCommand::WaitForFinishCommnadlist() {
 	}
 }
 
-void DirectXCommand::CreateCommandQueue() {
+void DirectXCommand::CreateCommandQueue_() {
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	
 	// コマンドキューを作成
@@ -104,7 +104,7 @@ void DirectXCommand::CreateCommandQueue() {
 	commandQueue_.SetName<DirectXCommand>();
 }
 
-void DirectXCommand::CreateCommandAllocator() {
+void DirectXCommand::CreateCommandAllocator_() {
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 
 	commandAllocators_ = { nullptr };
@@ -126,7 +126,7 @@ void DirectXCommand::CreateCommandAllocator() {
 	);
 }
 
-void DirectXCommand::CreateGraphicsCommandList() {
+void DirectXCommand::CreateGraphicsCommandList_() {
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	
 	for (size_t i = 0; i < commandLists_.size(); ++i) {
@@ -144,7 +144,7 @@ void DirectXCommand::CreateGraphicsCommandList() {
 	
 }
 
-void DirectXCommand::CrateFence() {
+void DirectXCommand::CrateFence_() {
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	
 	// 初期値0でFenceを作る

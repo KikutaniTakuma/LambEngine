@@ -38,12 +38,29 @@ private:
 	static Lamb::SafePtr<CbvSrvUavHeap> pInstance_;
 
 private:
+	/// <summary>
+	/// ヒープ作成
+	/// </summary>
+	/// <param name="heapSize">ヒープサイズ</param>
 	void CreateDescriptorHeap(uint32_t heapSize) override;
 
+	/// <summary>
+	/// ハンドルを作成する
+	/// </summary>
 	void CreateHeapHandles() override;
 
 public:
+	/// <summary>
+	/// ディスクリプタをセットする
+	/// </summary>
+	/// <param name="handle">gpuハンドル</param>
+	/// <param name="rootParmIndex">ルートパラメータインデックス</param>
 	void Use(D3D12_GPU_DESCRIPTOR_HANDLE handle, UINT rootParmIndex);
+	/// <summary>
+	/// ディスクリプタをセットする
+	/// </summary>
+	/// <param name="handleIndex">ヒープインデックス</param>
+	/// <param name="rootParmIndex">ルートパラメータインデックス</param>
 	void Use(uint32_t handleIndex, UINT rootParmIndex);
 
 public:
@@ -74,6 +91,10 @@ public:
 	void ReleaseView(UINT viewHandle) override;
 
 public:
+	/// <summary>
+	/// テクスチャサイズ
+	/// </summary>
+	/// <returns>テクスチャサイズ</returns>
 	uint32_t GetMaxTexture() const;
 
 private:

@@ -84,7 +84,7 @@ private:
 	/// <summary>
 	/// ウィンドウのモードを変更
 	/// </summary>
-	void ChangeWindowMode();
+	void ChangeWindowMode_();
 
 
 /// <summary>
@@ -127,6 +127,10 @@ public:
 	/// <returns>クライアント領域</returns>
 	const Vector2& GetClientSize() const;
 
+	/// <summary>
+	/// ウィンドウのモニター上のポジション
+	/// </summary>
+	/// <returns></returns>
 	const Vector2& GetPos() const;
 
 /// <summary>

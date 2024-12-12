@@ -100,7 +100,7 @@ void WindowFactory::Create(
 	isFullscreen_ = isFullscreen;
 
 	if (isFullscreen_) {
-		ChangeWindowMode();
+		ChangeWindowMode_();
 	}
 
 	Lamb::AddLog("Create Window succeeded");
@@ -122,7 +122,7 @@ bool WindowFactory::WindowMassage() {
 	return (msg.message != WM_QUIT) && !(err->GetError());
 }
 
-void WindowFactory::ChangeWindowMode() {
+void WindowFactory::ChangeWindowMode_() {
 	if (isFullscreen_) {
 		// 通常ウィンドウの時の状態を保存
 		windowStyle_ = GetWindowLong(hwnd_, GWL_STYLE);
@@ -158,7 +158,7 @@ void WindowFactory::Fullscreen() {
 		) 
 	{
 		isFullscreen_ = !isFullscreen_;
-		ChangeWindowMode();
+		ChangeWindowMode_();
 	}
 }
 

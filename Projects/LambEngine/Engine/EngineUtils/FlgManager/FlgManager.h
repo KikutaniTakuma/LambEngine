@@ -27,6 +27,9 @@ public:
 	static FlgManager* const GetInstance();
 
 public:
+	/// <summary>
+	/// 全フラグの更新
+	/// </summary>
 	void AllFlgUpdate() const;
 
 private:
