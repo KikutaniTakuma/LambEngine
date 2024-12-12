@@ -1,21 +1,21 @@
 #include "ScreenOut.h"
 #include "Drawer/StringOut/StringOut.h"
 
-ScreenOut* ScreenOut::instance_ = nullptr;
+ScreenOut* ScreenOut::pInstance_ = nullptr;
 
 void ScreenOut::Initialize() {
-	if (!instance_) {
-		instance_ = new ScreenOut{};
+	if (!pInstance_) {
+		pInstance_ = new ScreenOut{};
 	}
 }
 
 void ScreenOut::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	delete pInstance_;
+	pInstance_ = nullptr;
 }
 
 ScreenOut* ScreenOut::GetInstance() {
-	return instance_;
+	return pInstance_;
 }
 
 ScreenOut::ScreenOut() :

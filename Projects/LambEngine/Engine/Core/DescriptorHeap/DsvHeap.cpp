@@ -9,7 +9,7 @@
 #include <algorithm>
 #include "Error/Error.h"
 
-Lamb::SafePtr<DsvHeap> DsvHeap::instance_ = nullptr;
+Lamb::SafePtr<DsvHeap> DsvHeap::pInstance_ = nullptr;
 
 DsvHeap::~DsvHeap()
 {
@@ -17,15 +17,15 @@ DsvHeap::~DsvHeap()
 }
 
 void DsvHeap::Initialize(UINT heapSize) {
-	instance_.reset(new DsvHeap( heapSize ));
+	pInstance_.reset(new DsvHeap( heapSize ));
 }
 
 void DsvHeap::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 DsvHeap* const DsvHeap::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 DsvHeap::DsvHeap(uint32_t heapSize) :
@@ -42,14 +42,14 @@ DsvHeap::DsvHeap(uint32_t heapSize) :
 
 void DsvHeap::CreateDescriptorHeap(uint32_t heapSize) {
 	heapSize_ = std::clamp(heapSize, DirectXSwapChain::kBackBufferNumber, 0xffu);
-	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, heapSize_, false);
-	heap_.SetName<DsvHeap>();
+	pHeap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, heapSize_, false);
+	pHeap_.SetName<DsvHeap>();
 }
 
 void DsvHeap::CreateHeapHandles() {
 	uint64_t incrementDSVHeap = static_cast<uint64_t>(DirectXDevice::GetInstance()->GetIncrementDSVHeap());
 
-	heapHandles_.resize(heapSize_, { heap_->GetCPUDescriptorHandleForHeapStart(), D3D12_GPU_DESCRIPTOR_HANDLE{} });
+	heapHandles_.resize(heapSize_, { pHeap_->GetCPUDescriptorHandleForHeapStart(), D3D12_GPU_DESCRIPTOR_HANDLE{} });
 	for (uint64_t i = 0; i < static_cast<uint64_t>(heapSize_); i++) {
 		heapHandles_[i].first.ptr += incrementDSVHeap * i;
 	}

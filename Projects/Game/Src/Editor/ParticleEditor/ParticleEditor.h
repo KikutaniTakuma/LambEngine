@@ -23,7 +23,7 @@ public:
 	static ParticleEditor* GetInstance();
 
 private:
-	static ParticleEditor* instance_;
+	static ParticleEditor* pInstance_;
 
 public:
 	void Editor();

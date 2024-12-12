@@ -29,7 +29,7 @@ public:
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<DrawerManager> instance_;
+	static Lamb::SafePtr<DrawerManager> pInstance_;
 
 public:
 	Texture2D* const GetTexture2D() const;

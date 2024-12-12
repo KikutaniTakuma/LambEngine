@@ -14,21 +14,21 @@
 #include "Error/Error.h"
 #include "Utils/SafeDelete.h"
 
-Lamb::SafePtr<DirectXDevice> DirectXDevice::instance_ = nullptr;
+Lamb::SafePtr<DirectXDevice> DirectXDevice::pInstance_ = nullptr;
 
 DirectXDevice::~DirectXDevice() {
 	Lamb::AddLog("Finalize DirectXDevice succeeded");
 }
 
 DirectXDevice* const DirectXDevice::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void DirectXDevice::Initialize() {
-	instance_.reset(new DirectXDevice());
+	pInstance_.reset(new DirectXDevice());
 }
 void DirectXDevice::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 

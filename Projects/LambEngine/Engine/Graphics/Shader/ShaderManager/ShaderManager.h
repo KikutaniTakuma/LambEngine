@@ -36,7 +36,7 @@ public:
 	static void Finalize();
 
 	static inline ShaderManager* const GetInstance() {
-		return instance_.get();
+		return pInstance_.get();
 	}
 
 public:
@@ -50,7 +50,7 @@ public:
 	IDxcBlob* const LoadMeshShader(const std::string& fileName);
 
 private:
-	static Lamb::SafePtr<ShaderManager> instance_;
+	static Lamb::SafePtr<ShaderManager> pInstance_;
 
 private:
 	class ShaderFactory* shaderFactory_;

@@ -29,11 +29,11 @@ public:
 	static void Inititalize();
 	static void Finalize();
 	static inline AudioManager* const GetInstance() {
-		return instance_.get();
+		return pInstance_.get();
 	}
 
 private:
-	static Lamb::SafePtr<AudioManager> instance_;
+	static Lamb::SafePtr<AudioManager> pInstance_;
 
 public:
 	/// <summary>

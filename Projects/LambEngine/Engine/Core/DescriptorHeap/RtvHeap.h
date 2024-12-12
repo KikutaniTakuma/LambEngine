@@ -29,7 +29,7 @@ public:
 	static RtvHeap* const GetInstance();
 
 private:
-	static Lamb::SafePtr<RtvHeap> instance_;
+	static Lamb::SafePtr<RtvHeap> pInstance_;
 
 private:
 	void CreateDescriptorHeap(uint32_t heapSize) override;

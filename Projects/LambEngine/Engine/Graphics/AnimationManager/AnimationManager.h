@@ -31,7 +31,7 @@ public:
  	static [[nodiscard]] AnimationManager* const GetInstance();
 
 private:
-	static Lamb::SafePtr<AnimationManager> instance_;
+	static Lamb::SafePtr<AnimationManager> pInstance_;
 
 public:
 	void LoadAnimations(const std::string& fileName);

@@ -28,7 +28,7 @@ public:
 	static DsvHeap* const GetInstance();
 
 private:
-	static Lamb::SafePtr<DsvHeap> instance_;
+	static Lamb::SafePtr<DsvHeap> pInstance_;
 
 private:
 	void CreateDescriptorHeap(uint32_t heapSize) override;

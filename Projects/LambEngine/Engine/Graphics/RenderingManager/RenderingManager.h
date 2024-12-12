@@ -74,7 +74,7 @@ public:
 	static const Lamb::SafePtr<RenderingManager> GetInstance();
 
 private:
-	static std::unique_ptr<RenderingManager> instance_;
+	static std::unique_ptr<RenderingManager> pInstance_;
 
 public:
 	void FrameStart();

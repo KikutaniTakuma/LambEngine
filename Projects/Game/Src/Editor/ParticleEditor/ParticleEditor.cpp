@@ -3,22 +3,22 @@
 #include "imgui.h"
 #include "Utils/FileUtils.h"
 
-ParticleEditor* ParticleEditor::instance_ = nullptr;
+ParticleEditor* ParticleEditor::pInstance_ = nullptr;
 
 void ParticleEditor::Initialize() {
-	assert(!instance_);
-	instance_ = new ParticleEditor;
-	instance_->camera_.pos.z = -5.0f;
-	instance_->camera_.Update();
+	assert(!pInstance_);
+	pInstance_ = new ParticleEditor;
+	pInstance_->camera_.pos.z = -5.0f;
+	pInstance_->camera_.Update();
 }
 
 void ParticleEditor::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	delete pInstance_;
+	pInstance_ = nullptr;
 }
 
 ParticleEditor* ParticleEditor::GetInstance() {
-	return instance_;
+	return pInstance_;
 }
 
 void ParticleEditor::Editor() {

@@ -21,16 +21,16 @@
 
 #include "Utils/SafeDelete.h"
 
-Lamb::SafePtr<ImGuiManager> ImGuiManager::instance_ = nullptr;
+Lamb::SafePtr<ImGuiManager> ImGuiManager::pInstance_ = nullptr;
 
 ImGuiManager* const ImGuiManager::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 void ImGuiManager::Initialize() {
-	instance_.reset(new ImGuiManager());
+	pInstance_.reset(new ImGuiManager());
 }
 void ImGuiManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 ImGuiManager::ImGuiManager() {

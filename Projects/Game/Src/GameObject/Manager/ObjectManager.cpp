@@ -18,7 +18,7 @@
 #include "CompCollisionManager.h"
 
 
-std::unique_ptr<ObjectManager> ObjectManager::instance_;
+std::unique_ptr<ObjectManager> ObjectManager::pInstance_;
 
 ObjectManager::~ObjectManager()
 {
@@ -27,27 +27,27 @@ ObjectManager::~ObjectManager()
 
 ObjectManager* const ObjectManager::GetInstance()
 {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void ObjectManager::Initialize() {
-	if (instance_) {
-		instance_.reset();
+	if (pInstance_) {
+		pInstance_.reset();
 	}
 
-	instance_.reset(new ObjectManager());
+	pInstance_.reset(new ObjectManager());
 
 #ifdef USE_DEBUG_CODE
-	instance_->levelDataFilePathes_ = Lamb::GetFilePathFormDir("./SceneData/", ".json");
+	pInstance_->levelDataFilePathes_ = Lamb::GetFilePathFormDir("./SceneData/", ".json");
 #endif // USE_DEBUG_CODE
 
 	CompCollisionManager::Initialize();
-	instance_->collisionManager_ = CompCollisionManager::GetInstance();
+	pInstance_->collisionManager_ = CompCollisionManager::GetInstance();
 }
 
 void ObjectManager::Finalize()
 {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 void ObjectManager::SetLevelData(Lamb::SafePtr<LevelData> levelData) {

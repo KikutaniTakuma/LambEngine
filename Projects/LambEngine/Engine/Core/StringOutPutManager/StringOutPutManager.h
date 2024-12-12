@@ -31,7 +31,7 @@ public:
 	static StringOutPutManager* const GetInstance();
 
 private:
-	static Lamb::SafePtr<StringOutPutManager> instance_;
+	static Lamb::SafePtr<StringOutPutManager> pInstance_;
 
 public:
 	void LoadFont(const std::string& fontName);

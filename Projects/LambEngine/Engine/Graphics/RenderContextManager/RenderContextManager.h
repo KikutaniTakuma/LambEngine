@@ -36,7 +36,7 @@ public:
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<RenderContextManager> instance_;
+	static Lamb::SafePtr<RenderContextManager> pInstance_;
 
 
 public:

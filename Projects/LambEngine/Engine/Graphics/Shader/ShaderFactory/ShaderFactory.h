@@ -33,7 +33,7 @@ public:
 	static ShaderFactory* const GetInstance();
 
 private:
-	static ShaderFactory* instance_;
+	static ShaderFactory* pInstance_;
 
 public:
 	/// <summary>

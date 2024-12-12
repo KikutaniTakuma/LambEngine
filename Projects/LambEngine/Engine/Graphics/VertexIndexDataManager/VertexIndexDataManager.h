@@ -33,7 +33,7 @@ public:
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<VertexIndexDataManager> instance_;
+	static Lamb::SafePtr<VertexIndexDataManager> pInstance_;
 
 public:
 	void LoadModel(const std::string& objFileName);

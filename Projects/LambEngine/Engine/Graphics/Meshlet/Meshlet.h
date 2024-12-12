@@ -61,7 +61,7 @@ public:
 	static void Finalize();
 
 private:
-	static std::unique_ptr<MeshletManager> instance_;
+	static std::unique_ptr<MeshletManager> pInstance_;
 
 public:
 	void LoadMesh(const std::string& fileName, uint32_t maxDrawCount);

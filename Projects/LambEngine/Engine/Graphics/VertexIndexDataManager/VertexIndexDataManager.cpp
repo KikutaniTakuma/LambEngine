@@ -10,10 +10,10 @@
 #include "../VertexIndexDataLoader/VertexIndexDataLoader.h"
 #include "Error/Error.h"
 
-Lamb::SafePtr<VertexIndexDataManager> VertexIndexDataManager::instance_ = nullptr;
+Lamb::SafePtr<VertexIndexDataManager> VertexIndexDataManager::pInstance_ = nullptr;
 
 VertexIndexDataManager* const VertexIndexDataManager::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 VertexIndexDataManager::~VertexIndexDataManager() {
@@ -22,8 +22,8 @@ VertexIndexDataManager::~VertexIndexDataManager() {
 }
 
 void VertexIndexDataManager::Initialize() {
-	instance_.reset(new VertexIndexDataManager());
-	if (instance_) {
+	pInstance_.reset(new VertexIndexDataManager());
+	if (pInstance_) {
 		Lamb::AddLog("Initialize MeshManager succeeded");
 	}
 	else {
@@ -31,7 +31,7 @@ void VertexIndexDataManager::Initialize() {
 	}
 }
 void VertexIndexDataManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 void VertexIndexDataManager::LoadModel(const std::string& fileName) {

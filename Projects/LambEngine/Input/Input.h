@@ -28,12 +28,12 @@ public:
 	static void Finalize();
 
 	static Input* const GetInstance() {
-		assert(instance_);
-		return instance_;
+		assert(pInstance_);
+		return pInstance_;
 	}
 
 private:
-	static Input* instance_;
+	static Input* pInstance_;
 
 public:
 	void InputStart();

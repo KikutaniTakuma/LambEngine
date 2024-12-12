@@ -4,7 +4,7 @@
 
 #include "DrawerManager.h"
 
-Lamb::SafePtr<DrawerManager> DrawerManager::instance_ = nullptr;
+Lamb::SafePtr<DrawerManager> DrawerManager::pInstance_ = nullptr;
 
 DrawerManager::DrawerManager():
 	tex2D_(),
@@ -25,15 +25,15 @@ DrawerManager::~DrawerManager(){
 
 DrawerManager* DrawerManager::GetInstance()
 {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void DrawerManager::Initialize() {
-	instance_.reset(new DrawerManager());
+	pInstance_.reset(new DrawerManager());
 }
 
 void DrawerManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 Texture2D* const DrawerManager::GetTexture2D() const

@@ -30,7 +30,7 @@ public:
 	static SceneManager* const GetInstance();
 
 private:
-	static std::unique_ptr<SceneManager> instance_;
+	static std::unique_ptr<SceneManager> pInstance_;
 public:
 
 	void Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID);

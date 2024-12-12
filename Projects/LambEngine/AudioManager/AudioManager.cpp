@@ -9,12 +9,12 @@
 #include "Error/Error.h"
 #include "Utils/SafeDelete.h"
 
-Lamb::SafePtr<AudioManager> AudioManager::instance_ = nullptr;
+Lamb::SafePtr<AudioManager> AudioManager::pInstance_ = nullptr;
 void AudioManager::Inititalize() {
-	instance_.reset(new AudioManager());
+	pInstance_.reset(new AudioManager());
 }
 void AudioManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 AudioManager::AudioManager() :

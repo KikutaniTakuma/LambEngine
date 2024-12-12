@@ -31,7 +31,7 @@ public:
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<DirectXSwapChain> instance_;
+	static Lamb::SafePtr<DirectXSwapChain> pInstance_;
 
 public:
 	/// <summary>

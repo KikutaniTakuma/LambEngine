@@ -13,22 +13,22 @@
 #include <cassert>
 #pragma warning(disable: 6387)
 
-ShaderFactory* ShaderFactory::instance_ = nullptr;
+ShaderFactory* ShaderFactory::pInstance_ = nullptr;
 
 void ShaderFactory::Initialize() {
-	assert(!instance_);
-	instance_ = new ShaderFactory{};
+	assert(!pInstance_);
+	pInstance_ = new ShaderFactory{};
 }
 
 void ShaderFactory::Finalize() {
-	assert(!!instance_);
-	delete instance_;
-	instance_ = nullptr;
+	assert(!!pInstance_);
+	delete pInstance_;
+	pInstance_ = nullptr;
 }
 
 ShaderFactory* const ShaderFactory::GetInstance() {
-	assert(instance_);
-	return instance_;
+	assert(pInstance_);
+	return pInstance_;
 }
 
 

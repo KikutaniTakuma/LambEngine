@@ -5,26 +5,26 @@
 #endif // USE_DEBUG_CODE
 
 
-std::unique_ptr<TransformCompUpdater> TransformCompUpdater::instance_;
+std::unique_ptr<TransformCompUpdater> TransformCompUpdater::pInstance_;
 
 TransformCompUpdater::~TransformCompUpdater() {
 	transformComps_.clear();
 }
 
 TransformCompUpdater* const TransformCompUpdater::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void TransformCompUpdater::Initialize(){
-	if(instance_){
+	if(pInstance_){
 		return;
 	}
-	instance_.reset(new TransformCompUpdater());
+	pInstance_.reset(new TransformCompUpdater());
 }
 
 void TransformCompUpdater::Finalize()
 {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 void TransformCompUpdater::Set(const Lamb::SafePtr<class TransformComp>& transformComp) {

@@ -27,7 +27,7 @@ public:
 	static void Finalize();
 
 private:
-	static std::unique_ptr<CompCollisionManager> instance_;
+	static std::unique_ptr<CompCollisionManager> pInstance_;
 
 public:
 	void Set(const Lamb::SafePtr<ObbComp>& obbComp);

@@ -30,7 +30,7 @@ private:
 	static ScreenOut* GetInstance();
 
 private:
-	static ScreenOut* instance_;
+	static ScreenOut* pInstance_;
 
 private:
 	std::unique_ptr<class StringOut> sout_;

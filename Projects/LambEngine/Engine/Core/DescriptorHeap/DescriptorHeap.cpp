@@ -9,7 +9,7 @@
 #include "Error/Error.h"
 
 DescriptorHeap::DescriptorHeap() :
-	heap_{},
+	pHeap_{},
 	heapSize_(0u),
 	currentHandleIndex_(0u),
 	heapHandles_(0),

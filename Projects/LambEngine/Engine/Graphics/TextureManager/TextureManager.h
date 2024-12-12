@@ -38,7 +38,7 @@ public:
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<TextureManager> instance_;
+	static Lamb::SafePtr<TextureManager> pInstance_;
 
 
 public:

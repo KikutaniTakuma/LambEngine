@@ -75,11 +75,11 @@ public:
 	void Debug();
 
 private:
-	static Mouse* instance_;
+	static Mouse* pInstance_;
 
 public:
 	static Mouse* const GetInstance() {
-		return instance_;
+		return pInstance_;
 	}
 
 private:

@@ -30,7 +30,7 @@ public:
 	static void Finalize();
 
 private:
-	static std::unique_ptr<ObjectManager> instance_;
+	static std::unique_ptr<ObjectManager> pInstance_;
 
 public:
 	void SetLevelData(Lamb::SafePtr<LevelData> levelData);

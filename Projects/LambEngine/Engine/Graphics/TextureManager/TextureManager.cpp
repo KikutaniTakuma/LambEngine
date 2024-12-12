@@ -15,21 +15,21 @@
 #include "Error/Error.h"
 
 
-Lamb::SafePtr<TextureManager> TextureManager::instance_ = nullptr;
+Lamb::SafePtr<TextureManager> TextureManager::pInstance_ = nullptr;
 const std::string TextureManager::kWhiteTexturePath = "./Resources/EngineResources/white2x2.png";
 
 TextureManager* const TextureManager::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void TextureManager::Initialize() {
-	instance_.reset(new TextureManager());
-	instance_.NullCheck<TextureManager>(ErrorPlace);
-	instance_->LoadTexture(kWhiteTexturePath);
+	pInstance_.reset(new TextureManager());
+	pInstance_.NullCheck<TextureManager>(ErrorPlace);
+	pInstance_->LoadTexture(kWhiteTexturePath);
 }
 
 void TextureManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 TextureManager::TextureManager() :
@@ -92,7 +92,7 @@ Texture* const TextureManager::GetTexture(const std::string& fileName) {
 }
 
 uint32_t TextureManager::GetWhiteTex() {
-	return instance_->textures_[kWhiteTexturePath]->GetHandleUINT();
+	return pInstance_->textures_[kWhiteTexturePath]->GetHandleUINT();
 }
 
 void TextureManager::UploadTextureData()

@@ -8,21 +8,21 @@
 
 #include "imgui.h"
 
-std::unique_ptr<SceneManager> SceneManager::instance_;
+std::unique_ptr<SceneManager> SceneManager::pInstance_;
 
 void SceneManager::Initialize()
 {
-	instance_ = std::make_unique<SceneManager>();
+	pInstance_ = std::make_unique<SceneManager>();
 }
 
 void SceneManager::InstanceReset()
 {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 SceneManager* const SceneManager::GetInstance()
 {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void SceneManager::Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID) {

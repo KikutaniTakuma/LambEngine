@@ -16,6 +16,9 @@
 
 #include <array>
 
+/// <summary>
+/// DirectXCommand
+/// </summary>
 class DirectXCommand {
 public:
 	DirectXCommand();

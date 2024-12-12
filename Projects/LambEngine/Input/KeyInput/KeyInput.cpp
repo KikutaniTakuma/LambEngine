@@ -72,15 +72,15 @@ bool KeyInput::PushAnyKey() {
 	return key_ != preKey_;
 }
 
-KeyInput* KeyInput::instance_ = nullptr;
+KeyInput* KeyInput::pInstance_ = nullptr;
 
 void KeyInput::Initialize(IDirectInput8* input) {
 	assert(input);
-	instance_ = new KeyInput(input);
+	pInstance_ = new KeyInput(input);
 }
 void KeyInput::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	delete pInstance_;
+	pInstance_ = nullptr;
 }
 
 KeyInput::KeyInput(IDirectInput8* input):

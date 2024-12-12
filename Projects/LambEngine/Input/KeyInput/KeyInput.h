@@ -33,11 +33,11 @@ public:
 	void InputReset();
 
 	bool GetKey(uint8_t keyType) {
-		return (instance_->key_[keyType] & 0x80);
+		return (pInstance_->key_[keyType] & 0x80);
 	}
 
 	bool GetPreKey(uint8_t keyType) {
-		return (instance_->preKey_[keyType] & 0x80);
+		return (pInstance_->preKey_[keyType] & 0x80);
 	}
 
 	bool Pushed(uint8_t keyType);
@@ -55,11 +55,11 @@ public:
 	static void Finalize();
 
 private:
-	static KeyInput* instance_;
+	static KeyInput* pInstance_;
 
 public:
 	static KeyInput* const GetInstance() {
-		return instance_;
+		return pInstance_;
 	}
 
 

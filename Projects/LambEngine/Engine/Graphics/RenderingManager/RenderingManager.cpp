@@ -33,7 +33,7 @@
 #endif // USE_DEBUG_CODE
 
 
-std::unique_ptr<RenderingManager> RenderingManager::instance_;
+std::unique_ptr<RenderingManager> RenderingManager::pInstance_;
 
 RenderingManager::RenderingManager() {
 	resetDrawCount_ = 
@@ -182,16 +182,16 @@ RenderingManager::~RenderingManager()
 }
 
 void RenderingManager::Initialize() {
-	instance_.reset(new RenderingManager());
+	pInstance_.reset(new RenderingManager());
 }
 
 void RenderingManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 const Lamb::SafePtr<RenderingManager> RenderingManager::GetInstance()
 {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void RenderingManager::FrameStart()

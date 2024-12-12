@@ -64,7 +64,7 @@ void Line::Initialize() {
 		nodepthVertData_.end(), 
 		[](auto& n) {
 			n = std::make_unique<StructuredBuffer<VertxData>>(); 
-			n->Create(Line::kDrawMaxNumber_);
+			n->CreateBuffer(Line::kDrawMaxNumber_);
 		}
 	);
 	std::for_each(
@@ -72,7 +72,7 @@ void Line::Initialize() {
 		depthVertData_.end(),
 		[](auto& n) {
 			n = std::make_unique<StructuredBuffer<VertxData>>();
-			n->Create(Line::kDrawMaxNumber_);
+			n->CreateBuffer(Line::kDrawMaxNumber_);
 		}
 	);
 }

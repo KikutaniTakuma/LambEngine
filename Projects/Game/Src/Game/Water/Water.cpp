@@ -10,24 +10,24 @@
 #endif // USE_DEBUG_CODE
 
 
-Water* Water::instance_ = nullptr;
+Water* Water::pInstance_ = nullptr;
 
 void Water::Initialize()
 {
-	if (!instance_) {
-		instance_ = new Water{};
-		instance_->Init();
+	if (!pInstance_) {
+		pInstance_ = new Water{};
+		pInstance_->Init();
 	}
 }
 
 void Water::Finalize()
 {
-	Lamb::SafeDelete(instance_);
+	Lamb::SafeDelete(pInstance_);
 }
 
 Water* const Water::GetInstance()
 {
-	return instance_;
+	return pInstance_;
 }
 
 void Water::Init() {

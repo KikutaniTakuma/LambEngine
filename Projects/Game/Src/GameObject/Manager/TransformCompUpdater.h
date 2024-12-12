@@ -26,7 +26,7 @@ public:
 	static void Finalize();
 
 private:
-	static std::unique_ptr<TransformCompUpdater> instance_;
+	static std::unique_ptr<TransformCompUpdater> pInstance_;
 
 public:
 	void Set(const Lamb::SafePtr<TransformComp>& transformComp);

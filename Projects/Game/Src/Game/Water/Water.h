@@ -22,7 +22,7 @@ public:
 	static Water* const GetInstance();
 
 private:
-	static Water* instance_;
+	static Water* pInstance_;
 
 
 public:

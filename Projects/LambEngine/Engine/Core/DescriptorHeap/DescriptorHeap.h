@@ -58,7 +58,7 @@ public:
 	/// </summary>
 	/// <returns>ヒープのポインタ</returns>
 	inline ID3D12DescriptorHeap* const Get() const {
-		return heap_.Get();
+		return pHeap_.Get();
 	}
 
 public:
@@ -88,7 +88,7 @@ protected:
 	virtual void CreateHeapHandles() = 0;
 
 protected:
-	Lamb::LambPtr<ID3D12DescriptorHeap> heap_;
+	Lamb::LambPtr<ID3D12DescriptorHeap> pHeap_;
 
 	UINT heapSize_;
 	UINT currentHandleIndex_;

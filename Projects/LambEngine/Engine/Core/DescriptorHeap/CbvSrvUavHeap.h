@@ -35,7 +35,7 @@ public:
 	static CbvSrvUavHeap* const GetInstance();
 
 private:
-	static Lamb::SafePtr<CbvSrvUavHeap> instance_;
+	static Lamb::SafePtr<CbvSrvUavHeap> pInstance_;
 
 private:
 	void CreateDescriptorHeap(uint32_t heapSize) override;

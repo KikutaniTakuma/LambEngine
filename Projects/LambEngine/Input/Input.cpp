@@ -10,14 +10,14 @@
 
 #include <bit>
 
-Input* Input::instance_ = nullptr;
+Input* Input::pInstance_ = nullptr;
 
 void Input::Initialize() {
-	instance_ = new Input();
+	pInstance_ = new Input();
 }
 void Input::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	delete pInstance_;
+	pInstance_ = nullptr;
 }
 
 Input::Input():

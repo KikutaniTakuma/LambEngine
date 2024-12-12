@@ -17,22 +17,22 @@
 #include "Utils/SafeDelete.h"
 
 
-Lamb::SafePtr<StringOutPutManager> StringOutPutManager::instance_ = nullptr;
+Lamb::SafePtr<StringOutPutManager> StringOutPutManager::pInstance_ = nullptr;
 
 StringOutPutManager::~StringOutPutManager() {
 	Lamb::AddLog("Finalize StringOutPutManager succeeded");
 }
 
 void StringOutPutManager::Initialize() {
-	instance_.reset(new StringOutPutManager());
+	pInstance_.reset(new StringOutPutManager());
 }
 
 void StringOutPutManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 StringOutPutManager* const StringOutPutManager::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 

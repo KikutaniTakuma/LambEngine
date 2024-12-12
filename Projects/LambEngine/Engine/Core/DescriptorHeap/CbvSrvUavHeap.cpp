@@ -17,22 +17,22 @@
 
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
 
-Lamb::SafePtr<CbvSrvUavHeap> CbvSrvUavHeap::instance_ = nullptr;
+Lamb::SafePtr<CbvSrvUavHeap> CbvSrvUavHeap::pInstance_ = nullptr;
 
 CbvSrvUavHeap::~CbvSrvUavHeap() {
 	Lamb::AddLog("Finalize CbvSrvUavHeap succeeded");
 }
 
 void CbvSrvUavHeap::Initialize(UINT heapSize, UINT maxTexture) {
-	instance_.reset(new CbvSrvUavHeap(heapSize, maxTexture));
+	pInstance_.reset(new CbvSrvUavHeap(heapSize, maxTexture));
 }
 
 void CbvSrvUavHeap::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 CbvSrvUavHeap* const CbvSrvUavHeap::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor, UINT maxTexture) :
@@ -55,15 +55,15 @@ CbvSrvUavHeap::CbvSrvUavHeap(UINT numDescriptor, UINT maxTexture) :
 void CbvSrvUavHeap::CreateDescriptorHeap(uint32_t heapSize) {
 	// 1～(10^6-1)でクランプ
 	heapSize_ = std::clamp(heapSize, 1u, static_cast<UINT>(std::pow(10u, 6u)) - 1u);
-	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, heapSize_, true);
-	heap_.SetName<CbvSrvUavHeap>();
+	pHeap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, heapSize_, true);
+	pHeap_.SetName<CbvSrvUavHeap>();
 }
 
 void CbvSrvUavHeap::CreateHeapHandles()
 {
 	uint64_t incrementCbvSrvUavHeap = static_cast<uint64_t>(DirectXDevice::GetInstance()->GetIncrementSRVCBVUAVHeap());
 
-	heapHandles_.resize(heapSize_, { heap_->GetCPUDescriptorHandleForHeapStart(), heap_->GetGPUDescriptorHandleForHeapStart() });
+	heapHandles_.resize(heapSize_, { pHeap_->GetCPUDescriptorHandleForHeapStart(), pHeap_->GetGPUDescriptorHandleForHeapStart() });
 	for (uint64_t i = 0; i < static_cast<uint64_t>(heapSize_); i++) {
 		heapHandles_[i].first.ptr += incrementCbvSrvUavHeap * i;
 		heapHandles_[i].second.ptr += incrementCbvSrvUavHeap * i;

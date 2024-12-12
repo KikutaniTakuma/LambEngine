@@ -9,26 +9,26 @@
 
 #include "../VertexIndexDataLoader/VertexIndexDataLoader.h"
 
-Lamb::SafePtr<AnimationManager> AnimationManager::instance_ = nullptr;
+Lamb::SafePtr<AnimationManager> AnimationManager::pInstance_ = nullptr;
 
 void AnimationManager::Initialize() {
-	if (instance_) {
+	if (pInstance_) {
 		throw Lamb::Error::Code<AnimationManager>("Already created", ErrorPlace);
 	}
 
-	instance_.reset(new AnimationManager());
+	pInstance_.reset(new AnimationManager());
 
 	Lamb::AddLog("Initialize AnimationManager succeeded");
 }
 
 void AnimationManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 	Lamb::AddLog("Finalize AnimationManager succeeded");
 }
 
 AnimationManager* const AnimationManager::GetInstance()
 {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void AnimationManager::LoadAnimations(const std::string& fileName) {

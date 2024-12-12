@@ -31,7 +31,7 @@ public:
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<DirectXDevice> instance_;
+	static Lamb::SafePtr<DirectXDevice> pInstance_;
 
 private:
 	void SettingAdapter();

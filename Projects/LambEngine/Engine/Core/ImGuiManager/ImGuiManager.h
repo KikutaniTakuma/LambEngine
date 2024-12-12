@@ -23,7 +23,7 @@ public:
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<ImGuiManager> instance_;
+	static Lamb::SafePtr<ImGuiManager> pInstance_;
 
 public:
 	void Start();

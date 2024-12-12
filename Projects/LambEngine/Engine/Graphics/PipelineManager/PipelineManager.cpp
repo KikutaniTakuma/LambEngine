@@ -11,14 +11,14 @@
 #include "Utils/ExecutionLog.h"
 #include "Error/Error.h"
 
-Lamb::SafePtr<PipelineManager> PipelineManager::instance_ = nullptr;
+Lamb::SafePtr<PipelineManager> PipelineManager::pInstance_ = nullptr;
 
 void PipelineManager::Initialize() {
-	if (instance_) {
+	if (pInstance_) {
 		return;
 	}
-	instance_.reset(new PipelineManager());
-	if(instance_){
+	pInstance_.reset(new PipelineManager());
+	if(pInstance_){
 		Lamb::AddLog("Initialize PipelineManager succeeded");
 	}
 	else {
@@ -26,14 +26,14 @@ void PipelineManager::Initialize() {
 	}
 }
 void PipelineManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 
 	Lamb::AddLog("Finalize PipelineManager succeeded");
 }
 
 PipelineManager* const PipelineManager::GetInstance()
 {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 RootSignature* PipelineManager::CreateRootSgnature(const RootSignature::Desc& desc)
@@ -42,16 +42,16 @@ RootSignature* PipelineManager::CreateRootSgnature(const RootSignature::Desc& de
 		return rootSignature_->IsSame(desc);
 		};
 
-	auto rootSignatureItr = std::find_if(instance_->rootSignatures_.begin(), instance_->rootSignatures_.end(), IsSame);
+	auto rootSignatureItr = std::find_if(pInstance_->rootSignatures_.begin(), pInstance_->rootSignatures_.end(), IsSame);
 
-	if (rootSignatureItr == instance_->rootSignatures_.end()) {
+	if (rootSignatureItr == pInstance_->rootSignatures_.end()) {
 		auto rootSignature = std::make_unique<RootSignature>();
 
 		rootSignature->Create(desc);
 
-		instance_->rootSignatures_.push_back(std::move(rootSignature));
+		pInstance_->rootSignatures_.push_back(std::move(rootSignature));
 
-		return instance_->rootSignatures_.back().get();
+		return pInstance_->rootSignatures_.back().get();
 	}
 	else {
 		return rootSignatureItr->get();
@@ -72,9 +72,9 @@ Pipeline* const PipelineManager::Create() {
 			return pipeline->IsSame(pipelineDesc_);
 		};
 
-	auto pipelineItr = std::find_if(instance_->pipelines_.begin(), instance_->pipelines_.end(), IsSmae);
+	auto pipelineItr = std::find_if(pInstance_->pipelines_.begin(), pInstance_->pipelines_.end(), IsSmae);
 
-	if (pipelineItr == instance_->pipelines_.end()) {
+	if (pipelineItr == pInstance_->pipelines_.end()) {
 		auto pipeline = std::make_unique<Pipeline>();
 		pipeline->Create(pipelineDesc_);
 
@@ -82,9 +82,9 @@ Pipeline* const PipelineManager::Create() {
 			return nullptr;
 		}
 
-		instance_->pipelines_.push_back(std::move(pipeline));
+		pInstance_->pipelines_.push_back(std::move(pipeline));
 
-		return instance_->pipelines_.back().get();
+		return pInstance_->pipelines_.back().get();
 	}
 	else {
 		return pipelineItr->get();
@@ -97,9 +97,9 @@ Pipeline* const PipelineManager::CreateCubeMap()
 		return pipeline->IsSame(pipelineDesc_);
 		};
 
-	auto pipelineItr = std::find_if(instance_->pipelines_.begin(), instance_->pipelines_.end(), IsSmae);
+	auto pipelineItr = std::find_if(pInstance_->pipelines_.begin(), pInstance_->pipelines_.end(), IsSmae);
 
-	if (pipelineItr == instance_->pipelines_.end()) {
+	if (pipelineItr == pInstance_->pipelines_.end()) {
 		auto pipeline = std::make_unique<Pipeline>();
 		pipeline->CreateCubeMap(pipelineDesc_);
 
@@ -107,9 +107,9 @@ Pipeline* const PipelineManager::CreateCubeMap()
 			return nullptr;
 		}
 
-		instance_->pipelines_.push_back(std::move(pipeline));
+		pInstance_->pipelines_.push_back(std::move(pipeline));
 
-		return instance_->pipelines_.back().get();
+		return pInstance_->pipelines_.back().get();
 	}
 	else {
 		return pipelineItr->get();
@@ -122,9 +122,9 @@ Pipeline* const PipelineManager::CreateMesh()
 		return pipeline->IsSame(pipelineMeshDesc_);
 		};
 
-	auto pipelineItr = std::find_if(instance_->pipelines_.begin(), instance_->pipelines_.end(), IsSmae);
+	auto pipelineItr = std::find_if(pInstance_->pipelines_.begin(), pInstance_->pipelines_.end(), IsSmae);
 
-	if (pipelineItr == instance_->pipelines_.end()) {
+	if (pipelineItr == pInstance_->pipelines_.end()) {
 		auto pipeline = std::make_unique<Pipeline>();
 		pipeline->Create(pipelineMeshDesc_);
 
@@ -132,9 +132,9 @@ Pipeline* const PipelineManager::CreateMesh()
 			return nullptr;
 		}
 
-		instance_->pipelines_.push_back(std::move(pipeline));
+		pInstance_->pipelines_.push_back(std::move(pipeline));
 
-		return instance_->pipelines_.back().get();
+		return pInstance_->pipelines_.back().get();
 	}
 	else {
 		return pipelineItr->get();

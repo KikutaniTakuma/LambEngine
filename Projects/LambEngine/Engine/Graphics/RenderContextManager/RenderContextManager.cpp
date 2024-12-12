@@ -13,23 +13,23 @@
 
 #include "../PipelineManager/PipelineManager.h"
 
-Lamb::SafePtr<RenderContextManager> RenderContextManager::instance_ = nullptr;
+Lamb::SafePtr<RenderContextManager> RenderContextManager::pInstance_ = nullptr;
 
 RenderContextManager::~RenderContextManager()
 {
 }
 
 RenderContextManager* const RenderContextManager::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void RenderContextManager::Initialize() {
-	instance_.reset(new RenderContextManager());
+	pInstance_.reset(new RenderContextManager());
 	Lamb::AddLog("Initialize RenderContextManager succeeded");
 }
 
 void RenderContextManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 	Lamb::AddLog("Finalize RenderContextManager succeeded");
 }
 
