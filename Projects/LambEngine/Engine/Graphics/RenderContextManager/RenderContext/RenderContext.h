@@ -125,9 +125,9 @@ public:
         shaderData_()
     {
         for (uint32_t i = 0; i < DirectXSwapChain::kBackBufferNumber; ++i) {
-            shaderData_[i].wvpMatrix.Create(bufferSize);
-            shaderData_[i].color.Create(bufferSize);
-            shaderData_[i].shaderStruct.Create(bufferSize);
+            shaderData_[i].wvpMatrix.CreateBuffer(bufferSize);
+            shaderData_[i].color.CreateBuffer(bufferSize);
+            shaderData_[i].shaderStruct.CreateBuffer(bufferSize);
         }
 
         drawData_.resize(bufferSize);
@@ -297,9 +297,9 @@ public:
         BaseRenderContext(),
         shaderData_()
     {
-        shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.Create(bufferSize);
-        shaderData_[Lamb::GetGraphicBufferIndex()].color.Create(bufferSize);
-        shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.Create(bufferSize);
+        shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.CreateBuffer(bufferSize);
+        shaderData_[Lamb::GetGraphicBufferIndex()].color.CreateBuffer(bufferSize);
+        shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.CreateBuffer(bufferSize);
 
         drawData_.resize(bufferSize);
        
@@ -496,14 +496,14 @@ public:
             shaderStruct_.begin(),
             shaderStruct_.end(),
             [kBufferSize](auto& n) {
-                n.Create(kBufferSize);
+                n.CreateBuffer(kBufferSize);
             }
         );
         std::for_each(
             colors_.begin(),
             colors_.end(),
             [kBufferSize](auto& n) {
-                n.Create(kBufferSize);
+                n.CreateBuffer(kBufferSize);
             }
         );
 
