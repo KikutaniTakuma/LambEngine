@@ -1,3 +1,8 @@
+/// =========================
+/// ==  Errorクラスの定義  ==
+/// =========================
+
+
 #pragma once
 #include <string>
 #include <filesystem>

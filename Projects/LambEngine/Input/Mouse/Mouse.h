@@ -1,3 +1,8 @@
+/// =========================
+/// ==  Mouseクラスの宣言  ==
+/// =========================
+
+
 #pragma once
 #include <array>
 #define DIRECTINPUT_VERSION 0x0800

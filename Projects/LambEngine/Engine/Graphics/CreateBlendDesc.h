@@ -1,6 +1,16 @@
+/// ==============================
+/// ==  ブレンド設定を作成関数  ==
+/// ==============================
+
+
 #pragma once
 #include "PipelineManager/Pipeline/Pipeline.h"
 
+/// <summary>
+/// レンダーターゲットに書き込む設定構造体の作成
+/// </summary>
+/// <param name="blend">ブレンドタイプ</param>
+/// <returns>設定構造体</returns>
 inline D3D12_RENDER_TARGET_BLEND_DESC CreateRenderTargetBlendDesc(Pipeline::Blend blend) {
 	D3D12_RENDER_TARGET_BLEND_DESC result = {};
 

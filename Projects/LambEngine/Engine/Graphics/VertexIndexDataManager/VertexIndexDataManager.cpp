@@ -1,3 +1,9 @@
+/// ==========================================
+/// ==  VertexIndexDataManagerクラスの定義  ==
+/// ==========================================
+
+
+
 #include "VertexIndexDataManager.h"
 #include "Utils/EngineInfo.h"
 #include "Utils/SafeDelete.h"

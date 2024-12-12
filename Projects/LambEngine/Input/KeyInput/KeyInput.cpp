@@ -1,3 +1,8 @@
+/// ============================
+/// ==  KeyInputクラスの定義  ==
+/// ============================
+
+
 #include "KeyInput.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include <cassert>

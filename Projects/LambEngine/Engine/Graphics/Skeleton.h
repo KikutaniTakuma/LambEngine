@@ -1,3 +1,8 @@
+/// ===========================
+/// ==  Skeltonクラスの宣言  ==
+/// ===========================
+
+
 #pragma once
 #include <optional>
 #include <vector>

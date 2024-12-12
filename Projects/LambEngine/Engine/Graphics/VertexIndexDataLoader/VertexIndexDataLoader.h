@@ -1,3 +1,9 @@
+/// =========================================
+/// ==  VertexIndexDataLoaderクラスの宣言  ==
+/// =========================================
+
+
+
 #pragma once
 #include "../GraphicsStructs.h"
 #include <chrono>

@@ -1,3 +1,8 @@
+/// =========================
+/// ==  Inputクラスの定義  ==
+/// =========================
+
+
 #include "Input.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "Utils/ExecutionLog.h"

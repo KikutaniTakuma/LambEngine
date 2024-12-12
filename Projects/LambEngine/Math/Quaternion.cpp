@@ -1,3 +1,8 @@
+/// ==============================
+/// ==  Quaternionクラスの定義  ==
+/// ==============================
+
+
 #include "Quaternion.h"
 #include <cmath>
 #include <numbers>

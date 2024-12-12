@@ -1,3 +1,8 @@
+/// ==========================
+/// ==  Engineクラスの定義  ==
+/// ==========================
+
+
 #include "Engine.h"
 #include <cassert>
 #include <format>

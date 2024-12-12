@@ -1,3 +1,9 @@
+/// ==========================================
+/// ==  VertexIndexDataManagerクラスの宣言  ==
+/// ==========================================
+
+
+
 #pragma once
 #include <memory>
 #include <thread>

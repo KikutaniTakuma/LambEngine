@@ -650,9 +650,6 @@
     <ClInclude Include="Utils\HSV.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Math\Unit.h">
-      <Filter>Math</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Graphics\Shader\MeshShader\MeshShader.h">
       <Filter>Engine\Graphics\Shader\MeshShader</Filter>
     </ClInclude>

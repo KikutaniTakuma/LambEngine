@@ -6,6 +6,9 @@
 #include <memory>
 
 namespace Lamb {
+	/// <summary>
+	/// ゲームループ内で別threadを使うためのクラス
+	/// </summary>
 	class Thread {
 	public:
 		static uint32_t GetCurretnThreadNum() {

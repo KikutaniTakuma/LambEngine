@@ -1,3 +1,8 @@
+/// =============================
+/// ==  Frameworkクラスの定義  ==
+/// =============================
+
+
 #include "Framework.h"
 #include "Engine/Engine.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"

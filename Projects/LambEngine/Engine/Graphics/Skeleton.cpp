@@ -1,3 +1,9 @@
+/// ===========================
+/// ==  Skeltonクラスの定義  ==
+/// ===========================
+
+
+
 #include "Skeleton.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include <algorithm>

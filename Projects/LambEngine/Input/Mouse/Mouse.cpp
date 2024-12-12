@@ -1,3 +1,8 @@
+/// =========================
+/// ==  Mouseクラスの定義  ==
+/// =========================
+
+
 #include "Mouse.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "imgui.h"

@@ -1,3 +1,9 @@
+/// =========================
+/// ==  Inputクラスの宣言  ==
+/// =========================
+
+
+
 #pragma once
 #include "Input/Gamepad/Gamepad.h"
 #include "Input/KeyInput/KeyInput.h"

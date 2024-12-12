@@ -1,3 +1,8 @@
+/// =============================
+/// ==  Frameworkクラスの定義  ==
+/// =============================
+
+
 #include "GamePad.h"
 #include "imgui.h"
 #include <limits>

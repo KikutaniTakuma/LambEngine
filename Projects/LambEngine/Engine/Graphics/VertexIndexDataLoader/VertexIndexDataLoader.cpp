@@ -1,3 +1,8 @@
+/// =========================================
+/// ==  VertexIndexDataLoaderクラスの定義  ==
+/// =========================================
+
+
 #include "VertexIndexDataLoader.h"
 #include "Error/Error.h"
 #include "Utils/SafePtr.h"
