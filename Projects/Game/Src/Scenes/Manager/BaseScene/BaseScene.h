@@ -14,6 +14,9 @@
 
 #include <memory>
 
+/// <summary>
+/// 各シーンの基底クラス
+/// </summary>
 class BaseScene {
 	friend class SceneManager;
 

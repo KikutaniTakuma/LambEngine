@@ -4,6 +4,9 @@
 #include "Level/LevelData.h"
 #include "Game/Fishes/Fishes.h"
 
+/// <summary>
+/// テスト用
+/// </summary>
 class TestScene : public BaseScene {
 public:
 	TestScene();

@@ -3,6 +3,10 @@
 #include "Drawer/PeraRender/PeraRender.h"
 #include "Drawer/Other/WaterTex2D/WaterTex2D.h"
 
+
+/// <summary>
+/// 水
+/// </summary>
 class Water final {
 private:
 	Water() = default;

@@ -3,6 +3,9 @@
 #include "./Camera/Camera.h"
 #include <memory>
 
+/// <summary>
+/// そのシーン中にさらに別のシーンを処理するためのクラス(ポーズ画面など)
+/// </summary>
 class SubMenu {
 public:
 	SubMenu();

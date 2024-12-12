@@ -6,6 +6,9 @@
 #include "Utils/Easeing.h"
 #include <memory>
 
+/// <summary>
+/// 画面切り替え時のFade管理
+/// </summary>
 class Fade {
 public:
 	Fade();

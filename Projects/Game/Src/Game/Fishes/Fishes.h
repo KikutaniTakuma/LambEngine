@@ -9,6 +9,9 @@
 
 #include <memory>
 
+/// <summary>
+/// 魚の動きの制御
+/// </summary>
 class Fish {
 public:
 	Fish() = default;

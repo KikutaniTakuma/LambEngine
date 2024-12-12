@@ -27,6 +27,9 @@
 
 #include "Game/Fishes/Fishes.h"
 
+/// <summary>
+/// ゲームシーン
+/// </summary>
 class GameScene : public BaseScene {
 public:
 	GameScene();

@@ -3,7 +3,9 @@
 #include <array>
 #include "Drawer/Model/Model.h"
 
-
+/// <summary>
+/// サンゴ描画
+/// </summary>
 class Corals {
 private:
 	static constexpr size_t kLowCoralObjectNum_ = 22llu;

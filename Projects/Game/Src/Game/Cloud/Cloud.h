@@ -2,6 +2,9 @@
 #include "Drawer/Other/CloudTex2D/CloudTex2D.h"
 #include "Transform/Transform.h"
 
+/// <summary>
+/// 雲描画
+/// </summary>
 class Cloud {
 public:
 	Cloud();

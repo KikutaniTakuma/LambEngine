@@ -2,6 +2,9 @@
 #include "Drawer/Particle/Particle.h"
 #include "./Camera/Camera.h"
 
+/// <summary>
+/// パーティクルエディタ
+/// </summary>
 class ParticleEditor {
 private:
 	ParticleEditor() = default;

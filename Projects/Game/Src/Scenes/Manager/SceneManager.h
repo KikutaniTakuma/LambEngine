@@ -10,6 +10,9 @@
 #include "BaseScene/BaseScene.h"
 #include "SceneLoad/SceneLoad.h"
 
+/// <summary>
+/// シーン管理
+/// </summary>
 class SceneManager final {
 public:
 	SceneManager() = default;
