@@ -1,3 +1,9 @@
+/// ==================================
+/// ==  DirectXCommandクラスの宣言  ==
+/// ==================================
+
+
+
 #pragma once
 
 #include <d3d12.h>
@@ -10,6 +16,9 @@
 
 #include <array>
 
+/// <summary>
+/// DirectXCommand
+/// </summary>
 class DirectXCommand {
 public:
 	DirectXCommand();
@@ -47,14 +56,29 @@ public:
 	void WaitForFinishCommnadlist();
 
 private:
-	void CreateCommandQueue();
+	/// <summary>
+	/// コマンドキューを作成
+	/// </summary>
+	void CreateCommandQueue_();
 
-	void CreateCommandAllocator();
+	/// <summary>
+	/// コマンドアロケーターを作成
+	/// </summary>
+	void CreateCommandAllocator_();
 
-	void CreateGraphicsCommandList();
+	/// <summary>
+	/// グラフィックコマンドリストを作成
+	/// </summary>
+	void CreateGraphicsCommandList_();
 
-	void CrateFence();
+	/// <summary>
+	/// フェンスを作成
+	/// </summary>
+	void CrateFence_();
 
+/// <summary>
+/// ゲッター
+/// </summary>
 public:
 	ID3D12GraphicsCommandList6* const GetCommandList() const;
 
@@ -66,6 +90,11 @@ public:
 		return isCommandListClose_;
 	}
 
+public:
+	/// <summary>
+	/// バッファインデックスをセット
+	/// </summary>
+	/// <param name="bufferIndex">バッファインデックス</param>
 	void SetBufferIndex(uint32_t bufferIndex);
 
 private:
@@ -89,6 +118,10 @@ public:
 	/// <param name="after">遷移後の状態</param>
 	/// <param name="subResource">サブリソース</param>
 	static void Barrier(ID3D12Resource* resource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource = 0u);
+	/// <summary>
+	/// UAVバリア
+	/// </summary>
+	/// <param name="resource"></param>
 	static void BarrierUAV(ID3D12Resource* resource);
 	
 	/// <summary>
@@ -99,6 +132,21 @@ public:
 	/// <param name="after">遷移後の状態</param>
 	/// <param name="subResource">サブリソース</param>
 	static void Barrier(std::initializer_list<ID3D12Resource*> resources, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource = 0u);
+	/// <summary>
+	/// 複数のリソースバリアを貼る
+	/// </summary>
+	/// <param name="resources">リソースバリアを貼るリソース</param>
+	/// <param name="numResource">数</param>
+	/// <param name="before">今の状態</param>
+	/// <param name="after">遷移後の状態</param>
+	/// <param name="subResource">サブリソース</param>
 	static void Barrier(ID3D12Resource** resources, uint32_t numResource, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource = 0u);
+	/// <summary>
+	/// 複数のリソースバリアを貼る
+	/// </summary>
+	/// <param name="resources">リソースバリアを貼るリソース</param>
+	/// <param name="before">今の状態</param>
+	/// <param name="after">遷移後の状態</param>
+	/// <param name="subResource">サブリソース</param>
 	static void Barrier(std::vector<ID3D12Resource*> resources, D3D12_RESOURCE_STATES before, D3D12_RESOURCE_STATES after, UINT subResource = 0u);
 };

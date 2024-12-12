@@ -1,3 +1,9 @@
+/// =================================
+/// ==  RootSignatureクラスの定義  ==
+/// =================================
+
+
+
 #include "RootSignature.h"
 #include <cassert>
 #include "Utils/ExecutionLog.h"

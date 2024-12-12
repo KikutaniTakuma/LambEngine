@@ -9,6 +9,9 @@
 
 namespace Lamb {
 
+	/// <summary>
+	/// シードとランダムエンジンの生成管理
+	/// </summary>
 	class RandomGenereator {
 	private:
 		RandomGenereator();

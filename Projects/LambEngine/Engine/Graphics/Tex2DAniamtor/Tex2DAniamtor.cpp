@@ -1,8 +1,14 @@
+/// =================================
+/// ==  Tex2DAniamtorクラスの定義  ==
+/// =================================
+
+
 #include "Tex2DAniamtor.h"
 #include "Utils/EngineInfo.h"
 
 void Tex2DAniamtor::Update() {
 
+	// 次の画像へ移るか
 	if ((duration_ * static_cast<float>(currentAnimationNumber_) < animationTime_)) {
 		currentAnimationNumber_++;
 		currentPos_.x += scale_.x;
@@ -12,6 +18,7 @@ void Tex2DAniamtor::Update() {
 		animationTime_ += Lamb::DeltaTime();
 	}
 
+	// アニメーション終了
 	if (animationNumber_ <= currentAnimationNumber_) {
 		if (isLoop_) {
 			Reset();

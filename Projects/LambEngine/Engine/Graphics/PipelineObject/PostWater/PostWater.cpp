@@ -1,3 +1,8 @@
+/// =============================
+/// ==  PostWaterクラスの定義  ==
+/// =============================
+
+
 #include "PostWater.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"

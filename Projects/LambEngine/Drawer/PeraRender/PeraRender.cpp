@@ -19,23 +19,23 @@
 PeraRender::PeraRender():
 	color(std::numeric_limits<uint32_t>::max())
 {
-	peraPipelineObject_.reset(new PeraPipeline{});
+	pPeraPipelineObject_.reset(new PeraPipeline{});
 }
 
 PeraRender::PeraRender(uint32_t width, uint32_t height):
 	color(std::numeric_limits<uint32_t>::max())
 {
-	peraPipelineObject_.reset(new PeraPipeline{});
+	pPeraPipelineObject_.reset(new PeraPipeline{});
 
-	peraPipelineObject_->SetSize(width, height);
+	pPeraPipelineObject_->SetSize(width, height);
 }
 
 PeraRender::~PeraRender() {
-	peraPipelineObject_.reset();
+	pPeraPipelineObject_.reset();
 }
 
 void PeraRender::Initialize(const std::string& psFileName, std::initializer_list<DXGI_FORMAT> formtats) {
-	peraPipelineObject_->Init("./Shaders/PostShader/Post.VS.hlsl", psFileName, formtats);
+	pPeraPipelineObject_->Init("./Shaders/PostShader/Post.VS.hlsl", psFileName, formtats);
 }
 
 void PeraRender::Initialize(PeraPipeline* pipelineObject) {
@@ -43,19 +43,19 @@ void PeraRender::Initialize(PeraPipeline* pipelineObject) {
 }
 
 void PeraRender::PreDraw(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle) {
-	peraPipelineObject_->GetRender().SetThisRenderTarget(depthHandle);
+	pPeraPipelineObject_->GetRender().SetThisRenderTarget(depthHandle);
 }
 
 void PeraRender::Draw(
 	Pipeline::Blend blend, 
 	D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
 ) {
-	peraPipelineObject_->color = color;
-	peraPipelineObject_->DataSet();
+	pPeraPipelineObject_->color = color;
+	pPeraPipelineObject_->SetData();
 
 	// 各種描画コマンドを積む
 	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
-	peraPipelineObject_->Use(blend, !!depthHandle);
+	pPeraPipelineObject_->Use(blend, !!depthHandle);
 	commandList->DrawInstanced(3, 1, 0, 0);
 }
 
@@ -64,26 +64,26 @@ void PeraRender::ResetPipelineObject(PeraPipeline* pipelineObject) {
 		throw Lamb::Error::Code<PeraRender>("pipelineObject is nullptr", ErrorPlace);
 	}
 	else {
-		peraPipelineObject_.reset(pipelineObject);
+		pPeraPipelineObject_.reset(pipelineObject);
 	}
 }
 
 RenderTarget& PeraRender::GetRender()
 {
-	return peraPipelineObject_->GetRender();
+	return pPeraPipelineObject_->GetRender();
 }
 
 const RenderTarget& PeraRender::GetRender() const
 {
-	return peraPipelineObject_->GetRender();
+	return pPeraPipelineObject_->GetRender();
 }
 
 void PeraRender::Debug([[maybe_unused]]const std::string& guiName) {
 #ifdef USE_DEBUG_CODE
 	ImGui::Begin(guiName.c_str());
-	ImGui::ColorEdit4("color", peraPipelineObject_->color.m.data());
+	ImGui::ColorEdit4("color", pPeraPipelineObject_->color.m.data());
 
-	color = Vector4ToUint(peraPipelineObject_->color);
+	color = Vector4ToUint(pPeraPipelineObject_->color);
 	ImGui::End();
 #endif // USE_DEBUG_CODE
 }

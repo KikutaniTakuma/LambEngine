@@ -1,3 +1,8 @@
+/// ================
+/// ==  数学関数  ==
+/// ================
+
+
 #pragma once
 #include <numbers>
 #include <limits>

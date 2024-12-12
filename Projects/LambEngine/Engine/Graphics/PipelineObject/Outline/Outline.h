@@ -1,3 +1,9 @@
+/// ===========================
+/// ==  Outlineクラスの宣言  ==
+/// ===========================
+
+
+
 #pragma once
 #include "../PeraPipeline/PeraPipeline.h"
 #include "Math/MathCommon.h"
@@ -28,9 +34,15 @@ public:
 	) override;
 
 public:
-	void Use(Pipeline::Blend blendType, bool isDepth = false) override;
+	/// <summary>
+	/// リソースセット
+	/// </summary>
+	void Use(Pipeline::Blend blendType, bool isDepth) override;
 
-	void DataSet()override;
+	/// <summary>
+	/// バッファにデータを設定する
+	/// </summary>
+	void SetData()override;
 
 	void Debug(const std::string& guiName);
 

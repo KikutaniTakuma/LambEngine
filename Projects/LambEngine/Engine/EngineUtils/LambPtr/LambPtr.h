@@ -1,3 +1,8 @@
+/// ===========================
+/// ==  LambPtrクラスの定義  ==
+/// ===========================
+
+
 #pragma once
 #include <type_traits>
 #ifdef USE_DEBUG_CODE

@@ -43,13 +43,13 @@ void CloudTex2D::Load() {
 		// リソースとメッシュシェーダー読み込み
 		renderContextManager->LoadMesh<CloudTex2D::ShaderData, CloudTex2D::kMaxDrawCount>(kMeshFileNames_, 4);
 
-		meshRenderSet = renderContextManager->Get(kMeshFileNames_);
+		pMeshRenderSet = renderContextManager->Get(kMeshFileNames_);
 	}
 
 	// リソースとシェーダー読み込み
 	renderContextManager->Load<CloudTex2DRenderContext>(kFileNames_, 4);
 
-	renderSet = renderContextManager->Get(kFileNames_);
+	pRenderSet = renderContextManager->Get(kFileNames_);
 }
 
 void CloudTex2D::Draw(
@@ -65,8 +65,8 @@ void CloudTex2D::Draw(
 	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
 #endif // USE_DEBUG_CODE
 
-	if (isUseMeshShader_ and meshRenderSet) {
-		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<CloudTex2D::ShaderData, CloudTex2D::kMaxDrawCount>>(blend);
+	if (isUseMeshShader_ and pMeshRenderSet) {
+		Lamb::SafePtr renderContext = pMeshRenderSet->GetRenderContextDowncast<MeshRenderContext<CloudTex2D::ShaderData, CloudTex2D::kMaxDrawCount>>(blend);
 
 		renderContext->SetShaderStruct(
 			ShaderData{
@@ -77,7 +77,7 @@ void CloudTex2D::Draw(
 		);
 	}
 	else {
-		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<CloudTex2DRenderContext>(blend);
+		Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<CloudTex2DRenderContext>(blend);
 
 		renderContext->SetShaderStruct(
 			ShaderData{
@@ -96,8 +96,8 @@ void CloudTex2D::Draw(const CloudTex2D::Data& data) {
 	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
 #endif // USE_DEBUG_CODE
 
-	if (isUseMeshShader_ and meshRenderSet) {
-		Lamb::SafePtr renderContext = meshRenderSet->GetRenderContextDowncast<MeshRenderContext<CloudTex2D::ShaderData, CloudTex2D::kMaxDrawCount>>(data.blend);
+	if (isUseMeshShader_ and pMeshRenderSet) {
+		Lamb::SafePtr renderContext = pMeshRenderSet->GetRenderContextDowncast<MeshRenderContext<CloudTex2D::ShaderData, CloudTex2D::kMaxDrawCount>>(data.blend);
 
 		renderContext->SetShaderStruct(
 			ShaderData{
@@ -108,7 +108,7 @@ void CloudTex2D::Draw(const CloudTex2D::Data& data) {
 		);
 	}
 	else {
-		Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<CloudTex2DRenderContext>(data.blend);
+		Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<CloudTex2DRenderContext>(data.blend);
 
 		renderContext->SetShaderStruct(
 			ShaderData{

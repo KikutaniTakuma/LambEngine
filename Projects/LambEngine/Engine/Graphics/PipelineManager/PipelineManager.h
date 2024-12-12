@@ -1,3 +1,9 @@
+/// ===================================
+/// ==  PipelineManagerクラスの宣言  ==
+/// ===================================
+
+
+
 #pragma once
 #include "Pipeline/Pipeline.h"
 #include "../RootSignature/RootSignature.h"
@@ -74,7 +80,7 @@ public:
 /// シングルトンインスタンス
 /// </summary>
 private:
-	static Lamb::SafePtr<PipelineManager> instance_;
+	static Lamb::SafePtr<PipelineManager> pInstance_;
 
 /// <summary>
 /// メンバ変数

@@ -28,11 +28,18 @@ public:
 	BaseDrawer& operator=(BaseDrawer&&) = default;
 
 public:
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="worldMatrix">ワールド行列</param>
+	/// <param name="camera">カメラ行列</param>
+	/// <param name="color">色</param>
+	/// <param name="blend">ブレンドタイプ</param>
 	virtual void Draw(const Mat4x4& worldMatrix, const Mat4x4& camera, uint32_t color, BlendType blend);
 
 protected:
-	class RenderSet* renderSet;
-	class RenderSet* meshRenderSet;
+	class RenderSet* pRenderSet;
+	class RenderSet* pMeshRenderSet;
 	
 	bool isUseMeshShader_ = false;
 };

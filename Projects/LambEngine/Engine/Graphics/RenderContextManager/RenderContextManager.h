@@ -1,3 +1,9 @@
+/// ========================================
+/// ==  RenderContextManagerクラスの宣言  ==
+/// ========================================
+
+
+
 #pragma once
 #include <unordered_map>
 #include <string>
@@ -30,7 +36,7 @@ public:
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<RenderContextManager> instance_;
+	static Lamb::SafePtr<RenderContextManager> pInstance_;
 
 
 public:
@@ -42,28 +48,37 @@ public:
 	/// <param name="numRenderTarget">レンダーターゲットの数</param>
 	template<IsBasedRenderContext RenderContextType = RenderContext<>>
 	void Load(const LoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
+		
+		// すでにコンテナに追加しているか
 		auto isExist = renderData_.find(fileNames);
 
 		if (isExist != renderData_.end()) {
 			return;
 		}
 
+		// 現在のコンテナを参照
 		auto& currentRenderData = (isNowThreading_ ? threadRenderData_ : renderData_);
 
+		// 追加
 		currentRenderData.insert(std::make_pair(fileNames, std::make_unique<RenderSet>()));
 
+		// 追加したのを参照
 		RenderSet& currentRenderSet = *currentRenderData[fileNames];
 
+		// shaderロード
 		Shader shader = LoadShader(fileNames.shaderName);
 
+		// 描画パイプライン作成
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateGraphicsPipelines(shader, numRenderTarget);
 		Pipeline* shadowPipeline = CreateShadowPipeline();
 
+		// モデルデータ
 		Lamb::SafePtr vertexIndexDataManager = VertexIndexDataManager::GetInstance();
 		vertexIndexDataManager->LoadModel(fileNames.resourceFileName);
 		VertexIndexData* vertexIndexData = vertexIndexDataManager->GetVertexIndexData(fileNames.resourceFileName);
 		ModelData* modelData = vertexIndexDataManager->GetModelData(fileNames.resourceFileName);
 
+		// 各ブレンドモードごとにデータを設定
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();
 
@@ -74,6 +89,7 @@ public:
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
 
+		// レンダーリストをリサイズ
 		ResizeRenderList();
 	}
 
@@ -85,28 +101,37 @@ public:
 	/// <param name="numRenderTarget">レンダーターゲットの数</param>
 	template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
 	void LoadSkinAnimationModel(const LoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
+
+		// すでにコンテナに追加しているか
 		auto isExist = renderData_.find(fileNames);
 
 		if (isExist != renderData_.end()) {
 			return;
 		}
 
+		// 現在のコンテナを参照
 		auto& currentRenderData = (isNowThreading_ ? threadRenderData_ : renderData_);
 
+		// 追加
 		currentRenderData.insert(std::make_pair(fileNames, std::make_unique<RenderSet>()));
 
+		// 追加したのを参照
 		RenderSet& currentRenderSet = *currentRenderData[fileNames];
 
+		// shaderロード
 		Shader shader = LoadShader(fileNames.shaderName);
 
+		// 描画パイプライン作成
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateSkinAnimationGraphicsPipelines(shader, numRenderTarget);
 		Pipeline* shadowPipeline = CreateSkinAnimationShadowPipeline();
 
+		// モデルデータ
 		Lamb::SafePtr vertexIndexDataManager = VertexIndexDataManager::GetInstance();
 		vertexIndexDataManager->LoadModel(fileNames.resourceFileName);
 		VertexIndexData* vertexIndexData = vertexIndexDataManager->GetVertexIndexData(fileNames.resourceFileName);
 		ModelData* modelData = vertexIndexDataManager->GetModelData(fileNames.resourceFileName);
 
+		// 各ブレンドモードごとにデータを設定
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<SkinRenderContext<T, bufferSize>> renderContext = std::make_unique<SkinRenderContext<T, bufferSize>>();
 
@@ -116,6 +141,9 @@ public:
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
+
+		// レンダーリストをリサイズ
+		ResizeRenderList();
 	}
 
 	/// <summary>
@@ -126,23 +154,30 @@ public:
 	/// <param name="numRenderTarget">レンダーターゲットの数</param>
 	template<class T = uint32_t, uint32_t bufferSize = RenderData::kMaxDrawInstance>
 	void LoadMesh(const MeshLoadFileNames& fileNames, uint32_t numRenderTarget = 1) {
+		// すでにコンテナに追加しているか
 		auto isExist = meshRenderData_.find(fileNames);
 
 		if (isExist != meshRenderData_.end()) {
 			return;
 		}
 
+		// 現在のコンテナを参照
 		auto& currentRenderData = (isNowThreading_ ? threadMeshRenderData_ : meshRenderData_);
 
+		// 追加
 		currentRenderData.insert(std::make_pair(fileNames, std::make_unique<RenderSet>()));
 
+		// 追加したのを参照
 		RenderSet& currentRenderSet = *currentRenderData[fileNames];
 
+		// shaderロード
 		MeshShader shader = LoadMeshShader(fileNames.shaderName);
 
+		// 描画パイプライン作成
 		const std::array<Pipeline*, BlendType::kNum>& pipelines = CreateMeshShaderGraphicsPipelines(shader, numRenderTarget);
 		Pipeline* shadowPipeline = CreateMeshShaderShadowPipeline();
 
+		// モデルデータ
 		Lamb::SafePtr vertexIndexDataManager = VertexIndexDataManager::GetInstance();
 		vertexIndexDataManager->LoadModel(fileNames.resourceFileName);
 		VertexIndexData* vertexIndexData = vertexIndexDataManager->GetVertexIndexData(fileNames.resourceFileName);
@@ -150,8 +185,10 @@ public:
 
 		Lamb::SafePtr meshManager = MeshletManager::GetInstance();
 		meshManager->LoadMesh(fileNames.resourceFileName, bufferSize);
+		
 		const auto& mesh = meshManager->GetMesh(fileNames.resourceFileName);
 
+		// 各ブレンドモードごとにデータを設定
 		for (uint32_t i = 0; i < BlendType::kNum; i++) {
 			std::unique_ptr<MeshRenderContext<T, bufferSize>> renderContext = std::make_unique<MeshRenderContext<T, bufferSize>>();
 
@@ -162,6 +199,7 @@ public:
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
 
+		// レンダーリストをリサイズ
 		ResizeRenderList();
 	}
 

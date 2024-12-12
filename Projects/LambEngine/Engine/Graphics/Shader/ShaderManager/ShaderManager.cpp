@@ -1,3 +1,8 @@
+/// =================================
+/// ==  ShaderManagerクラスの定義  ==
+/// =================================
+
+
 #include "ShaderManager.h"
 #include "../ShaderFactory/ShaderFactory.h"
 #include "Utils/ConvertString.h"
@@ -6,7 +11,7 @@
 #include <format>
 #include "Utils/ExecutionLog.h"
 
-Lamb::SafePtr<ShaderManager> ShaderManager::instance_ = nullptr;
+Lamb::SafePtr<ShaderManager> ShaderManager::pInstance_ = nullptr;
 
 ShaderManager::ShaderManager() {
 	vertexShader_.clear();
@@ -27,11 +32,11 @@ ShaderManager::~ShaderManager() {
 }
 
 void ShaderManager::Initialize() {
-	instance_.reset(new ShaderManager());
+	pInstance_.reset(new ShaderManager());
 }
 
 void ShaderManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 IDxcBlob* const ShaderManager::LoadVertexShader(const std::string& fileName) {

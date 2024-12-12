@@ -1,3 +1,8 @@
+/// =========================
+/// ==  Mouseクラスの定義  ==
+/// =========================
+
+
 #include "Mouse.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
 #include "imgui.h"
@@ -5,19 +10,19 @@
 #include "Error/Error.h"
 
 
-Mouse* Mouse::instance_ = nullptr;
+Mouse* Mouse::pInstance_ = nullptr;
 
 void Mouse::Initialize(IDirectInput8* input) {
-	instance_ = new Mouse(input);
-	if (!instance_) {
+	pInstance_ = new Mouse(input);
+	if (!pInstance_) {
 		throw Lamb::Error::Code<Mouse>("instance failed", ErrorPlace);
 	}
 }
 
 
 void Mouse::Finalize() {
-	delete instance_;
-	instance_ = nullptr;
+	delete pInstance_;
+	pInstance_ = nullptr;
 }
 
 Mouse::Mouse(IDirectInput8* input) :

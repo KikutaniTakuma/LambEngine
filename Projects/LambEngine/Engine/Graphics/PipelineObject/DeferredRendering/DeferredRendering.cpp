@@ -1,3 +1,9 @@
+/// ====================================
+/// ==  DeferredRederingクラスの定義  ==
+/// ====================================
+
+
+
 #include "DeferredRendering.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
@@ -17,6 +23,8 @@
 void DeferredRendering::Draw() {
 	const uint32_t kBufferIndex = Lamb::GetGraphicBufferIndex();
 
+	// データ設定
+
 	(*deferredRenderingDataBuf_[kBufferIndex]).Map();
 	(*atomosphericDataBuf_[kBufferIndex]).Map();
 	(*cameraBuf_[kBufferIndex]).Map();
@@ -35,6 +43,8 @@ void DeferredRendering::Draw() {
 	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();
 
 	pipelinesNoDepth_[Pipeline::Blend::None]->Use();
+
+	// コマンド
 
 	commandList->SetGraphicsRootConstantBufferView(0, deferredRenderingDataBuf_[kBufferIndex]->GetGPUVtlAdrs());
 	commandList->SetGraphicsRootConstantBufferView(1, atomosphericDataBuf_[kBufferIndex]->GetGPUVtlAdrs());

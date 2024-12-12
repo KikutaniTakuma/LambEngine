@@ -3,6 +3,12 @@
 #include "Math/MathCommon.h"
 #include <algorithm>
 
+
+/// <summary>
+/// RGBからHSVへの変換
+/// </summary>
+/// <param name="rgb"></param>
+/// <returns></returns>
 inline float32_t3 RGBToHSV(float32_t3 rgb) {
     float32_t r = rgb.x;
     float32_t g = rgb.y;
@@ -32,6 +38,11 @@ inline float32_t3 RGBToHSV(float32_t3 rgb) {
     return float32_t3(h, s, v);
 }
 
+/// <summary>
+/// HSVからRGBへの変換
+/// </summary>
+/// <param name="hsv"></param>
+/// <returns></returns>
 inline float32_t3 HSVToRGB(float32_t3 hsv) {
     float32_t h = hsv.x;
     float32_t s = hsv.y;

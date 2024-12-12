@@ -1,3 +1,8 @@
+/// ============================
+/// ==  KeyInputクラスの宣言  ==
+/// ============================
+
+
 #pragma once
 #include <array>
 #define DIRECTINPUT_VERSION 0x0800
@@ -28,15 +33,26 @@ public:
 	void InputReset();
 
 	bool GetKey(uint8_t keyType) {
-		return (instance_->key_[keyType] & 0x80);
+		return (pInstance_->key_[keyType] & 0x80);
 	}
 
 	bool GetPreKey(uint8_t keyType) {
-		return (instance_->preKey_[keyType] & 0x80);
+		return (pInstance_->preKey_[keyType] & 0x80);
 	}
 
+	/// <summary>
+	/// 押した瞬間
+	/// </summary>
 	bool Pushed(uint8_t keyType);
+
+	/// <summary>
+	/// 押している間
+	/// </summary>
 	bool LongPush(uint8_t keyType);
+	
+	/// <summary>
+	/// 話した瞬間
+	/// </summary>
 	bool Released(uint8_t keyType);
 
 	/// <summary>
@@ -50,11 +66,11 @@ public:
 	static void Finalize();
 
 private:
-	static KeyInput* instance_;
+	static KeyInput* pInstance_;
 
 public:
 	static KeyInput* const GetInstance() {
-		return instance_;
+		return pInstance_;
 	}
 
 

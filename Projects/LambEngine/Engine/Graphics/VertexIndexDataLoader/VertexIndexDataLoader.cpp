@@ -1,9 +1,13 @@
+/// =========================================
+/// ==  VertexIndexDataLoaderクラスの定義  ==
+/// =========================================
+
+
 #include "VertexIndexDataLoader.h"
 #include "Error/Error.h"
 #include "Utils/SafePtr.h"
 #include "../TextureManager/TextureManager.h"
 #include "../../Core/DirectXDevice/DirectXDevice.h"
-#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
 #include <filesystem>
 #include <unordered_map>
@@ -16,10 +20,10 @@ std::chrono::steady_clock::time_point VertexIndexDataLoader::loadStartTime_;
 
 ModelData VertexIndexDataLoader::LoadModel(const std::string& fileName)
 {
-	StartLoadTimeCount();
+	StartLoadTimeCount_();
 
 	Assimp::Importer importer;
-	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
+	Lamb::SafePtr<const aiScene> scene = ReadFile_(importer, fileName);
 	if (not scene->HasMeshes()) [[unlikely]] {
 		throw Lamb::Error::Code<VertexIndexDataLoader>("This file does not have meshes -> " + fileName, ErrorPlace);
 	}
@@ -31,7 +35,7 @@ ModelData VertexIndexDataLoader::LoadModel(const std::string& fileName)
 	std::string&& directorypath = path.parent_path().string();
 	std::vector<uint32_t> textures;
 
-	LoadMtl(scene.get(), directorypath, textures);
+	LoadMtl_(scene.get(), directorypath, textures);
 	
 	ModelData result;
 
@@ -98,23 +102,22 @@ ModelData VertexIndexDataLoader::LoadModel(const std::string& fileName)
 		}
 	}
 
-	result.rootNode = ReadNode(scene->mRootNode);
+	result.rootNode = ReadNode_(scene->mRootNode);
 
 
-	EndLoadTimeCountAndAddLog(fileName);
+	EndLoadTimeCountAndAddLog_(fileName);
 
-	ResourceLoadLog::Set(fileName);
 
 	return result;
 }
 
 Animations* VertexIndexDataLoader::LoadAnimation(const std::string& fileName)
 {
-	StartLoadTimeCount();
+	StartLoadTimeCount_();
 
 	std::unique_ptr result = std::make_unique<Animations>();
 	Assimp::Importer importer;
-	Lamb::SafePtr<const aiScene> scene = ReadFile(importer, fileName);
+	Lamb::SafePtr<const aiScene> scene = ReadFile_(importer, fileName);
 	if (not (scene->mNumAnimations != 0)) [[unlikely]] {
 		throw Lamb::Error::Code<VertexIndexDataLoader>("This file does not have animation -> " + fileName, ErrorPlace);
 	}
@@ -160,14 +163,13 @@ Animations* VertexIndexDataLoader::LoadAnimation(const std::string& fileName)
 		}
 	}
 
-	EndLoadTimeCountAndAddLog(fileName);
+	EndLoadTimeCountAndAddLog_(fileName);
 
-	ResourceLoadLog::Set(fileName);
 
 	return result.release();
 }
 
-const aiScene* VertexIndexDataLoader::ReadFile(Assimp::Importer& importer, const std::string& fileName)
+const aiScene* VertexIndexDataLoader::ReadFile_(Assimp::Importer& importer, const std::string& fileName)
 {
 	std::filesystem::path path = fileName;
 
@@ -183,7 +185,7 @@ const aiScene* VertexIndexDataLoader::ReadFile(Assimp::Importer& importer, const
 	return importer.ReadFile(fileName.c_str(), aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 }
 
-Node VertexIndexDataLoader::ReadNode(aiNode* node)
+Node VertexIndexDataLoader::ReadNode_(aiNode* node)
 {
 	Node result;
 	aiVector3D scale, translate;
@@ -199,13 +201,13 @@ Node VertexIndexDataLoader::ReadNode(aiNode* node)
 	result.children.resize(node->mNumChildren);
 
 	for (uint32_t childIndex = 0; childIndex < node->mNumChildren; childIndex++) {
-		result.children[childIndex] = ReadNode(node->mChildren[childIndex]);
+		result.children[childIndex] = ReadNode_(node->mChildren[childIndex]);
 	}
 
 	return result;
 }
 
-void VertexIndexDataLoader::LoadMtl(const aiScene* scene, const std::string& directorypath, std::vector<uint32_t>& result)
+void VertexIndexDataLoader::LoadMtl_(const aiScene* scene, const std::string& directorypath, std::vector<uint32_t>& result)
 {
 	std::vector<std::string> textureFileNames;
 
@@ -227,11 +229,11 @@ void VertexIndexDataLoader::LoadMtl(const aiScene* scene, const std::string& dir
 	}
 }
 
-void VertexIndexDataLoader::StartLoadTimeCount() {
+void VertexIndexDataLoader::StartLoadTimeCount_() {
 	loadStartTime_ = std::chrono::steady_clock::now();
 }
 
-void VertexIndexDataLoader::EndLoadTimeCountAndAddLog(const std::string& fileName) {
+void VertexIndexDataLoader::EndLoadTimeCountAndAddLog_(const std::string& fileName) {
 	auto loadEndTime = std::chrono::steady_clock::now();
 
 	auto time = std::chrono::duration_cast<std::chrono::milliseconds>(loadEndTime - loadStartTime_);

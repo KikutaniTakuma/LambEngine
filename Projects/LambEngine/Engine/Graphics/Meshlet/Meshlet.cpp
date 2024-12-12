@@ -1,3 +1,9 @@
+/// ===================
+/// ==  Meshlet関係  ==
+/// ===================
+
+
+
 #include "Meshlet.h"
 
 #include "../VertexIndexDataManager/VertexIndexDataManager.h"
@@ -100,18 +106,18 @@ void MeshLoader::ParseMesh(ResMesh& dstMesh, Lamb::SafePtr<const ModelData> pSrc
 	std::memcpy(dstMesh.primitiveIndices.data(), primitiveIndices.data(), sizeof(DirectX::MeshletTriangle) * primitiveIndices.size());
 }
 
-std::unique_ptr<MeshletManager> MeshletManager::instance_;
+std::unique_ptr<MeshletManager> MeshletManager::pInstance_;
 
 MeshletManager* const MeshletManager::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void MeshletManager::Initialize() {
-	instance_.reset(new MeshletManager());
+	pInstance_.reset(new MeshletManager());
 }
 
 void MeshletManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 void MeshletManager::LoadMesh(const std::string& fileName, uint32_t maxDrawCount) {
@@ -130,19 +136,19 @@ void MeshletManager::LoadMesh(const std::string& fileName, uint32_t maxDrawCount
 			shaderData->gTransform.begin(),
 			shaderData->gTransform.end(),
 			[maxDrawCount](auto& n) {
-				n.Create(maxDrawCount);
+				n.CreateBuffer(maxDrawCount);
 			}
 		);
-		shaderData->gMeshlets.Create(static_cast<uint32_t>(resMesh->meshlets.size()));
+		shaderData->gMeshlets.CreateBuffer(static_cast<uint32_t>(resMesh->meshlets.size()));
 		shaderData->gMeshlets.MemCpy(resMesh->meshlets.data(), sizeof(DirectX::Meshlet) * resMesh->meshlets.size());
 		
-		shaderData->gVertices.Create(static_cast<uint32_t>(resMesh->vertices.size()));
+		shaderData->gVertices.CreateBuffer(static_cast<uint32_t>(resMesh->vertices.size()));
 		shaderData->gVertices.MemCpy(resMesh->vertices.data(), sizeof(Vertex) * resMesh->vertices.size());
 		
-		shaderData->gUniqueVertexIndices.Create(static_cast<uint32_t>(resMesh->uniqueVertexIndices.size()));
+		shaderData->gUniqueVertexIndices.CreateBuffer(static_cast<uint32_t>(resMesh->uniqueVertexIndices.size()));
 		shaderData->gUniqueVertexIndices.MemCpy(resMesh->uniqueVertexIndices.data(), sizeof(uint32_t) * resMesh->uniqueVertexIndices.size());
 		
-		shaderData->gPrimitiveIndices.Create(static_cast<uint32_t>(resMesh->primitiveIndices.size()));
+		shaderData->gPrimitiveIndices.CreateBuffer(static_cast<uint32_t>(resMesh->primitiveIndices.size()));
 		shaderData->gPrimitiveIndices.MemCpy(resMesh->primitiveIndices.data(), sizeof(uint32_t) * resMesh->primitiveIndices.size());
 
 		shaderData->meshletCount = static_cast<uint32_t>(shaderData->gMeshlets.size());

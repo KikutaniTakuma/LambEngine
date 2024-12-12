@@ -1,3 +1,8 @@
+/// ==================================
+/// ==  PipelineObjectクラスの定義  ==
+/// ==================================
+
+
 #include "PipelineObject.h"
 #include "Engine/Graphics/Shader/ShaderManager/ShaderManager.h"
 #include <cassert>

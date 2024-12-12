@@ -1,3 +1,8 @@
+/// ===================
+/// ==  Meshlet関係  ==
+/// ===================
+
+
 #pragma once
 #include <cstdint>
 #include <vector>
@@ -26,8 +31,18 @@ private:
 
 
 public:
+	/// <summary>
+	/// モデルをロードしてmeshletを作成する
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
+	/// <returns>meshletデータ</returns>
 	static [[nodiscard]] ResMesh* LoadMesh(const std::string& fileName);
 
+	/// <summary>
+	/// モデルデータからmeshletを作成する
+	/// </summary>
+	/// <param name="pSrcMesh">モデルデータ</param>
+	/// <returns></returns>
 	static [[nodiscard]] ResMesh* LoadMesh(Lamb::SafePtr<const ModelData> pSrcMesh);
 
 	static void ParseMesh(
@@ -56,9 +71,15 @@ public:
 	static void Finalize();
 
 private:
-	static std::unique_ptr<MeshletManager> instance_;
+	static std::unique_ptr<MeshletManager> pInstance_;
 
 public:
+	/// <summary>
+	/// モデルをロードしてメッシュを作成し、コンテナに追加
+	/// 
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
+	/// <param name="maxDrawCount">描画上限</param>
 	void LoadMesh(const std::string& fileName, uint32_t maxDrawCount);
 
 	const std::pair<std::unique_ptr<ResMesh>, std::unique_ptr<MeshShaderData>>& GetMesh(const std::string& fileName);

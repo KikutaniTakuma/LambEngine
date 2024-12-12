@@ -1,3 +1,8 @@
+/// =================================
+/// ==  RootSignatureクラスの宣言  ==
+/// =================================
+
+
 #pragma once
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
@@ -35,6 +40,10 @@ public:
 	bool operator!=(const RootSignature& right) const;
 
 public:
+	/// <summary>
+	/// ルートシグネチャ作成
+	/// </summary>
+	/// <param name="desc"></param>
 	void Create(const Desc& desc);
 
 	inline ID3D12RootSignature* Get() const {

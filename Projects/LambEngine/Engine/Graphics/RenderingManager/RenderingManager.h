@@ -1,3 +1,9 @@
+/// ====================================
+/// ==  RenderingManagerクラスの宣言  ==
+/// ====================================
+
+
+
 #pragma once
 #include "Utils/SafePtr.h"
 #include "Drawer/PeraRender/PeraRender.h"
@@ -68,7 +74,7 @@ public:
 	static const Lamb::SafePtr<RenderingManager> GetInstance();
 
 private:
-	static std::unique_ptr<RenderingManager> instance_;
+	static std::unique_ptr<RenderingManager> pInstance_;
 
 public:
 	void FrameStart();
@@ -86,6 +92,10 @@ public:
 
 	DepthBuffer* GetDepthBuffer();
 
+/// <summary>
+/// セッター
+/// </summary>
+public:
 	void SetState(const State& state);
 
 	void SetCameraPos(const Vector3& cameraPos);
@@ -99,14 +109,18 @@ public:
 	void SetBloomKernelSize(int32_t x, int32_t y);
 	void SetEnvironmentCoefficient(float32_t environmentCoefficient);
 	void SetTonemapParam(float32_t2 toe, float32_t2 linear, float32_t2 shoulder);
+	void SetIsUseMeshShader(bool isUseMesh);
 
 	void Debug(const std::string& guiName);
 
+public:
 	void Save(nlohmann::json& jsonFile);
 	void Load(nlohmann::json& jsonFile);
 
-	void SetIsUseMeshShader(bool isUseMesh);
-
+/// <summary>
+/// ゲッター
+/// </summary>
+public:
 	bool GetIsUseMeshShader() const;
 
 	uint32_t GetBufferIndex()const;

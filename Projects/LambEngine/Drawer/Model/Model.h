@@ -37,8 +37,20 @@ public:
 	Model& operator=(Model&& right) noexcept = default;
 
 public:
+	/// <summary>
+	/// ロード
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	virtual void Load(const std::string& fileName);
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="worldMatrix">ワールド行列</param>
+	/// <param name="camera">カメラ行列</param>
+	/// <param name="color">色</param>
+	/// <param name="blend">ブレンドタイプ</param>
+	/// <param name="isLighting">ライティングするか(ブレンドタイプがkNoneだったらDeferredRenderingの設定依存)</param>
 	virtual void Draw(
 		const Mat4x4& worldMatrix,
 		const Mat4x4& camera,
@@ -47,25 +59,56 @@ public:
 		bool isLighting = true
 	);
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="data">データ</param>
 	void Draw(const Data& data);
 
 public:
+	/// <summary>
+	/// ノード
+	/// </summary>
+	/// <returns></returns>
 	const Node& GetNode() const;
+	
+	/// <summary>
+	/// モデルのデータ
+	/// </summary>
+	/// <returns></returns>
 	const ModelData& GetModelData() const;
 };
 
+/// <summary>
+/// モデルインスタンス
+/// </summary>
 class ModelInstance {
 public:
 	ModelInstance() = default;
 	~ModelInstance() = default;
 
 public:
+	/// <summary>
+	/// ロード
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void Load(const std::string& fileName);
 	
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="cameraMat">カメラ行列</param>
 	void Draw(const Mat4x4& cameraMat);
 
+	/// <summary>
+	/// 親のモデルを設定
+	/// </summary>
+	/// <param name="parent"></param>
 	void SetParent(ModelInstance* parent);
 
 	const Mat4x4& GetWorldMatrix() const;
@@ -80,7 +123,7 @@ public:
 	bool isLighting = true;
 
 private:
-	Lamb::SafePtr<Model> model_;
-	Lamb::SafePtr<ModelInstance> parent_;
+	Lamb::SafePtr<Model> pModel_;
+	Lamb::SafePtr<ModelInstance> pParent_;
 	Mat4x4 worldMat_ = Mat4x4::kIdentity;
 };

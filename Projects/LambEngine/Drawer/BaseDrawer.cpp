@@ -15,18 +15,18 @@
 
 
 BaseDrawer::BaseDrawer() :
-	renderSet(nullptr),
+	pRenderSet(nullptr),
 	isUseMeshShader_(Lamb::IsCanUseMeshShader())
 {}
 
 void BaseDrawer::Draw(const Mat4x4& worldMatrix, const Mat4x4& camera, uint32_t color, BlendType blend)
 {
 	Lamb::SafePtr<RenderData> render;
-	if (isUseMeshShader_ and meshRenderSet) {
-		render = meshRenderSet->GetRenderContext(blend);
+	if (isUseMeshShader_ and pMeshRenderSet) {
+		render = pMeshRenderSet->GetRenderContext(blend);
 	}
 	else {
-		render = renderSet->GetRenderContext(blend);
+		render = pRenderSet->GetRenderContext(blend);
 	}
 
 	render->SetWVPMatrix({

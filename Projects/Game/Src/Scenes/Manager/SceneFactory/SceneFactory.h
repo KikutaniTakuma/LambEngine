@@ -4,6 +4,9 @@
 #include <functional>
 #include "Scenes/Manager/BaseScene/BaseScene.h"
 
+/// <summary>
+/// シーン生成
+/// </summary>
 class SceneFactory final {
 private:
 	SceneFactory();

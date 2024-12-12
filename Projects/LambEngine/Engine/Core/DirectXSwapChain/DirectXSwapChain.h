@@ -1,3 +1,7 @@
+/// ====================================
+/// ==  DirectXSwapchainクラスの宣言  ==
+/// ====================================
+
 #pragma once
 #include <cstdint>
 #include <array>
@@ -27,7 +31,7 @@ public:
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<DirectXSwapChain> instance_;
+	static Lamb::SafePtr<DirectXSwapChain> pInstance_;
 
 public:
 	/// <summary>

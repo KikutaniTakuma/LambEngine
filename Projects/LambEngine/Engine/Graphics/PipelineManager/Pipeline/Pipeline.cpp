@@ -1,3 +1,8 @@
+/// ============================
+/// ==  Pipelineクラスの定義  ==
+/// ============================
+
+
 #include "Pipeline.h"
 #include "../../CreateBlendDesc.h"
 #include <cassert>

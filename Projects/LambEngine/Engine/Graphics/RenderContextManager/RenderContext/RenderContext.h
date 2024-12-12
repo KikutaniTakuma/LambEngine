@@ -1,3 +1,8 @@
+/// =================================
+/// ==  RenderContextクラスの定義  ==
+/// =================================
+
+
 #pragma once
 #include "../../GraphicsStructs.h"
 #include "../../Meshlet/Meshlet.h"
@@ -47,6 +52,10 @@ public:
         return typeID_;
     }
 
+/// <summary>
+/// セッター
+/// </summary>
+public:
     virtual void SetVertexIndexData(const VertexIndexData* const) = 0;
     virtual void SetModelData(const ModelData* const modelData) = 0;
     virtual void SetPipeline(Pipeline* const pipeline) = 0;
@@ -54,8 +63,6 @@ public:
     virtual void SetColor(const Vector4& color) = 0;
     virtual void SetLight(const DirectionLight& light) = 0;
     virtual void SetCameraPos(const Vector3& cameraPos) = 0;
-    virtual void ZSort() = 0;
-    virtual void DataSet() = 0;
 
     void SetShadowPipeline(Pipeline* const shadowPipeline) {
         if (not shadowPipeline_ and shadowPipeline) {
@@ -66,6 +73,16 @@ public:
     void SetLightCameraMatrix(const float32_t4x4& lightCameraMatrix) {
         lightCamera_[Lamb::GetGraphicBufferIndex()]->MemCpy(lightCameraMatrix.data());
     }
+public:
+    /// <summary>
+    /// ポジションベースのzソート
+    /// </summary>
+    virtual void ZSort() = 0;
+    /// <summary>
+    /// バッファにデータをセットする
+    /// </summary>
+    virtual void SetData() = 0;
+
 
 public:
     void AddDrawCount() {
@@ -120,9 +137,9 @@ public:
         shaderData_()
     {
         for (uint32_t i = 0; i < DirectXSwapChain::kBackBufferNumber; ++i) {
-            shaderData_[i].wvpMatrix.Create(bufferSize);
-            shaderData_[i].color.Create(bufferSize);
-            shaderData_[i].shaderStruct.Create(bufferSize);
+            shaderData_[i].wvpMatrix.CreateBuffer(bufferSize);
+            shaderData_[i].color.CreateBuffer(bufferSize);
+            shaderData_[i].shaderStruct.CreateBuffer(bufferSize);
         }
 
         drawData_.resize(bufferSize);
@@ -263,7 +280,7 @@ public:
 
     }
 
-    inline void DataSet() override {
+    inline void SetData() override {
         shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.Map();
         shaderData_[Lamb::GetGraphicBufferIndex()].color.Map();
         shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.Map();
@@ -292,9 +309,9 @@ public:
         BaseRenderContext(),
         shaderData_()
     {
-        shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.Create(bufferSize);
-        shaderData_[Lamb::GetGraphicBufferIndex()].color.Create(bufferSize);
-        shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.Create(bufferSize);
+        shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.CreateBuffer(bufferSize);
+        shaderData_[Lamb::GetGraphicBufferIndex()].color.CreateBuffer(bufferSize);
+        shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.CreateBuffer(bufferSize);
 
         drawData_.resize(bufferSize);
        
@@ -452,7 +469,7 @@ public:
         );
     }
 
-    inline void DataSet() override {
+    inline void SetData() override {
         shaderData_[Lamb::GetGraphicBufferIndex()].wvpMatrix.Map();
         shaderData_[Lamb::GetGraphicBufferIndex()].color.Map();
         shaderData_[Lamb::GetGraphicBufferIndex()].shaderStruct.Map();
@@ -491,14 +508,14 @@ public:
             shaderStruct_.begin(),
             shaderStruct_.end(),
             [kBufferSize](auto& n) {
-                n.Create(kBufferSize);
+                n.CreateBuffer(kBufferSize);
             }
         );
         std::for_each(
             colors_.begin(),
             colors_.end(),
             [kBufferSize](auto& n) {
-                n.Create(kBufferSize);
+                n.CreateBuffer(kBufferSize);
             }
         );
 
@@ -644,7 +661,7 @@ public:
         );
     }
 
-    inline void DataSet() override {
+    inline void SetData() override {
         shaderData_->gTransform[Lamb::GetGraphicBufferIndex()].Map();
         shaderStruct_[Lamb::GetGraphicBufferIndex()].Map();
         colors_[Lamb::GetGraphicBufferIndex()].Map();
@@ -728,9 +745,9 @@ public:
         ResetDrawCount();
     }
 
-    inline void DataSet() {
+    inline void SetData() {
         for (auto& i : renderDatas_) {
-            i->DataSet();
+            i->SetData();
         }
     }
 

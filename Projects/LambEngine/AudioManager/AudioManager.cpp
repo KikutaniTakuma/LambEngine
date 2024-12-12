@@ -8,31 +8,30 @@
 #include <filesystem>
 #include "Error/Error.h"
 #include "Utils/SafeDelete.h"
-#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
-Lamb::SafePtr<AudioManager> AudioManager::instance_ = nullptr;
+Lamb::SafePtr<AudioManager> AudioManager::pInstance_ = nullptr;
 void AudioManager::Inititalize() {
-	instance_.reset(new AudioManager());
+	pInstance_.reset(new AudioManager());
 }
 void AudioManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 AudioManager::AudioManager() :
-	xAudio2_(),
-	masterVoice_(nullptr),
+	pxAudio2_(),
+	pMasterVoice_(nullptr),
 	audios_{}
 {
 	// Media Foundationの初期化
 	MFStartup(MF_VERSION, MFSTARTUP_NOSOCKET);
 
 
-	HRESULT hr = XAudio2Create(xAudio2_.GetAddressOf(), 0u, XAUDIO2_DEFAULT_PROCESSOR);
+	HRESULT hr = XAudio2Create(pxAudio2_.GetAddressOf(), 0u, XAUDIO2_DEFAULT_PROCESSOR);
 	if (not SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<AudioManager>("XAudio2Create()", ErrorPlace);
 	}
 
-	hr = xAudio2_->CreateMasteringVoice(&masterVoice_);
+	hr = pxAudio2_->CreateMasteringVoice(&pMasterVoice_);
 	if (not SUCCEEDED(hr)) {
 		throw Lamb::Error::Code<AudioManager>("CreateMasteringVoicey()", ErrorPlace);
 	}
@@ -40,7 +39,7 @@ AudioManager::AudioManager() :
 	Lamb::AddLog("Initialize AudioManager succeeded");
 }
 AudioManager::~AudioManager() {
-	xAudio2_.Reset();
+	pxAudio2_.Reset();
 	MFShutdown();
 	Lamb::AddLog("Finalize AudioManager succeeded");
 }
@@ -58,7 +57,6 @@ void AudioManager::Load(const std::string& fileName) {
 		audio->Load(fileName);
 		audios_.insert({ fileName, std::move(audio) });
 
-		ResourceLoadLog::Set(fileName);
 	}
 }
 

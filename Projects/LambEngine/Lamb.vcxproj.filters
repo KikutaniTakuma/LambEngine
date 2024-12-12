@@ -133,9 +133,6 @@
     <ClCompile Include="Math\MathCommon.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\EngineUtils\ResourceLoadLog\ResourceLoadLog.cpp">
-      <Filter>Engine\EngineUtils\ResourceLoadLog</Filter>
-    </ClCompile>
     <ClCompile Include="Utils\ExecutionLog.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -369,9 +366,6 @@
     <Filter Include="Engine\Graphics\Animator">
       <UniqueIdentifier>{0359fcab-3674-4f23-a03c-3ef946b211c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\EngineUtils\ResourceLoadLog">
-      <UniqueIdentifier>{5d704287-10e8-4615-9e1d-949b3bb47401}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\GaussianBlur">
       <UniqueIdentifier>{bcc30c3c-78cb-4f5e-8b79-0fff4d880363}</UniqueIdentifier>
     </Filter>
@@ -593,9 +587,6 @@
     <ClInclude Include="Engine\Graphics\Tex2DAniamtor\Tex2DAniamtor.h">
       <Filter>Engine\Graphics\Tex2DAniamtor</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\EngineUtils\ResourceLoadLog\ResourceLoadLog.h">
-      <Filter>Engine\EngineUtils\ResourceLoadLog</Filter>
-    </ClInclude>
     <ClInclude Include="Utils\EngineInfo.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -658,9 +649,6 @@
     </ClInclude>
     <ClInclude Include="Utils\HSV.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Math\Unit.h">
-      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Shader\MeshShader\MeshShader.h">
       <Filter>Engine\Graphics\Shader\MeshShader</Filter>

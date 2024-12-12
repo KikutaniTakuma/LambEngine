@@ -1,3 +1,8 @@
+/// =========================
+/// ==  Mouseクラスの宣言  ==
+/// =========================
+
+
 #pragma once
 #include <array>
 #define DIRECTINPUT_VERSION 0x0800
@@ -39,8 +44,17 @@ public:
 	 void Input();
 	 void InputReset();
 
+	 /// <summary>
+	 /// 押した瞬間
+	 /// </summary>
 	 bool Pushed(Mouse::Button button);
+	 /// <summary>
+	 /// 押している間
+	 /// </summary>
 	 bool LongPush(Mouse::Button button);
+	 /// <summary>
+	 /// 離した瞬間
+	 /// </summary>
 	 bool Released(Mouse::Button button);
 
 	/// <summary>
@@ -70,11 +84,11 @@ public:
 	void Debug();
 
 private:
-	static Mouse* instance_;
+	static Mouse* pInstance_;
 
 public:
 	static Mouse* const GetInstance() {
-		return instance_;
+		return pInstance_;
 	}
 
 private:

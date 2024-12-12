@@ -1,3 +1,9 @@
+/// ===========================
+/// ==  Skeltonクラスの定義  ==
+/// ===========================
+
+
+
 #include "Skeleton.h"
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include <algorithm>
@@ -84,7 +90,7 @@ SkinCluster* SkinCluster::CreateSkinCluster(const Skeleton& skeleton, const Mode
         result->paletteBuffer.begin(),
         result->paletteBuffer.end(),
         [&skeleton](auto& n) {
-            n.Create(static_cast<uint32_t>(skeleton.joints.size()));
+            n.CreateBuffer(static_cast<uint32_t>(skeleton.joints.size()));
         }
     );
 

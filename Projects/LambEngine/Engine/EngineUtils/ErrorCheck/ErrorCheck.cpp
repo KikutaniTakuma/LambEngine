@@ -1,3 +1,8 @@
+/// ==============================
+/// ==  ErrorCheckクラスの定義  ==
+/// ==============================
+
+
 #include "ErrorCheck.h"
 #include <fstream>
 #include <filesystem>
@@ -23,7 +28,7 @@ ErrorCheck::ErrorCheck() :
 {}
 
 void ErrorCheck::ErrorTextBox(const std::string& text, const std::string& boxName) {
-	ErrorLog(text, boxName);
+	ErrorLog_(text, boxName);
 
 	if (boxName == "Error") {
 		MessageBoxA(
@@ -50,7 +55,7 @@ void ErrorCheck::CrashProgram() {
 	}
 }
 
-void ErrorCheck::ErrorLog(const std::string& text, const std::string& boxName) {
+void ErrorCheck::ErrorLog_(const std::string& text, const std::string& boxName) {
 	std::filesystem::path directoryPath = "./Log/";
 	if (!std::filesystem::exists(directoryPath)) {
 		std::filesystem::create_directory(directoryPath);

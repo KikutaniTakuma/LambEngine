@@ -1,3 +1,7 @@
+/// ==================================
+/// ==  ConstantBufferクラスの定義  ==
+/// ==================================
+
 #pragma once
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
 #include "ShaderBuffer.h"
@@ -40,6 +44,12 @@ private:
 	ConstantBuffer& operator=(ConstantBuffer&&) = delete;
 
 public:
+	/// <summary>
+	/// view作成
+	/// </summary>
+	/// <param name="heapHandleCPU"></param>
+	/// <param name="heapHandleGPU"></param>
+	/// <param name="heapHandle"></param>
 	void CreateView(
 		D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
 		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,

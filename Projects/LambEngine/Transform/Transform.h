@@ -3,6 +3,10 @@
 #include "Math/Quaternion.h"
 #include "Math/Matrix.h"
 
+
+/// <summary>
+/// トランスフォーム
+/// </summary>
 struct Transform {
 	Transform() = default;
 	Transform(const Transform&) = default;

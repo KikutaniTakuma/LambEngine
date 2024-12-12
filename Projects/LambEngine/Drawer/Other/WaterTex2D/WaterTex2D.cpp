@@ -37,7 +37,7 @@ void WaterTex2D::Load()
 
 	renderContextManager->Load<WaterRenderContext>(kFileNames_, 4);
 
-	renderSet = renderContextManager->Get(kFileNames_);
+	pRenderSet = renderContextManager->Get(kFileNames_);
 
 	Lamb::SafePtr textureManager = TextureManager::GetInstance();
 	textureManager->LoadTexture("./Resources/Common/Water/caustics_01.bmp");
@@ -54,7 +54,7 @@ void WaterTex2D::Draw(
 	uint32_t color,
 	BlendType blend
 ) {
-	Lamb::SafePtr renderContext = renderSet->GetRenderContextDowncast<WaterRenderContext>(blend);
+	Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<WaterRenderContext>(blend);
 
 	Vector2 clientSize = Lamb::ClientSize();
 
@@ -72,11 +72,4 @@ void WaterTex2D::Draw(
 	);
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
-}
-
-void WaterTex2D::AllDraw(BlendType blend)
-{
-	Lamb::SafePtr renderContext = renderSet->GetRenderContext(blend);
-	renderContext->Draw();
-	renderContext->ResetDrawCount();
 }

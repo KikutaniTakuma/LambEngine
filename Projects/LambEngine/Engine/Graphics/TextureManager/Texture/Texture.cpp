@@ -1,3 +1,8 @@
+/// ===========================
+/// ==  Textureクラスの定義  ==
+/// ===========================
+
+
 #include "Texture.h"
 #include "../TextureManager.h"
 #include "../externals/DirectXTex/d3dx12.h"

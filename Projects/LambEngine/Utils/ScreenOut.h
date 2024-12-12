@@ -8,6 +8,9 @@ namespace Lamb{
 	class ScreenOutAllocator;
 }
 
+/// <summary>
+/// 文字列描画を管理するクラス
+/// </summary>
 class ScreenOut {
 	friend class Lamb::ScreenOutAllocator;
 private:
@@ -27,7 +30,7 @@ private:
 	static ScreenOut* GetInstance();
 
 private:
-	static ScreenOut* instance_;
+	static ScreenOut* pInstance_;
 
 private:
 	std::unique_ptr<class StringOut> sout_;
@@ -38,7 +41,11 @@ class Vector3;
 class Vector4;
 class Quaternion;
 
+
 namespace Lamb {
+	/// <summary>
+	/// 画面上に文字列を描画するためのクラス(std::coutのようなもの)
+	/// </summary>
 	class ScreenOutAllocator {
 		friend class Engine;
 	public:

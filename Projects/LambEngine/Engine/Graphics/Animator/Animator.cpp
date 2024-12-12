@@ -1,3 +1,8 @@
+/// ============================
+/// ==  Animatorクラスの定義  ==
+/// ============================
+
+
 #include "Animator.h"
 #include "../AnimationManager/AnimationManager.h"
 #include "Utils/EngineInfo.h"
@@ -37,9 +42,9 @@ void Animator::Update(Skeleton& skeleton) {
 	for (Joint& joint : skeleton.joints) {
 		if (auto itr = currentAnimation.nodeAnimations.find(joint.name); itr != currentAnimation.nodeAnimations.end()) {
 			const NodeAnimation& rootNodeAnimation = (*itr).second;
-			joint.transform.translate = CalaclateValue(rootNodeAnimation.translation, animationTime_);
-			joint.transform.rotate = CalaclateValue(rootNodeAnimation.rotate, animationTime_);
-			joint.transform.scale = CalaclateValue(rootNodeAnimation.sacle, animationTime_);
+			joint.transform.translate = CalaclateValue_(rootNodeAnimation.translation, animationTime_);
+			joint.transform.rotate = CalaclateValue_(rootNodeAnimation.rotate, animationTime_);
+			joint.transform.scale = CalaclateValue_(rootNodeAnimation.sacle, animationTime_);
 		}
 	}
 
@@ -87,9 +92,9 @@ void Animator::Update(const std::string& rootNodeName)
 {
 	Animation& currentAnimation = animations_->data[currentAnimationIndex_];
 	NodeAnimation& rootNodeAnimation = currentAnimation.nodeAnimations[rootNodeName];
-	Vector3&& translate = CalaclateValue(rootNodeAnimation.translation, animationTime_);
-	Quaternion&& rotate = CalaclateValue(rootNodeAnimation.rotate, animationTime_);
-	Vector3&& scale = CalaclateValue(rootNodeAnimation.sacle, animationTime_);
+	Vector3&& translate = CalaclateValue_(rootNodeAnimation.translation, animationTime_);
+	Quaternion&& rotate = CalaclateValue_(rootNodeAnimation.rotate, animationTime_);
+	Vector3&& scale = CalaclateValue_(rootNodeAnimation.sacle, animationTime_);
 
 	animationMatrix_ = Mat4x4::MakeAffin(scale, rotate, translate);
 
@@ -206,7 +211,7 @@ void Animator::SetAnimations(Animations* const animations) {
 	animations_ = animations;
 }
 
-Vector3 Animator::CalaclateValue(const AnimationCurve<Vector3>& animationCurve, float time) {
+Vector3 Animator::CalaclateValue_(const AnimationCurve<Vector3>& animationCurve, float time) {
 	if (animationCurve.keyFrames.empty()) {
 		throw Lamb::Error::Code<Animator>("keyFrams is empty", ErrorPlace);
 	}
@@ -225,7 +230,7 @@ Vector3 Animator::CalaclateValue(const AnimationCurve<Vector3>& animationCurve, 
 	return animationCurve.keyFrames.back().value;
 }
 
-Quaternion Animator::CalaclateValue(const AnimationCurve<Quaternion>& animationCurve, float time) {
+Quaternion Animator::CalaclateValue_(const AnimationCurve<Quaternion>& animationCurve, float time) {
 	if (animationCurve.keyFrames.empty()) {
 		throw Lamb::Error::Code<Animator>("keyFrams is empty", ErrorPlace);
 	}

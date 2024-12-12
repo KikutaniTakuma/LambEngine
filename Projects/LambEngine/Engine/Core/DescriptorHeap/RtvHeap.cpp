@@ -1,3 +1,8 @@
+/// ===========================
+/// ==  RtvHeapクラスの定義  ==
+/// ===========================
+
+
 #include "RtvHeap.h"
 #include "Engine/Graphics/RenderTarget/RenderTarget.h"
 #include "Utils/ExecutionLog.h"
@@ -9,7 +14,7 @@
 
 #include "Utils/SafeDelete.h"
 
-Lamb::SafePtr<RtvHeap> RtvHeap::instance_ = nullptr;
+Lamb::SafePtr<RtvHeap> RtvHeap::pInstance_ = nullptr;
 
 RtvHeap::~RtvHeap()
 {
@@ -17,15 +22,15 @@ RtvHeap::~RtvHeap()
 }
 
 void RtvHeap::Initialize(UINT heapSize) {
-	instance_.reset(new RtvHeap(heapSize));
+	pInstance_.reset(new RtvHeap(heapSize));
 }
 
 void RtvHeap::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 RtvHeap* const RtvHeap::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 RtvHeap::RtvHeap(uint32_t heapSize):
@@ -42,14 +47,14 @@ RtvHeap::RtvHeap(uint32_t heapSize):
 
 void RtvHeap::CreateDescriptorHeap(uint32_t heapSize) {
 	heapSize_ = std::clamp(heapSize, DirectXSwapChain::kBackBufferNumber, 0xffu);
-	heap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, heapSize_, false);
-	heap_.SetName<RtvHeap>();
+	pHeap_ = DirectXDevice::GetInstance()->CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_RTV, heapSize_, false);
+	pHeap_.SetName<RtvHeap>();
 }
 
 void RtvHeap::CreateHeapHandles() {
 	uint64_t incrementRTVHeap = static_cast<uint64_t>(DirectXDevice::GetInstance()->GetIncrementRTVHeap());
 
-	heapHandles_.resize(heapSize_, { heap_->GetCPUDescriptorHandleForHeapStart(), D3D12_GPU_DESCRIPTOR_HANDLE{} });
+	heapHandles_.resize(heapSize_, { pHeap_->GetCPUDescriptorHandleForHeapStart(), D3D12_GPU_DESCRIPTOR_HANDLE{} });
 	for (uint64_t i = 0; i < static_cast<uint64_t>(heapSize_); i++) {
 		heapHandles_[i].first.ptr += incrementRTVHeap * i;
 	}

@@ -1,3 +1,8 @@
+/// ===========================
+/// ==  Outlineクラスの定義  ==
+/// ===========================
+
+
 #include "Outline.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
@@ -44,7 +49,7 @@ void Outline::SetDepthBuffer(DepthBuffer* depthBuffer) {
 	depthBuffer_ = depthBuffer;
 }
 
-void Outline::DataSet() {
+void Outline::SetData() {
 	colorBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(color.data());
 	outlineDataBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&outlineData_);
 }

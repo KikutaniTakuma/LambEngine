@@ -5,6 +5,9 @@
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 
+/// <summary>
+/// 値調整用
+/// </summary>
 class GlobalVariables {
 public:
 	using Item = std::variant<int32_t, float, Vector2 ,Vector3, std::string>;

@@ -1,3 +1,9 @@
+/// ====================================
+/// ==  RenderingManagerクラスの定義  ==
+/// ====================================
+
+
+
 #include "RenderingManager.h"
 
 
@@ -27,7 +33,7 @@
 #endif // USE_DEBUG_CODE
 
 
-std::unique_ptr<RenderingManager> RenderingManager::instance_;
+std::unique_ptr<RenderingManager> RenderingManager::pInstance_;
 
 RenderingManager::RenderingManager() {
 	resetDrawCount_ = 
@@ -176,16 +182,16 @@ RenderingManager::~RenderingManager()
 }
 
 void RenderingManager::Initialize() {
-	instance_.reset(new RenderingManager());
+	pInstance_.reset(new RenderingManager());
 }
 
 void RenderingManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 const Lamb::SafePtr<RenderingManager> RenderingManager::GetInstance()
 {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void RenderingManager::FrameStart()
@@ -338,7 +344,7 @@ void RenderingManager::Draw() {
 		&depthStencil_->GetDepthHandle()
 	);
 	// 深度値付きのlineを描画
-	Line::AllDraw(true);
+	Line::DrawAll(true);
 
 	skyBox_->SetAtmosphericParams(atmosphericParams_);
 
@@ -451,7 +457,7 @@ void RenderingManager::Draw() {
 	// UIの描画(depth書き込まないやつ)
 	DrawNoDepth(nodepthLists);
 	// 深度値なしのlineを描画
-	Line::AllDraw(false);
+	Line::DrawAll(false);
 
 	/// ====================================================================================
 
@@ -797,7 +803,7 @@ void RenderingManager::DrawRGB(const RenderDataList& renderList) {
 		if (renderList.first <= index) {
 			break;
 		}
-		element->DataSet();
+		element->SetData();
 		element->Draw();
 		index++;
 	}
@@ -884,7 +890,7 @@ void RenderingManager::DrawNoDepth(const RenderDataLists& nodepthList)
 
 			element->SetLight(deferredRenderingData_.directionLight);
 			element->SetCameraPos(deferredRenderingData_.eyePos);
-			element->DataSet();
+			element->SetData();
 			element->Draw();
 
 			count++;
@@ -902,7 +908,7 @@ void RenderingManager::ZSort(const RenderDataLists& rgbaList) {
 			element->ZSort();
 			element->SetLight(deferredRenderingData_.directionLight);
 			element->SetCameraPos(deferredRenderingData_.eyePos);
-			element->DataSet();
+			element->SetData();
 
 			count++;
 		}

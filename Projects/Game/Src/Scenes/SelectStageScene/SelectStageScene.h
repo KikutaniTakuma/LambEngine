@@ -15,6 +15,9 @@
 #include "Game/Fishes/Fishes.h"
 
 
+/// <summary>
+/// ステージセレクト
+/// </summary>
 class SelectStageScene : public BaseScene {
 public:
     SelectStageScene();

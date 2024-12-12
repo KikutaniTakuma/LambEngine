@@ -25,7 +25,7 @@ void AnimationModel::Load(const std::string& fileName) {
 		2
 	);
 
-	renderSet = renderContextManager->Get(
+	pRenderSet = renderContextManager->Get(
 		LoadFileNames{
 			.resourceFileName = fileName,
 			.shaderName{
@@ -36,19 +36,19 @@ void AnimationModel::Load(const std::string& fileName) {
 	);
 
 
-	animator_.reset();
-	animator_ = std::make_unique<Animator>();
-	animator_->Load(fileName);
+	pAnimator_.reset();
+	pAnimator_ = std::make_unique<Animator>();
+	pAnimator_->Load(fileName);
 
-	skeleton_ = std::make_unique<Skeleton>(Lamb::CreateSkeleton(renderSet->GetNode()));
-	skinCluster_.reset(SkinCluster::CreateSkinCluster(*skeleton_, *renderSet->GetModelData()));
+	pSkeleton_ = std::make_unique<Skeleton>(Lamb::CreateSkeleton(pRenderSet->GetNode()));
+	pSkinCluster_.reset(SkinCluster::CreateSkinCluster(*pSkeleton_, *pRenderSet->GetModelData()));
 }
 
 void AnimationModel::Update() {
-	animator_->Debug("animation model");
-	animator_->Update(*skeleton_);
-	skeleton_->Update();
-	skinCluster_->Update(*skeleton_);
+	pAnimator_->Debug("animation model");
+	pAnimator_->Update(*pSkeleton_);
+	pSkeleton_->Update();
+	pSkinCluster_->Update(*pSkeleton_);
 }
 
 void AnimationModel::Draw(
@@ -58,10 +58,10 @@ void AnimationModel::Draw(
 	BlendType blend,
 	bool isLighting
 ) {
-	SkinRenderContext<uint32_t, 1>* renderContext = renderSet->GetRenderContextDowncast<SkinRenderContext<uint32_t, 1>>(blend);
-	renderContext->SetSkinCluster(skinCluster_.get());
+	SkinRenderContext<uint32_t, 1>* renderContext = pRenderSet->GetRenderContextDowncast<SkinRenderContext<uint32_t, 1>>(blend);
+	renderContext->SetSkinCluster(pSkinCluster_.get());
 	renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
-	skeleton_->Draw(worldMatrix, camera);
+	pSkeleton_->Draw(worldMatrix, camera);
 }

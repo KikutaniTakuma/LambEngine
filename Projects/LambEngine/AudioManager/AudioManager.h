@@ -29,26 +29,45 @@ public:
 	static void Inititalize();
 	static void Finalize();
 	static inline AudioManager* const GetInstance() {
-		return instance_.get();
+		return pInstance_.get();
 	}
 
 private:
-	static Lamb::SafePtr<AudioManager> instance_;
+	static Lamb::SafePtr<AudioManager> pInstance_;
 
 public:
+	/// <summary>
+	/// ロードしてコンテナに追加(同じものは再ロードされない)
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void Load(const std::string& fileName);
+
+	/// <summary>
+	/// ロードしたものを取ってくる(ロードしてなかったらエラーが起きる)
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
+	/// <returns>オーディオポインタ(デリートしてはいけない)</returns>
 	Audio* const Get(const std::string& fileName);
 
+	/// <summary>
+	/// アンロード
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void Unload(const std::string& fileName);
+	/// <summary>
+	/// アンロード
+	/// </summary>
+	/// <param name="audio">Audioポインタ</param>
 	void Unload(Audio* audio);
 
+
 	IXAudio2MasteringVoice* GetMasterVoice() {
-		return masterVoice_.get();
+		return pMasterVoice_.get();
 	}
 
 private:
-	Lamb::LambPtr<IXAudio2> xAudio2_;
-	Lamb::SafePtr<IXAudio2MasteringVoice> masterVoice_;
+	Lamb::LambPtr<IXAudio2> pxAudio2_;
+	Lamb::SafePtr<IXAudio2MasteringVoice> pMasterVoice_;
 
 	std::unordered_map<std::string, std::unique_ptr<Audio>> audios_;
 };

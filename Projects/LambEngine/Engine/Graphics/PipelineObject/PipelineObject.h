@@ -1,3 +1,9 @@
+/// ==================================
+/// ==  PipelineObjectクラスの宣言  ==
+/// ==================================
+
+
+
 #pragma once
 #include <string>
 #include <unordered_map>
@@ -16,6 +22,11 @@ public:
 	PipelineObject& operator=(PipelineObject&&) = delete;
 
 protected:
+	/// <summary>
+	/// shaderロード
+	/// </summary>
+	/// <param name="vsFileName"></param>
+	/// <param name="psFileName"></param>
 	void LoadShader(
 		const std::string& vsFileName,
 		const std::string& psFileName

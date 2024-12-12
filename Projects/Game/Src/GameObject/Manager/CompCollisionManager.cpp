@@ -2,7 +2,7 @@
 #include "../Comp/LineCollisionComp.h"
 #include "../Comp/LineComp.h"
 
-std::unique_ptr<CompCollisionManager> CompCollisionManager::instance_;
+std::unique_ptr<CompCollisionManager> CompCollisionManager::pInstance_;
 
 CompCollisionManager::~CompCollisionManager() {
 	obbComps_.clear();
@@ -11,19 +11,19 @@ CompCollisionManager::~CompCollisionManager() {
 
 CompCollisionManager* const CompCollisionManager::GetInstance()
 {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void CompCollisionManager::Initialize()
 {
-	if (instance_) {
+	if (pInstance_) {
 		return;
 	}
-	instance_.reset(new CompCollisionManager());
+	pInstance_.reset(new CompCollisionManager());
 }
 
 void CompCollisionManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 

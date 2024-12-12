@@ -1,13 +1,19 @@
+/// ==========================================
+/// ==  VertexIndexDataManagerクラスの定義  ==
+/// ==========================================
+
+
+
 #include "VertexIndexDataManager.h"
 #include "Utils/EngineInfo.h"
 #include "Utils/SafeDelete.h"
 #include "../VertexIndexDataLoader/VertexIndexDataLoader.h"
 #include "Error/Error.h"
 
-Lamb::SafePtr<VertexIndexDataManager> VertexIndexDataManager::instance_ = nullptr;
+Lamb::SafePtr<VertexIndexDataManager> VertexIndexDataManager::pInstance_ = nullptr;
 
 VertexIndexDataManager* const VertexIndexDataManager::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 VertexIndexDataManager::~VertexIndexDataManager() {
@@ -16,8 +22,8 @@ VertexIndexDataManager::~VertexIndexDataManager() {
 }
 
 void VertexIndexDataManager::Initialize() {
-	instance_.reset(new VertexIndexDataManager());
-	if (instance_) {
+	pInstance_.reset(new VertexIndexDataManager());
+	if (pInstance_) {
 		Lamb::AddLog("Initialize MeshManager succeeded");
 	}
 	else {
@@ -25,7 +31,7 @@ void VertexIndexDataManager::Initialize() {
 	}
 }
 void VertexIndexDataManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 void VertexIndexDataManager::LoadModel(const std::string& fileName) {
@@ -69,6 +75,8 @@ VertexIndexData* VertexIndexDataManager::CreateMesh(const ModelData& modelData)
 	uint32_t vertexSizeInBytes = static_cast<uint32_t>(sizeof(Vertex) * modelData.vertices.size());
 
 	result->node = modelData.rootNode;
+	
+	// インデックス
 	result->indexResource = directXDevice->CreateBufferResuorce(indexSizeInBytes);
 
 	Lamb::SafePtr<uint32_t> indexMap = nullptr;
@@ -81,7 +89,7 @@ VertexIndexData* VertexIndexDataManager::CreateMesh(const ModelData& modelData)
 	result->indexView.Format = DXGI_FORMAT_R32_UINT;
 	result->indexView.BufferLocation = result->indexResource->GetGPUVirtualAddress();
 
-
+	// 頂点
 	result->vertexResource = directXDevice->CreateBufferResuorce(vertexSizeInBytes);
 
 	Lamb::SafePtr<Vertex> vertMap = nullptr;

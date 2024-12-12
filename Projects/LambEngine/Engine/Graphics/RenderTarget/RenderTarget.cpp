@@ -1,3 +1,9 @@
+/// ================================
+/// ==  RenderTargerクラスの定義  ==
+/// ================================
+
+
+
 #include "RenderTarget.h"
 #include "Engine/Engine.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"

@@ -49,8 +49,20 @@ public:
 	Texture2D& operator=(Texture2D&&) = default;
 
 public:
+	/// <summary>
+	/// ロード
+	/// </summary>
 	void Load();
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="worldMatrix">ワールド行列</param>
+	/// <param name="uvTransform">uv行列</param>
+	/// <param name="camera">カメラ行列</param>
+	/// <param name="textureID">テクスチャID</param>
+	/// <param name="color">色</param>
+	/// <param name="blend">ブレンド</param>
 	void Draw(
 		const Mat4x4& worldMatrix, 
 		const Mat4x4& uvTransform, 
@@ -59,30 +71,52 @@ public:
 		uint32_t color, 
 		BlendType blend
 	);
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="data">データ</param>
 	void Draw(const Texture2D::Data& data);
-
-	void AllDraw();
 };
 
+/// <summary>
+/// 板ポリインスタンス
+/// </summary>
 class Tex2DInstance {
 public:
 	Tex2DInstance() = default;
 	~Tex2DInstance() = default;
 
 public:
+	/// <summary>
+	/// ロード
+	/// </summary>
+	/// <param name="fileName">テクスチャファイルパス</param>
 	void Load(const std::string& fileName);
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="cameraMat">カメラ行列</param>
 	void Draw(const Mat4x4& cameraMat);
 
+	/// <summary>
+	/// テクスチャのサイズ
+	/// </summary>
+	/// <returns></returns>
 	Vector2 GetTexSize() const {
-		if (tex_.have()) {
-			return tex_->getSize();
+		if (pTex_.have()) {
+			return pTex_->getSize();
 		}
 		else {
 			return Vector2::kZero;
 		}
 	}
 
+	/// <summary>
+	/// 当たり判定
+	/// </summary>
+	/// <param name="otherPos">ポジション</param>
+	/// <returns></returns>
 	bool Collision(const Vector3& otherPos);
 
 public:
@@ -97,8 +131,8 @@ public:
 	BlendType blend = BlendType::kNone;
 
 private:
-	Lamb::SafePtr<Texture> tex_;
+	Lamb::SafePtr<Texture> pTex_;
 
 private:
-	Lamb::SafePtr<Texture2D> tex2D_;
+	Lamb::SafePtr<Texture2D> pTex2D_;
 };

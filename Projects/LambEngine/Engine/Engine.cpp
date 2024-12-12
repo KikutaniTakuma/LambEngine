@@ -1,3 +1,8 @@
+/// ==========================
+/// ==  Engineクラスの定義  ==
+/// ==========================
+
+
 #include "Engine.h"
 #include <cassert>
 #include <format>
@@ -92,7 +97,7 @@ void Engine::Debug::InitializeDebugLayer() {
 /// 各種初期化処理
 /// 
 
-Engine* Engine::instance_ = nullptr;
+Engine* Engine::pInstance_ = nullptr;
 
 void Engine::Initialize(const std::string& windowName, const Vector2& windowSize, float fpsLimit, bool isFullscreen) {
 	HRESULT hr = CoInitializeEx(0, COINIT_MULTITHREADED);
@@ -102,8 +107,8 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	else {
 		Lamb::AddLog("CoInitializeEx succeeded");
 	}
-	instance_ = new Engine();
-	assert(instance_);
+	pInstance_ = new Engine();
+	assert(pInstance_);
 
 
 	const auto&& windowTitle = ConvertString(windowName);
@@ -119,10 +124,10 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	debugLayer_.InitializeDebugLayer();
 #endif
 
-	instance_->HardwareLog();
+	pInstance_->HardwareLog();
 
 	// デバイス生成
-	instance_->InitializeDirectXDevice();
+	pInstance_->InitializeDirectXDevice();
 
 	// ディスクリプタヒープ初期化
 	RtvHeap::Initialize(128u);
@@ -130,14 +135,14 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	CbvSrvUavHeap::Initialize(1024u);
 
 	// コマンドリスト生成
-	instance_->InitializeDirectXCommand();
+	pInstance_->InitializeDirectXCommand();
 
 	// スワップチェーン生成
-	instance_->InitializeDirectXSwapChain();
+	pInstance_->InitializeDirectXSwapChain();
 
 	ImGuiManager::Initialize();
 
-	instance_->InitializeDirectXTK();
+	pInstance_->InitializeDirectXTK();
 
 	// 各種マネージャー初期化
 	ShaderManager::Initialize();
@@ -154,7 +159,7 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 }
 
 void Engine::Finalize() {
-	instance_->isFinalize_ = true;
+	pInstance_->isFinalize_ = true;
 
 	// 各種マネージャー解放
 	DrawerManager::Finalize();
@@ -177,11 +182,11 @@ void Engine::Finalize() {
 	ImGuiManager::Finalize();
 
 	DirectXSwapChain::Finalize();
-	instance_->FinalizeDirectXCommand();
+	pInstance_->FinalizeDirectXCommand();
 	DirectXDevice::Finalize();
 
-	delete instance_;
-	instance_ = nullptr;
+	delete pInstance_;
+	pInstance_ = nullptr;
 
 	// COM 終了
 	CoUninitialize();
@@ -191,7 +196,7 @@ void Engine::Finalize() {
 }
 
 bool Engine::IsFinalize() {
-	return instance_->isFinalize_;
+	return pInstance_->isFinalize_;
 }
 
 std::string Engine::GetCpuName() const {
@@ -297,7 +302,7 @@ std::string Engine::GetCpuName() const {
 }
 
 void Engine::HardwareLog() const {
-	Lamb::AddLog("cpu : " + instance_->GetCpuName());
+	Lamb::AddLog("cpu : " + pInstance_->GetCpuName());
 
 	MEMORYSTATUSEX memoryStatus;
 	memoryStatus.dwLength = sizeof(memoryStatus);

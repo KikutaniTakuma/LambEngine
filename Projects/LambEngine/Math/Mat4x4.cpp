@@ -1,3 +1,7 @@
+/// =====================================
+/// ==  Matirx<float,4,4>クラスの宣言  ==
+/// =====================================
+
 #include "Matrix.h"
 #include "Quaternion.h"
 #include <cmath>

@@ -1,3 +1,8 @@
+/// ===========================
+/// ==  RtvHeapクラスの宣言  ==
+/// ===========================
+
+
 #pragma once
 #include "DescriptorHeap.h"
 #include <array>
@@ -24,11 +29,18 @@ public:
 	static RtvHeap* const GetInstance();
 
 private:
-	static Lamb::SafePtr<RtvHeap> instance_;
+	static Lamb::SafePtr<RtvHeap> pInstance_;
 
 private:
+	/// <summary>
+	/// ヒープ作成
+	/// </summary>
+	/// <param name="heapSize">ヒープサイズ</param>
 	void CreateDescriptorHeap(uint32_t heapSize) override;
 
+	/// <summary>
+	/// ハンドル作成
+	/// </summary>
 	void CreateHeapHandles() override;
 
 	[[deprecated("Don`t use this function")]]
@@ -37,20 +49,47 @@ private:
 	}
 
 public:
+	/// <summary>
+	/// バックバッファー作成
+	/// </summary>
+	/// <param name="backBuffer"></param>
+	/// <param name="swapChain"></param>
 	void CreateBackBuffer(
 		std::array<Lamb::LambPtr<ID3D12Resource>, DirectXSwapChain::kBackBufferNumber>& backBuffer,
 		IDXGISwapChain4* const swapChain
 		);
 	
+	/// <summary>
+	/// メインレンダーターゲットをセット
+	/// </summary>
+	/// <param name="depthHandle">深度値のハンドル</param>
 	void SetMainRtv(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
 public:
+	/// <summary>
+	/// rtvをセット
+	/// </summary>
 	void SetRtv(uint32_t heapHandle, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	/// <summary>
+	/// rtvをセット
+	/// </summary>
 	void SetRtv(std::initializer_list<D3D12_CPU_DESCRIPTOR_HANDLE> heapHandles, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	/// <summary>
+	/// rtvをセット
+	/// </summary>
 	void SetRtv(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	/// <summary>
+	/// rtvとメインのレンダーターゲットをセット
+	/// </summary>
 	void SetRtvAndMain(D3D12_CPU_DESCRIPTOR_HANDLE* heapHandles, uint32_t numRenderTargets, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
+	/// <summary>
+	/// レンダーターゲットをクリア
+	/// </summary>
 	void ClearRenderTargetView(uint32_t handle, const class Vector4& clearColor);
 
+	/// <summary>
+	/// ビューを作成
+	/// </summary>
 	uint32_t CreateView(class RenderTarget& peraRender);
 };

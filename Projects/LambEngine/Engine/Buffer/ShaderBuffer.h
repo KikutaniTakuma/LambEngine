@@ -1,3 +1,8 @@
+/// ================================
+/// ==  ShaderBufferクラスの定義  ==
+/// ================================
+
+
 #pragma once
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXSwapChain/DirectXSwapChain.h"
@@ -41,6 +46,9 @@ public:
 	}
 
 public:
+	/// <summary>
+	/// マップ
+	/// </summary>
 	void Map() noexcept {
 		if (not this->isMap) {
 			this->bufferResource_->Map(0, nullptr, this->pData_.GetPtrAdress());
@@ -48,6 +56,9 @@ public:
 		}
 	}
 
+	/// <summary>
+	/// アンマップ
+	/// </summary>
 	void Unmap() noexcept {
 		if (this->isMap) {
 			this->bufferResource_->Unmap(0, nullptr);

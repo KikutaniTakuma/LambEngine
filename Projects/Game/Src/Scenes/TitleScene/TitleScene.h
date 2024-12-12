@@ -16,6 +16,9 @@
 #include "Game/Fishes/Fishes.h"
 #include <array>
 
+/// <summary>
+/// タイトル
+/// </summary>
 class TitleScene : public BaseScene {
 public:
 	TitleScene();

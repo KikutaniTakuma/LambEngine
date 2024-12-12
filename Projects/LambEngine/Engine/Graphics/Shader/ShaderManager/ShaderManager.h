@@ -1,3 +1,8 @@
+/// =================================
+/// ==  ShaderManagerクラスの宣言  ==
+/// =================================
+
+
 #pragma once
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
@@ -31,9 +36,12 @@ public:
 	static void Finalize();
 
 	static inline ShaderManager* const GetInstance() {
-		return instance_.get();
+		return pInstance_.get();
 	}
 
+/// <summary>
+/// ロード関数(shaderの種類ごと)
+/// </summary>
 public:
 	IDxcBlob* const LoadVertexShader(const std::string& fileName);
 	IDxcBlob* const LoadHullShader(const std::string& fileName);
@@ -45,7 +53,7 @@ public:
 	IDxcBlob* const LoadMeshShader(const std::string& fileName);
 
 private:
-	static Lamb::SafePtr<ShaderManager> instance_;
+	static Lamb::SafePtr<ShaderManager> pInstance_;
 
 private:
 	class ShaderFactory* shaderFactory_;

@@ -1,3 +1,8 @@
+/// ==================================
+/// ==  TextureManagerクラスの宣言  ==
+/// ==================================
+
+
 #pragma once
 #include "Texture/Texture.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
@@ -33,23 +38,42 @@ public:
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<TextureManager> instance_;
+	static Lamb::SafePtr<TextureManager> pInstance_;
 
 
+/// <summary>
+/// ロード
+/// </summary>
 public:
 	void LoadTexture(const std::string& fileName);
 
+public:
 	[[nodiscard]] uint32_t GetHandle(const std::string& fileName);
 
 	[[nodiscard]] Texture* const GetTexture(const std::string& fileName);
 
 public:
+	/// <summary>
+	/// ホワイトテクスチャのハンドルを渡す
+	/// </summary>
+	/// <returns>基本的に0が返ってくる</returns>
 	[[nodiscard]] uint32_t GetWhiteTex();
 
+	/// <summary>
+	/// VRAMにテクスチャデータを渡す
+	/// </summary>
 	void UploadTextureData();
 
+	/// <summary>
+	/// dramから解放
+	/// </summary>
 	void ReleaseIntermediateResource();
 
+	/// <summary>
+	/// テクスチャセット
+	/// </summary>
+	/// <param name="texIndex">テクスチャインデックス</param>
+	/// <param name="rootParam">ルートパラメータインデックス</param>
 	void Use(uint32_t texIndex, UINT rootParam);
 
 

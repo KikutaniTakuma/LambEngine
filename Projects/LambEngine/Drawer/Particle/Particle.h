@@ -168,19 +168,39 @@ public:
 	}
 
 public:
+	/// <summary>
+	/// 設定フォルダのロード
+	/// </summary>
+	/// <param name="directoryName">ディレクトリパス</param>
 	void LoadSettingDirectory(const std::string& directoryName);
 
+	/// <summary>
+	/// ファイルを保存
+	/// </summary>
+	/// <param name="groupName"></param>
 	void SaveSettingFile(const std::string& groupName);
 private:
-	void LopadSettingFile(const std::string& jsonName);
+	/// <summary>
+	/// 設定ファイルのロード
+	/// </summary>
+	/// <param name="jsonName">ファイルの名前</param>
+	void LopadSettingFile_(const std::string& jsonName);
 
-	void BackUpSettingFile(const std::string& groupName);
+	/// <summary>
+	/// バックアップ
+	/// </summary>
+	/// <param name="groupName"></param>
+	void BackUpSettingFile_(const std::string& groupName);
 private:
 	std::unordered_map<std::string, Group> datas_;
 	std::string dataDirectoryName_;
 
 
 public:
+	/// <summary>
+	///  テクスチャのロード
+	/// </summary>
+	/// <param name="fileName"></param>
 	void LoadTexture(const std::string& fileName);
 
 public:
@@ -251,7 +271,7 @@ private:
 
 	std::vector<WorldTransForm> wtfs_;
 
-	const class Texture* tex_;
+	const class Texture* pTex_;
 	bool isLoad_;
 
 	bool isBillboard_;

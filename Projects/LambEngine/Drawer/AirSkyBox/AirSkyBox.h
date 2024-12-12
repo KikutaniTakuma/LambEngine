@@ -43,24 +43,40 @@ public:
 	AirSkyBox& operator=(AirSkyBox&&) = delete;
 
 public:
+	/// <summary>
+	/// ロード
+	/// </summary>
 	void Load();
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="worldMat">ワールド行列</param>
+	/// <param name="cameraMat">カメラ行列</param>
+	/// <param name="color">色</param>
 	void Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color);
 
+	/// <summary>
+	/// 大気散乱の値設定
+	/// </summary>
+	/// <param name="atmosphericParams"></param>
 	void SetAtmosphericParams(const AtmosphericParams& atmosphericParams);
 
 private:
+	/// <summary>
+	/// パイプライン生成
+	/// </summary>
 	void CreateGraphicsPipeline();
 
 private:
 	D3D12_VERTEX_BUFFER_VIEW vertexView_ = {};
-	Lamb::LambPtr<ID3D12Resource> vertexResource_;
+	Lamb::LambPtr<ID3D12Resource> pVertexResource_;
 
 	D3D12_INDEX_BUFFER_VIEW indexView_ = {};
-	Lamb::LambPtr<ID3D12Resource> indexResource_;
+	Lamb::LambPtr<ID3D12Resource> pIndexResource_;
 
 	static constexpr uint32_t kIndexNumber_ = 36u;
 	std::array<std::unique_ptr<ConstantBuffer<ShaderData>>, DirectXSwapChain::kBackBufferNumber> shaderData_;
 	std::array<std::unique_ptr<ConstantBuffer<AtmosphericParams>>, DirectXSwapChain::kBackBufferNumber> atmosphericParams_;
-	Lamb::SafePtr<class Pipeline> pipeline_;
+	Lamb::SafePtr<class Pipeline> pPipeline_;
 };

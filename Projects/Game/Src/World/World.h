@@ -2,6 +2,9 @@
 #include "Framework/Framework.h"
 #include "Scenes/Manager/SceneManager.h"
 
+/// <summary>
+/// ゲーム固有の処理を含めた初期化や描画など
+/// </summary>
 class World final : public Framework {
 public:
 	World() = default;
@@ -22,7 +25,7 @@ private:
 	void Draw()override;
 
 private:
-	SceneManager* sceneManager_;
+	SceneManager* sceneManager_ = nullptr;
 
 	class ParticleEditor* particleEditor_ = nullptr;
 };

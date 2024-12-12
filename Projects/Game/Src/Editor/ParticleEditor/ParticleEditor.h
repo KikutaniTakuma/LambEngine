@@ -2,6 +2,9 @@
 #include "Drawer/Particle/Particle.h"
 #include "./Camera/Camera.h"
 
+/// <summary>
+/// パーティクルエディタ
+/// </summary>
 class ParticleEditor {
 private:
 	ParticleEditor() = default;
@@ -20,7 +23,7 @@ public:
 	static ParticleEditor* GetInstance();
 
 private:
-	static ParticleEditor* instance_;
+	static ParticleEditor* pInstance_;
 
 public:
 	void Editor();

@@ -1,3 +1,8 @@
+/// ================================
+/// ==  PeraPipelineクラスの定義  ==
+/// ================================
+
+
 #include "PeraPipeline.h"
 #include <cassert>
 #include <initializer_list>
@@ -8,7 +13,7 @@
 
 #include "Utils/EngineInfo.h"
 
-void PeraPipeline::DataSet() {
+void PeraPipeline::SetData() {
 	colorBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(color.data());
 }
 

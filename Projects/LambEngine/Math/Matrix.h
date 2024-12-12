@@ -1,3 +1,8 @@
+/// ==========================
+/// ==  Matrixクラスの宣言  ==
+/// ==========================
+
+
 #pragma once
 #include <array>
 #include <concepts>

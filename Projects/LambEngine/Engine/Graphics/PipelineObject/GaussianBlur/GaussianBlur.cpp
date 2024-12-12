@@ -1,3 +1,8 @@
+/// ================================
+/// ==  GaussianBlurクラスの定義  ==
+/// ================================
+
+
 #include "GaussianBlur.h"
 #include <cassert>
 #include "Engine/Graphics/PipelineManager/PipelineManager.h"
@@ -25,7 +30,7 @@ void GaussianBlur::Debug([[maybe_unused]]const std::string& guiName) {
 
 }
 
-void GaussianBlur::DataSet() {
+void GaussianBlur::SetData() {
 	colorBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(color.data());
 	gaussianBlurStateBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&gaussianBlurState_);
 }

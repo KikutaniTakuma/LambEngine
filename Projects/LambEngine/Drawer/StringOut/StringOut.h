@@ -55,10 +55,20 @@ public:
 	StringOut& operator>>(std::wstring& right);
 
 public:
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Clear();
 
+	/// <summary>
+	/// imgui
+	/// </summary>
+	/// <param name="debugName"></param>
 	void Debug(const std::string& debugName);
 
 

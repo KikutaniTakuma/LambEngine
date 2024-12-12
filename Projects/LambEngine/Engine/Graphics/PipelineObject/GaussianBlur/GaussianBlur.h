@@ -1,3 +1,9 @@
+/// ================================
+/// ==  GaussianBlurクラスの宣言  ==
+/// ================================
+
+
+
 #pragma once
 #include "../PipelineObject.h"
 #include "../PeraPipeline/PeraPipeline.h"
@@ -23,6 +29,9 @@ public:
 	GaussianBlur& operator=(GaussianBlur&&) = delete;
 
 public:
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Init(
 		const std::string& vsShader = "./Shaders/PostShader/Post.VS.hlsl",
 		const std::string& psShader = "./Shaders/PostShader/PostGaussian.PS.hlsl",
@@ -30,9 +39,15 @@ public:
 	) override;
 
 public:
+	/// <summary>
+	/// リソースセット
+	/// </summary>
 	void Use(Pipeline::Blend blendType, bool isDepth) override;
 
-	void DataSet()override;
+	/// <summary>
+	/// バッファにデータを設定する
+	/// </summary>
+	void SetData()override;
 
 	void SetGaussianState(const State& gaussianBlurState) {
 		gaussianBlurState_ = gaussianBlurState;

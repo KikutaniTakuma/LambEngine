@@ -1,3 +1,7 @@
+/// =======================================
+/// ==  StringOutPutManagerクラスの定義  ==
+/// =======================================
+
 #include "StringOutPutManager.h"
 #include "Engine/Core/DirectXDevice/DirectXDevice.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
@@ -12,24 +16,23 @@
 
 #include "Utils/SafeDelete.h"
 
-#include "Engine/EngineUtils/ResourceLoadLog/ResourceLoadLog.h"
 
-Lamb::SafePtr<StringOutPutManager> StringOutPutManager::instance_ = nullptr;
+Lamb::SafePtr<StringOutPutManager> StringOutPutManager::pInstance_ = nullptr;
 
 StringOutPutManager::~StringOutPutManager() {
 	Lamb::AddLog("Finalize StringOutPutManager succeeded");
 }
 
 void StringOutPutManager::Initialize() {
-	instance_.reset(new StringOutPutManager());
+	pInstance_.reset(new StringOutPutManager());
 }
 
 void StringOutPutManager::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 StringOutPutManager* const StringOutPutManager::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 
@@ -105,7 +108,6 @@ void StringOutPutManager::LoadFont(const std::string& fontName) {
 
 	future.wait();
 
-	ResourceLoadLog::Set(fontName);
 }
 
 DirectX::SpriteFont* const StringOutPutManager::GetFont(const std::string& fontName) {

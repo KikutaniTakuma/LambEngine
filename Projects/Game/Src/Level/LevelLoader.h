@@ -4,6 +4,9 @@
 
 #include "Utils/FileUtils.h"
 
+/// <summary>
+/// レベルローダー
+/// </summary>
 class LevelLoader {
 private:
 	LevelLoader() = delete;

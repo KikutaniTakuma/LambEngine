@@ -1,3 +1,7 @@
+/// ====================================
+/// ==  DirectXSwapchainクラスの定義  ==
+/// ====================================
+
 #include "DirectXSwapChain.h"
 #include "Utils/ExecutionLog.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
@@ -12,21 +16,21 @@
 #include "Utils/SafeDelete.h"
 #include <bit>
 
-Lamb::SafePtr<DirectXSwapChain> DirectXSwapChain::instance_ = nullptr;
+Lamb::SafePtr<DirectXSwapChain> DirectXSwapChain::pInstance_ = nullptr;
 
 DirectXSwapChain::~DirectXSwapChain() {
 	Lamb::AddLog("Finalize DirectXSwapChain succeeded");
 }
 
 DirectXSwapChain* const DirectXSwapChain::GetInstance() {
-	return instance_.get();
+	return pInstance_.get();
 }
 
 void DirectXSwapChain::Initialize() {
-	instance_.reset(new DirectXSwapChain());
+	pInstance_.reset(new DirectXSwapChain());
 }
 void DirectXSwapChain::Finalize() {
-	instance_.reset();
+	pInstance_.reset();
 }
 
 DirectXSwapChain::DirectXSwapChain():

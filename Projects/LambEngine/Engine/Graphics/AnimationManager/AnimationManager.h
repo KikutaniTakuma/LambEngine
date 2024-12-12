@@ -1,3 +1,7 @@
+/// ====================================
+/// ==  AnimationManagerクラスの宣言  ==
+/// ====================================
+
 #pragma once
 #include "../GraphicsStructs.h"
 
@@ -27,11 +31,16 @@ public:
  	static [[nodiscard]] AnimationManager* const GetInstance();
 
 private:
-	static Lamb::SafePtr<AnimationManager> instance_;
+	static Lamb::SafePtr<AnimationManager> pInstance_;
 
 public:
+	/// <summary>
+	/// アニメーションファイル読み込み
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void LoadAnimations(const std::string& fileName);
 	
+public:
 	[[nodiscard]] Animations* const GetAnimations(const std::string& fileName);
 
 private:

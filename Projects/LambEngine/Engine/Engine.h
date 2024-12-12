@@ -1,3 +1,8 @@
+/// ==========================
+/// ==  Engineクラスの宣言  ==
+/// ==========================
+
+
 #pragma once
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
@@ -46,14 +51,14 @@ private:
 	/// <summary>
 	/// シングルトンインスタンス
 	/// </summary>
-	static Engine* instance_;
+	static Engine* pInstance_;
 
 private:
 	bool isFinalize_ = false;
 
 public:
 	static inline Engine* const GetInstance() {
-		return instance_;
+		return pInstance_;
 	}
 
 private:

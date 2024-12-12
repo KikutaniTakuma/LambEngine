@@ -29,7 +29,7 @@ public:
 	static void Finalize();
 
 private:
-	static Lamb::SafePtr<DrawerManager> instance_;
+	static Lamb::SafePtr<DrawerManager> pInstance_;
 
 public:
 	Texture2D* const GetTexture2D() const;
@@ -41,7 +41,15 @@ private:
 
 
 public:
+	/// <summary>
+	/// テクスチャロード
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void LoadTexture(const std::string& fileName);
+	/// <summary>
+	/// ロードモデル
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void LoadModel(const std::string& fileName);
 	Model* const GetModel(const std::string& fileName);
 

@@ -1,3 +1,7 @@
+/// ======================================
+/// ==  RWStructuredBufferクラスの定義  ==
+/// ======================================
+
 #pragma once
 
 #include "Engine/Core/DescriptorHeap/Descriptor.h"
@@ -28,7 +32,11 @@ private:
 	RWStructuredBuffer& operator=(RWStructuredBuffer&&) = delete;
 
 public:
-	void Create(uint32_t bufferSize) {
+	/// <summary>
+	/// バッファー作成
+	/// </summary>
+	/// <param name="bufferSize">バッファーサイズ</param>
+	void CreateBuffer(uint32_t bufferSize) {
 		this->bufferSize_ = bufferSize;
 
 		this->bufferResource_ = DirectXDevice::GetInstance()->CreateBufferResuorce(sizeof(value_type) * this->size());
@@ -37,6 +45,12 @@ public:
 #endif // USE_DEBUG_CODE
 	}
 
+	/// <summary>
+	/// view作成
+	/// </summary>
+	/// <param name="heapHandleCPU"></param>
+	/// <param name="heapHandleGPU"></param>
+	/// <param name="heapHandle"></param>
 	void CreateView(
 		D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
 		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,

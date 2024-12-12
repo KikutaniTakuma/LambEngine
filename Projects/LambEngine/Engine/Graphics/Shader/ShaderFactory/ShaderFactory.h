@@ -1,3 +1,8 @@
+/// =================================
+/// ==  ShaderFactoryクラスの宣言  ==
+/// =================================
+
+
 #pragma once
 #include <d3d12.h>
 #pragma comment(lib, "d3d12.lib")
@@ -28,15 +33,19 @@ public:
 	static ShaderFactory* const GetInstance();
 
 private:
-	static ShaderFactory* instance_;
+	static ShaderFactory* pInstance_;
 
 public:
-	[[nodiscard]]
-	IDxcBlob* CompileShader(
-		// CompilerするShaderファイルへのパス
+	/// <summary>
+	/// hlslをコンパイルする
+	/// </summary>
+	/// <param name="filePath"> CompilerするShaderファイルへのパス</param>
+	/// <param name="profile">プロファイル</param>
+	/// <returns>バイナリコード</returns>
+	[[nodiscard]] IDxcBlob* CompileShader(
 		const std::wstring& filePath,
-		// Compilerに使用するProfile
-		const wchar_t* profile);
+		const wchar_t* profile
+	);
 
 private:
 	Lamb::LambPtr<IDxcUtils> dxcUtils_;

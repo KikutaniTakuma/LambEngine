@@ -6,6 +6,9 @@
 #include <memory>
 
 namespace Lamb {
+	/// <summary>
+	/// ゲームループ内で別threadを使うためのクラス
+	/// </summary>
 	class Thread {
 	public:
 		static uint32_t GetCurretnThreadNum() {
@@ -30,8 +33,14 @@ namespace Lamb {
 		Thread& operator=(Thread&&) = delete;
 
 	public:
+		/// <summary>
+		/// thread処理開始
+		/// </summary>
 		void Notify();
 
+		/// <summary>
+		/// thread作成
+		/// </summary>
 		void Create(
 			const std::function<void(void)>& userProcess,
 			const std::function<bool(void)>& waitProcess,
