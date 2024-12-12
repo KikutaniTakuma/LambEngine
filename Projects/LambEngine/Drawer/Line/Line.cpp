@@ -94,7 +94,7 @@ void Line::Finalize() {
 	);
 }
 
-void Line::AllDraw(bool isDepth) {
+void Line::DrawAll(bool isDepth) {
 	uint32_t& drawCount = isDepth ? depthDrawCount_ : nodepthDrawCount_;
 	if (drawCount == 0u) {
 		return;

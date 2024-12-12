@@ -30,11 +30,21 @@ private:
 	static uint32_t nodepthDrawCount_;
 
 public:
+	/// <summary>
+	/// バッファーの生成
+	/// </summary>
 	static void Initialize();
 
+	/// <summary>
+	/// バッファーの開放
+	/// </summary>
 	static void Finalize();
 
-	static void AllDraw(bool isDepth);
+	/// <summary>
+	/// 線の描画
+	/// </summary>
+	/// <param name="isDepth"></param>
+	static void DrawAll(bool isDepth);
 
 private:
 	static Shader shader_;
@@ -55,10 +65,27 @@ public:
 	Line& operator=(Line&& right)noexcept = default;
 
 public:
+	/// <summary>
+	/// imgui
+	/// </summary>
+	/// <param name="guiName"></param>
 	void Debug(const std::string& guiName);
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="viewProjection">ワールド行列</param>
+	/// <param name="isDepth">深度値を有効にするか</param>
 	void Draw(const Mat4x4& viewProjection, bool isDepth = true);
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="start">開始位置</param>
+	/// <param name="end">終わり位置</param>
+	/// <param name="viewProjection">カメラ行列</param>
+	/// <param name="color">色</param>
+	/// <param name="isDepth">深度値</param>
 	static void Draw(
 		const Vector3& start, 
 		const Vector3& end,

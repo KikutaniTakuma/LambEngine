@@ -50,8 +50,21 @@ public:
 	CloudTex2D& operator=(CloudTex2D&&) = default;
 
 public:
+	/// <summary>
+	/// ロード
+	/// </summary>
 	void Load();
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="worldMatrix">ワールド行列</param>
+	/// <param name="uvTransform">uv行列</param>
+	/// <param name="camera">カメラ行列</param>
+	/// <param name="textureID">テクスチャID</param>
+	/// <param name="randomVec">ランダムベクトル</param>
+	/// <param name="color">色</param>
+	/// <param name="blend">ブレンド</param>
 	void Draw(
 		const Mat4x4& worldMatrix,
 		const Mat4x4& uvTransform,
@@ -61,5 +74,9 @@ public:
 		uint32_t color,
 		BlendType blend
 	);
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="data">データ</param>
 	void Draw(const CloudTex2D::Data& data);
 };

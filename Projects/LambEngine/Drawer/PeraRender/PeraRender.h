@@ -35,12 +35,26 @@ public:
 	PeraRender& operator=(PeraRender&&) = delete;
 
 public:
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="psFileName">PixelShaderのファイルパス</param>
+	/// <param name="formtats">GBufferの設定</param>
 	void Initialize(const std::string& psFileName, std::initializer_list<DXGI_FORMAT> formtats);
 	void Initialize(PeraPipeline* pipelineObject);
 
 public:
+	/// <summary>
+	/// レンダーターゲットの設定
+	/// </summary>
+	/// <param name="depthHandle"></param>
 	void PreDraw(const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="blend">ブレンドタイプ</param>
+	/// <param name="depthHandle"></param>
 	void Draw(
 		Pipeline::Blend blend, 
 		D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
@@ -50,6 +64,9 @@ public:
 		return peraPipelineObject_->GetRender().GetTex();
 	}
 
+	/// <summary>
+	/// 書き込みとのステート変更
+	/// </summary>
 	void ChangeResourceState() {
 		peraPipelineObject_->GetRender().ChangeResourceState();
 	}
@@ -58,6 +75,10 @@ public:
 		peraPipelineObject_->GetRender().SetMainRenderTarget(depthHandle);
 	}
 
+	/// <summary>
+	/// デバッグ
+	/// </summary>
+	/// <param name="guiName"></param>
 	void Debug(const std::string& guiName);
 
 	void ResetPipelineObject(PeraPipeline* pipelineObject);

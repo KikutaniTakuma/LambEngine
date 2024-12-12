@@ -43,13 +43,29 @@ public:
 	AirSkyBox& operator=(AirSkyBox&&) = delete;
 
 public:
+	/// <summary>
+	/// ロード
+	/// </summary>
 	void Load();
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="worldMat">ワールド行列</param>
+	/// <param name="cameraMat">カメラ行列</param>
+	/// <param name="color">色</param>
 	void Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color);
 
+	/// <summary>
+	/// 大気散乱の値設定
+	/// </summary>
+	/// <param name="atmosphericParams"></param>
 	void SetAtmosphericParams(const AtmosphericParams& atmosphericParams);
 
 private:
+	/// <summary>
+	/// パイプライン生成
+	/// </summary>
 	void CreateGraphicsPipeline();
 
 private:

@@ -30,14 +30,24 @@ public:
 	SkyBox& operator=(SkyBox&&) = delete;
 
 public:
+	/// <summary>
+	/// ロード
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void Load(const std::string& fileName);
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="worldMat">ワールド行列</param>
+	/// <param name="cameraMat">カメラ行列</param>
+	/// <param name="color">色</param>
 	void Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color);
 
 	D3D12_GPU_DESCRIPTOR_HANDLE GetHandle() const;
 
 private:
-	void CreateGraphicsPipeline();
+	void CreateGraphicsPipeline_();
 
 private:
 	D3D12_VERTEX_BUFFER_VIEW vertexView_ = {};

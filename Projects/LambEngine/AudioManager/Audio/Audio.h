@@ -52,25 +52,57 @@ public:
 	Audio& operator=(Audio&&) = delete;
 
 public:
+	/// <summary>
+	/// 最初から再生
+	/// </summary>
+	/// <param name="volume">音の大きさ(0.0f～1.0f)</param>
+	/// <param name="isLoop">ループするか否か</param>
 	void Start(float volume, bool isLoop);
 
+	/// <summary>
+	/// 一時停止
+	/// </summary>
 	void Pause();
 
+	/// <summary>
+	/// 一時停止した場所から再生
+	/// </summary>
 	void ReStart();
 
+	/// <summary>
+	/// 止める
+	/// </summary>
 	void Stop();
 
+	/// <summary>
+	/// 再生しているか
+	/// </summary>
+	/// <returns></returns>
 	bool IsStart() const {
 		return isStart_;
 	}
 
+	/// <summary>
+	/// 音の大きさ設定
+	/// </summary>
+	/// <param name="volume">音の大きさ(0.0f～1.0f)</param>
 	void SetVolume(float volume);
 
+	/// <summary>
+	/// ImGui
+	/// </summary>
 	void Debug(const std::string& guiName);
 
 private:
+	/// <summary>
+	/// アンロード
+	/// </summary>
 	void Unload();
 
+	/// <summary>
+	/// ロード
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void Load(const std::string& fileName);
 
 private:

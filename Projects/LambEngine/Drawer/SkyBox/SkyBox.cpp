@@ -91,7 +91,7 @@ void SkyBox::Load(const std::string& fileName) {
     heap->BookingHeapPos(1u);
     heap->CreateView(*shaderData_);
 
-    CreateGraphicsPipeline();
+    CreateGraphicsPipeline_();
 }
 
 void SkyBox::Draw(const Mat4x4& worldMat, const Mat4x4& cameraMat, uint32_t color) {
@@ -125,7 +125,7 @@ D3D12_GPU_DESCRIPTOR_HANDLE SkyBox::GetHandle() const
     return texture_->GetHandleGPU();
 }
 
-void SkyBox::CreateGraphicsPipeline() {
+void SkyBox::CreateGraphicsPipeline_() {
     Shader shader = {};
 
     ShaderManager* const shaderMaanger = ShaderManager::GetInstance();

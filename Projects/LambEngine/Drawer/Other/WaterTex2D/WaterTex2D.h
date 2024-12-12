@@ -51,8 +51,23 @@ public:
 	WaterTex2D& operator=(WaterTex2D&&) = default;
 
 public:
+	/// <summary>
+	/// ロード
+	/// </summary>
 	void Load();
 
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="worldMatrix">カメラ行列</param>
+	/// <param name="camera">カメラ行列</param>
+	/// <param name="randomVec">ランダムベクトル</param>
+	/// <param name="density">パーリンノイズの値</param>
+	/// <param name="edgeDivision">分割数(辺)</param>
+	/// <param name="insideDivision">分割数(ポリゴン)</param>
+	/// <param name="waveData">(波のデータ)</param>
+	/// <param name="color">色</param>
+	/// <param name="blend">ブレンド</param>
 	void Draw(
 		const Mat4x4& worldMatrix,
 		const Mat4x4& camera,
@@ -64,5 +79,4 @@ public:
 		uint32_t color,
 		BlendType blend
 	);
-	void AllDraw(BlendType blend);
 };

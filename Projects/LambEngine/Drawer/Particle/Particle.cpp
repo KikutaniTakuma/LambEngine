@@ -160,7 +160,7 @@ void Particle::LoadSettingDirectory(const std::string& directoryName) {
 		}
 
 		// jsonファイルを読み込む
-		LopadSettingFile(filePath.string());
+		LopadSettingFile_(filePath.string());
 	}
 
 	std::ifstream file{ dataDirectoryName_ + "otherSetting.txt" };
@@ -201,7 +201,7 @@ void Particle::LoadSettingDirectory(const std::string& directoryName) {
 	isClose_ = false;
 }
 
-void Particle::LopadSettingFile(const std::string& jsonName) {
+void Particle::LopadSettingFile_(const std::string& jsonName) {
 	std::ifstream file(jsonName);
 
 	if (file.fail()) {
@@ -366,7 +366,7 @@ void Particle::SaveSettingFile(const std::string& groupName) {
 	file.close();
 }
 
-void Particle::BackUpSettingFile(const std::string& groupName) {
+void Particle::BackUpSettingFile_(const std::string& groupName) {
 	auto itrGroup = datas_.find(groupName);
 	assert(itrGroup != datas_.end());
 
@@ -885,7 +885,7 @@ void Particle::Debug(const std::string& guiName) {
 			);
 
 			if (id == IDOK) {
-				BackUpSettingFile(groupName);
+				BackUpSettingFile_(groupName);
 
 				settings_.erase(settings_.begin() + i);
 				datas_.erase(groupName);

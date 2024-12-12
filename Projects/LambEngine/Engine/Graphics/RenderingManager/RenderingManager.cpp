@@ -344,7 +344,7 @@ void RenderingManager::Draw() {
 		&depthStencil_->GetDepthHandle()
 	);
 	// 深度値付きのlineを描画
-	Line::AllDraw(true);
+	Line::DrawAll(true);
 
 	skyBox_->SetAtmosphericParams(atmosphericParams_);
 
@@ -457,7 +457,7 @@ void RenderingManager::Draw() {
 	// UIの描画(depth書き込まないやつ)
 	DrawNoDepth(nodepthLists);
 	// 深度値なしのlineを描画
-	Line::AllDraw(false);
+	Line::DrawAll(false);
 
 	/// ====================================================================================
 

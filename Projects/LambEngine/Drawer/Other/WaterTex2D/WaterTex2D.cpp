@@ -73,10 +73,3 @@ void WaterTex2D::Draw(
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
 }
-
-void WaterTex2D::AllDraw(BlendType blend)
-{
-	Lamb::SafePtr renderContext = renderSet->GetRenderContext(blend);
-	renderContext->Draw();
-	renderContext->ResetDrawCount();
-}

@@ -36,11 +36,30 @@ private:
 	static Lamb::SafePtr<AudioManager> instance_;
 
 public:
+	/// <summary>
+	/// ロードしてコンテナに追加(同じものは再ロードされない)
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void Load(const std::string& fileName);
+
+	/// <summary>
+	/// ロードしたものを取ってくる(ロードしてなかったらエラーが起きる)
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
+	/// <returns>オーディオポインタ(デリートしてはいけない)</returns>
 	Audio* const Get(const std::string& fileName);
 
+	/// <summary>
+	/// アンロード
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void Unload(const std::string& fileName);
+	/// <summary>
+	/// アンロード
+	/// </summary>
+	/// <param name="audio">Audioポインタ</param>
 	void Unload(Audio* audio);
+
 
 	IXAudio2MasteringVoice* GetMasterVoice() {
 		return masterVoice_.get();
