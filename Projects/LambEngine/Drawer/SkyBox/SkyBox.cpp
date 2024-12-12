@@ -53,6 +53,9 @@ void SkyBox::Load(const std::string& fileName) {
     uint32_t indexSizeInBytes = static_cast<uint32_t>(sizeof(uint16_t) * indexData.size());
     uint32_t vertexSizeInBytes = static_cast<uint32_t>(sizeof(Vector4) * vertexData.size());
 
+
+    // インデックス
+
     pIndexResource_ = directXDevice->CreateBufferResuorce(indexSizeInBytes);
 
     Lamb::SafePtr<uint16_t> indexMap = nullptr;
@@ -65,6 +68,8 @@ void SkyBox::Load(const std::string& fileName) {
     indexView_.BufferLocation = pIndexResource_->GetGPUVirtualAddress();
 
 
+    // バーテックス
+
     pVertexResource_ = directXDevice->CreateBufferResuorce(vertexSizeInBytes);
 
     Lamb::SafePtr<Vector4> vertMap = nullptr;
@@ -75,6 +80,8 @@ void SkyBox::Load(const std::string& fileName) {
     vertexView_.SizeInBytes = vertexSizeInBytes;
     vertexView_.StrideInBytes = static_cast<uint32_t>(sizeof(Vector4));
     vertexView_.BufferLocation = pVertexResource_->GetGPUVirtualAddress();
+
+    // テクスチャ
 
     Lamb::SafePtr textureMangaer = TextureManager::GetInstance();
     textureMangaer->LoadTexture(fileName);

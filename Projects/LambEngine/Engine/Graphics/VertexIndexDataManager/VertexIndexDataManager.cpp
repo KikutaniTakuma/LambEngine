@@ -75,6 +75,8 @@ VertexIndexData* VertexIndexDataManager::CreateMesh(const ModelData& modelData)
 	uint32_t vertexSizeInBytes = static_cast<uint32_t>(sizeof(Vertex) * modelData.vertices.size());
 
 	result->node = modelData.rootNode;
+	
+	// インデックス
 	result->indexResource = directXDevice->CreateBufferResuorce(indexSizeInBytes);
 
 	Lamb::SafePtr<uint32_t> indexMap = nullptr;
@@ -87,7 +89,7 @@ VertexIndexData* VertexIndexDataManager::CreateMesh(const ModelData& modelData)
 	result->indexView.Format = DXGI_FORMAT_R32_UINT;
 	result->indexView.BufferLocation = result->indexResource->GetGPUVirtualAddress();
 
-
+	// 頂点
 	result->vertexResource = directXDevice->CreateBufferResuorce(vertexSizeInBytes);
 
 	Lamb::SafePtr<Vertex> vertMap = nullptr;

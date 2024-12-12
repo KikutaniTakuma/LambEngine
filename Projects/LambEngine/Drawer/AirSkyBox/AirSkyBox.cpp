@@ -17,7 +17,7 @@ AirSkyBox::~AirSkyBox()
 }
 
 void AirSkyBox::Load() {
-    std::array vertexData = {
+    const std::array vertexData = {
         Vector4(1.0f,  1.0f, -1.0f, 1.0f),
         Vector4(1.0f, -1.0f, -1.0f, 1.0f),
         Vector4(1.0f,  1.0f,  1.0f, 1.0f),
@@ -28,7 +28,7 @@ void AirSkyBox::Load() {
         Vector4(-1.0f, -1.0f,  1.0f, 1.0f),
     };
 
-    std::array indexData = {
+    const std::array indexData = {
         0_u16, 2_u16, 4_u16,
         3_u16, 7_u16, 2_u16,
         7_u16, 5_u16, 6_u16,
@@ -49,6 +49,8 @@ void AirSkyBox::Load() {
     uint32_t indexSizeInBytes = static_cast<uint32_t>(sizeof(uint16_t) * indexData.size());
     uint32_t vertexSizeInBytes = static_cast<uint32_t>(sizeof(Vector4) * vertexData.size());
 
+
+    // インデックス
     pIndexResource_ = directXDevice->CreateBufferResuorce(indexSizeInBytes);
 
     Lamb::SafePtr<uint16_t> indexMap = nullptr;
@@ -60,7 +62,7 @@ void AirSkyBox::Load() {
     indexView_.Format = DXGI_FORMAT_R16_UINT;
     indexView_.BufferLocation = pIndexResource_->GetGPUVirtualAddress();
 
-
+    // 頂点
     pVertexResource_ = directXDevice->CreateBufferResuorce(vertexSizeInBytes);
 
     Lamb::SafePtr<Vector4> vertMap = nullptr;
@@ -72,6 +74,7 @@ void AirSkyBox::Load() {
     vertexView_.StrideInBytes = static_cast<uint32_t>(sizeof(Vector4));
     vertexView_.BufferLocation = pVertexResource_->GetGPUVirtualAddress();
 
+    // バッファ作成
     std::for_each(shaderData_.begin(), shaderData_.end(), [](auto& n) {
         n = std::make_unique<ConstantBuffer<ShaderData>>();
         });
@@ -79,6 +82,7 @@ void AirSkyBox::Load() {
         n = std::make_unique<ConstantBuffer<AtmosphericParams>>();
         });
 
+    // パイプライン作成
     CreateGraphicsPipeline();
 }
 

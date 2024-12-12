@@ -22,43 +22,48 @@ std::array<std::unique_ptr<StructuredBuffer<Line::VertxData>>, DirectXSwapChain:
 std::array<std::unique_ptr<StructuredBuffer<Line::VertxData>>, DirectXSwapChain::kBackBufferNumber> Line::depthVertData_;
 
 void Line::Initialize() {
-	Lamb::SafePtr shaderManager = ShaderManager::GetInstance();
-	shader_.vertex = shaderManager->LoadVertexShader("./Shaders/LineShader/Line.VS.hlsl");
-	shader_.pixel = shaderManager->LoadPixelShader("./Shaders/LineShader/Line.PS.hlsl");
+	// パイプライン作成
+	{
+		Lamb::SafePtr shaderManager = ShaderManager::GetInstance();
+		shader_.vertex = shaderManager->LoadVertexShader("./Shaders/LineShader/Line.VS.hlsl");
+		shader_.pixel = shaderManager->LoadPixelShader("./Shaders/LineShader/Line.PS.hlsl");
 
-	D3D12_ROOT_PARAMETER paramater = {};
-	paramater.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
-	paramater.ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
-	paramater.Descriptor.ShaderRegister = 0;
+		D3D12_ROOT_PARAMETER paramater = {};
+		paramater.ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
+		paramater.ParameterType = D3D12_ROOT_PARAMETER_TYPE_SRV;
+		paramater.Descriptor.ShaderRegister = 0;
 
-	RootSignature::Desc desc;
-	desc.rootParameter = &paramater;
-	desc.rootParameterSize = 1;
-	desc.samplerDeacs.clear();
+		RootSignature::Desc desc;
+		desc.rootParameter = &paramater;
+		desc.rootParameterSize = 1;
+		desc.samplerDeacs.clear();
 
-	auto pipelineManager = PipelineManager::GetInstance();
-	Pipeline::Desc pipelineDesc;
-	pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
-	pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
-	pipelineDesc.shader = shader_;
-	pipelineDesc.blend[0] = Pipeline::None;
-	pipelineDesc.solidState = Pipeline::SolidState::Solid;
-	pipelineDesc.cullMode = Pipeline::CullMode::None;
-	pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
-	pipelineDesc.numRenderTarget = 1;
+		auto pipelineManager = PipelineManager::GetInstance();
+		Pipeline::Desc pipelineDesc;
+		pipelineDesc.rootSignature = pipelineManager->CreateRootSgnature(desc);
+		pipelineDesc.vsInputData.push_back({ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT });
+		pipelineDesc.shader = shader_;
+		pipelineDesc.blend[0] = Pipeline::None;
+		pipelineDesc.solidState = Pipeline::SolidState::Solid;
+		pipelineDesc.cullMode = Pipeline::CullMode::None;
+		pipelineDesc.topologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_LINE;
+		pipelineDesc.numRenderTarget = 1;
 
-	pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	pipelineDesc.isDepth = true;
-	pipelineManager->SetDesc(pipelineDesc);
-	pDepthPipeline_ = pipelineManager->Create();
+		pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R32G32B32A32_FLOAT;
+		pipelineDesc.isDepth = true;
+		pipelineManager->SetDesc(pipelineDesc);
+		pDepthPipeline_ = pipelineManager->Create();
 
-	pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	pipelineDesc.isDepth = false;
-	pipelineManager->SetDesc(pipelineDesc);
-	pNodepthPipeline_ = pipelineManager->Create();
+		pipelineDesc.rtvFormtat[0] = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
+		pipelineDesc.isDepth = false;
+		pipelineManager->SetDesc(pipelineDesc);
+		pNodepthPipeline_ = pipelineManager->Create();
 
-	pipelineManager->StateReset();
+		pipelineManager->StateReset();
 
+	}
+
+	// バッファ作成
 	std::for_each(
 		nodepthVertData_.begin(), 
 		nodepthVertData_.end(), 
@@ -141,6 +146,7 @@ void Line::Draw(const Mat4x4& viewProjection, bool isDepth) {
 	vertData->Map();
 	(*vertData)[drawCount].color = colorFloat;
 
+	// 初めと終わりのベクトルから行列を作成
 	Vector3 scale;
 	scale.x = (end - start).Length();
 	Vector3 to = (end - start).Normalize();
@@ -172,6 +178,7 @@ void Line::Draw(
 	vertData->Map();
 	(*vertData)[drawCount].color = colorFloat;
 
+	// 初めと終わりのベクトルから行列を作成
 	Vector3 scale;
 	scale.x = (end - start).Length();
 	Vector3 to = (end - start).Normalize();

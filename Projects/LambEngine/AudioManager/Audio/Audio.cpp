@@ -35,6 +35,7 @@ void Audio::Unload() {
 }
 
 void Audio::Load(const std::string& fileName) {
+	// ファイルパスの存在を確認
 	if (!std::filesystem::exists(std::filesystem::path{ fileName })) {
 		throw Lamb::Error::Code<Audio>(("This file is not found -> " + fileName), ErrorPlace);
 	}
@@ -45,6 +46,7 @@ void Audio::Load(const std::string& fileName) {
 
 	auto extension = std::filesystem::path(fileName).extension();
 
+	// mp3かwavのみ
 	if (extension != ".wav" and extension != ".mp3") {
 		throw Lamb::Error::Code<Audio>(("This file is not supported (only ""mp3"" or ""wav"" file) -> " + fileName), ErrorPlace);
 	}

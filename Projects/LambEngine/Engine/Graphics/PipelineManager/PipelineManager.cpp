@@ -38,12 +38,15 @@ PipelineManager* const PipelineManager::GetInstance()
 
 RootSignature* PipelineManager::CreateRootSgnature(const RootSignature::Desc& desc)
 {
+	// すでに作ってあるか
 	auto IsSame = [&desc](const std::unique_ptr<RootSignature>& rootSignature_) {
 		return rootSignature_->IsSame(desc);
 		};
-
+	
+	// 判定
 	auto rootSignatureItr = std::find_if(pInstance_->rootSignatures_.begin(), pInstance_->rootSignatures_.end(), IsSame);
 
+	// 作ってなかったら
 	if (rootSignatureItr == pInstance_->rootSignatures_.end()) {
 		auto rootSignature = std::make_unique<RootSignature>();
 
@@ -68,12 +71,14 @@ void PipelineManager::SetDesc(const Pipeline::MeshDesc& desc)
 }
 
 Pipeline* const PipelineManager::Create() {
+	// すでに作ってあるか
 	auto IsSmae = [this](const std::unique_ptr<Pipeline>& pipeline) {
 			return pipeline->IsSame(pipelineDesc_);
 		};
 
 	auto pipelineItr = std::find_if(pInstance_->pipelines_.begin(), pInstance_->pipelines_.end(), IsSmae);
 
+	// 作ってなかったら
 	if (pipelineItr == pInstance_->pipelines_.end()) {
 		auto pipeline = std::make_unique<Pipeline>();
 		pipeline->Create(pipelineDesc_);
@@ -93,12 +98,14 @@ Pipeline* const PipelineManager::Create() {
 
 Pipeline* const PipelineManager::CreateCubeMap()
 {
+	// すでに作ってあるか
 	auto IsSmae = [this](const std::unique_ptr<Pipeline>& pipeline) {
 		return pipeline->IsSame(pipelineDesc_);
 		};
 
 	auto pipelineItr = std::find_if(pInstance_->pipelines_.begin(), pInstance_->pipelines_.end(), IsSmae);
 
+	// 作ってなかったら
 	if (pipelineItr == pInstance_->pipelines_.end()) {
 		auto pipeline = std::make_unique<Pipeline>();
 		pipeline->CreateCubeMap(pipelineDesc_);
@@ -118,12 +125,14 @@ Pipeline* const PipelineManager::CreateCubeMap()
 
 Pipeline* const PipelineManager::CreateMesh()
 {
+	// すでに作ってあるか
 	auto IsSmae = [this](const std::unique_ptr<Pipeline>& pipeline) {
 		return pipeline->IsSame(pipelineMeshDesc_);
 		};
 
 	auto pipelineItr = std::find_if(pInstance_->pipelines_.begin(), pInstance_->pipelines_.end(), IsSmae);
 
+	// 作ってなかったら
 	if (pipelineItr == pInstance_->pipelines_.end()) {
 		auto pipeline = std::make_unique<Pipeline>();
 		pipeline->Create(pipelineMeshDesc_);

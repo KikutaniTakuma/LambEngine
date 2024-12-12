@@ -25,7 +25,6 @@ void ShadowRendering::Draw() {
 
 	pipelinesNoDepth_[Pipeline::Blend::None]->Use();
 
-	//commandList->SetGraphicsRootDescriptorTable(0, colorTextureHandle_);
 	commandList->SetGraphicsRootDescriptorTable(0, depthTextureHandle_);
 	commandList->SetGraphicsRootDescriptorTable(1, depthShadowTextureHandle_);
 	commandList->DrawInstanced(3, 1, 0, 0);
@@ -72,10 +71,7 @@ void ShadowRendering::Init(
 
 	std::array<D3D12_ROOT_PARAMETER, 2> rootParameter = {};
 
-	/*rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-	rootParameter[0].DescriptorTable.pDescriptorRanges = diffColorTextureRange.data();
-	rootParameter[0].DescriptorTable.NumDescriptorRanges = static_cast<UINT>(diffColorTextureRange.size());*/
+
 	
 	rootParameter[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
 	rootParameter[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
