@@ -39,6 +39,9 @@ public:
 		return pInstance_.get();
 	}
 
+/// <summary>
+/// ロード関数(shaderの種類ごと)
+/// </summary>
 public:
 	IDxcBlob* const LoadVertexShader(const std::string& fileName);
 	IDxcBlob* const LoadHullShader(const std::string& fileName);

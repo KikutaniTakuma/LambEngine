@@ -40,6 +40,9 @@ public:
 public:
 	void Use(Pipeline::Blend blendType, bool isDepth) override;
 
+	/// <summary>
+	///	描画
+	/// </summary>
 	void Draw();
 
 	void SetColorHandle(D3D12_GPU_DESCRIPTOR_HANDLE colorTextureHandle) {

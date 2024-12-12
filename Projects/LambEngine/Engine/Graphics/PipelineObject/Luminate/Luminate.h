@@ -28,9 +28,15 @@ public:
 	) override;
 
 public:
+	/// <summary>
+	/// リソースセット
+	/// </summary>
 	void Use(Pipeline::Blend blendType, bool isDepth) override;
 
-	void DataSet()override;
+	/// <summary>
+	/// バッファにデータを設定する
+	/// </summary>
+	void SetData()override;
 
 	void SetLuminanceThreshold(float32_t luminanceThreshold) {
 		luminanceThreshold_ = luminanceThreshold;

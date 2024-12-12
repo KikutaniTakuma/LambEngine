@@ -31,7 +31,14 @@ public:
 	DepthBuffer& operator=(DepthBuffer&&) = delete;
 
 public:
+	/// <summary>
+	/// 深度値ビューの作成
+	/// </summary>
 	void CreateDepthView(D3D12_CPU_DESCRIPTOR_HANDLE handle, uint32_t hadleUINT);
+	
+	/// <summary>
+	/// SRV作成
+	/// </summary>
 	void CreateView(D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
 		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
 		UINT heapHandle
@@ -41,8 +48,14 @@ public:
 	const D3D12_CPU_DESCRIPTOR_HANDLE& GetDepthHandle() const;
 	class Texture* const GetTex() const;
 
+	/// <summary>
+	/// リソースバリア
+	/// </summary>
 	void Barrier();
 
+	/// <summary>
+	/// リソースクリア
+	/// </summary>
 	void Clear();
 
 	DepthBuffer::State GetCurrentState() const {

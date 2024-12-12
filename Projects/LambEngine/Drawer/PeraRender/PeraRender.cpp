@@ -51,7 +51,7 @@ void PeraRender::Draw(
 	D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle
 ) {
 	pPeraPipelineObject_->color = color;
-	pPeraPipelineObject_->DataSet();
+	pPeraPipelineObject_->SetData();
 
 	// 各種描画コマンドを積む
 	Lamb::SafePtr commandList = DirectXCommand::GetMainCommandlist()->GetCommandList();

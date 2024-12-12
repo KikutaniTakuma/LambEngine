@@ -40,8 +40,19 @@ public:
 		return (pInstance_->preKey_[keyType] & 0x80);
 	}
 
+	/// <summary>
+	/// 押した瞬間
+	/// </summary>
 	bool Pushed(uint8_t keyType);
+
+	/// <summary>
+	/// 押している間
+	/// </summary>
 	bool LongPush(uint8_t keyType);
+	
+	/// <summary>
+	/// 話した瞬間
+	/// </summary>
 	bool Released(uint8_t keyType);
 
 	/// <summary>

@@ -36,7 +36,15 @@ private:
 	static Lamb::SafePtr<VertexIndexDataManager> pInstance_;
 
 public:
+	/// <summary>
+	/// モデルをロードしてコンテナに追加
+	/// </summary>
 	void LoadModel(const std::string& objFileName);
+	
+/// <summary>
+/// ゲッター
+/// </summary>
+public:
 	[[nodiscard]] VertexIndexData* GetVertexIndexData(const std::string& objFileName);
 	[[nodiscard]] ModelData* GetModelData(const std::string& objFileName);
 

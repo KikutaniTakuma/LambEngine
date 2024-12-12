@@ -40,6 +40,10 @@ public:
 	bool operator!=(const RootSignature& right) const;
 
 public:
+	/// <summary>
+	/// ルートシグネチャ作成
+	/// </summary>
+	/// <param name="desc"></param>
 	void Create(const Desc& desc);
 
 	inline ID3D12RootSignature* Get() const {

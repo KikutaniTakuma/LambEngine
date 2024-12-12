@@ -36,10 +36,16 @@ public:
 	// レンダーターゲットに設定したResourceをShaderResourceとして使う
 	void UseThisRenderTargetShaderResource();
 
+	/// <summary>
+	/// view作成
+	/// </summary>
 	void CreateView(D3D12_CPU_DESCRIPTOR_HANDLE heapHandleCPU,
 		D3D12_GPU_DESCRIPTOR_HANDLE heapHandleGPU,
 		UINT heapHandle
 	);
+	/// <summary>
+	/// レンダーターゲット作成
+	/// </summary>
 	void CreateRTV(D3D12_CPU_DESCRIPTOR_HANDLE descHeapHandle, UINT descHeapHandleUINT);
 
 	Texture* GetTex() const {
@@ -52,11 +58,29 @@ public:
 	ID3D12Resource* const GetResource() const;
 
 public:
+	/// <summary>
+	/// レンダーターゲットをセットする
+	/// </summary>
 	static void SetRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	/// <summary>
+	/// メインレンダーターゲットと他のもセット
+	/// </summary>
 	static void SetMainAndRenderTargets(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget, const D3D12_CPU_DESCRIPTOR_HANDLE* depthHandle);
+	/// <summary>
+	/// リソースの状態を切り替える
+	/// </summary>
 	static void ChangeResourceState(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	/// <summary>
+	/// 書き込み状態からテクスチャへ
+	/// </summary>
 	static void ChangeToWriteResources(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	/// <summary>
+	/// テクスチャから書き込み状態へ
+	/// </summary>
 	static void ChangeToTextureResources(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
+	/// <summary>
+	/// リソースクリア
+	/// </summary>
 	static void Clear(Lamb::SafePtr<RenderTarget*> renderTargetPtrs, uint32_t numRenderTarget);
 
 private:

@@ -21,8 +21,16 @@ public:
 	Animator& operator=(Animator&&) = default;
 
 public:
+	/// <summary>
+	/// ロード
+	/// </summary>
+	/// <param name="fileName">ファイルパス</param>
 	void Load(const std::string& fileName);
 
+/// <summary>
+/// 更新
+/// </summary>
+public:
 	void Update(const VertexIndexData* const mesh);
 	void Update(Skeleton& skeleton);
 	void Update(const std::string& rootNodeName);
@@ -89,8 +97,8 @@ public:
 	void SetAnimations(struct Animations* const animations);
 
 private:
-	Vector3 CalaclateValue(const AnimationCurve<Vector3>& animationCurve, float time);
-	Quaternion CalaclateValue(const AnimationCurve<Quaternion>& animationCurve, float time);
+	Vector3 CalaclateValue_(const AnimationCurve<Vector3>& animationCurve, float time);
+	Quaternion CalaclateValue_(const AnimationCurve<Quaternion>& animationCurve, float time);
 
 private:
 	float animationTime_;

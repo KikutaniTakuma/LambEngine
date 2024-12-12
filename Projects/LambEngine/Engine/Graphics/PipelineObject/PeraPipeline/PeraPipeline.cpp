@@ -13,7 +13,7 @@
 
 #include "Utils/EngineInfo.h"
 
-void PeraPipeline::DataSet() {
+void PeraPipeline::SetData() {
 	colorBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(color.data());
 }
 

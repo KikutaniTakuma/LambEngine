@@ -25,21 +25,36 @@ namespace Lamb {
 		Error& operator=(Error&&) = default;
 
 	public:
+		/// <summary>
+		/// エラー内容
+		/// </summary>
 		const std::string& What() const {
 			return errorCode_;
 		}
 
+		/// <summary>
+		/// エラーが起きた関数
+		/// </summary>
 		const std::string& FunctionName() const {
 			return functionName_;
 		}
 
+		/// <summary>
+		/// エラーが起きたクラス
+		/// </summary>
 		const std::string& ClassName() const {
 			return className_;
 		}
 
+		/// <summary>
+		/// エラーが起きたファイル名
+		/// </summary>
 		const std::string& SourceFileName() const {
 			return sourceFileName_;
 		}
+		/// <summary>
+		/// エラーが起きた行数
+		/// </summary>
 		const std::string& CodeLineNumber() const {
 			return codeLineNumber_;
 		}

@@ -33,8 +33,14 @@ namespace Lamb {
 		Thread& operator=(Thread&&) = delete;
 
 	public:
+		/// <summary>
+		/// thread処理開始
+		/// </summary>
 		void Notify();
 
+		/// <summary>
+		/// thread作成
+		/// </summary>
 		void Create(
 			const std::function<void(void)>& userProcess,
 			const std::function<bool(void)>& waitProcess,

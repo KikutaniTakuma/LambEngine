@@ -34,6 +34,9 @@ public:
 	DeferredRendering& operator=(DeferredRendering&&) = delete;
 
 public:
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Init(
 		const std::string& vsShader = "./Shaders/DeferredRendering/DeferredRendering.VS.hlsl",
 		const std::string& psShader = "./Shaders/DeferredRendering/DeferredRendering.PS.hlsl",
@@ -41,10 +44,20 @@ public:
 	) override;
 
 public:
+	/// <summary>
+	/// リソースセット
+	/// </summary>
 	void Use(Pipeline::Blend blendType, bool isDepth) override;
 
+	/// <summary>
+	/// 描画
+	/// </summary>
 	void Draw();
 
+/// <summary>
+/// セッター
+/// </summary>
+public:
 	void SetDeferredRenderingData(const DeferredRenderingData& deferredRenderingData) {
 		deferredRenderingData_ = deferredRenderingData;
 	}

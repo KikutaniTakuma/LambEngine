@@ -29,7 +29,7 @@ void Luminate::Debug() {
 #endif // USE_DEBUG_CODE
 }
 
-void Luminate::DataSet() {
+void Luminate::SetData() {
 	colorBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(color.data());
 	luminanceThresholdBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&luminanceThreshold_);
 }

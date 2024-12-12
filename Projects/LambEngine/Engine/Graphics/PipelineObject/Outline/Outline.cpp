@@ -49,7 +49,7 @@ void Outline::SetDepthBuffer(DepthBuffer* depthBuffer) {
 	depthBuffer_ = depthBuffer;
 }
 
-void Outline::DataSet() {
+void Outline::SetData() {
 	colorBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(color.data());
 	outlineDataBuf_[Lamb::GetGraphicBufferIndex()]->MemCpy(&outlineData_);
 }

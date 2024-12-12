@@ -44,8 +44,17 @@ public:
 	 void Input();
 	 void InputReset();
 
+	 /// <summary>
+	 /// 押した瞬間
+	 /// </summary>
 	 bool Pushed(Mouse::Button button);
+	 /// <summary>
+	 /// 押している間
+	 /// </summary>
 	 bool LongPush(Mouse::Button button);
+	 /// <summary>
+	 /// 離した瞬間
+	 /// </summary>
 	 bool Released(Mouse::Button button);
 
 	/// <summary>

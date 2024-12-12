@@ -803,7 +803,7 @@ void RenderingManager::DrawRGB(const RenderDataList& renderList) {
 		if (renderList.first <= index) {
 			break;
 		}
-		element->DataSet();
+		element->SetData();
 		element->Draw();
 		index++;
 	}
@@ -890,7 +890,7 @@ void RenderingManager::DrawNoDepth(const RenderDataLists& nodepthList)
 
 			element->SetLight(deferredRenderingData_.directionLight);
 			element->SetCameraPos(deferredRenderingData_.eyePos);
-			element->DataSet();
+			element->SetData();
 			element->Draw();
 
 			count++;
@@ -908,7 +908,7 @@ void RenderingManager::ZSort(const RenderDataLists& rgbaList) {
 			element->ZSort();
 			element->SetLight(deferredRenderingData_.directionLight);
 			element->SetCameraPos(deferredRenderingData_.eyePos);
-			element->DataSet();
+			element->SetData();
 
 			count++;
 		}
