@@ -26,7 +26,6 @@ void World::Initialize() {
 
 	Water::Initialize();
 
-	//Cloud::Initialize();
 
 	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/default.spritefont");
 
@@ -49,7 +48,6 @@ void World::Initialize() {
 }
 
 void World::Finalize() {
-	//Cloud::Finalize();
 	Water::Finalize();
 
 	if (sceneManager_) {
