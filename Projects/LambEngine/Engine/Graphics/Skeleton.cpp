@@ -49,7 +49,7 @@ namespace Lamb {
 
 void Skeleton::Update() {
     for (Joint& joint : joints) {
-        joint.localMatrix = joint.transform.GetMatrix();
+        joint.localMatrix = joint.transform.CreateMatrix();
         if (joint.parent) {
             joint.skeletonSpaceMatrix = joint.localMatrix * joints[*joint.parent].skeletonSpaceMatrix;
         }

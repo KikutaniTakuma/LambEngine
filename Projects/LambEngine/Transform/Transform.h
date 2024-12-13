@@ -20,7 +20,7 @@ struct Transform {
 	Transform& operator=(Transform&&) = default;
 
 	Transform& operator=(const struct QuaternionTransform& transform);
-	Mat4x4 GetMatrix() const;
+	Mat4x4 CreateMatrix() const;
 	void Debug(const std::string& guiName);
 };
 
@@ -37,5 +37,5 @@ struct QuaternionTransform {
 	QuaternionTransform& operator=(const QuaternionTransform&) = default;
 	QuaternionTransform& operator=(QuaternionTransform&&) = default;
 
-	Mat4x4 GetMatrix() const;
+	Mat4x4 CreateMatrix() const;
 };

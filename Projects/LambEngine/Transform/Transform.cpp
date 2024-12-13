@@ -21,7 +21,7 @@ Transform& Transform::operator=(const QuaternionTransform& transform) {
 	return *this;
 }
 
-Mat4x4 Transform::GetMatrix() const
+Mat4x4 Transform::CreateMatrix() const
 {
 	return Mat4x4::MakeAffin(scale, rotate, translate);
 }
@@ -36,7 +36,7 @@ void Transform::Debug([[maybe_unused]]const std::string& guiName) {
 #endif // USE_DEBUG_CODE
 }
 
-Mat4x4 QuaternionTransform::GetMatrix() const
+Mat4x4 QuaternionTransform::CreateMatrix() const
 {
 	return Mat4x4::MakeAffin(scale, rotate, translate);
 }

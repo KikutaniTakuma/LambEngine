@@ -810,7 +810,7 @@ void RenderingManager::DrawRGB(const RenderDataList& renderList) {
 }
 
 void RenderingManager::DrawSkyBox() {
-	skyBox_->Draw(skyBoxTransform_.GetMatrix(), viewMatrix_ * projectionMatrix_, 0xffffffff);
+	skyBox_->Draw(skyBoxTransform_.CreateMatrix(), viewMatrix_ * projectionMatrix_, 0xffffffff);
 }
 
 void RenderingManager::DrawRGBA(const RenderDataLists& rgbaList) {

@@ -35,8 +35,8 @@ void Cloud::Draw(const Mat4x4& camera)
 	uvTransform_.translate.y += 0.01f * Lamb::DeltaTime();
 
 	cloudTex_->Draw(
-		transform_.GetMatrix(),
-		uvTransform_.GetMatrix(),
+		transform_.CreateMatrix(),
+		uvTransform_.CreateMatrix(),
 		camera,
 		0u,
 		vec_,

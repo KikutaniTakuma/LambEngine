@@ -72,10 +72,10 @@ void Water::Update(const Vector3& cameraPos) {
 }
 
 void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera) {
-	RenderingManager::GetInstance()->SetWaterMatrix(transform.GetMatrix());
+	RenderingManager::GetInstance()->SetWaterMatrix(transform.CreateMatrix());
 
 	waterSurface_->Draw(
-		transform.GetMatrix(),
+		transform.CreateMatrix(),
 		cameraMat,
 		randomVec_,
 		density_,

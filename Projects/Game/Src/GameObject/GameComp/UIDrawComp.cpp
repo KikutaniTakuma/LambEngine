@@ -22,7 +22,7 @@ void UIDrawComp::Draw([[maybe_unused]]CameraComp* cameraComp)
 
 	tex2D_->Draw(
 		renderDataComp_->GetOffsetMatrix() * transformComp_->GetWorldMatrix(),
-		renderDataComp_->uvTransform.GetMatrix(),
+		renderDataComp_->uvTransform.CreateMatrix(),
 		cameraMatrix,
 		renderDataComp_->texHandle,
 		renderDataComp_->color.GetColorRGBA(),
