@@ -11,12 +11,6 @@ Cloud::Cloud() {
 
 	transform_.scale = Vector3::kIdentity * 1000.0f;
 	transform_.scale.z = 1.0f;
-	/*transform_.rotate = { 
-		-0.7071068286895752f,
-		0.0f,
-		0.0f,
-		0.7071067690849304f 
-	};*/
 
 	transform_.translate.y = 40.0f;
 

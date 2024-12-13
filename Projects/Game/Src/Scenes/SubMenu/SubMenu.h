@@ -20,6 +20,9 @@ public:
 	virtual void Initialize() = 0;
 	virtual void Finalize() = 0;
 
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void ActiveUpdate();
 	virtual void Draw() = 0;
 

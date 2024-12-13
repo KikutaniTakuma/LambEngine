@@ -32,7 +32,10 @@ public:
 	void Stop();
 
 private:
-	void CreateLoad();
+	/// <summary>
+	/// thread作成
+	/// </summary>
+	void CreateLoad_();
 
 private:
 	std::unique_ptr<Lamb::Thread> thread_;

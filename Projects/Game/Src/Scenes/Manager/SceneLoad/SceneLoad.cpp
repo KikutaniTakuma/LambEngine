@@ -32,7 +32,7 @@ SceneLoad::SceneLoad() :
 	camera->Update();
 	cameraMatrix_ = camera->GetViewOthographics();
 
-	CreateLoad();
+	CreateLoad_();
 }
 
 void SceneLoad::Start()
@@ -75,7 +75,7 @@ void SceneLoad::Stop()
 	}
 }
 
-void SceneLoad::CreateLoad()
+void SceneLoad::CreateLoad_()
 {
 	thread_ = std::make_unique<Lamb::Thread>();
 	thread_->Create(

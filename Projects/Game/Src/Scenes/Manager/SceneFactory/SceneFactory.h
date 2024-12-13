@@ -21,10 +21,18 @@ public:
 	static SceneFactory* const GetInstance();
 
 public:
+	/// <summary>
+	/// シーン作成
+	/// </summary>
+	/// <param name="createSceneID">シーンID</param>
+	/// <returns></returns>
 	BaseScene* CreateBaseScene(std::optional<BaseScene::ID> createSceneID);
 
 private:
-	void CreateFunctions();
+	/// <summary>
+	/// 作成する関数を作成
+	/// </summary>
+	void CreateFunctions_();
 
 private:
 	std::unordered_map<std::optional<BaseScene::ID>, std::function<BaseScene* (void)>> createScene_;

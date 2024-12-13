@@ -255,6 +255,9 @@ public:
 		return isClose_;
 	}
 
+	/// <summary>
+	/// パーティクルのサイズを変更
+	/// </summary>
 	void Resize(uint32_t index);
 
 public:

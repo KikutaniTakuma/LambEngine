@@ -7,7 +7,7 @@
 SceneFactory::SceneFactory():
 	createScene_{}
 {
-	CreateFunctions();
+	CreateFunctions_();
 }
 
 SceneFactory* const SceneFactory::GetInstance() {
@@ -19,7 +19,7 @@ BaseScene* SceneFactory::CreateBaseScene(std::optional<BaseScene::ID> createScen
 	return createScene_[createSceneID]();
 }
 
-void SceneFactory::CreateFunctions() {
+void SceneFactory::CreateFunctions_() {
 	createScene_[BaseScene::ID::Game] =
 		[]()->BaseScene* {
 		return new GameScene();

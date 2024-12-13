@@ -36,6 +36,10 @@ public:
 	void Initialize(std::optional<BaseScene::ID> firstScene, std::optional<BaseScene::ID> finishID);
 	void Finalize();
 
+	/// <summary>
+	/// シーン変更
+	/// </summary>
+	/// <param name="next">次のID</param>
 	void SceneChange(std::optional<BaseScene::ID> next);
 
 	void Update();
@@ -58,6 +62,9 @@ public:
 private:
 	void Debug();
 
+	/// <summary>
+	/// テクスチャをvramへ送る
+	/// </summary>
 	void UploadTextureData();
 
 

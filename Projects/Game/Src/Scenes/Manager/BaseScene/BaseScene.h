@@ -46,6 +46,9 @@ public:
 public:
 	void SceneInitialize(class SceneManager* sceneManager);
 
+	/// <summary>
+	/// リソースロード
+	/// </summary>
 	virtual void Load() = 0;
 
 	virtual void Initialize() = 0;
@@ -54,6 +57,9 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
+	/// <summary>
+	/// デバッグカメラとの変更
+	/// </summary>
 	void ChangeCamera();
 
 	inline BaseScene::ID GetID() const {

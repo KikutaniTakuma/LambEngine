@@ -17,9 +17,24 @@ public:
 	static [[nodiscard]] LevelData* Load(const std::string& fileName);
 
 private:
-	static void AddObjects(nlohmann::json& data, Lamb::SafePtr<LevelData> levelData);
-	static void AddTransform(nlohmann::json& data, Object& object);
-	static void AddCamera(nlohmann::json& data, Object& object);
-	static void AddObb(nlohmann::json& data, Object& object);
-	static void AddChildren(nlohmann::json& data, Lamb::SafePtr<LevelData> levelData, Object& parent);
+	/// <summary>
+	/// オブジェクト追加
+	/// </summary>
+	static void AddObjects_(nlohmann::json& data, Lamb::SafePtr<LevelData> levelData);
+	/// <summary>
+	/// トランスフォーム追加
+	/// </summary>
+	static void AddTransform_(nlohmann::json& data, Object& object);
+	/// <summary>
+	/// カメラ追加
+	/// </summary>
+	static void AddCamera_(nlohmann::json& data, Object& object);
+	/// <summary>
+	/// obb追加
+	/// </summary>
+	static void AddObb_(nlohmann::json& data, Object& object);
+	/// <summary>
+	/// children追加
+	/// </summary>
+	static void AddChildren_(nlohmann::json& data, Lamb::SafePtr<LevelData> levelData, Object& parent);
 };

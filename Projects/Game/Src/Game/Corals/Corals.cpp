@@ -7,6 +7,7 @@
 void Corals::Init(float32_t coralHeight, ModelVertexLevel modelLevel) {
     std::string coralModelFilePath;
 
+    // 頂点を変更
     switch (modelLevel)
     {
     case Corals::ModelVertexLevel::LEVEL0_3584:
@@ -43,7 +44,6 @@ void Corals::Init(float32_t coralHeight, ModelVertexLevel modelLevel) {
 
 
     for (auto& i : *models_) {
-        // 9866頂点オブジェクト
         i.Load(coralModelFilePath);
         i.blend = BlendType::kNone;
         i.color = colorRandom[Lamb::Random(0llu, colorRandom.size() - 1)];

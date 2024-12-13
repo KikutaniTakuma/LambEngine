@@ -29,6 +29,9 @@ public:
     SelectStageScene& operator=(SelectStageScene&&) = delete;
 
 public:
+    /// <summary>
+    /// ロード
+    /// </summary>
     void Load() override;
 
     void Initialize() override;

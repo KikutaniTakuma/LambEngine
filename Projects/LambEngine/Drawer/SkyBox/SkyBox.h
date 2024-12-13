@@ -47,6 +47,9 @@ public:
 	D3D12_GPU_DESCRIPTOR_HANDLE GetHandle() const;
 
 private:
+	/// <summary>
+	/// パイプライン作成
+	/// </summary>
 	void CreateGraphicsPipeline_();
 
 private:

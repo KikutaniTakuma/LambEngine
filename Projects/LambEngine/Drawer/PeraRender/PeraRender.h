@@ -81,6 +81,10 @@ public:
 	/// <param name="guiName"></param>
 	void Debug(const std::string& guiName);
 
+	/// <summary>
+	/// パイプラインオブジェクトを変更する
+	/// </summary>
+	/// <param name="pipelineObject"></param>
 	void ResetPipelineObject(PeraPipeline* pipelineObject);
 
 	RenderTarget& GetRender();
