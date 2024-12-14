@@ -103,13 +103,15 @@ void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
         ImGui::NewLine();
         ImGui::Text("uv");
         ImGui::DragFloat3("scale", uvTransform.scale.data(), 0.001f);
+        euler_ = uvTransform.rotate.ToEuler();
+        euler_ *= Lamb::Math::toDegree<float32_t>;
         ImGui::DragFloat3("rotate", euler_.data(), 0.001f);
+        euler_ *= Lamb::Math::toRadian<float32_t>;
+        uvTransform.rotate.SetEuler(euler_);
         ImGui::DragFloat3("translate", uvTransform.translate.data(), 0.001f);
 
         if (euler_ == Vector3::kZero) {
-            euler_ = uvTransform.rotate.ToEuler();
         }
-        uvTransform.rotate = Quaternion::EulerToQuaternion(euler_);
 
         ImGui::Text("texture %s", fileName.c_str());
 

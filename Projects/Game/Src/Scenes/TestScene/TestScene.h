@@ -25,7 +25,5 @@ private:
 	Lamb::SafePtr<ObjectManager> objectManager_;
 	Lamb::SafePtr<LevelData> levelData_;
 	
-	class Water* water_;
 
-	std::unique_ptr<Fishes> fishes_;
 };

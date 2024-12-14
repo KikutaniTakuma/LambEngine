@@ -1,0 +1,141 @@
+{
+    "RederingSetting": {
+        "bloom": {
+            "luminanceThreshold": 1.0,
+            "x": 128,
+            "y": 128
+        },
+        "hsv": [
+            0.0,
+            0.0,
+            1.0
+        ],
+        "isDirectionLight": false,
+        "isShadow": false,
+        "lightRotate": [
+            0.0,
+            -2.2165682315826416,
+            0.0
+        ],
+        "outline": 0.0,
+        "outline_enable": false,
+        "skybox": {
+            "environment": 0.0,
+            "environmentCoefficient": 0.0,
+            "isDraw": false,
+            "scale": [
+                500.0,
+                500.0,
+                500.0
+            ]
+        },
+        "tonemap": {
+            "linear": [
+                0.6000000238418579,
+                0.4000000059604645
+            ],
+            "shoulder": [
+                15.0,
+                1.0
+            ],
+            "toe": [
+                0.16599999368190765,
+                0.13300000131130219
+            ]
+        }
+    },
+    "objects": [
+        {
+            "Comps": [
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        9.035512960053893e-08,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        0.9999999403953552
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        -4.0
+                    ]
+                },
+                {
+                    "CompName": "class CameraComp"
+                },
+                {
+                    "CompName": "class Camera3DComp",
+                    "aspectRatio": 1.7777777910232544,
+                    "farClip": 1000.0,
+                    "fov": 0.4869273006916046,
+                    "nearClip": 0.10000000149011612
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "CompName": "class SpriteRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class SpriteRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources/uvChecker.dds",
+                    "offsetType": "kMiddle",
+                    "uv": {
+                        "rotate": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ],
+                        "scale": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "translate": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    }
+                }
+            ],
+            "type": "Object"
+        }
+    ],
+    "scene": "TL2_Demo"
+}
