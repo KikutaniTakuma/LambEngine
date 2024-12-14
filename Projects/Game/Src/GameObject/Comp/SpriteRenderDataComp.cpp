@@ -38,8 +38,12 @@ void SpriteRenderDataComp::Init() {
 
 #ifdef USE_DEBUG_CODE
     filePaths_ = Lamb::GetFilePathFormDir("./", ".png");
+    auto jpg = Lamb::GetFilePathFormDir("./", ".jpg");
     auto bmp = Lamb::GetFilePathFormDir("./", ".bmp");
+    auto dds = Lamb::GetFilePathFormDir("./", ".dds");
+    filePaths_.insert(filePaths_.end(), jpg.begin(), jpg.end());
     filePaths_.insert(filePaths_.end(), bmp.begin(), bmp.end());
+    filePaths_.insert(filePaths_.end(), dds.begin(), dds.end());
     euler_ = uvTransform.rotate.ToEuler();
 #endif // USE_DEBUG_CODE
 
@@ -114,8 +118,12 @@ void SpriteRenderDataComp::Debug([[maybe_unused]]const std::string& guiName)
             filePaths_.clear();
             filePaths_.reserve(size);
             filePaths_ = Lamb::GetFilePathFormDir("./", ".png");
+            auto jpg = Lamb::GetFilePathFormDir("./", ".jpg");
             auto bmp = Lamb::GetFilePathFormDir("./", ".bmp");
+            auto dds = Lamb::GetFilePathFormDir("./", ".dds");
+            filePaths_.insert(filePaths_.end(), jpg.begin(), jpg.end());
             filePaths_.insert(filePaths_.end(), bmp.begin(), bmp.end());
+            filePaths_.insert(filePaths_.end(), dds.begin(), dds.end());
         }
 
         if (ImGui::TreeNode("テクスチャ読み込み")) {
