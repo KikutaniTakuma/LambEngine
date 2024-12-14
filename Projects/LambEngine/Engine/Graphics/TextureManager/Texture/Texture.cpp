@@ -46,14 +46,20 @@ Texture& Texture::operator=(Texture&& tex) noexcept {
 void Texture::Load(const std::string& filePath, ID3D12GraphicsCommandList* commandList) {
 	if (!isLoad_ && !threadLoadFlg_) {
 		this->fileName_ = filePath;
+		std::string extension = std::filesystem::path(fileName_).extension().string();
 
-		DirectX::ScratchImage mipImages = LoadTexture(filePath);
-		const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
+		DirectX::ScratchImage images = LoadTexture(filePath);
+		const DirectX::TexMetadata& metadata = images.GetMetadata();
 		size_ = { static_cast<float>(metadata.width),static_cast<float>(metadata.height) };
 		textureResouce_ = CreateTextureResource(metadata);
 
 		if (textureResouce_) {
-			intermediateResource_ = UploadTextureData(textureResouce_.Get(), mipImages, commandList);
+			intermediateResource_
+				= UploadTextureData(
+				textureResouce_.Get(), 
+				images, 
+				commandList
+			);
 		}
 		else {
 			return;
@@ -116,7 +122,7 @@ DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 		hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 	}
 	if (!SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<Texture>("DirectX::LoadFromWICFile() failed", ErrorPlace);
+		throw Lamb::Error::Code<Texture>("DirectX::Load failed", ErrorPlace);
 	}
 
 	// ミップマップの作成
@@ -140,22 +146,28 @@ DirectX::ScratchImage Texture::LoadTexture(const std::string& filePath) {
 		image = std::move(tmpImage);
 	}
 
-	hr = DirectX::GenerateMipMaps(
-		image.GetImages(),
-		image.GetImageCount(),
-		image.GetMetadata(),
-		DirectX::TEX_FILTER_SRGB, isddsfile ? 4 : 0, mipImages
-	);
+	if (not isddsfile) {
+		hr = DirectX::GenerateMipMaps(
+			image.GetImages(),
+			image.GetImageCount(),
+			image.GetMetadata(),
+			DirectX::TEX_FILTER_SRGB, 0, mipImages
+		);
 
-	if (not SUCCEEDED(hr)) {
-		throw Lamb::Error::Code<Texture>("DirectX::GenerateMipMaps failed", ErrorPlace);
+		if (not SUCCEEDED(hr)) {
+			throw Lamb::Error::Code<Texture>("DirectX::GenerateMipMaps failed", ErrorPlace);
+		}
+
+		image = std::move(mipImages);
 	}
 
 	// ミップマップ付きのデータを返す
-	return mipImages;
+	return image;
 }
 
-ID3D12Resource* Texture::CreateTextureResource(const DirectX::TexMetadata& metaData) {
+ID3D12Resource* Texture::CreateTextureResource(
+	const DirectX::TexMetadata& metaData
+) {
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 
 	if (metaData.width == 0 || metaData.height == 0) {
@@ -186,17 +198,22 @@ ID3D12Resource* Texture::CreateTextureResource(const DirectX::TexMetadata& metaD
 		nullptr,
 		IID_PPV_ARGS(&resource)
 	);
-	if (hr != S_OK) {
+	if (FAILED(hr)) {
 		throw Lamb::Error::Code<Texture>("somehitng error", ErrorPlace);
 	}
+
 	return resource;
 }
 
-ID3D12Resource* Texture::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages, ID3D12GraphicsCommandList* commandList) {
+ID3D12Resource* Texture::UploadTextureData(
+	ID3D12Resource* texture, 
+	const DirectX::ScratchImage& images, 
+	ID3D12GraphicsCommandList* commandList
+) {
 	Lamb::SafePtr device = DirectXDevice::GetInstance()->GetDevice();
 	
 	std::vector<D3D12_SUBRESOURCE_DATA> subresources;
-	DirectX::PrepareUpload(device.get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
+	DirectX::PrepareUpload(device.get(), images.GetImages(), images.GetImageCount(), images.GetMetadata(), subresources);
 	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresources.size()));
 	ID3D12Resource* resource = DirectXDevice::GetInstance()->CreateBufferResuorce(intermediateSize);
 	UpdateSubresources(commandList, texture, resource, 0, 0, UINT(subresources.size()), subresources.data());

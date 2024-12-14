@@ -51,9 +51,12 @@ private:
 	void Load(const std::string& filePath, ID3D12GraphicsCommandList* commandList);
 
 	DirectX::ScratchImage LoadTexture(const std::string& filePath);
-	ID3D12Resource* CreateTextureResource(const DirectX::TexMetadata& metaData);
-	[[nodiscard]]
-	ID3D12Resource* UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages, ID3D12GraphicsCommandList* commandList);
+	[[nodiscard]] ID3D12Resource* CreateTextureResource(const DirectX::TexMetadata& metaData);
+	[[nodiscard]] ID3D12Resource* UploadTextureData(
+		ID3D12Resource* texture, 
+		const DirectX::ScratchImage& mipImages, 
+		ID3D12GraphicsCommandList* commandList
+	);
 
 public:
 	void Unload();
