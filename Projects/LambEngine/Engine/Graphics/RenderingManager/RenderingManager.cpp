@@ -311,11 +311,12 @@ void RenderingManager::Draw() {
 	/// ====================================================================================
 
 	// 色、歪み、法線、ワールドポジション用レンダーターゲットをセット
-	std::array<RenderTarget*, 4> renderTargets;
-	renderTargets[0] = colorTexture_.get();
-	renderTargets[1] = distortionTexture_.get();
-	renderTargets[2] = normalTexture_.get();
-	renderTargets[3] = worldPositionTexture_.get();
+	std::array<RenderTarget*, 4> renderTargets = {
+		 colorTexture_.get(),
+		 distortionTexture_.get(),
+		 normalTexture_.get(),
+		 worldPositionTexture_.get()
+	};
 
 	RenderTarget::ChangeToWriteResources(
 		renderTargets.data(),
