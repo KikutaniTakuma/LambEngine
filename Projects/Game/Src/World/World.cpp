@@ -42,7 +42,7 @@ void World::Initialize() {
 	particleEditor_ = ParticleEditor::GetInstance();
 
 #ifndef USE_DEBUG_CODE
-	Input::GetInstance()->GetMouse()->Show(false);
+	Input::GetInstance()->GetMouse()->Show(true);
 #endif // !USE_DEBUG_CODE
 
 }
