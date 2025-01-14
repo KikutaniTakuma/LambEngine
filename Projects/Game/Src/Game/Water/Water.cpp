@@ -39,7 +39,7 @@ void Water::Init() {
 	waterSurface_ = std::make_unique<WaterTex2D>();
 	waterSurface_->Load();
 
-	color_ = 0x16CEDA58;
+	color_ = 0x16CEDAb4;
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 

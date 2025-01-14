@@ -1,5 +1,5 @@
 #include "WaterTex2D.hlsli"
-#include "../PerlinNoise.hlsli"
+#include "../PerlinToNormal.hlsli"
 #include "../Normal.hlsli"
 #include "../SkyBoxShader/AirSkyBox.hlsli"
 
@@ -128,10 +128,10 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     // ポジション
     output.color3 = input.worldPosition;
 
-    output.color1.x = CreateNoiseNoDdy(input.uv + float32_t2(1.0f, 0.0f), kRandomVec, kDensity) * 0.5f;
-    output.color1.x -= CreateNoiseNoDdy(input.uv - float32_t2(1.0f, 0.0f), kRandomVec, kDensity) * 0.5f;
-    output.color1.y = CreateNoiseNoDdy(input.uv + float32_t2(0.0f, 1.0f), kRandomVec, kDensity) * 0.5f;
-    output.color1.y -= CreateNoiseNoDdy(input.uv - float32_t2(0.0f, 1.0f), kRandomVec, kDensity) * 0.5f;
+    output.color1.x = CreateNoise(input.uv + float32_t2(1.0f, 0.0f), kRandomVec, kDensity) * 0.5f;
+    output.color1.x -= CreateNoise(input.uv - float32_t2(1.0f, 0.0f), kRandomVec, kDensity) * 0.5f;
+    output.color1.y = CreateNoise(input.uv + float32_t2(0.0f, 1.0f), kRandomVec, kDensity) * 0.5f;
+    output.color1.y -= CreateNoise(input.uv - float32_t2(0.0f, 1.0f), kRandomVec, kDensity) * 0.5f;
     output.color1.z = 0;
     output.color1.w = 1.0f;
 

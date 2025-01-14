@@ -1,5 +1,7 @@
 #include "../Normal.hlsli"
+#include "../PerlinNoise.hlsli"
 #include "WaterTex2D.hlsli"
+
 #define M_PI 3.141592653589793238462643
 #define M_E 2.71828182846
 
@@ -56,27 +58,28 @@ void main(
 
 	float32_t3 ripplesPoint = kWaterData[instanceID].waveData.ripplesPoint;
 
+	// お水の処理
+	const float32_t2 kRandomVec = kWaterData[instanceID].randomVec;
+    const float32_t kDensity = kWaterData[instanceID].density;
+
 	for(uint32_t i = 0; i < 3; ++i){
+		DomainShaderOutPutToGeometory inputTmp = input[i];
+
 		// ワールドポジション計算
-    	output[i].position = input[i].position;
+    	output[i].position = inputTmp.position;
 		output[i].worldPosition = mul(output[i].position, kWvpMat[instanceID].worldMat);
-		//float32_t3 ripplesNormal = CalcNormal(output[i].worldPosition.xyz, 0.0001f, instanceID);
-		//float32_t3 tangent = NormalToTangent(input[i].normal);
-		//float32_t3 binormal = CalcBinormal(input[i].normal, tangent);
-		//output[i].normal = BlendNormal(input[i].normal, tangent, binormal, ripplesNormal);
-		output[i].normal = input[i].normal;
+
+		output[i].normal = inputTmp.normal;
 		
 		// 波紋からの長さ
-		float32_t ripplesPointToPos = length(output[i].worldPosition.xyz - ripplesPoint);
-		float32_t height = Waves(ripplesPointToPos, instanceID);
+		float32_t height = CreateNoise(inputTmp.uv, kRandomVec, kDensity) * 50.0f;
 		output[i].worldPosition.y += height;
-
 		
 		output[i].position = mul(output[i].worldPosition, kWvpMat[instanceID].cameraMat);
 
-		output[i].uv = input[i].uv;
-		output[i].textureID = input[i].textureID;
-		output[i].instanceID = input[i].instanceID;
+		output[i].uv = inputTmp.uv;
+		output[i].textureID = inputTmp.textureID;
+		output[i].instanceID = inputTmp.instanceID;
 
 		outStream.Append(output[i]);
 	}
