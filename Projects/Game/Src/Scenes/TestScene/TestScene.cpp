@@ -31,6 +31,8 @@ void TestScene::Update()
 
 	fishes_->Update();
 
+	water_->Debug("water");
+
 	water_->Update(objectManager_->GetCameraPos());
 }
 

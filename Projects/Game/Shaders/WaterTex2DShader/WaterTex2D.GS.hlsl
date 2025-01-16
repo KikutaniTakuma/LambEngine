@@ -69,10 +69,37 @@ void main(
     	output[i].position = inputTmp.position;
 		output[i].worldPosition = mul(output[i].position, kWvpMat[instanceID].worldMat);
 
-		output[i].normal = inputTmp.normal;
 		
-		// 波紋からの長さ
-		float32_t height = CreateNoise(inputTmp.uv, kRandomVec, kDensity) * 50.0f;
+		// 波の高さ
+		float32_t wavePower = 20.0f;
+		float32_t height = CreateNoise(inputTmp.uv, kRandomVec, kDensity) * wavePower;
+		float32_t up = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y + 0.00025f), kRandomVec, kDensity) * wavePower;
+		float32_t down = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y - 0.00025f), kRandomVec, kDensity) * wavePower;
+		float32_t right = CreateNoise(float32_t2(inputTmp.uv.x + 0.00025f, inputTmp.uv.y), kRandomVec, kDensity) * wavePower;
+		float32_t left = CreateNoise(float32_t2(inputTmp.uv.x - 0.00025f, inputTmp.uv.y), kRandomVec, kDensity) * wavePower;
+
+		float32_t3 currentPos = output[i].worldPosition.xyz;
+		float32_t3 upPos = currentPos;
+		upPos.z += 0.1f;
+		upPos.y += up;
+		float32_t3 downPos = currentPos;
+		downPos.z -= 0.1f;
+		downPos.y += down;
+		float32_t3 rightPos = currentPos;
+		rightPos.x += 0.1f;
+		rightPos.y += right;
+		float32_t3 leftPos = currentPos;
+		leftPos.x -= 0.1f;
+		leftPos.y += left;
+
+		float32_t3 normal0 = normalize(cross(currentPos - upPos, leftPos - currentPos));
+		float32_t3 normal1 = normalize(cross(currentPos - rightPos, upPos - currentPos));
+		float32_t3 normal2 = normalize(cross(currentPos - downPos, rightPos - currentPos));
+		float32_t3 normal3 = normalize(cross(currentPos - leftPos, downPos - currentPos));
+
+		float32_t3 resultNormal = (normal0 + normal1 + normal2 + normal3) * 0.25f;
+		output[i].normal = resultNormal;
+
 		output[i].worldPosition.y += height;
 		
 		output[i].position = mul(output[i].worldPosition, kWvpMat[instanceID].cameraMat);

@@ -47,8 +47,8 @@ private:
 	Vector4 color_ = 0u;
 	Vector2 randomVec_;
 	float32_t density_ = 1.0f;
-	int32_t edgeDivision_ = 1;
-	int32_t insideDivision_ = 1;
+	int32_t edgeDivision_ = 18;
+	int32_t insideDivision_ = 18;
 	WaterTex2D::WaveData waveData_;
 	Light light_;
 	float32_t lightScale_ = 0.0f;
