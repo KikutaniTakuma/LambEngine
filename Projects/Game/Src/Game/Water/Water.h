@@ -36,6 +36,13 @@ public:
 
 	void SetWaveData(const WaterTex2D::WaveData& waveData);
 
+	const Vector2& GetRandomVector() const {
+		return randomVec_;
+	}
+	float32_t GetDensity() const {
+		return density_;
+	}
+
 public:
 	Transform transform;
 
