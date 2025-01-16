@@ -73,7 +73,7 @@ void main(
 		// 波の高さ
 		float32_t wavePower = 20.0f;
 		float32_t height = CreateNoise(inputTmp.uv, kRandomVec, kDensity) * wavePower;
-		float32_t up = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y + 0.00025f), kRandomVec, kDensity) * wavePower;
+		/*float32_t up = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y + 0.00025f), kRandomVec, kDensity) * wavePower;
 		float32_t down = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y - 0.00025f), kRandomVec, kDensity) * wavePower;
 		float32_t right = CreateNoise(float32_t2(inputTmp.uv.x + 0.00025f, inputTmp.uv.y), kRandomVec, kDensity) * wavePower;
 		float32_t left = CreateNoise(float32_t2(inputTmp.uv.x - 0.00025f, inputTmp.uv.y), kRandomVec, kDensity) * wavePower;
@@ -97,8 +97,8 @@ void main(
 		float32_t3 normal2 = normalize(cross(currentPos - downPos, rightPos - currentPos));
 		float32_t3 normal3 = normalize(cross(currentPos - leftPos, downPos - currentPos));
 
-		float32_t3 resultNormal = (normal0 + normal1 + normal2 + normal3) * 0.25f;
-		output[i].normal = resultNormal;
+		float32_t3 resultNormal = (normal0 + normal1 + normal2 + normal3) * 0.25f;*/
+		output[i].normal = inputTmp.normal;
 
 		output[i].worldPosition.y += height;
 		
