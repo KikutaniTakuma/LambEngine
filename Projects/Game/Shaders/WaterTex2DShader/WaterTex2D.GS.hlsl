@@ -71,7 +71,7 @@ void main(
 
 		
 		// 波の高さ
-		float32_t wavePower = 20.0f;
+		float32_t wavePower = 10.0f;
 		float32_t epsilon = 0.0001f;
 		float32_t subUV = 1.0f * rcp(400.0f) * epsilon;
 		float32_t height = CreateNoise(inputTmp.uv, kRandomVec, kDensity) * wavePower;
