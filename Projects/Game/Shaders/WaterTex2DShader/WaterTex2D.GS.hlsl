@@ -72,33 +72,19 @@ void main(
 		
 		// 波の高さ
 		float32_t wavePower = 20.0f;
+		float32_t epsilon = 0.0001f;
+		float32_t subUV = 1.0f * rcp(400.0f) * epsilon;
 		float32_t height = CreateNoise(inputTmp.uv, kRandomVec, kDensity) * wavePower;
-		/*float32_t up = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y + 0.00025f), kRandomVec, kDensity) * wavePower;
-		float32_t down = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y - 0.00025f), kRandomVec, kDensity) * wavePower;
-		float32_t right = CreateNoise(float32_t2(inputTmp.uv.x + 0.00025f, inputTmp.uv.y), kRandomVec, kDensity) * wavePower;
-		float32_t left = CreateNoise(float32_t2(inputTmp.uv.x - 0.00025f, inputTmp.uv.y), kRandomVec, kDensity) * wavePower;
+		float32_t up = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y + subUV), kRandomVec, kDensity) * wavePower;
+		float32_t down = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y - subUV), kRandomVec, kDensity) * wavePower;
+		float32_t right = CreateNoise(float32_t2(inputTmp.uv.x + subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower;
+		float32_t left = CreateNoise(float32_t2(inputTmp.uv.x - subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower;
 
-		float32_t3 currentPos = output[i].worldPosition.xyz;
-		float32_t3 upPos = currentPos;
-		upPos.z += 0.1f;
-		upPos.y += up;
-		float32_t3 downPos = currentPos;
-		downPos.z -= 0.1f;
-		downPos.y += down;
-		float32_t3 rightPos = currentPos;
-		rightPos.x += 0.1f;
-		rightPos.y += right;
-		float32_t3 leftPos = currentPos;
-		leftPos.x -= 0.1f;
-		leftPos.y += left;
+		float32_t yx = (right - left) * rcp(2.0f * epsilon);
+		float32_t yz = (up - down) * rcp(2.0f * epsilon);
 
-		float32_t3 normal0 = normalize(cross(currentPos - upPos, leftPos - currentPos));
-		float32_t3 normal1 = normalize(cross(currentPos - rightPos, upPos - currentPos));
-		float32_t3 normal2 = normalize(cross(currentPos - downPos, rightPos - currentPos));
-		float32_t3 normal3 = normalize(cross(currentPos - leftPos, downPos - currentPos));
-
-		float32_t3 resultNormal = (normal0 + normal1 + normal2 + normal3) * 0.25f;*/
-		output[i].normal = inputTmp.normal;
+		float32_t3 resultNormal = normalize(float32_t3(-yx, 1.0f, -yz));
+		output[i].normal = resultNormal;
 
 		output[i].worldPosition.y += height;
 		
