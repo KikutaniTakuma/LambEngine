@@ -12,8 +12,7 @@ const Matrix<float,4,4> Matrix<float,4,4>::kIdentity = DirectX::XMMatrixIdentity
 
 const Matrix<float,4,4> Matrix<float,4,4>::kZero = Matrix<float,4,4>();
 
-constexpr Matrix<float, 4, 4>& Matrix<float, 4, 4>::operator=(const DirectX::XMMATRIX& xmMatrix)
-{
+constexpr Matrix<float, 4, 4>& Matrix<float, 4, 4>::operator=(const DirectX::XMMATRIX& xmMatrix) {
 	this->xmMatrix_ = xmMatrix;
 
 	return *this;

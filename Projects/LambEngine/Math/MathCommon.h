@@ -43,6 +43,11 @@ namespace Lamb {
 	bool Step(const T& a, const T& x) {
 		return x < a ? static_cast<T>(0) : static_cast<T>(1);
 	}
+
+	template<Lamb::IsFloat T>
+	float Frac(T a) {
+		return a - std::floor(a);
+	}
 }
 
 inline uint16_t operator""_u16(size_t i) {

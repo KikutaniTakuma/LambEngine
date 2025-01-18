@@ -38,6 +38,36 @@ Vector2 Vector2::operator-(const Vector2& right) const noexcept {
 	return result;
 }
 
+Vector2 Vector2::operator*(const Vector2& right) const noexcept
+{
+	Vector2 result;
+
+	result.x = this->x * right.x;
+	result.y = this->y * right.y;
+
+	return result;
+}
+
+Vector2 Vector2::operator/(const Vector2& right) const noexcept
+{
+	Vector2 result;
+
+	result.x = this->x / right.x;
+	result.y = this->y / right.y;
+
+	return result;
+}
+
+Vector2 Vector2::operator+(float scalar) const noexcept
+{
+	return Vector2(this->x + scalar, this->y + scalar);
+}
+
+Vector2 Vector2::operator-(float scalar) const noexcept
+{
+	return Vector2(this->x - scalar, this->y - scalar);
+}
+
 
 Vector2 Vector2::operator*(float scalar) const noexcept {
 	Vector2 result;
@@ -97,6 +127,7 @@ Vector2& Vector2::operator/=(float scalar) noexcept {
 	return *this;
 }
 
+
 bool Vector2::operator==(const Vector2& right) const noexcept {
 	return this->x == right.x && this->y == right.y;
 }
@@ -116,6 +147,22 @@ const float& Vector2::operator[](size_t index) const {
 	}
 	return data()[index];
 }
+
+
+Vector2 operator*(float scalar, const Vector2& vec)noexcept {
+	return vec * scalar;
+}
+Vector2 operator/(float scalar, const Vector2& vec)noexcept {
+	return Vector2(scalar / vec.x, scalar / vec.y);
+}
+Vector2 operator+(float scalar, const Vector2& vec)noexcept {
+	return vec + scalar;
+}
+Vector2 operator-(float scalar, const Vector2& vec)noexcept {
+	return vec - scalar;
+}
+
+
 
 void Vector2::Rotate(float rad) noexcept {
 	x *= cosf(rad);
@@ -176,4 +223,19 @@ Vector2 Vector2::Lerp(const Vector2& start, const Vector2& end, float easeSpd) {
 
 Vector2 Vector2::Clamp(const Vector2& num, const Vector2& min, const Vector2& max) {
 	return Vector2(std::clamp(num.x, min.x, max.x), std::clamp(num.y, min.y, max.y));
+}
+
+Vector2 Vector2::Abs(const Vector2& vec)
+{
+	return Vector2(std::abs(vec.x), std::abs(vec.y));
+}
+
+Vector2 Vector2::Floor(const Vector2& vec)
+{
+	return Vector2(std::floor(vec.x), std::floor(vec.y));
+}
+
+Vector2 Vector2::Frac(const Vector2& vec)
+{
+	return vec - Vector2::Floor(vec);
 }

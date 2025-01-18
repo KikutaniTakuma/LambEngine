@@ -42,8 +42,14 @@ public:
 
 	[[nodiscard]] Vector2 operator+(const Vector2& right) const noexcept;
 	[[nodiscard]] Vector2 operator-(const Vector2& right) const noexcept;
+	[[nodiscard]] Vector2 operator*(const Vector2& right) const noexcept;
+	[[nodiscard]] Vector2 operator/(const Vector2& right) const noexcept;
+	[[nodiscard]] Vector2 operator+(float scalar) const noexcept;
+	[[nodiscard]] Vector2 operator-(float scalar) const noexcept;
 	[[nodiscard]] Vector2 operator*(float scalar) const noexcept;
 	[[nodiscard]] Vector2 operator/(float scalar) const noexcept;
+
+
 	Vector2& operator=(const Vector2& right) noexcept;
 	Vector2& operator=(Vector2&& right) noexcept;
 	Vector2& operator+=(const Vector2& right) noexcept;
@@ -55,6 +61,11 @@ public:
 
 	[[nodiscard]] float& operator[](size_t index);
 	[[nodiscard]] const float& operator[](size_t index) const;
+
+	friend Vector2 operator*(float scalar, const Vector2& vec) noexcept;
+	friend Vector2 operator/(float scalar, const Vector2& vec) noexcept;
+	friend Vector2 operator+(float scalar, const Vector2& vec) noexcept;
+	friend Vector2 operator-(float scalar, const Vector2& vec) noexcept;
 
 /// <summary>
 /// メンバ関数
@@ -174,6 +185,9 @@ public:
 public:
 	static [[nodiscard]] Vector2 Lerp(const Vector2& start, const Vector2& end, float easeSpd);
 	static [[nodiscard]] Vector2 Clamp(const Vector2& num, const Vector2& min, const Vector2& max);
+	static [[nodiscard]] Vector2 Abs(const Vector2& vec);
+	static [[nodiscard]] Vector2 Floor(const Vector2& vec);
+	static [[nodiscard]] Vector2 Frac(const Vector2& vec);
 
 /// <summary>
 /// 静的定数

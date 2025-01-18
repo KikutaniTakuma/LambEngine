@@ -519,7 +519,7 @@ public:
 #ifdef value_cast
 public:
 	constexpr Matrix& operator=(const Matrix&) = default;
-	constexpr Matrix& operator=(Matrix&&) = default;
+	constexpr Matrix& operator=(Matrix&&) noexcept = default;
 	constexpr Matrix& operator=(const DirectX::XMMATRIX& xmMatrix);
 
 public:
