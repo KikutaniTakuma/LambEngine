@@ -287,6 +287,9 @@
     <ClCompile Include="Src\Game\Fishes\Fishes.cpp">
       <Filter>Game\Fishes</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Game\WaterInteractive\WaterInteractive.cpp">
+      <Filter>Game\WaterInteractive</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GlobalVariables">
@@ -366,6 +369,9 @@
     </Filter>
     <Filter Include="Game\Fishes">
       <UniqueIdentifier>{048cb0c1-1a6d-41f6-a5d8-cbc1cd9d2cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\WaterInteractive">
+      <UniqueIdentifier>{cbbc32be-41bf-4e9d-af6d-119819c052a6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -665,6 +671,9 @@
     </ClInclude>
     <ClInclude Include="Src\Game\Fishes\Fishes.h">
       <Filter>Game\Fishes</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Game\WaterInteractive\WaterInteractive.h">
+      <Filter>Game\WaterInteractive</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
