@@ -232,6 +232,9 @@
     <ClCompile Include="Engine\Graphics\PipelineObject\PostWater\PostWater.cpp">
       <Filter>Engine\Graphics\PipelineObject\PostWater</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\PerlinNoise.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -715,6 +718,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Graphics\PipelineObject\PostWater\PostWater.h">
       <Filter>Engine\Graphics\PipelineObject\PostWater</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\PerlinNoise.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

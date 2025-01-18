@@ -249,6 +249,7 @@
     <ClCompile Include="Utils\ExecutionLog.cpp" />
     <ClCompile Include="Utils\FileUtils.cpp" />
     <ClCompile Include="Utils\Flg.cpp" />
+    <ClCompile Include="Utils\PerlinNoise.cpp" />
     <ClCompile Include="Utils\Random.cpp" />
     <ClCompile Include="Utils\ScreenOut.cpp" />
     <ClCompile Include="Utils\Thread.cpp" />
@@ -342,6 +343,7 @@
     <ClInclude Include="Utils\FileUtils.h" />
     <ClInclude Include="Utils\Flg.h" />
     <ClInclude Include="Utils\HSV.h" />
+    <ClInclude Include="Utils\PerlinNoise.h" />
     <ClInclude Include="Utils\Random.h" />
     <ClInclude Include="Utils\SafeDelete.h" />
     <ClInclude Include="Utils\SafePtr.h" />
