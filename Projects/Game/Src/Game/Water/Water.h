@@ -43,6 +43,8 @@ public:
 		return density_;
 	}
 
+	float CalcWaveHeight(float32_t2 uv);
+
 public:
 	Transform transform;
 

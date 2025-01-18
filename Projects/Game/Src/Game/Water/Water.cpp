@@ -3,6 +3,8 @@
 #include "Utils/SafeDelete.h"
 #include "Utils/Random.h"
 
+#include "Utils/PerlinNoise.h"
+
 #include "Engine/Graphics/RenderingManager/RenderingManager.h"
 
 #ifdef USE_DEBUG_CODE
@@ -139,4 +141,8 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 void Water::SetWaveData(const WaterTex2D::WaveData& waveData)
 {
 	waveData_ = waveData;
+}
+
+float Water::CalcWaveHeight(float32_t2 uv) {
+	return Lamb::CreateNoise(uv, randomVec_, density_);
 }
