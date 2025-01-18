@@ -15,7 +15,10 @@ WaterInteractive::WaterInteractive() :
 	dir_(Quaternion::kIdentity),
 	pre_(Quaternion::kIdentity),
 	next_(Quaternion::kIdentity)
-{}
+{
+	nextTime_ = 1.5f;
+	count_ = nextTime_;
+}
 
 void WaterInteractive::Update() {
 	const Mat4x4&& waterMatrixInverse = pWater_->transform.CreateMatrix().Inverse();

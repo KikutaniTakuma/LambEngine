@@ -66,7 +66,7 @@ private:
 	float preHeight_ = 0.0f;
 	float nextHeight_ = 0.0f;
 
-	float nextTime_ = 0.6f;
+	float nextTime_ = 0.0f;
 	float count_ = 0.0f;
 
 #ifdef USE_DEBUG_CODE

@@ -14,6 +14,8 @@
 #include "Math/Vector3.h"
 #include "Utils/Easeing.h"
 
+#include "Game/WaterInteractive/WaterInteractive.h"
+
 class Camera;
 class Player :public Collider {
 public:
@@ -453,5 +455,11 @@ private:
 	// 大砲のパーティクル
 	std::array<std::unique_ptr<Particle>, 14llu> cannonParticle_;
 	decltype(cannonParticle_)::iterator cannonParticleItr_;
+
+	std::unique_ptr<WaterInteractive> waterInteractive_;
+
+	Vector3 bodyRotate_;
+
+	float bodyHeight_ = 0.0f;
 #pragma endregion
 };

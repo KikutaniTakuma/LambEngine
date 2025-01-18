@@ -166,6 +166,9 @@ Player::Player() {
 	chargeAnchorPointTexture_->scale = { 10.0f,10.0f };
 	chargeAnchorPointTexture_->pos = { chargeAnchorPoint_.x - 1280.0f * 0.5f,chargeAnchorPoint_.y - 720.0f * 0.5f };
 	chargeAnchorPointTexture_->pos = { chargeAnchorPoint_.x - 1280.0f * 0.5f,-chargeAnchorPoint_.y + 720.0f * 0.5f };
+
+
+	waterInteractive_ = std::make_unique<WaterInteractive>();
 }
 
 Player::~Player() {
@@ -184,6 +187,7 @@ void Player::Initialize() {
 	deathScale_ = {};
 	body_->rotate = { 0.0f,0.0f,0.0f };
 	body_->pos = { 0.0f,0.0f,0.0f };
+	body_->pos.y = 0.3f;
 	prePlayerPos_ = {};
 	velocity_ = 0.0f;
 	windVelocity_ = 0.0f;
@@ -307,6 +311,8 @@ void Player::Update() {
 		moveAudioSound_->Stop();
 		DeathUpdate();
 	}
+
+
 	ParticleUpdate();
 	ResourceUpdate();
 #ifdef USE_DEBUG_CODE
@@ -314,10 +320,26 @@ void Player::Update() {
 	ApplyGlobalVariable();
 	globalVariables_->Update();
 #endif // USE_DEBUG_CODE
+
+	body_->rotate = bodyRotate_;
+	body_->pos.y = bodyHeight_;
 }
 
 void Player::ResourceUpdate() {
+	waterInteractive_->SetMatrix(Mat4x4::MakeScale(Vector3::kIdentity * 2.0f) *  Mat4x4::MakeAffin(body_->scale, body_->rotate, body_->pos));
+	bodyRotate_ = body_->rotate;
+	bodyHeight_ = body_->pos.y;
+
+	waterInteractive_->Update();
+
+	body_->rotate += waterInteractive_->GetQuaternion().ToEuler();
+	body_->pos.y += waterInteractive_->GetHeight();
+
 	body_->Update();
+
+	body_->rotate = bodyRotate_;
+	body_->pos.y = bodyHeight_;
+
 	screw_->Update();
 	for (auto& barrel : barrels_) {
 #ifdef USE_DEBUG_CODE
