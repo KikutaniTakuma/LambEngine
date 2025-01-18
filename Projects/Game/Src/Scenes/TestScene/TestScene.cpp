@@ -19,6 +19,8 @@ void TestScene::Load()
 void TestScene::Initialize() {
 	fishes_ = std::make_unique<Fishes>();
 	fishes_->Init(200);
+
+	interactive_ = std::make_unique<WaterInteractive>();
 }
 
 void TestScene::Finalize() {
@@ -34,6 +36,8 @@ void TestScene::Update()
 	water_->Debug("water");
 
 	water_->Update(objectManager_->GetCameraPos());
+
+	interactive_->Update();
 }
 
 void TestScene::Draw()
@@ -42,4 +46,6 @@ void TestScene::Draw()
 	objectManager_->Draw();
 
 	fishes_->Draw(objectManager_->GetCameraMatrix());
+
+	interactive_->Debug(objectManager_->GetCameraMatrix(), "waterinteractive_");
 }

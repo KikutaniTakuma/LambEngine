@@ -4,6 +4,8 @@
 #include "Level/LevelData.h"
 #include "Game/Fishes/Fishes.h"
 
+#include "Game/WaterInteractive/WaterInteractive.h"
+
 /// <summary>
 /// テスト用
 /// </summary>
@@ -28,4 +30,6 @@ private:
 	class Water* water_;
 
 	std::unique_ptr<Fishes> fishes_;
+
+	std::unique_ptr<WaterInteractive> interactive_;
 };
