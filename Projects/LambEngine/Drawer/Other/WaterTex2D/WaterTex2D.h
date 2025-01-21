@@ -30,6 +30,8 @@ public:
 		float32_t density = 0.0_f32;
 		uint32_t edgeDivision = 1;
 		uint32_t insideDivision = 1;
+		float32_t3 camerPosition;
+		float32_t distanceThreshold = 1.0_f32;
 		float32_t3 cameraDirection;
 		float32_t4x4 viewportMatrix;
 		WaveData waveData;
@@ -63,6 +65,7 @@ public:
 	/// <param name="camera">カメラ行列</param>
 	/// <param name="randomVec">ランダムベクトル</param>
 	/// <param name="density">パーリンノイズの値</param>
+	/// <param name="divisionMaxLength">分割が最大数になる距離</param>
 	/// <param name="edgeDivision">分割数(辺)</param>
 	/// <param name="insideDivision">分割数(ポリゴン)</param>
 	/// <param name="waveData">(波のデータ)</param>
@@ -73,6 +76,8 @@ public:
 		const Mat4x4& camera,
 		Vector2 randomVec,
 		float32_t density,
+		float32_t3 cameraPos,
+		float32_t divisionMinLength,
 		uint32_t edgeDivision,
 		uint32_t insideDivision,
 		WaveData waveData,

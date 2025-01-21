@@ -81,6 +81,8 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 		cameraMat,
 		randomVec_,
 		density_,
+		cameraPos_,
+		divisionMinLength,
 		edgeDivision_,
 		insideDivision_,
 		waveData_,
@@ -120,6 +122,7 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	if (ImGui::TreeNode("ポリゴン分割数")) {
 		ImGui::DragInt("edgeDivision", &edgeDivision_, 0.1f, 1, 64);
 		ImGui::DragInt("insideDivision", &insideDivision_, 0.1f, 1, 64);
+		ImGui::DragFloat("分割が最大になる距離", &divisionMinLength, 0.1f, 1, 1000);
 		ImGui::TreePop();
 	}
 
@@ -145,4 +148,8 @@ void Water::SetWaveData(const WaterTex2D::WaveData& waveData)
 
 float Water::CalcWaveHeight(float32_t2 uv) {
 	return Lamb::CreateNoise(uv, randomVec_, density_);
+}
+
+void Water::SetCameraPos(const float32_t3& pos) {
+	cameraPos_ = pos;
 }

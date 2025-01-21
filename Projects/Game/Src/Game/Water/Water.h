@@ -45,6 +45,12 @@ public:
 
 	float CalcWaveHeight(float32_t2 uv);
 
+	void SetCameraPos(const float32_t3& pos);
+
+private:
+	float32_t3 cameraPos_;
+
+
 public:
 	Transform transform;
 
@@ -55,9 +61,11 @@ private:
 	std::unique_ptr<WaterTex2D> waterSurface_;
 	Vector4 color_ = 0u;
 	Vector2 randomVec_;
+
+	float32_t divisionMinLength = 5.0f;
 	float32_t density_ = 1.0f;
-	int32_t edgeDivision_ = 9;
-	int32_t insideDivision_ = 9;
+	int32_t edgeDivision_ = 64;
+	int32_t insideDivision_ = 64;
 	WaterTex2D::WaveData waveData_;
 	Light light_;
 	float32_t lightScale_ = 0.0f;

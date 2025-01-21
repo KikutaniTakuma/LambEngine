@@ -34,6 +34,8 @@
 #include "Comp/CloudRenderCoomp.h"
 #include "Comp/CloudRenderDataCoomp.h"
 
+#include"GameComp/WaterComp.h"
+
 
 void Object::Init() {
 	/*for (auto& i : components_) {
@@ -151,6 +153,7 @@ bool Object::DebugAddComp() {
 		DebugAdd<LineConvertTransformComp>();
 		DebugAdd<CloudRenderCoomp>();
 		DebugAdd<CloudRenderDataCoomp>();
+		DebugAdd<WaterComp>();
 
 		ImGui::EndChild();
 
@@ -215,5 +218,6 @@ void Object::AddComps(nlohmann::json& compData)
 	AddAndLoadComp<LineConvertTransformComp>(compName, compData);
 	AddAndLoadComp<CloudRenderCoomp>(compName, compData);
 	AddAndLoadComp<CloudRenderDataCoomp>(compName, compData);
+	AddAndLoadComp<WaterComp>(compName, compData);
 }
 

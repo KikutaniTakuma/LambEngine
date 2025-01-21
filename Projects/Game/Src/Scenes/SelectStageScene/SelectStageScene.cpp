@@ -325,6 +325,8 @@ void SelectStageScene::Update() {
     renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 
     fishes_->Update();
+
+    water_->SetCameraPos(currentCamera_->GetPos());
 }
 
 void SelectStageScene::Draw() {

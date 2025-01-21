@@ -200,6 +200,8 @@ void TitleScene::Update() {
     easing_->Update();
 
     fishes_->Update();
+
+    water_->SetCameraPos(currentCamera_->GetPos());
 }
 
 void TitleScene::Draw() {

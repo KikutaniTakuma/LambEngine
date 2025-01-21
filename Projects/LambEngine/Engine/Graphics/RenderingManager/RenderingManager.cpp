@@ -799,6 +799,11 @@ const Vector3& RenderingManager::GetCameraDirection() const
 	return cameraDirection_;
 }
 
+const Vector3& RenderingManager::GetCameraPosition() const
+{
+	return deferredRenderingData_.eyePos;
+}
+
 void RenderingManager::DrawRGB(const RenderDataList& renderList) {
 	for (size_t index = 0; const auto & element : renderList.second) {
 		if (renderList.first <= index) {

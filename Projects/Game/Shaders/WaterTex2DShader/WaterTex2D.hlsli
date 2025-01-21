@@ -25,6 +25,8 @@ struct WaterData {
     float32_t density;
     uint32_t edgeDivision;
     uint32_t insideDivision;
+    float32_t3 cameraPosition;
+    float32_t distanceThreshold;
     float32_t3 cameraDirection;
     float32_t4x4 viewportMatrix;
     WaveData waveData;

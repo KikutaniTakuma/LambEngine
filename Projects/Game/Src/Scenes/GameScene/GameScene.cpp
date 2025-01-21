@@ -278,6 +278,8 @@ void GameScene::Update() {
 	renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 	renderingManager_->Debug("randeringManager");
 
+	water_->SetCameraPos(currentCamera_->GetPos());
+
 	fishes_->Update();
 }
 

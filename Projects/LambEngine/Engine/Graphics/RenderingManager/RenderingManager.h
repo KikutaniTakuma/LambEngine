@@ -128,6 +128,9 @@ public:
 	const AirSkyBox::AtmosphericParams& GetAtmosphericParams() const;
 
 	const Vector3& GetCameraDirection() const;
+	
+	const Vector3& GetCameraPosition() const;
+
 
 private:
 	// アルファ値がないものを描画
