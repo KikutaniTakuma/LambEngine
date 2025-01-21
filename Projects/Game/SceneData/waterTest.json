@@ -50,10 +50,10 @@
                 {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        0.06667260825634003,
-                        0.3898549973964691,
-                        -0.028313640505075455,
-                        0.9180229902267456
+                        0.3303462266921997,
+                        0.36692842841148376,
+                        -0.1412632316350937,
+                        0.8580673933029175
                     ],
                     "scale": [
                         1.0,
@@ -61,9 +61,9 @@
                         0.9999999403953552
                     ],
                     "translate": [
-                        -127.28620147705078,
-                        10.932417869567871,
-                        -64.27034759521484
+                        -127.77574157714844,
+                        55.509674072265625,
+                        -54.38936996459961
                     ]
                 },
                 {
@@ -75,6 +75,49 @@
                     "farClip": 1000.0,
                     "fov": 0.4869273006916046,
                     "nearClip": 0.10000000149011612
+                }
+            ],
+            "type": "Object"
+        },
+        {
+            "Comps": [
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources\\Common\\Ball.obj",
+                    "isDraw": true,
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        -0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        -96.12567901611328,
+                        2.02720046043396,
+                        -14.322509765625
+                    ]
+                },
+                {
+                    "CompName": "class WaterComp"
                 }
             ],
             "type": "Object"

@@ -6,33 +6,49 @@ ConstantHullShaderOutPut ConstantsHS_Main( InputPatch<VertexShaderOutputToHull, 
 
 	WaterData data = kWaterData[instanceID];
 
-	float32_t3 avgPos = 0;
-	for(uint32_t i = 0; i < 3; ++i){
-		float32_t3 worldPos = mul(input[i].worldPosition, kWvpMat[instanceID].worldMat).xyz;
-		float32_t posToCameraLength = length(worldPos - data.cameraPosition);
-
-		float32_t edgeDivision = clamp(float32_t(data.edgeDivision) * ((data.distanceThreshold) * rcp(max(posToCameraLength, data.distanceThreshold))), 1.0f, float32_t(data.edgeDivision));
-
-		output.Edges[i] = int32_t(edgeDivision);
-
-		avgPos += worldPos;
+	// 頂点をワールド座標へ
+	float32_t3 worldPositions[3];
+	{
+		for(int32_t i = 0; i < 3; ++i){
+			worldPositions[i] = mul(input[i].worldPosition, kWvpMat[instanceID].worldMat).xyz;
+		}
 	}
 
-	avgPos *= rcp(3.0f);
+	// ポリゴンエッジの座標
+	float32_t3 edgePositions[3];
+	edgePositions[0] = (worldPositions[0] + worldPositions[1]) * 0.5f;
+	edgePositions[1] = (worldPositions[1] + worldPositions[2]) * 0.5f;
+	edgePositions[2] = (worldPositions[2] + worldPositions[0]) * 0.5f;
 
-	float32_t posToCameraLength = length(avgPos - data.cameraPosition);
-	float32_t insideDivision = clamp(float32_t(data.insideDivision) * ((data.distanceThreshold) * rcp(max(posToCameraLength, data.distanceThreshold))), 1.0f, float32_t(data.insideDivision));
+	// 距離によるエッジの分割数を計算
+	float32_t3 edgeFactors;
+	{
+		for(int32_t i = 0; i < 3; ++i){
+			float32_t3 edgePos = edgePositions[i];
+			float32_t posToCameraLength = length(edgePos - data.cameraPosition);
 
-	output.Inside = int32_t(insideDivision);
+			float32_t edgeDivision = float32_t(data.edgeDivision) * ((data.distanceThreshold) * rcp(max(posToCameraLength, data.distanceThreshold)));
+			edgeDivision = clamp(edgeDivision, 1.0f, float32_t(data.edgeDivision));
+
+			edgeFactors[i] = int32_t(edgeDivision);
+		}
+	}
+
+	float32_t3 tessFactors = edgeFactors;
+
+	output.Edges[0] = tessFactors.x;
+	output.Edges[2] = tessFactors.y;
+	output.Edges[1] = tessFactors.z;
+	output.Inside = dot(tessFactors, float32_t3(1.0f, 1.0f, 1.0f)) * rcp(3.0f);
 
 	return output;
 }
 
 [domain("tri")]
-[partitioning("fractional_odd")]
-[outputtopology("triangle_ccw")]
-[outputcontrolpoints(3)]
-[patchconstantfunc("ConstantsHS_Main")]
+[partitioning("integer")] 
+[outputtopology("triangle_ccw")] // 分割後のポリゴン結合方法の設定 左回り
+[outputcontrolpoints(3)] // トポロジーコントロールポイント 
+[patchconstantfunc("ConstantsHS_Main")] // 
 HullShaderOutPut main( InputPatch<VertexShaderOutputToHull, 3> input, uint32_t i : SV_OutputControlPointID, uint32_t PatchID : SV_PrimitiveID ) {
 	HullShaderOutPut output;
 	uint32_t ID = 2 - i;
