@@ -30,16 +30,17 @@ ConstantHullShaderOutPut ConstantsHS_Main( InputPatch<VertexShaderOutputToHull, 
 			float32_t edgeDivision = float32_t(data.edgeDivision) * ((data.distanceThreshold) * rcp(max(posToCameraLength, data.distanceThreshold)));
 			edgeDivision = clamp(edgeDivision, 1.0f, float32_t(data.edgeDivision));
 
-			edgeFactors[i] = int32_t(edgeDivision);
+			edgeFactors[i] = edgeDivision;
 		}
 	}
 
 	float32_t3 tessFactors = edgeFactors;
 
+	// ポリゴンの結合方法が入力と反対方向で設定されているのでそれに合わせて出力
 	output.Edges[0] = tessFactors.x;
 	output.Edges[2] = tessFactors.y;
 	output.Edges[1] = tessFactors.z;
-	output.Inside = dot(tessFactors, float32_t3(1.0f, 1.0f, 1.0f)) * rcp(3.0f);
+	output.Inside = min(dot(tessFactors, float32_t3(1.0f, 1.0f, 1.0f)) * rcp(3.0f), data.insideDivision);
 
 	return output;
 }
