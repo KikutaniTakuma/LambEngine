@@ -242,12 +242,12 @@ void GameScene::Update() {
 	CameraManager::GetInstance()->Update(player_->GetPosition(), player_->GetRotate());
 
 	water_->Debug("Water");
-	//waveData_.ripplesPoint = player_->GetPosition();
-	////waveData_.time += Lamb::DeltaTime();
-	//waveData_.waveStrength = 0.3f;
-	//waveData_.ripples = 20.0f;
-	//waveData_.waveSpeed = 2.0f;
-	//waveData_.timeAttenuation = 0.0f;
+	waveData_.ripplesPoint = player_->GetPosition();
+	waveData_.time += Lamb::DeltaTime();
+	waveData_.waveStrength = 0.3f;
+	waveData_.ripples = 20.0f;
+	waveData_.waveSpeed = 2.0f;
+	waveData_.timeAttenuation = 0.0f;
 
 	water_->Update(currentCamera_->GetPos());
 	water_->SetWaveData(waveData_);
@@ -278,7 +278,7 @@ void GameScene::Update() {
 	renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 	renderingManager_->Debug("randeringManager");
 
-	water_->SetCameraPos(currentCamera_->GetPos());
+	water_->SetCameraPos(player_->GetPosition());
 
 	fishes_->Update();
 }
