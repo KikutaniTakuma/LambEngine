@@ -61,7 +61,7 @@ PixelShaderOutPut2 main(Output input) {
         causticsUV = mul(causticsUV, gUVMatrix.value);
 
         float32_t4 caustics = gCausticsTexture.Sample(smp, causticsUV.xy + uvDistortion);
-        color.rgb += caustics.rgb;
+        //color.rgb += caustics.rgb;
         
     }
     // 泡
