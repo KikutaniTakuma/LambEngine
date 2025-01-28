@@ -921,7 +921,3 @@ void RenderingManager::ZSort(const RenderDataLists& rgbaList) {
 	}
 }
 
-
-/// 課題用
-/// 3-5確認課題
-/// スクリーンショット1枚目

@@ -189,7 +189,3 @@ void TransformComp::Load(nlohmann::json& json)
 #endif // USE_DEBUG_CODE
 
 }
-
-/// 課題用
-/// 3-8確認課題
-/// スクリーンショット2枚目

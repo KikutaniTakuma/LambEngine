@@ -39,7 +39,3 @@ void BaseDrawer::Draw(const Mat4x4& worldMatrix, const Mat4x4& camera, uint32_t 
 
 	render->AddDrawCount();
 }
-
-/// 課題用
-/// 3-6確認課題
-/// スクリーンショット2枚目

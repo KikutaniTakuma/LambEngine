@@ -220,7 +220,3 @@ void Object::AddComps(nlohmann::json& compData)
 	AddAndLoadComp<CloudRenderDataCoomp>(compName, compData);
 	AddAndLoadComp<WaterComp>(compName, compData);
 }
-
-/// 課題用
-/// 3-8確認課題
-/// スクリーンショット1枚目
