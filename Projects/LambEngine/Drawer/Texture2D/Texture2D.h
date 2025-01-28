@@ -136,3 +136,7 @@ private:
 private:
 	Lamb::SafePtr<Texture2D> pTex2D_;
 };
+
+/// 課題用
+/// 3-5確認課題
+/// スクリーンショット2枚目

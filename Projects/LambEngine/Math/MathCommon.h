@@ -89,3 +89,8 @@ inline float operator""_f32(long double i) {
 inline double operator""_f64(long double i) {
 	return static_cast<double>(i);
 }
+
+
+/// 課題用
+/// 3-7確認課題
+/// スクリーンショット4枚目

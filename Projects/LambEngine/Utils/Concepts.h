@@ -46,3 +46,7 @@ namespace Lamb {
 	template<typename T>
 	concept IsNotObject = !std::is_object_v<T>;
 }
+
+/// 課題用
+/// 3-7確認課題
+/// スクリーンショット3枚目

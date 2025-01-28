@@ -227,3 +227,7 @@ void SceneManager::Finalize() {
 	}
 	next_.reset();
 }
+
+/// 課題用
+/// 3-6確認課題
+/// スクリーンショット1枚目
