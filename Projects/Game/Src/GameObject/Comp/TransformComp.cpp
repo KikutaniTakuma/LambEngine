@@ -183,7 +183,7 @@ void TransformComp::Load(nlohmann::json& json)
 	for (size_t i = 0; i < json["translate"].size(); i++) {
 		translate[i] = json["translate"][i];
 	}
-
+	
 #ifdef USE_DEBUG_CODE
 	eulerRotate = rotate.ToEuler();
 #endif // USE_DEBUG_CODE
