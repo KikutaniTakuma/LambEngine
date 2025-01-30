@@ -238,8 +238,8 @@ private:
 #ifdef USE_DEBUG_CODE
 	std::vector<float32_t> toeDataX_;
 	std::vector<float32_t> toeDataY_;
-	std::array<float32_t, 2> linearDataX_;
-	std::array<float32_t, 2> linearDataY_;
+	std::array<float32_t, 2> linearDataX_ = {0.0f, 0.0f};
+	std::array<float32_t, 2> linearDataY_ = {0.0f, 0.0f};
 	std::vector<float32_t> sholderDataX_;
 	std::vector<float32_t> sholderDataY_;
 

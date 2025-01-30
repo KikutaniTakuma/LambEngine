@@ -227,3 +227,4 @@ void SceneManager::Finalize() {
 	}
 	next_.reset();
 }
+

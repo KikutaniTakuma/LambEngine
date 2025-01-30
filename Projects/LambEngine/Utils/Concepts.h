@@ -46,3 +46,4 @@ namespace Lamb {
 	template<typename T>
 	concept IsNotObject = !std::is_object_v<T>;
 }
+

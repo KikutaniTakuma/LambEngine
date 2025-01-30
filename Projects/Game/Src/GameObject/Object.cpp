@@ -220,4 +220,3 @@ void Object::AddComps(nlohmann::json& compData)
 	AddAndLoadComp<CloudRenderDataCoomp>(compName, compData);
 	AddAndLoadComp<WaterComp>(compName, compData);
 }
-

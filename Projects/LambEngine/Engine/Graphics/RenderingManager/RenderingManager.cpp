@@ -920,3 +920,4 @@ void RenderingManager::ZSort(const RenderDataLists& rgbaList) {
 		}
 	}
 }
+
