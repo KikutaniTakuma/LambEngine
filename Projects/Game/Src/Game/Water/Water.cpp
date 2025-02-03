@@ -46,10 +46,10 @@ void Water::Init() {
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
 	waveData_.ripplesPoint = transform.translate;
-	waveData_.waveStrength = 0.5f;
-	waveData_.ripples = 10.0f;
-	waveData_.waveSpeed = 10.0f;
-	waveData_.timeAttenuation = 0.1f;
+	waveData_.waveStrength = 0.38f;
+	waveData_.ripples = 3.0f;
+	waveData_.waveSpeed = 5.0f;
+	waveData_.lengthAttenuation = 0.08f;
 
 	lightRotate_ = Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>;
 
@@ -94,6 +94,7 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef USE_DEBUG_CODE
 	ImGui::Begin(guiName.c_str());
+
 	ImGui::DragFloat("density", &density_, 0.01f);
 
 	ImGui::ColorEdit4("color", color_.data());
@@ -131,13 +132,26 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 		ImGui::DragFloat("波長", &waveData_.ripples, 0.001f);
 		ImGui::DragFloat("波の速度m/s", &waveData_.waveSpeed, 0.001f);
 		ImGui::DragFloat("時間s", &waveData_.time, 0.01f);
-		ImGui::DragFloat("時間減衰", &waveData_.timeAttenuation, 0.01f);
-		ImGui::DragFloat3("波源", waveData_.ripplesPoint.data(), 0.01f);
+		ImGui::DragFloat("距離減衰係数", &waveData_.lengthAttenuation, 0.01f);
+
+		ImGui::Checkbox("時間を加算するか", &isWaveAddTime_);
+
+		ImGui::Text("速度 : %f", waveData_.ripplePointSpeed);
+
+		waveData_.preRipplesPoint = waveData_.ripplesPoint;
+		waveData_.ripplesPoint = cameraPos_;
+		//waveData_.ripplePointSpeed = (waveData_.preRipplesPoint - waveData_.ripplesPoint).Length() / std::min(Lamb::DeltaTime(), 1.0f);
+
 
 		ImGui::TreePop();
 	}
 
 	ImGui::End();
+
+
+	if (isWaveAddTime_) {
+		waveData_.time += Lamb::DeltaTime();
+	}
 #endif // USE_DEBUG_CODE
 }
 

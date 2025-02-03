@@ -247,7 +247,7 @@ void GameScene::Update() {
 	waveData_.waveStrength = 0.3f;
 	waveData_.ripples = 20.0f;
 	waveData_.waveSpeed = 2.0f;
-	waveData_.timeAttenuation = 0.0f;
+	waveData_.lengthAttenuation = 0.0f;
 
 	water_->Update(currentCamera_->GetPos());
 	water_->SetWaveData(waveData_);

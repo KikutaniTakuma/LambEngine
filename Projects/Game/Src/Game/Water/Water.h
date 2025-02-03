@@ -73,4 +73,9 @@ private:
 
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectWidth_;
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectHeight_;
+
+#ifdef USE_DEBUG_CODE
+	bool isWaveAddTime_ = false;
+#endif // USE_DEBUG_CODE
+
 };

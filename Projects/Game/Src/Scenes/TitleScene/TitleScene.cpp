@@ -160,10 +160,10 @@ void TitleScene::Update() {
     waveData_.waveStrength = 0.2f;
     waveData_.ripples = 20.0f;
     waveData_.waveSpeed = 2.0f;
-    waveData_.timeAttenuation = 0.0f;
+    waveData_.lengthAttenuation = 0.0f;
 
     water_->Update(currentCamera_->GetPos());
-    water_->SetWaveData(waveData_);
+    //water_->SetWaveData(waveData_);
 
     blinking_ += blinkingSpeed_ * Lamb::DeltaTime();
     if (blinking_ >= 0.8f) {

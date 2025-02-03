@@ -21,8 +21,11 @@ public:
 		float32_t ripples = 1.0f;
 		float32_t waveSpeed = 0.1f;
 		float32_t time = 0.0f;
-		float32_t timeAttenuation = 0.1f;
-		Vector3 ripplesPoint;
+		float32_t lengthAttenuation = 0.1f;
+		float32_t3 ripplesPoint;
+
+		float32_t3 preRipplesPoint;
+		float32_t ripplePointSpeed = 0.0f;
 	};
 
 	struct ShaderData {
