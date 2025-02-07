@@ -17,6 +17,13 @@ void TestScene::Load()
 }
 
 void TestScene::Initialize() {
+	WaterTex2D::WaveData waveData;
+	waveData.waveStrength = 0.38f;
+	waveData.ripples = 3.0f;
+	waveData.waveSpeed = 5.0f;
+	waveData.lengthAttenuation = 0.08f;
+	water_->SetWaveData(waveData);
+
 	fishes_ = std::make_unique<Fishes>();
 	fishes_->Init(200);
 
