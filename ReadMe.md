@@ -3,9 +3,9 @@ Windows :
 * [![DemoBuild](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/DemoBuild.yml/badge.svg)](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/DemoBuild.yml)
 * [![ReleaseBuild](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/ReleaseBuild.yml/badge.svg)](https://github.com/KikutaniTakuma/LambEngine/actions/workflows/ReleaseBuild.yml)
 
-Windows SDK : 10.0.22621.0  
+Windows SDK : 10.0.26100.0  
 DirectX : 12  
-推奨グラフィックボード : GeForce RTX2060以上(GTXではMeshShaderが利用できずパフォーマンスに影響が出ますが実行はできます)  
+推奨グラフィックボード : GeForce RTX3060 laptop以上(GTXではMeshShaderが利用できずパフォーマンスに影響が出ますが、実行はできます)  
 
 <br>
 <br> 
