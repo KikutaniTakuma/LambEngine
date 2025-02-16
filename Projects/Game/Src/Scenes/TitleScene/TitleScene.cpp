@@ -155,12 +155,12 @@ void TitleScene::Update() {
     renderingManager_->SetViewMatrix(currentCamera_->GetView());
     renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 
-    waveData_.ripplesPoint = ship_->pos;
-    //waveData_.time += Lamb::DeltaTime();
-    waveData_.waveStrength = 0.2f;
-    waveData_.ripples = 20.0f;
-    waveData_.waveSpeed = 2.0f;
-    waveData_.lengthAttenuation = 0.0f;
+    //waveData_.ripplesPoints = ship_->pos;
+    ////waveData_.time += Lamb::DeltaTime();
+    //waveData_.waveStrength = 0.2f;
+    //waveData_.ripples = 20.0f;
+    //waveData_.waveSpeed = 2.0f;
+    //waveData_.lengthAttenuation = 0.0f;
 
     water_->Update(currentCamera_->GetPos());
     //water_->SetWaveData(waveData_);

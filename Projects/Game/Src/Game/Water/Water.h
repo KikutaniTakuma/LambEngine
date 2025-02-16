@@ -71,6 +71,11 @@ private:
 	float32_t lightScale_ = 0.0f;
 	Vector3 lightRotate_;
 
+	std::array<bool, WaterTex2D::kMaxRipplePoint> isPoint_ = {false};
+	float32_t time_ = 0.0f;
+	float32_t nextRipplePoint_ = 0.5f;
+	size_t index_ = 0;
+
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectWidth_;
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectHeight_;
 

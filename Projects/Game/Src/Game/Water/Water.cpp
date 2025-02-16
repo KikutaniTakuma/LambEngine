@@ -45,11 +45,11 @@ void Water::Init() {
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
-	waveData_.ripplesPoint = transform.translate;
 	waveData_.waveStrength = 0.38f;
 	waveData_.ripples = 3.0f;
 	waveData_.waveSpeed = 5.0f;
 	waveData_.lengthAttenuation = 0.08f;
+	waveData_.timeAttenuation = 0.2f;
 
 	lightRotate_ = Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>;
 
@@ -131,16 +131,21 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 		ImGui::DragFloat("波の高さm", &waveData_.waveStrength, 0.01f);
 		ImGui::DragFloat("波長", &waveData_.ripples, 0.001f);
 		ImGui::DragFloat("波の速度m/s", &waveData_.waveSpeed, 0.001f);
-		ImGui::DragFloat("時間s", &waveData_.time, 0.01f);
+		ImGui::DragFloat("時間s", &(time_), 0.01f);
+		ImGui::DragFloat("次へ移る時間", &nextRipplePoint_, 0.001f, 0.0f, 1.0f);
+		if (ImGui::TreeNode("波源の時間")) {
+			for (int i = 0; i < WaterTex2D::kMaxRipplePoint; i++) {
+				ImGui::DragFloat("時間s", &(waveData_.time[i]), 0.01f);
+			}
+
+			ImGui::TreePop();
+		}
 		ImGui::DragFloat("距離減衰係数", &waveData_.lengthAttenuation, 0.01f);
+		ImGui::DragFloat("時間減衰係数", &waveData_.timeAttenuation, 0.01f);
 
 		ImGui::Checkbox("時間を加算するか", &isWaveAddTime_);
 
-		ImGui::Text("速度 : %f", waveData_.ripplePointSpeed);
 
-		waveData_.preRipplesPoint = waveData_.ripplesPoint;
-		waveData_.ripplesPoint = cameraPos_;
-		//waveData_.ripplePointSpeed = (waveData_.preRipplesPoint - waveData_.ripplesPoint).Length() / std::min(Lamb::DeltaTime(), 1.0f);
 
 
 		ImGui::TreePop();
@@ -150,7 +155,29 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 
 
 	if (isWaveAddTime_) {
-		waveData_.time += Lamb::DeltaTime();
+		time_ += Lamb::DeltaTime();
+
+		waveData_.ripplesPoints[index_] = cameraPos_;
+		size_t index = index_;
+
+		if (nextRipplePoint_ < time_) {
+			time_ = 0.0f;
+			waveData_.time[index_] = 0.0f;
+			isPoint_[index_] = true;
+			index_++;
+
+			if (WaterTex2D::kMaxRipplePoint <= index_) {
+				index_ = 0;
+			}
+		}
+
+		index = 0;
+		for ( bool i : isPoint_) {
+			if (i) {
+				waveData_.time[index] += Lamb::DeltaTime();
+			}
+			index++;
+		}
 	}
 #endif // USE_DEBUG_CODE
 }

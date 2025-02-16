@@ -10,33 +10,39 @@
 static float32_t radBasis = 0.5f;
 
 float32_t Waves(float32_t3 worldPos, uint32_t instanceID){
-	float32_t3 ripplesPoint = kWaterData[instanceID].waveData.ripplesPoint;
-	float32_t3 preRipplesPoint = kWaterData[instanceID].waveData.preRipplesPoint;
-	float32_t ripplePointSpeed = kWaterData[instanceID].waveData.ripplePointSpeed;
-
-	float32_t len = length(worldPos - ripplesPoint);
-	float32_t preLen = length(worldPos - preRipplesPoint);
-	
-	// 以前の距離のほうが長かったら近づいてる(-)
-	// 以前の距離のほうが近かったら遠ざかってる(+)
-	float32_t singned = sign(len - preLen);
-
 
 	float32_t maxHeight = kWaterData[instanceID].waveData.waveStrength;
 	float32_t waveSpeed = kWaterData[instanceID].waveData.waveSpeed;
-	float32_t time = kWaterData[instanceID].waveData.time;
 	float32_t lengthAttenuation = kWaterData[instanceID].waveData.lengthAttenuation;
+	float32_t timeAttenuation = kWaterData[instanceID].waveData.timeAttenuation;
 
 	float32_t ripples = kWaterData[instanceID].waveData.ripples;
-	ripples = waveSpeed * rcp(waveSpeed + (ripplePointSpeed * singned)) * ripples;
 	float32_t waveLength = 2.0f * M_PI * rcp(ripples);
 
-	return maxHeight * pow(M_E, -len * lengthAttenuation) * sin(waveLength * (len - waveSpeed * time)) * min(1.0f, max(0.0f, (waveSpeed * time- len)));
+
+	float32_t wave = 0.0f;
+
+	for(int32_t i = 0; i < 32; i++){
+		float32_t3 ripplesPoint = kWaterData[instanceID].waveData.ripplesPoint[i];
+		float32_t len = length(worldPos - ripplesPoint);
+		float32_t time = kWaterData[instanceID].waveData.time[i];
+		float32_t waveLen = waveSpeed * time;
+
+		// 波からの距離(波が通り過ぎてれば+)
+		float32_t waveToPosLen = waveLen - len;
+
+		// 最大の高さ * sin波 * 波が到達してたら1をそれ以外は0を返す * 距離減衰 * 時間減衰
+		wave += maxHeight * sin(waveLength * -waveToPosLen) 
+			* min(1.0f, ceil(max(0.0f, waveToPosLen))) 
+			* pow(M_E, -len * lengthAttenuation) * pow(M_E, -max(waveToPosLen, 0.0f) * timeAttenuation);
+	}
+
+	return wave;
 }
 
 [maxvertexcount(3)]
 void main(
-	triangle DomainShaderOutPutToGeometory input[3], 
+	triangle DomainShaderOutPutToGeometory input[3],
 	inout TriangleStream<GeometoryOutPut> outStream
 ){
 	GeometoryOutPut output[3];

@@ -15,17 +15,17 @@
 class WaterTex2D : public BaseDrawer {
 public:
 	static constexpr uint32_t kMaxDrawCount = 1u;
+	static constexpr uint32_t kMaxRipplePoint = 32u;
 
 	struct WaveData {
-		float32_t waveStrength = 5.0f;
-		float32_t ripples = 1.0f;
-		float32_t waveSpeed = 0.1f;
-		float32_t time = 0.0f;
-		float32_t lengthAttenuation = 0.1f;
-		float32_t3 ripplesPoint;
+		float32_t waveStrength= 0.0f;
+		float32_t ripples= 0.0f;
+		float32_t waveSpeed= 0.0f;
+		float32_t lengthAttenuation= 0.0f;
+		float32_t timeAttenuation= 0.0f;
 
-		float32_t3 preRipplesPoint;
-		float32_t ripplePointSpeed = 0.0f;
+		float32_t3 ripplesPoints[kMaxRipplePoint];
+		float32_t time[kMaxRipplePoint] = { 0.0f };
 	};
 
 	struct ShaderData {

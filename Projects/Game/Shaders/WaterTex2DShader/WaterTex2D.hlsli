@@ -15,12 +15,11 @@ struct WaveData{
     float32_t waveStrength;
     float32_t ripples;
     float32_t waveSpeed;
-    float32_t time;
     float32_t lengthAttenuation;
-    float32_t3 ripplesPoint;
+    float32_t timeAttenuation;
 
-    float32_t3 preRipplesPoint;
-    float32_t ripplePointSpeed;
+    float32_t3 ripplesPoint[32];
+    float32_t time[32];
 };
 
 struct WaterData {
