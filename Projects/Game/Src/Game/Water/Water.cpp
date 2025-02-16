@@ -70,6 +70,28 @@ void Water::Update(const Vector3& cameraPos) {
 	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 
+	time_ += Lamb::DeltaTime();
+
+	waveData_.ripplesPoints[index_] = cameraPos_;
+
+	if (nextRipplePoint_ < time_) {
+		time_ = 0.0f;
+		waveData_.time[index_] = 0.0f;
+		isPoint_[index_] = true;
+		index_++;
+
+		if (WaterTex2D::kMaxRipplePoint <= index_) {
+			index_ = 0;
+		}
+	}
+
+	for (size_t index = 0;  bool i : isPoint_) {
+		if (i) {
+			waveData_.time[index] += Lamb::DeltaTime();
+		}
+		index++;
+	}
+
 	//waveData_.time += Lamb::DeltaTime();
 }
 
@@ -143,42 +165,11 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 		ImGui::DragFloat("距離減衰係数", &waveData_.lengthAttenuation, 0.01f);
 		ImGui::DragFloat("時間減衰係数", &waveData_.timeAttenuation, 0.01f);
 
-		ImGui::Checkbox("時間を加算するか", &isWaveAddTime_);
-
-
-
 
 		ImGui::TreePop();
 	}
 
 	ImGui::End();
-
-
-	if (isWaveAddTime_) {
-		time_ += Lamb::DeltaTime();
-
-		waveData_.ripplesPoints[index_] = cameraPos_;
-		size_t index = index_;
-
-		if (nextRipplePoint_ < time_) {
-			time_ = 0.0f;
-			waveData_.time[index_] = 0.0f;
-			isPoint_[index_] = true;
-			index_++;
-
-			if (WaterTex2D::kMaxRipplePoint <= index_) {
-				index_ = 0;
-			}
-		}
-
-		index = 0;
-		for ( bool i : isPoint_) {
-			if (i) {
-				waveData_.time[index] += Lamb::DeltaTime();
-			}
-			index++;
-		}
-	}
 #endif // USE_DEBUG_CODE
 }
 
@@ -192,5 +183,17 @@ float Water::CalcWaveHeight(float32_t2 uv) {
 }
 
 void Water::SetCameraPos(const float32_t3& pos) {
+	if (0.5f < (cameraPos_ - pos).Length()) {
+		waveData_.ripplesPoints[index_] = pos;
+		time_ = 0.0f;
+		waveData_.time[index_] = 0.0f;
+		isPoint_[index_] = true;
+		index_++;
+
+		if (WaterTex2D::kMaxRipplePoint <= index_) {
+			index_ = 0;
+		}
+	}
+
 	cameraPos_ = pos;
 }
