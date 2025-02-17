@@ -70,11 +70,13 @@ void Water::Update(const Vector3& cameraPos) {
 	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 
-	time_ += Lamb::DeltaTime();
+	if (isActiveWave_) {
+		time_ += Lamb::DeltaTime();
+		waveData_.ripplesPoints[index_] = cameraPos_;
+	}
 
-	waveData_.ripplesPoints[index_] = cameraPos_;
 
-	if (nextRipplePoint_ < time_) {
+	if (isActiveWave_ and nextRipplePoint_ < time_) {
 		time_ = 0.0f;
 		waveData_.time[index_] = 0.0f;
 		isPoint_[index_] = true;
@@ -92,7 +94,6 @@ void Water::Update(const Vector3& cameraPos) {
 		index++;
 	}
 
-	//waveData_.time += Lamb::DeltaTime();
 }
 
 void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera) {
@@ -162,8 +163,17 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 
 			ImGui::TreePop();
 		}
-		ImGui::DragFloat("距離減衰係数", &waveData_.lengthAttenuation, 0.01f);
-		ImGui::DragFloat("時間減衰係数", &waveData_.timeAttenuation, 0.01f);
+		ImGui::DragFloat("距離減衰係数", &waveData_.lengthAttenuation, 0.001f, 0.0, 10.0f);
+		ImGui::DragFloat("時間減衰係数", &waveData_.timeAttenuation, 0.001f, 0.0f, 10.0f);
+		ImGui::DragFloat("移動時に次の波源へ移る距離", &nextRipplePointLength_, 0.01f, 0.0f, 5.0f);
+		ImGui::Checkbox("波有効", &debugIsActiveWave_);
+
+		if (debugIsActiveWave_ and not isActiveWave_) {
+			StartWave();
+		}
+		else if (not debugIsActiveWave_ and isActiveWave_) {
+			StopWave();
+		}
 
 
 		ImGui::TreePop();
@@ -183,7 +193,7 @@ float Water::CalcWaveHeight(float32_t2 uv) {
 }
 
 void Water::SetCameraPos(const float32_t3& pos) {
-	if (0.5f < (cameraPos_ - pos).Length()) {
+	if (nextRipplePointLength_ < (cameraPos_ - pos).Length() and isActiveWave_) {
 		waveData_.ripplesPoints[index_] = pos;
 		time_ = 0.0f;
 		waveData_.time[index_] = 0.0f;
@@ -196,4 +206,25 @@ void Water::SetCameraPos(const float32_t3& pos) {
 	}
 
 	cameraPos_ = pos;
+}
+
+void Water::StartWave()
+{
+	if (not isActiveWave_) {
+		isPoint_ = { false };
+		time_ = 0.0f;
+		index_ = 0;
+
+		isActiveWave_ = true;
+	}
+}
+
+void Water::StopWave()
+{
+	if (isActiveWave_) {
+		time_ = 0.0f;
+		index_ = 0;
+
+		isActiveWave_ = false;
+	}
 }

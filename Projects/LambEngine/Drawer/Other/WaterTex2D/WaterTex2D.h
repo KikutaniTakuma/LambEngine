@@ -15,7 +15,7 @@
 class WaterTex2D : public BaseDrawer {
 public:
 	static constexpr uint32_t kMaxDrawCount = 1u;
-	static constexpr uint32_t kMaxRipplePoint = 32u;
+	static constexpr uint32_t kMaxRipplePoint = 96u;
 
 	struct WaveData {
 		float32_t waveStrength= 0.0f;
@@ -24,8 +24,8 @@ public:
 		float32_t lengthAttenuation= 0.0f;
 		float32_t timeAttenuation= 0.0f;
 
-		float32_t3 ripplesPoints[kMaxRipplePoint];
-		float32_t time[kMaxRipplePoint] = { 0.0f };
+		std::array<float32_t3, kMaxRipplePoint> ripplesPoints;
+		std::array<float32_t, kMaxRipplePoint> time = { 0.0f };
 	};
 
 	struct ShaderData {

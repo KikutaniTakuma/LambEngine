@@ -1,6 +1,7 @@
 #include "../Lamb.hlsli"
 
 #define PI 3.14159265358f
+#define kMaxRipplePoints 96
 
 struct AtmosphericParams {
 	float32_t3 cameraPosition;
@@ -18,8 +19,8 @@ struct WaveData{
     float32_t lengthAttenuation;
     float32_t timeAttenuation;
 
-    float32_t3 ripplesPoint[32];
-    float32_t time[32];
+    float32_t3 ripplesPoint[kMaxRipplePoints];
+    float32_t time[kMaxRipplePoints];
 };
 
 struct WaterData {
