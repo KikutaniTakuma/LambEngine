@@ -64,14 +64,14 @@ void main(
 		float32_t waveHeight = Waves(output[i].worldPosition.xyz, instanceID);
 
 
-		float32_t wavePower = 10.0f;
+		float32_t wavePower = 6.0f;
 		float32_t epsilon = 0.0001f;
 		float32_t subUV = 1.0f * rcp(400.0f) * epsilon;
-		float32_t height = /*CreateNoise(inputTmp.uv, kRandomVec, kDensity) * wavePower +*/ waveHeight;
-		float32_t up = /*CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y + subUV), kRandomVec, kDensity) * wavePower +*/ Waves(float32_t3(output[i].worldPosition.x, output[i].worldPosition.y, output[i].worldPosition.z + epsilon), instanceID);
-		float32_t down = /*CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y - subUV), kRandomVec, kDensity) * wavePower +*/ Waves(float32_t3(output[i].worldPosition.x, output[i].worldPosition.y, output[i].worldPosition.z - epsilon), instanceID);
-		float32_t right = /*CreateNoise(float32_t2(inputTmp.uv.x + subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower +*/ Waves(float32_t3(output[i].worldPosition.x + epsilon, output[i].worldPosition.y, output[i].worldPosition.z), instanceID);
-		float32_t left = /*CreateNoise(float32_t2(inputTmp.uv.x - subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower +*/ Waves(float32_t3(output[i].worldPosition.x - epsilon, output[i].worldPosition.y, output[i].worldPosition.z), instanceID);
+		float32_t height = CreateNoise(inputTmp.uv, kRandomVec, kDensity) * wavePower + waveHeight;
+		float32_t up = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y + subUV), kRandomVec, kDensity) * wavePower + Waves(float32_t3(output[i].worldPosition.x, output[i].worldPosition.y, output[i].worldPosition.z + epsilon), instanceID);
+		float32_t down = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y - subUV), kRandomVec, kDensity) * wavePower + Waves(float32_t3(output[i].worldPosition.x, output[i].worldPosition.y, output[i].worldPosition.z - epsilon), instanceID);
+		float32_t right = CreateNoise(float32_t2(inputTmp.uv.x + subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower + Waves(float32_t3(output[i].worldPosition.x + epsilon, output[i].worldPosition.y, output[i].worldPosition.z), instanceID);
+		float32_t left = CreateNoise(float32_t2(inputTmp.uv.x - subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower + Waves(float32_t3(output[i].worldPosition.x - epsilon, output[i].worldPosition.y, output[i].worldPosition.z), instanceID);
 
 		float32_t yx = (right - left) * rcp(2.0f * epsilon);
 		float32_t yz = (up - down) * rcp(2.0f * epsilon);
