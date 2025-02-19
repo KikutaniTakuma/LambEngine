@@ -45,12 +45,14 @@ void Water::Init() {
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
-	waveData_.waveStrength = 0.38f;
+	waveData_.waveStrength = 0.25f;
 	waveData_.ripples = 3.0f;
 	waveData_.waveSpeed = 5.0f;
-	waveData_.lengthAttenuation = 0.08f;
-	waveData_.timeAttenuation = 0.2f;
+	waveData_.lengthAttenuation = 0.3f;
+	waveData_.timeAttenuation = 0.1f;
 
+	nextRipplePointLength_ = 0.2f;
+	nextRipplePoint_ = 0.35f;
 	lightRotate_ = Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>;
 
 	lightScale_ = 8.0f;
@@ -63,6 +65,7 @@ void Water::Init() {
 
 	density_ = 1.3f * 2.0f;
 }
+
 
 void Water::Update(const Vector3& cameraPos) {
 	light_.eyePos = cameraPos;
@@ -225,6 +228,7 @@ void Water::StopWave()
 		time_ = 0.0f;
 		index_ = 0;
 
+		isPoint_ = { false };
 		isActiveWave_ = false;
 	}
 }
