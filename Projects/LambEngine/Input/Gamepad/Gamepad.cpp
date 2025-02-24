@@ -157,15 +157,15 @@ void Gamepad::Debug() {
 	ImGui::SetNextWindowSizeConstraints({}, { 210.0f, 400.0f });
 	ImGui::Begin("Gamepad Debug");
 	if (ImGui::TreeNode("stick")) {
-		ImGui::Text("LeftX          = %.2f%%\n", static_cast<float>(GetStick(Stick::LEFT).x) * 100.0f);
-		ImGui::Text("LeftY          = %.2f%%\n", static_cast<float>(GetStick(Stick::LEFT).y) * 100.0f);
-		ImGui::Text("RightX         = %.2f%%\n", static_cast<float>(GetStick(Stick::RIGHT).x) * 100.0f);
-		ImGui::Text("RightY         = %.2f%%\n", static_cast<float>(GetStick(Stick::RIGHT).y) * 100.0f);
+		ImGui::Text("LeftX          = %.2f%%\n", GetStick(Stick::LEFT, 0.0f).x * 100.0f);
+		ImGui::Text("LeftY          = %.2f%%\n", GetStick(Stick::LEFT, 0.0f).y * 100.0f);
+		ImGui::Text("RightX         = %.2f%%\n", GetStick(Stick::RIGHT, 0.0f).x * 100.0f);
+		ImGui::Text("RightY         = %.2f%%\n", GetStick(Stick::RIGHT, 0.0f).y * 100.0f);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("triger")) {
-		ImGui::Text("LEFT_TRIGER    = %.2f%%\n", GetTriger(Triger::LEFT) * 100.0f);
-		ImGui::Text("RIGHT_TRIGER   = %.2f%%\n", GetTriger(Triger::RIGHT) * 100.0f);
+		ImGui::Text("LEFT_TRIGER    = %.2f%%\n", GetTriger(Triger::LEFT, 0.0f) * 100.0f);
+		ImGui::Text("RIGHT_TRIGER   = %.2f%%\n", GetTriger(Triger::RIGHT, 0.0f) * 100.0f);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("ABXY")) {

@@ -9,54 +9,44 @@
 
 static float32_t radBasis = 0.5f;
 
-float32_t Waves(float32_t length, uint32_t instanceID){
+float32_t Waves(float32_t3 worldPos, uint32_t instanceID){
+
 	float32_t maxHeight = kWaterData[instanceID].waveData.waveStrength;
-	float32_t waveLength = 2.0f * M_PI * rcp(kWaterData[instanceID].waveData.ripples);
 	float32_t waveSpeed = kWaterData[instanceID].waveData.waveSpeed;
-	float32_t time = kWaterData[instanceID].waveData.time;
+	float32_t lengthAttenuation = kWaterData[instanceID].waveData.lengthAttenuation;
 	float32_t timeAttenuation = kWaterData[instanceID].waveData.timeAttenuation;
 
-	return maxHeight * pow(M_E, -time * timeAttenuation) * sin(waveLength * (length - waveSpeed * time)) * min(1.0f, max(0.0f, (waveSpeed * time- length)));
-}
+	float32_t ripples = kWaterData[instanceID].waveData.ripples;
+	float32_t waveLength = 2.0f * M_PI * rcp(ripples);
 
-float32_t3 CalcNormal(float32_t3 position, float32_t delta, uint32_t instanceID){
-	float32_t3 ripplesPoint = kWaterData[instanceID].waveData.ripplesPoint;
-	float32_t3 upPos = position;
-	upPos.z += delta;
-	float32_t3 bottomPos = position;
-	bottomPos.z -= delta;
-	float32_t3 rightPos = position;
-	rightPos.x += delta;
-	float32_t3 leftPos = position;
-	leftPos.x -= delta;
 
-	float32_t upLength = length(upPos - ripplesPoint);
-	float32_t bottomLength = length(bottomPos - ripplesPoint);
-	float32_t rightLength = length(rightPos - ripplesPoint);
-	float32_t leftLength = length(leftPos - ripplesPoint);
+	float32_t wave = 0.0f;
 
-	float32_t up = Waves(upLength, instanceID);
-	float32_t bottom = Waves(bottomLength, instanceID);
-	float32_t right = Waves(rightLength, instanceID);
-	float32_t left = Waves(leftLength, instanceID);
+	for(int32_t i = 0; i < kMaxRipplePoints; i++){
+		float32_t3 ripplesPoint = kWaterData[instanceID].waveData.ripplesPoint[i];
+		float32_t len = length(worldPos - ripplesPoint);
+		float32_t time = kWaterData[instanceID].waveData.time[i];
+		float32_t waveLen = waveSpeed * time;
 
-	float32_t dx = (right - left) * rcp(2.0f * delta);
-	float32_t dy = (up - bottom) * rcp(2.0f * delta);
+		// 波からの距離(波が通り過ぎてれば+)
+		float32_t waveToPosLen = waveLen - len;
 
-	float32_t3 normal = normalize(float32_t3(-dx, -dy, 1.0));
+		// 最大の高さ * sin波 * 波が到達してたら1をそれ以外は0を返す * 距離減衰 * 時間減衰
+		wave += maxHeight * sin(waveLength * -waveToPosLen) 
+			* min(1.0f, ceil(max(0.0f, waveToPosLen))) 
+			* pow(M_E, -len * lengthAttenuation) * pow(M_E, -max(waveToPosLen, 0.0f) * timeAttenuation);
+	}
 
-	return normal;
+	return wave;
 }
 
 [maxvertexcount(3)]
 void main(
-	triangle DomainShaderOutPutToGeometory input[3], 
+	triangle DomainShaderOutPutToGeometory input[3],
 	inout TriangleStream<GeometoryOutPut> outStream
 ){
 	GeometoryOutPut output[3];
 	uint32_t instanceID = input[0].instanceID;
-
-	float32_t3 ripplesPoint = kWaterData[instanceID].waveData.ripplesPoint;
 
 	// お水の処理
 	const float32_t2 kRandomVec = kWaterData[instanceID].randomVec;
@@ -71,14 +61,17 @@ void main(
 
 		
 		// 波の高さ
-		float32_t wavePower = 10.0f;
+		float32_t waveHeight = Waves(output[i].worldPosition.xyz, instanceID);
+
+
+		float32_t wavePower = 6.0f;
 		float32_t epsilon = 0.0001f;
 		float32_t subUV = 1.0f * rcp(400.0f) * epsilon;
-		float32_t height = CreateNoise(inputTmp.uv, kRandomVec, kDensity) * wavePower;
-		float32_t up = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y + subUV), kRandomVec, kDensity) * wavePower;
-		float32_t down = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y - subUV), kRandomVec, kDensity) * wavePower;
-		float32_t right = CreateNoise(float32_t2(inputTmp.uv.x + subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower;
-		float32_t left = CreateNoise(float32_t2(inputTmp.uv.x - subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower;
+		float32_t height = CreateNoise(inputTmp.uv, kRandomVec, kDensity) * wavePower + waveHeight;
+		float32_t up = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y + subUV), kRandomVec, kDensity) * wavePower + Waves(float32_t3(output[i].worldPosition.x, output[i].worldPosition.y, output[i].worldPosition.z + epsilon), instanceID);
+		float32_t down = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y - subUV), kRandomVec, kDensity) * wavePower + Waves(float32_t3(output[i].worldPosition.x, output[i].worldPosition.y, output[i].worldPosition.z - epsilon), instanceID);
+		float32_t right = CreateNoise(float32_t2(inputTmp.uv.x + subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower + Waves(float32_t3(output[i].worldPosition.x + epsilon, output[i].worldPosition.y, output[i].worldPosition.z), instanceID);
+		float32_t left = CreateNoise(float32_t2(inputTmp.uv.x - subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower + Waves(float32_t3(output[i].worldPosition.x - epsilon, output[i].worldPosition.y, output[i].worldPosition.z), instanceID);
 
 		float32_t yx = (right - left) * rcp(2.0f * epsilon);
 		float32_t yz = (up - down) * rcp(2.0f * epsilon);
@@ -87,6 +80,7 @@ void main(
 		output[i].normal = resultNormal;
 
 		output[i].worldPosition.y += height;
+
 		
 		output[i].position = mul(output[i].worldPosition, kWvpMat[instanceID].cameraMat);
 

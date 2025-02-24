@@ -9,6 +9,10 @@
 #include <initializer_list>
 #include <cmath>
 
+#if _HAS_CXX23
+#include <stdfloat>
+#endif
+
 #include "Utils/Concepts.h"
 
 namespace Lamb {
