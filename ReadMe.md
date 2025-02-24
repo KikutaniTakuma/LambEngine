@@ -19,7 +19,7 @@ DirectX : 12
 * MeshShaderとVertexShaderの切り替え
 
 ## 水概要
-制作期間 : 11ヶ月(作成開始2023年12月)
+制作期間 : 11ヶ月(2023年12月～現在)
 * 水の作成変遷
   * PerlinNoiseからHeightMapを作成、NormalMapに変換して細かい波の表現しています。
   ![PerlinNoise](ReadMeTexture/Water_Surface_Complete.gif)
@@ -30,7 +30,10 @@ DirectX : 12
   * 歪みを入れたタイトル
   ![DistortionTitle](ReadMeTexture/Water-DistortionDemo.gif)  
   * 最近実装した波
-  ![DistortionTitle](ReadMeTexture/wave_wakewave.gif)  
+  ![DistortionTitle](ReadMeTexture/wave_wakewave.gif)
+    * ポリゴンを分割した頂点で波を表現しています。
+    ![DistortionTitle](ReadMeTexture/wave_division.gif)
+
 
 * 参考サイト、参考書籍
   * https://blog.natade.net/2015/12/13/secondlife-water-make/
@@ -78,14 +81,12 @@ DirectX : 12
 # アプリケーション
 ## ゲーム : 笹舟大航海
 * ジャンル : シミュレーション
-* 作成期間 : 2ヶ月
+* 作成期間 : チーム2ヶ月(2023年12月～2024年2月)+個人9ヶ月(2024年6月～現在)
 * 制作人数 : 3人(プランナー1人、プログラマー2人)
 * 担当箇所 : 水、空、タイトル、描画エンジン
 ## ゲーム画面
-[動画](https://youtu.be/n-AkMtcHfJg)
-<br>
+https://youtu.be/W3fc-wBp30Y
 
-![InGame](ReadMeTexture/Game-Demo.gif)
 ## チームメンバーが書いたコード
 [Projects/Game/Src/GameExternals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Src/GameExternals)
 * ゲームの部分のコードはチームメンバーが書いています
