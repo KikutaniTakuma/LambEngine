@@ -22,13 +22,16 @@ DirectX : 12
 制作期間 : 11ヶ月(作成開始2023年12月)
 * 水の作成変遷
   * PerlinNoiseからHeightMapを作成、NormalMapに変換して細かい波の表現しています。
-  ![PerlinNoise](Demo/Water_Surface_Complete.gif)
+  ![PerlinNoise](ReadMeTexture/Water_Surface_Complete.gif)
   * 水を透過させて水面下に484個のモデルを配置。DoubleBufferとMeshShaderで描画を最適化しています。
-  ![Object](Demo/Water-NoDistortionDemo.gif)
+  ![Object](ReadMeTexture/Water-NoDistortionDemo.gif)
   * 水を描画する際に歪みの情報をPerlinNoiseで生成。それを元にポストエフェクトで歪ませています。
-  ![Distortion](Demo/Water-Distortion.gif)
+  ![Distortion](ReadMeTexture/Water-Distortion.gif)
   * 歪みを入れたタイトル
-  ![DistortionTitle](Demo/Water-DistortionDemo.gif)
+  ![DistortionTitle](ReadMeTexture/Water-DistortionDemo.gif)  
+  * 最近実装した波
+  ![DistortionTitle](ReadMeTexture/wave_wakewave.gif)  
+
 * 参考サイト、参考書籍
   * https://blog.natade.net/2015/12/13/secondlife-water-make/
   * https://www.klab.com/jp/blog/tech/2021/unitydeferredrendering.html
@@ -43,19 +46,19 @@ DirectX : 12
   * レンダーターゲットの設定、ポストエフェクト等もここで行います
   * ZSortをRenderingManagerのDraw関数でしています
 
-  ![RenderingManager](Demo/RenderingManager.png)
+  ![RenderingManager](ReadMeTexture/RenderingManager.png)
 
 * 描画情報の格納を[RenderContext](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Engine/Graphics/RenderContextManager/RenderContext)でしています
   * 描画情報を保持するのとDrawCountを行います。
   * RenderContextをtemplate化してshader側との対応を最小限にして共通化しています。
 
-  ![RenderContext](Demo/RenderContext.png)
+  ![RenderContext](ReadMeTexture/RenderContext.png)
 
 * 描画情報を[Drawer](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Drawer)で積んでいます
   * クライアント側から直接描画データをセットをして使います。
   * 各Shaderや用途に合わせてBaseDrawerを継承して特化させています。
 
-  ![Drawer](Demo/Drawer.png)
+  ![Drawer](ReadMeTexture/Drawer.png)
 
 ## 外部ライブラリ
 - [Projects/externals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals)
@@ -82,7 +85,7 @@ DirectX : 12
 [動画](https://youtu.be/n-AkMtcHfJg)
 <br>
 
-![InGame](Demo/Game-Demo.gif)
+![InGame](ReadMeTexture/Game-Demo.gif)
 ## チームメンバーが書いたコード
 [Projects/Game/Src/GameExternals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Src/GameExternals)
 * ゲームの部分のコードはチームメンバーが書いています
