@@ -155,6 +155,8 @@ void SelectStageScene::Initialize() {
     tex2DData_.color = 0xffffffff;
     drawerManager_->LoadTexture("./Resources/sandybeach.png");
     tex2DData_.textureID = drawerManager_->GetTexture("./Resources/sandybeach.png");
+
+    water_->StopWave();
 }
 
 void SelectStageScene::Finalize() {

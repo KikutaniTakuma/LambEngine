@@ -103,6 +103,8 @@ void GameScene::Initialize() {
 	tex2DData_.color = 0xffffffff;
 	drawerManager_->LoadTexture("./Resources/sandybeach.png");
 	tex2DData_.textureID = drawerManager_->GetTexture("./Resources/sandybeach.png");
+
+	water_->StopWave();
 }
 
 void GameScene::Finalize() {
@@ -182,8 +184,14 @@ void GameScene::Update() {
 
 
 		windManager_->Update();
+
+		water_->StopWave();
 	}
 	else {
+		if (not player_->GetIsCharge()) {
+			water_->StartWave();
+		}
+
 		blockManager_->Update();
 		for (auto& block : blockManager_->GetBlocks()) {
 			for (uint32_t i = 0; i < block->GetColliderSize(); i++) {
@@ -242,15 +250,8 @@ void GameScene::Update() {
 	CameraManager::GetInstance()->Update(player_->GetPosition(), player_->GetRotate());
 
 	water_->Debug("Water");
-	//waveData_.ripplesPoint = player_->GetPosition();
-	////waveData_.time += Lamb::DeltaTime();
-	//waveData_.waveStrength = 0.3f;
-	//waveData_.ripples = 20.0f;
-	//waveData_.waveSpeed = 2.0f;
-	//waveData_.timeAttenuation = 0.0f;
 
 	water_->Update(currentCamera_->GetPos());
-	water_->SetWaveData(waveData_);
 
 
 	if (player_->GetIsGoal()) {
@@ -278,7 +279,7 @@ void GameScene::Update() {
 	renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 	renderingManager_->Debug("randeringManager");
 
-	water_->SetCameraPos(currentCamera_->GetPos());
+	water_->SetCameraPos(player_->GetPosition());
 
 	fishes_->Update();
 }

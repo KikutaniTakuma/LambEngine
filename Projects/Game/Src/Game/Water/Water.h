@@ -47,6 +47,10 @@ public:
 
 	void SetCameraPos(const float32_t3& pos);
 
+	void StartWave();
+
+	void StopWave();
+
 private:
 	float32_t3 cameraPos_;
 
@@ -55,12 +59,9 @@ public:
 	Transform transform;
 
 private:
-	std::unique_ptr<PeraRender> luminate_;
-	std::unique_ptr<PeraRender> gaussianBlurWidth_;
-	std::unique_ptr<PeraRender> gaussianBlurHeight_;
 	std::unique_ptr<WaterTex2D> waterSurface_;
-	Vector4 color_ = 0u;
-	Vector2 randomVec_;
+	float32_t4 color_ = 0u;
+	float32_t2 randomVec_;
 
 	float32_t divisionMinLength = 5.0f;
 	float32_t density_ = 1.0f;
@@ -69,7 +70,18 @@ private:
 	WaterTex2D::WaveData waveData_;
 	Light light_;
 	float32_t lightScale_ = 0.0f;
-	Vector3 lightRotate_;
+	float32_t3 lightRotate_;
+
+	bool isActiveWave_ = false;
+#ifdef USE_DEBUG_CODE
+	bool debugIsActiveWave_ = false;
+#endif // USE_DEBUG_CODE
+
+	std::array<bool, WaterTex2D::kMaxRipplePoint> isPoint_ = {false};
+	float32_t nextRipplePointLength_ = 0.5f;
+	float32_t time_ = 0.0f;
+	float32_t nextRipplePoint_ = 0.5f;
+	size_t index_ = 0;
 
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectWidth_;
 	Lamb::SafePtr<class GaussianBlur> gaussianBlurObjectHeight_;

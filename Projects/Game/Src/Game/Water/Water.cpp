@@ -45,12 +45,14 @@ void Water::Init() {
 
 	randomVec_ = Lamb::Random(Vector2::kZero, Vector2::kIdentity);
 
-	waveData_.ripplesPoint = transform.translate;
-	waveData_.waveStrength = 0.5f;
-	waveData_.ripples = 10.0f;
-	waveData_.waveSpeed = 10.0f;
+	waveData_.waveStrength = 0.25f;
+	waveData_.ripples = 3.0f;
+	waveData_.waveSpeed = 5.0f;
+	waveData_.lengthAttenuation = 0.3f;
 	waveData_.timeAttenuation = 0.1f;
 
+	nextRipplePointLength_ = 0.2f;
+	nextRipplePoint_ = 0.35f;
 	lightRotate_ = Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>;
 
 	lightScale_ = 8.0f;
@@ -64,13 +66,37 @@ void Water::Init() {
 	density_ = 1.3f * 2.0f;
 }
 
+
 void Water::Update(const Vector3& cameraPos) {
 	light_.eyePos = cameraPos;
 
 	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 
-	//waveData_.time += Lamb::DeltaTime();
+	if (isActiveWave_) {
+		time_ += Lamb::DeltaTime();
+		waveData_.ripplesPoints[index_] = cameraPos_;
+	}
+
+
+	if (isActiveWave_ and nextRipplePoint_ < time_) {
+		time_ = 0.0f;
+		waveData_.time[index_] = 0.0f;
+		isPoint_[index_] = true;
+		index_++;
+
+		if (WaterTex2D::kMaxRipplePoint <= index_) {
+			index_ = 0;
+		}
+	}
+
+	for (size_t index = 0;  bool i : isPoint_) {
+		if (i) {
+			waveData_.time[index] += Lamb::DeltaTime();
+		}
+		index++;
+	}
+
 }
 
 void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera) {
@@ -94,6 +120,7 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 void Water::Debug([[maybe_unused]]const std::string& guiName){
 #ifdef USE_DEBUG_CODE
 	ImGui::Begin(guiName.c_str());
+
 	ImGui::DragFloat("density", &density_, 0.01f);
 
 	ImGui::ColorEdit4("color", color_.data());
@@ -130,9 +157,27 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 		ImGui::DragFloat("波の高さm", &waveData_.waveStrength, 0.01f);
 		ImGui::DragFloat("波長", &waveData_.ripples, 0.001f);
 		ImGui::DragFloat("波の速度m/s", &waveData_.waveSpeed, 0.001f);
-		ImGui::DragFloat("時間s", &waveData_.time, 0.01f);
-		ImGui::DragFloat("時間減衰", &waveData_.timeAttenuation, 0.01f);
-		ImGui::DragFloat3("波源", waveData_.ripplesPoint.data(), 0.01f);
+		ImGui::DragFloat("時間s", &(time_), 0.01f);
+		ImGui::DragFloat("次へ移る時間", &nextRipplePoint_, 0.001f, 0.0f, 1.0f);
+		if (ImGui::TreeNode("波源の時間")) {
+			for (int i = 0; i < WaterTex2D::kMaxRipplePoint; i++) {
+				ImGui::DragFloat("時間s", &(waveData_.time[i]), 0.01f);
+			}
+
+			ImGui::TreePop();
+		}
+		ImGui::DragFloat("距離減衰係数", &waveData_.lengthAttenuation, 0.001f, 0.0, 10.0f);
+		ImGui::DragFloat("時間減衰係数", &waveData_.timeAttenuation, 0.001f, 0.0f, 10.0f);
+		ImGui::DragFloat("移動時に次の波源へ移る距離", &nextRipplePointLength_, 0.01f, 0.0f, 5.0f);
+		ImGui::Checkbox("波有効", &debugIsActiveWave_);
+
+		if (debugIsActiveWave_ and not isActiveWave_) {
+			StartWave();
+		}
+		else if (not debugIsActiveWave_ and isActiveWave_) {
+			StopWave();
+		}
+
 
 		ImGui::TreePop();
 	}
@@ -151,5 +196,39 @@ float Water::CalcWaveHeight(float32_t2 uv) {
 }
 
 void Water::SetCameraPos(const float32_t3& pos) {
+	if (nextRipplePointLength_ < (cameraPos_ - pos).Length() and isActiveWave_) {
+		waveData_.ripplesPoints[index_] = pos;
+		time_ = 0.0f;
+		waveData_.time[index_] = 0.0f;
+		isPoint_[index_] = true;
+		index_++;
+
+		if (WaterTex2D::kMaxRipplePoint <= index_) {
+			index_ = 0;
+		}
+	}
+
 	cameraPos_ = pos;
+}
+
+void Water::StartWave()
+{
+	if (not isActiveWave_) {
+		isPoint_ = { false };
+		time_ = 0.0f;
+		index_ = 0;
+
+		isActiveWave_ = true;
+	}
+}
+
+void Water::StopWave()
+{
+	if (isActiveWave_) {
+		time_ = 0.0f;
+		index_ = 0;
+
+		isPoint_ = { false };
+		isActiveWave_ = false;
+	}
 }

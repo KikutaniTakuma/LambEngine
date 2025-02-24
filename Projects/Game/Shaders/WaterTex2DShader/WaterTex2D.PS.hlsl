@@ -118,6 +118,8 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     lig += 0.2f;
     
     // 色
+    //output.color0.rgb = saturate(float32_t3(1.0f,1.0f,1.0f) * (input.worldPosition.y * 0.1f));
+    //output.color0.w = 1.0f;
     output.color0.rgb = kColor[input.instanceID].color.rgb * lig;
     output.color0.w = kColor[input.instanceID].color.w;
 
