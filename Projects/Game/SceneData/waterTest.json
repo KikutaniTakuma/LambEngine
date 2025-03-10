@@ -5,6 +5,14 @@
             "x": 128,
             "y": 128
         },
+        "directionLight": {
+            "color": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "shiness": 132.6999969482422
+        },
         "hsv": [
             0.0,
             0.0,
@@ -45,6 +53,49 @@
         }
     },
     "objects": [
+        {
+            "Comps": [
+                {
+                    "CompName": "class ModelRenderComp"
+                },
+                {
+                    "BlendType": "kNone",
+                    "CompName": "class ModelRenderDataComp",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "fileName": "./Resources\\Common\\Ball.obj",
+                    "isDraw": true,
+                    "isLighting": true
+                },
+                {
+                    "CompName": "class TransformComp",
+                    "rotate": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "translate": [
+                        0.0,
+                        0.04800000041723251,
+                        100.0
+                    ]
+                },
+                {
+                    "CompName": "class WaterComp"
+                }
+            ],
+            "type": "Object"
+        },
         {
             "Comps": [
                 {
@@ -107,10 +158,10 @@
                 {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        0.2587067186832428,
-                        0.35763484239578247,
-                        -0.10380776971578598,
-                        0.8912868499755859
+                        0.057261936366558075,
+                        0.47103074193000793,
+                        -0.03065977618098259,
+                        0.8797222375869751
                     ],
                     "scale": [
                         1.0,
@@ -118,9 +169,9 @@
                         0.9999999403953552
                     ],
                     "translate": [
-                        -49.777557373046875,
-                        46.35258483886719,
-                        45.2899169921875
+                        -26.083106994628906,
+                        6.159270286560059,
+                        78.9810562133789
                     ]
                 },
                 {
@@ -132,49 +183,6 @@
                     "farClip": 1000.0,
                     "fov": 0.4869273006916046,
                     "nearClip": 0.10000000149011612
-                }
-            ],
-            "type": "Object"
-        },
-        {
-            "Comps": [
-                {
-                    "BlendType": "kNone",
-                    "CompName": "class ModelRenderDataComp",
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "fileName": "./Resources\\Common\\Ball.obj",
-                    "isDraw": true,
-                    "isLighting": true
-                },
-                {
-                    "CompName": "class ModelRenderComp"
-                },
-                {
-                    "CompName": "class TransformComp",
-                    "rotate": [
-                        0.0,
-                        0.0,
-                        0.0,
-                        1.0
-                    ],
-                    "scale": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "translate": [
-                        0.0,
-                        0.04800000041723251,
-                        100.0
-                    ]
-                },
-                {
-                    "CompName": "class WaterComp"
                 }
             ],
             "type": "Object"

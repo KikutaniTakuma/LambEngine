@@ -105,13 +105,13 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     float32_t3 toEye = kCameraPos.pos - input.worldPosition.xyz;
     toEye = normalize(toEye);
     
-    float32_t3 refVec = reflect(ligDirection, normal);
+    float32_t3 refVec = reflect(-ligDirection, normal);
     refVec = normalize(refVec);
 
     t = dot(refVec, toEye);
 
 
-    t = pow(saturate(t), shinness);
+    t = pow(abs(t), shinness);
     float32_t3 specDirection = ligColor * t;
     
     float32_t3 lig = diffDirection + specDirection;
