@@ -53,23 +53,12 @@ void Water::Init() {
 
 	nextRipplePointLength_ = 0.2f;
 	nextRipplePoint_ = 0.35f;
-	lightRotate_ = Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>;
-
-	lightScale_ = 8.0f;
-	light_ = Light{
-			.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(lightRotate_),
-			.ligColor = Vector3::kIdentity * lightScale_,
-			.eyePos = Vector3::kZero,
-			.shinness = 42.0f
-	};
 
 	density_ = 1.3f * 2.0f;
 }
 
 
-void Water::Update(const Vector3& cameraPos) {
-	light_.eyePos = cameraPos;
-
+void Water::Update() {
 	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 
@@ -124,20 +113,6 @@ void Water::Debug([[maybe_unused]]const std::string& guiName){
 	ImGui::DragFloat("density", &density_, 0.01f);
 
 	ImGui::ColorEdit4("color", color_.data());
-
-	if (ImGui::TreeNode("Light")) {
-		lightRotate_ *= Lamb::Math::toDegree<float>;
-		ImGui::DragFloat3("lightDirection", lightRotate_.data(), 1.0f, -360.0f, 360.0f);
-		lightRotate_ *= Lamb::Math::toRadian<float>;
-		light_.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(lightRotate_);
-		light_.ligDirection = light_.ligDirection.Normalize();
-		light_.ligColor /= lightScale_;
-		ImGui::ColorEdit3("ligColor", light_.ligColor.data());
-		ImGui::DragFloat("ligColorScale", &lightScale_, 0.01f);
-		light_.ligColor *= lightScale_;
-		ImGui::DragFloat("shinness", &light_.shinness, 0.01f, 0.0f, 256.0f);
-		ImGui::TreePop();
-	}
 
 	if (ImGui::TreeNode("WaterSRT")) {
 		ImGui::DragFloat3("pos", transform.translate.data(), 0.01f);

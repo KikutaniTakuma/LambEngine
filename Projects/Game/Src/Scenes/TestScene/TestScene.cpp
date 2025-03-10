@@ -35,7 +35,7 @@ void TestScene::Update()
 
 	water_->Debug("water");
 
-	water_->Update(objectManager_->GetCameraPos());
+	water_->Update();
 
 	interactive_->Update();
 }

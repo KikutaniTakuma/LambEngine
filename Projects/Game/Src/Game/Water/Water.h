@@ -28,7 +28,7 @@ private:
 public:
 	void Init();
 
-	void Update(const Vector3& cameraPos);
+	void Update();
 
 	void Draw(const Mat4x4& cameraMat, PeraRender* const pera = nullptr);
 
@@ -68,9 +68,6 @@ private:
 	int32_t edgeDivision_ = 64;
 	int32_t insideDivision_ = 64;
 	WaterTex2D::WaveData waveData_;
-	Light light_;
-	float32_t lightScale_ = 0.0f;
-	float32_t3 lightRotate_;
 
 	bool isActiveWave_ = false;
 #ifdef USE_DEBUG_CODE
