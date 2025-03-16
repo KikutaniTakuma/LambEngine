@@ -294,6 +294,7 @@ void RenderingManager::FinalFrame()
 void RenderingManager::Draw() {
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
+	atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
 	deferredRenderingData_.directionLight.ligDirection = atmosphericParams_.lightDirection;
 	gaussianPipeline_[GaussianIndex::kHorizontal]->SetGaussianState(gaussianBlurStateHorizontal_);
 	gaussianPipeline_[GaussianIndex::kVertical]->SetGaussianState(gaussianBlurStateVertical_);
@@ -514,7 +515,6 @@ void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 	deferredRenderingData_.eyePos = cameraPos;
 	skyBoxTransform_.translate = cameraPos;
 	atmosphericParams_.cameraPosition = cameraPos;
-	atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
 }
 
 void RenderingManager::SetWaterMatrix(const Mat4x4& waterMatrix) {
@@ -638,8 +638,6 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 		}
 
 		
-
-		atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
 		if (ImGui::TreeNode("hsv")) {
 			ImGui::DragFloat("h", &hsv_.x, 0.1f, 0.0f, 360.0f);
 			ImGui::DragFloat("s", &hsv_.y, 0.001f, 0.0f, 1.0f);
