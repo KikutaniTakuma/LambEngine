@@ -86,7 +86,7 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     const float32_t kDensity = kWaterData[input.instanceID].density;
     
     float32_t3 perlinNormal = CreateNormal(input.uv, kRandomVec, kDensity);
-    float32_t3 normal = input.normal;
+    float32_t3 normal = GenerateNormal(input.worldPosition.xyz, kWaterData[input.instanceID].time, input.instanceID);
     // float32_t3 tangent = NormalToTangent(perlinNormal);
     // float32_t3 binormal = CalcBinormal(perlinNormal, tangent);
     // float32_t3 blendNormal = BlendNormal(perlinNormal, tangent, binormal, normal);
