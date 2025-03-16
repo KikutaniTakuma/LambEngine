@@ -156,6 +156,9 @@ RenderingManager::RenderingManager() {
 
 	isUseMesh_ = Lamb::IsCanUseMeshShader();
 
+	sunSpeed_ = 5.0f * Lamb::Math::toRadian<float>;
+	isSkyTimeStart_ = true;
+
 #ifdef USE_DEBUG_CODE
 	const uint32_t kPlotDivison = 11;
 
@@ -292,6 +295,12 @@ void RenderingManager::FinalFrame()
 }
 
 void RenderingManager::Draw() {
+	if (isSkyTimeStart_) {
+		lightRotate_.x += sunSpeed_ * Lamb::DeltaTime();
+		if (179.0f * Lamb::Math::toRadian<float> < lightRotate_.x) {
+			lightRotate_.x = 0.0f;
+		}
+	}
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
 	atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
@@ -576,6 +585,9 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 		}
 
 		if (ImGui::TreeNode("lighting")) {
+			ImGui::Checkbox("空を動かす", &isSkyTimeStart_);
+			ImGui::DragFloat("空の速度", &sunSpeed_);
+
 			ImGui::Checkbox("lighting", std::bit_cast<bool*>(&deferredRenderingData_.isDirectionLight));
 			ImGui::Checkbox("isShadow", std::bit_cast<bool*>(&deferredRenderingData_.isShadow));
 			lightRotate_ *= Lamb::Math::toDegree<float>;

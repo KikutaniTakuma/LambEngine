@@ -224,6 +224,8 @@ private:
 	const Vector3 kLightRotateBaseVector = -Vector3::kZIdentity;
 	Vector3 lightRotate_;
 	bool isDrawSkyBox_ = true;
+	bool isSkyTimeStart_ = false;
+	float32_t sunSpeed_ = 0.0f;
 
 	Mat4x4 viewMatrix_;
 	Mat4x4 projectionMatrix_;
