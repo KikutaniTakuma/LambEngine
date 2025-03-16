@@ -1,6 +1,7 @@
 #include "../Normal.hlsli"
 #include "../PerlinNoise.hlsli"
 #include "WaterTex2D.hlsli"
+#include "./Gerstner.hlsli"
 
 #define M_PI 3.141592653589793238462643
 #define M_E 2.71828182846
@@ -57,13 +58,12 @@ void main(
 
 		// ワールドポジション計算
     	output[i].position = inputTmp.position;
-		output[i].worldPosition = mul(output[i].position, kWvpMat[instanceID].worldMat);
+		float32_t4 worldPosition = mul(output[i].position, kWvpMat[instanceID].worldMat);
+		output[i].worldPosition = worldPosition;
 
 		
-		// 波の高さ
-		float32_t waveHeight = Waves(output[i].worldPosition.xyz, instanceID);
 
-
+		/*
 		float32_t wavePower = 6.0f;
 		float32_t epsilon = 0.0001f;
 		float32_t subUV = 1.0f * rcp(400.0f) * epsilon;
@@ -72,14 +72,37 @@ void main(
 		float32_t down = CreateNoise(float32_t2(inputTmp.uv.x, inputTmp.uv.y - subUV), kRandomVec, kDensity) * wavePower + Waves(float32_t3(output[i].worldPosition.x, output[i].worldPosition.y, output[i].worldPosition.z - epsilon), instanceID);
 		float32_t right = CreateNoise(float32_t2(inputTmp.uv.x + subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower + Waves(float32_t3(output[i].worldPosition.x + epsilon, output[i].worldPosition.y, output[i].worldPosition.z), instanceID);
 		float32_t left = CreateNoise(float32_t2(inputTmp.uv.x - subUV, inputTmp.uv.y), kRandomVec, kDensity) * wavePower + Waves(float32_t3(output[i].worldPosition.x - epsilon, output[i].worldPosition.y, output[i].worldPosition.z), instanceID);
+		*/
 
-		float32_t yx = (right - left) * rcp(2.0f * epsilon);
-		float32_t yz = (up - down) * rcp(2.0f * epsilon);
+		float32_t wavePower = 0.2f;
+		float32_t time = kWaterData[instanceID].time;
+
+		// 波の高さ
+		float32_t3 gerstner = GenerateWave(worldPosition.xyz, time) * wavePower;
+		gerstner.y += Waves(worldPosition.xyz, instanceID);
+
+		float32_t kEpsilon = 0.0001f;
+
+		float32_t3 upPos = worldPosition.xyz;
+		upPos.z += kEpsilon;
+		float32_t3 downPos = worldPosition.xyz;
+		downPos.z -= kEpsilon;
+		float32_t3 rightPos = worldPosition.xyz;
+		rightPos.x += kEpsilon;
+		float32_t3 leftPos = worldPosition.xyz;
+		leftPos.x -= kEpsilon;
+		float32_t up = GenerateWave(upPos, time).y * wavePower + Waves(upPos, instanceID);
+		float32_t down = GenerateWave(downPos, time).y * wavePower + Waves(downPos.xyz, instanceID);
+		float32_t right = GenerateWave(rightPos, time).y * wavePower + Waves(rightPos, instanceID);
+		float32_t left = GenerateWave(leftPos, time).y * wavePower + Waves(leftPos, instanceID);
+
+		float32_t yx = (right - left) * rcp(2.0f * kEpsilon);
+		float32_t yz = (up - down) * rcp(2.0f * kEpsilon);
 
 		float32_t3 resultNormal = normalize(float32_t3(-yx, 1.0f, -yz));
 		output[i].normal = resultNormal;
 
-		output[i].worldPosition.y += height;
+		output[i].worldPosition.xyz += gerstner;
 
 		
 		output[i].position = mul(output[i].worldPosition, kWvpMat[instanceID].cameraMat);

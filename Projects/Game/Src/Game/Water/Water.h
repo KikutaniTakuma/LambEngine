@@ -63,6 +63,8 @@ private:
 	float32_t4 color_ = 0u;
 	float32_t2 randomVec_;
 
+	float32_t waveTime_ = 0.0f;
+
 	float32_t divisionMinLength = 5.0f;
 	float32_t density_ = 1.0f;
 	int32_t edgeDivision_ = 64;

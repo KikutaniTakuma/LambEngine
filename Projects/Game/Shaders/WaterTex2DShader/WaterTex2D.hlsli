@@ -34,6 +34,7 @@ struct WaterData {
     float32_t4x4 viewportMatrix;
     WaveData waveData;
     AtmosphericParams atmosphericParams;
+    float32_t time;
 };
 
 StructuredBuffer<WaterData> kWaterData : register(t2);

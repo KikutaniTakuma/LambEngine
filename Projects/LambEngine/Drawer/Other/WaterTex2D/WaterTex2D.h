@@ -29,7 +29,7 @@ public:
 	};
 
 	struct ShaderData {
-		Vector2 randomVec;
+		float32_t2 randomVec;
 		float32_t density = 0.0_f32;
 		uint32_t edgeDivision = 1;
 		uint32_t insideDivision = 1;
@@ -39,6 +39,7 @@ public:
 		float32_t4x4 viewportMatrix;
 		WaveData waveData;
 		AirSkyBox::AtmosphericParams atomosphericParam;
+		float32_t time = 0.0f;
 	};
 
 	using WaterRenderContext = RenderContext<ShaderData, kMaxDrawCount>;
@@ -66,6 +67,7 @@ public:
 	/// </summary>
 	/// <param name="worldMatrix">カメラ行列</param>
 	/// <param name="camera">カメラ行列</param>
+	/// <param name="time">時間</param>
 	/// <param name="randomVec">ランダムベクトル</param>
 	/// <param name="density">パーリンノイズの値</param>
 	/// <param name="divisionMaxLength">分割が最大数になる距離</param>
@@ -77,7 +79,8 @@ public:
 	void Draw(
 		const Mat4x4& worldMatrix,
 		const Mat4x4& camera,
-		Vector2 randomVec,
+		float32_t time, 
+		float32_t2 randomVec,
 		float32_t density,
 		float32_t3 cameraPos,
 		float32_t divisionMinLength,
