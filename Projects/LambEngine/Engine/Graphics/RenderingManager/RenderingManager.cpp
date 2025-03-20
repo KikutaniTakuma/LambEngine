@@ -75,7 +75,7 @@ RenderingManager::RenderingManager() {
 	deferredRendering_->SetDistortionHandle(distortionTexture_->GetHandleGPU());
 	deferredRenderingData_.isDirectionLight = 1;
 	deferredRenderingData_.environmentCoefficient = 0.2f;
-	deferredRenderingData_.directionLight.shinness = 42.0f;
+	deferredRenderingData_.directionLight.shinness = 135.0f;
 	deferredRenderingData_.directionLight.ligColor = Vector3::kIdentity;
 	deferredRenderingData_.directionLight.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>);
 
@@ -155,6 +155,9 @@ RenderingManager::RenderingManager() {
 
 
 	isUseMesh_ = Lamb::IsCanUseMeshShader();
+
+	sunSpeed_ = 5.0f * Lamb::Math::toRadian<float>;
+	isSkyTimeStart_ = true;
 
 #ifdef USE_DEBUG_CODE
 	const uint32_t kPlotDivison = 11;
@@ -292,8 +295,15 @@ void RenderingManager::FinalFrame()
 }
 
 void RenderingManager::Draw() {
+	if (isSkyTimeStart_) {
+		lightRotate_.x += sunSpeed_ * Lamb::DeltaTime();
+		if (179.0f * Lamb::Math::toRadian<float> < lightRotate_.x) {
+			lightRotate_.x = 0.0f;
+		}
+	}
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
+	atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
 	deferredRenderingData_.directionLight.ligDirection = atmosphericParams_.lightDirection;
 	gaussianPipeline_[GaussianIndex::kHorizontal]->SetGaussianState(gaussianBlurStateHorizontal_);
 	gaussianPipeline_[GaussianIndex::kVertical]->SetGaussianState(gaussianBlurStateVertical_);
@@ -514,7 +524,6 @@ void RenderingManager::SetCameraPos(const Vector3& cameraPos) {
 	deferredRenderingData_.eyePos = cameraPos;
 	skyBoxTransform_.translate = cameraPos;
 	atmosphericParams_.cameraPosition = cameraPos;
-	atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
 }
 
 void RenderingManager::SetWaterMatrix(const Mat4x4& waterMatrix) {
@@ -575,14 +584,26 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 			ImGui::Checkbox("MeshShader", &isUseMesh_);
 		}
 
-		ImGui::Checkbox("lighting", std::bit_cast<bool*>(&deferredRenderingData_.isDirectionLight));
-		ImGui::Checkbox("isShadow", std::bit_cast<bool*>(&deferredRenderingData_.isShadow));
-		lightRotate_ *= Lamb::Math::toDegree<float>;
-		ImGui::DragFloat3("ライト角度", lightRotate_.data(), 1.0f);
-		lightRotate_.x = std::fmodf(lightRotate_.x, 360.0f);
-		lightRotate_.y = std::fmodf(lightRotate_.y, 360.0f);
-		lightRotate_.z = std::fmodf(lightRotate_.z, 360.0f);
-		lightRotate_ *= Lamb::Math::toRadian<float>;
+		if (ImGui::TreeNode("lighting")) {
+			ImGui::Checkbox("空を動かす", &isSkyTimeStart_);
+			ImGui::DragFloat("空の速度", &sunSpeed_);
+
+			ImGui::Checkbox("lighting", std::bit_cast<bool*>(&deferredRenderingData_.isDirectionLight));
+			ImGui::Checkbox("isShadow", std::bit_cast<bool*>(&deferredRenderingData_.isShadow));
+			lightRotate_ *= Lamb::Math::toDegree<float>;
+			ImGui::DragFloat3("ライト角度", lightRotate_.data(), 1.0f);
+			lightRotate_.x = std::fmodf(lightRotate_.x, 360.0f);
+			lightRotate_.y = std::fmodf(lightRotate_.y, 360.0f);
+			lightRotate_.z = std::fmodf(lightRotate_.z, 360.0f);
+			lightRotate_ *= Lamb::Math::toRadian<float>;
+
+			ImGui::DragFloat("shinness", &deferredRenderingData_.directionLight.shinness, 0.1f, 0.0f, 1000.0f);
+			ImGui::ColorEdit3("ライトカラー", deferredRenderingData_.directionLight.ligColor.data());
+
+
+			ImGui::TreePop();
+		}
+		
 
 		if (ImGui::TreeNode("トーンマップ")) {
 			if (ImPlot::BeginPlot("トーンカーブ")) {
@@ -629,8 +650,6 @@ void RenderingManager::Debug([[maybe_unused]] const std::string& guiName) {
 		}
 
 		
-
-		atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
 		if (ImGui::TreeNode("hsv")) {
 			ImGui::DragFloat("h", &hsv_.x, 0.1f, 0.0f, 360.0f);
 			ImGui::DragFloat("s", &hsv_.y, 0.001f, 0.0f, 1.0f);
@@ -714,6 +733,13 @@ void RenderingManager::Save(nlohmann::json& jsonFile) {
 	for (auto& i : tonemapShoulder_) {
 		json["tonemap"]["shoulder"].push_back(i);
 	}
+
+	json["directionLight"]["color"] = nlohmann::json::array();
+	for (auto& i : deferredRenderingData_.directionLight.ligColor) {
+		json["directionLight"]["color"].push_back(i);
+	}
+	json["directionLight"]["shiness"] = deferredRenderingData_.directionLight.shinness;
+
 }
 
 void RenderingManager::Load(nlohmann::json& jsonFile) {
@@ -724,6 +750,13 @@ void RenderingManager::Load(nlohmann::json& jsonFile) {
 	}
 	for (size_t i = 0; i < lightRotate_.size(); i++) {
 		lightRotate_[i] = json["lightRotate"][i].get<float>();
+	}
+	if (json.contains("directionLight")) {
+		for (size_t i = 0; i < deferredRenderingData_.directionLight.ligColor.size(); i++) {
+			deferredRenderingData_.directionLight.ligColor[i] = json["directionLight"]["color"][i].get<float>();
+		}
+
+		deferredRenderingData_.directionLight.shinness = json["directionLight"]["shiness"].get<float>();
 	}
 
 	for (size_t i = 0; i < hsv_.size(); i++) {

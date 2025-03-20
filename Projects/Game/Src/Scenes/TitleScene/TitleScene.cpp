@@ -155,7 +155,7 @@ void TitleScene::Update() {
     renderingManager_->SetViewMatrix(currentCamera_->GetView());
     renderingManager_->SetProjectionMatrix(currentCamera_->GetProjection());
 
-    water_->Update(currentCamera_->GetPos());
+    water_->Update();
 
     blinking_ += blinkingSpeed_ * Lamb::DeltaTime();
     if (blinking_ >= 0.8f) {

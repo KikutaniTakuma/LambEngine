@@ -175,7 +175,7 @@ PixelShaderOutPut main(Output input) {
         float32_t3 toEye = eyePos - worldPosition.xyz;
         toEye = normalize(toEye);
     
-        float32_t3 refVec = reflect(ligDirection, normal);
+        float32_t3 refVec = reflect(-ligDirection, normal);
         refVec = normalize(refVec);
 
         t = dot(refVec, toEye);

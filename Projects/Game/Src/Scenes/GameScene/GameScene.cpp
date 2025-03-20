@@ -251,7 +251,7 @@ void GameScene::Update() {
 
 	water_->Debug("Water");
 
-	water_->Update(currentCamera_->GetPos());
+	water_->Update();
 
 
 	if (player_->GetIsGoal()) {

@@ -25,10 +25,10 @@ PixelOutPut main(VertexOutput input)
 	const float32_t kRayleigh4PI = kRayleighScattering * 4.0f * PI;
 	const float32_t kMie4PI = kMieScattering * 4.0f * PI;
 
-	float32_t3 worldPos = input.worldPosition.xyz;
-	worldPos = IntersectionPos(normalize(worldPos), float32_t3(0.0f, kInnerRadius, 0.0f), kOuterRadius);
 	float32_t3 cameraPos = gAtmosphericParams.cameraPosition;
+	float32_t3 worldPos = input.worldPosition.xyz - cameraPos;
 	cameraPos.y += kInnerRadius;
+	worldPos = IntersectionPos(normalize(worldPos), float32_t3(0.0f, kInnerRadius, 0.0f), kOuterRadius);
     float32_t3 viewDirection = normalize(worldPos - cameraPos);
     float32_t3 lightDirection = normalize(gAtmosphericParams.lightDirection + viewDirection);
 

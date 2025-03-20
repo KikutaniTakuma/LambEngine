@@ -46,7 +46,8 @@ void WaterTex2D::Load()
 void WaterTex2D::Draw(
 	const Mat4x4& worldMatrix,
 	const Mat4x4& camera,
-	Vector2 randomVec,
+	float32_t time,
+	float32_t2 randomVec,
 	float32_t density,
 	float32_t3 cameraPos,
 	float32_t divisionMinLength,
@@ -71,7 +72,8 @@ void WaterTex2D::Draw(
 			.cameraDirection = RenderingManager::GetInstance()->GetCameraDirection(),
 			.viewportMatrix = float32_t4x4::MakeViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f),
 			.waveData = waveData,
-			.atomosphericParam = RenderingManager::GetInstance()->GetAtmosphericParams()
+			.atomosphericParam = RenderingManager::GetInstance()->GetAtmosphericParams(),
+			.time = time
 		}
 	);
 

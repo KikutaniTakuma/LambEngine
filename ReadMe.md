@@ -19,16 +19,22 @@ DirectX : 12
 * MeshShaderとVertexShaderの切り替え
 
 ## 水概要
-制作期間 : 11ヶ月(作成開始2023年12月)
+制作期間 : 11ヶ月(2023年12月～現在)
 * 水の作成変遷
   * PerlinNoiseからHeightMapを作成、NormalMapに変換して細かい波の表現しています。
-  ![PerlinNoise](Demo/Water_Surface_Complete.gif)
+  ![PerlinNoise](ReadMeTexture/Water_Surface_Complete.gif)
   * 水を透過させて水面下に484個のモデルを配置。DoubleBufferとMeshShaderで描画を最適化しています。
-  ![Object](Demo/Water-NoDistortionDemo.gif)
+  ![Object](ReadMeTexture/Water-NoDistortionDemo.gif)
   * 水を描画する際に歪みの情報をPerlinNoiseで生成。それを元にポストエフェクトで歪ませています。
-  ![Distortion](Demo/Water-Distortion.gif)
+  ![Distortion](ReadMeTexture/Water-Distortion.gif)
   * 歪みを入れたタイトル
-  ![DistortionTitle](Demo/Water-DistortionDemo.gif)
+  ![DistortionTitle](ReadMeTexture/Water-DistortionDemo.gif)  
+  * 最近実装した波
+  ![DistortionTitle](ReadMeTexture/wave_wakewave.gif)
+    * ポリゴンを分割した頂点で波を表現しています。
+    ![DistortionTitle](ReadMeTexture/wave_division.gif)
+
+
 * 参考サイト、参考書籍
   * https://blog.natade.net/2015/12/13/secondlife-water-make/
   * https://www.klab.com/jp/blog/tech/2021/unitydeferredrendering.html
@@ -43,19 +49,19 @@ DirectX : 12
   * レンダーターゲットの設定、ポストエフェクト等もここで行います
   * ZSortをRenderingManagerのDraw関数でしています
 
-  ![RenderingManager](Demo/RenderingManager.png)
+  ![RenderingManager](ReadMeTexture/RenderingManager.png)
 
 * 描画情報の格納を[RenderContext](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Engine/Graphics/RenderContextManager/RenderContext)でしています
   * 描画情報を保持するのとDrawCountを行います。
   * RenderContextをtemplate化してshader側との対応を最小限にして共通化しています。
 
-  ![RenderContext](Demo/RenderContext.png)
+  ![RenderContext](ReadMeTexture/RenderContext.png)
 
 * 描画情報を[Drawer](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/LambEngine/Drawer)で積んでいます
   * クライアント側から直接描画データをセットをして使います。
   * 各Shaderや用途に合わせてBaseDrawerを継承して特化させています。
 
-  ![Drawer](Demo/Drawer.png)
+  ![Drawer](ReadMeTexture/Drawer.png)
 
 ## 外部ライブラリ
 - [Projects/externals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/externals)
@@ -75,14 +81,12 @@ DirectX : 12
 # アプリケーション
 ## ゲーム : 笹舟大航海
 * ジャンル : シミュレーション
-* 作成期間 : 2ヶ月
+* 作成期間 : チーム2ヶ月(2023年12月～2024年2月)+個人9ヶ月(2024年6月～現在)
 * 制作人数 : 3人(プランナー1人、プログラマー2人)
 * 担当箇所 : 水、空、タイトル、描画エンジン
 ## ゲーム画面
-[動画](https://youtu.be/n-AkMtcHfJg)
-<br>
+https://youtu.be/W3fc-wBp30Y
 
-![InGame](Demo/Game-Demo.gif)
 ## チームメンバーが書いたコード
 [Projects/Game/Src/GameExternals](https://github.com/KikutaniTakuma/LambEngine/tree/master/Projects/Game/Src/GameExternals)
 * ゲームの部分のコードはチームメンバーが書いています
