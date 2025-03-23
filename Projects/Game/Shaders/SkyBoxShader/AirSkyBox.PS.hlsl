@@ -28,6 +28,7 @@ PixelOutPut main(VertexOutput input)
 	float32_t3 cameraPos = gAtmosphericParams.cameraPosition;
 	float32_t3 worldPos = input.worldPosition.xyz - cameraPos;
 	cameraPos.y += kInnerRadius;
+	cameraPos.xz = 0.0f;
 	worldPos = IntersectionPos(normalize(worldPos), float32_t3(0.0f, kInnerRadius, 0.0f), kOuterRadius);
     float32_t3 viewDirection = normalize(worldPos - cameraPos);
     float32_t3 lightDirection = normalize(gAtmosphericParams.lightDirection + viewDirection);
