@@ -57,8 +57,8 @@ void Water::Init() {
 	density_ = 1.3f * 2.0f;
 
 	divisionMinLength = 2.0f;
-	edgeDivision_ = 64;
-	insideDivision_ = 64;
+	edgeDivision_ = 32;
+	insideDivision_ = 32;
 }
 
 
