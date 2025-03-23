@@ -16,12 +16,13 @@ float32_t3 SkyColor(uint32_t instanceID, float32_t3 gWorldPos, float32_t3 gNorma
 	const float32_t kRayleigh4PI = kRayleighScattering * 4.0f * PI;
 	const float32_t kMie4PI = kMieScattering * 4.0f * PI;
 
-    float32_t3 cameraToPosition = normalize(gWorldPos - cameraPos);
-    float32_t3 reflectedVector = reflect(cameraToPosition, gNormal);
+    //float32_t3 cameraToPosition = normalize(gWorldPos - cameraPos);
+    //float32_t3 reflectedVector = reflect(cameraToPosition, gNormal);
 
-	float32_t3 worldPos = reflectedVector + normalize(gWorldPos);
+	float32_t3 worldPos = gNormal;
 	worldPos = IntersectionPos(normalize(worldPos), float32_t3(0.0f, kInnerRadius, 0.0f), kOuterRadius);
 	cameraPos.y += kInnerRadius;
+    cameraPos.xz = 0.0f;
     float32_t3 viewDirection = normalize(worldPos - cameraPos);
     float32_t3 lightDirection = normalize(kWaterData[instanceID].atmosphericParams.lightDirection + viewDirection);
 
@@ -79,7 +80,7 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
 {
 	PixelShaderOutPut4 output;
 
-    float32_t3 skyColor = SkyColor(input.instanceID, input.worldPosition.xyz, input.normal, kWaterData[input.instanceID].atmosphericParams.cameraPosition);
+    float32_t3 skyColor = SkyColor(input.instanceID, input.worldPosition.xyz, kLight.ligDirection, kWaterData[input.instanceID].atmosphericParams.cameraPosition);
 
     // お水の処理
 	const float32_t2 kRandomVec = kWaterData[input.instanceID].randomVec;
@@ -92,7 +93,7 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     // float32_t3 blendNormal = BlendNormal(perlinNormal, tangent, binormal, normal);
 
     float32_t3 ligDirection = kLight.ligDirection;
-    float32_t3 ligColor = kLight.ligColor;
+    float32_t3 ligColor = skyColor;//kLight.ligColor;
     float32_t shinness = kLight.shinness;
  
     // ディレクションライト拡散反射光
@@ -112,7 +113,7 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
 
 
     t = pow(abs(t), shinness);
-    float32_t3 specDirection = ligColor * t;
+    float32_t3 specDirection = ligColor * t * 100.0f;
     
     float32_t3 lig = diffDirection + specDirection;
     lig += 0.2f;
