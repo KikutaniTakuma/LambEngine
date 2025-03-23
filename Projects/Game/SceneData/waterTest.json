@@ -7,9 +7,9 @@
         },
         "directionLight": {
             "color": [
-                1.0,
-                1.0,
-                1.0
+                0.7450980544090271,
+                0.4901960790157318,
+                0.08235294371843338
             ],
             "shiness": 132.6999969482422
         },
@@ -43,7 +43,7 @@
                 0.4000000059604645
             ],
             "shoulder": [
-                15.0,
+                8.0,
                 1.0
             ],
             "toe": [
@@ -56,9 +56,6 @@
         {
             "Comps": [
                 {
-                    "CompName": "class ModelRenderComp"
-                },
-                {
                     "BlendType": "kNone",
                     "CompName": "class ModelRenderDataComp",
                     "color": [
@@ -70,6 +67,9 @@
                     "fileName": "./Resources\\Common\\Ball.obj",
                     "isDraw": true,
                     "isLighting": true
+                },
+                {
+                    "CompName": "class ModelRenderComp"
                 },
                 {
                     "CompName": "class TransformComp",
@@ -158,10 +158,10 @@
                 {
                     "CompName": "class TransformComp",
                     "rotate": [
-                        0.057261936366558075,
-                        0.47103074193000793,
+                        0.05726194754242897,
+                        0.47103068232536316,
                         -0.03065977618098259,
-                        0.8797222375869751
+                        0.8797222971916199
                     ],
                     "scale": [
                         1.0,
