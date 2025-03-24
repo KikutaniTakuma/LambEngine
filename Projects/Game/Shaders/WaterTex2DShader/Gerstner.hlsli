@@ -17,6 +17,10 @@ float32_t3 GerstnerWave(
 	float32_t2 d = normalize(dir.xy);
 	float32_t q = steep;
 	float32_t f = (dot(d, v) * freq + time * speed);
+    const float kTau = 2.0f * 3.141592653f;
+    float32_t a = f * rcp(kTau);
+    f -= (floor(a) * kTau);
+    
 	p.xz = d.xy * q * amp * cos(f);
 	p.y = amp * sin(f);
  
