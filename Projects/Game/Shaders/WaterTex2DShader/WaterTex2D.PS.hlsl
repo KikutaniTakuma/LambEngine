@@ -113,15 +113,48 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
 
 
     t = pow(abs(t), shinness);
-    float32_t3 specDirection = ligColor * t * 1000.0f;
+    float32_t3 specDirection = ligColor * t * 100.0f;
     
     float32_t3 lig = diffDirection + specDirection;
     lig += 0.2f;
+
+
+    // スポットライト
+    float32_t3 pointLightPos = kWaterData[input.instanceID].pointLightPos;
+    float32_t pointLightRange = kWaterData[input.instanceID].pointLightRange;
+
+    float32_t3 pointLightDir = input.worldPosition.xyz - pointLightPos;
+    float32_t pointLightDistance = length(pointLightDir);
+    pointLightDir = normalize(pointLightDir);
+
+    t = dot(normal, pointLightDir);
+    t = saturate(t);
+
+    float32_t3 potinDiffDirection = ligColor * t;
+
+    refVec = reflect(pointLightDir, normal);
+    refVec = normalize(refVec);
+
+    t = dot(refVec, toEye);
+
+
+    t = pow(abs(t), shinness);
+    float32_t3 pointSpecDirection = ligColor * t * 1000.0f;
+
+
+    float32_t affect = 1.0f - rcp(pointLightDistance) * pointLightDistance;
+    affect = max(affect, 0.0f);
+    potinDiffDirection *= affect;
+    pointSpecDirection *= affect;
+
+    float32_t3 potintLig =  potinDiffDirection + pointSpecDirection;
+    potintLig *= 10.0f;
+
     
     // 色
     //output.color0.rgb = saturate(float32_t3(1.0f,1.0f,1.0f) * (input.worldPosition.y * 0.1f));
     //output.color0.w = 1.0f;
-    output.color0.rgb = kColor[input.instanceID].color.rgb * lig;
+    output.color0.rgb = kColor[input.instanceID].color.rgb * (lig + potintLig);
     output.color0.w = kColor[input.instanceID].color.w;
 
     // 法線

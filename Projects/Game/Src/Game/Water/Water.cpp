@@ -59,10 +59,18 @@ void Water::Init() {
 	divisionMinLength = 2.0f;
 	edgeDivision_ = 32;
 	insideDivision_ = 32;
+
+
+	pointLightPos = transform.translate + RenderingManager::GetInstance()->GetAtmosphericParams().lightDirection * 300.0f;
+	pointLightRange = 300.0f;
+	pointLightAngle = 0.0f;
 }
 
 
 void Water::Update() {
+	pointLightPos = transform.translate + RenderingManager::GetInstance()->GetAtmosphericParams().lightDirection * 300.0f;
+
+
 	randomVec_.x += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 	randomVec_.y += 0.006f * Lamb::DeltaTime() * Lamb::Random(0.8f, 1.2f);
 
@@ -108,6 +116,9 @@ void Water::Draw(const Mat4x4& cameraMat, [[maybe_unused]]PeraRender* const pera
 		edgeDivision_,
 		insideDivision_,
 		waveData_,
+		pointLightPos,
+		pointLightRange,
+		pointLightAngle,
 		color_.GetColorRGBA(),
 		BlendType::kNormal
 	);

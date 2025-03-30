@@ -71,6 +71,10 @@ private:
 	int32_t insideDivision_ = 64;
 	WaterTex2D::WaveData waveData_;
 
+	float32_t3 pointLightPos;
+	float32_t  pointLightRange;
+	float32_t  pointLightAngle;
+
 	bool isActiveWave_ = false;
 #ifdef USE_DEBUG_CODE
 	bool debugIsActiveWave_ = false;

@@ -36,6 +36,9 @@ struct WaterData {
     WaveData waveData;
     AtmosphericParams atmosphericParams;
     float32_t time;
+	float32_t3 pointLightPos;
+	float32_t pointLightRange;
+	float32_t pointLightAngle;
 };
 
 StructuredBuffer<WaterData> kWaterData : register(t2);
