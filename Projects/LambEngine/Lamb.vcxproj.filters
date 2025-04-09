@@ -235,6 +235,9 @@
     <ClCompile Include="Utils\PerlinNoise.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\Graphics\RayTracing\AccelerationStructure.cpp">
+      <Filter>Engine\Graphics\RayTracing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -437,6 +440,9 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\PostWater">
       <UniqueIdentifier>{ecfce8a0-b714-48c7-9970-25b8dd5ed69d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\RayTracing">
+      <UniqueIdentifier>{f2f56916-8fbd-4c10-afca-5b5083fc9fb2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -721,6 +727,9 @@
     </ClInclude>
     <ClInclude Include="Utils\PerlinNoise.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\RayTracing\AccelerationStructure.h">
+      <Filter>Engine\Graphics\RayTracing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
