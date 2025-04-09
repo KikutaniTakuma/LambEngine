@@ -40,6 +40,9 @@ public:
 		WaveData waveData;
 		AirSkyBox::AtmosphericParams atomosphericParam;
 		float32_t time = 0.0f;
+		float32_t3 pointLightPos;
+		float32_t pointLightRange;
+		float32_t pointLightAngle;
 	};
 
 	using WaterRenderContext = RenderContext<ShaderData, kMaxDrawCount>;
@@ -82,11 +85,14 @@ public:
 		float32_t time, 
 		float32_t2 randomVec,
 		float32_t density,
-		float32_t3 cameraPos,
+		const float32_t3& cameraPos,
 		float32_t divisionMinLength,
 		uint32_t edgeDivision,
 		uint32_t insideDivision,
 		WaveData waveData,
+		const float32_t3& pointLightPos,
+		float32_t pointLightRange,
+		float32_t pointLightAngle,
 		uint32_t color,
 		BlendType blend
 	);

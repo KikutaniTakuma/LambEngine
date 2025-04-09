@@ -79,14 +79,15 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
 {
 	PixelShaderOutPut4 output;
 
-    float32_t3 skyColor = SkyColor(input.instanceID, input.worldPosition.xyz, input.normal, kWaterData[input.instanceID].atmosphericParams.cameraPosition);
+    //float32_t3 skyColor = SkyColor(input.instanceID, input.worldPosition.xyz, input.normal, kWaterData[input.instanceID].atmosphericParams.cameraPosition);
 
     // お水の処理
 	const float32_t2 kRandomVec = kWaterData[input.instanceID].randomVec;
     const float32_t kDensity = kWaterData[input.instanceID].density;
     
     float32_t3 perlinNormal = CreateNormal(input.uv, kRandomVec, kDensity);
-    float32_t3 normal = GenerateNormal(input.worldPosition.xyz, kWaterData[input.instanceID].time, input.instanceID);
+    float32_t3 normal = input.normal;
+    // float32_t3 normal = GenerateNormal(input.worldPosition.xyz, kWaterData[input.instanceID].time, input.instanceID);
     // float32_t3 tangent = NormalToTangent(perlinNormal);
     // float32_t3 binormal = CalcBinormal(perlinNormal, tangent);
     // float32_t3 blendNormal = BlendNormal(perlinNormal, tangent, binormal, normal);
@@ -117,7 +118,7 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
 
 
     t = pow(abs(t), shinness);
-    float32_t3 specDirection = ligColor * t;
+    float32_t3 specDirection = ligColor * t * 100.0f;
     
     float32_t3 lig = diffDirection + specDirection;
     lig += 0.2f;

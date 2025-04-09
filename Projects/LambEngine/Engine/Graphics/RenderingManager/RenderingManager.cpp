@@ -22,6 +22,7 @@
 #include "Engine/Core/ImGuiManager/ImGuiManager.h"
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
 #include "Utils/HSV.h"
+#include "Utils/Easeing.h"
 
 
 #include "Engine/Graphics/TextureManager/TextureManager.h"
@@ -302,6 +303,26 @@ void RenderingManager::Draw() {
 		}
 	}
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
+
+	////0xBE7D21FF
+	float piHalf = (std::numbers::pi_v<float> * 0.5f);
+	if(lightRotate_.x <= piHalf){
+		deferredRenderingData_.directionLight.ligColor = 
+			Vector3::Lerp(
+				Vector3(0.74509803f, 0.49019607f, 0.08235294f),
+				Vector3::kIdentity,
+				std::clamp(Easeing::OutCubic(lightRotate_.x / piHalf), 0.0f, 1.0f)
+			);
+	}
+	else if (piHalf < lightRotate_.x && lightRotate_.x <= piHalf * 2.0f) {
+		deferredRenderingData_.directionLight.ligColor =
+			Vector3::Lerp(
+				Vector3::kIdentity,
+				Vector3(0.74509803f, 0.49019607f, 0.08235294f),
+				std::clamp(Easeing::InCubic((lightRotate_.x - piHalf) / piHalf), 0.0f, 1.0f)
+			);
+	}
+
 
 	atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
 	deferredRenderingData_.directionLight.ligDirection = atmosphericParams_.lightDirection;

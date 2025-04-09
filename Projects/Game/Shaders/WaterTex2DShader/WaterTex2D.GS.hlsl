@@ -42,7 +42,7 @@ void main(
 		float32_t3 gerstner = GenerateWave(worldPosition.xyz, time) * wavePower;
 		gerstner.y += Waves(worldPosition.xyz, instanceID);
 
-		output[i].normal = inputTmp.normal;
+		output[i].normal = GenerateNormal(worldPosition.xyz, kWaterData[instanceID].time, instanceID);;
 
 		output[i].worldPosition.xyz += gerstner;
 

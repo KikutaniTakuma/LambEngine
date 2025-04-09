@@ -49,11 +49,14 @@ void WaterTex2D::Draw(
 	float32_t time,
 	float32_t2 randomVec,
 	float32_t density,
-	float32_t3 cameraPos,
+	const float32_t3& cameraPos,
 	float32_t divisionMinLength,
 	uint32_t edgeDivision,
 	uint32_t insideDivision,
 	WaveData waveData,
+	const float32_t3& pointLightPos,
+	float32_t pointLightRange,
+	float32_t pointLightAngle,
 	uint32_t color,
 	BlendType blend
 ) {
@@ -73,7 +76,10 @@ void WaterTex2D::Draw(
 			.viewportMatrix = float32_t4x4::MakeViewPort(0.0f, 0.0f, clientSize.x, clientSize.y, 0.0f, 1.0f),
 			.waveData = waveData,
 			.atomosphericParam = RenderingManager::GetInstance()->GetAtmosphericParams(),
-			.time = time
+			.time = time,
+			.pointLightPos = pointLightPos,
+			.pointLightRange = pointLightRange,
+			.pointLightAngle = pointLightAngle,
 		}
 	);
 
