@@ -94,7 +94,12 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     float32_t3 ligDirection = kLight.ligDirection;
     float32_t3 ligColor = kLight.ligColor;
     float32_t shinness = kLight.shinness;
- 
+
+    float32_t3 cameraPosition = kCameraPos.pos;
+    float32_t3 worldPos = input.worldPosition.xyz;
+    float32_t3 wolrdPosToCamera = cameraPosition - worldPos;
+    float32_t wolrdPosToCameraLength = length(wolrdPosToCamera);
+
     // ディレクションライト拡散反射光
     float32_t t = dot(normal, ligDirection);
     t = saturate(t);
@@ -102,7 +107,7 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     float32_t3 diffDirection = ligColor * t;
 
     // 鏡面反射光
-    float32_t3 toEye = kCameraPos.pos - input.worldPosition.xyz;
+    float32_t3 toEye = wolrdPosToCamera;
     toEye = normalize(toEye);
     
     float32_t3 refVec = reflect(-ligDirection, normal);
@@ -116,12 +121,51 @@ PixelShaderOutPut4 main(GeometoryOutPut input)
     
     float32_t3 lig = diffDirection + specDirection;
     lig += 0.2f;
-    
+
+
+    // スポットライト
+    float32_t3 pointLightPos = kWaterData[input.instanceID].pointLightPos;
+    float32_t pointLightRange = kWaterData[input.instanceID].pointLightRange;
+
+    float32_t3 pointLightDir = input.worldPosition.xyz - pointLightPos;
+    float32_t pointLightDistance = length(pointLightDir);
+    pointLightDir = normalize(pointLightDir);
+
+    t = dot(normal, pointLightDir);
+    t = saturate(t);
+
+    float32_t3 potinDiffDirection = ligColor * t;
+
+    refVec = reflect(pointLightDir, normal);
+    refVec = normalize(refVec);
+
+    t = dot(refVec, toEye);
+
+
+    t = pow(abs(t), shinness);
+    float32_t3 pointSpecDirection = ligColor * t * 1000.0f;
+
+
+    float32_t affect = 1.0f - rcp(pointLightDistance) * pointLightDistance;
+    affect = max(affect, 0.0f);
+    potinDiffDirection *= affect;
+    pointSpecDirection *= affect;
+
+    float32_t3 potintLig =  potinDiffDirection + pointSpecDirection;
+    potintLig *= 10.0f;
+
+    // フォグパラメータ
+    float32_t fogStart = 20.0f; // ここからフォグがかかり始める距離
+    float32_t fogEnd = 100.0f;  // 最大距離
+    refVec = reflect(-wolrdPosToCamera, normal);
+    float32_t fogFactor = dot(normalize(refVec), normalize(wolrdPosToCamera));
+    fogFactor = lerp(saturate(-fogFactor), 1.0f, (min(wolrdPosToCameraLength, fogEnd) - fogStart) * rcp(fogEnd - fogStart) * saturate(wolrdPosToCameraLength - fogStart));
+
     // 色
     //output.color0.rgb = saturate(float32_t3(1.0f,1.0f,1.0f) * (input.worldPosition.y * 0.1f));
     //output.color0.w = 1.0f;
-    output.color0.rgb = kColor[input.instanceID].color.rgb * lig;
-    output.color0.w = kColor[input.instanceID].color.w;
+    output.color0.rgb = kColor[input.instanceID].color.rgb * (lig + potintLig);
+    output.color0.w = lerp(0.2f, 1.0f, pow(fogFactor, 3.0f));
 
     // 法線
     output.color2.xyz = normal;
