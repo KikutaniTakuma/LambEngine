@@ -281,6 +281,18 @@ Mat4x4 Quaternion::GetMatrix() const {
 	return Mat4x4::MakeRotate(*this);
 }
 
+void Quaternion::DecomposeToAxisAngle(Vector3& outAxis, float& outAngle) const {
+	if (this->vector.vector3.LengthSQ() == 0.0f) {
+		outAxis = Vector3::kXIdentity;
+		outAngle = 0.0f;
+		return;
+	}
+
+	outAxis = this->vector.vector3.Normalize();
+
+	outAngle = std::acos(this->vector.w) * 2.0f;
+}
+
 Vector3 Quaternion::ToEuler() const {
 	return QuaternionToEuler(*this);
 }
@@ -330,13 +342,13 @@ Quaternion Quaternion::MakeRotateAxisAngle(const Vector3& axis, float angle) {
 	return result;
 }
 Quaternion Quaternion::MakeRotateXAxis(float angle) {
-	return Quaternion{ std::sin(angle * 0.5f),0.0f,0.0f,std::cos(angle * 0.5f), };
+	return Quaternion{ std::sin(angle * 0.5f),0.0f,0.0f,std::cos(angle * 0.5f), }.Normalize();
 }
 Quaternion Quaternion::MakeRotateYAxis(float angle) {
-	return Quaternion{ 0.0f, std::sin(angle * 0.5f),0.0f,std::cos(angle * 0.5f) };
+	return Quaternion{ 0.0f, std::sin(angle * 0.5f),0.0f,std::cos(angle * 0.5f) }.Normalize();
 }
 Quaternion Quaternion::MakeRotateZAxis(float angle) {
-	return Quaternion{ 0.0f, 0.0f, std::sin(angle * 0.5f),std::cos(angle * 0.5f) };
+	return Quaternion{ 0.0f, 0.0f, std::sin(angle * 0.5f),std::cos(angle * 0.5f) }.Normalize();
 }
 
 Quaternion Quaternion::EulerToQuaternion(const Vector3& euler)

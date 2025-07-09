@@ -219,9 +219,9 @@ void Player::Initialize() {
 	easingCount_ = 4.0f;
 	deathAnimationEasingCount_ = 3.0f;
 
-	positionEasing_.Start(false, easingCount_,  Easeing::Type::kInSine);
-	rotateEasing_.Start(false, easingCount_ * 0.5f,  Easeing::Type::kInSine);
-	deathAnimationEasing_.Start(false, deathAnimationEasingCount_ * 0.5f,  Easeing::Type::kInSine);
+	positionEasing_.Start(false, easingCount_,  Easing::Type::kInSine);
+	rotateEasing_.Start(false, easingCount_ * 0.5f,  Easing::Type::kInSine);
+	deathAnimationEasing_.Start(false, deathAnimationEasingCount_ * 0.5f,  Easing::Type::kInSine);
 
 	for (auto& sailInterval : sailsIntervals_) {
 		sailInterval.count = 0;
@@ -256,15 +256,10 @@ void Player::Initialize() {
 		loopCannonIntervalTexture->uvPibot = { 0.0f,0.0f };
 	}
 
-	for (auto& i : cannonParticle_) {
-		i.reset(new Particle{});
-		i->LoadSettingDirectory("cannon");
-	}
 
-	cannonParticleItr_ = cannonParticle_.begin();
 
 	deathTexture_->color = Vector4ToUint({ 1.0f,1.0f,1.0f,0.0f });
-	goEasing_.Start(false, 1.5f,  Easeing::Type::kInSine);
+	goEasing_.Start(false, 1.5f,  Easing::Type::kInSine);
 
 	isToCustomizeScene_ = false;
 }
@@ -300,9 +295,7 @@ void Player::Update() {
 			goEasing_.Update();
 		}
 
-		for (auto& i : cannonParticle_) {
-			i->Update();
-		}
+
 	}
 	/*if (!isAlive_) {
 		Initialize();
@@ -986,13 +979,7 @@ void Player::CannonUpdate() {
 				// エミッタのポジション
 				Vector3 emitterPos = cannon->pos + body_->pos;
 
-				// 大砲のパーティクル発生
-				(*cannonParticleItr_)->ParticleStart(emitterPos);
 
-				cannonParticleItr_++;
-				if (cannonParticleItr_ == cannonParticle_.end()) {
-					cannonParticleItr_ = cannonParticle_.begin();
-				}
 
 
 				// 左右の加速度

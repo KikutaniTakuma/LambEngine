@@ -83,8 +83,8 @@ void TitleScene::Initialize() {
     sceneChangeRotateBasis_ = 0.22f;
     sceneChangeRotateSpeed_ = rotateSpeed_ * 5.0f;
 
-    easing_.reset(new Easeing{});
-    volumeEasing_.reset(new Easeing{});
+    easing_.reset(new Easing{});
+    volumeEasing_.reset(new Easing{});
 
     audioManager_->Load("./Resources/Sound/sea.mp3");
     seaSE_ = audioManager_->Get("./Resources/Sound/sea.mp3");
@@ -169,8 +169,8 @@ void TitleScene::Update() {
         Input::GetInstance()->GetMouse()->Pushed(Mouse::Button::Left)) {
         isSceneChange_ = true;
         sceneChangeRotate_ = rotate_;
-        easing_->Start(false, 0.2f, Easeing::Type::kOutQuad);
-        volumeEasing_->Start(false, 1.2f, Easeing::Type::kInSine);
+        easing_->Start(false, 0.2f, Easing::Type::kOutQuad);
+        volumeEasing_->Start(false, 1.2f, Easing::Type::kInSine);
 
         moveShipSE_->Start(moveShipSEVolume_.first, true);
         seaSE_->SetVolume(0.1f);

@@ -50,23 +50,36 @@ void DrawerManager::LoadTexture(const std::string& fileName) {
 	textureManager_->LoadTexture(fileName);
 }
 
-void DrawerManager::LoadModel(const std::string& fileName) {
-	auto isExist = models_.find(fileName);
+size_t DrawerManager::LoadModel(const std::string& fileName) {
+	size_t key = std::hash<std::string>()(fileName);
+	auto isExist = models_.find(key);
 
 	if (isExist == models_.end()) {
 		std::unique_ptr<Model> newModel = std::make_unique<Model>(fileName);
 
-		models_.insert(std::make_pair(fileName, newModel.release()));
+		models_.insert(std::make_pair(key, newModel.release()));
 	}
+
+	return key;
 }
 
 Model* const DrawerManager::GetModel(const std::string& fileName)
 {
-	if (not models_[fileName]) {
+	size_t key = std::hash<std::string>()(fileName);
+	if (not models_[key]) {
 		throw Lamb::Error::Code<DrawerManager>("this model is not loaded -> " + fileName, ErrorPlace);
 	}
 
-	return models_[fileName].get();
+	return models_[key].get();
+}
+
+Model* const DrawerManager::GetModel(size_t key)
+{
+	if (not models_[key]) {
+		throw Lamb::Error::Code<DrawerManager>("this model is not loaded -> " + key, ErrorPlace);
+	}
+
+	return models_[key].get();
 }
 
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "../Object.h"
-#include "Utils/Easeing.h"
+#include "Utils/Easing.h"
 
 class WindNodeComp : public IComp {
 public:
@@ -58,7 +58,7 @@ public:
 
 private:
 	// 最初のイージング
-	Easeing ease_;
+	Easing ease_;
 
 private:
 	bool isActive_;

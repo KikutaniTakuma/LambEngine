@@ -10,20 +10,31 @@
 /// </summary>
 class Model : public BaseDrawer {
 public:
-	static constexpr uint32_t kMaxDrawCount = 512;
+	static constexpr uint32_t kMaxDrawCount = 1024;
 
 public:
+	struct ShaderData {
+		int32_t isLighting = 1;
+		int32_t isEffect = 0;
+		int32_t backGroundTextureIndex = 0;
+		struct GaussianState {
+			float32_t2 dir;
+			float32_t sigma = 0.0f;
+			int32_t kernelSize = 0;
+		} gausState;
+	};
+
 	struct Data {
 		Mat4x4 worldMatrix = Mat4x4::kIdentity;
 		Mat4x4 camera = Mat4x4::kIdentity;
 		uint32_t color = 0xffffffff;
 		BlendType blend = BlendType::kNone;
-		bool isLighting = true;
+		ShaderData shaderData;
 	};
 	struct Instance {
 		QuaternionTransform transform;
 		uint32_t color = 0xffffffff;
-		bool isLighting = true;
+		ShaderData shaderData;
 	};
 
 public:
@@ -56,7 +67,7 @@ public:
 		const Mat4x4& camera,
 		uint32_t color,
 		BlendType blend,
-		bool isLighting = true
+		ShaderData shaderData = {}
 	);
 
 	/// <summary>
@@ -77,6 +88,9 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	const ModelData& GetModelData() const;
+
+private:
+	int32_t backGroundTextureIndex_ = 0;
 };
 
 /// <summary>
@@ -120,7 +134,7 @@ public:
 
 	uint32_t color = 0xffffffff;
 	BlendType blend = BlendType::kNone;
-	bool isLighting = true;
+	Model::ShaderData shaderData;
 
 private:
 	Lamb::SafePtr<Model> pModel_;

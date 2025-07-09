@@ -51,12 +51,18 @@ namespace Lamb {
 			return flg_ != other.flg_ || preFlg_ != other.preFlg_;
 		}
 
+		inline bool Get() const {
+			return flg_;
+		}
+
 		inline bool* const data() {
 			return &flg_;
 		}
 		inline const bool* const data() const {
 			return &flg_;
 		}
+
+
 
 	public:
 		/// <summary>

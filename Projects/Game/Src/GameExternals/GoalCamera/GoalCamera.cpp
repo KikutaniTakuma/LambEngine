@@ -13,8 +13,8 @@ void GoalCamera::Initialize() {
 	endCamera_.pos = goal_.pos + offset_;
 	endCamera_.rotate = rotateOffset_;
 	easingCount_ = 4.0f;
-	rotateEasing_.Start(false, easingCount_, Easeing::Type::kInSine);
-	translateEasing_.Start(false, easingCount_, Easeing::Type::kInSine);
+	rotateEasing_.Start(false, easingCount_, Easing::Type::kInSine);
+	translateEasing_.Start(false, easingCount_, Easing::Type::kInSine);
 }
 
 void GoalCamera::Update() {

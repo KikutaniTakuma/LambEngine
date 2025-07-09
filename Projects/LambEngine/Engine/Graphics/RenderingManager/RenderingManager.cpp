@@ -22,10 +22,12 @@
 #include "Engine/Core/ImGuiManager/ImGuiManager.h"
 #include "Engine/Core/DescriptorHeap/RtvHeap.h"
 #include "Utils/HSV.h"
-#include "Utils/Easeing.h"
+#include "Utils/Easing.h"
 
 
 #include "Engine/Graphics/TextureManager/TextureManager.h"
+
+#include <Engine/Core/EffekseerControler/EffekseerControler.h>
 
 #ifdef USE_DEBUG_CODE
 #include "imgui.h"
@@ -48,6 +50,8 @@ RenderingManager::RenderingManager() {
 			);
 		};
 
+
+	/// DeferredRenderingの初期化
 	deferredRendering_ = std::make_unique<DeferredRendering>();
 	deferredRendering_->Init();
 
@@ -64,11 +68,11 @@ RenderingManager::RenderingManager() {
 
 	auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->BookingHeapPos(5u);
-	srvHeap->CreateView(*colorTexture_);
-	srvHeap->CreateView(*normalTexture_);
-	srvHeap->CreateView(*worldPositionTexture_);
-	srvHeap->CreateView(*distortionTexture_);
-	srvHeap->CreateView(*distortionTextureRGBA_);
+	srvHeap->CreateView(colorTexture_.get());
+	srvHeap->CreateView(normalTexture_.get());
+	srvHeap->CreateView(worldPositionTexture_.get());
+	srvHeap->CreateView(distortionTexture_.get());
+	srvHeap->CreateView(distortionTextureRGBA_.get());
 
 	deferredRendering_->SetColorHandle(colorTexture_->GetHandleGPU());
 	deferredRendering_->SetNormalHandle(normalTexture_->GetHandleGPU());
@@ -80,11 +84,13 @@ RenderingManager::RenderingManager() {
 	deferredRenderingData_.directionLight.ligColor = Vector3::kIdentity;
 	deferredRenderingData_.directionLight.ligDirection = Vector3::kXIdentity * Quaternion::EulerToQuaternion(Vector3(-90.0f, 0.0f, 90.0f) * Lamb::Math::toRadian<float>);
 
+
+	// 影
 	depthStencil_ = std::make_unique<DepthBuffer>();
 	depthStencilShadow_ = std::make_unique<DepthBuffer>();
 	srvHeap->BookingHeapPos(2u);
-	srvHeap->CreateView(*depthStencil_);
-	srvHeap->CreateView(*depthStencilShadow_);
+	srvHeap->CreateView(depthStencil_.get());
+	srvHeap->CreateView(depthStencilShadow_.get());
 
 	shadow_->SetDepthHandle(depthStencil_->GetHandleGPU());
 	shadow_->SetDepthShadowHandle(depthStencilShadow_->GetHandleGPU());
@@ -92,6 +98,8 @@ RenderingManager::RenderingManager() {
 	TextureManager::GetInstance()->LoadTexture("./Resources/Water/caustics_02.bmp");
 	Texture* causticsTex = TextureManager::GetInstance()->GetTexture("./Resources/Water/caustics_02.bmp");
 
+
+	// 水の歪み描画
 	postWater_ = Lamb::MakeSafePtr<PostWater>();
 	postWater_->Init();
 	postWater_->SetDistortionTexHandle(distortionTextureRGBA_->GetHandleGPU());
@@ -99,11 +107,18 @@ RenderingManager::RenderingManager() {
 	postWater_->SetCausticsTexHandle(causticsTex->GetHandleGPU());
 	postWater_->SetWorldPositionTexHandle(worldPositionTexture_->GetHandleGPU());
 
+	effectTexture_ = std::make_unique<PeraRender>();
+	effectTexture_->Initialize(postWater_.get());
+
 	rgbaTexture_ = std::make_unique<PeraRender>();
-	rgbaTexture_->Initialize(postWater_.get());
-	Vector4 rgba = rgbaTexture_->color;
+	rgbaTexture_->Initialize("./Shaders/PostShader/PostNone.PS.hlsl", { DXGI_FORMAT_R32G32B32A32_FLOAT });
+
+	Vector4 rgba = effectTexture_->color;
 	hsv_ = RGBToHSV({ rgba.color.r,rgba.color.g,rgba.color.b });
 
+
+
+	// ポストエフェクト関連
 	std::unique_ptr<Luminate> luminate = std::make_unique<Luminate>();
 	luminate->Init();
 	luminate_ = luminate.release();
@@ -158,7 +173,7 @@ RenderingManager::RenderingManager() {
 	isUseMesh_ = Lamb::IsCanUseMeshShader();
 
 	sunSpeed_ = 5.0f * Lamb::Math::toRadian<float>;
-	isSkyTimeStart_ = true;
+	isSkyTimeStart_ = false;
 
 #ifdef USE_DEBUG_CODE
 	const uint32_t kPlotDivison = 11;
@@ -173,6 +188,7 @@ RenderingManager::RenderingManager() {
 
 #endif // USE_DEBUG_CODE
 
+	effekseerControler_ = EffekseerControler::GetInstance();
 }
 
 RenderingManager::~RenderingManager()
@@ -207,6 +223,7 @@ void RenderingManager::FrameStart()
 	// 最初のフレームは通らない
 	if (not isFirstFrame_) {
 		ImGuiManager::GetInstance()->End();
+		//effekseerControler_->EndFrame();
 
 		directXSwapChain->ChangeBackBufferState();
 
@@ -244,6 +261,9 @@ void RenderingManager::FrameStart()
 	const Lamb::SafePtr cbvSrvUavDescriptorHeap = CbvSrvUavHeap::GetInstance();
 	std::array heapPtrs = { cbvSrvUavDescriptorHeap->Get() };
 	DescriptorHeap::SetHeaps(heapPtrs.size(), heapPtrs.data());
+
+
+	effekseerControler_->NewFrame();
 }
 
 void RenderingManager::FrameEnd()
@@ -296,48 +316,11 @@ void RenderingManager::FinalFrame()
 }
 
 void RenderingManager::Draw() {
-	if (isSkyTimeStart_) {
-		lightRotate_.x += sunSpeed_ * Lamb::DeltaTime();
-		if (179.0f * Lamb::Math::toRadian<float> < lightRotate_.x) {
-			lightRotate_.x = 0.0f;
-		}
-	}
+	CalcSunLight();
+	
 	Lamb::SafePtr renderContextManager = RenderContextManager::GetInstance();
 
-	////0xBE7D21FF
-	float piHalf = (std::numbers::pi_v<float> * 0.5f);
-	if(lightRotate_.x <= piHalf){
-		deferredRenderingData_.directionLight.ligColor = 
-			Vector3::Lerp(
-				Vector3(0.74509803f, 0.49019607f, 0.08235294f),
-				Vector3::kIdentity,
-				std::clamp(Easeing::OutCubic(lightRotate_.x / piHalf), 0.0f, 1.0f)
-			);
-	}
-	else if (piHalf < lightRotate_.x && lightRotate_.x <= piHalf * 2.0f) {
-		deferredRenderingData_.directionLight.ligColor =
-			Vector3::Lerp(
-				Vector3::kIdentity,
-				Vector3(0.74509803f, 0.49019607f, 0.08235294f),
-				std::clamp(Easeing::InCubic((lightRotate_.x - piHalf) / piHalf), 0.0f, 1.0f)
-			);
-	}
-
-
-	atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
-	deferredRenderingData_.directionLight.ligDirection = atmosphericParams_.lightDirection;
-	gaussianPipeline_[GaussianIndex::kHorizontal]->SetGaussianState(gaussianBlurStateHorizontal_);
-	gaussianPipeline_[GaussianIndex::kVertical]->SetGaussianState(gaussianBlurStateVertical_);
-	luminate_->SetLuminanceThreshold(luminanceThreshold);
-	outlinePipeline_->SetWeight(outlineWeight_);
-
-	CalcLightCamera();
-	deferredRendering_->SetCameraMatrix(viewMatrix_ * projectionMatrix_);
-	deferredRendering_->SetLightCameraMatrix(lightCamera_);
-
-	tonemapParamas_ = PrepareTonemapParams(tonemapToe_, tonemapLinear_, tonemapShoulder_);
-	postWater_->SetTonemapParams(tonemapParamas_);
-	postWater_->SetWaterWorldMatrixInverse(waterWorldMatrx_.Inverse());
+	SetGraphicsState();
 
 	/// ====================================================================================
 
@@ -397,7 +380,7 @@ void RenderingManager::Draw() {
 	ZSort(rgbaList);
 
 	// 色書き込み用のレンダーターゲットをセット
-	std::array<RenderTarget*, 2> rgbaTextureRenderTarget = {
+	std::array rgbaTextureRenderTarget = {
 		&(rgbaTexture_->GetRender()),
 		(distortionTextureRGBA_.get()),
 	};
@@ -426,10 +409,57 @@ void RenderingManager::Draw() {
 	// Deferredでライティングした後に描画
 	DrawRGBA(rgbaList);
 
+	// effekseer描画
+	effekseerControler_->Draw();
+	effekseerControler_->EndFrame();
+
+	// SRV用のヒープ(Effekseerで別のディスクリプタヒープをセットされるので改めて設定)
+	const Lamb::SafePtr cbvSrvUavDescriptorHeap = CbvSrvUavHeap::GetInstance();
+	std::array heapPtrs = { cbvSrvUavDescriptorHeap->Get() };
+	DescriptorHeap::SetHeaps(heapPtrs.size(), heapPtrs.data());
+
+
 	RenderTarget::ChangeToTextureResources(
 		rgbaTextureRenderTarget.data(),
 		static_cast<uint32_t>(rgbaTextureRenderTarget.size())
 	);
+
+
+	/// ===================================================================================
+
+	RenderDataLists alphaEffectList = {
+		renderContextManager->CreateRenderList(BlendType::kAlphaEffect)
+	};
+
+	ZSort(alphaEffectList);
+
+	std::array effectTextureRenderTarget = {
+		&(effectTexture_->GetRender())
+	};
+
+	RenderTarget::ChangeToWriteResources(
+		effectTextureRenderTarget.data(),
+		static_cast<uint32_t>(effectTextureRenderTarget.size())
+	);
+	RenderTarget::SetRenderTargets(
+		effectTextureRenderTarget.data(),
+		static_cast<uint32_t>(effectTextureRenderTarget.size()),
+		&depthStencil_->GetDepthHandle()
+	);
+	RenderTarget::Clear(
+		effectTextureRenderTarget.data(),
+		static_cast<uint32_t>(effectTextureRenderTarget.size())
+	);
+
+	rgbaTexture_->Draw(Pipeline::None, nullptr);
+
+	DrawAlphaEffect(alphaEffectList);
+
+	RenderTarget::ChangeToTextureResources(
+		effectTextureRenderTarget.data(),
+		static_cast<uint32_t>(effectTextureRenderTarget.size())
+	);
+
 
 	/// ===================================================================================
 
@@ -447,7 +477,7 @@ void RenderingManager::Draw() {
 
 
 	// メインと輝度抽出用のレンダーターゲットをセット
-	std::array<RenderTarget*, 1> luminate = {
+	std::array luminate = {
 		&(luminateTexture_->GetRender())
 	};
 	RenderTarget::ChangeResourceState(
@@ -466,13 +496,16 @@ void RenderingManager::Draw() {
 
 	
 	depthStencilShadow_->Barrier();
-	rgbaTexture_->Draw(Pipeline::None, nullptr);
+	effectTexture_->Draw(Pipeline::None, nullptr);
 	depthStencilShadow_->Barrier();
 
 	/// ====================================================================================
 
 	// ポストエフェクトの描画
 	DrawPostEffect();
+	
+	/// ====================================================================================
+
 
 	/// ====================================================================================
 
@@ -498,6 +531,8 @@ void RenderingManager::Draw() {
 
 	std::for_each(rgbaList.begin(), rgbaList.end(), resetDrawCount_);
 
+	std::for_each(alphaEffectList.begin(), alphaEffectList.end(), resetDrawCount_);
+
 	std::for_each(nodepthLists.begin(), nodepthLists.end(), resetDrawCount_);
 }
 
@@ -518,6 +553,53 @@ void RenderingManager::CalcLightCamera() {
 	Quaternion viewRotate = Quaternion::DirectionToDirection(Vector3::kZIdentity, (lightBasePos - lightPos).Normalize());
 
 	lightCamera_ = Mat4x4::MakeAffin(Vector3::kIdentity, viewRotate, lightPos) * Mat4x4::MakeOrthographic(160.0f, 90.0f, 0.1f, 1000.0f);
+}
+
+void RenderingManager::CalcSunLight() {
+	if (isDrawSkyBox_) {
+		if (isSkyTimeStart_) {
+			lightRotate_.x += sunSpeed_ * Lamb::DeltaTime();
+			if (179.0f * Lamb::Math::toRadian<float> < lightRotate_.x) {
+			lightRotate_.x = 0.0f;
+			}
+		}
+
+		////0xBE7D21FF
+		float piHalf = (std::numbers::pi_v<float> *0.5f);
+		if (lightRotate_.x <= piHalf) {
+			deferredRenderingData_.directionLight.ligColor =
+				Vector3::Lerp(
+					Vector3(0.74509803f, 0.49019607f, 0.08235294f),
+					Vector3::kIdentity,
+					std::clamp(Easing::OutCubic(lightRotate_.x / piHalf), 0.0f, 1.0f)
+				);
+		}
+		else if (piHalf < lightRotate_.x && lightRotate_.x <= piHalf * 2.0f) {
+			deferredRenderingData_.directionLight.ligColor =
+				Vector3::Lerp(
+					Vector3::kIdentity,
+					Vector3(0.74509803f, 0.49019607f, 0.08235294f),
+					std::clamp(Easing::InCubic((lightRotate_.x - piHalf) / piHalf), 0.0f, 1.0f)
+				);
+		}
+	}
+}
+
+void RenderingManager::SetGraphicsState() {
+	atmosphericParams_.lightDirection = kLightRotateBaseVector * Quaternion::EulerToQuaternion(lightRotate_);
+	deferredRenderingData_.directionLight.ligDirection = atmosphericParams_.lightDirection;
+	gaussianPipeline_[GaussianIndex::kHorizontal]->SetGaussianState(gaussianBlurStateHorizontal_);
+	gaussianPipeline_[GaussianIndex::kVertical]->SetGaussianState(gaussianBlurStateVertical_);
+	luminate_->SetLuminanceThreshold(luminanceThreshold);
+	outlinePipeline_->SetWeight(outlineWeight_);
+
+	CalcLightCamera();
+	deferredRendering_->SetCameraMatrix(viewMatrix_ * projectionMatrix_);
+	deferredRendering_->SetLightCameraMatrix(lightCamera_);
+
+	tonemapParamas_ = PrepareTonemapParams(tonemapToe_, tonemapLinear_, tonemapShoulder_);
+	postWater_->SetTonemapParams(tonemapParamas_);
+	postWater_->SetWaterWorldMatrixInverse(waterWorldMatrx_.Inverse());
 }
 
 DepthBuffer* RenderingManager::GetDepthBuffer()
@@ -858,6 +940,10 @@ const Vector3& RenderingManager::GetCameraPosition() const
 	return deferredRenderingData_.eyePos;
 }
 
+UINT RenderingManager::GetBackGroundTexture() const {
+	return rgbaTexture_->GetTex()->GetHandleUINT();
+}
+
 void RenderingManager::DrawRGB(const RenderDataList& renderList) {
 	for (size_t index = 0; const auto & element : renderList.second) {
 		if (renderList.first <= index) {
@@ -876,6 +962,20 @@ void RenderingManager::DrawSkyBox() {
 void RenderingManager::DrawRGBA(const RenderDataLists& rgbaList) {
 	for (auto& list : rgbaList) {
 		for (size_t count = 0; auto & element : list.second) {
+			if (list.first <= count) {
+				break;
+			}
+
+			element->Draw();
+
+			count++;
+		}
+	}
+}
+
+void RenderingManager::DrawAlphaEffect(const RenderDataLists& renderList) {
+	for (auto& list : renderList) {
+		for (size_t count = 0; auto& element : list.second) {
 			if (list.first <= count) {
 				break;
 			}

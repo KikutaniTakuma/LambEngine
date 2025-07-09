@@ -145,6 +145,13 @@ public:
 	/// <returns>クォータニオンからの回転行列</returns>
 	[[nodiscard]] Mat4x4 GetMatrix() const;
 
+	/// <summary>
+	/// 任意軸とangleを取得
+	/// </summary>
+	/// <param name="outAxis">任意軸</param>
+	/// <param name="outAngle">Angle</param>
+	void DecomposeToAxisAngle(Vector3& outAxis, float& outAngle) const;
+
 	[[nodiscard]] Vector3 ToEuler() const;
 
 	void SetEuler(const Vector3& euler);
@@ -195,7 +202,7 @@ public:
 	static [[nodiscard]] Quaternion EulerToQuaternion(const Vector3& euler);
 
 	/// <summary>
-	/// Quaternionからオイラー角への変換
+	/// Quaternionからオイラー角への変換(Debug以外で使うな)
 	/// </summary>
 	/// <param name="quaternion">Quaternion</param>
 	/// <returns></returns>

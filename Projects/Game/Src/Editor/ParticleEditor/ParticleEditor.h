@@ -1,5 +1,4 @@
 #pragma once
-#include "Drawer/Particle/Particle.h"
 #include "./Camera/Camera.h"
 
 /// <summary>
@@ -33,7 +32,6 @@ public:
 private:
 	std::string inputLoadString_;
 	std::string currentLoadString_;
-	Particle particle_;
 
 	bool isOpen_ = false;
 

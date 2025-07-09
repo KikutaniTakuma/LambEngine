@@ -8,7 +8,9 @@
 #include "Engine/Core/DescriptorHeap/CbvSrvUavHeap.h"
 #include "Engine/Core/DirectXCommand/DirectXCommand.h"
 #include "Error/Error.h"
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
+#endif // USE_DEBUG_CODE
 #include <numbers>
 
 #include "Utils/EngineInfo.h"

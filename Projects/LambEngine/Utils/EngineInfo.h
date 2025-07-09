@@ -5,10 +5,16 @@
 
 namespace Lamb {
 	/// <summary>
-	/// デルタタイム
+	/// デルタタイム(デバッグの設定でゲームを止めると0が変える)
 	/// </summary>
 	/// <returns>デルタタイム</returns>
 	float DeltaTime();
+
+	/// <summary>
+	/// 最大FPSを取得
+	/// </summary>
+	/// <returns></returns>
+	float MaxFPS();
 
 	/// <summary>
 	/// クライアントサイズ

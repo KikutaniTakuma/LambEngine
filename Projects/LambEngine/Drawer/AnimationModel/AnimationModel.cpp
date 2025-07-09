@@ -56,11 +56,11 @@ void AnimationModel::Draw(
 	const Mat4x4& camera,
 	uint32_t color,
 	BlendType blend,
-	bool isLighting
+	Model::ShaderData shaderdata
 ) {
-	SkinRenderContext<uint32_t, 1>* renderContext = pRenderSet->GetRenderContextDowncast<SkinRenderContext<uint32_t, 1>>(blend);
+	Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<SkinRenderContext<Model::ShaderData, 1>>(blend);
 	renderContext->SetSkinCluster(pSkinCluster_.get());
-	renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
+	renderContext->SetShaderStruct(shaderdata);
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
 	pSkeleton_->Draw(worldMatrix, camera);

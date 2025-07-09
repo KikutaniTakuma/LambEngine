@@ -79,27 +79,27 @@ void CbvSrvUavHeap::Use(uint32_t handleIndex, UINT rootParmIndex) {
 	commandlist->SetGraphicsRootDescriptorTable(rootParmIndex, heapHandles_[handleIndex].second);
 }
 
-uint32_t CbvSrvUavHeap::CreateView(Descriptor& buffer) {
+uint32_t CbvSrvUavHeap::CreateView(Descriptor* buffer) {
 	if (currentHandleIndex_ >= heapSize_) {
 		throw Lamb::Error::Code<CbvSrvUavHeap>("Over Heap Size", ErrorPlace);
 	}
 
 	if (bookingHandle_.empty()) {
 		useHandle_.push_back(currentHandleIndex_);
-		buffer.CreateView(heapHandles_[currentHandleIndex_].first, heapHandles_[currentHandleIndex_].second, currentHandleIndex_);
+		buffer->CreateView(heapHandles_[currentHandleIndex_].first, heapHandles_[currentHandleIndex_].second, currentHandleIndex_);
 		currentHandleIndex_++;
 		return currentHandleIndex_ - 1u;
 	}
 	else {
 		uint32_t nowCreateViewHandle = bookingHandle_.front();
 		useHandle_.push_back(nowCreateViewHandle);
-		buffer.CreateView(heapHandles_[nowCreateViewHandle].first, heapHandles_[nowCreateViewHandle].second, nowCreateViewHandle);
+		buffer->CreateView(heapHandles_[nowCreateViewHandle].first, heapHandles_[nowCreateViewHandle].second, nowCreateViewHandle);
 		bookingHandle_.pop_front();
 		return nowCreateViewHandle;
 	}
 }
 
-uint32_t CbvSrvUavHeap::CreateTextureView(Descriptor& tex)
+uint32_t CbvSrvUavHeap::CreateTextureView(Descriptor* tex)
 {
 	// viewを作れる上限か
 	if (kMaxTextureHadle_ <= currentTextureHeapIndex_) {
@@ -108,26 +108,26 @@ uint32_t CbvSrvUavHeap::CreateTextureView(Descriptor& tex)
 
 
 	if (releaseTextureHeapIndex_.empty()) {
-		tex.CreateView(heapHandles_[currentTextureHeapIndex_].first, heapHandles_[currentTextureHeapIndex_].second, currentTextureHeapIndex_);
+		tex->CreateView(heapHandles_[currentTextureHeapIndex_].first, heapHandles_[currentTextureHeapIndex_].second, currentTextureHeapIndex_);
 		currentTextureHeapIndex_++;
 		return currentTextureHeapIndex_ - 1u;
 	}
 	else {
 		uint32_t nowCreateViewHandle = releaseTextureHeapIndex_.front();
-		tex.CreateView(heapHandles_[nowCreateViewHandle].first, heapHandles_[nowCreateViewHandle].second, nowCreateViewHandle);
+		tex->CreateView(heapHandles_[nowCreateViewHandle].first, heapHandles_[nowCreateViewHandle].second, nowCreateViewHandle);
 		releaseTextureHeapIndex_.pop_front();
 		return nowCreateViewHandle;
 	}
 }
 
-void CbvSrvUavHeap::ReleaseView(Texture& tex)
+void CbvSrvUavHeap::ReleaseView(Texture* tex)
 {
 	// すでにコンテナに追加してのか
-	auto isExist = std::find(releaseTextureHeapIndex_.begin(), releaseTextureHeapIndex_.end(), tex.GetHandleUINT());
+	auto isExist = std::find(releaseTextureHeapIndex_.begin(), releaseTextureHeapIndex_.end(), tex->GetHandleUINT());
 
 	// 追加してない
 	if (isExist == releaseTextureHeapIndex_.end()) {
-		releaseTextureHeapIndex_.push_back(tex.GetHandleUINT());
+		releaseTextureHeapIndex_.push_back(tex->GetHandleUINT());
 	}
 }
 

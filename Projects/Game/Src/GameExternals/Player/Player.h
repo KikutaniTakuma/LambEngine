@@ -7,12 +7,12 @@
 #include "AudioManager/AudioManager.h"
 #include "Drawer/Model/Model.h"
 #include "Drawer/Texture2D/Texture2D.h"
-#include "Drawer/Particle/Particle.h"
+
 #include "GameExternals/CollisionManager/Collider/Collider.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Math/Matrix.h"
 #include "Math/Vector3.h"
-#include "Utils/Easeing.h"
+#include "Utils/Easing.h"
 
 #include "Game/WaterInteractive/WaterInteractive.h"
 
@@ -309,7 +309,7 @@ private:
 	std::unique_ptr<Tex2DInstance> stageNames_;
 
 	// go
-	Easeing goEasing_;
+	Easing goEasing_;
 
 	Vector3 vector_;
 
@@ -389,8 +389,8 @@ private:
 	Vector3 goalPlayerPos_;
 	float goalPlayerRotate_;
 	float easingCount_;
-	Easeing positionEasing_;
-	Easeing rotateEasing_;
+	Easing positionEasing_;
+	Easing rotateEasing_;
 
 	// 速度描画
 	std::unique_ptr<Tex2DInstance> tensPlace_;
@@ -412,7 +412,7 @@ private:
 	Vector3 deathPosition_;
 	Vector3 deathPlayerPosition_;
 	Vector3 deathScale_;
-	Easeing deathAnimationEasing_;
+	Easing deathAnimationEasing_;
 	float deathAnimationEasingCount_;
 	std::unique_ptr<Tex2DInstance> deathTexture_;
 #pragma region GlobalVariables
@@ -453,8 +453,6 @@ private:
 	bool isCannonShot_;
 
 	// 大砲のパーティクル
-	std::array<std::unique_ptr<Particle>, 14llu> cannonParticle_;
-	decltype(cannonParticle_)::iterator cannonParticleItr_;
 
 	std::unique_ptr<WaterInteractive> waterInteractive_;
 

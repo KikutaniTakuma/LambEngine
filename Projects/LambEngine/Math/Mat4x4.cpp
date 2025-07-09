@@ -70,7 +70,7 @@ Matrix<float,4,4> Matrix<float,4,4>::MakeRotate(const Quaternion& rad)
 Matrix<float,4,4> Matrix<float,4,4>::MakeAffin(const Vector3& scale, const Vector3& rad, const Vector3& translate) {
 	Matrix<float,4,4> result;
 
-	Mat4x4 rotate = Mat4x4::MakeRotateX(rad.x) * Mat4x4::MakeRotateY(rad.y) * Mat4x4::MakeRotateZ(rad.z);
+	/*Mat4x4 rotate = Mat4x4::MakeRotateX(rad.x) * Mat4x4::MakeRotateY(rad.y) * Mat4x4::MakeRotateZ(rad.z);
 
 	result = Mat4x4(
 		Mat4x4::vector_type{
@@ -79,7 +79,11 @@ Matrix<float,4,4> Matrix<float,4,4>::MakeAffin(const Vector3& scale, const Vecto
 			scale.z * rotate[2][0], scale.z * rotate[2][1],scale.z * rotate[2][2], 0.0f,
 			translate.x, translate.y, translate.z, 1.0f
 		}
-	);
+	);*/
+
+	Quaternion q = Quaternion::EulerToQuaternion(rad);
+
+	result = MakeAffin(scale, q, translate);
 
 	return result;
 }

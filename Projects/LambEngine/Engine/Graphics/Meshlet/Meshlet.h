@@ -79,8 +79,7 @@ public:
 	/// 
 	/// </summary>
 	/// <param name="fileName">ファイルパス</param>
-	/// <param name="maxDrawCount">描画上限</param>
-	void LoadMesh(const std::string& fileName, uint32_t maxDrawCount);
+	void LoadMesh(const std::string& fileName);
 
 	const std::pair<std::unique_ptr<ResMesh>, std::unique_ptr<MeshShaderData>>& GetMesh(const std::string& fileName);
 

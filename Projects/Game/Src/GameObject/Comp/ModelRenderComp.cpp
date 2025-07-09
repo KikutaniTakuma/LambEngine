@@ -28,8 +28,7 @@ void ModelRenderComp::Draw(CameraComp* cameraComp) {
             transformComp_->GetWorldMatrix(),
             cameraComp->GetCameraMatrix(),
             renderDataComp_->color.GetColorRGBA(),
-            renderDataComp_->type,
-            renderDataComp_->isLighting
+            renderDataComp_->type
         );
     }
 }

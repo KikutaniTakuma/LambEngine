@@ -3,7 +3,7 @@
 #include "Transform/Transform.h"
 #include "Drawer/Texture2D/Texture2D.h"
 #include "Utils/FileUtils.h"
-#include "Utils/Easeing.h"
+#include "Utils/Easing.h"
 #include <memory>
 
 /// <summary>
@@ -78,7 +78,7 @@ private:
 
 	Vector4 color_;
 
-	Easeing ease_;
+	Easing ease_;
 	/// <summary>
 	/// seconds
 	/// </summary>

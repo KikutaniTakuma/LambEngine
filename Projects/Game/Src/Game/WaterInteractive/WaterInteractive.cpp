@@ -1,7 +1,7 @@
 #include "WaterInteractive.h"
 #include "Game/Water/Water.h"
 
-#include "Utils/Easeing.h"
+#include "Utils/Easing.h"
 
 #ifdef USE_DEBUG_CODE
 #include "imgui.h"
@@ -54,7 +54,7 @@ void WaterInteractive::Update() {
 		count_ = 0.0f;
 	}
 
-	float t = Easeing::InOutSine(count_ / nextTime_);
+	float t = Easing::InOutSine(count_ / nextTime_);
 	dir_ = Quaternion::Slerp(pre_, next_, t);
 	height_ = std::lerp(preHeight_, nextHeight_, t);
 

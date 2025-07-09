@@ -69,20 +69,20 @@ public:
 	/// </summary>
 	/// <param name="buffer"></param>
 	/// <returns></returns>
-	uint32_t CreateView(class Descriptor& buffer);
+	uint32_t CreateView(class Descriptor* buffer);
 
 	/// <summary>
 	/// TextureのViewを作成する
 	/// </summary>
 	/// <param name="tex">テクスチャ</param>
 	/// <returns>作ったヒープハンドル</returns>
-	uint32_t CreateTextureView(class Descriptor& tex);
+	uint32_t CreateTextureView(class Descriptor* tex);
 
 	/// <summary>
 	/// TextureのViewを解放済みにする
 	/// </summary>
 	/// <param name="tex">テクスチャ</param>
-	void ReleaseView(class Texture& tex);
+	void ReleaseView(class Texture* tex);
 
 	/// <summary>
 	/// 他のViewを解放する

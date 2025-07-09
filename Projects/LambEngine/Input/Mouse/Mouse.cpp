@@ -5,7 +5,9 @@
 
 #include "Mouse.h"
 #include "Engine/Core/WindowFactory/WindowFactory.h"
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
+#endif // USE_DEBUG_CODE
 #include "Utils/ExecutionLog.h"
 #include "Error/Error.h"
 
@@ -173,11 +175,6 @@ Vector2 Mouse::GetVelocity() {
 		return Vector2::kZero;
 	}
 
-#ifdef USE_DEBUG_CODE
-	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
-		return Vector2::kZero;
-	}
-#endif // USE_DEBUG_CODE
 	return { static_cast<float>(mosueState_.lX), -static_cast<float>(mosueState_.lY) };
 }
 
@@ -208,14 +205,8 @@ float Mouse::GetWheelVelocity() {
 
 Vector2 Mouse::GetPos() {
 	if (!initalizeSucceeded_) {
-		return Vector2::kZero;;
+		return Vector2::kZero;
 	}
-
-#ifdef USE_DEBUG_CODE
-	if (ImGui::GetIO().WantCaptureMouse or ImGui::IsAnyItemHovered()) {
-		return Vector2::kZero;;
-	}
-#endif // USE_DEBUG_CODE
 
 	POINT p{};
 	GetCursorPos(&p);

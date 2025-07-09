@@ -3,10 +3,9 @@
 #include "Drawer/Model/Model.h"
 #include "Drawer/Texture2D/Texture2D.h"
 #include "Drawer/PeraRender/PeraRender.h"
-#include "Drawer/Particle/Particle.h"
 #include "Drawer/StringOut/StringOut.h"
 #include "GlobalVariables/GlobalVariables.h"
-#include "Utils/Easeing.h"
+#include "Utils/Easing.h"
 #include "GameExternals/Cursor/Cursor.h"
 
 #include "Drawer/Other/WaterTex2D/WaterTex2D.h"
@@ -81,8 +80,8 @@ private:
 	float sceneChangeRotateBasis_;
 	float sceneChangeRotateSpeed_;
 
-	std::unique_ptr<Easeing> easing_;
-	std::unique_ptr<Easeing> volumeEasing_;
+	std::unique_ptr<Easing> easing_;
+	std::unique_ptr<Easing> volumeEasing_;
 
 	class Audio* seaSE_ = nullptr;
 	class Audio* moveShipSE_ = nullptr;

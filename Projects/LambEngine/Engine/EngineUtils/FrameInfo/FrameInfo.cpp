@@ -32,15 +32,15 @@ FrameInfo::FrameInfo() :
 	isFixedDeltaTime_(false),
 #endif // USE_DEBUG_CODE
 	frameStartTime_(),
-	deltaTime_(0.0),
-	fps_(0.0),
-	maxFps_(0.0),
-	minFps_(0.0),
+	deltaTime_(0.0f),
+	fps_(0.0f),
+	maxFps_(0.0f),
+	minFps_(0.0f),
 	frameCount_(0),
-	fpsLimit_(0.0),
+	fpsLimit_(0.0f),
 	minTime_(),
 	minCheckTime_(),
-	gameSpeedSccale_(1.0),
+	gameSpeedSccale_(1.0f),
 	frameDatas_(),
 	frameDataDuration_(1),
 	frameDataDurationStartTime_{},
@@ -52,7 +52,7 @@ FrameInfo::FrameInfo() :
 	// リフレッシュレート取得
 	fps_ = kMaxMonitorFps_;
 	minFps_ = fps_;
-	deltaTime_ = 1.0 / fps_;
+	deltaTime_ = 1.0f / fps_;
 
 	auto nowTime = std::chrono::steady_clock::now();
 	gameStartTime_ = nowTime;
@@ -77,11 +77,11 @@ FrameInfo::~FrameInfo() {
 	EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &mode);
 
 
-	maxFps_ = std::clamp(maxFps_, 0.0, fpsLimit_);
-	minFps_ = std::clamp(minFps_, 0.0, fpsLimit_);
+	maxFps_ = std::clamp(maxFps_, 0.0f, fpsLimit_);
+	minFps_ = std::clamp(minFps_, 0.0f, fpsLimit_);
 
-	double avgFps = 0.0;
-	double size = static_cast<double>(frameDatas_.size());
+	float avgFps = 0.0;
+	float size = static_cast<float>(frameDatas_.size());
 	while (!frameDatas_.empty()) {
 		avgFps += frameDatas_.front();
 
@@ -124,7 +124,7 @@ void FrameInfo::End() {
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
 	// 10^-6
-	static constexpr double kUnitAdjustment = 0.000001;
+	static constexpr float kUnitAdjustment = 0.000001f;
 	
 	auto elapsed =
 		std::chrono::duration_cast<std::chrono::microseconds>(end - reference_);
@@ -138,8 +138,8 @@ void FrameInfo::End() {
 	end = std::chrono::steady_clock::now();
 	auto frameTime = std::chrono::duration_cast<std::chrono::microseconds>(end - frameStartTime_);
 
-	deltaTime_ = static_cast<double>(frameTime.count()) * kUnitAdjustment;
-	fps_ = 1.0 / deltaTime_;
+	deltaTime_ = frameTime.count() * kUnitAdjustment;
+	fps_ = 1.0f / deltaTime_;
 	fps_ = std::min(fps_, fpsLimit_);
 
 	if (isStartFrameInfo_) {
@@ -153,13 +153,13 @@ void FrameInfo::End() {
 
 #ifdef USE_DEBUG_CODE
 	if (frameCount_ < frameRateData_.size()) {
-		frameRateData_[frameCount_] = static_cast<float>(fps_);
+		frameRateData_[frameCount_] = fps_;
 	}
 	else {
 		for (size_t i = 0; (i + 1) < frameRateData_.size(); i++) {
-			frameRateData_[i] = static_cast<float>(frameRateData_[i + 1]);
+			frameRateData_[i] = frameRateData_[i + 1];
 		}
-		frameRateData_.back() = static_cast<float>(fps_);
+		frameRateData_.back() = fps_;
 	}
 #endif // USE_DEBUG_CODE
 
@@ -168,8 +168,8 @@ void FrameInfo::End() {
 		frameDatas_.push(fps_);
 
 		if (avgProcDuration_ < frameDatas_.size()) {
-			double avgFps = 0.0;
-			double size = static_cast<double>(frameDatas_.size());
+			float avgFps = 0.0f;
+			float size = static_cast<float>(frameDatas_.size());
 			while (!frameDatas_.empty()) {
 				avgFps += frameDatas_.front();
 
@@ -205,19 +205,19 @@ void FrameInfo::SwitchDarwFlg() {
 	}
 }
 
-void FrameInfo::SetFpsLimit(double fpsLimit) {
-	fpsLimit_ = std::clamp(fpsLimit, 10.0, maxFpsLimit_);
+void FrameInfo::SetFpsLimit(float fpsLimit) {
+	fpsLimit_ = std::clamp(fpsLimit, 10.0f, maxFpsLimit_);
 	           
-	minTime_ = std::chrono::microseconds(uint64_t(1000000.0 / fpsLimit_));
-	minCheckTime_ = std::chrono::microseconds(uint64_t(1000000.0 / (fpsLimit_ + (5.0f * (fpsLimit_ / 60.0f)))));
+	minTime_ = std::chrono::microseconds(uint64_t(10e5f / fpsLimit_));
+	minCheckTime_ = std::chrono::microseconds(uint64_t(10e5f / (fpsLimit_ + (5.0f * (fpsLimit_ / 60.0f)))));
 }
 
 void FrameInfo::Debug() {
 	this->SwitchDarwFlg();
 
 #ifdef USE_DEBUG_CODE
-	static float fpsLimit = static_cast<float>(fpsLimit_);
-	fpsLimit = static_cast<float>(fpsLimit_);
+	static float fpsLimit = fpsLimit_;
+	fpsLimit = fpsLimit_;
 
 	if (KeyInput::GetInstance()->Pushed(DIK_F9)) {
 		isDebugStopGame_ = !isDebugStopGame_;
@@ -232,12 +232,17 @@ void FrameInfo::Debug() {
 	bool isThisWindowActive = WindowFactory::GetInstance()->IsThisWindowaActive();
 	ImGui::Text(std::format("This Window Active : {}", isThisWindowActive).c_str());
 	ImGui::Text("Frame rate : %3.0lf fps", fps_);
-	ImGui::PlotLines("Frame", frameRateData_.data(), static_cast<int32_t>(frameRateData_.size()));
+	ImGui::PlotLines(
+		"Frame", 
+		frameRateData_.data(),
+		static_cast<int32_t>(frameRateData_.size()), 
+		0, NULL, 0.0f, fpsLimit_
+	);
 	ImGui::Text("Delta Time : %.4lf", deltaTime_);
 	ImGui::Text("Frame Count : %llu", frameCount_);
-	ImGui::DragFloat("fps limit", &fpsLimit, 1.0f, 1.0f, static_cast<float>(kMaxMonitorFps_));
+	ImGui::DragFloat("fps limit", &fpsLimit, 1.0f, 1.0f, kMaxMonitorFps_);
 	
-	fpsLimit_ = static_cast<double>(fpsLimit);
+	fpsLimit_ = fpsLimit;
 	SetFpsLimit(fpsLimit_);
 	if (ImGui::TreeNode("DEBUG")) {
 		ImGui::Checkbox("is Debug Stop", &isDebugStopGame_);
@@ -256,11 +261,10 @@ void FrameInfo::Debug() {
 }
 
 void FrameInfo::SetGameSpeedScale(float gameSpeedSccale) {
-	gameSpeedSccale = std::clamp(gameSpeedSccale, 0.0f, 10.0f);
-	gameSpeedSccale_ = static_cast<double>(gameSpeedSccale);
+	gameSpeedSccale_ = std::clamp(gameSpeedSccale, 0.0f, 100.0f);
 }
 
-double FrameInfo::GetMainMonitorFramerate() const {
+float FrameInfo::GetMainMonitorFramerate() const {
 	//画面情報構造体
 	DEVMODE mode{};
 
@@ -268,5 +272,10 @@ double FrameInfo::GetMainMonitorFramerate() const {
 	EnumDisplaySettings(nullptr, ENUM_CURRENT_SETTINGS, &mode);
 
 	// リフレッシュレート取得
-	return static_cast<double>(mode.dmDisplayFrequency);
+	return static_cast<float>(mode.dmDisplayFrequency);
+}
+
+float FrameInfo::GetMaxFpsLimit() const
+{
+	return maxFpsLimit_;
 }

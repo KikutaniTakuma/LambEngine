@@ -62,10 +62,14 @@ private:
 	Gamepad& operator=(Gamepad&&) = delete;
 
 private:
-	WORD preButton_;
+	XINPUT_STATE preState_;
 	XINPUT_STATE state_;
 	XINPUT_VIBRATION vibration_;
 
+	std::array<bool, 2> isPreStickNeutral;
+
+	// padが接続中かどうか true:繋がっている/false:繋がっていない
+	bool isPadConnecting_;
 public:
 	static Gamepad*const GetInstance();
 
@@ -136,6 +140,40 @@ public:
 	Vector2 GetStick(Stick type, float deadZone = 0.3f);
 
 	/// <summary>
+	/// 前フレームのStick
+	/// </summary>
+	/// <param name="type">スティックのタイプ</param>
+	/// <param name="deadZone">デッドゾーン(0.0f～1.0f)の範囲内なら0.0fを返す</param>
+	/// <returns>-1.0f ～ 1.0f の値</returns>
+	Vector2 GetPreStick(Stick type, float deadZone = 0.3f);
+
+	/// <summary>
+	/// 特定のボタンとスティック入力同期
+	/// </summary>
+	/// <param name="buttonType">ボタンタイプ(十字ABXYのみ)</param>
+	/// <param name="StickType">スティックタイプ</param>
+	/// <param name="deadZone">デッドゾーン(デフォは0.3f)</param>
+	/// <returns>入力があった際にtrue</returns>
+	bool GetButtonStick(Button buttonType, Stick stickType, float deadZone = 0.3f);
+	/// <summary>
+	/// 特定のボタンとスティック入力同期
+	/// </summary>
+	/// <param name="buttonType">ボタンタイプ(十字ABXYのみ)</param>
+	/// <param name="StickType">スティックタイプ</param>
+	/// <param name="deadZone">デッドゾーン(デフォは0.3f)</param>
+	/// <returns>入力があった瞬間にtrue</returns>
+	bool PushedButtonStick(Button buttonType, Stick stickType, float deadZone = 0.3f);
+
+	/// <summary>
+	/// 特定のボタンとスティック入力同期
+	/// </summary>
+	/// <param name="buttonType">ボタンタイプ(十字ABXYのみ)</param>
+	/// <param name="StickType">スティックタイプ</param>
+	/// <param name="deadZone">デッドゾーン(デフォは0.3f)</param>
+	/// <returns>離した瞬間にtrue</returns>
+	bool ReleasedButtonStick(Button buttonType, Stick stickType, float deadZone = 0.3f);
+
+	/// <summary>
 	/// バイブレーション
 	/// </summary>
 	/// <param name="leftVibIntensity">左側のバイブレーション 0.0f ～ 1.0f で強さを指定</param>
@@ -144,4 +182,11 @@ public:
 
 	// デバッグ用
 	void Debug();
+
+	/// <summary>
+	/// padが接続中か
+	/// </summary>
+	/// <returns>true:繋がっている/false:繋がっていない</returns>
+	bool GetPadConnecting() const { return isPadConnecting_; }
+
 };
