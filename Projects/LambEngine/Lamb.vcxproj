@@ -77,7 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_DEBUG_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\;$(SolutionDir)Projects\externals\Effekseer\Include\Effekseer\;$(SolutionDir)Projects\externals\Effekseer\Include\EffekseerRendererDX12\;$(SolutionDir)Projects\externals\nlohmann\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -109,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\;$(SolutionDir)Projects\externals\Effekseer\Include\Effekseer\;$(SolutionDir)Projects\externals\Effekseer\Include\EffekseerRendererDX12\;$(SolutionDir)Projects\externals\nlohmann\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -144,7 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;USE_DEBUG_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\assimp\include\;$(SolutionDir)Projects\externals\Effekseer\Include\Effekseer\;$(SolutionDir)Projects\externals\Effekseer\Include\EffekseerRendererDX12\;$(SolutionDir)Projects\externals\nlohmann\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -178,11 +178,13 @@
     <ClCompile Include="Drawer\AnimationModel\AnimationModel.cpp" />
     <ClCompile Include="Drawer\BaseDrawer.cpp" />
     <ClCompile Include="Drawer\DrawerManager.cpp" />
+    <ClCompile Include="Drawer\Effect\Effect.cpp" />
     <ClCompile Include="Drawer\Line\Line.cpp" />
     <ClCompile Include="Drawer\Model\Model.cpp" />
     <ClCompile Include="Drawer\Other\CloudTex2D\CloudTex2D.cpp" />
+    <ClCompile Include="Drawer\Other\PlayerMiddleModel.cpp" />
+    <ClCompile Include="Drawer\Other\Texture3D.cpp" />
     <ClCompile Include="Drawer\Other\WaterTex2D\WaterTex2D.cpp" />
-    <ClCompile Include="Drawer\Particle\Particle.cpp" />
     <ClCompile Include="Drawer\PeraRender\PeraRender.cpp" />
     <ClCompile Include="Drawer\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Drawer\StringOut\StringOut.cpp" />
@@ -194,6 +196,7 @@
     <ClCompile Include="Engine\Core\DirectXCommand\DirectXCommand.cpp" />
     <ClCompile Include="Engine\Core\DirectXDevice\DirectXDevice.cpp" />
     <ClCompile Include="Engine\Core\DirectXSwapChain\DirectXSwapChain.cpp" />
+    <ClCompile Include="Engine\Core\EffekseerControler\EffekseerControler.cpp" />
     <ClCompile Include="Engine\Core\ImGuiManager\ImGuiManager.cpp" />
     <ClCompile Include="Engine\Core\StringOutPutManager\StringOutPutManager.cpp" />
     <ClCompile Include="Engine\Core\WindowFactory\WindowFactory.cpp" />
@@ -207,6 +210,7 @@
     <ClCompile Include="Engine\Graphics\AnimationManager\AnimationManager.cpp" />
     <ClCompile Include="Engine\Graphics\Animator\Animator.cpp" />
     <ClCompile Include="Engine\Graphics\DepthBuffer\DepthBuffer.cpp" />
+    <ClCompile Include="Engine\Graphics\EffectDataManager\EffectDataManager.cpp" />
     <ClCompile Include="Engine\Graphics\Meshlet\Meshlet.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\PipelineManager.cpp" />
     <ClCompile Include="Engine\Graphics\PipelineManager\Pipeline\Pipeline.cpp" />
@@ -232,6 +236,7 @@
     <ClCompile Include="Engine\Graphics\VertexIndexDataLoader\VertexIndexDataLoader.cpp" />
     <ClCompile Include="Engine\Graphics\VertexIndexDataManager\VertexIndexDataManager.cpp" />
     <ClCompile Include="Framework\Framework.cpp" />
+    <ClCompile Include="GraphicsUtils.cpp" />
     <ClCompile Include="Input\Gamepad\Gamepad.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="Input\KeyInput\KeyInput.cpp" />
@@ -244,7 +249,7 @@
     <ClCompile Include="Math\Vector4.cpp" />
     <ClCompile Include="Transform\Transform.cpp" />
     <ClCompile Include="Utils\ConvertString.cpp" />
-    <ClCompile Include="Utils\Easeing.cpp" />
+    <ClCompile Include="Utils\Easing.cpp" />
     <ClCompile Include="Utils\EngineInfo.cpp" />
     <ClCompile Include="Utils\ExecutionLog.cpp" />
     <ClCompile Include="Utils\FileUtils.cpp" />
@@ -261,11 +266,13 @@
     <ClInclude Include="Drawer\AnimationModel\AnimationModel.h" />
     <ClInclude Include="Drawer\BaseDrawer.h" />
     <ClInclude Include="Drawer\DrawerManager.h" />
+    <ClInclude Include="Drawer\Effect\Effect.h" />
     <ClInclude Include="Drawer\Line\Line.h" />
     <ClInclude Include="Drawer\Model\Model.h" />
     <ClInclude Include="Drawer\Other\CloudTex2D\CloudTex2D.h" />
+    <ClInclude Include="Drawer\Other\PlayerMiddleModel.h" />
+    <ClInclude Include="Drawer\Other\Texture3D.h" />
     <ClInclude Include="Drawer\Other\WaterTex2D\WaterTex2D.h" />
-    <ClInclude Include="Drawer\Particle\Particle.h" />
     <ClInclude Include="Drawer\PeraRender\PeraRender.h" />
     <ClInclude Include="Drawer\SkyBox\SkyBox.h" />
     <ClInclude Include="Drawer\StringOut\StringOut.h" />
@@ -282,6 +289,7 @@
     <ClInclude Include="Engine\Core\DirectXCommand\DirectXCommand.h" />
     <ClInclude Include="Engine\Core\DirectXDevice\DirectXDevice.h" />
     <ClInclude Include="Engine\Core\DirectXSwapChain\DirectXSwapChain.h" />
+    <ClInclude Include="Engine\Core\EffekseerControler\EffekseerControler.h" />
     <ClInclude Include="Engine\Core\ImGuiManager\ImGuiManager.h" />
     <ClInclude Include="Engine\Core\StringOutPutManager\StringOutPutManager.h" />
     <ClInclude Include="Engine\Core\WindowFactory\WindowFactory.h" />
@@ -294,6 +302,7 @@
     <ClInclude Include="Engine\Graphics\Animator\Animator.h" />
     <ClInclude Include="Engine\Graphics\CreateBlendDesc.h" />
     <ClInclude Include="Engine\Graphics\DepthBuffer\DepthBuffer.h" />
+    <ClInclude Include="Engine\Graphics\EffectDataManager\EffectDataManager.h" />
     <ClInclude Include="Engine\Graphics\GraphicsStructs.h" />
     <ClInclude Include="Engine\Graphics\Meshlet\Meshlet.h" />
     <ClInclude Include="Engine\Graphics\PipelineManager\PipelineManager.h" />
@@ -324,6 +333,7 @@
     <ClInclude Include="Engine\Graphics\VertexIndexDataManager\VertexIndexDataManager.h" />
     <ClInclude Include="Error\Error.h" />
     <ClInclude Include="Framework\Framework.h" />
+    <ClInclude Include="GraphicsUtils.h" />
     <ClInclude Include="Input\Gamepad\Gamepad.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="Input\KeyInput\KeyInput.h" />
@@ -337,7 +347,8 @@
     <ClInclude Include="Transform\Transform.h" />
     <ClInclude Include="Utils\Concepts.h" />
     <ClInclude Include="Utils\ConvertString.h" />
-    <ClInclude Include="Utils\Easeing.h" />
+    <ClInclude Include="Utils\CreateHash.h" />
+    <ClInclude Include="Utils\Easing.h" />
     <ClInclude Include="Utils\EngineInfo.h" />
     <ClInclude Include="Utils\ExecutionLog.h" />
     <ClInclude Include="Utils\FileUtils.h" />

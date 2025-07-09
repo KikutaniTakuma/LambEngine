@@ -54,10 +54,6 @@ ImGuiManager::ImGuiManager() {
 	auto& imguiIO = ImGui::GetIO();
 	// Docking有効化
 	imguiIO.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	// キーボードコントロール有効
-	imguiIO.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	// ゲームパッドコントロール有効
-	imguiIO.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
 	// 日本語フォント追加
 	imguiIO.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\msgothic.ttc", 13.0f, NULL, ImGui::GetIO().Fonts->GetGlyphRangesJapanese());

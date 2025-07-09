@@ -237,6 +237,16 @@ Vector3 Vector3::Lerp(const Vector3& start, const Vector3& end, const Vector3& t
 	return result;
 }
 
+Vector3 Vector3::CatmullRom(const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& controlPoint3, const float t) {
+	Vector3 result{};
+	result =
+		((controlPoint0 * -1.0f + controlPoint1 * 3.0f + controlPoint2 * -3.0f + controlPoint3) * std::powf(t, 3.0f) +
+			(controlPoint0 * 2.0f + controlPoint1 * -5.0f + controlPoint2 * 4.0f + controlPoint3 * -1.0f) * std::powf(t, 2.0f) +
+			(controlPoint0 * -1.0f + controlPoint2) * t + controlPoint1 * 2.0f) * 0.5f;
+
+	return result;
+}
+
 Vector3 Vector3::Step(const float a, const Vector3& x)
 {
 	return Vector3(Lamb::Step(a, x.x), Lamb::Step(a, x.y), Lamb::Step(a, x.z));
@@ -277,6 +287,20 @@ Vector3 Vector3::Pararerl(const Vector3& i, const Vector3& n) {
 
 Vector3 Vector3::Clamp(const Vector3& num, const Vector3& min, const Vector3& max) {
 	return Vector3(std::clamp(num.x, min.x, max.x), std::clamp(num.y, min.y, max.y), std::clamp(num.z, min.z, max.z));
+}
+
+Vector3 Vector3::TransformCoord(const Vector3& v, const Mat4x4& mat){
+	Vector4 temp = Vector4(v.x, v.y, v.z, 1.0f); // 座標は w=1.0 で拡張
+	temp = temp * mat; // 行列と掛ける
+
+	// 同次座標変換（w で割る）
+	if (temp.vec.w != 0.0f) {
+		temp.vec.x /= temp.vec.w;
+		temp.vec.y /= temp.vec.w;
+		temp.vec.z /= temp.vec.w;
+	}
+
+	return Vector3(temp.vec.x, temp.vec.y, temp.vec.z);
 }
 
 Vector3 Project(const Vector3& vec1, const Vector3& vec2) {

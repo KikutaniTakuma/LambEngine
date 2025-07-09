@@ -92,6 +92,10 @@ void RenderContextManager::SetIsNowThreading(bool isNowThreading) {
 
 std::pair<size_t, const std::list<RenderData*>&> RenderContextManager::CreateRenderList(BlendType blend)
 {
+	if (blend == BlendType::kAlphaEffect) {
+		blend = BlendType::kNum;
+	}
+
 	std::pair<size_t, const std::list<RenderData*>&> result = { 0llu, renderDataLists_[blend] };
 	size_t count = 0;
 	auto itr = renderDataLists_[blend].begin();

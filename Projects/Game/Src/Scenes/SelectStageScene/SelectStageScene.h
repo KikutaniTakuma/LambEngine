@@ -3,10 +3,9 @@
 #include "Drawer/Model/Model.h"
 #include "Drawer/Texture2D/Texture2D.h"
 #include "Drawer/PeraRender/PeraRender.h"
-#include "Drawer/Particle/Particle.h"
 #include "Drawer/StringOut/StringOut.h"
 #include "GlobalVariables/GlobalVariables.h"
-#include "Utils/Easeing.h"
+#include "Utils/Easing.h"
 #include "GameExternals/Cursor/Cursor.h"
 
 #include "Drawer/Other/WaterTex2D/WaterTex2D.h"
@@ -75,10 +74,10 @@ private:
 
     // イージング
     // どこの海を制する？
-    Easeing whichSeaEasing_;
+    Easing whichSeaEasing_;
     // 三角矢印
-    Easeing leftEasing_;
-    Easeing rightEasing_;
+    Easing leftEasing_;
+    Easing rightEasing_;
 
     // 仮で配置
     uint32_t stageIndex_;

@@ -96,7 +96,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\;$(SolutionDir)Projects\externals\assimp\lib\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\;$(SolutionDir)Projects\externals\assimp\lib\$(Configuration)\;$(SolutionDir)Projects\externals\Effekseer\lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib</AdditionalDependencies>
       <AdditionalOptions>/ignore:4049 /ignore:4098 %(AdditionalOptions)</AdditionalOptions>
     </Link>
@@ -135,7 +135,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <AdditionalLibraryDirectories>$(SolutionDir)Projects\externals\assimp\lib\$(Configuration)\;$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Projects\externals\assimp\lib\$(Configuration)\;$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\;$(SolutionDir)Projects\externals\Effekseer\lib\</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <AdditionalDependencies>assimp-vc143-mt.lib</AdditionalDependencies>
       <AdditionalOptions>/ignore:4049 /ignore:4098 %(AdditionalOptions)</AdditionalOptions>
@@ -175,7 +175,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <AdditionalLibraryDirectories>$(SolutionDir)Projects\externals\assimp\lib\Release\;$(ProjectDir);$(SolutionDir)Projects\externals\lib\Release\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Projects\externals\assimp\lib\Release\;$(ProjectDir);$(SolutionDir)Projects\externals\lib\Release\;$(SolutionDir)Projects\externals\Effekseer\lib\</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
       <AdditionalDependencies>assimp-vc143-mt.lib</AdditionalDependencies>
       <AdditionalOptions>/ignore:4049 /ignore:4098 %(AdditionalOptions)</AdditionalOptions>

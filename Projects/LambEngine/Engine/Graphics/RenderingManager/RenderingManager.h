@@ -88,6 +88,10 @@ private:
 
 	void CalcLightCamera();
 
+	void CalcSunLight();
+
+	void SetGraphicsState();
+
 public:
 
 	DepthBuffer* GetDepthBuffer();
@@ -131,6 +135,8 @@ public:
 	
 	const Vector3& GetCameraPosition() const;
 
+	UINT GetBackGroundTexture() const;
+
 
 private:
 	// アルファ値がないものを描画
@@ -141,6 +147,9 @@ private:
 
 	// アルファ値があるものを描画
 	void DrawRGBA(const RenderDataLists& rgbaList);
+
+	// 背景に処理を加えるものの描画
+	void DrawAlphaEffect(const RenderDataLists& renderList);
 
 	// ディファード描画
 	void DrawDeferred();
@@ -184,6 +193,9 @@ private:
 	std::unique_ptr<PeraRender> rgbaTexture_;
 	Vector3 hsv_;
 
+	// エフェクトを施したものの描画
+	std::unique_ptr<PeraRender> effectTexture_;
+
 	Lamb::SafePtr<PostWater> postWater_;
 	float32_t4x4 waterWorldMatrx_;
 
@@ -223,7 +235,7 @@ private:
 	AirSkyBox::AtmosphericParams atmosphericParams_;
 	const Vector3 kLightRotateBaseVector = -Vector3::kZIdentity;
 	Vector3 lightRotate_;
-	bool isDrawSkyBox_ = true;
+	bool isDrawSkyBox_ = false;
 	bool isSkyTimeStart_ = false;
 	float32_t sunSpeed_ = 0.0f;
 
@@ -268,4 +280,9 @@ private:
 
 	uint32_t bufferIndex_ = 0;
 	uint32_t preBufferIndex_ = 0;
+
+
+
+	/// Effekseer
+	Lamb::SafePtr<class EffekseerControler> effekseerControler_;
 };

@@ -224,6 +224,8 @@ public:
 public:
 	static [[nodiscard]] Vector3 Lerp(const Vector3& start, const Vector3& end, float t);
 	static [[nodiscard]] Vector3 Lerp(const Vector3& start, const Vector3& end, const Vector3& t);
+
+	static [[nodiscard]] Vector3 CatmullRom(const Vector3& controlPoint0, const Vector3& controlPoint1, const Vector3& controlPoint2, const Vector3& controlPoint3, const float t);
 	static [[nodiscard]] Vector3 Step(const float a, const Vector3& x);
 	static [[nodiscard]] Vector3 Reflect(const Vector3& i, const Vector3& n);
 	// 元のベクトルと反射後のベクトルを使って法線を求める
@@ -234,7 +236,7 @@ public:
 
 	static [[nodiscard]] Vector3 Clamp(const Vector3& num, const Vector3& min, const Vector3& max);
 
-
+	static [[nodiscard]] Vector3 TransformCoord(const Vector3& v, const Mat4x4& mat);
 };
 
 struct Ray {

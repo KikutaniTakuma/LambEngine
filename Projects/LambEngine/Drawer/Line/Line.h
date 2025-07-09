@@ -24,8 +24,8 @@ private:
 	};
 
 private:
-	static constexpr uint16_t kVertexNum = 2u;
-	static constexpr uint16_t kDrawMaxNumber_ = 4096u;
+	static constexpr uint32_t kVertexNum = 2u;
+	static constexpr uint32_t kDrawMaxNumber_ = 65535u;
 	static uint32_t depthDrawCount_;
 	static uint32_t nodepthDrawCount_;
 

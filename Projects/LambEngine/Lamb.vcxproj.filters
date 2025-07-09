@@ -151,7 +151,7 @@
     <ClCompile Include="Utils\ConvertString.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\Easeing.cpp">
+    <ClCompile Include="Utils\Easing.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="Utils\EngineInfo.cpp">
@@ -202,9 +202,6 @@
     <ClCompile Include="Drawer\PeraRender\PeraRender.cpp">
       <Filter>Drawer\PeraRender</Filter>
     </ClCompile>
-    <ClCompile Include="Drawer\Particle\Particle.cpp">
-      <Filter>Drawer\Particle</Filter>
-    </ClCompile>
     <ClCompile Include="Drawer\Other\WaterTex2D\WaterTex2D.cpp">
       <Filter>Drawer\Other</Filter>
     </ClCompile>
@@ -234,6 +231,22 @@
     </ClCompile>
     <ClCompile Include="Utils\PerlinNoise.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsUtils.cpp" />
+    <ClCompile Include="Drawer\Other\PlayerMiddleModel.cpp">
+      <Filter>Drawer\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\EffekseerControler\EffekseerControler.cpp">
+      <Filter>Engine\Core\EffekseerControler</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphics\EffectDataManager\EffectDataManager.cpp">
+      <Filter>Engine\Graphics\EffectDataManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\Effect\Effect.cpp">
+      <Filter>Drawer\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawer\Other\Texture3D.cpp">
+      <Filter>Drawer\Other</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -426,9 +439,6 @@
     <Filter Include="Drawer\AirSkyBox">
       <UniqueIdentifier>{ca4daa01-23b2-4a95-840d-4ee7e9337717}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Drawer\Particle">
-      <UniqueIdentifier>{b53c4b35-c897-4ef6-bffb-a327c572b220}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\ShadowRendering">
       <UniqueIdentifier>{a90aa1dd-aafa-43b6-bc7a-f761153e7ff3}</UniqueIdentifier>
     </Filter>
@@ -437,6 +447,15 @@
     </Filter>
     <Filter Include="Engine\Graphics\PipelineObject\PostWater">
       <UniqueIdentifier>{ecfce8a0-b714-48c7-9970-25b8dd5ed69d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\EffekseerControler">
+      <UniqueIdentifier>{da73ff5d-b555-4f65-8290-4c8fca7e9fb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\EffectDataManager">
+      <UniqueIdentifier>{d80d49b9-ffbf-4a19-9fb6-756e5b637dbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawer\Effect">
+      <UniqueIdentifier>{116e1c25-89df-48ee-b0ef-8c028693b2a2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -620,7 +639,7 @@
     <ClInclude Include="Utils\ConvertString.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\Easeing.h">
+    <ClInclude Include="Utils\Easing">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Utils\FileUtils.h">
@@ -689,9 +708,6 @@
     <ClInclude Include="Drawer\PeraRender\PeraRender.h">
       <Filter>Drawer\PeraRender</Filter>
     </ClInclude>
-    <ClInclude Include="Drawer\Particle\Particle.h">
-      <Filter>Drawer\Particle</Filter>
-    </ClInclude>
     <ClInclude Include="Drawer\Other\WaterTex2D\WaterTex2D.h">
       <Filter>Drawer\Other</Filter>
     </ClInclude>
@@ -721,6 +737,25 @@
     </ClInclude>
     <ClInclude Include="Utils\PerlinNoise.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsUtils.h" />
+    <ClInclude Include="Utils\CreateHash.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\Other\PlayerMiddleModel.h">
+      <Filter>Drawer\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\EffekseerControler\EffekseerControler.h">
+      <Filter>Engine\Core\EffekseerControler</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphics\EffectDataManager\EffectDataManager.h">
+      <Filter>Engine\Graphics\EffectDataManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\Effect\Effect.h">
+      <Filter>Drawer\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawer\Other\Texture3D.h">
+      <Filter>Drawer\Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -45,10 +45,7 @@ void Goal::Initialize(const Vector3& scale, const Vector3& rotate, const Vector3
 	Collider::SetColliderAttribute(Collider::Attribute::kOther);
 	Collider::InitializeCollision({ scale.x * overSize_,scale.y,scale.z }, MakeEulerAngle(tmp), { tmp[3][0],tmp[3][1],tmp[3][2] });
 
-	for (auto& i : particles_) {
-		i.reset(new Particle{});
-		i->LoadSettingDirectory("firework");
-	}
+
 
 	particleCoolTime_ = 0.2f;
 	particleCount_ = 0.0f;
@@ -128,23 +125,7 @@ void Goal::SetPosition(const Vector3& pos) {
 void Goal::ParticleUpdate()
 {
 	if (isParticleStart_) {
-		for (auto& i : particles_) {
-			if (!i->GetIsParticleStart() &&
-				particleCoolTime_ <= particleCount_) {
-				particleCount_ = 0.0f;
-				Vector3 eimtterPos = Lamb::Random(emitterRange_.first, emitterRange_.second);
-				i->ParticleStart(eimtterPos);
-				particleCoolTime_ = Lamb::Random(particleCoolTimeRange_.first, particleCoolTimeRange_.second);
-				
-				// 音鳴らす
-				//fireworkSound_->Stop();
-				//fireworkSound_->Start(0.5f, false);
-				break;
-			}
-		}
-		for (auto& i : particles_) {
-			i->Update();
-		}
+
 
 		particleCount_ += Lamb::DeltaTime();
 	}

@@ -1,6 +1,6 @@
 #pragma once
 #include "Math/Vector3.h"
-#include "Utils/Easeing.h"
+#include "Utils/Easing.h"
 
 class WindNode {
 /// <summary>
@@ -81,7 +81,7 @@ private:
 
 private:
 	// 最初のイージング
-	Easeing ease_;
+	Easing ease_;
 
 private:
 	bool isActive_;

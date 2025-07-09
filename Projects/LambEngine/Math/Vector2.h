@@ -184,6 +184,7 @@ public:
 /// </summary>
 public:
 	static [[nodiscard]] Vector2 Lerp(const Vector2& start, const Vector2& end, float easeSpd);
+	static [[nodiscard]] Vector2 CatmullRom(const Vector2& controlPoint0, const Vector2& controlPoint1, const Vector2& controlPoint2, const Vector2& controlPoint3, const float t);
 	static [[nodiscard]] Vector2 Clamp(const Vector2& num, const Vector2& min, const Vector2& max);
 	static [[nodiscard]] Vector2 Abs(const Vector2& vec);
 	static [[nodiscard]] Vector2 Floor(const Vector2& vec);

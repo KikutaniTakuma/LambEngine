@@ -17,6 +17,8 @@
 #include "Engine/Graphics/RenderingManager/RenderingManager.h"
 #include "Engine/Graphics/RenderContextManager/RenderContextManager.h"
 
+#include <Engine/Graphics/EffectDataManager/EffectDataManager.h>
+
 void Framework::Initialize() {
 	// ライブラリ初期化
 	Engine::Initialize(initDesc_.windowName, initDesc_.windowSize, initDesc_.maxFps, initDesc_.isFullesceen);
@@ -27,10 +29,13 @@ void Framework::Initialize() {
 	Input::Initialize();
 
 	Line::Initialize();
+
+	EffectDataManager::Initialize();
 }
 
 void Framework::Finalize() {
-	// インデックスリソース解放
+	EffectDataManager::Finalize();
+
 	Line::Finalize();
 
 	// 入力関連解放
@@ -68,19 +73,9 @@ void Framework::Execution() {
 			// 今のウィンドウのポジションを更新
 			window->UpdateCurrentPos();
 
-#ifdef USE_DEBUG_CODE		
-			if (frameInfo->GetIsDebugStop() && frameInfo->GetIsOneFrameActive()) {
-				this->Update();
-				frameInfo->SetIsOneFrameActive(false);
-			}
-			else if (!frameInfo->GetIsDebugStop()) {
-				// 更新処理
-				this->Update();
-			}
-#else
 			// 更新処理
 			this->Update();
-#endif
+
 			// 終了リクエストが来たら終わり
 			if (this->isEnd_) {
 				RenderingManager::GetInstance()->FinalFrame();
@@ -97,8 +92,10 @@ void Framework::Execution() {
 	catch (const Lamb::Error& err) {
 		Lamb::ErrorLog(err);
 	}
+#ifndef USE_DEBUG_CODE
 	catch (const std::exception& err) {
 		Lamb::ErrorLog(err.what(), __func__);
 	}
+#endif // USE_DEBUG_CODE
 	this->Finalize();
 }

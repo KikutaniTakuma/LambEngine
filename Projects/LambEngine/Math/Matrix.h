@@ -412,6 +412,21 @@ public:
 		return str;
 	}
 
+/// <summary>
+/// 静的関数
+/// </summary>
+public:
+	static Matrix Lerp(const Matrix& start, const Matrix& end, float t) {
+		Matrix result;
+
+		for (size_t y = 0; y < result.HeightSize(); y++) {
+			for (size_t x = 0; x < result.WidthSize(); x++) {
+				result[y][x] = std::lerp(start[y][x], end[y][x], t);
+			}
+		}
+
+		return result;
+	}
 private:
 	void OutOfRange(const std::string& funcName,
 		const std::string& sourceFileName,
@@ -819,6 +834,19 @@ public:
 	static [[nodiscard]] Matrix DirectionToDirection(const class Vector3& from, const class Vector3& to);
 
 	static [[nodiscard]] Matrix MakeRotateAxisAngle(const class Vector3& axis, float angle);
+
+
+	static Matrix Lerp(const Matrix& start, const Matrix& end, float t) {
+		Matrix result;
+
+		for (size_t y = 0; y < result.HeightSize(); y++) {
+			for (size_t x = 0; x < result.WidthSize(); x++) {
+				result[y][x] = std::lerp(start[y][x], end[y][x], t);
+			}
+		}
+
+		return result;
+	}
 
 	// 静的定数
 public:

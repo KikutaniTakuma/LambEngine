@@ -40,7 +40,7 @@ void WaterTex2D::Load()
 	pRenderSet = renderContextManager->Get(kFileNames_);
 
 	Lamb::SafePtr textureManager = TextureManager::GetInstance();
-	textureManager->LoadTexture("./Resources/Common/Water/caustics_01.bmp");
+	textureManager->LoadTexture("./Resources/Water/caustics_01.bmp");
 }
 
 void WaterTex2D::Draw(

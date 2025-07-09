@@ -136,7 +136,6 @@ struct MeshShaderData {
 	StructuredBuffer<uint32_t>         gUniqueVertexIndices; // インデックスデータ
 	StructuredBuffer<uint32_t>         gPrimitiveIndices;    // プリミティブインデックス
 	StructuredBuffer<DirectX::Meshlet> gMeshlets;            // メッシュレット
-	std::array<StructuredBuffer<WVPMatrix>, DirectXSwapChain::kBackBufferNumber> gTransform;// トランスフォーム
 
-	uint32_t meshletCount; // メッシュレットの数
+	uint32_t meshletCount = 0; // メッシュレットの数
 };

@@ -64,10 +64,10 @@ void TextureManager::LoadTexture(const std::string& fileName) {
 		}
 
 		if (tex->GetIsCubemap()) {
-			srvHeap_->CreateView(*(tex->GetBaseClassPtr()));
+			srvHeap_->CreateView((tex->GetBaseClassPtr()));
 		}
 		else {
-			srvHeap_->CreateTextureView(*tex);
+			srvHeap_->CreateTextureView(tex.get());
 		}
 		textures_.insert(std::make_pair(fileName, std::move(tex)));
 

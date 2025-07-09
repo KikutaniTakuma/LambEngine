@@ -8,6 +8,7 @@
 #pragma comment(lib, "d3d12.lib")
 
 #include "EngineUtils/LambPtr/LambPtr.h"
+#include <Utils/SafePtr.h>
 
 #include "Core/DirectXCommand/DirectXCommand.h"
 #include "Core/DirectXSwapChain/DirectXSwapChain.h"
@@ -96,7 +97,7 @@ private:
 	void InitializeDirectXDevice();
 
 private:
-	class DirectXDevice* directXDevice_ = nullptr;
+	Lamb::SafePtr<class DirectXDevice> directXDevice_ = nullptr;
 
 	/// 
 	/// DirectXCommand
@@ -118,7 +119,7 @@ private:
 	void InitializeDirectXSwapChain();
 
 private:
-	class DirectXSwapChain* directXSwapChain_ = nullptr;
+	Lamb::SafePtr<class DirectXSwapChain> directXSwapChain_ = nullptr;
 
 	
 /// <summary>
@@ -128,7 +129,7 @@ private:
 	void InitializeDirectXTK();
 
 private:
-	class StringOutPutManager* stringOutPutManager_ = nullptr;
+	Lamb::SafePtr<class StringOutPutManager> stringOutPutManager_ = nullptr;
 
 
 	///

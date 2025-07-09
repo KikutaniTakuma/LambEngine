@@ -114,7 +114,9 @@ enum BlendType {
     kUnenableDepthSub,
     kUnenableDepthMul,
 
-    kNum
+    kNum,
+    
+    kAlphaEffect,
 };
 
 static const std::array<std::string, BlendType::kNum> kBlendTypeStrs = {

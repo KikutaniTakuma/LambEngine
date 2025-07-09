@@ -21,6 +21,7 @@
 #include "Core/DirectXSwapChain/DirectXSwapChain.h"
 #include "Core/StringOutPutManager/StringOutPutManager.h"
 #include "Core/ImGuiManager/ImGuiManager.h"
+#include "Core/EffekseerControler/EffekseerControler.h"
 
 #include "Core/DescriptorHeap/RtvHeap.h"
 #include "Core/DescriptorHeap/CbvSrvUavHeap.h"
@@ -113,7 +114,7 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 
 	const auto&& windowTitle = ConvertString(windowName);
 
-	FrameInfo::GetInstance()->SetFpsLimit(static_cast<double>(fpsLimit));
+	FrameInfo::GetInstance()->SetFpsLimit(fpsLimit);
 	Lamb::AddLog("Set fps limit : " + std::to_string(fpsLimit));
 
 	// Window生成
@@ -153,6 +154,7 @@ void Engine::Initialize(const std::string& windowName, const Vector2& windowSize
 	MeshletManager::Initialize();
 	RenderContextManager::Initialize();
 	AnimationManager::Initialize();
+	EffekseerControler::Initialize();
 
 
 	DrawerManager::Initialize();
@@ -164,6 +166,7 @@ void Engine::Finalize() {
 	// 各種マネージャー解放
 	DrawerManager::Finalize();
 
+	EffekseerControler::Finalize();
 	AnimationManager::Finalize();
 	RenderContextManager::Finalize();
 	MeshletManager::Finalize();

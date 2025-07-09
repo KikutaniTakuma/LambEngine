@@ -519,6 +519,14 @@ public:
             }
         );
 
+        std::for_each(
+            gTransform_.begin(),
+            gTransform_.end(),
+            [kBufferSize](auto& n) {
+                n.CreateBuffer(kBufferSize);
+            }
+        );
+
         typeID_ = (typeid(MeshRenderContext).name());
     }
     ~MeshRenderContext() = default;
@@ -548,7 +556,7 @@ public:
 
 
         // Transform
-        commandlist->SetGraphicsRootShaderResourceView(3, shaderData_->gTransform[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(3, gTransform_[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
         // gVertices
         commandlist->SetGraphicsRootShaderResourceView(4, shaderData_->gVertices.GetGPUVtlAdrs());
         // gUniqueVertexIndices
@@ -580,7 +588,7 @@ public:
 
 
         // Transform
-        commandlist->SetGraphicsRootShaderResourceView(2, shaderData_->gTransform[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
+        commandlist->SetGraphicsRootShaderResourceView(2, gTransform_[Lamb::GetGraphicBufferIndex()].GetGPUVtlAdrs());
         // gVertices
         commandlist->SetGraphicsRootShaderResourceView(3, shaderData_->gVertices.GetGPUVtlAdrs());
         // gUniqueVertexIndices
@@ -662,17 +670,17 @@ public:
     }
 
     inline void SetData() override {
-        shaderData_->gTransform[Lamb::GetGraphicBufferIndex()].Map();
+        gTransform_[Lamb::GetGraphicBufferIndex()].Map();
         shaderStruct_[Lamb::GetGraphicBufferIndex()].Map();
         colors_[Lamb::GetGraphicBufferIndex()].Map();
 
         for (uint32_t i = 0; i < drawCount_; ++i) {
-            shaderData_->gTransform[Lamb::GetGraphicBufferIndex()][i] = drawData_[i].wvpMatrix;
+            gTransform_[Lamb::GetGraphicBufferIndex()][i] = drawData_[i].wvpMatrix;
             colors_[Lamb::GetGraphicBufferIndex()][i] = drawData_[i].color;
             shaderStruct_[Lamb::GetGraphicBufferIndex()][i] = drawData_[i].shaderStruct;
         }
 
-        shaderData_->gTransform[Lamb::GetGraphicBufferIndex()].Unmap();
+        gTransform_[Lamb::GetGraphicBufferIndex()].Unmap();
         shaderStruct_[Lamb::GetGraphicBufferIndex()].Unmap();
         colors_[Lamb::GetGraphicBufferIndex()].Unmap();
 
@@ -692,6 +700,8 @@ private:
     std::array<StructuredBuffer<T>, DirectXSwapChain::kBackBufferNumber> shaderStruct_;
     std::array<StructuredBuffer<Vector4>, DirectXSwapChain::kBackBufferNumber> colors_;
 
+    std::array<StructuredBuffer<WVPMatrix>, DirectXSwapChain::kBackBufferNumber> gTransform_;// トランスフォーム
+
     std::vector<DrawData<T>> drawData_;
 };
 
@@ -700,6 +710,9 @@ template<class T>
 concept IsBasedRenderContext =  std::is_base_of_v<BaseRenderContext, T>;
 
 class RenderSet {
+private:
+    static constexpr int32_t kRenderDataIndexNum = (BlendType::kNum + 1);
+
 public:
     RenderSet() = default;
     ~RenderSet() = default;
@@ -716,13 +729,23 @@ public:
             throw Lamb::Error::Code<RenderSet>("renderData is nullptr", ErrorPlace);
         }
 
+        if (blend == BlendType::kAlphaEffect) {
+            blend = BlendType::kNum;
+        }
+
         renderDatas_[blend].reset(renderData);
     }
 
     RenderData* const GetRenderData(BlendType blend) const {
+        if (blend == BlendType::kAlphaEffect) {
+            blend = BlendType::kNum;
+        }
         return renderDatas_[blend].get();
     }
     bool IsDraw(BlendType blend) const {
+        if (blend == BlendType::kAlphaEffect) {
+            blend = BlendType::kNum;
+        }
         return renderDatas_[blend]->IsDraw();
     }
 
@@ -753,6 +776,9 @@ public:
 
 public:
     inline RenderData* GetRenderContext(BlendType blend) {
+        if (blend == BlendType::kAlphaEffect) {
+            blend = BlendType::kNum;
+        }
         return renderDatas_[blend].get();
     }
 
@@ -762,6 +788,9 @@ public:
     // 使うときは気を付けて(一応型が違ったらエラーは出る)
     template<IsBasedRenderContext ClassName>
     inline ClassName* GetRenderContextDowncast(BlendType blend) {
+        if (blend == BlendType::kAlphaEffect) {
+            blend = BlendType::kNum;
+        }
         if (typeid(ClassName).name() != renderDatas_[blend]->GetID()) {
             throw Lamb::Error::Code<RenderSet>("does not match class type", ErrorPlace);
         }
@@ -785,28 +814,28 @@ public:
     }
 
 public:
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::iterator begin() {
+    std::array<std::unique_ptr<RenderData>, kRenderDataIndexNum>::iterator begin() {
         return renderDatas_.begin();
     }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::iterator end() {
+    std::array<std::unique_ptr<RenderData>, kRenderDataIndexNum>::iterator end() {
         return renderDatas_.end();
     }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_iterator cbegin() const {
+    std::array<std::unique_ptr<RenderData>, kRenderDataIndexNum>::const_iterator cbegin() const {
         return renderDatas_.cbegin();
     }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_iterator cend() const {
+    std::array<std::unique_ptr<RenderData>, kRenderDataIndexNum>::const_iterator cend() const {
         return renderDatas_.cend();
     }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::reverse_iterator rbegin() {
+    std::array<std::unique_ptr<RenderData>, kRenderDataIndexNum>::reverse_iterator rbegin() {
         return renderDatas_.rbegin();
     }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::reverse_iterator rend() {
+    std::array<std::unique_ptr<RenderData>, kRenderDataIndexNum>::reverse_iterator rend() {
         return renderDatas_.rend();
     }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_reverse_iterator crbegin() const {
+    std::array<std::unique_ptr<RenderData>, kRenderDataIndexNum>::const_reverse_iterator crbegin() const {
         return renderDatas_.crbegin();
     }
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum>::const_reverse_iterator crend() const {
+    std::array<std::unique_ptr<RenderData>, kRenderDataIndexNum>::const_reverse_iterator crend() const {
         return renderDatas_.crend();
     }
 
@@ -818,5 +847,5 @@ public:
     }
 
 private:
-    std::array<std::unique_ptr<RenderData>, BlendType::kNum> renderDatas_;
+    std::array<std::unique_ptr<RenderData>, kRenderDataIndexNum> renderDatas_;
 };

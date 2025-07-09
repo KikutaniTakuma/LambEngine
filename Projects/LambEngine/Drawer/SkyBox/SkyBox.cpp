@@ -96,7 +96,7 @@ void SkyBox::Load(const std::string& fileName) {
     pShaderData_ = std::make_unique<ConstantBuffer<ShaderData>>();
 
     heap->BookingHeapPos(1u);
-    heap->CreateView(*pShaderData_);
+    heap->CreateView(pShaderData_.get());
 
     CreateGraphicsPipeline_();
 }

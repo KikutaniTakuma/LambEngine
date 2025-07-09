@@ -97,7 +97,7 @@ void Texture::Unload() {
 			textureResouce_.Reset();
 		}
 
-		CbvSrvUavHeap::GetInstance()->ReleaseView(*this);
+		CbvSrvUavHeap::GetInstance()->ReleaseView(this);
 
 		// Unload済み
 		isLoad_ = false;
@@ -275,7 +275,7 @@ void Texture::Set(
 ) {
 	if (CanUse()) {
 		CbvSrvUavHeap* srvHeap = CbvSrvUavHeap::GetInstance();
-		srvHeap->ReleaseView(*this);
+		srvHeap->ReleaseView(this);
 		textureResouce_.Reset();
 	}
 

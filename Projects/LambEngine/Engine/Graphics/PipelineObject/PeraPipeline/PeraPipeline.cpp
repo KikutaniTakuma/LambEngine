@@ -108,7 +108,7 @@ void PeraPipeline::Init(
 
 	auto* const srvHeap = CbvSrvUavHeap::GetInstance();
 	srvHeap->BookingHeapPos(1u);
-	srvHeap->CreateView(*render_);
+	srvHeap->CreateView(render_.get());
 
 	std::for_each(
 		colorBuf_.begin(),

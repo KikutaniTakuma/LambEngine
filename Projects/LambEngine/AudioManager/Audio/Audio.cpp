@@ -6,7 +6,10 @@
 #include <filesystem>
 #include "AudioManager/AudioManager.h"
 #include "Utils/ExecutionLog.h"
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
+#endif // USE_DEBUG_CODE
+
 #include "Error/Error.h"
 #include "Utils/ConvertString.h"
 

@@ -4,15 +4,20 @@
 
 
 #include "GamePad.h"
+#ifdef USE_DEBUG_CODE
 #include "imgui.h"
+#endif // USE_DEBUG_CODE
 #include <limits>
 #include <algorithm>
+#include <format>
 #include "Math/Vector2.h"
 
 Gamepad::Gamepad() :
-	preButton_(0),
+	preState_(0),
 	state_({0}),
-	vibration_({0})
+	vibration_({0}),
+	isPreStickNeutral({ true, true }),
+	isPadConnecting_(false)
 {}
 
 Gamepad* const Gamepad::GetInstance() {
@@ -21,12 +26,19 @@ Gamepad* const Gamepad::GetInstance() {
 }
 
 void Gamepad::Input() {
-	preButton_ = state_.Gamepad.wButtons;
-    XInputGetState(0, &state_);
+	isPreStickNeutral = { 
+		GetStick(Stick::LEFT).LengthSQ() == 0.0f,
+		GetStick(Stick::RIGHT).LengthSQ() == 0.0f 
+	};
+
+	preState_ = state_;
+    DWORD dresult = XInputGetState(0, &state_);
+	// 接続状況の確認
+	dresult == ERROR_SUCCESS ? isPadConnecting_ = true : isPadConnecting_ = false;
 }
 
 void Gamepad::InputReset() {
-	preButton_ = 0;
+	preState_ = {  };
 	state_ = {  };
 	vibration_ = {  };
 }
@@ -46,7 +58,7 @@ bool Gamepad::GetPreButton(Button type) {
 		return false;
 	}
 #endif // USE_DEBUG_CODE
-	return (preButton_ >> static_cast<short>(type)) % 2 == 1;
+	return (preState_.Gamepad.wButtons >> static_cast<short>(type)) % 2 == 1;
 }
 
 bool Gamepad::Pushed(Button type) {
@@ -91,7 +103,7 @@ bool Gamepad::PushAnyKey() {
 		return true;
 	}
 
-	return instance->state_.Gamepad.wButtons != instance->preButton_;
+	return instance->state_.Gamepad.wButtons != instance->preState_.Gamepad.wButtons;
 }
 
 float Gamepad::GetTriger(Triger type, float deadZone) {
@@ -136,11 +148,147 @@ Vector2 Gamepad::GetStick(Stick type, float deadZone) {
 	float length = moveStick.Length();
 
 	// もしデッドゾーン内だった場合は0.0fを返す
-	if (-deadZone <= length && length <= deadZone) {
+	if (length <= deadZone) {
 		return Vector2::kZero;
 	}
 
 	return moveStick;
+}
+
+Vector2 Gamepad::GetPreStick(Stick type, float deadZone)
+{
+	static constexpr float kNormal = 1.0f / static_cast<float>(SHRT_MAX);
+	Vector2 moveStick = Vector2::kZero;
+	deadZone = std::clamp(deadZone, 0.0f, 1.0f);
+
+	switch (type)
+	{
+	case Gamepad::Stick::LEFT:
+		moveStick.x = static_cast<float>(preState_.Gamepad.sThumbLX) * kNormal;
+		moveStick.y = static_cast<float>(preState_.Gamepad.sThumbLY) * kNormal;
+		break;
+	case Gamepad::Stick::RIGHT:
+		moveStick.x = static_cast<float>(preState_.Gamepad.sThumbRX) * kNormal;
+		moveStick.y = static_cast<float>(preState_.Gamepad.sThumbRY) * kNormal;
+		break;
+	default:
+		return Vector2::kZero;
+	}
+
+	float length = moveStick.Length();
+
+	// もしデッドゾーン内だった場合は0.0fを返す
+	if (length <= deadZone) {
+		return Vector2::kZero;
+	}
+
+	return moveStick;
+}
+
+bool Gamepad::GetButtonStick(Button buttonType, Stick stickType, float deadZone) {
+	bool result = false;
+	switch (buttonType)
+	{
+	case Gamepad::Button::UP:
+	case Gamepad::Button::Y:
+		result = GetButton(buttonType) or (GetStick(stickType, deadZone).y > deadZone);
+		break;
+	case Gamepad::Button::DOWN:
+	case Gamepad::Button::A:
+		result = GetButton(buttonType) or (GetStick(stickType, deadZone).y < -deadZone);
+		break;
+	case Gamepad::Button::LEFT:
+	case Gamepad::Button::X:
+		result = GetButton(buttonType) or (GetStick(stickType, deadZone).x < -deadZone);
+		break;
+	case Gamepad::Button::RIGHT:
+	case Gamepad::Button::B:
+		result = GetButton(buttonType) or (GetStick(stickType, deadZone).x > deadZone);
+		break;
+	case Gamepad::Button::START:
+	case Gamepad::Button::BACK:
+	case Gamepad::Button::LEFT_THUMB:
+	case Gamepad::Button::RIGHT_THUMB:
+	case Gamepad::Button::LEFT_SHOULDER:
+	case Gamepad::Button::RIGHT_SHOULDER:
+	default:
+		break;
+	}
+
+
+	return result;
+}
+
+bool Gamepad::PushedButtonStick(Button buttonType, Stick stickType, float deadZone)
+{
+	bool result = false;
+	bool isNeutral = isPreStickNeutral[static_cast<int>(stickType)];
+	switch (buttonType)
+	{
+	case Gamepad::Button::UP:
+	case Gamepad::Button::Y:
+		result = Pushed(buttonType) or (GetStick(stickType, deadZone).y > deadZone and isNeutral);
+		break;
+	case Gamepad::Button::DOWN:
+	case Gamepad::Button::A:
+		result = Pushed(buttonType) or (GetStick(stickType, deadZone).y < -deadZone and isNeutral);
+		break;
+	case Gamepad::Button::LEFT:
+	case Gamepad::Button::X:
+		result = Pushed(buttonType) or (GetStick(stickType, deadZone).x < -deadZone and isNeutral);
+		break;
+	case Gamepad::Button::RIGHT:
+	case Gamepad::Button::B:
+		result = Pushed(buttonType) or (GetStick(stickType, deadZone).x > deadZone and isNeutral);
+		break;
+	case Gamepad::Button::START:
+	case Gamepad::Button::BACK:
+	case Gamepad::Button::LEFT_THUMB:
+	case Gamepad::Button::RIGHT_THUMB:
+	case Gamepad::Button::LEFT_SHOULDER:
+	case Gamepad::Button::RIGHT_SHOULDER:
+	default:
+		break;
+	}
+
+
+	return result;
+}
+
+bool Gamepad::ReleasedButtonStick(Button buttonType, Stick stickType, float deadZone)
+{
+	bool result = false;
+	bool isNeutral = GetStick(stickType).LengthSQ() == 0.0f;
+	switch (buttonType)
+	{
+	case Gamepad::Button::UP:
+	case Gamepad::Button::Y:
+		result = Released(buttonType) or (GetPreStick(stickType, deadZone).y > deadZone and isNeutral);
+		break;
+	case Gamepad::Button::DOWN:
+	case Gamepad::Button::A:
+		result = Released(buttonType) or (GetPreStick(stickType, deadZone).y < -deadZone and isNeutral);
+		break;
+	case Gamepad::Button::LEFT:
+	case Gamepad::Button::X:
+		result = Released(buttonType) or (GetPreStick(stickType, deadZone).x < -deadZone and isNeutral);
+		break;
+	case Gamepad::Button::RIGHT:
+	case Gamepad::Button::B:
+		result = Released(buttonType) or (GetPreStick(stickType, deadZone).x > deadZone and isNeutral);
+		break;
+	case Gamepad::Button::START:
+	case Gamepad::Button::BACK:
+	case Gamepad::Button::LEFT_THUMB:
+	case Gamepad::Button::RIGHT_THUMB:
+	case Gamepad::Button::LEFT_SHOULDER:
+	case Gamepad::Button::RIGHT_SHOULDER:
+	default:
+		break;
+	}
+
+
+	return result;
 }
 
 void Gamepad::Vibration(float leftVibIntensity, float rightVibIntensity) {
@@ -156,6 +304,7 @@ void Gamepad::Debug() {
 #ifdef USE_DEBUG_CODE
 	ImGui::SetNextWindowSizeConstraints({}, { 210.0f, 400.0f });
 	ImGui::Begin("Gamepad Debug");
+	ImGui::Text(std::format("isConecting : {}", isPadConnecting_).c_str());
 	if (ImGui::TreeNode("stick")) {
 		ImGui::Text("LeftX          = %.2f%%\n", GetStick(Stick::LEFT, 0.0f).x * 100.0f);
 		ImGui::Text("LeftY          = %.2f%%\n", GetStick(Stick::LEFT, 0.0f).y * 100.0f);
@@ -189,6 +338,28 @@ void Gamepad::Debug() {
 		ImGui::Text("RIGHT_THUMB    = %d\n", GetButton(Button::RIGHT_THUMB));
 		ImGui::Text("LEFT_SHOULDER  = %d\n", GetButton(Button::LEFT_SHOULDER));
 		ImGui::Text("RIGHT_SHOULDER = %d\n", GetButton(Button::RIGHT_SHOULDER));
+
+		ImGui::NewLine();
+		ImGui::Text("UpAndStick     = %d\n", GetButtonStick(Button::UP, Stick::LEFT));
+		ImGui::Text("DownAndStick   = %d\n", GetButtonStick(Button::DOWN, Stick::LEFT));
+		ImGui::Text("LeftAndStick   = %d\n", GetButtonStick(Button::LEFT, Stick::LEFT));
+		ImGui::Text("RightAndStick  = %d\n", GetButtonStick(Button::RIGHT, Stick::LEFT));
+
+		if (ImGui::TreeNode("ボタンスティックの押した瞬間")) {
+			ImGui::Text("UpAndStick     = %d\n", PushedButtonStick(Button::UP, Stick::LEFT));
+			ImGui::Text("DownAndStick   = %d\n", PushedButtonStick(Button::DOWN, Stick::LEFT));
+			ImGui::Text("LeftAndStick   = %d\n", PushedButtonStick(Button::LEFT, Stick::LEFT));
+			ImGui::Text("RightAndStick  = %d\n", PushedButtonStick(Button::RIGHT, Stick::LEFT));
+			ImGui::TreePop();
+		}
+		
+		if (ImGui::TreeNode("ボタンスティックの離した瞬間")) {
+			ImGui::Text("UpAndStick     = %d\n", ReleasedButtonStick(Button::UP, Stick::LEFT));
+			ImGui::Text("DownAndStick   = %d\n", ReleasedButtonStick(Button::DOWN, Stick::LEFT));
+			ImGui::Text("LeftAndStick   = %d\n", ReleasedButtonStick(Button::LEFT, Stick::LEFT));
+			ImGui::Text("RightAndStick  = %d\n", ReleasedButtonStick(Button::RIGHT, Stick::LEFT));
+			ImGui::TreePop();
+		}
 		ImGui::TreePop();
 	}
 

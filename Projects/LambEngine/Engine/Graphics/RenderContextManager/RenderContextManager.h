@@ -89,6 +89,14 @@ public:
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
 
+		std::unique_ptr<RenderContextType> renderContext = std::make_unique<RenderContextType>();
+
+		renderContext->SetShadowPipeline(shadowPipeline);
+		renderContext->SetVertexIndexData(vertexIndexData);
+		renderContext->SetModelData(modelData);
+		renderContext->SetPipeline(pipelines[0]);
+		currentRenderSet.Set(renderContext.release(), BlendType::kAlphaEffect);
+
 		// レンダーリストをリサイズ
 		ResizeRenderList();
 	}
@@ -142,6 +150,14 @@ public:
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
 
+		std::unique_ptr<SkinRenderContext<T, bufferSize>> renderContext = std::make_unique<SkinRenderContext<T, bufferSize>>();
+
+		renderContext->SetShadowPipeline(shadowPipeline);
+		renderContext->SetVertexIndexData(vertexIndexData);
+		renderContext->SetModelData(modelData);
+		renderContext->SetPipeline(pipelines[0]);
+		currentRenderSet.Set(renderContext.release(), BlendType::kAlphaEffect);
+
 		// レンダーリストをリサイズ
 		ResizeRenderList();
 	}
@@ -184,7 +200,7 @@ public:
 
 
 		Lamb::SafePtr meshManager = MeshletManager::GetInstance();
-		meshManager->LoadMesh(fileNames.resourceFileName, bufferSize);
+		meshManager->LoadMesh(fileNames.resourceFileName);
 		
 		const auto& mesh = meshManager->GetMesh(fileNames.resourceFileName);
 
@@ -198,6 +214,14 @@ public:
 			renderContext->SetPipeline(pipelines[i]);
 			currentRenderSet.Set(renderContext.release(), BlendType(i));
 		}
+
+		std::unique_ptr<MeshRenderContext<T, bufferSize>> renderContext = std::make_unique<MeshRenderContext<T, bufferSize>>();
+
+		renderContext->SetShadowPipeline(shadowPipeline);
+		renderContext->SetVertexIndexData(vertexIndexData);
+		renderContext->SetMeshShaderData(mesh.second.get());
+		renderContext->SetPipeline(pipelines[0]);
+		currentRenderSet.Set(renderContext.release(), BlendType::kAlphaEffect);
 
 		// レンダーリストをリサイズ
 		ResizeRenderList();
@@ -242,5 +266,5 @@ private:
 	std::unordered_map<MeshKey, std::unique_ptr<RenderSet>> threadMeshRenderData_;
 	bool isNowThreading_ = false;
 
-	std::array<std::list<RenderData*>, BlendType::kNum> renderDataLists_;
+	std::array<std::list<RenderData*>, BlendType::kNum + 1> renderDataLists_;
 };

@@ -50,9 +50,10 @@ public:
 	/// ロードモデル
 	/// </summary>
 	/// <param name="fileName">ファイルパス</param>
-	void LoadModel(const std::string& fileName);
+	size_t LoadModel(const std::string& fileName);
 	Model* const GetModel(const std::string& fileName);
+	Model* const GetModel(size_t key);
 
 private:
-	std::unordered_map<std::string, std::unique_ptr<Model>> models_;
+	std::unordered_map<size_t, std::unique_ptr<Model>> models_;
 };

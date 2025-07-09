@@ -7,10 +7,29 @@
 
 #include "Engine/Graphics/RenderingManager/RenderingManager.h"
 
+
+
 namespace Lamb {
 	float DeltaTime() {
 		static FrameInfo* const frameInfo = FrameInfo::GetInstance();
-		return frameInfo->GetDelta();
+#ifdef USE_DEBUG_CODE
+		float deltatime = frameInfo->GetDelta();
+		if (frameInfo->GetIsDebugStop()) {
+			const float kStopFrameDeltaTime = 1.0f / frameInfo->GetMaxFpsLimit();
+			deltatime = frameInfo->GetIsOneFrameActive() ? kStopFrameDeltaTime : 0.0f;
+		}
+
+		return deltatime * frameInfo->GetGameSpeedScale();
+#else
+		return frameInfo->GetDelta() * frameInfo->GetGameSpeedScale();
+#endif // USE_DEBUG_CODE
+
+	}
+
+	float MaxFPS()
+	{
+		static FrameInfo* const frameInfo = FrameInfo::GetInstance();
+		return frameInfo->GetMaxFpsLimit();
 	}
 
 	Vector2 ClientSize() {

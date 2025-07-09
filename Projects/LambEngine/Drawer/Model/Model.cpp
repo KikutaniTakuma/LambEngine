@@ -39,15 +39,17 @@ void Model::Load(const std::string& fileName) {
 	// メッシュシェーダーが読み込む
 	if (Lamb::IsCanUseMeshShader()) {
 		// リソースとメッシュシェーダー読み込み
-		renderContextManager->LoadMesh<uint32_t, kMaxDrawCount>(meshFileNames, 4);
+		renderContextManager->LoadMesh<ShaderData, kMaxDrawCount>(meshFileNames, 4);
 		
 		pMeshRenderSet = renderContextManager->Get(meshFileNames);
 	}
 
 	// リソースとシェーダー読み込み
-	renderContextManager->Load<RenderContext<uint32_t, kMaxDrawCount>>(fileNames, 4);
+	renderContextManager->Load<RenderContext<ShaderData, kMaxDrawCount>>(fileNames, 4);
 
 	pRenderSet = renderContextManager->Get(fileNames);
+
+	backGroundTextureIndex_ = static_cast<int32_t>(RenderingManager::GetInstance()->GetBackGroundTexture());
 }
 
 void Model::Draw(
@@ -55,30 +57,46 @@ void Model::Draw(
 	const Mat4x4& camera, 
 	uint32_t color, 
 	BlendType blend, 
-	bool isLighting
+	ShaderData shaderData
 ) {
 #ifdef USE_DEBUG_CODE
 	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
 #endif // USE_DEBUG_CODE
 
+	if (blend == BlendType::kNone) {
+		shaderData.isLighting = 0;
+		shaderData.isEffect = 0;
+	}
 	
 	if (isUseMeshShader_ and pMeshRenderSet) {
-		Lamb::SafePtr renderContext = pMeshRenderSet->GetRenderContextDowncast<MeshRenderContext<uint32_t, kMaxDrawCount>>(blend);
-		if (blend == BlendType::kNone) {
-			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
-		}
-		else {
-			renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
-		}
+		Lamb::SafePtr renderContext = pMeshRenderSet->GetRenderContextDowncast<MeshRenderContext<ShaderData, kMaxDrawCount>>(blend);
+		renderContext->SetShaderStruct(
+			ShaderData{
+				.isLighting = shaderData.isLighting,
+				.isEffect = shaderData.isEffect,
+				.backGroundTextureIndex = backGroundTextureIndex_,
+				.gausState = {
+					.dir = shaderData.gausState.dir,
+					.sigma = shaderData.gausState.sigma,
+					.kernelSize = shaderData.gausState.kernelSize
+				}
+			}
+		);
 	}
 	else {
-		Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<RenderContext<uint32_t, kMaxDrawCount>>(blend);
-		if (blend == BlendType::kNone) {
-			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
-		}
-		else {
-			renderContext->SetShaderStruct(static_cast<uint32_t>(isLighting));
-		}
+		Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<RenderContext<ShaderData, kMaxDrawCount>>(blend);
+		renderContext->SetShaderStruct(
+			ShaderData{
+				.isLighting = shaderData.isLighting,
+				.isEffect = shaderData.isEffect,
+				.backGroundTextureIndex = backGroundTextureIndex_,
+				.gausState = {
+					.dir = shaderData.gausState.dir,
+					.sigma = shaderData.gausState.sigma,
+					.kernelSize = shaderData.gausState.kernelSize
+				}
+			}
+		);
 	}
 
 	BaseDrawer::Draw(worldMatrix, camera, color, blend);
@@ -89,23 +107,20 @@ void Model::Draw(const Data& data) {
 	isUseMeshShader_ = RenderingManager::GetInstance()->GetIsUseMeshShader();
 #endif // USE_DEBUG_CODE
 
+	ShaderData shaderData = data.shaderData;
+
+	if (data.blend == BlendType::kNone) {
+		shaderData.isLighting = 0;
+		shaderData.isEffect = 0;
+	}
+
 	if (isUseMeshShader_ and pMeshRenderSet) {
-		Lamb::SafePtr renderContext = pMeshRenderSet->GetRenderContextDowncast<MeshRenderContext<uint32_t, kMaxDrawCount>>(data.blend);
-		if (data.blend == BlendType::kNone) {
-			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
-		}
-		else {
-			renderContext->SetShaderStruct(static_cast<uint32_t>(data.isLighting));
-		}
+		Lamb::SafePtr renderContext = pMeshRenderSet->GetRenderContextDowncast<MeshRenderContext<ShaderData, kMaxDrawCount>>(data.blend);
+		renderContext->SetShaderStruct(shaderData);
 	}
 	else {
-		Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<RenderContext<uint32_t, kMaxDrawCount>>(data.blend);
-		if (data.blend == BlendType::kNone) {
-			renderContext->SetShaderStruct(static_cast<uint32_t>(false));
-		}
-		else {
-			renderContext->SetShaderStruct(static_cast<uint32_t>(data.isLighting));
-		}
+		Lamb::SafePtr renderContext = pRenderSet->GetRenderContextDowncast<RenderContext<ShaderData, kMaxDrawCount>>(data.blend);
+		renderContext->SetShaderStruct(shaderData);
 	}
 
 	BaseDrawer::Draw(data.worldMatrix, data.camera, data.color, data.blend);
@@ -147,7 +162,7 @@ void ModelInstance::Draw(const Mat4x4& cameraMat)
 			cameraMat,
 			color,
 			blend,
-			isLighting
+			shaderData
 		);
 	}
 }

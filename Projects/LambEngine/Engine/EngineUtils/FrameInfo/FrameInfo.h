@@ -99,11 +99,11 @@ public:
 	inline float GetDelta() const {
 #ifdef USE_DEBUG_CODE
 		if (isFixedDeltaTime_ || isDebugStopGame_) {
-			return static_cast<float>(1.0 / fpsLimit_);
+			return 1.0f / fpsLimit_;
 		}
-		return static_cast<float>(deltaTime_);
+		return deltaTime_;
 #else
-		return static_cast<float>(deltaTime_);
+		return deltaTime_;
 #endif
 	}
 
@@ -111,7 +111,7 @@ public:
 	/// fps取得
 	/// </summary>
 	/// <returns>fps</returns>
-	inline double GetFps() const {
+	inline float GetFps() const {
 		return fps_;
 	}
 
@@ -128,7 +128,7 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	inline float GetGameSpeedScale() const {
-		return static_cast<float>(gameSpeedSccale_);
+		return gameSpeedSccale_;
 	}
 
 	/// <summary>
@@ -143,7 +143,9 @@ public:
 	/// メインモニターのリフレッシュレートを取得
 	/// </summary>
 	/// <returns>リフレッシュレート</returns>
-	double GetMainMonitorFramerate() const;
+	float GetMainMonitorFramerate() const;
+
+	float GetMaxFpsLimit() const;
 
 
 /// <summary>
@@ -154,7 +156,7 @@ public:
 	/// fpsの上限値を設定(メインモニターのリフレッシュレートを超えることはない)
 	/// </summary>
 	/// <param name="fpsLimit">fps上限値</param>
-	void SetFpsLimit(double fpsLimit);
+	void SetFpsLimit(float fpsLimit);
 
 	/// <summary>
 	/// ゲームスピードのスケールを変更
@@ -167,27 +169,27 @@ public:
 /// メンバ変数
 /// </summary>
 private:
-	const double kMaxMonitorFps_;
+	const float kMaxMonitorFps_;
 
 	std::chrono::steady_clock::time_point frameStartTime_;
-	double deltaTime_;
-	double fps_;
-	double maxFps_;
-	double minFps_;
+	float deltaTime_;
+	float fps_;
+	float maxFps_;
+	float minFps_;
 	size_t frameCount_;
 
 	std::chrono::steady_clock::time_point gameStartTime_;
 
 	std::chrono::steady_clock::time_point reference_;
-	double fpsLimit_;
-	double maxFpsLimit_;
+	float fpsLimit_;
+	float maxFpsLimit_;
 
 	std::chrono::microseconds minTime_;
 	std::chrono::microseconds minCheckTime_;
 
-	double gameSpeedSccale_;
+	float gameSpeedSccale_;
 
-	std::queue<double> frameDatas_;
+	std::queue<float> frameDatas_;
 	std::chrono::seconds frameDataDuration_;
 	std::chrono::steady_clock::time_point frameDataDurationStartTime_;
 	size_t avgProcDuration_;

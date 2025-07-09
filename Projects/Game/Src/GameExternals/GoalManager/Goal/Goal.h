@@ -5,7 +5,6 @@
 #include "Drawer/Model/Model.h"
 #include "GlobalVariables/GlobalVariables.h"
 #include "Math/Matrix.h"
-#include "Drawer/Particle/Particle.h"
 
 class Camera;
 class Player;
@@ -43,7 +42,6 @@ private:
 	Camera* camera_;
 	Vector3 pos_;
 
-	std::array<std::unique_ptr<Particle>, 4llu> particles_;
 	float particleCoolTime_;
 	float particleCount_;
 

@@ -120,7 +120,7 @@ void MeshletManager::Finalize() {
 	pInstance_.reset();
 }
 
-void MeshletManager::LoadMesh(const std::string& fileName, uint32_t maxDrawCount) {
+void MeshletManager::LoadMesh(const std::string& fileName) {
 	if (not meshlets_.contains(fileName)) {
 		meshlets_.insert(std::make_pair(fileName, std::make_pair(MeshLoader::LoadMesh(fileName), std::make_unique<MeshShaderData>())));
 
@@ -130,15 +130,6 @@ void MeshletManager::LoadMesh(const std::string& fileName, uint32_t maxDrawCount
 		auto& shaderData = meshAndMeshData.second;
 
 
-
-		// SturucturedBufferを作成して代入
-		std::for_each(
-			shaderData->gTransform.begin(),
-			shaderData->gTransform.end(),
-			[maxDrawCount](auto& n) {
-				n.CreateBuffer(maxDrawCount);
-			}
-		);
 		shaderData->gMeshlets.CreateBuffer(static_cast<uint32_t>(resMesh->meshlets.size()));
 		shaderData->gMeshlets.MemCpy(resMesh->meshlets.data(), sizeof(DirectX::Meshlet) * resMesh->meshlets.size());
 		
