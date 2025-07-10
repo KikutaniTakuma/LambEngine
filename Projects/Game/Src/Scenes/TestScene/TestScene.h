@@ -1,6 +1,7 @@
 #pragma once
 #include "Scenes/Manager/BaseScene/BaseScene.h"
 #include <chrono>
+#include <future>
 
 
 /// <summary>
@@ -11,7 +12,9 @@ private:
 	enum class State {
 		kReady,
 		kCount,
-		kStop
+		kStop,
+		kCommunicating,
+		kRanking
 	};
 
 public:
@@ -30,6 +33,9 @@ public:
 private:
 	int Score(float sub);
 
+	std::future<std::string> PostScoreAsync(int score);
+	std::future<std::string> GetAllScoresAsync();
+
 private:
 	std::chrono::steady_clock::time_point start_;
 	std::chrono::steady_clock::time_point stop_;
@@ -43,4 +49,8 @@ private:
 	float timeOverRange_;
 
 	float topThresholdTime_;
+
+	int32_t score_;
+
+	std::string rankingText_;
 };

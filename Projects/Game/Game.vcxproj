@@ -77,7 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;USE_DEBUG_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\curl\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -96,8 +96,8 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\;$(SolutionDir)Projects\externals\assimp\lib\$(Configuration)\;$(SolutionDir)Projects\externals\Effekseer\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc143-mtd.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\;$(SolutionDir)Projects\externals\assimp\lib\$(Configuration)\;$(SolutionDir)Projects\externals\Effekseer\lib\;$(SolutionDir)Projects\externals\curl\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc143-mtd.lib;libcurl.lib</AdditionalDependencies>
       <AdditionalOptions>/ignore:4049 /ignore:4098 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
@@ -115,7 +115,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\curl\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -135,9 +135,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <AdditionalLibraryDirectories>$(SolutionDir)Projects\externals\assimp\lib\$(Configuration)\;$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\;$(SolutionDir)Projects\externals\Effekseer\lib\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Projects\externals\assimp\lib\$(Configuration)\;$(ProjectDir);$(SolutionDir)Projects\externals\lib\$(Configuration)\;$(SolutionDir)Projects\externals\Effekseer\lib\;$(SolutionDir)Projects\externals\curl\lib\</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>assimp-vc143-mt.lib</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mt.lib;libcurl.lib</AdditionalDependencies>
       <AdditionalOptions>/ignore:4049 /ignore:4098 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
@@ -155,7 +155,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;USE_DEBUG_CODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Src\;$(SolutionDir)Projects\LambEngine\;$(SolutionDir)Projects\externals\ImGui\;$(SolutionDir)Projects\externals\;$(SolutionDir)Projects\externals\curl\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -175,9 +175,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatformVersion)\x64\dxil.dll" "$(TargetDir)dx
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>false</TreatLinkerWarningAsErrors>
-      <AdditionalLibraryDirectories>$(SolutionDir)Projects\externals\assimp\lib\Release\;$(ProjectDir);$(SolutionDir)Projects\externals\lib\Release\;$(SolutionDir)Projects\externals\Effekseer\lib\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Projects\externals\assimp\lib\Release\;$(ProjectDir);$(SolutionDir)Projects\externals\lib\Release\;$(SolutionDir)Projects\externals\Effekseer\lib\;$(SolutionDir)Projects\externals\curl\lib\</AdditionalLibraryDirectories>
       <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>assimp-vc143-mt.lib</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc143-mt.lib;libcurl.lib</AdditionalDependencies>
       <AdditionalOptions>/ignore:4049 /ignore:4098 %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>

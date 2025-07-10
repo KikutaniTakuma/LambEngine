@@ -27,7 +27,7 @@ void World::Initialize() {
 	Water::Initialize();
 
 
-	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/default.spritefont");
+	StringOutPutManager::GetInstance()->LoadFont("./Resources/Font/mincho_size_32.spritefont");
 
 	TransformCompUpdater::Initialize();
 	ObjectManager::Initialize();
