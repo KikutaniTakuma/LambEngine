@@ -11,6 +11,8 @@
 #include "Utils/ExecutionLog.h"
 #include "Error/Error.h"
 
+#include <cassert>
+
 
 Mouse* Mouse::pInstance_ = nullptr;
 
