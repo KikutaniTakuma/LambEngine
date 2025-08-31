@@ -15,11 +15,16 @@ using json = nlohmann::json;
 
 #include "Utils/ConvertString.h"
 
+#ifdef USE_DEBUG_CODE
+#include "imgui.h"
+#endif // USE_DEBUG_CODE
+
+
 TestScene::TestScene():
 	BaseScene(BaseScene::ID::Test),
 	start_(),
 	stop_(),
-	state_(State::kReady),
+	state_(State::kLogin),
 	time_(0.0f),
 	threshold_(7.0f),
 	thresholdTime_(10.0f),
@@ -29,8 +34,15 @@ TestScene::TestScene():
 	timeOverRange_(0.05f),
 	topThresholdTime_(0.5f),
 	score_(0),
-	rankingText_()
+	rankingText_(),
+	username_(),
+	userPassword_(),
+	token_()
 {
+	for (int i = 0; i < 32; i++) {
+		usernameBuf_[i] = '\0';
+		userPasswordBuf_[i] = '\0';
+	}
 }
 
 void TestScene::Load()
@@ -45,8 +57,105 @@ void TestScene::Finalize() {
 
 void TestScene::Update()
 {
+	if (state_ == TestScene::State::kLogin or state_ == TestScene::State::kNewUser) {
+		Lamb::screenout << "Please Login" << Lamb::endline;
+	}
+	else {
+		Lamb::screenout << "Login user is `" << username_ << "`" << Lamb::endline << Lamb::endline;
+	}
+
 	switch (state_)
 	{
+	case TestScene::State::kLogin:
+#ifdef USE_DEBUG_CODE
+		if (not isLoginNow_) {
+			ImGui::Begin("Login");
+			ImGui::InputText("name", usernameBuf_, 32);
+			ImGui::InputText("password", userPasswordBuf_, 32);
+			if (ImGui::Button("login")) {
+				for (int i = 0; i < 32; i++) {
+					if (usernameBuf_[i] == '\0') {
+						break;
+					}
+					username_ += usernameBuf_[i];
+				}
+				for (int i = 0; i < 32; i++) {
+					if (userPasswordBuf_[i] == '\0') {
+						break;
+					}
+					userPassword_ += userPasswordBuf_[i];
+				}
+
+				if (username_.empty() or userPassword_.empty()) {
+					MessageBoxA(
+						0,
+						"Name or Password is empty. Please write your user name or password", "Error",
+						0
+					);
+				}
+				else {
+
+					for (int i = 0; i < 32; i++) {
+						usernameBuf_[i] = '\0';
+						userPasswordBuf_[i] = '\0';
+					}
+
+					isLoginNow_ = true;
+				}
+			}
+			if (ImGui::Button("new user")) {
+				username_.clear();
+				userPassword_.clear();
+
+				state_ = TestScene::State::kNewUser;
+			}
+			ImGui::End();
+		}
+#endif // USE_DEBUG_CODE
+
+		break;
+	case TestScene::State::kNewUser:
+#ifdef USE_DEBUG_CODE
+		if (not isNewUser) {
+			ImGui::Begin("New User");
+			ImGui::InputText("name", usernameBuf_, 32);
+			ImGui::InputText("password", userPasswordBuf_, 32);
+			if (ImGui::Button("new")) {
+				for (int i = 0; i < 32; i++) {
+					if (usernameBuf_[i] == '\0') {
+						break;
+					}
+					username_ += usernameBuf_[i];
+				}
+				for (int i = 0; i < 32; i++) {
+					if (userPasswordBuf_[i] == '\0') {
+						break;
+					}
+					userPassword_ += userPasswordBuf_[i];
+				}
+
+				if (username_.empty() or userPassword_.empty()) {
+					MessageBoxA(
+						0,
+						"Name or Password is empty. Please write your user name or password", "Error",
+						0
+					);
+				}
+				else {
+
+					for (int i = 0; i < 32; i++) {
+						usernameBuf_[i] = '\0';
+						userPasswordBuf_[i] = '\0';
+					}
+
+					isNewUser = true;
+				}
+			}
+			ImGui::End();
+		}
+#endif // USE_DEBUG_CODE
+		break;
+
 	case TestScene::State::kReady:
 		if (input_->GetKey()->Pushed(DIK_SPACE)) {
 			start_ = std::chrono::steady_clock::now();
@@ -79,9 +188,69 @@ void TestScene::Update()
 	}
 
 	// 通信中
+	if (isLoginNow_ and state_ == TestScene::State::kLogin) {
+		std::string userData = PostUserLoginAsync(username_, userPassword_).get();
+		
+		nlohmann::json j = nlohmann::json::parse(userData);
+		std::string status = j["login_status"].get<std::string>();
+		if (status == "success") {
+
+			token_ = j["token"].get<std::string>();
+
+			state_ = TestScene::State::kReady;
+
+		}
+		else {
+			MessageBoxA(
+				0,
+				"Login error or No user found. try again", "Error",
+				0
+			);
+
+			for (int i = 0; i < 32; i++) {
+				usernameBuf_[i] = '\0';
+				userPasswordBuf_[i] = '\0';
+			}
+			username_.clear();
+			userPassword_.clear();
+		}
+		isLoginNow_ = false;
+
+	}
+
+	if (isNewUser and state_ == TestScene::State::kNewUser) {
+		std::string userData = PostNewUserAsync(username_, userPassword_).get();
+
+		nlohmann::json j = nlohmann::json::parse(userData);
+		bool isSuccess = (j.find("name") != j.end());
+
+		if (not isSuccess) {
+			MessageBoxA(
+				0,
+				"New User Error. try again", "Error",
+				0
+			);
+
+			for (int i = 0; i < 32; i++) {
+				usernameBuf_[i] = '\0';
+				userPasswordBuf_[i] = '\0';
+			}
+			username_.clear();
+			userPassword_.clear();
+		}
+
+		else {
+			state_ = TestScene::State::kLogin;
+
+			isLoginNow_ = true;
+		}
+
+		isNewUser = false;
+	}
+
 	if (state_ == TestScene::State::kCommunicating) {
-		std::string postRes = PostScoreAsync(score_).get();
-		std::string allScoresJson = GetAllScoresAsync().get();
+		std::string postRes = PostScoreAsync(score_, token_).get();
+		std::string allScoresJson = GetAllScoresAsync(token_).get();
 
 		Lamb::screenout << postRes << Lamb::endline;
 
@@ -89,22 +258,43 @@ void TestScene::Update()
 		try {
 			nlohmann::json j = nlohmann::json::parse(allScoresJson);
 
-			rankingText_ = "Ranking Top 5:\n";
+			if (j.find("error") != j.end()) {
+				std::string userData = PostUserLoginAsync(username_, userPassword_).get();
 
-			for (int32_t i = 0; const auto& entry : j) {
-				int32_t rankScore = entry["score"];
-				if (score_ == rankScore) {
-					rankingText_ += std::to_string(i + 1) + ". " +
-						std::to_string(rankScore) + " <- new!\n";
+				nlohmann::json j_userData = nlohmann::json::parse(userData);
+				std::string status = j_userData["login_status"].get<std::string>();
+				if (status == "success") {
+
+					token_ = j_userData["token"].get<std::string>();
 				}
-				else {
-					rankingText_ += std::to_string(i + 1) + ". " +
-						std::to_string(rankScore) + "\n";
-				}
-				++i;
 			}
+			else {
 
-			state_ = State::kRanking;
+				rankingText_ = "Ranking Top 30:\n";
+
+				for (int32_t i = 0; const auto& entry : j) {
+					int32_t rankScore = entry["score"].get<int32_t>();
+					std::string userName = entry["user"]["name"].get<std::string>();
+
+
+					rankingText_ += std::to_string(i + 1) + ". " + userName + " : " +
+						std::to_string(rankScore);
+
+					if (score_ == rankScore and username_ == userName) {
+						rankingText_ += " <- new!\n";
+					}
+					else {
+						rankingText_ += "\n";
+					}
+
+					++i;
+					if (30 <= i) {
+						break;
+					}
+				}
+
+				state_ = State::kRanking;
+			}
 		}
 		catch (const std::exception& err) {
 			rankingText_ = std::string("[Ranking Error] : ") + err.what();
@@ -202,9 +392,9 @@ static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* use
 	return size * nmemb;
 }
 
-std::future<std::string> TestScene::PostScoreAsync(int score)
+std::future<std::string> TestScene::PostScoreAsync(int score, const std::string& token)
 {
-	return std::async(std::launch::async, [score]()->std::string {
+	return std::async(std::launch::async, [score, &token]()->std::string {
 		CURL* curl  = curl_easy_init();
 		if (!curl) {
 			return "CURL初期化エラー";
@@ -217,13 +407,16 @@ std::future<std::string> TestScene::PostScoreAsync(int score)
 #pragma warning(pop)
 		std::string bodyStr = body.dump();
 
+		std::string authHeader = "Authorization: Bearer " + token;
+
 		struct curl_slist* headers = nullptr;
 		headers = curl_slist_append(headers, "Content-Type: application/json");
+		headers = curl_slist_append(headers, authHeader.c_str());
 
 		std::string response;
 
 		curl_easy_setopt(curl, CURLOPT_URL,
-			"http://localhost:3000/scores");
+			"https://swgame-nine-umber.vercel.app/scores");
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 		curl_easy_setopt(curl, CURLOPT_POST, 1L);
 		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, bodyStr.c_str());
@@ -242,17 +435,14 @@ std::future<std::string> TestScene::PostScoreAsync(int score)
 			return std::string("送信エラー: ") + curl_easy_strerror(res);
 		}
 
-		std::stringstream ss;
-		ss << "HTTP" << httpCode << ": " << response;
-
-		return ss.str();;
+		return response;
 		}
 	);
 }
 
-std::future<std::string> TestScene::GetAllScoresAsync()
+std::future<std::string> TestScene::GetAllScoresAsync(const std::string& token)
 {
-	return std::async(std::launch::async, []() -> std::string {
+	return std::async(std::launch::async, [&token]() -> std::string {
 		CURL* curl = curl_easy_init();
 		if (!curl) {
 			return "CURL初期化エラー";
@@ -260,16 +450,117 @@ std::future<std::string> TestScene::GetAllScoresAsync()
 
 		std::string response;
 
-		curl_easy_setopt(curl, CURLOPT_URL, "http://localhost:3000/scores");
+		std::string authHeader = "Authorization: Bearer " + token;
+
+		struct curl_slist* headers = nullptr;
+		headers = curl_slist_append(headers, "Content-Type: application/json");
+		headers = curl_slist_append(headers, authHeader.c_str());
+
+		curl_easy_setopt(curl, CURLOPT_URL, "https://swgame-nine-umber.vercel.app/scores");
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 		curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 
 		CURLcode res = curl_easy_perform(curl);
+
+		curl_slist_free_all(headers);
 		curl_easy_cleanup(curl);
 
 		if (res != CURLE_OK) {
 			return std::string("取得エラー: ") + curl_easy_strerror(res);
+		}
+
+		return response;
+		}
+	);
+}
+
+std::future<std::string> TestScene::PostNewUserAsync(const std::string& name, const std::string& password)
+{
+	return std::async(std::launch::async, [&name, &password]()->std::string {
+		CURL* curl = curl_easy_init();
+		if (!curl) {
+			return "CURL初期化エラー";
+		}
+
+#pragma warning(push)
+#pragma warning(disable : 26495)
+		nlohmann::json body = nlohmann::json::object();
+		body["name"] = name;
+		body["password"] = password;
+#pragma warning(pop)
+		std::string bodyStr = body.dump();
+
+		struct curl_slist* headers = nullptr;
+		headers = curl_slist_append(headers, "Content-Type: application/json");
+
+		std::string response;
+
+		curl_easy_setopt(curl, CURLOPT_URL,
+			"https://swgame-nine-umber.vercel.app/users/new");
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+		curl_easy_setopt(curl, CURLOPT_POST, 1L);
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, bodyStr.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+		CURLcode res = curl_easy_perform(curl);
+
+		long httpCode = 0l;
+		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
+
+		curl_slist_free_all(headers);
+		curl_easy_cleanup(curl);
+
+		if (res != CURLE_OK) {
+			return std::string("送信エラー: ") + curl_easy_strerror(res);
+		}
+
+		return response;
+		}
+	);
+}
+
+std::future<std::string> TestScene::PostUserLoginAsync(const std::string& name, const std::string& password)
+{
+	return std::async(std::launch::async, [&name, &password]()->std::string {
+		CURL* curl = curl_easy_init();
+		if (!curl) {
+			return "CURL初期化エラー";
+		}
+
+#pragma warning(push)
+#pragma warning(disable : 26495)
+		nlohmann::json body = nlohmann::json::object();
+		body["name"] = name;
+		body["password"] = password;
+#pragma warning(pop)
+		std::string bodyStr = body.dump();
+
+		struct curl_slist* headers = nullptr;
+		headers = curl_slist_append(headers, "Content-Type: application/json");
+
+		std::string response;
+
+		curl_easy_setopt(curl, CURLOPT_URL,
+			"https://swgame-nine-umber.vercel.app/users/login");
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+		curl_easy_setopt(curl, CURLOPT_POST, 1L);
+		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, bodyStr.c_str());
+		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+		CURLcode res = curl_easy_perform(curl);
+
+		long httpCode = 0l;
+		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpCode);
+
+		curl_slist_free_all(headers);
+		curl_easy_cleanup(curl);
+
+		if (res != CURLE_OK) {
+			return std::string("送信エラー: ") + curl_easy_strerror(res);
 		}
 
 		return response;

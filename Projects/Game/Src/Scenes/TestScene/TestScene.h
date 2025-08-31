@@ -10,6 +10,8 @@
 class TestScene : public BaseScene {
 private:
 	enum class State {
+		kLogin,
+		kNewUser,
 		kReady,
 		kCount,
 		kStop,
@@ -33,8 +35,10 @@ public:
 private:
 	int Score(float sub);
 
-	std::future<std::string> PostScoreAsync(int score);
-	std::future<std::string> GetAllScoresAsync();
+	std::future<std::string> PostScoreAsync(int score, const std::string& token);
+	std::future<std::string> GetAllScoresAsync(const std::string& token);
+	std::future<std::string> PostNewUserAsync(const std::string& name, const std::string& password);
+	std::future<std::string> PostUserLoginAsync(const std::string& name, const std::string& password);
 
 private:
 	std::chrono::steady_clock::time_point start_;
@@ -53,4 +57,15 @@ private:
 	int32_t score_;
 
 	std::string rankingText_;
+
+
+	std::string username_;
+	std::string userPassword_;
+	std::string token_;
+
+	bool isLoginNow_ = false;
+	bool isNewUser = false;
+
+	char usernameBuf_[32];
+	char userPasswordBuf_[32];
 };
