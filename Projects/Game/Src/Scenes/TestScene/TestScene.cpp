@@ -270,7 +270,7 @@ void TestScene::Update()
 			}
 			else {
 
-				rankingText_ = "Ranking Top 30:\n";
+				rankingText_ = "Ranking Top 20:\n";
 
 				for (int32_t i = 0; const auto& entry : j) {
 					int32_t rankScore = entry["score"].get<int32_t>();
